@@ -23,7 +23,7 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['../../../ehi/multivariate-testing/Isobar/**/**/*.html'], //path to your working folder
+      files: ['path/to/multivariate-testing/Isobar/**/**/*.html'], //path to your working folder
       tasks: ['strip_code','htmlmin'],
       options: {
         event: ['changed'],
