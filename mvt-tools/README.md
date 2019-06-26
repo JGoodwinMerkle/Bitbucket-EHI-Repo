@@ -41,7 +41,7 @@ Install all dependecies in the mvt-tools folder
 `npm install`
 
 ### Update your source files path
-Depending on how your files are organized you'll have to update the path of the files being watched in Gruntfile.js. **Do not commit this change**
+Depending on how your files are organized you'll have to update the path of the files being watched in Gruntfile.js. *Do not commit this change*, simply add this file to your personal git ignore rules.
 
 ```
 watch: {
@@ -53,10 +53,6 @@ watch: {
   }
 }
 ```
-
-This file has been added to `.gitignore`, run git rm to prevent the file from being commited.
-
-`git rm --cached mvt-tools/Gruntfile.js`
 
 ### Using grunt watch
 By default, the grunt task is watch, simply run `grunt` on the console. This will run the tasks to remove debug code and minify the file whenever you save your file. It'll create a new folder under your test folder with the production-ready file(s).
