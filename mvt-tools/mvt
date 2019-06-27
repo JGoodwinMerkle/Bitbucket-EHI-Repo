@@ -39,7 +39,7 @@ elif [[ "${a}" =~ ^[0-9]+$ ]]
 	then
 	chall=$a
 else
-	folderName=$arg 
+	folderName=$arg
 fi
 done
 
@@ -74,11 +74,11 @@ accountLog="isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);"
 
 
 get_dependencies (){
-	if [[ "${jq}" == true ]] 
+	if [[ "${jq}" == true ]]
 	then
-		dependencies="dependsLoaded : function (callback) { 
+		dependencies="dependsLoaded : function (callback) {
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Start...');
-			
+
 			window.clearTimeout(isoTest.timer);
 			//Check for jQuery
 			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
@@ -99,9 +99,9 @@ get_dependencies (){
 
 get_init (){
 	init='isoTest.init();'
-	if [[ "${jq}" == true ]] 
+	if [[ "${jq}" == true ]]
 	then
-		init="isoTest.dependsLoaded(function(){ 
+		init="isoTest.dependsLoaded(function(){
 		isoTest.init();
 	});"
 	fi
@@ -110,7 +110,7 @@ get_init (){
 get_resFunnel (){
 	resListener=''
 	resFunction=''
-	if [[ "${resFunnel}" == true ]] 
+	if [[ "${resFunnel}" == true ]]
 	then
 		resListener='
 		window.addEventListener('hashchange', isoTest.viewChange, false);
@@ -118,7 +118,7 @@ get_resFunnel (){
 		resFunction='
 		hashHandler : function(){
 			if(/viewName/.test(location.hash)){
-				isoTest.elementLoaded(isoTest.selector, function() {	
+				isoTest.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
 			}
@@ -140,7 +140,7 @@ if [[ $1 -gt 0 ]]; then
 	creativeName="Challenger $1"
 fi
 
-cat <<EOT >> ${folderName}/${titleConcat}_${challName}.html
+cat <<EOT >> ${folderName}/dev/${titleConcat}_${challName}.html
 <style>
 </style>
 <script>
@@ -156,31 +156,31 @@ cat <<EOT >> ${folderName}/${titleConcat}_${challName}.html
 			isoTest.log('Test Running...');
 			${accountLog}
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-				
-			helpers.elementLoaded(isoTest.selector, function() {	
-				isoTest.log('Test Ready!');	
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
 			${resListener}
 		},${resFunction}
 		chall : function() {
-			
+
 			// Your code goes here
 
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20'; 
-			s.eVar20 = linkName; 
-			s.tl(this, 'o', linkName); 
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
 		},$dependencies
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
 		}
-		
+
 	}
 
 	var helpers = {
@@ -216,7 +216,7 @@ cat <<EOT >> ${folderName}/${titleConcat}_${challName}.html
 EOT
 }
 
-mkdir $folderName
+mkdir -p $folderName/dev/
 
 i=0
 while [[ "${i}" -le "${chall}" ]]

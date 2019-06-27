@@ -41,7 +41,7 @@ Install all dependecies in the mvt-tools folder
 `npm install`
 
 ### Update your source files path
-Depending on how your files are organized you'll have to update the path of the files being watched in Gruntfile.js. *Do not commit this change*, simply add this file to your personal git ignore rules.
+Depending on how your files are organized you'll have to update the path of the files being watched in Gruntfile.js. **Do not commit this change**
 
 ```
 watch: {
