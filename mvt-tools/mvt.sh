@@ -132,13 +132,13 @@ get_resFunnel
 
 generate_template () {
 
-challName='Control'
-creativeName='Control'
+#challName='Control'
+#creativeName='Control'
 
-if [[ $1 -gt 0 ]]; then
+#if [[ $1 -gt 0 ]]; then
 	challName="Chall${1}"
 	creativeName="Challenger $1"
-fi
+#fi
 
 cat <<EOT >> ${folderName}/dev/${titleConcat}_${challName}.html
 <style>
