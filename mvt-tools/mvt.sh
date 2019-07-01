@@ -116,7 +116,7 @@ get_resFunnel (){
 		window.addEventListener('hashchange', isoTest.viewChange, false);
 		'
 		resFunction='
-		hashHandler : function(){
+		viewChange : function(){
 			if(/viewName/.test(location.hash)){
 				isoTest.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();

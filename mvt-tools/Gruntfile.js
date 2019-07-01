@@ -39,7 +39,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['watch']);
 
   grunt.event.on('watch', function(action, filepath, target) {
-    var filename = filepath.slice(0,filepath.lastIndexOf('/')+1) + 'prod/' + filepath.slice(filepath.lastIndexOf('/')+1, filepath.lastIndexOf('.html')) + '.prod.html';
+    var filename = filepath.slice(0,filepath.lastIndexOf('/dev/')+1) + filepath.slice(filepath.lastIndexOf('/')+1, filepath.lastIndexOf('.html')) + '.prod.html';
 
     grunt.config('strip_code.your_target.files.0.src', filepath);
     grunt.config('strip_code.your_target.files.0.dest', filename);
