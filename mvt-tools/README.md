@@ -32,11 +32,11 @@ Test code clean-up and minification has been automated using grunt + strip_code 
 
 
 ### Install
-Install node & npm, you can do a pkg install or use brew
+Install node & npm, you can do a pkg install or use Homebrew. [Instructions](https://www.dyclassroom.com/howto-mac/how-to-install-nodejs-and-npm-on-mac-using-homebrew)
 
 Install grunt cli
 
-`npm install -g grunt-cli`
+`npm install -g grunt-cli` or `brew install grunt-cli`
 
 Install all dependecies in the mvt-tools folder
 
