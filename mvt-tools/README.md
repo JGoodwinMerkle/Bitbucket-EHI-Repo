@@ -1,5 +1,7 @@
 # Isobar MVT Tools
 
+**UPDATE 2019-08-09: All development will take place in our internal repository, each client will have a dedicated folder for all our files. Grunt will take care of the minification and moving of the files**
+
 ## Using the template
 Copy the mvt executable file to your bin ~/bin
 
@@ -41,21 +43,14 @@ Install all dependecies in the mvt-tools folder
 `npm install`
 
 ### Update your source files path
-Depending on how your files are organized you'll have to update the path of the files being watched in Gruntfile.js. **Do not commit this change**
+Depending on how your files are organized you'll have to update the path of the files being moved to the client repo in Gruntfile.js. **Do not commit this change**
 
 ```
-watch: {
-  files: ['/path/to/your/working/folder'],
-  tasks: ['strip_code','htmlmin'],
-  options: {
-    event: ['changed'],
-    spawn: false
-  }
-}
+var destinationPath = '../../../ehi/multivariate-testing/Isobar'; //path to your ehi folder
 ```
 
 ### Using grunt watch
-By default, the grunt task is watch, simply run `grunt` on the console. This will run the tasks to remove debug code and minify the file whenever you save your file. It'll create a new folder under your test folder with the production-ready file(s).
+By default, the grunt task is watch, simply run `grunt` on the console. This will run the tasks to remove debug code, minify, and move the file whenever you save your file. It'll create a new folder under your test folder with the production-ready file(s).
 
 ### Running grunt from working directory
 If you want to run the grunt tasks from a different folder, grunt gives you the option to run it from where your current path is at.
