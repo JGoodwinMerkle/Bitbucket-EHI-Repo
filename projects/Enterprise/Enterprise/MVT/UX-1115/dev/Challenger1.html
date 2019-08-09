@@ -1,0 +1,161 @@
+<style>
+	.en_gb.vanhire.GB .lob-intro-comp {
+		display: none;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.co.uk',
+		test : 'Enterprise Van Hire Landing Page',
+		cookieName : 'enVanHireLandingPage',
+		customMbox : 'enVanHireLandingPageClicks',
+		creative : "Challenger 1",
+		heroContainer : '<div class="interrupter-small-band section" id="iso-hero">\
+											<section class="band interrupter-band full-bleed content-left gray border-">\
+												<section class="g g-2up">\
+													<section class="gi content-block vertical-align-center">\
+														<div class="content-container horizontal-align-left">\
+															<h1 class="headline iso-header"></h1>\
+															<span class="interrupter-band-text iso-text"><p></p></span>\
+														</div>\
+													</section>\
+													<section class="gi image-block">\
+														<div class="img-container">\
+															<div class="content-bg-img">\
+																<img data-original="/content/dam/ecom/hosted/van-rental-hero.jpg" src="/content/dam/ecom/hosted/van-rental-hero.jpg" class="fake-bg lazy lazy-initial lazy-loaded" alt="" data-was-processed="true">\
+															</div>\
+															<img data-original="/content/dam/ecom/hosted/van-rental-hero.jpg" src="/content/dam/ecom/hosted/van-rental-hero.jpg" alt="Car Hire from Enterprise" class="content-fg-img lazy lazy-initial lazy-loaded" data-was-processed="true">\
+														</div>\
+													</section>\
+												</section>\
+											</section>\
+										</div>',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+	        _satellite.setVar('TargetCampaign', isoTest.test);
+	        _satellite.setVar('TargetCreative', isoTest.creative);
+	        _satellite.track('target_variables');
+		    }
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.dependsLoaded(function(){
+				isoTest.chall();
+				if (isoTest.debug === true) {
+					console.log("Test Ready!"); 
+				}
+			});
+	
+		},
+		chall : function() {
+			$('.en_gb.vanhire.GB .band.three-up-band').insertAfter('.en_gb.vanhire.GB .meet-the-fleet.section');
+
+			$(isoTest.heroContainer).insertAfter('.en_gb.vanhire.GB .band.breadcrumb-band');
+
+			$('.en_gb.vanhire.GB #reservationWidget .inner-container').removeClass('collapsed').addClass('expanded');
+
+			isoTest.updateHeroContent();
+		},
+		updateHeroContent : function() {
+			var heroHeaderText = $('.en_gb.vanhire.GB .lob-intro-comp .band.lob-intro-content-band .g.gi-2-3.left h1').text();
+			var heroBodyText = $('.en_gb.vanhire.GB .lob-intro-comp .band.lob-intro-content-band .g.gi-2-3.left .lob-intro-text p').text();
+
+
+			$('#iso-hero .iso-text').text(heroBodyText);
+			$('#iso-hero .iso-header').text(heroHeaderText);
+
+			$('.en_gb.vanhire.GB .lob-intro-comp').remove();
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        "mbox": isoTest.customMbox,
+        "params": {
+            "click": element
+        },
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+      });
+		},
+		supplant : function (str, o) {
+			return str.replace(/{([^{}]*)}/g, function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : '';
+			});
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+      } else {
+        isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+      }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+        	return decodeURIComponent(pair[1]);
+        }
+      }
+    }
+	}
+	
+	isoTest.dependsLoaded(function(){ 
+    isoTest.init();
+  });
+})();
+</script>

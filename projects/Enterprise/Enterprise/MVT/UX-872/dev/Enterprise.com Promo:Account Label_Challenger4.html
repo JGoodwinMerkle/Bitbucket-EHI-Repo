@@ -1,0 +1,422 @@
+<style>
+	#book .coupon-field-wrapper {
+		margin: 18px 0 0 0;
+	}
+
+	#book #coupon {
+		color: #181918;
+	}
+
+	.date-time-label span:nth-child(2):after, .location-input-label > span:first-child:after, .age-input label > span:first-child:after{
+    content: " *";
+	}
+
+	.location-input-label .sublabel > span:last-child {
+    float: right;
+    white-space: nowrap;
+	}
+
+	.location-input-label .sublabel .bold {
+    font-family: "DINMedium",Arial,sans-serif;
+	}
+
+	#book #iso-couponSub {
+		display: block;
+	}
+
+	#book label#iso-couponSub {
+		font-family: "DINLight",Helvetica,Arial,sans-serif;
+	  font-size: 15px;
+	}
+
+	#book #iso-couponSub .iso-couponOp {
+		text-transform: capitalize;
+	}
+
+	#book #coupon {
+		margin:	.1875rem 0 0 0;
+	}
+
+	#book .booking-widget .booking-submit {
+		margin-top: 42px;
+	}
+
+	#book .booking-widget .booking-submit a {
+		font-size: 16px;
+	}
+
+	.inner-container.collapsed #book .iso-memWrap {
+		display: none;
+	}
+
+	#book .iso-memWrap {
+		cursor: pointer;
+		font-weight: 900;
+		margin-top: 1em;
+		text-align: center;
+	}
+
+	#book .iso-memWrap a {
+		color: #169A59;
+	}
+
+		.pre-expedited-banner i.icon.icon-eplus-logo-black {  
+		background-size: 28px !important; 
+		float: left !important;
+		height: 42px !important; 
+		width: 28px !important;
+	}
+
+	.iso-eplus .content-container a { 
+		color: #169a5a; 
+	}
+
+	.iso-eplus .eplus-info { 
+		float: right; 
+		text-align: right;
+	}
+
+	.iso-eplus .accented a { 
+		color: #169a5a; 
+		font-weight: bold;
+		text-transform: capitalize; 
+	}
+
+	.iso-eplus h2, .iso-eplus h3 {
+		color: #181918; 
+		font-family: "DINMedium",Helvetica,Arial,sans-serif; 
+		font-size:17px; text-transform: uppercase;
+	}
+
+	@media (min-width: 1057px) {
+		#book .booking-widget .date-time-form {
+			margin-bottom: 1.5em;
+		}
+
+		#book .booking-widget .booking-submit {
+			margin-top: 4px;
+		}
+	}
+
+	@media (max-width: 1032px) {
+		#book .booking-widget .booking-submit a {
+			line-height: 16px;
+		}
+	}
+
+	@media (max-width: 820px) {
+		.iso-eplus.pre-expedited-banner i.icon.icon-eplus-logo-black { 
+			vertical-align: top;
+		}
+
+		.iso-eplus.pre-expedited-banner .content-container { 
+			width: calc(100% - 70px); 
+		}
+
+		.iso-eplus .eplus-info { 
+			float: left;
+			margin-left: 60px;
+			margin-top: 10px;
+			position: relative; 
+			top: 0;  
+		}
+	}
+
+	@media (max-width: 48em) {
+		#book .coupon-field-wrapper {
+			margin: 0 3% 16px;
+		}
+
+		#book #coupon {
+			margin: .1875rem 0 0 0;
+			padding: .8em .5em .5em .5em;
+			width: 100%;
+		}
+
+		#book .booking-widget .booking-submit {
+			margin: 25px 3% 0px 0px;
+		}
+	}
+
+	@media (max-width: 46.8em) {
+		#location-text-box-pickup {
+			position: relative;
+		}
+
+		#location-text-box-pickup .sublabel > span:last-child {
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+
+		#book .booking-widget .booking-submit {
+			margin: auto;
+		}
+
+		#book .booking-widget .booking-submit a {
+			font-size: 18px;
+			line-height: inherit;
+		}
+
+		.iso-eplus.eplus { 
+			margin-bottom: 0; 
+		}
+	}
+
+	@media (max-width: 35.75em) {
+		#location-text-box-pickup > span > span:last-child {
+			display: none;
+		}
+
+		.iso-eplus.eplus { 
+	  	margin: 0; width:100%; 
+	  }
+
+		.iso-eplus.pre-expedited-banner i.icon.icon-eplus-logo-black { 
+			float: left;
+			margin: auto;
+		}
+
+		.iso-eplus.pre-expedited-banner .content-container{ 
+			display: inline-block;
+			margin: 0 10px;
+			width: calc(100% - 50px);
+		}
+
+		.iso-eplus .eplus-info {
+			display: inline-block;
+			float: left;
+			margin: 10px 0 0 40px;
+			text-align: left;  
+			width: calc(100% - 50px);  
+		}
+	}
+</style>
+
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Promo/Account Label',
+		cookieName : 'enPromoAccountLabel',
+		customMbox : 'enPromoAccountLabelClicks',
+		creative : "Challenger 4",
+		resWidget: '#reservationWidget',
+		content: {
+			required: '<span><span class="bold">* </span>Required Field</span>',
+			signIn: '<div class="iso-memWrap"><span class="iso-mem"><a class="iso-signIn">Continue as Member</a></span></div>'
+		},
+		couponBlock: '<div class="custom-select"><label id="iso-couponSub">Rate Code<span class="iso-couponOp"> (Contract, Promotion, Group, etc.)</span></label></div>',
+		widgetSelector: '.reserve-widget-band',
+		template: '<div class="iso-eplus eplus pre-expedited-banner cf hide">\
+		                 <i class="icon icon-eplus-logo-black" aria-hidden="true" role="presentation"></i>\
+		                 <div class="content-container">\
+		                 	<h2>Enterprise Plus</h2>\
+							<span class="content-message">Welcome! Continue below and reserve to earn points toward free rentals or to redeem points for free rental days on qualifying rentals. (See complete <a class="iso-terms" href="https://www.enterprise.com/en/loyalty/enterprise-plus-terms-conditions.html" target="_blank">Enterprise Plus terms and conditions</a>.)</span>\
+		                </div>\
+		        </div>',
+		init : function() {
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			
+			isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded(isoTest.resWidget, function() {	
+					isoTest.log("Test Ready!");	
+					isoTest.chall();	
+				});
+			});
+
+		},
+		chall : function() {
+			$(isoTest.widgetSelector).prepend(isoTest.template);
+			$('#viewModifyCancelBookingWidget').click(function(){
+				isoTest.updateWidget();
+			});
+
+			isoTest.checkPath();
+			isoTest.updateLabels();
+		},
+		updateWidget: function() {
+			var bookingLink = $('#viewModifyCancelBookingWidget span.active');
+			if (bookingLink.text() === "Reserve a Rental Car" || bookingLink.text() === "START A RESERVATION") {
+				setTimeout(function(){
+					isoTest.checkPath();
+					isoTest.updateLabels();
+				}, .1);
+			}
+		},
+		checkPath: function() {
+			if (location.pathname.indexOf('car-rental.html') > -1) {
+				$('#reservationWidget .inner-container').removeClass('collapsed').addClass('expanded');
+			}
+		},
+		updateLabels : function(){
+			$('#location-text-box-pickup .sublabel').append(isoTest.content.required);
+
+			var $couponField = $('.coupon-field-wrapper');
+			$couponField.prepend($(isoTest.couponBlock));
+			$couponField.find('#coupon').attr('placeholder','');
+
+			var $bookButton = $('.reservationWidget .booking-submit');
+			$bookButton.append($(isoTest.content.signIn));
+
+			isoTest.updateButton();
+			isoTest.addEvents();
+			isoTest.checkLogIn();
+		},
+		addEvents : function(){
+			$('.iso-mem a').click(function(e){
+				e.preventDefault();
+				$("html, body").animate({ scrollTop: 0 }, "slow");
+				$('#signInJoinButton').click();
+			});
+
+			$('#login-container').on('click', '.login-widget.active .enterprise-login.active .login-field-container .btn', function(){
+				isoTest.checkLogIn();
+				isoTest.hideSignIn();
+			});
+
+			$('#login-container').on('click', '.modal-container.active .logout-modal .btn.cancel', function(){
+				isoTest.updateButton();
+			});
+		},
+		checkLogIn : function (){
+			var interval = setInterval(function(){ 
+				var loggedIn = ReservationStateTree.get(['model','reservationSession','profile']);
+				if(loggedIn != undefined) {
+					isoTest.removeButtonUpdate();
+					clearInterval(interval);
+				}
+
+				window.load = function() {
+					var loggedIn = ReservationStateTree.get(['model','reservationSession','profile']);
+					if (loggedIn == undefined) {
+						clearInterval(interval);
+					}
+				}
+			}, 1000);
+		},
+		updateButton : function(){
+			$('#book .booking-submit #continueButton').text('Continue As Guest');
+			$('.reservationWidget .booking-submit .iso-memWrap').css('display', 'block');
+			$('.reserve-widget-band .iso-eplus.pre-expedited-banner ').addClass('hide');
+		},
+		removeButtonUpdate : function(){
+			$('#book .booking-submit #continueButton').text('Continue');
+			$('.reservationWidget .booking-submit .iso-memWrap').css('display', 'none');
+			$('.reserve-widget-band .iso-eplus.pre-expedited-banner').removeClass('hide');
+		},
+		hideSignIn : function() {
+			function hideContainer(){
+				$('#login-container .login-widget').removeClass('active');
+				$('#login-container .login-widget .utility-nav-label').trigger('click');
+			}
+			setTimeout(function(){
+				var loggedIn = ReservationStateTree.get(['model','reservationSession','profile']);
+				if(loggedIn != undefined) {
+					$('#login-container .login-widget .authenticated.utility-nav-content').animate({height: 0},"slow", hideContainer());
+				}
+			}, 3000);
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        "mbox": isoTest.customMbox,
+        "params": {
+          "click": element
+      	},
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+    	});
+		},
+		analyticsLoaded : function(callback){
+			isoTest.log('analyticsLoaded - Checking...');
+			var aTimer;
+			window.clearTimeout(aTimer);
+			if (_a && _a.stationId.length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('analyticsLoaded - Found!');
+					callback();
+				}
+	    } else {
+	      aTimer = window.setTimeout(function(){isoTest.analyticsLoaded(callback);}, 100);
+	    }
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	    } else {
+	      isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	    }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === "function") {
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	    var query = window.location.search.substring(1);
+	    var vars = query.split('&');
+	    for (var i = 0; i < vars.length; i++) {
+	      var pair = vars[i].split('=');
+	      if (decodeURIComponent(pair[0]) == variable) {
+	      	return decodeURIComponent(pair[1]);
+	      }
+	    }
+	  }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

@@ -1,0 +1,195 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Alamo.com',
+		test : 'EHI Email Opt In',
+		cookieName : 'ehiEmailOptIn',
+		customMbox : 'ehiEmailOptInClicks',
+		creative : "Challenger 1",
+		timeOut : 10000,
+		domain : (window.location.hostname.indexOf('alamo.com') > -1) ? 'alamo' : 'enterprise',
+		pages : (window.location.href.indexOf('deals.html') > -1) ? 'deals' : 'utopian',
+		content : {
+			alamo : {
+				modalText : 'Want more content like this delivered to your inbox? Sign up for email specials to receive weekly deals, last minute specials and travel tips.',
+			},
+			enterprise : {
+				modalHeader : {
+					deals : {
+						modalText : 'Get the latest rental discounts, great rates and special offers delivered directly to your inbox.'
+					},
+					utopian : {
+						modalText : 'Want more content like this delivered to your inbox? Sign up for email specials to receive weekly deals, last minute specials and travel tips.'
+					}
+				},
+				modalBody : '<h2>Sign up for Email Specials</h2>\
+											<p>{modalText}</p>\
+											<div class="btn-grp">\
+												<button class="btn ok">Sign Up</button>\
+												<button class="btn cancel">No Thanks</button>\
+											</div>'
+			}
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.dependsLoaded(function(){
+				isoTest.chall();
+				if (isoTest.debug === true) {
+					console.log("Test Ready!"); 
+				}
+			});
+	
+		},
+		chall : function() {
+			if (localStorage.getItem('ehiOptInSeen') === null) {
+				setTimeout(function(){
+					isoTest.triggerModal[isoTest.domain]();
+				}, isoTest.timeOut);
+			}
+		},
+		triggerModal : {
+			alamo : function() {
+				if ($('.footer .insidersSignUp .anon a').length > 0) {
+					$('.footer .insidersSignUp .anon a').trigger("click");
+					isoTest.updateAlamoModalText();
+					isoTest.cookieModal();
+				}
+			},
+			enterprise : function() {
+				isoTest.cookieModal();
+				$('.modal-container').addClass('active');
+				$('.modal-content').addClass('redirect-modal').addClass('iso-signup-modal');
+				var parent = $('.modal-header')[0];
+				for( var i = 0; i < parent.childNodes.length; i++ ) {
+				  var current_child = parent.childNodes[i];
+				  if( current_child.nodeType == 3 )
+				    parent.removeChild( current_child );
+				}
+				$('.modal-body').html(isoTest.supplant(isoTest.content.enterprise.modalBody, isoTest.content[isoTest.domain].modalHeader[isoTest.pages]));
+				$('.iso-signup-modal .btn.cancel').on('click', function(){
+					$('.iso-signup-modal .close-modal').trigger('click');
+				});
+				$('.iso-signup-modal .btn.ok').on('click', function(){
+					isoTest.updateEnterpriseRedirect[isoTest.pages]();
+				});
+			}
+		},
+		updateEnterpriseRedirect : {
+			deals : function() {
+				window.location.href = 'https://www.enterprise.com/en/email-specials.EPOPDEALS.html';
+			},
+			utopian : function() {
+				window.location.href = 'https://www.enterprise.com/en/email-specials.EPOPPERSUE.html';
+			}
+		},
+		updateAlamoModalText : function() {
+			if (isoTest.pages === 'utopian') {
+				isoTest.elementLoaded('#modal .hotDealsOnWheels .utilityRail p:nth-child(2)', function(){
+					$('#modal .hotDealsOnWheels .utilityRail p:nth-child(2)').text(isoTest.content.alamo.modalText);
+				});
+			}
+		},
+		cookieModal : function() {
+			localStorage.setItem('ehiOptInSeen','true');
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        "mbox": isoTest.customMbox,
+        "params": {
+            "click": element
+        },
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+      });
+		},
+		supplant : function (str, o) {
+			return str.replace(/{([^{}]*)}/g, function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : '';
+			});
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+      } else {
+        isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+      }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+        	return decodeURIComponent(pair[1]);
+        }
+      }
+    }
+	}
+	
+	isoTest.dependsLoaded(function(){ 
+    isoTest.init();
+  });
+})();
+</script>

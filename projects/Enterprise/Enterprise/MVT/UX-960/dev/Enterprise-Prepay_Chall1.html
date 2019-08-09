@@ -1,0 +1,266 @@
+<style>
+.reservation-flow.cars .car-container .car .pay-now-container .right-rate-section, .reservation-flow.cars .prepaytile-container {
+	display: none !important;
+}
+.reservation-flow.cars .car-container .car .pay-now-container .rate-container:first-of-type:after {
+	border-left: none !important;
+}
+.reservation-flow.cars .car-container .car .pay-now-container .rate-container {
+	width: 100% !important;
+}
+.reservation-flow.cars .car-container .car .pay-now-container .rate-container .header-border .header-copy {
+	display: inline-block;
+    background: #fff;
+    padding-right: 10px;
+    position: absolute;
+    top: -10px;
+}
+/* Rate Comparison */
+.modal-content.rate-comparison-modal .prepay-col {
+	display: none !important;
+}
+.modal-content.rate-comparison-modal .paylater-select {
+	width: 40% !important;
+	margin-left: 0 !important;
+}
+.pay-now-container .day-rate {
+	color: #656565;
+	font-family: "DINRegular",Arial,sans-serif;
+	margin:10px;
+}
+.reservation-flow.cars .car-container .car .pay-now-container .rate-container .rate-uppertext.rate-per-time {
+	float: left;
+    font-size: 25px;
+    border-right: 1px solid #dbdbdb;
+    padding-right: 10px;
+    padding-top: 9px;
+    width: 50%;
+}
+.reservation-flow.cars .car-container .car .pay-now-container .rate-container .rate-uppertext.rate-per-time span:first-of-type {
+	font-size: 24px;
+}
+.reservation-flow.cars .car-container .car .pay-now-container .rate-container .rate-uppertext.rate-per-time span:last-of-type, .iso-total{
+	clear: both;
+	display: block;
+}
+.pay-now-container .rate-normal.currency .unit, .rate-normal.currency .fraction {
+	font-size: 24px !important;
+	font-weight: normal !important;
+}
+.pay-now-container .rate-normal.currency .fraction,  .rate-normal.currency .symbol {
+ 	top: 9px !important;
+ }
+.iso-total {
+	display: block;
+    font-size: 15px;
+    color: #656565;
+}
+.iso-ca .pay-now-container .rate-normal.currency .fraction,  .rate-normal.currency .symbol {
+ 	font-size: : 24px !important;
+ 	margin-right: 6px;
+ }
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Enterprise No Prepay',
+		cookieName : 'EnterpriseNoPrepay',
+		customMbox : 'EnterpriseNoPrepayClicks',
+		creative : "Challenger 1",
+		prepaySelector: '.pay-now-container .right-rate-section',
+		paylaterSelector: '.pay-now-container .left-rate-section .select-button',
+		rateSelector: '.rate-compare-link',
+		modalSelector: '#global-modal-title',
+		lang: 'en_US',
+		content: {
+			en_US: {
+				select: 'Select',
+				included: 'What\'s included',
+				total: 'Total'
+			},
+			es_US: {
+				select: 'Seleccionar',
+				included: 'Lo que se incluye',
+				total: 'Total'
+			}
+			,
+			fr_CA: {
+				select: 'Sélectionner',
+				included: 'Ce qui est compris',
+				total: 'Total'
+			}
+		},
+		init : function() {
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded('.cars-wrapper', function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();
+			});
+		},
+		chall : function() {
+			isoTest.setLanguage();
+			isoTest.disableButton();
+			isoTest.updateButton();
+
+			$(window).on('hashchange', function(){
+				if(window.location.hash=='#cars'){	
+					isoTest.elementLoaded('.cars-wrapper', function() {	
+						isoTest.disableButton();
+						isoTest.updateButton();
+					});
+				}
+			});
+		},
+		bindEvents: function(){
+			$(isoTest.rateSelector).click(function(){
+				isoTest.elementVisible(isoTest.modalSelector,function(){
+					isoTest.modalUpdates();
+				});
+			});
+		},
+		modalUpdates: function(){
+			$(isoTest.modalSelector).text(isoTest.content[isoTest.lang].included);
+		},
+		updateButton: function(){
+			$(isoTest.paylaterSelector).text(isoTest.content[isoTest.lang].select);
+			$(isoTest.rateSelector).text(isoTest.content[isoTest.lang].included);
+
+			var $total = $('<span class="iso-total">'+isoTest.content[isoTest.lang].total+'</span>');
+			$('.pay-now-container .rate-normal').append($total);
+
+			isoTest.bindEvents();
+		},
+		disableButton: function(){
+			$(isoTest.prepaySelector).click(function(e){
+                return false;
+            });
+		},
+		setLanguage: function(){
+	        if (window.location.href.indexOf('/es/') > -1) {
+	          isoTest.lang = 'es_US';
+	        } else if (window.location.href.indexOf('/en/') > -1) {
+	          isoTest.lang = 'en_US';
+	        } else if (window.location.href.indexOf('/fr/') > -1) {
+	          isoTest.lang = 'fr_CA';
+	        } 
+
+	        if(window.location.href.indexOf('.ca') > -1){
+	        	$('body').addClass('iso-ca');
+	        }
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementVisible: function(ele, callback){
+			var visibleInterval = window.setInterval(function(){
+				isoTest.log('elementVisible::  ' + ele + " - Checking...");
+				if ($(ele).length > 0 && $(ele).is(':visible')) {
+					if (typeof callback === 'function') {
+						isoTest.log('elementVisible::  ' + ele + " - Found!");
+						window.clearInterval(visibleInterval);
+						callback();
+					}
+		        } 
+			},100);
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

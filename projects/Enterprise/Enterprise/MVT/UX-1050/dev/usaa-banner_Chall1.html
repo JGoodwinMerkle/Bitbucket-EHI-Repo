@@ -1,0 +1,171 @@
+<style>
+.iso-usaa {
+	background: #f3f3f3;
+	display: inline-block;
+	font-size: 14px;
+	margin: 15px 7%;
+	padding: 20px;
+}
+.iso-usaa .iso-banner {
+	float: left;
+	margin: 0 15px 0 0;
+	width: 40%;
+}
+.iso-usaa .iso-content {
+	float: left;
+	width: calc(60% - 15px);
+}
+.iso-usaa strong{
+	font-family: 'DINRegular', Arial, Helvetica, sans-serif;
+}
+.iso-usaa a, .iso-usaa a:visited{
+	color: #169a5a;
+}
+.iso-usaa a:hover {
+	color: #006639;
+    text-decoration: underline;
+}
+@media (max-width: 66em){
+	.iso-usaa {
+		margin: 15px 4%;
+	}
+}
+@media (max-width: 706px){
+	.iso-usaa .iso-banner {
+		float: none;
+		margin: 0 auto 10px;
+		width: 80%;
+	}
+	.iso-usaa .iso-content {
+		font-size: 14px;
+		width: 100%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'USAA Banner',
+		cookieName : 'enUSAABanner',
+		customMbox : 'enUSAABannerClicks',
+		creative : "Challenger 1",
+		commitSelector: '#commit .verification-header',
+		bannerSrc:'/content/dam/ecom/utilitarian/common/business-rentals/corporate-accounts/For_USAA_Members_hrz_center_2.5in_300dpi_clr_blu.png',
+		template: '<div class="iso-usaa"><div class="iso-banner"><img src="/content/dam/ecom/utilitarian/common/business-rentals/corporate-accounts/For_USAA_Members_hrz_center_2.5in_300dpi_clr_blu.png" alt="For USAA Members" /></div><div class="iso-content">As a USAA member, you\'ll <strong>save 5% on everyday low rates</strong> at participating locations along with <a href="/en/corporate-accounts/usaa/faqs.html" target="_blank">other special benefits</a>.</div></div>',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.commitSelector, function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();
+			});
+			$(window).on('hashchange', function(){
+				if(/commit/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.findElement, function() {	
+						isoTest.chall();
+					});
+				} 
+			});
+		},
+		chall : function() {
+			isoTest.preloadImg();
+			$(isoTest.commitSelector).after(isoTest.template);
+		},
+		preloadImg: function(){
+			$('<img/>')[0].src = isoTest.bannerSrc;
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

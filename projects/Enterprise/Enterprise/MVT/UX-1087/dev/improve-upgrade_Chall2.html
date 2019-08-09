@@ -1,0 +1,227 @@
+<style>
+#price-details {
+	position: relative;
+}
+.iso-upgradeInfo .verification-page .upgrade-block.iso-upgrade {
+	position: absolute;
+    top: 190px;
+    width: calc(100% - 30px);
+}
+.iso-upgradeInfo .verification-page .upgrade-block.iso-upgrade h3 {
+	color: #333;
+}
+.iso-upgradeInfo .verification-page .upgrade-block.iso-upgrade .icon.icon-res-nav-notch{
+	right: calc(50% - 10px);
+}
+.iso-upgradeInfo .verification-page .upgrade-block.iso-upgrade .upgrade-category .upgrade-info {
+	position: relative;
+}
+.iso-upgradeInfo .verification-page .upgrade-block.iso-upgrade .upgrade-category .upgrade-button {
+    border: 2px solid #169a5a;
+	padding: 6px 15px;
+	position: absolute;
+	right: 0;
+	vertical-align: bottom;
+}
+.iso-upgradeInfo .verification-page .upgrade-block.iso-upgrade .upgrade-category .upgrade-button:hover {
+	background: #0a653b;
+	border-color: #0a653b;
+	color: #fff;
+	text-decoration: none;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Improve Upgrade Experience',
+		cookieName : 'enImproveUpgradeExperience',
+		customMbox : 'enImproveUpgradeExperienceClicks',
+		creative : 'Challenger 1',
+		upgradeBlock: '.upgrade-block',
+		upgradeBtn: '.upgrade-block .upgrade-button',
+		headline: '<h3>Did you know?</h3>',
+		replacementTxt: 'You can get',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			if(_analytics.reservation.upgradeVehiclePossible){
+				isoTest.elementLoaded(isoTest.upgradeBlock, function() {	
+					isoTest.log('Test Ready!');	
+	  				isoTest.chall();
+				});
+			}
+
+			$(window).on('hashchange', function(){
+				if(/commit/.test(window.location.hash)){	
+					if(_analytics.reservation.upgradeVehiclePossible){
+						isoTest.elementLoaded(isoTest.upgradeBlock, function() {	
+							isoTest.log('Test Ready!');	
+			  				isoTest.chall();
+						});
+					}
+				} 
+			});
+		},
+		chall : function() {
+			$('#commit').addClass('iso-upgradeInfo');
+			$(isoTest.upgradeBlock).addClass('iso-upgrade');
+			
+			var replaceTxt = $(isoTest.upgradeBlock).find('.upgrade-info').text();
+				replaceTxt = replaceTxt.replace('Get', isoTest.replacementTxt);
+			$(isoTest.upgradeBlock).find('.upgrade-info').text(replaceTxt);
+
+			$(isoTest.upgradeBlock).find('.upgrade-info').prepend(isoTest.headline);
+
+			var priceTotal = isoTest.getTotal();
+			$(isoTest.upgradeBlock).find('.upgrade-info').append(' <span>('+priceTotal+' total)</span>');
+
+			isoTest.bindEvents();
+
+			isoTest.elementLoaded('.vehicle img', function(){
+				isoTest.adjustBox();
+			});
+
+			$('.vehicle img').on('load',function(){
+				isoTest.adjustBox();
+			});
+
+			isoTest.adjustBox();
+			
+		},
+		getTotal: function(){
+			var resSession = ReservationStateTree.get(['model','reservationSession']);
+			var chargeType = resSession.chargeType;
+			var totalUpgrade = resSession.upgrades.vehicle_rates[chargeType].price_summary.estimated_total_payment.format;
+			return totalUpgrade.replace(' ','');
+		},
+		bindEvents: function(){
+			$(isoTest.upgradeBtn).click(function(){
+				isoTest.userUpgrade();
+			});
+
+			$(window).resize(isoTest.adjustBox);
+		},
+		userUpgrade: function () {
+			var blockInt = setInterval(function(){
+				if($(isoTest.upgradeBlock).length == 0){
+					$('#commit').removeClass('iso-upgradeInfo');
+					$('.vehicle img').css('margin-bottom',0);
+				}
+			},200);
+
+			setInterval(function(){
+				clearInterval(blockInt);
+			}, 10000);
+		},
+		adjustBox: function(){
+			var headH = $('#price-details .view-header').outerHeight();
+			var carMT = parseFloat($('.iso-upgradeInfo .vehicle img').css('margin-top'));
+			var carH = $('.iso-upgradeInfo .vehicle img').height();
+		   
+			var boxT = headH + carH + carMT + 15;
+
+			$('.iso-upgrade').css({
+				'top' : boxT
+			});
+
+			var boxH = $('.iso-upgrade').outerHeight();
+			var carM = boxH + 15;
+
+			$('.iso-upgradeInfo .vehicle img').css({
+				'margin-bottom' : carM
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, linkName) {
+			s.linkTrackVars = 'eVar20'; 
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Start...');
+			
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Ready!');
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

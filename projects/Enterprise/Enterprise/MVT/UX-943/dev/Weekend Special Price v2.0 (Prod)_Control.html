@@ -1,0 +1,108 @@
+<style>
+.promotion-detail-content .interrupter-band .image-block { background-image: url(/content/dam/ecom/promotions/weekend-special-car-960-250.jpg); background-position: center; background-size: auto 100%;}
+    .promotion-detail-content .img-container .content-bg-img { display: none; }
+    .promotion-detail-content .img-container img { visibility: hidden; }
+    .promotion-detail-content .interrupter-band-text li { font-size: 20px; line-height: 24px;}
+    .interrupter-band.content-left .gi:first-child{ margin: 2em 3%; }
+    .no-flexbox .interrupter-band.content-left .gi:first-child{ margin: 0 3%; }
+</style>
+
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.com",
+		test : "weekend-special",
+		creative : "Control",
+        couponName : 'Great Weekend Rates',
+        couponVal : 'ERETWEB',
+		templates :{
+			chicklet: '<div class="coupon-chicklet removable"><a class="chicklet"><span class="iso-couponName">Great Weekend Rates</span><span> </span><span aria-label="Clear Location">X</span></a></div>'
+		},
+		init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			if (isoTest.debug === true) {
+				console.log("Test Running...");
+				console.log(isoTest.account + " - " + isoTest.portfolio);
+				console.log(isoTest.test + " - " + isoTest.creative);
+			}
+            if(!/weekend-specials/.test(location.pathname)){
+                return;
+            }
+          _satellite.setCookie('tt_greatrates', 'true');
+    	    isoTest.dependsLoaded(function() {
+      	    
+    		      isoTest.elementLoaded('#reservationWidget .booking-submit', function() {
+    				    if (isoTest.debug === true) {
+    							console.log("Test Ready!");
+    						}
+    	  		       isoTest.chall();
+                
+    			    }); 	
+			});
+		},
+	   elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 500);
+	        }
+		},
+	  dependsLoaded : function (callback) {
+				if (isoTest.debug === true) {
+					console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				}
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === 'function') {
+						if (isoTest.debug === true) {
+							console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						}
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+		},
+	  setCid : function() {
+	    ReservationStateTree.select(['model']).set('coupon', isoTest.couponVal);
+	  },
+	  setCouponName : function() {
+        if($('.coupon-field-wrapper .chicklet span:first-child').length > 0){
+            $('.coupon-field-wrapper .chicklet span:first-child').text(isoTest.couponName);
+        } else {
+            $('.coupon-field-wrapper').append($(isoTest.templates.chicklet));
+            $('.coupon-field-wrapper').addClass('couponChicklet-active');
+        }
+	  },
+	chall : function() {
+      isoTest.setCid();
+      isoTest.setCouponName();
+      $('.reservation-toggle-header').text('Book Now');
+      $('.promotion-detail-content .interrupter-band-text p').remove();
+	}
+};
+	isoTest.init();
+})();
+</script>

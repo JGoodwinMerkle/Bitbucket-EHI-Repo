@@ -1,0 +1,257 @@
+<style>
+.vehicle-list {
+	display: flex;
+	flex-flow: wrap;
+}
+.vehicle-list__item {
+	order: 0;
+	width: 100%;
+}
+.vehicle-list__item.iso-preSelectedClass {
+	border: 0;
+	margin-top: -3px;
+	order: -1;
+}
+.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+	border: 3px solid #00975a;
+	padding-right: 15px;
+	margin-right: -15px;
+}
+.iso-unavailable-msg {
+	background: #f2f2f2;
+	border-bottom: .125rem solid #c3c3c3;
+	display: block;
+	font-size: 14px;
+	padding: 15px 20px;
+	width: 100%;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Path Filter',
+		cookieName : 'enVehiclePathFilter',
+		customMbox : 'enVehiclePathFilterClicks',
+		creative : 'Challenger 1',
+		filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
+		vehicleItem: '.vehicle-list__item',
+		unavailTemplate: '<span class="iso-unavailable-msg">{content}</span>',
+		content: {
+			en_com: {
+				unavailable: 'Sorry, {class} vehicles are currently unavailable out at this location. You can try searching for a different location where this vehicle is available, change your dates and/or times, or select from available vehicle classes below.'
+			},
+			en_ca: {
+				unavailable: 'Sorry, {class} vehicles are currently unavailable out at this location. You can try searching for a different location where this vehicle is available, change your dates and/or times, or select from available vehicle classes below.'
+			},
+			en_uk: {
+				unavailable: 'Sorry, {class} vehicles are currently unavailable out at this location. You can try searching for a different location where this vehicle is available, change your dates and/or times, or select from available vehicle classes below.'
+			},
+			en_ie: {
+				unavailable: 'Sorry, {class} vehicles are currently unavailable out at this location. You can try searching for a different location where this vehicle is available, change your dates and/or times, or select from available vehicle classes below.'
+			},
+			en_es: {
+				unavailable: 'Sorry, {class} vehicles are currently unavailable out at this location. You can try searching for a different location where this vehicle is available, change your dates and/or times, or select from available vehicle classes below.'
+			},
+			en_fr: {
+				unavailable: 'Sorry, {class} vehicles are currently unavailable out at this location. You can try searching for a different location where this vehicle is available, change your dates and/or times, or select from available vehicle classes below.'
+			},
+			en_de: {
+				unavailable: 'Sorry, {class} vehicles are currently unavailable out at this location. You can try searching for a different location where this vehicle is available, change your dates and/or times, or select from available vehicle classes below.'
+			},
+			es_com: {
+				unavailable: 'Lo sentimos, pero los {class} vehículos no están disponibles en esta oficina por el momento. Puedes intentar buscar una oficina diferente donde este vehículo esté disponible, cambiar las fechas u horas, o seleccionar otro entre las clases de vehículo disponibles a continuación.'
+			},
+			es_es: {
+				unavailable: 'Lo sentimos, los vehículos {class} no están disponibles en estos momentos en esta oficina. Puede intentar buscar en una oficina diferente donde este vehículo esté disponible, cambiar las fechas y/u horas o seleccionar uno de los tipos de vehículo disponibles siguientes.'
+			},
+			fr_fr: {
+				unavailable: 'Désolé, les véhicules de type {class} sont actuellement indisponibles dans cette agence. Vous pouvez essayer d’effectuer une recherche dans une autre agence où ce véhicule est disponible, de modifier vos dates et/ou heures, ou de choisir parmi les catégories de véhicule ci-dessous.'
+			},
+			fr_ca: {
+				unavailable: 'Nous sommes désolés, les véhicules de type {class} ne sont pas disponibles actuellement à cet emplacement. Vous pouvez essayer de rechercher un emplacement différent où ce véhicule est disponible, de modifier vos dates ou vos heures, ou de sélectionner l’une des catégories de véhicules disponibles ci-dessous.'
+			},
+			de_de: {
+				unavailable: 'Leider sind {class} Fahrzeuge an dieser Station zurzeit nicht verfügbar. Sie können nach einer anderen Station suchen, an der dieses Fahrzeug verfügbar ist, oder die ausgewählten Daten und/oder Zeiten ändern, oder aus den unten angezeigten Fahrzeugklassen wählen.'
+			}
+		},
+		lang: 'en_com',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			isoTest.setLanguage();
+				
+			isoTest.elementLoaded(isoTest.vehicleItem, function() {	
+				isoTest.log('Test Ready!');	
+				if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
+					isoTest.chall();
+				} else {
+					isoTest.unfilter();
+				}
+			});
+
+			$(window).on('hashchange', function(){
+				if(/cars/.test(location.hash)){
+					isoTest.elementLoaded(isoTest.vehicleItem, function() {	
+						if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
+							isoTest.chall();
+						} else {
+							isoTest.unfilter();
+						}
+					});
+				}
+			});
+		},
+		chall : function() {
+			isoTest.log('chall()');
+			isoTest.vehicleClass = ReservationStateTree.get(['model', 'carSelect', 'preSelectedCarClass']);
+			if(!isoTest.vehicleClass){
+				return false;
+			}
+			
+			isoTest.unfilter();
+			isoTest.labelVehicle();
+			if($('.iso-preSelectedClass').length == 0 || $('.iso-preSelectedClass').parents('.vehicle-list').parent().hasClass('unavailable-vehicles__wrapper')){
+				isoTest.unavailable();
+			}
+		},
+		unavailable: function(){
+			isoTest.log('unavailable()');
+			if($('.iso-unavailable-msg').length == 0){
+				var content = helpers.supplant(isoTest.content[isoTest.lang].unavailable, {
+					'class' : isoTest.vehicleClass
+				});
+				var $unavail = helpers.supplant(isoTest.unavailTemplate, {
+					'content' : content
+				});
+				$('.vehicle-select__main').prepend($unavail);
+			}
+		},
+		labelVehicle: function(){
+			isoTest.log('labelVehicle()');
+			$('.vehicle-item__title').each(function(){
+			    if($(this).text() == isoTest.vehicleClass){
+			        $(this).parents('.vehicle-list__item').addClass('iso-preSelectedClass');
+			    }
+			});
+		},
+		unfilter: function () {
+			isoTest.log('unfilter()');
+			isoTest.elementLoaded(isoTest.vehicleItem, function() {
+				isoTest.elementLoaded(isoTest.filters, function() {
+					$(isoTest.filters).click();
+				});
+			});
+		},
+		bindEvents: function(){
+			$('.iso-tooltip .tooltip-info__close').click(function(){
+				$('.iso-tooltip').remove();
+			});
+		},
+		setLanguage: function(){
+			var lang = location.pathname.split('/')[1];
+			var domain = location.hostname.split('.').reverse()[0];
+			isoTest.lang = lang+'_'+domain;
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          'mbox': isoTest.customMbox,
+		          'params': {
+		              'click': element
+		          },
+					'success': function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Start...');
+			
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Ready!');
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

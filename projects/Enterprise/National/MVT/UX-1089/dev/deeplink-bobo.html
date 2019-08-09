@@ -1,0 +1,179 @@
+<style>
+.iso-link {
+	font-size: 14px;
+	font-weight: 600;
+	text-align: right;
+	width: 24%;
+}
+.iso-link a:after {
+	content: "\203A";
+    display: inline-block;
+    position: absolute;
+    margin-left: .3125em;
+}
+@media (max-width: 640px){
+	.iso-link {
+		text-align: left;
+		width: auto;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Nationalcar.com',
+		test : 'Deeplink DOBOBO',
+		cookieName : 'nlDeeplinkDOBOBO',
+		customMbox : 'nlDeeplinkDOBOBOClicks',
+		creative : "Challenger 1",
+		contractPromo: '.contract-promo',
+		boboSelector: '.book-on-behalf',
+		header: '.reserve__header-title-wrap',
+		template: '<a>{link}</a>',
+		linkText: {
+			en: 'Book for someone else',
+			es: 'Reservar para otra persona',
+			pt: 'Réserver un véhicule pour quelqu\'un d\'autre'
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+			isoTest.elementLoaded(isoTest.header, function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();
+			});
+			
+			window.addEventListener('hashchange', function(){
+				if(location.hash == '#/start'){
+					isoTest.elementLoaded(isoTest.header, function() {	
+						isoTest.log("Test Ready!");	
+		  				isoTest.chall();
+					});
+				}
+			});
+		},
+		chall : function(){
+			var boboInt = setInterval(function(){
+				_satellite.notify('int');
+				if(document.querySelectorAll(isoTest.contractPromo).length > 0){
+					_satellite.notify('promo located');
+					clearInterval(boboInt);
+					if(document.querySelectorAll(isoTest.boboSelector).length == 0){
+						_satellite.notify('bobo located');
+						isoTest.addLink();
+					}
+				}
+			}, 200);
+		},
+		addLink : function() {
+
+			var lang = isoTest.getLanguage();
+			var cid = _analytics.gma.initiate_request.contract_number;
+			isoTest.deeplink = document.referrer.length == 0 ? 'https://www.nationalcar.com/'+ lang +'/deeplink.html?booking_agent=BOOKING_ON_BEHALF_OF&contractNumber=' + cid  : document.referrer + '&booking_agent=BOOKING_ON_BEHALF_OF';
+
+			var divLink = document.createElement('div');
+			divLink.setAttribute('class','iso-link');
+			var linkText = helpers.supplant(isoTest.template, {
+				'link': isoTest.linkText[lang]
+			});
+			divLink.innerHTML = linkText;
+			document.querySelector(isoTest.header).appendChild(divLink);
+
+			isoTest.bindEvent();
+
+		},
+		bindEvent: function(){
+			document.querySelector('.iso-link a').addEventListener('click', function(){
+				window.location = isoTest.deeplink;
+			});
+		},
+		getLanguage: function(){
+			return window.location.pathname.split("/")[1];
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

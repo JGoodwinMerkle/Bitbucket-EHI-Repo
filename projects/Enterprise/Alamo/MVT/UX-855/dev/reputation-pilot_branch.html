@@ -1,0 +1,364 @@
+<style>
+.locations-details .locationImage img {
+	display: none;
+}
+#outer-box {
+	position: relative;
+	align-content: center; 
+	background: white; 
+	color: black; 
+	float: right;
+	width: 227px; 
+	border:3px solid #e2e2e2; 
+	border-radius:4px;
+	margin: 0 0 15px;
+}
+#outer-box img{
+	display: inline;
+	float: none;
+}
+div#content div #outer-box p {
+    display: inline;
+    float: none;
+}
+#location {
+	margin: 0px;
+}
+#competitor{
+	margin-top:5px; 
+	background-color: #f8f8f8; 
+	height:160px; 
+	border:2px solid #ffffff; 
+	margin-left:3px; 
+	margin-right:3px;
+}
+#reputation-widget-0{
+  border:none !important;
+  height:102px !important;
+}
+#competitor-google {
+  display: inline-block; 
+  position:absolute;
+  width:45px;
+  flex:auto;
+  margin-top: 5px;
+  margin-left: -5px;
+}
+#competitor-iframe {
+  /* iframe width*/
+  display: inline-block; 
+  /* apply the transform */
+  -webkit-transform:scale(0.6);
+  -moz-transform:scale(0.6);
+  -o-transform:scale(0.6);
+  transform:scale(0.6);
+  /* position */
+    position: relative;
+    flex:auto;
+    margin-top: -10px;
+    margin-left: 10px;
+}
+#competitor-row{
+  margin-top:0px;
+}
+#solid-line{
+	height:10px;
+}
+@media screen and (min-width: 496px) and (max-width: 999px){
+	#outer-box {
+		float: left;
+		min-height: 200px;
+		width: 100%;
+	}
+	#header, #location, #alamo-widget{
+		width: 50%;
+	}
+	#competitor {
+		height: 190px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 50%;
+	}
+	#competitor-header{
+		margin-top:15px;
+	}
+	#solid-line {
+		height: 190px;
+		width: 10px;
+    	float: left;
+	}
+}
+@media screen and (max-width: 495px){
+	#outer-box {
+		width: 100%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Alamo.com",
+		test : "Reputation Pilot Location",
+		cookieName : 'alReputationPilotLocation',
+		creative : "Challenger 2",
+		customMbox : 'alReputationPilotLocationClicks',
+		placement: '.locationImage',
+		cities: [{
+			name: 'Indianapolis Airport (IND)',
+			location_id: 'INDT71',
+			reputation_id: '08H1',
+			code: 'IND'
+		},{
+			name: 'Jfk Airport (JFK)',
+			location_id: 'JFKT71',
+			reputation_id: '24Z2',
+			code: 'JFK'
+		},{
+			name: 'Des Moines Airport (DSM)',
+			location_id: 'DSMT71',
+			reputation_id: '62D2',
+			code: 'DSM'
+		},{
+			name: 'Memphis Airport (MEM)',
+			location_id: 'MEMT71',
+			reputation_id: '56A1',
+			code: 'MEM'
+		},{
+			name: 'Dallas Love Field Airport (DAL)',
+			location_id: 'DALT71',
+			reputation_id: '09Y5',
+			code: 'DAL'
+		},{
+			name: 'Albuquerque Airport (ABQ)',
+			location_id: 'ABQT71',
+			reputation_id: '34A3',
+			code: 'ABQ'
+		},{
+			name: 'Grand Rapids Airport (GRR)',
+			location_id: 'GRRT71',
+			reputation_id: '202F',
+			code: 'GRR'
+		},{
+			name: 'Los Angeles Airport (LAX)',
+			location_id: 'LAXT71',
+			reputation_id: '326L',
+			code: 'LAX'
+		},{
+			name: 'Denver Airport (DEN)',
+			location_id: 'DENT71',
+			reputation_id: '12E2',
+			code: 'DEN'
+		},{
+			name: 'Orlando Airport (MCO)',
+			location_id: 'MCOT71',
+			reputation_id: '07A3',
+			code: 'MCT'
+		}],
+		reputation:{
+			loc_url: 'https://widgets.reputation.com/widgets/58cc518ab6f00825394765fa/run?tk=35e67e551f1&lc=',
+			all_url: 'https://widgets.reputation.com/widgets/58d451cf7c4fe6058db90265/run?tk=7c5eae1fd3f&filterName=__alamo_all__&preview=true&filterValues='
+		},
+		template: '<div id="outer-box">\
+		    <div id="header" align="center">\
+		      <br>\
+		      <img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Alamo_Rent_a_Car_(logo).svg/2000px-Alamo_Rent_a_Car_(logo).svg.png">\
+		    </div>\
+		    <div id="location" align="center">\
+		      <br>\
+		       <p class="location-name" style="color: grey; font-family: Arial; margin: 10px; font-size: medium; font-weight:bold;">Indianapolis Airport (IND)</p>\
+		    </div> \
+		    <div id="alamo-widget">\
+		      <div id="rating" align="center" style="height:85px;">\
+		        <img style="flex:auto; width:68px; margin-left:15px;margin-right:-5px;" src="http://r4e-cstatic.reputation.com.s3.amazonaws.com/png-icons/google_maps-512.png"/>\
+		        <iframe id="reputation" style="flex:auto; padding:0; " width="140px" height="75px"  scrolling="no" frameborder="0" src="https://widgets.reputation.com/widgets/58cc518ab6f00825394765fa/run?tk=35e67e551f1&lc=08H1"></iframe>\
+		      </div>\
+		    </div>\
+		    <div id="competitor" align="center">\
+		      <div id="solid-line" style="background-color:#e2e2e2;">\
+		      </div>\
+		      <div id="competitor-header" style="height:40px;">\
+		        <p style="color:#a0a0a0; font-family: Arial; font-size: x-small;line-height:14px;"><b>Compared to the combined average rental car rating of</b></p>\
+		      </div>\
+		      <div id="competitor-row" >\
+		        <div id="rating" align="center" style="height:55px; margin-left: 40px;">\
+		          <img id="competitor-google" src="http://r4e-cstatic.reputation.com.s3.amazonaws.com/png-icons/google_maps-512.png">\
+		          <iframe id="competitor-iframe" name="competitor-iframe" width="140px" height="73px" scrolling="no" frameborder="0" src="https://widgets.reputation.com/widgets/58d451cf7c4fe6058db90265/run?tk=7c5eae1fd3f&filterName=__alamo_all__&filterValues=08H1&preview=true">  </iframe>\
+		        </div>  \
+		      </div>\
+		      <div id="competitor-footer" align="center" style="margin-left:3px; margin-right:3px;">\
+		          <span id="competitor-text" style="color: #a0a0a0; font-family: Arial; font-size: xx-small;">Rating is the combined average of consumer ratings on Google for <span id="code">IND</span> locations of Avis, Budget, Dollar, Hertz and Thrifty</span>\
+		      </div> \
+		    </div>  \
+		  </div>',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			//mboxDefine('',isoTest.customMbox);
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			
+			isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded(isoTest.placement, function() {
+					isoTest.analyticsLoaded(function(){
+						isoTest.chall(_a.pageId);
+					})
+				});
+			});
+		},
+		chall : function(c) {
+			var city = isoTest.getCity(c);
+
+			if(!isoTest.isCityValid(city)){
+				return;
+			}
+
+			var $widget = isoTest.getWidget(city);
+			$widget.appendTo(isoTest.placement);
+		},
+		getWidget: function(c){
+			var $obj = $(isoTest.template);
+			var reputationUrl, competitorUrl, airportCode, cityName;
+			$.each(isoTest.cities, function(i, city){
+				if(city.location_id == c){
+					reputationUrl = isoTest.reputation.loc_url + city.reputation_id;
+					competitorUrl = isoTest.reputation.all_url + city.reputation_id;
+					airportCode = city.code;
+					cityName = city.name;
+				}
+			});
+
+			$obj.find('.location-name').text(cityName);
+			$obj.find('#reputation').attr('src', reputationUrl);
+			$obj.find('#competitor-iframe').attr('src', competitorUrl);
+			$obj.find('#code').text(airportCode);
+			
+			return $obj;
+		},
+		getCity: function(c){
+			return c.split('-')[0];
+		},
+		isCityValid: function(c){
+			var valid = false;
+			$.each(isoTest.cities, function(i, city){
+				if(city.location_id == c){
+					valid = true;
+				}
+			});
+			return valid;
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+			//mboxUpdate(isoTest.customMbox, 'click='+element);
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		analyticsLoaded: function(callback){
+			isoTest.log('analyticsLoaded - Checking...');
+			var aTimer;
+			window.clearTimeout(aTimer);
+			if (_a && _a.pageId.length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('analyticsLoaded - Found!');
+					callback();
+				}
+	        } else {
+	            aTimer = window.setTimeout(function(){isoTest.analyticsLoaded(callback);}, 100);
+	        }
+
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

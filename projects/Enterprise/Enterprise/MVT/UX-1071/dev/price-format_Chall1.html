@@ -1,0 +1,235 @@
+<style>
+.car { visibility: hidden; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price { padding-top: 10px; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rates { margin-top: 15px; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rates .total-rate { cursor:default; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-section { border-bottom: 1px solid #dbdbdb; height: auto; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-section span { background:none; padding: 0; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-subtext { font-weight: 300; padding-top: 10px; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rates .included-text { display: none; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-section .iso-priceDetail { float: right; font-size: 14px; font-weight: 300; padding: 0; text-transform: none; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-section .iso-priceDetail i { display: inline-block; margin-left: -3px; margin-top: -10px; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-section .iso-priceDetail a { cursor: pointer; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-normal { color:#181918; line-height: 1em; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price  .iso-currency, .reservation-flow.cars .car-container .car .iso-vehicle-price .iso-cents { font-size: 16px; font-weight: 300; padding: 0 3px; vertical-align: super; }
+.reservation-flow.cars .car-container.iso-car-container { height: 590px; }
+.reservation-flow.cars .car-container.iso-car-container .car .rate-normal { margin-left: 0; font-size: 30px; }
+@media only screen and (max-width: 1000px)  {
+  .reservation-flow.cars .car-container.iso-car-container { height:615px !important; }
+}
+@media only screen and (max-width: 768px)  {
+  .reservation-flow.cars .car-container.iso-car-container { height:595px !important; }
+}
+@media only screen and (max-width: 700px)  {
+  .reservation-flow.cars .car-container.iso-car-container { height:630px !important; }
+}
+@media only screen and (max-width: 570px)  {
+  .reservation-flow.cars .car-container.iso-car-container { height:600px !important; }
+}
+@media only screen and (max-width: 415px)  {
+  .reservation-flow.cars .car-container.iso-car-container { height:520px !important; }
+  .iso-vehicle-price { margin-left:7%; margin-right:7%; }
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Price Format',
+		cookieName : 'caVehiclePriceFormat',
+		customMbox : 'caVehiclePriceFormat',
+		creative : "Challenger 1",
+		carSelector: '#reservationFlow .cars-wrapper .car .rate-section',
+		lang: 'en',
+		content: {
+			en: {
+				details: 'Vehicle Details',
+				prices: '<span class="iso-priceDetail">Prices include <a class="iso-link">taxes and fees <i class="icon icon-icon-info-green"></i></a></span>',
+				avg: 'Daily Average',
+				total: 'Rental Total'
+			}, 
+			es : {
+				details: 'Detalles del Vehículo',
+				prices: 'Precios incluyen <a class="iso-link">impuestos y tarifas</a>',
+				avg: 'Promedio Diario',
+				total: 'Alquiler Total'
+			}
+		},
+		init : function() {
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			isoTest.elementLoaded(isoTest.carSelector, function() {	
+		        $('.filter-bar').on('click', function(){
+		          setTimeout(function(){
+		            isoTest.chall();
+		          }, 250);
+		        });
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();	
+			});
+			$(window).on('hashchange', function(){
+				if(/cars/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.carSelector, function() {	
+			            $('.filter-bar').on('click', function(){
+			              setTimeout(function(){
+			                isoTest.chall();
+			              }, 250);
+			            });
+						isoTest.chall();
+					});
+				} 
+			});
+		},
+		chall : function() {
+			isoTest.setLang();
+			isoTest.adjustLayout();
+		},
+	    adjustLayout : function() {
+	    	var totalDays = parseInt(_analytics.reservation.lengthOfRentalInDays);
+
+	      	$('.car .rate-section').each(function(){
+		        if ($(this).parents('.unavailable-wrapper').length === 0) {
+		        	var $priceContainer = $(this).parent();
+		          	$priceContainer.addClass('iso-vehicle-price');
+		          if (!$priceContainer.find('.total-rate').hasClass('no-pricing')) {
+		          	var total = $priceContainer.find('.total-rate .rate-normal').text().replace(',','').replace('$','').trim();
+		          	var $total = isoTest.formatPrice(total);
+		          	var $daily = isoTest.formatPrice(parseFloat(total) / totalDays);
+
+		            if($(this).find('.iso-priceDetail').length == 0){
+		            	$(this).append(isoTest.content[isoTest.lang].prices);
+		            }
+		            
+		            $priceContainer.find('.day-rate .rate-normal').html($daily);
+		            $priceContainer.find('.day-rate .rate-subtext').text(isoTest.content[isoTest.lang].avg);
+
+		            $priceContainer.find('.total-rate .rate-normal').html($total);
+		            $priceContainer.find('.total-rate .rate-subtext > span').text(isoTest.content[isoTest.lang].total);
+		          }
+		          $(this).parents('.car-container').addClass('iso-car-container');
+		          $(this).parents('.car-container').find('.default-view .car-details .state-link').text(isoTest.content[isoTest.lang].details);
+		       }
+	      });
+	      isoTest.bindEvents();
+	      $('.car').css('visibility','visible');
+	    },
+	    bindEvents: function(){
+	    	$('.iso-priceDetail .iso-link').click(function(){
+	    		var el = $(this).parents('.car-container').find('.rates .included-text')[0];
+	    		var event = new Event('click', { bubbles: true });
+	    		el.dispatchEvent(event);
+	    	});
+	    },
+	    formatPrice : function(p){
+	    	var price = p.toString();
+		    var dollars = price.slice(0,price.indexOf('.'));
+		    var cents = price.slice(price.indexOf('.')+1,price.indexOf('.')+3);
+		    	cents = cents.length == 1 ? cents + '0': cents;
+		    var formatted = '<span class="iso-currency">$</span>'+dollars +'<span class="iso-cents">.'+cents+'</span>';
+		    return formatted;
+	    },
+	    setLang: function(){
+	    	if(window.location.href.indexOf('/es/') > -1){
+	    		isoTest.lang = 'es';
+	    	}
+	    },
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

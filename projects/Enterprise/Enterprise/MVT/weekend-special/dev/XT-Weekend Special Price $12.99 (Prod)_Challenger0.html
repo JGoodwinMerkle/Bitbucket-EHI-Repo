@@ -1,0 +1,319 @@
+<style>
+body > section, .homepage .two-up-three-up, body .promotion-detail-content, body section.band { visibility:hidden; }
+.iso-weekend-layout .addthis_sharing_toolbox { display: none; }
+.iso-weekend-layout #reservationWidget .inner-container .date-time-form, .iso-weekend-layout #reservationWidget .inner-container .age-input, .iso-weekend-layout #reservationWidget .inner-container .coupon-chicklet, .iso-weekend-layout #reservationWidget .inner-container .booking-submit { display: block; opacity: 100; }
+
+.iso-weekend-layout .iso-weekend-details strong, .iso-weekend-layout #reservationWidget p strong, .iso-weekend-layout .iso-car-type strong { font-family: 'DINMedium', helvetica, Arial, sans-serif; font-weight: normal; }
+
+.iso-weekend-layout #reservationWidget p { margin-bottom: 3em; }
+.iso-weekend-layout #reservationWidget p a { color: #169a5a; font-family: 'DINMedium', helvetica, arial, sans-serif; cursor: pointer;}
+
+.iso-weekend-layout .iso-weekend-details { display: block; height:335px; width: 100%; }
+.iso-weekend-layout .iso-weekend-details p, .iso-weekend-layout .iso-weekend-details li { font-size: 19px; }
+.iso-weekend-layout .iso-weekend-details .details { background: #e6e6e6; float:left; height: 100%; position: relative; width: 50%;}
+.iso-weekend-layout .iso-weekend-details .details .section { margin: 0 0 0 60px; padding: 20px 0 0;}
+.iso-weekend-layout .iso-weekend-details .details ul { margin: 0 80px 25px 0; }
+.iso-weekend-layout .iso-weekend-details .details li { list-style: disc; margin: 0 0 7px 20px;}
+.iso-weekend-layout .iso-weekend-details .details .simpletextband .band { max-width: auto;}
+.iso-weekend-layout .iso-weekend-details .main-image { float: right; width: 50%; }
+.iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { 	background-image: url('//www.enterprise.com/content/ecom/en/car-rental/deals/weekend-specials/jcr:content/par/adaptiveimageband/image.img.full.high.jpg/1491838201064.jpg')
+ !important; height:335px; min-height: 100%; background-position: bottom; }
+.iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container img {display:none;}
+
+.iso-weekend-layout .threeup h2 { font-family: 'DINBold', helvetica, arial, sans-serif; text-align: center;}
+.iso-weekend-layout .three-up-band .gi:first-child, .iso-weekend-layout .three-up-band .gi, .iso-weekend-layout .three-up-band .gi:last-child { padding-top: 0;}
+.iso-weekend-layout .iso-car-type .car-img { height: 220px; }
+.iso-weekend-layout .iso-car-type .car-img img { height: 100%; width: auto; }
+.iso-weekend-layout .iso-car-type strong { display:block; margin: 0 0 7px;}
+
+@media (max-width: 80rem){
+	.iso-weekend-layout #reservationWidget p { margin: 10px;}
+	.iso-weekend-layout #reservationWidget .inner-container { margin-top: 1em;     padding-bottom: 1em;}
+	.iso-weekend-layout .iso-weekend-details .details, .iso-weekend-layout .iso-weekend-details .main-image { width: 50%; }
+	.iso-weekend-layout .iso-weekend-details, .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { height: 330px; }
+	.iso-weekend-layout .iso-weekend-details .band { margin: 0; }
+	.iso-weekend-layout .iso-weekend-details .details .section { margin: 0 0px 0 0; padding: 10px 20px 0 50px; left: 10px; position: absolute;}
+	.iso-weekend-layout .iso-weekend-details .details ul { margin: 0 0 10px 0; }
+	.iso-weekend-layout .iso-weekend-details .details li { margin: 0 0 0 20px; }
+}
+
+@media (max-width: 66rem){
+	.iso-weekend-layout .iso-weekend-details, .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { height: 310px; }
+	.iso-weekend-layout .iso-weekend-details p, .iso-weekend-layout .iso-weekend-details li { font-size: 17px;}
+	.iso-weekend-layout .iso-weekend-details .details .section { padding: 10px 20px 0 20px; }
+	.iso-weekend-layout .iso-weekend-details .promotion-detail-content .simpletextband .band {padding: 10px 0;}
+	.iso-weekend-layout .promotion-detail-content .simpletextband .band { padding: 10px 0;}
+	.iso-weekend-layout .iso-car-type .car-img { height: 150px; }
+	.iso-weekend-layout .threeup .band { padding: 0; }
+	.iso-weekend-layout .threeup .band .gi { width: 33.3333333%;}
+}
+
+@media (max-width: 48rem) {
+	#reservationWidget .inner-container { clear: both;}
+	.iso-weekend-layout .iso-weekend-details, .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { height: 250px;	}
+	.iso-weekend-layout .iso-weekend-details h1 { font-size: 24px; line-height: 1.1;}
+	.iso-weekend-layout .iso-weekend-details p, .iso-weekend-layout .iso-weekend-details li { font-size: 14px;}
+	.iso-weekend-layout .iso-weekend-details .details { overflow: hidden; }
+	.iso-weekend-layout .iso-weekend-details .details .section { padding: 10px 10px 0 15px;	}
+	.iso-weekend-layout .iso-weekend-details .details ul { margin: 0 10px 10px 0;}
+	.iso-weekend-layout .threeup .band .gi { width: 50%;}
+}
+
+@media (max-width: 46rem) {
+	.iso-weekend-layout .iso-weekend-details, .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { height: 200px; }
+	.iso-weekend-layout .iso-weekend-details h1 { font-size: 24px; line-height: 1.1;}
+	.iso-weekend-layout .iso-weekend-details p, .iso-weekend-layout .iso-weekend-details li { font-size: 15px; }
+	.iso-weekend-layout .iso-weekend-details .details ul { margin: 0 0 10px 0;}
+	.iso-weekend-layout .iso-weekend-details .details { height: 150px; width: 100%;}
+	.iso-weekend-layout .iso-weekend-details .main-image { width: 100%; }
+	.iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { background-position: bottom;}
+	.iso-weekend-layout .promotion-detail-content .simpletextband .band { padding: 10px 0;}
+	.iso-weekend-layout .iso-weekend-details .details .section { left: initial; padding: 5px 10px 0 15px; }
+	.iso-weekend-layout .iso-car-type .car-img img { margin: 0 auto;}
+	.iso-weekend-layout .iso-car-type .type-details { display: table; margin:0 auto;}
+	.iso-weekend-layout .threeup .band .gi { width: 100%;}
+}
+
+@media (max-width:37rem){
+	.iso-weekend-layout .iso-weekend-details .details { height: 265px;}
+}
+
+@media (max-width: 46rem) and (orientation: landscape){
+	.iso-weekend-layout .iso-weekend-details .details, .iso-weekend-layout .iso-weekend-details .main-image { width: 50%;  height: 250px;}
+	.iso-weekend-layout .iso-weekend-details .main-image .band.full-bleed, .iso-weekend-layout .iso-weekend-details .main-image .section.adaptiveImageBand { height: inherit;}
+	.iso-weekend-layout .threeup .band .gi { width: 50%; float: left;}
+}
+
+</style>
+<script>
+(function($) {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.com",
+		test : "Weekend Special Price XT $12.99",
+		creative : "Challenger 1",
+    lang : 'en_US',
+    couponName : '$12.99 Weekend Special',
+    couponVal : 'E1299WB',
+    updatedTxt: '$12.99',
+    content : {
+			other: 'Other Eligible Vehicles',
+			cars : [
+				{
+					level: 'Intermediate',
+					price: '$14.99',
+					type: 'Hyundai Elantra',
+					img: 'https://www.enterprise.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/ICAR.doi.352.high.imageSmallThreeQuarterNodePath.png/1481655718439.png'
+				},
+				{
+					level: 'Standard',
+					price: '$17.99',
+					type: 'Buick Verano',
+					img: 'https://www.enterprise.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/SCAR.doi.352.high.imageSmallThreeQuarterNodePath.png/1481644839466.png'
+				},
+				{
+					level: 'Fullsize',
+					price: '$19.99',
+					type: 'Nissan Altima',
+					img: 'https://www.enterprise.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/FCAR.doi.352.high.imageSmallThreeQuarterNodePath.png/1481747006648.png'
+				}
+			],
+			reservation : {
+				header: 'Book Promotion',
+				miles : '<strong>Need more than 100 miles per day?</strong> Enjoy great weekend rates and get unlimited mileage at most locations by removing the “$12.99 Weekend Special” above or by using <a>our standard reservation form</a>.',
+				bookingUrl: '/en/book.html'
+			},
+			details : {
+				list: [
+					'For rentals of <strong>3 days, Friday–Monday</strong> at participating locations in North America, <strong>excluding airports</strong>',
+					'Rates <strong>starting at $12.99</strong> per day for select vehicles, with <strong>100 miles per day</strong> included',
+					'Full details and expiration in the Terms & Conditions below'
+				],
+				terms: '<sup>*</sup>For full details please read terms and conditions below'
+			}
+		},
+		templates :{
+			details: '<div class="iso-weekend-details">\
+				<div class="details">\
+				</div>\
+				<div class="main-image"></div>\
+			</div>',
+			carType: '<div class="iso-car-type">\
+				<div class="car-img"><img /></div>\
+				<div class="type-details">\
+					<strong></strong>\
+					<p></p>\
+				</div>\
+			</div>',
+		},
+		init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			if (isoTest.debug === true) {
+				console.log("Test Running...");
+				console.log(isoTest.account + " - " + isoTest.portfolio);
+				console.log(isoTest.test + " - " + isoTest.creative);
+			}
+      isoTest.dependsLoaded(function() {
+        isoTest.swapStaticText(isoTest.updatedTxt);
+        $("body > section, .homepage .two-up-three-up, body section.band").css("visibility", "visible");
+        if (window.location.href.indexOf("/en/car-rental/deals/weekend-specials.html") > -1) {
+          $('body').addClass('iso-weekend-layout');
+          isoTest.elementLoaded('#reservationWidget .booking-submit', function() {
+  					if (isoTest.debug === true) {
+  						console.log("Test Ready!");
+  					}
+           isoTest.chall();
+           $("body .promotion-detail-content").css("visibility", "visible");
+         });
+        }
+	    });
+		},
+    elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 500);
+	        }
+		},
+    dependsLoaded : function (callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		swapStaticText : function(newText){
+			$('p,h1,h2,h3,h4,li:not(.text-capsule-item)').each(function(){
+				let txt = $(this).text();
+				let updatedTxt = txt.replace(/\$9.99/g, newText);
+				if(updatedTxt !== txt){
+					 $(this).text(updatedTxt);
+				}
+			});
+		},
+    setCid : function(){
+      ReservationStateTree.select(['model']).set('coupon', isoTest.couponVal);
+    },
+    changePageTitle : function(){
+    	var title = $(document).prop('title').replace(/\$9.99/g,isoTest.updatedTxt);
+    	$(document).prop('title',title);
+    },
+    setCouponName : function(){
+      $('.coupon-field-wrapper .chicklet span:first-child').text(isoTest.couponName);
+    },
+    detailsLayout : function () {
+			var $detailsLayout = $(isoTest.templates.details);
+					$detailsLayout.prependTo('.promotion-detail-content');
+
+			var $detailsContent = $('.promotion-detail-content .simpletextband:first');
+			var $imageSection = $('.adaptiveImageBand.section');
+
+			$detailsContent.find('img, p').remove();
+			$detailsContent.append($('<ul />'));
+
+			$(isoTest.content.details.list).each(function(i,j){
+				var $l = $('<li />');;
+				$l.append(j);
+				$detailsContent.find('ul').append($l);
+			});
+
+			//$detailsContent.append($('<p>' + isoTest.content.details.terms + '</p>'));
+
+			$detailsLayout.find('.details').append($detailsContent);
+			$detailsLayout.find('.main-image').append($imageSection);
+
+		},
+		otherVehiclesLayout : function () {
+			var $threeup = $('.threeup.section');
+			var $header = $('<h2>' + isoTest.content.other + '</h2>');
+
+			$threeup.prepend($header);
+
+			$threeup.find('.gi').each(function(i){
+				var $vehicle = isoTest.getVehicle(i);
+				$(this).html($vehicle);
+			});
+		},
+		getVehicle : function(i){
+			var $layout = $(isoTest.templates.carType);
+			$layout.find('img').attr('src', isoTest.content.cars[i].img);
+			$layout.find('strong').text(isoTest.content.cars[i].level + ' at ' + isoTest.content.cars[i].price + ' per day');
+			$layout.find('p').text(isoTest.content.cars[i].type + ' or similar');
+
+			return $layout;
+		},
+		updateReservation : function () {
+			var $reservationWidget = $('#reservationWidget');
+			$reservationWidget.find('.inner-container').removeClass('collapsed').addClass('expanded');
+			$reservationWidget.find('h2').text(isoTest.content.reservation.header);
+
+			var $extraMiles = $('<p>'+ isoTest.content.reservation.miles + '</p>');
+					$extraMiles.find('a').attr('href',isoTest.content.reservation.bookingUrl);
+
+			$reservationWidget.find('#book').append($extraMiles);
+
+		},
+    couponLoaded : function(callback) {
+      isoTest.couponLoadedCount = isoTest.couponLoadedCount || 0;
+      if (isoTest.couponLoadedCount < 50) {
+        if (typeof ReservationStateTree !== 'undefined' && typeof ReservationStateTree !== 'undefined' && typeof ReservationStateTree.select === 'function' && typeof ReservationStateTree.select(['model']).get === 'function' && ReservationStateTree.select(['model']).get('coupon') !== null) {
+  	      window.clearTimeout(isoTest.timer);
+          if (typeof callback === 'function') {
+            callback();
+          }
+	      } else {
+          isoTest.couponLoadedCount += 1;
+	        isoTest.timer = window.setTimeout(function(){isoTest.couponLoaded(callback);}, 100);
+	      }
+			}
+    },
+		chall : function() {
+        isoTest.setCid();
+        isoTest.setCouponName();
+        isoTest.couponLoaded(function() {
+          isoTest.setCid();
+          isoTest.setCouponName();
+        });
+        setTimeout(function(){
+          isoTest.setCid();
+          isoTest.setCouponName();
+        },1000);
+        isoTest.changePageTitle();
+        isoTest.updateReservation();
+				isoTest.otherVehiclesLayout();
+				isoTest.detailsLayout();
+	 }
+}
+	isoTest.init();
+})(jQuery);
+</script>

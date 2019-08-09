@@ -1,0 +1,364 @@
+<style>
+.personal-information .personal-entry-form .privacy-disclaimer {
+	margin-left: 38px;
+}
+.verification-page .review-section .section-content .personal-entry-form label {
+	margin-bottom: 0;
+}
+.required-text, .expedite__incomplete--modal-action .continue, .pre-expedite-warning .continue {
+	display: none;
+}
+#expedited {
+	padding-top: 55px;
+	position: relative;
+}
+#personal-information:before, #expedited:before {
+	content: "* Required to complete your reservation";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
+    left: 15px;
+    position: absolute;
+    top: 15px;
+}
+/*#expedited h2 {
+	margin-bottom: 10px;
+}*/
+#expedited.expedited .find-action .btn.disabled {
+	border-color: #666;
+	color: #666;
+}
+#expedited.expedited .expedite-optional-text {
+	display: none;
+}
+#expedited.expedited .find-country label:after, #expedited.expedited .find-region label:after, #expedited.expedited .find-license label:after {
+	content: '*';
+}
+#expedited .icon.icon-included-theftprotection-2 {
+	background-image: url(/content/dam/ecom/hosted/ico-shield.png);
+	margin-left: -23px;
+    margin-right: 3px;
+}
+#expedited .find-action .search-disclaimer .disclaimer-content strong, #expedited .disclaimer-content span:last-of-type {
+    font-weight: 600;
+}
+#expedited.expedited .find-action .btn {
+	margin-right: 15px;
+}
+#expedited.expedited .find-action .search-disclaimer{
+    float: right;
+    margin-top: -7px;
+	width: calc(100% - 245px);
+}
+#expedited-skip-link{
+	display: none;
+}
+#expedited .field-container.country {
+    margin-top: 10px;
+}
+.iso-expedited {
+	display: flex;
+}
+#expedited p {
+	font-size: 14px;
+	margin-bottom: 0;
+}
+.iso-expedited li {
+	font-size: 14px;
+	list-style: disc outside;
+    margin-left: 20px;
+}
+.iso-expedited .content {
+	float: left;
+	width: calc(80% - 20px);
+}
+.iso-expedited .icon {
+	float: right;
+	margin-left: 20px;
+    max-width: 70px;
+	width: 20%;
+}
+.iso-expedited-skip {
+	border-bottom: 1px solid #d3d3d3;
+    margin:10px 0 20px;
+}
+.expedited .edit.iso-skip {
+	margin-left: 0;
+}
+#reviewSubmit.hide, button.iso-submit.hide {
+	display: none;
+}
+@media (min-width: 749px) and (max-width: 860px){
+	#expedited.expedited .find-action .search-disclaimer {
+		display: block;
+		float: none;
+		margin: 5px 0 0 23px;
+		width: 100%;
+	}
+}
+@media (max-width: 540px){
+	#expedited.expedited .find-action .search-disclaimer {
+		display: block;
+		float: none;
+		margin: 5px 0 0 23px;
+		width: 100%;
+	}
+}
+@media (max-width: 428px){
+	.iso-expedited .content {
+		width: 100%;
+	}
+	.iso-expedited .icon {
+		display: none;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Expedited Required',
+		creative : 'Challenger 2',
+		selector: '#expedited .expedited-form .expedited-disclaimer',
+		template: '<div class="iso-expedited">\
+					<div class="content">\
+					<p>Add more rental details and <strong>spend less time at the counter.</strong></p>\
+					<ul>\
+						<li>No payment is needed and you won\'t be charged right now.</li>\
+						<li>You can still cancel at any time.</li>\
+						<li>It should only take a couple of minutes.</li>\
+					</ul>\
+					</div><div class="icon"><img src="/content/dam/ecom/hosted/ico-clock.png" /></div>\
+				</div>',
+		btnText : 'Next',
+		skipBtn : '<div class="iso-expedited-skip"></div>',
+		reserveBtn : '<button class="btn iso-submit submit">RESERVE NOW</button>',
+		errorTemplate : '<ul id="expeditedErrorsContainer" aria-labelledby="error-messages-heading" class="error-container" tabindex="-1">{error}</ul>',
+		driverInfoError : '<li class="global-error"><span class="error-prefix"><span>ERROR:</span><span> </span></span><span>Please enter your driver\'s license information and select "Next" again to continue.</span><span> </span><span></span></li>',
+		nextError : '<li class="global-error"><span class="error-prefix"><span>ERROR:</span><span> </span></span><span>Please select "Next" to continue.</span><span> </span><span></span></li>',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.selector, function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();
+			});
+
+			window.addEventListener('hashchange', function() {
+				if(/commit/.test(location.hash)){
+					isoTest.elementLoaded(isoTest.selector, function() {	
+						isoTest.log('Test Ready!');	
+		  				isoTest.chall();
+					});
+				}
+			});
+		},
+		chall : function() {
+			isoTest.log('fn:chall');
+			isoTest.reChall();
+
+			document.querySelector('.submit-button-wrapper').insertAdjacentHTML('beforeend', isoTest.reserveBtn);
+			isoTest.isoSubmit = document.querySelector('.iso-submit');
+			isoTest.isoSubmit.addEventListener('click', isoTest.validate);
+			//Hiding button at the end in case of JS error
+			isoTest.submitBtn = document.querySelector('#reviewSubmit');
+			isoTest.submitBtn.classList.add('hide');
+
+			document.querySelector('.pre-expedite-warning .btn').addEventListener('click',isoTest.removeError);
+		},
+		addSkip: function(){
+			isoTest.log('fn:addSkip');
+			if(!document.querySelector('#expedited .expedited-form .find-action button').classList.contains('disabled')){
+				setTimeout(function(){
+					if(!document.querySelector('#globalErrorsContainer')){
+						isoTest.removeError();
+						isoTest.elementLoaded('#expedited-skip-link', function(){
+							var text = '<p>' + document.querySelector('.expedited-disclaimer').innerHTML + '</p>';
+							document.querySelector('.expedited-disclaimer').innerHTML = isoTest.template + isoTest.skipBtn + text;
+							document.querySelector('.accented.edit').addEventListener('click', isoTest.licenseEdit);
+						});
+					}
+				}, 500);
+			}
+		},
+		licenseEdit : function(){
+			setTimeout(function(){
+				isoTest.elementLoaded(isoTest.selector, function() {	
+	  				isoTest.reChall();
+				});
+			}, 200);
+		},
+		reChall : function () {
+			document.querySelector(isoTest.selector).innerHTML = isoTest.template;
+			var nextBtn = document.querySelector('#expedited .expedited-form .find-action button');
+				nextBtn.innerHTML = isoTest.btnText;
+				nextBtn.addEventListener('click',isoTest.addSkip);
+		},
+		validate : function(){
+			isoTest.log('fn:validate');
+			isoTest.isContactInfo = isoTest.getContactInfoVal();
+			if(document.querySelector('#find-license') && isoTest.isContactInfo){
+				isoTest.validateExpedited();
+			} else if(document.querySelector('#find-license') && !isoTest.isContactInfo) {
+				isoTest.validateExpedited();
+				isoTest.triggerSubmit();
+				isoTest.hideBtn();
+			} else {
+				isoTest.triggerSubmit();
+				isoTest.checkBtn();
+			}
+		},
+		validateExpedited : function(){
+			var regionInput = document.querySelector('#find-region');
+			var hasRegion = regionInput ? regionInput.value ? true : false : true;
+			var hasLicense = document.querySelector('#find-license').value ? true : false;
+
+			if(!hasRegion || !hasLicense){
+				isoTest.addError('driverInfo');
+			} else if (hasRegion && hasLicense) {
+				isoTest.addError('next');
+			}
+		},
+		getContactInfoVal : function(){
+			var fname = Boolean(document.querySelector('#firstName').value);
+			var lname = Boolean(document.querySelector('#lastName').value);
+			var phone = Boolean(document.querySelector('#phoneNumber').value);
+			var email = Boolean(document.querySelector('#emailAddress').value);
+
+			return fname && lname && phone && email;
+		},
+		addError: function(error){
+			isoTest.log('fn:addError');
+			var err = isoTest[error+'Error'];
+			var errorMessage = helpers.supplant(isoTest.errorTemplate, { 'error' : err });
+			var expeditedContainer = document.querySelector('#expedited');
+			if(!expeditedContainer.querySelector('#expeditedErrorsContainer')){
+				expeditedContainer.insertAdjacentHTML('afterbegin', errorMessage);
+			} else {
+				expeditedContainer.querySelector('#expeditedErrorsContainer').innerHTML = err;
+			}
+
+			if(isoTest.isContactInfo){
+				window.scrollTo(0, expeditedContainer.offsetTop);
+			}
+		},
+		removeError : function(){
+			isoTest.log('fn:removeError');
+			var expeditedContainer = document.querySelector('#expedited');
+			var expeditedErrors = expeditedContainer.querySelector('#expeditedErrorsContainer');
+			if(expeditedErrors){
+				expeditedContainer.removeChild(expeditedErrors);
+			}
+		},
+		triggerSubmit : function(){
+			isoTest.log('fn:triggerSubmit');
+			var event = new Event('click', { bubbles: true });
+			isoTest.submitBtn.dispatchEvent(event);		
+		},
+		hideBtn : function(){
+			isoTest.log('fn:hideBtn');
+			var btnInt = setInterval(function(){
+				if(!isoTest.submitBtn.classList.contains('hide') && !isoTest.submitBtn.classList.contains('disabled')){
+					clearInterval(btnInt);
+					isoTest.submitBtn.classList.add('hide');
+					isoTest.isoSubmit.classList.remove('hide');
+				} else if(!isoTest.submitBtn.classList.contains('hide') && isoTest.submitBtn.classList.contains('disabled')){
+					isoTest.isoSubmit.classList.add('hide');
+				}
+			},100);
+			
+			setTimeout(function(){
+				isoTest.log('fn:hideBtn:interval cleared');
+				clearInterval(btnInt);
+			}, 10000);
+		},
+		checkBtn: function(){
+			isoTest.log('fn:checkBtn');
+			var btnInt = setInterval(function(){
+				if(!isoTest.submitBtn.classList.contains('hide')){
+					clearInterval(btnInt);
+					isoTest.isoSubmit.classList.add('hide');
+				}
+			},50);
+			
+			setTimeout(function(){
+				clearInterval(btnInt);
+			}, 10000);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

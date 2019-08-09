@@ -1,0 +1,199 @@
+<style>
+.iso-upgrade {
+    bottom: -10px;
+    position: absolute;
+    right: 230px;
+    text-align: center;
+}
+.iso-currentSelection {
+    font-weight: 600;
+}
+.iso-btn button {
+    background: #fff;
+    border: 2px solid #169a5a;
+    color: #169a5a;
+    font-weight: 600;
+    margin-top: 5px;
+    padding: .5em 1em;
+}
+.iso-btn button:hover {
+    color: #fff;
+    background: #006639;
+    border-color: #006639;
+}
+@media (max-width: 48em) {
+	.iso-upgrade {
+	    position: static;
+	}
+	.iso-currentSelection, .iso-similar {
+	    display: none;
+	}
+	.iso-btn button {
+		margin: 20px 0;
+	    width: 100%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Friendly Reminder Upgrade',
+		creative : 'Challenger 1',
+		header: '.resflow__header-info',
+		template: '<div class="iso-upgrade">\
+						<div class="iso-currentSelection">{carType} Selected</div>\
+						<div class="iso-similar">{similar}</div>\
+						<div class="iso-btn"><button type="button">{upgradeCTA}</button></div>\
+					</div>',
+		modifyCss : '<style id="iso-modify">#modify,.modal-overlay { display: none; }</style>',
+		init : function() {
+
+			isoTest.debug = true; //Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.header, function() {	
+				isoTest.log('Test Ready!');	
+  				isoTest.chall();
+			});
+
+			window.addEventListener('hashchange', isoTest.hashHandler, false);
+		},
+		hashHandler : function(){
+			if(/details/.test(location.hash)){
+				isoTest.elementLoaded(isoTest.header, function() {	
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log('fn:: chall');
+			var similarTxt = enterprise.i18nReservation.resflowcarselect_0008.replace('#{carName}',ReservationStateTree.get(['session', 'reservationSession','selectedCarClassDetails','make_model_or_similar_text']));
+			var upgrade = helpers.supplant(isoTest.template, {
+				'carType' : ReservationStateTree.get(['session', 'reservationSession','selectedCarClassDetails','name']),
+				'similar' : similarTxt,
+				'upgradeCTA' : enterprise.i18nReservation.resflowextras_0017
+			});
+
+			document.querySelector(isoTest.header).insertAdjacentHTML('beforeend',upgrade);
+			isoTest.bindEvent();
+		},
+		bindEvent: function(){
+			isoTest.log('fn:: bindEvent');
+			document.querySelector('.iso-upgrade button').addEventListener('click',function(){
+				isoTest.fireTag(this, isoTest.test + ' : Upgrade Now');
+
+				//when modify status is empty, it doesn't trigger modify view. Clicking on modify button will reset this.
+				if(_analytics.modify.vehicleClass){
+					isoTest.log(isoTest.test + ' : normal flow');
+					window.location = '#modify';
+				} else {
+					isoTest.log(isoTest.test + ' : modify flow');
+					isoTest.triggerBtn('.resflow__header-actions-buttons-content button');
+					isoTest.fixModify();
+				}
+				isoTest.triggerModify();
+			});
+		},
+		fixModify: function(){
+			isoTest.log('fn:: fixModify');
+			var modifyInt = setInterval(function () {
+				if(document.querySelector('.modal-overlay .modal-button:last-child')){
+					clearInterval(modifyInt);
+					isoTest.triggerBtn('.modal-overlay .modal-button:last-child');
+				}
+			},200);
+		},
+		triggerModify: function(){
+			isoTest.log('fn:: triggerModify');
+			document.querySelector('body').insertAdjacentHTML('beforeend',isoTest.modifyCss);
+			var modifyInt = setInterval(function () {
+				if(document.querySelector('.information-block.vehicle .edit')){
+					clearInterval(modifyInt);
+					isoTest.triggerBtn('.information-block.vehicle .edit');
+					isoTest.selectView();	
+				}
+			},200);
+		},
+		triggerBtn : function(selector) {
+			isoTest.log('fn:: triggerBtn:: '+ selector);
+			var event = new Event('click', { bubbles: true });
+			document.querySelector(selector).dispatchEvent(event);
+		},
+		selectView : function(){
+			isoTest.log('fn:: selectView');
+			var vehicleInt = setInterval(function(){
+				if(document.querySelector('#cars')){
+					clearInterval(vehicleInt);
+					var modifyCss = document.querySelector('#iso-modify');
+					modifyCss.parentNode.removeChild(modifyCss);
+				}
+			},200);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+			s.linkTrackVars = 'eVar20'; 
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

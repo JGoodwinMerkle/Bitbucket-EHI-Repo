@@ -1,0 +1,129 @@
+<script>
+(function($) {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.com",
+		test : "Transmission Filter",
+		creative : "Challenger 1",
+		customMbox : 'ehiTransmissionFilterClicks',
+		lang : 'en_US',
+		target : '.vehicle-filter__filter-list input',
+		init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "mbox": isoTest.customMbox,"offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+			if (isoTest.debug === true) {
+				console.log("Test Running...");
+				console.log(isoTest.account + " - " + isoTest.portfolio);
+				console.log(isoTest.test + " - " + isoTest.creative);
+			}
+			isoTest.elementLoaded(isoTest.target, function() {
+        if (isoTest.debug === true) {
+            console.log("Test Ready!");
+        }
+        isoTest.chall();  
+	    });
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+			//mboxUpdate(isoTest.customMbox, 'click='+element);
+      adobe.target.trackEvent({
+          "mbox": isoTest.customMbox,
+          "params": {
+              "click": element
+          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+      });
+		},
+   elementLoaded : function(ele, callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 500);
+	        }
+	},
+   dependsLoaded : function(callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+	},
+	chall : function() {
+		isoTest.removeFilter();
+
+		$('body').on('click', '.vehicle-filter__content .checkbox__label, .vehicle-filter__header-link, .pre-filter-band a', function() {
+			isoTest.trackClicks("FilterChange");
+		});
+		$(window).on('hashchange',function() {
+			if (window.location.href.indexOf('#cars') > -1) {
+				isoTest.elementLoaded(isoTest.target, function() {
+	  			isoTest.removeFilter();
+				});
+			}
+		});
+	},
+  removeFilter : function() {
+		$('.vehicle-filter__filter-list input[name=transmission]').each(function() {
+			if ($(this).prop('checked') === true) {
+				$(this).click();
+			}
+		});
+
+		$('.vehicle-filter__filter-list input[name=getriebe]').each(function() {
+			if ($(this).prop('checked') === true) {
+				$(this).click();
+			}
+		});
+
+		$('.vehicle-filter__filter-list input[name=transmisión]').each(function() {
+			if ($(this).prop('checked') === true) {
+				$(this).click();
+			}
+		});
+  }
+};
+isoTest.init();
+})(jQuery);
+</script>

@@ -1,0 +1,80 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : true,
+		account : 'Enterprise',
+		portfolio : 'Alamo.com',
+		test : 'Sort By Recommended Vehicles',
+		creative : 'Control',
+		selector : '.carList',
+		template : '<div class="iso-sortVehicle"><label for="isoTestSort">Sort Cars By:</label><select name="sortBy" id="isoTestSort"><option value="Recommended">Recommended</option><option value="Lowest to Highest Price">Lowest to Highest Price</option><option value="Highest to Lowest Price">Highest to Lowest Price</option></select></div>',	
+		init : function() {
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.selector, function() {	
+				isoTest.log('Test Ready!');	
+  				isoTest.chall();
+			});
+		},
+		chall : function() {
+			isoTest.log('fn:Chall');
+			isoTest.trackClicksSort();
+			isoTest.trackClicksFilter();
+		},
+		trackClicksSort : function() {
+			var dropdownSelect = document.querySelector('.sortVehicle select');
+			dropdownSelect.addEventListener('change', function (event) {
+			    if (dropdownSelect.value == 'Lowest to Highest Price') {
+					isoTest.trackClicks('Low to High');			    	
+			    }
+			    if (dropdownSelect.value == 'Highest to Lowest Price') {
+			    	isoTest.trackClicks('High to Low');
+			    }
+			}, false);
+		},
+		trackClicksFilter : function() {
+			document.querySelector('.vehicleFilter').addEventListener('click', function (event) {
+				if (event.target.matches('#suvs')) {
+					isoTest.trackClicks('Filter: SUVs');
+				}
+				if (event.target.matches('#cars')) {
+					isoTest.trackClicks('Filter: Cars');
+				}
+				if (event.target.matches('#vans')) {
+					isoTest.trackClicks('Filter: Vans');
+				}
+				if (event.target.matches('#trucks')) {
+					isoTest.trackClicks('Filter: Trucks');
+				}
+			});
+		},
+		trackClicks : function(link) {
+			var linkName = isoTest.test + ' : ' + link +' Selected';
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName);
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+	isoTest.init();
+})();
+</script>

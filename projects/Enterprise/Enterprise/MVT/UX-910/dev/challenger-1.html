@@ -1,0 +1,386 @@
+<style>
+.enroll-page .enroll-forms .iso-account-details .first-name, .enroll-page .enroll-forms, .iso-account-details .driver-countryIssue{
+	margin-right: 3%;
+}
+.enroll-page .enroll-forms .iso-account-details .driver-countryIssue {
+	display: inline-block;
+	width: 30%;
+}
+.enroll-page .enroll-forms .iso-account-details .driver-license {
+	display: inline-block;
+	width: 66%;
+}
+
+.enroll-page .enroll-forms-container .error-container.iso-error {
+    padding: 1em;
+    margin-bottom: 3%;
+}
+
+.iso-reset {
+	font-weight: bold;
+}
+
+@media (max-width: 48em) {
+	.iso-error {
+    	margin: 0 4% 20px;
+		width: 92%;
+	}
+}
+
+@media (max-width: 39.8em) {
+	.enroll-page .enroll-forms .iso-account-details .driver-countryIssue, .enroll-page .enroll-forms .iso-account-details .driver-license {
+		width: 100%;
+	}
+}
+
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.com",
+		test : "Expedited Enrollment",
+		cookieName : 'enExpeditedEnrollment',
+		creative : "Challenger 1",
+		customMbox : 'enExpeditedEnrollmentClicks',
+		service : {
+            expedited: '/reservations/expedited/search',
+            countries: '/countries',
+            path : enterprise.services.path,
+        },
+		profileObjs: {
+			h2: '.enroll-forms.active h2',
+			active: '.enroll-forms.active, .account-details.active, .icon-nav-carrot-down.active',
+			continueBtn: '.iso-expedited .continue'
+		},
+		template: '<form class="cf enroll-forms active iso-expedited">\
+					<h2>\
+						<span class="cf numberCircle">1</span>\
+						<span>Profile Search</span>\
+						<span class="cf icon icon-nav-carrot-down active"></span>\
+					</h2>\
+					<div class="cf account-details active iso-account-details">\
+						<div class="field-container first-name">\
+							<label for="first-name">First Name</label>\
+							<input name="first-name" type="text">\
+						</div>\
+						<div class="field-container last-name">\
+							<label for="last-name">Last Name</label>\
+							<input name="last-name" type="text">\
+						</div>\
+						<div class="field-container driver-countryIssue">\
+							<label for="driver-countryIssue">Issuing Country</label>\
+							<select name="driver-countryIssue" class="styled"></select>\
+						</div>\
+						<div class="cf field-container driver-license">\
+							<label for="driver-license">Driver\'s License</label>\
+							<input name="driver-license" type="text">\
+						</div>\
+						<div class="form-actions">\
+							<button tabindex="0" class="btn continue disabled">CONTINUE</button>\
+						</div>\
+					</div>\
+				</form>',
+		errorTemplate: '<div class="iso-error error-container"><section class="content-block"></section></div>',
+		content: {
+			success: {
+				userExists: 'Welcome back, Enterprise Plus member! It looks like you\'ve already enrolled with us in the past, whether on the website or at a branch. Please sign in above. Have you forgotten your password? We\'ll <a class="iso-reset text-btn">help you reset it</a>.',
+				userExistsEmerald: 'Welcome back, Emerald Club member! It looks like you\'ve already enrolled with us in the past, whether on the website or at a branch. Please sign in above. Have you forgotten your password? We\'ll <a class="iso-reset text-btn">help you reset it</a>.',
+				userExistsNotEnrolled: 'Welcome back! It looks like you\'ve rented with us before. For your convenience, we have pre-filled some of the information below to help you get through the form more quickly. Feel free to update it if it is out of date.'
+			},
+			error: {
+				genericError: 'Something went wrong, please try again later.'
+			},
+			resetUrl: 'https://www.enterprise.com/en/forgot-password.html'
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			
+			isoTest.elementLoaded(isoTest.profileObjs.h2, function() {
+  				isoTest.chall();
+			});
+		},
+		chall : function() {
+			isoTest.updateSteps();
+			var $form = $(isoTest.template);
+			$('.enroll-forms-container').prepend($form);
+
+			isoTest.getCountries();
+
+			$(isoTest.profileObjs.continueBtn).click(function(e){
+				e.preventDefault();	
+				isoTest.log(':::: Continue clicked ::::');
+
+				if($(this).hasClass('disabled')){
+					return false;
+				}			
+
+				$(this).addClass('disabled');
+				isoTest.validate();
+				//isoTest.trackClicks(this, isoTest.validate());
+			});
+		},
+		updateSteps : function(){
+			$(isoTest.profileObjs.h2).addClass('disabled');
+			$(isoTest.profileObjs.active).removeClass('active');
+			$('.numberCircle').each(function(){
+			    var n = parseInt($(this).text());
+			    $(this).text(n+1);
+			});
+		},
+		getCountries: function(){
+			$.ajax({
+			    crossDomain: true,
+			    url:  isoTest.service.path + isoTest.service.countries + "?" + Date.now(),
+			    contentType: "application/json; charset=UTF-8",
+			    type: "GET",
+			    error: function(e){
+			        isoTest.log(e);
+			        isoTest.expandProfile();
+			    },
+			    success: function(data){
+					isoTest.log('::: Got them countries :::');
+			        isoTest.populateCountries(data.countries);
+			        $(isoTest.profileObjs.continueBtn).removeClass('disabled');
+			    }
+			});
+		},
+		populateCountries: function(d){
+			$.each(d,function(){
+				var selected = this.country_code == 'US' ? ' selected="selected"' : '';
+				var $option = $('<option value="' + this.country_code + '"'+ selected+'>' + this.country_name + '</option>')
+				$('select[name=driver-countryIssue]').append($option);
+			});
+		},
+		validate: function(){
+			var p = {};
+			var success = true;
+
+			$('.iso-expedited input').removeClass('invalid');
+
+			var $fname = $('[name=first-name]');
+			var $lname = $('[name=last-name]');
+			var $dl = $('[name=driver-license]');
+
+			p.first_name = $fname.val();
+			p.last_name = $lname.val();
+			p.country = $('[name=driver-countryIssue]').val();
+			p.driver_license_number = $dl.val();
+
+			if(!helpers.isValid(p.first_name, '^[a-zA-Z\u00C0-\u017F]+$')){
+				$fname.addClass('invalid');
+				success = false;
+			} 
+
+			if(!helpers.isValid(p.last_name, '^[a-zA-Z\u00C0-\u017F]+$')){
+				$lname.addClass('invalid');
+				success = false;
+			} 
+
+			if(!helpers.isValid(p.driver_license_number, '^[ a-zA-Z\-0-9]+$')){
+				$dl.addClass('invalid');
+				success = false;
+			} 
+
+			if(success){
+				isoTest.expeditedSearch(p);
+			} else {
+				$(isoTest.profileObjs.continueBtn).removeClass('disabled');
+			}
+
+		},
+		expeditedSearch: function(p){
+            $.ajax({
+                crossDomain: true,
+                url: isoTest.service.path + isoTest.service.expedited + "?" + Date.now(),
+                contentType: "application/json; charset=UTF-8",
+                type: "POST",
+                data: JSON.stringify(p),
+                error: function(e){
+                	//$(isoTest.profileObjs.continueBtn).removeClass('disabled');
+                	isoTest.showError(isoTest.content.error.genericError, false);
+                	isoTest.expandProfile();
+                    isoTest.log(e);
+                },
+                success: function(data){
+                	isoTest.continueProfile(data,p);
+                	isoTest.log(data.profile);
+                }
+            });
+        },
+		continueProfile: function(u, p){
+			if(!u.profile){
+				//isoTest.showError(isoTest.content.success.userNull, true);
+				isoTest.log('::: User null :::');
+			} else if(!u.profile.basic_profile.loyalty_data.loyalty_number){
+				isoTest.showError(isoTest.content.success.userExistsNotEnrolled, true);
+				isoTest.log('::: User not enrolled :::');
+			} else {
+				if(u.profile.basic_profile.loyalty_data.loyalty_program === 'Emerald Club'){
+					isoTest.showError(isoTest.content.success.userExistsEmerald, false);
+				} else {
+					isoTest.showError(isoTest.content.success.userExists, false);
+				}
+				
+				isoTest.log('::: User Exisits :::');
+				return;
+			}
+
+			$('#first-name').val(p.first_name);
+			$('#last-name').val(p.last_name);
+			$('#license-number').val(p.driver_license_number);
+			$('#issue-country option[value='+ p.country +']').attr('selected',true);
+
+			// Using vanilla js because React can't handle a simple change()
+			var event = new Event('change', { bubbles: true });
+			var element= document.getElementById('issue-country');
+			element.dispatchEvent(event);
+
+			isoTest.expandProfile();
+			
+		},
+		expandProfile: function(){
+			var $form = $('#first-name').parents('.enroll-forms');
+			$form.addClass('active');
+			$form.find('.account-details').addClass('active');
+			$form.find('h2').removeClass('disabled');
+
+			$('.iso-expedited, .iso-expedited .account-details').removeClass('active');
+			$('.iso-expedited h2').addClass('disabled');
+
+			var $nCircle = $('.iso-expedited h2 .numberCircle');
+			$nCircle.addClass('completed');
+			$nCircle.html('<i class="icon icon-forms-checkmark-green" data-reactid=".4.0.0.1.1.0.0.0"></i>');
+		},
+        showError: function(errMsg, scroll){
+        	var $errMsg = $(isoTest.errorTemplate);
+        	$errMsg.find('section').html(errMsg);
+
+        	$errMsg.find('.iso-reset').click(function(){
+	        	isoTest.trackClicks(this, isoTest.content.resetUrl);
+        	});
+
+        	if(scroll){
+        		$errMsg.insertAfter('.iso-expedited');
+        	} else {
+        		$errMsg.insertBefore('.iso-expedited');
+        	}
+
+        	if(scroll){
+	        	isoTest.log($('.iso-error').position().top);
+	        	var scrollT = $('.iso-error').position().top - 20;
+	        	$('html,body').animate({
+	        		scrollTop: scrollT
+	        	},'fast');
+        	}
+        },
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, callback) {
+			var callback = callback || null;
+			adobe.target.trackEvent({
+				"mbox": isoTest.customMbox,
+				"params": {
+					"click": element
+				},
+				"success" : function() {
+					if(typeof callback === 'function'){
+						callback();
+					}
+					if (callback !== null) {
+						window.location.href=callback;
+					}
+				}
+			});
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) {
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+		isValid: function(str, testStr){
+			var regEx = new RegExp(testStr);
+			return regEx.test(str);
+		}
+	}
+
+	isoTest.dependsLoaded(function(){
+		 isoTest.init();
+	});
+})();
+</script>

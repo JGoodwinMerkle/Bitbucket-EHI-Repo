@@ -1,0 +1,376 @@
+<style>
+	#booking-widget-inputs {
+		display: block;
+	}
+
+	#booking-widget-inputs .booking-widget__column.booking-widget__left-column {
+		width: 100%;
+	}
+
+	#booking-widget-inputs .booking-widget__right-column {
+		display: block !important;
+    float: right;
+    margin: .625rem 0 .625rem;
+    padding: .6375rem 0;
+    width: 49.5%;
+	}
+
+	#booking-widget-inputs .booking-widget__right-column .go-cta {
+		width: 49%;
+		float: right;
+	}
+
+	#booking-widget-inputs .booking-widget__right-column .go-cta .btn {
+		font-size: 14px;
+	}
+
+	#booking-widget-inputs .booking-widget__right-column .go-cta .one-click-toggle__container {
+		width: 100%;
+		height: 4rem;
+		top: -4rem;
+		position: relative;
+		display: none;
+	}
+
+	#booking-widget-inputs .booking-widget__right-column .go-cta .one-click-toggle__container.checked {
+		display: block;
+	}
+
+	#booking-widget-inputs .booking-widget__right-column .go-cta .one-click-toggle__container .btn-link.one-click-toggle {
+		padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+	}
+
+	#booking-widget-inputs .booking-widget__right-column .go-cta .one-click-toggle__container .tooltip {
+		display: none;
+	}
+
+	#booking-widget-inputs .iso-one-click-container {
+		display: block;
+		float: left;
+		margin-top: .54054%;
+    background-color: rgba(228, 228, 228, 1);
+    width: 100%;
+    height: 100%;
+	}
+
+	#booking-widget-inputs .iso-one-click-container .iso-checkbox-cta {
+		display: block;
+		position: relative;
+		-webkit-user-select: none;
+	  -moz-user-select: none;
+	  -ms-user-select: none;
+	  user-select: none;
+	  margin: auto 12px;
+	  padding: 7px 0;
+	}
+
+	.iso-checkbox-cta input {
+		position: absolute;
+  	opacity: 0;
+	  cursor: pointer;
+	  height: 0;
+	  width: 0;
+	}
+
+	.iso-checkbox-cta .iso-checkmark {
+		border-width: 1px;
+    border-style: solid;
+    border-color: rgba(0, 112, 60, 1);
+    background-color: rgba(255, 255, 255, 1);
+    width: 18px;
+    height: 18px;
+    float: left;
+    cursor: pointer;
+	}
+
+	.iso-checkbox-cta .iso-checkmark .checked-state {
+		width: 14px;
+		height: 14px;
+		background-color: #00703C;
+		position: relative;
+		left: 1px;
+		top: 1px;
+		display: none;
+	}
+
+	.iso-checkbox-cta .iso-checkmark .checked-state.checked {
+		display: block;
+	}
+
+	#booking-widget-inputs .iso-one-click-container .iso-text-container {
+		margin-left: 30px;
+    line-height: 14px;
+	}
+
+	#booking-widget-inputs .iso-one-click-container .iso-header-container {
+		position: initial;
+    white-space: initial;
+    display: inline-block;
+    padding-right: 8px;
+    line-height: 18px;
+	}
+
+	#booking-widget-inputs .iso-one-click-container .iso-header-container .iso-btn-header {
+		font-weight: 700;
+    font-size: 14px;
+    line-height: normal;
+    letter-spacing: .02rem;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+    font-family: "Open Sans",Arial,Helvetica,sans-serif;
+    text-align: left;
+    color: #00703c;
+	}
+
+	#booking-widget-inputs .iso-one-click-container .iso-header-container .iso-btn-header:hover {
+		color: #231f20;
+		cursor: pointer;
+	}
+
+	#booking-widget-inputs .iso-one-click-container .iso-btn-text {
+		font-family: 'OpenSans-Semibold', 'Open Sans Semibold', 'Open Sans';
+    font-weight: 650;
+    font-size: 12px;
+    color: #231F20;
+    position: relative;
+    top: -1px;
+	}
+
+	#booking-widget-inputs .input-container__btn.contract-promo__toggle.btn-drawer {
+		font-weight: 700;
+		font-size: 13px;
+	}
+
+
+	@media screen and (min-width: 641px) {
+		#booking-widget-inputs .contract-promo__input {
+			display: inline-block;
+		}
+
+		#booking-widget-inputs .contract-promo__input  .booking-widget-section__row {
+			display: inline-block;
+    	width: 24.45%;
+    	margin-right: .72202%;
+    	margin-top: 0;
+		}
+
+		#booking-widget-inputs .contract-promo__input  .promo__container.promo__container--3 {
+			display: inline-flex;
+    	width: 74.79%;
+		}
+
+		#booking-widget-inputs .contract__input.input-container label {
+			font-size: 12px;
+		}
+
+		#booking-widget-inputs .contract__input.input-container .input-pseudo__input {
+			font-size: 16px;
+		}
+
+		#booking-widget-inputs .promo__input.input-container label {
+			font-size: 12px;
+		}
+
+		#booking-widget-inputs .promo__container.promo__container--3 .promo__input.input-container .promo__add-wrap.link--color.link--underline {
+			font-weight: 700;
+			font-size: 13px;
+		}
+	}
+
+
+  @media screen and (max-width: 640px) {
+  	#booking-widget-inputs .booking-widget__right-column {
+	    width: 100%;
+	    float: none;
+    	margin-top: 0;
+    	padding-top: 0;
+		}
+
+		#booking-widget-inputs .booking-widget__right-column .go-cta {
+			width: 100%;
+    	float: none;
+    	position: initial;
+		}
+  }
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'National.com',
+		test : 'One Click',
+		cookieName : 'nlOneClick',
+		customMbox : 'nlOneClickClicks',
+		creative : "Challenger 2",
+		bookingWidget : '#booking-widget-inputs.drawer-animation__content--open .booking-widget__right-column',
+		oneClickButton : '<div class="iso-checkbox-cta iso-cta">\
+												<span class="iso-checkmark" tabindex="0" aria-label="One-Click Reservation Checkbox">\
+													<span class="checked-state"></span>\
+												</span>\
+												<div class="iso-text-container">\
+													<div class="iso-header-container">\
+														<span class="iso-btn-header iso-cta">ONE-CLICK RESERVATION</span>\
+													</div>\
+													<span id="iso-dynamic-size" class="iso-btn-text iso-cta"></span>\
+												</div>\
+											</div>',
+		template : '',
+		init : function() {
+			
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+	    	_satellite.setVar('TargetCampaign', isoTest.test);
+	      _satellite.setVar('TargetCreative', isoTest.creative);
+	      _satellite.track('target_variables');
+		  }
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+			isoTest.elementLoaded(isoTest.bookingWidget, function() {	
+				isoTest.log("Test Ready!");	
+  			isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			isoTest.updateBookingWidget();
+			isoTest.bindEvents();
+		},
+		updateBookingWidget : function() {
+			var newEl = document.createElement('div');
+			newEl.classList.add("iso-one-click-container", "iso-cta");
+			newEl.innerHTML += isoTest.oneClickButton;
+			document.querySelector('#booking-widget-inputs .contract-promo').insertAdjacentHTML("beforebegin", newEl.outerHTML);
+			document.getElementsByClassName('btn-link one-click-toggle')[0].innerHTML = "";
+
+			var checkLoyaltyTier = setInterval(function(){
+				var loyaltyTier = _analytics["gbo"]["profile"]["profile"]["basic_profile"]["loyalty_data"]["loyalty_tier"];
+				if (loyaltyTier != null) {
+					clearInterval(checkLoyaltyTier);
+					(loyaltyTier != "Emerald Club") ? isoTest.updateButtonText("full") : isoTest.updateButtonText("mid");
+				} else {
+					isoTest.updateButtonText("mid");
+				}
+
+				setTimeout(function(){
+					clearInterval(checkLoyaltyTier);
+				}, 8000)
+			}, 100);
+		},
+		updateButtonText : function(type) {
+			if (type == "full") {
+				document.getElementById("iso-dynamic-size").innerHTML = "— Skip to Review & Reserve with a Full Size vehicle and your preferred Add&#8209;ons selected";
+			} else {
+				document.getElementById("iso-dynamic-size").innerHTML = "— Skip to Review & Reserve with a Midsize vehicle and your preferred Add&#8209;ons selected";
+			}
+		},
+		bindEvents : function(){
+			document.addEventListener('click', function (event) {
+				console.log(event.target);
+				isoTest.eventDetails(event);
+			}, false);
+
+			document.addEventListener('keypress', function (event) {
+				var key = event.which || event.keyCode;
+
+				if (key === 13) {
+					isoTest.eventDetails(event);
+				}
+			}, false);
+	  },
+	  eventDetails : function(event) {
+			if (event.target.matches('.contract-promo__header') || event.target.matches('.contract-promo__label') || event.target.matches('.contract-promo__toggle')) {
+				var oneclickButton = document.getElementsByClassName('iso-one-click-cta')[0];
+				oneclickButton.classList.toggle("iso-down");
+			}
+
+			if (event.target.matches('.iso-checkbox-cta .iso-checkmark') || event.target.matches('.iso-checkbox-cta .iso-btn-header') || event.target.matches('.iso-checkbox-cta .checked-state')) {
+
+				var element = event.target;
+
+				if (element.classList.contains("checked")) {
+					isoTest.trackClicks(isoTest.test + ' : Checkbox:Uncheck');
+					isoTest.toggleCheckbox();
+					document.querySelector('.go-cta .btn').tabIndex = 0;
+				} else {
+					isoTest.trackClicks(isoTest.test + ' : Checkbox:Check');
+					isoTest.toggleCheckbox();
+					document.querySelector('.go-cta .btn').tabIndex = -1;
+				}
+			}
+	  },
+	  toggleCheckbox : function() {
+	  	var oneclickCheckmark = document.getElementsByClassName('checked-state')[0];
+			var oneclickButton = document.getElementsByClassName('one-click-toggle__container')[0];
+			var oneclickHeader = document.getElementsByClassName('iso-btn-header')[0];
+			var oneclickCheckbox = document.getElementsByClassName('iso-checkmark')[0];
+			oneclickCheckmark.classList.toggle("checked");
+  		oneclickButton.classList.toggle("checked");
+  		oneclickHeader.classList.toggle("checked");
+  		oneclickCheckbox.classList.toggle("checked");
+	  },
+		supplant : function (str, o) {
+			return str.replace(/{([^{}]*)}/g, function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : '';
+			});
+		},
+		trackClicks : function(linkName) {
+			s.linkTrackVars = 'eVar89'; 
+			s.eVar89 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.init();
+})();
+</script>

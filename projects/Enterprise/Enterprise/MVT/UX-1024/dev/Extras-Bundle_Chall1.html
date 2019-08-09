@@ -1,0 +1,422 @@
+<style>
+.extras-row[data-class~="addRemove"]{
+	background: #fff !important;
+	color: #333333 !important;
+}
+.extras-row[data-class~="selected"]{
+	background: #006639 !important;
+	color: #fff !important;
+}
+.extras-row[data-class~="addRemove"] .extras-row_details-btn a, .extras-row[data-class~="addRemove"] .extras-row_exclusion-btn a{
+	color: #169a5a !important;
+}
+.extras-row[data-class~="selected"] .extras-row_details-btn a, .extras-row[data-class~="selected"] .extras-row_exclusion-btn a{
+	color: #fff !important;
+}
+.extras-row[data-class~="addRemove"] i.icon.icon-forms-checkmark{
+	margin: 0 auto;
+}
+.extras-row[data-class~="addRemove"] i.icon.icon-forms-checkmark.hide{
+	display: none;
+}
+.iso-desc {
+	display: inline-block;
+    font-size: 13px;
+    font-weight: normal;
+    font-family: "DINLight",Helvetica,Arial,sans-serif;
+    margin-left: 25%;
+}
+.iso-desc strong, .iso-line-item .extras-row_details strong{
+	font-family: "DINRegular",Arial,sans-serif;
+}
+.extras-row_details p{
+	font-size: 15px !important;
+}
+#iso-extras-modal {
+	color: #333;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Extras Bundle',
+		cookieName : 'enExtrasBundle',
+		customMbox : 'enExtrasBundleClicks',
+		creative : "Challenger 1",
+		extrasSelector: '.extras-container',
+		bundleCodes : ['EXS','TWR'],
+		template: '<tbody class="iso-line-item extras-row cf insurance">\
+			<tr class="extras-row_summary cf">\
+				<th scope="row" class="extras-row_name cell pad-top extras-exclusion-name extras-remove-space" id="PMBHeader">\
+					<div class="extras-cell_icon cell" aria-hidden="true"><i class="icon icon-ir-insurance-carrier"></i></div><span>Peace of Mind</span><span class="iso-desc">Includes <strong>Excess Protection</strong> and <strong>Roadside Assistance Protection</strong> products</span>\
+				</th>\
+				<td class="extras-row_exclusion-btn cell pad-top">\<a role="button" tabindex="0" aria-controls="PMB1AriaDescription">View Exclusions</a>\
+				</td>\
+				<td class="extras-row_rate cell pad-top">{currency} {totalPerDay} / day</td>\
+				<td class="extras-row_max cell pad-top">--</td>\
+				<td class="extras-row_details-btn cell pad-top">\<a role="button" tabindex="0" aria-controls="PMB1AriaDescription" aria-expanded="false" aria-label="Details for Peace of Mind">DETAILS</a>\
+				</td>\
+				<td class="extras-row_action cell">\
+					<div class="control-cell">\
+						<div class="add-remove add" data-code="PMB" data-type="insurance"><div>\
+							<a role="button" tabindex="0" data-action="add"><i aria-hidden="true" role="presentation" class="icon icon-add"></i><div class="label">ADD</div></a>\
+						</div></div>\
+					</div>\
+				</td>\
+			</tr>\
+			<tr class="extras-row_details" aria-hidden="true" id="PMBAriaDescription"><td headers="PMBHeader" colspan="5"><p><strong>Excess Protection</strong> is an optional coverage that reduces the applicable Damage Waiver excess (see Damage Waiver terms) to all cars 100.00 GBP, MINI MPVs, MPVs and commercial vehicles 250.00 GBP, all premiums and 4x4s 500.00 GBP. In Northern Ireland the reduced excess on all commercial vehicles is 500.00 GBP. You may wish to check if your personal coverage is adequate to cover damage, theft, loss of revenue, administration fees, diminishment of value, and any towing, storage or impound fees. If you decline Excess Protection then you are required to pay any applicable Damage Waiver excess and seek compensation from your carrier. The price of Excess Protection varies by vehicle size and the prices are inclusive of VAT. Premium location fee applies to airports.<br /><br />Enterprise offers <strong>roadside assistance protection</strong> Rap. Rap allows Enterprise customers to waive all financial responsibility for the following - tire and glass repair or replacement costs, except when part of a larger repair, replacement keys costs, and all recovery and call out charges imposed by our chosen roadside assistance providers as result of a fault caused by renter error. Rap does not exempt you from these charges if there is any breach of our rental agreement. Rap is an optional product; before purchasing you may wish to check if your personal coverage is adequate. If you decline RAP then you will be required to pay any applicable charges and seek compensation from your carrier. RAP is not insurance.\
+			</p></td></tr>\
+		</tbody>',
+		buttonTemplate:'<i class="icon icon-forms-checkmark hide"></i>\
+						<div class="iso-btn add-remove add" data-code="{code}" data-type="insurance"><div>\
+							<a role="button" tabindex="0" data-action="add"><i aria-hidden="true" role="presentation" class="icon icon-add"></i><div class="label">ADD</div></a>\
+						</div></div>',
+		modalTemplate: '<div role="dialog" aria-labelledby="global-modal-title" class="modal-container active" id="iso-extras-modal"><div class="modal-content"><div class="modal-header"><span id="global-modal-title">Exclusions</span><button tabindex="0" class="close-modal" aria-label="Close"><i class="icon icon-close-x-white">X</i></button></div><div class="modal-body cf"><div><div><h2 class="exclusion-extra-header">Peace of Mind</h2><p class="exclusion-extras-text">Excess Protection does not cover: damage caused by the use of the wrong fuel or any failure to take all reasonable measures to look after the vehicle keys or any other device which unlocks the vehicle and/or enables the vehicle to be started. Excess Protection will be voided if damage is caused by: failure to secure the vehicle keys and failure to lock the vehicle, unauthorised repairs on the vehicle, failure to stop using the vehicle once a fault becomes known, use by an unauthorised driver, use by an unlicensed driver, use for hire and reward, use of vehicle for any illegal purpose or deliberately causing injury or damage to property, racing, pacemaking, or teaching someone to drive, use whilst under the influence of alcohol or drugs, use of the vehicle outside of the United Kingdom without our written permission, overloaded with more passengers than seatbelts, towing, use off road, transporting dangerous or noxious substances, use of vehicle in a reckless manner, or use of vehicle on an aerodrome, airfield, airport or military installation.<br /><br />Roadside Protection does not cover: damage caused by the use of the wrong fuel or any failure to take all reasonable measures to look after the vehicle keys or any other device which unlocks the vehicle and/or enables the vehicle to be started. Roadside Protection will be voided if damage is caused by: failure to secure the vehicle keys and failure to lock the vehicle, unauthorised repairs on the vehicle, failure to stop using the vehicle once a fault becomes known, use by an unauthorised driver, use by an unlicensed driver, use for hire and reward, use of vehicle for any illegal purpose or deliberately causing injury or damage to property, racing, pacemaking, or teaching someone to drive, use whilst under the influence of alcohol or drugs, use of the vehicle outside of the United Kingdom without our written permission, overloaded with more passengers than seatbelts, towing, use off road, transporting dangerous or noxious substances, use of vehicle in a reckless manner, or use of vehicle on an aerodrome, airfield, airport or military installation.</p></div></div></div></div></div>',
+		resExtras: null,
+		totalDays: parseFloat(_analytics.reservation.lengthOfRentalInDays),
+		extras: [],
+		codes: [],
+		extrasTotal: 0,
+		extrasPerDay: 0,
+		bundleItemsSelected: true,
+		bundleSelected: false,
+		currency: ReservationStateTree.select(["model",'reservationSession','defaultTopNavAmount']).get().symbol,
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.extrasSelector, function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();	
+			});
+
+			$(window).on('hashchange', function(){
+				if(/extras/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.extrasSelector, function() {	
+						isoTest.chall();
+					});
+				} 
+			});
+		},
+		chall : function() {
+			if(!isoTest.checkBundle()){
+				return false;
+			}
+			isoTest.bundleSelected = (_satellite.readCookie('bundleSelected')==='true');
+			var extrasInt = setInterval(function(){
+				var extras = ReservationStateTree.select(["view", "extras"]).get();
+				if(extras && extras.insurance){
+					clearInterval(extrasInt);
+					isoTest.resExtras = ReservationStateTree.select(["view", "extras"]).get();
+					isoTest.initExtras();
+				}
+			},200);
+		},
+		initExtras: function(){
+			isoTest.addMirror(); //Slide of hand for the existing buttons. Adds a false button to prevent overlap between bundle and items in the bundle.
+			isoTest.getAllExtras();
+			isoTest.setPrice();
+			isoTest.addLineItem();
+			isoTest.adjustSelectedBundle();
+		},
+		adjustSelectedBundle: function(){
+			isoTest.log('adjustSelectedBundle');
+			isoTest.log('bundleItemsSelected::: '+ isoTest.bundleItemsSelected);
+			if(isoTest.bundleItemsSelected && isoTest.bundleSelected){
+				var $lineItem = $('.iso-line-item');
+				isoTest.adjustClass($lineItem.find('.add-remove'));
+				$lineItem.addClass('selected');
+				
+				$('.extras-row[data-class=addRemove]').each(function(){
+					//isoTest.updateDataClass($(this));
+					isoTest.adjustBundledClasses($(this));
+				});
+
+			} else if($('.extras-row.selected[data-class=addRemove]').length > 0) {
+				var $row = $('.extras-row.selected[data-class=addRemove]');
+				var $btn = $row.find('.add-remove.iso-btn');
+				isoTest.adjustClass($btn);
+
+				$row.each(function(){
+					isoTest.updateDataClass($(this));
+				});
+			}
+			
+		},
+		addMirror: function(){
+			isoTest.log('addMirror');
+			for(var i=0;i<isoTest.bundleCodes.length;i++){
+				var $originalBtn = $('.add-remove[data-code='+isoTest.bundleCodes[i]+']');
+				var newBtn = helpers.supplant(isoTest.buttonTemplate,{
+					'code': isoTest.bundleCodes[i]
+				});
+				$originalBtn.hide();
+				$originalBtn.after($(newBtn));
+			}
+
+			isoTest.bindMirrorEvents();
+		},
+		bindMirrorEvents: function(){
+			$('.extras-row[data-class=addRemove] .add-remove.iso-btn').click(function(){
+				var time = 100;
+				var code = $(this).data('code');
+				isoTest.delayClick(code,time,false);
+				isoTest.adjustClass($(this));
+
+				isoTest.updateDataClass($(this).parents('.extras-row'));
+				
+			});
+		},
+		updateDataClass : function($row){
+			var dataClass= $row.attr('data-class');
+			isoTest.log(dataClass);
+			dataClass = dataClass === 'addRemove' ? 'addRemove selected' : 'addRemove';
+			isoTest.log(dataClass);
+			$row.attr('data-class', dataClass);
+		},
+		adjustClass: function(obj){
+			if($(obj).hasClass('add')){
+				$(obj).removeClass('add').addClass('remove');
+				$(obj).find('.icon').removeClass('icon-add').addClass('icon-remove');
+				$(obj).find('.label').text('REMOVE');
+			} else {
+				$(obj).removeClass('remove').addClass('add');
+				$(obj).find('.icon').addClass('icon-add').removeClass('icon-remove');
+				$(obj).find('.label').text('ADD');
+			}
+		},
+		addLineItem: function(){
+			isoTest.log('addLineItem');
+			var $lineItem = helpers.supplant(isoTest.template,{
+				'totalPerDay': isoTest.extrasPerDay,
+				'currency' : isoTest.currency
+			});
+			$('table.extras-section:eq(0)').prepend($lineItem);
+			isoTest.bindEvents();
+		},
+		bindEvents : function(){
+			isoTest.log('bindEvents');
+			$('.iso-line-item .add-remove').click(function(){
+				var time = 100; //adds a delay to the fake click so it works
+				var isNotSeleted = !$(this).parents('.iso-line-item').hasClass('selected');
+				var toBundleSelector = isNotSeleted ? '.extras-row[data-class=addRemove]:not(.selected)' : '.extras-row.selected[data-class~=addRemove]'; //sets the selector of the items that need to be added/removed in case some items are already selected
+
+				$(toBundleSelector).each(function(i){
+					var code = $(this).find('.add-remove:not(.iso-btn)').data('code');
+					isoTest.delayClick(code, time*i, true);
+				});
+
+				// Fixes the classes/styles of the items that were already selected
+				var $rows = $('.extras-row.selected[data-class~=addRemove]');
+				if(isNotSeleted && $rows.length > 0){
+					isoTest.updateDataClass($rows);
+					isoTest.adjustClass($rows.find('.add-remove.iso-btn'));
+					isoTest.adjustBundledClasses($rows);
+				}
+
+				isoTest.adjustClass($(this));
+				$(this).parents('.iso-line-item').toggleClass('selected');
+				
+				isoTest.saveBundle();
+			});
+
+			$('.iso-line-item .extras-row_details-btn a').click(function(){
+				$('.iso-line-item .extras-row_details').toggleClass('show');
+			});
+
+			$('.iso-line-item .extras-row_exclusion-btn a').click(function(){
+				$('.iso-line-item .extras-row_details').append($(isoTest.modalTemplate));
+				isoTest.bindModalEvents();
+			});
+
+			/*$('#extrasSubmitTop').click(function(){
+				isoTest.saveBundle();
+			});*/
+		},
+		saveBundle: function(){
+			isoTest.bundleSelected = $('.iso-line-item').hasClass('selected');
+			_satellite.setCookie('bundleSelected',isoTest.bundleSelected);
+
+			isoTest.log(isoTest.bundleSelected);
+		},
+		bindModalEvents : function(){
+			$('#iso-extras-modal .close-modal').click(function(){
+				$('#iso-extras-modal').remove();
+			});
+		},
+		delayClick : function(code,time,isBundled){
+		    setTimeout(function(){
+		    	var event = new Event('click', { bubbles: true });
+				var element = $('.add-remove[data-code='+code+']:not(.iso-btn) a');
+				var $row = element.parents('.extras-row_action');
+				element[0].dispatchEvent(event);
+
+				if(isBundled){
+					isoTest.adjustBundledClasses($row);
+				}
+
+		    },time);
+		},
+		adjustBundledClasses: function($row){
+			$row.find('.icon-forms-checkmark').toggleClass('hide');
+			$row.find('.iso-btn').toggle();
+		},
+		setPrice : function(){
+			for(var i=0;i<isoTest.bundleCodes.length;i++){
+				isoTest.extrasTotal += isoTest.getItemTotal(isoTest.bundleCodes[i]);
+			}
+			var total = isoTest.extrasTotal/isoTest.totalDays;
+			isoTest.extrasPerDay = isoTest.getFormattedTotal(total);
+			isoTest.log('totalDays::' + isoTest.totalDays);
+			isoTest.log('setPrice::' + total);
+		},
+		getFormattedTotal: function(total){
+			var t = total.toString();
+			return t.slice(0,t.indexOf('.')+3);
+		},
+		getItemTotal: function(code){
+			var extraItem = isoTest.extras[isoTest.codes.indexOf(code)];
+		    var perDay = parseFloat(extraItem.rate_amount_payment.formatted_amount);
+		    var max = extraItem.formattedMaxAmount == '--'? 0 : parseFloat(extraItem.max_amount_payment.formatted_amount);
+		    var perDayTotal = perDay * isoTest.totalDays;
+
+		    return max > 0 && perDayTotal > max? max: perDayTotal;
+		},
+		getAllExtras: function(){
+			isoTest.log('getAllExtras');
+			/*for(var i=0;i<isoTest.resExtras.equipment.length;i++){
+			    isoTest.extras.push(isoTest.resExtras.equipment[i]);
+			    isoTest.codes.push(isoTest.resExtras.equipment[i].code);
+			}*/
+			for(var i=0;i<isoTest.resExtras.insurance.length;i++){
+			    isoTest.extras.push(isoTest.resExtras.insurance[i]);
+			    isoTest.codes.push(isoTest.resExtras.insurance[i].code);
+			}
+			/*for(var i=0;i<isoTest.resExtras.fuel.length;i++){
+			    isoTest.extras.push(isoTest.resExtras.fuel[i]);
+			    isoTest.codes.push(isoTest.resExtras.fuel[i].code);
+			}*/
+		},
+		checkBundle: function(){
+			var bundleExists = true;
+
+			for(var i=0;i<isoTest.bundleCodes.length;i++){
+				var $lineItem = $('.add-remove[data-code='+isoTest.bundleCodes[i]+']');
+				if($lineItem.length==0){
+					bundleExists=false;
+				} else {
+					$lineItem.parents('tbody').attr('data-class','addRemove');
+				}
+				if(!$lineItem.parents('.extras-row').hasClass('selected')){
+					isoTest.bundleItemsSelected = false;
+				}
+			}
+			isoTest.log('bundleExists:: '+bundleExists);
+			return bundleExists;
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

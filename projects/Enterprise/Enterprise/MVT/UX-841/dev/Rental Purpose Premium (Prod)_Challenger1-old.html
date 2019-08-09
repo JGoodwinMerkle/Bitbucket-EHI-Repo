@@ -1,0 +1,424 @@
+<style>
+.iso-modal-open { overflow: hidden;height: 100%; }
+.iso-modal strong { font-family: "DINRegular",Arial,sans-serif; }
+.iso-modal .modal-body h2:before {
+    content: '* Required';
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+    font-size: 15px;
+    font-family: "DINLight",Arial,sans-serif;
+    line-height: 1;
+    color: #676767;
+}
+.iso-modal .modal-body { position: relative; }
+.iso-modal .modal-body h2 { position: relative; border-bottom: 3px solid #181918; margin-bottom: 17px; font-size: 26px; }
+.iso-modal.modal-container.active .modal-content h2 { padding-bottom: 12px; }
+.iso-modal .modal-body p { font-size: 15px; margin: 0 0 26px; }
+.iso-modal .modal-body p:last-of-type { line-height: 1; margin: 0 0 13px; }
+.iso-modal .modal-body label { font-family: "DINLight",Arial,sans-serif; font-size: 15px; padding: 0; margin: 0 0 6px; }
+.iso-modal .modal-body label:last-of-type { margin: 0; }
+* .iso-modal .modal-body :focus input { box-shadow: 0px 0px 5px 3px #169a5a; border-radius: 6px; }
+* .iso-modal .modal-body :active input { box-shadow: none; }
+.iso-modal .modal-body label input { margin-right: 6px; }
+.iso-modal .modal-body .btn-grp { overflow: hidden; }
+.iso-modal .modal-body .btn-grp .btn { float: right; margin: 0; padding: 10px 37px 7px; font-size: 15px; }
+.iso-modal .modal-body .btn-grp .btn.disabled { cursor: not-allowed; }
+</style>
+<script>
+(function($) {
+  'use strict';
+  var isoTest = {
+    debug : false,
+    account : "Enterprise",
+    portfolio : "Enterprise.com",
+    test : "Rental Purpose",
+    cookieName : 'ehiRentalPurpose',
+    creative : "Challenger 1",
+    customMbox : 'ehiRentalPurposeClicks',
+    storage : localStorage,
+    tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+    content : {
+      modal : {
+        heading : 'Why are you renting today?',
+        copy : 'Please let us know why you are renting. <strong>Your answer will not affect your reservation</strong> in any way. We are only asking for this information from select customers in order to improve our website experience.',
+        label : 'Rental Purpose *',
+        choices : [
+          { id : 'purposeLeisure', option : '<strong>Leisure</strong> travel or other <strong>occassional</strong> needs', value : 'Leisure' },
+          { id : 'purposeBusiness', option : '<strong>Business</strong> travel', value : 'Business' },
+          { id : 'purposeRepairSelf', option : 'Vehicle being <strong>repaired/serviced</strong>; rental costs paid by <strong>myself</strong>', value : 'RepairSelf' },
+          { id : 'purposeRepairInsurance', option : 'Vehicle being <strong>repaired/serviced</strong>; rental costs paid by <strong>insurance</strong>', value : 'RepairInsurance' },
+          { id : 'purposeNoAnswer', option : 'Prefer not to answer', value : 'NoAnswer' },
+        ],
+        buttonText : 'Continue'
+      },
+      error : {
+        prefix : 'ERROR:',
+        errorText : 'Please choose one of the following to continue'
+      }
+    },
+    templates : {
+      modal : '<div class="iso-modal modal-container active" tabindex="0">\
+        <div class="modal-content">\
+          <div class="modal-header"></div>\
+          <div class="modal-body">\
+            <h2>{heading}</h2>\
+            <p>{copy}</p>\
+            <p><strong>{label}</strong></p>\
+            <div class="iso-purpose-options">\
+              <label for="{choices.0.id}" tabindex="0"><input type="radio" id="{choices.0.id}" name="purpose" value="{choices.0.value}" tabindex="-1" /><span>{choices.0.option}</span></label>\
+              <label for="{choices.1.id}" tabindex="0"><input type="radio" id="{choices.1.id}" name="purpose" value="{choices.1.value}" tabindex="-1" /><span>{choices.1.option}</span></label>\
+              <label for="{choices.2.id}" tabindex="0"><input type="radio" id="{choices.2.id}" name="purpose" value="{choices.2.value}" tabindex="-1" /><span>{choices.2.option}</span></label>\
+              <label for="{choices.3.id}" tabindex="0"><input type="radio" id="{choices.3.id}" name="purpose" value="{choices.3.value}" tabindex="-1" /><span>{choices.3.option}</span></label>\
+              <label for="{choices.4.id}" tabindex="0"><input type="radio" id="{choices.4.id}" name="purpose" value="{choices.4.value}" tabindex="-1" /><span>{choices.4.option}</span></label>\
+            </div>\
+            <div class="btn-grp">\
+              <div class="btn disabled" tabindex="0">{buttonText}</div>\
+            </div>\
+          </div>\
+        </div>\
+      </div>',
+      error : '<div class="error-container">\
+        <div class="global-error">\
+          <span class="error-prefix">{prefix}</span>\
+          <span>{errorText}</span>\
+        </div>\
+      </div>'
+    },
+    clickTracking : [
+      { element : '.iso-modal', evt : 'click', metric : 'OutsideModalClose', group : 'modal' },
+      { element : '.iso-modal .modal-header', evt : 'click', metric : 'HeaderModalClose', group : 'element' }
+    ],
+    init : function() {
+      if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+        _satellite.setVar('TargetCampaign', isoTest.test);
+        _satellite.setVar('TargetCreative', isoTest.creative);
+        if (typeof window.isoSetTargetVars === 'function') {
+          window.isoSetTargetVars();
+        }
+      }
+      //mboxDefine('',isoTest.customMbox);
+      adobe.target.getOffer({
+        "mbox": isoTest.customMbox,
+        "success": function(offers) {
+          adobe.target.applyOffer( { "offer": offers } );
+        },
+        "error": function(status, error) {
+
+        }
+      });
+      if (isoTest.debug === true) {
+        console.log("Test Running...");
+        console.log(isoTest.account + " - " + isoTest.portfolio);
+        console.log(isoTest.test + " - " + isoTest.creative);
+      }
+      isoTest.dependsLoaded(function() {
+        //isoTest.elementLoaded('#location .search-results li:eq(0)', function() {
+        if (isoTest.debug === true) {
+          console.log("Test Ready!");
+        }
+        if (!isoTest.storage.purpose) {
+          isoTest.chall();
+        }
+        //});
+      });
+    },
+    chall : function() {
+      isoTest.storage.setItem('purpose','seen');
+      //isoTest.trackClicks('ModalSeen');
+      isoTest.addPurpose();
+
+      // track purpose and destroy modal
+      $('.iso-modal .btn').on('click', function(e) {
+        isoTest.submitPurpose(function() {
+          isoTest.destroyModal();
+        });
+      });
+
+      $('.iso-modal .btn').on('keypress', function(e) {
+        var keyCode = e.which || e.keyCode;
+        if (keyCode === 13) {
+          isoTest.submitPurpose(function() {
+            isoTest.destroyModal();
+          });
+        }
+      });
+
+      // close modal from keyboard
+      $(document).on('keyup', function(e) {
+        var keyCode = e.which || e.keyCode;
+        if (isoTest.debug === true) {
+          console.log(keyCode);
+          console.log(e);
+          console.log(e.target);
+          console.log(e.target.className.indexOf('disabled'));
+        }
+        if (isoTest.keyboardClose(keyCode)) {
+          if ($('html').hasClass('iso-modal-open')) {
+            if (isoTest.debug === true) {
+              console.log('Keyboard Esc Close');
+            } /*else {
+              isoTest.trackClicks('KeyboardEscClose');
+            }*/
+            isoTest.destroyModal();
+          }
+        }
+      });
+
+      // activate button
+      $('.iso-purpose-options label').on('click', function() {
+        if ($('.iso-modal .btn').hasClass('disabled')) {
+          $('.iso-modal .btn').removeClass('disabled');
+        }
+      });
+
+      // generic click tracking
+      /*for (var i = 0; i < isoTest.clickTracking.length; i++) {
+        isoTest.createClickTracking({
+          ele : isoTest.clickTracking[i].element,
+          evt : isoTest.clickTracking[i].evt,
+          metric : isoTest.clickTracking[i].metric,
+          group : isoTest.clickTracking[i].group
+        });
+      }*/
+    },
+    addPurpose : function() {
+      var $html = $('html'),
+          $redirect = $('#ip-redirect'),
+          modal = isoTest.supplant(isoTest.templates.modal, isoTest.content.modal);
+      $redirect.after(modal);
+      isoTest.shufflePurpose('.iso-purpose-options');
+      $html.addClass('iso-modal-open');
+
+      isoTest.observeDOM(document.querySelector('html'), function() {
+        if ($('html').hasClass('iso-modal-open')) {
+          $('html').removeClass('iso-modal-open');
+        }
+        if ($('.iso-modal').length > 0) {
+          $('.iso-modal').remove();
+        }
+      });
+
+      var modalFocus = document.querySelector('.iso-modal');
+      isoTest.keepFocus(modalFocus);
+
+      modalFocus.focus();
+    },
+    shufflePurpose : function(container) {
+      var container = document.querySelector(container),
+          temp = container.cloneNode(true),
+          i = temp.children.length;
+      while (i-- > 0)
+        temp.appendChild(temp.children[Math.random() * i | 0]);
+
+      container.parentNode.replaceChild(temp, container);
+    },
+    submitPurpose : function(callback) {
+      var currentHash = _analytics.reservation.currentHash.split('#'),
+          location = isoTest.titleCase(currentHash[currentHash.length - 1]),
+          purpose = '';
+      if ($('.iso-purpose-options input').is(':checked')) {
+        purpose = $('.iso-purpose-options input:checked').val();
+        if (isoTest.debug === true) {
+          console.log('Purpose:' + purpose);
+        } else {
+          isoTest.setOmniture(purpose, location);
+        }
+        callback();
+      } else {
+        /*if ($('.iso-purpose-options .error-container').length === 0) {
+          var error = isoTest.supplant(isoTest.templates.error, isoTest.content.error);
+          $('.iso-purpose-options').prepend(error);
+        }*/
+        if (isoTest.debug === true) {
+          console.log('ErrorSubmission');
+        }/* else {
+          isoTest.trackClicks('ErrorSubmission');
+        }*/
+      }
+    },
+    destroyModal : function() {
+      $('html').removeClass('iso-modal-open');
+      $('.iso-modal').remove();
+    },
+    observeDOM : (function() {
+      var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+      return function(obj, callback) {
+        if (MutationObserver) {
+          var obs = new MutationObserver(function(mutations, observer) {
+            var modalClass = $.inArray('modal-open', mutations[0].target.classList);
+            if (mutations[0].attributeName === 'class' && modalClass > -1) {
+              callback();
+            }
+          });
+          obs.observe(obj, { attributes : true, attributeOldvalue : true });
+        }
+      }
+    })(),
+    keepFocus : function(context) {
+      var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+          firstTabbableElement = allTabbableElements[0],
+          lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+      var keyListener = function(e) {
+        var keyCode = e.which || e.keyCode;
+
+        e.preventDefault = e.preventDefault || function () {
+          e.returnValue = false;
+        };
+        if (keyCode === 9) {
+          if (e.target === lastTabbableElement && !e.shiftKey) {
+            e.preventDefault();
+            firstTabbableElement.focus();
+          } else if (e.target === firstTabbableElement && e.shiftKey) {
+            e.preventDefault();
+            lastTabbableElement.focus();
+          }
+        }
+      };
+      context.addEventListener('keydown', keyListener, false);
+    },
+    keyboardClose : function(characterCode) {
+      var isEsc = false;
+      switch (characterCode) {
+        case 27:
+          isEsc = true;
+          break;
+        default:
+          break;
+      }
+      return isEsc;
+    },
+    titleCase : function(str) {
+      return str.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
+    },
+    setTargetCookie : function (test, creative) {
+      if (test && creative) {
+        _satellite.setCookie('tt_info', test + '|' + creative);
+      }
+    },
+    setTrackingCookie : function(page) {
+      _satellite.setCookies('tt_review', page);
+    },
+    /*createClickTracking : function(o) {
+      var selector = o.selector || null,
+          data = o.data || null;
+      $(o.ele).on(o.evt, selector, data, function(e) {
+        if (isoTest.debug === true) {
+          switch (o.group) {
+            case 'link':
+              e.preventDefault();
+              console.log(o.metric, $(this).attr('href'));
+              break;
+            case 'element':
+              console.log(o.metric);
+              break;
+            case 'modal':
+              if (e.target === this)
+                console.log(o.metric);
+              break;
+            default:
+              console.log(o.metric);
+              break;
+          }
+        } else {
+          switch (o.group) {
+            case 'link':
+              e.preventDefault();
+              isoTest.trackClicks(o.metric, $(this).attr('href'));
+              break;
+            case 'element':
+              isoTest.trackClicks(o.metric);
+              break;
+            case 'modal':
+              if (e.target === this)
+                isoTest.trackClicks(o.metric);
+              break;
+            default:
+              isoTest.trackClicks(o.metric);
+              break;
+          }
+        }
+      });
+    },*/
+    setOmniture : function(value, location) { // value = NoAnswer, location = Cars
+      var pageName = _analytics.pageInfo.pageName,
+          linkName = 'RW:' + location + ':Purpose';
+      s.linkTrackVars = 'eVar20,prop22,prop23,eVar55,eVar89';
+      s.eVar20 = linkName;
+      s.prop22 = linkName;
+      s.prop23 = linkName + ':' + value // RW:Cars:Purpose
+      s.eVar55 = pageName + '#purposemodal'; // reservationpage#purposemodal
+      s.eVar89 = 'Purpose:' + value; // Purpose:NoAnswer
+      s.tl(this, 'o', linkName);
+      return false;
+    },
+    trackClicks : function(element, url) {
+      var url = url || null;
+      //mboxUpdate(isoTest.customMbox, 'click='+element);
+      adobe.target.trackEvent({
+          "mbox": isoTest.customMbox,
+          "params": {
+              "click": element
+          },
+          "success" : function() {
+            if (url !== null) {
+              window.location.href=url;
+            }
+          }
+      });
+    },
+    supplant : function(str, o) {
+      return str.replace(/{([^{}]*)}/g, function(a, b) {
+        var p = b.split(/\./),
+            c = o;
+        for (var i = 0; i < p.length; i++) {
+          if (c[p[i]] == null)
+            return a;
+          c = c[p[i]];
+        }
+        return typeof c === 'string' || typeof c === 'number' ? c : a;
+      });
+    },
+    elementLoaded : function (ele, callback) {
+      if (isoTest.debug === true) {
+        console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+      }
+      window.clearTimeout(isoTest.eleTimer);
+      //Check for jQuery and _a object
+      if ($(ele).length > 0) {
+        if (typeof callback === 'function') {
+          if (isoTest.debug === true) {
+            console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+          }
+          callback();
+        }
+          } else {
+              isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+          }
+    },
+    dependsLoaded : function (callback) {
+      if (isoTest.debug === true) {
+        console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+      }
+      window.clearTimeout(isoTest.timer);
+      //Check for jQuery and _a object
+      if (((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) && typeof _analytics === "object") {
+        if (typeof callback === 'function') {
+          if (isoTest.debug === true) {
+            console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+          }
+          callback();
+        }
+      } else {
+        isoTest.timer = window.setTimeout(function() {
+          isoTest.dependsLoaded(callback);
+        }, 100);
+      }
+    }
+  }
+  isoTest.init();
+})(jQuery);
+</script>

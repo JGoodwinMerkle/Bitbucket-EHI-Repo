@@ -1,0 +1,426 @@
+<style>
+	#book .coupon-field-wrapper {
+		margin: 18px 0 0 0;
+	}
+
+	#book #coupon {
+		color: #181918;
+	}
+
+	.date-time-label span:nth-child(2):after, .location-input-label > span:first-child:after, .age-input label > span:first-child:after{
+    content: " *";
+	}
+
+	.location-input-label .sublabel > span:last-child {
+    float: right;
+    white-space: nowrap;
+	}
+
+	.location-input-label .sublabel .bold, 
+	#book .coupon-field-wrapper .custom-select .iso-tooltip .iso-tooltiptext p .bold {
+    font-family: "DINMedium",Arial,sans-serif;
+	}
+
+	#book .coupon-field-wrapper .custom-select .iso-tooltip .iso-tooltiptext p .bold.iso-link {
+		cursor: pointer;
+		color: white;
+	}
+
+	#book #iso-couponSub {
+		display: block;
+	}
+
+	#book label#iso-couponSub {
+		float: left;
+		font-family: "DINLight",Helvetica,Arial,sans-serif;
+	  font-size: 15px;
+	}
+
+	#book #iso-couponSub .iso-couponOp {
+		text-transform: capitalize;
+	}
+
+	#book .coupon-field-wrapper .custom-select, #book #coupon {
+		display: none;
+	}
+
+	#book .coupon-field-wrapper .custom-select .iso-tooltip {
+		border: .5px solid #009B57;
+		border-radius: 50%;
+		-webkit-box-shadow: 0px 0px .25px .25px #009B57; 
+    -moz-box-shadow: 0px 0px .25px .25px #009B57; 
+    box-shadow: 0px 0px .25px .25px #009B57; 
+		color: #009B57;
+		cursor: pointer;
+		display: table-cell;
+		float: none;
+		font-family: "DINMedium",Arial,sans-serif;
+		font-size: 12px;
+		left: 4px;
+		line-height: 15px;
+    padding-top: 2px;
+    position: relative;
+		text-align: center;
+		text-transform: lowercase;
+		top: 1px;
+		width: 18px;
+	}
+
+	#book .coupon-field-wrapper .custom-select .iso-tooltip:hover {
+		background-color: #009B57;
+		color: white;
+	}
+
+	#book .coupon-field-wrapper .custom-select .iso-tooltip .iso-tooltiptext {	
+		background-color: rgba(81, 81, 81, 1);
+    left: 190%;
+    line-height: normal;
+    padding: 15px 13.5px 0px;
+		position: absolute;
+    text-transform: none;	
+    text-align: left;
+    top: -15px;
+    visibility: hidden;
+    width: 300px;
+    z-index: 1;
+	}
+
+	#book .coupon-field-wrapper .custom-select .iso-tooltip:hover .iso-tooltiptext {
+		cursor: auto;
+		visibility: visible;
+	}
+
+	#book .coupon-field-wrapper .custom-select .iso-tooltip .iso-tooltiptext p {
+    font-family: "DINLight",Helvetica,Arial,sans-serif;
+    font-size: 14.5px;
+	}
+
+	#book .coupon-field-wrapper .custom-select .iso-tooltip .iso-tooltiptext::after {
+		border-color: transparent rgba(81, 81, 81, 1) transparent transparent;
+		border-style: solid;
+		border-width: 10px;
+    content: " ";
+    margin-top: -5px;
+    position: absolute;
+    right: 100%;
+    top: 12%;
+	}	
+
+	#book #options-dropdown {
+		cursor: pointer;
+		margin-bottom: .5em;
+	}
+
+	#book #options-dropdown i {
+		border: solid #169a5a;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    height: 13px;
+    margin-bottom: 2px;
+    width: 13px;
+	} 
+
+	#book #options-dropdown i.iso-down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+	}
+
+	#book #options-dropdown i.iso-up {
+		margin-bottom: -4px;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+	}
+
+	#book #options-dropdown .options-text {
+		font-family: "DINLight",Helvetica,Arial,sans-serif;
+    font-size: 15px;
+    line-height: 22px;
+    margin-left: 15px;
+	} 
+
+	#book #coupon {
+		margin:	.1875rem 0 0 0;
+	}
+
+	#book .booking-widget .booking-submit {
+		margin-top: 75px;
+	}
+
+	#book .booking-widget .booking-submit.collapsed {
+		margin-top: 25px;
+	}
+
+	@media (min-width: 1057px) {
+		#book .booking-widget .date-time-form {
+			margin-bottom: 1.5em;
+		}
+
+		#book .booking-widget .booking-submit {
+			margin-top: 3px;
+		}
+
+		#book label#iso-couponSub {
+			display: inline-block;
+		}
+
+		#book .booking-widget .booking-submit.collapsed {
+			margin-top: -25px;
+		}
+	}
+
+	@media (max-width: 48em) {
+		#book .coupon-field-wrapper {
+			margin: 0 3% 16px;
+		}
+
+		#book #coupon {
+			margin: .1875rem 0 0 0;
+			padding: .8em .5em .5em .5em;
+			width: 100%;
+		}
+
+		#book .booking-widget .booking-submit {
+			margin: 56px 3% 0px 0px;
+		}
+
+		#book .booking-widget .booking-submit.collapsed {
+			margin-top: 5px;
+		}
+	}
+
+	@media (max-width: 46.8em) {
+		#location-text-box-pickup {
+			position: relative;
+		}
+
+		#location-text-box-pickup .sublabel > span:last-child {
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+
+		#book .booking-widget .booking-submit {
+			margin: auto;
+		}
+
+		#book .coupon-field-wrapper .custom-select .iso-tooltip .iso-tooltiptext {
+			left: -680%;
+			margin-left: -60px;
+			top: 169%;
+			width: 210px;
+		}
+
+		#book .coupon-field-wrapper .custom-select .iso-tooltip .iso-tooltiptext::after {
+			border-color: transparent transparent rgba(81, 81, 81, 1) transparent;
+			bottom: 100%;
+			left: 83%;
+			right: auto;
+			top: auto;
+		}
+	}
+
+	@media (max-width: 35.75em) {
+		#location-text-box-pickup > span > span:last-child {
+			display: none;
+		}
+	}
+
+	@media (max-width: 320px) {
+		#book label#iso-couponSub {
+			font-size: 14px;
+		}
+
+		#book .coupon-field-wrapper .custom-select .iso-tooltip .iso-tooltiptext {
+			left: -710%;
+		}
+
+		#book .coupon-field-wrapper .custom-select .iso-tooltip .iso-tooltiptext::after {
+			border-color: transparent transparent rgba(81, 81, 81, 1) transparent;
+			bottom: 100%;
+			left: 83%;
+			right: auto;
+			top: auto;
+		}
+	}
+</style>
+
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Promo/Account Label',
+		cookieName : 'enPromoAccountLabel',
+		customMbox : 'enPromoAccountLabelClicks',
+		creative : "Challenger 3",
+		resWidget: '#reservationWidget',
+		content: {
+			required: '<span><span class="bold">* </span>Required Field</span>'
+		},
+		couponBlock: '<div class="custom-select"><label id="iso-couponSub">Rate Code<span class="iso-couponOp"> (Contract, Promotion, Group, etc.) </span></label><span class="iso-tooltip">i<span class="iso-tooltiptext"><p>Use this field to enter a code for a corporate contract, association, coupon, or other special rate.</p><p>Looking to use your <span class="bold">Enterprise Plus</span> account? Please <a class="bold iso-link">sign in above</a> instead.</p></span></span></div>',
+		dropdown: '<div id="options-dropdown"><i class="iso-arrow iso-down"></i><span class="options-text">Additional Options</span></div>',
+		init : function() {
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			
+			isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded(isoTest.resWidget, function() {	
+					isoTest.log("Test Ready!");	
+					isoTest.chall();	
+				});
+			});
+		},
+		chall : function() {
+			$('#viewModifyCancelBookingWidget').click(function(){
+				isoTest.updateWidget();
+			});
+
+			isoTest.checkPath();
+			isoTest.updateLabels();
+		},
+		updateWidget: function() {
+			var bookingLink = $('#viewModifyCancelBookingWidget span.active');
+			if (bookingLink.text() === "Reserve a Rental Car" || bookingLink.text() === "START A RESERVATION") {
+				setTimeout(function(){
+					isoTest.checkPath();
+					isoTest.updateLabels();
+				}, .1);
+			}
+		},
+		checkPath: function() {
+			if (location.pathname.indexOf('car-rental.html') > -1) {
+				$('#reservationWidget .inner-container').removeClass('collapsed').addClass('expanded');
+			}
+		},
+		updateLabels : function(){
+			$('#location-text-box-pickup .sublabel').append(isoTest.content.required);
+
+			var $couponField = $('.coupon-field-wrapper');
+			$couponField.prepend($(isoTest.couponBlock));
+			$couponField.prepend($(isoTest.dropdown));
+			$couponField.find('#coupon').attr('placeholder','');
+
+			isoTest.checkState();
+			isoTest.addEvents();
+		},
+		addEvents : function(){
+			$('#options-dropdown').click(function(){
+				$('#options-dropdown i').toggleClass("iso-down iso-up");
+				isoTest.checkState();
+				$('.coupon-field-wrapper .custom-select, #coupon').toggle();
+			});
+
+			$('.iso-tooltiptext a.iso-link').click(function(e){
+				e.preventDefault();
+				$("html, body").animate({ scrollTop: 0 }, "slow");
+				$('#signInJoinButton').click();
+			});
+		},
+		checkState : function(){
+			if ($('#options-dropdown i').hasClass('iso-down')) { 
+				$('#book .booking-submit').addClass('collapsed');
+			} else {
+				$('#book .booking-submit').removeClass('collapsed');
+			}
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        "mbox": isoTest.customMbox,
+        "params": {
+          "click": element
+      	},
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+    	});
+		},
+		analyticsLoaded : function(callback){
+			isoTest.log('analyticsLoaded - Checking...');
+			var aTimer;
+			window.clearTimeout(aTimer);
+			if (_a && _a.stationId.length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('analyticsLoaded - Found!');
+					callback();
+				}
+	    } else {
+	      aTimer = window.setTimeout(function(){isoTest.analyticsLoaded(callback);}, 100);
+	    }
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	    } else {
+	      isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	    }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === "function") {
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	    var query = window.location.search.substring(1);
+	    var vars = query.split('&');
+	    for (var i = 0; i < vars.length; i++) {
+	      var pair = vars[i].split('=');
+	      if (decodeURIComponent(pair[0]) == variable) {
+	      	return decodeURIComponent(pair[1]);
+	      }
+	    }
+	  }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

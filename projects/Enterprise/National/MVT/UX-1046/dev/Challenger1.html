@@ -1,0 +1,441 @@
+<style type="text/css">
+	
+	div#modal.modal-new.modal-greyBg.iso-global-modal {
+    background-color: #f5eee4;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    position: absolute;
+	}
+
+	div#modal.iso-global-modal p.closer {
+		z-index: 100;
+	}
+
+	div#modal.modal-new.iso-global-modal p.closer a.x {
+    background-size: 70%;
+    padding-top: 1rem;
+	}
+
+	#modal.iso-global-modal .content {
+		width: 100% !important;
+		padding: 0 !important;
+    margin: 0 !important;
+		display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    max-height: 100%;
+	}
+
+	#modal.iso-global-modal .modal-header {
+		position: relative;
+		padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    background-color: #231f20;
+	}
+
+	#modal.iso-global-modal .modal-header h3 {
+    color: #fff;
+    margin-bottom: 0;
+	}
+
+	#modal.iso-global-modal .canada-redirect-section {
+		position: relative;
+    z-index: 1;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    padding-top: 1.875rem;
+    padding-bottom: 1.875rem;
+    padding-right: 2.125rem;
+    padding-left: 2.125rem;
+	}
+
+	#modal.iso-global-modal .canada-redirect-section .modal-body p {
+		font-size: 16px;
+		line-height: 22px;
+		margin-bottom: 1.25rem;
+	}
+
+	#modal.iso-global-modal .input-option-container {
+    position: relative;
+    cursor: pointer;
+	}
+
+	#modal.iso-global-modal .canada-redirect-section .input-option-container input#iso-remember {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+	}
+
+	#modal.iso-global-modal .canada-redirect-section .input-option-container label {
+    font-weight: 400;
+    font-size: 13px !important;
+    padding-left: 1.5625rem;
+    line-height: 2;
+    display: block;
+    letter-spacing: .005rem;
+    color: #231f20;
+    cursor: pointer;
+	}
+
+	#modal.iso-global-modal .input-option-container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+	}
+
+	#modal.iso-global-modal .input-option-container input:checked ~ .checkmark:after {
+    display: block;
+    top: .4rem;
+    left: .185rem;
+    width: .75rem;
+    height: .75rem;
+    background-color: #00703c;
+	}
+
+	#modal.iso-global-modal .input-option-container .checkmark:after {
+    top: .75rem;
+    left: .5rem;
+    z-index: 2;
+    width: 0;
+    height: 0;
+    background-color: #00703c;
+    -webkit-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    content: "";
+    pointer-events: none;
+    z-index: 1;
+    position: absolute;
+    display: block;
+	}
+
+	#modal.iso-global-modal .input-option-container .checkmark:before {
+    border: .0625rem solid #00703c;
+    top: .25rem;
+    left: 0;
+   	width: 1rem;
+    height: 1rem;
+    content: "";
+    pointer-events: none;
+    z-index: 1;
+    position: absolute;
+    display: block;
+	}
+
+	#modal.iso-global-modal .modal-footer {
+    padding: 1.25rem .625rem;
+	}
+
+	#modal.iso-global-modal button:enabled, #modal.iso-global-modal .btn:enabled {
+    cursor: pointer;
+	}
+
+	#modal.iso-global-modal .btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    font-size: 12px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: .1rem;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+    outline: none;
+    background-color: #00703c;
+    padding: .875rem .9375rem;
+    -webkit-transition: color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95),background-color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95),border 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    transition: color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95),background-color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95),border 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    box-shadow: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+	}
+
+	#modal.iso-global-modal .btn--underline {
+    text-decoration: underline;
+    border: .0625rem solid transparent !important;
+  }
+
+  #modal.iso-global-modal .btn--opaque {
+    color: #00703c;
+    background-color: transparent;
+    border: .0625rem solid #00703c;
+	}
+
+	#modal.iso-global-modal .btn:hover:enabled, #modal.iso-global-modal .btn:focus:enabled {
+    background-color: #231f20;
+	}
+
+	#modal.iso-global-modal .btn--opaque:hover:enabled, #modal.iso-global-modal .btn--opaque:focus:enabled {
+    color: #231f20;
+    background-color: transparent;
+	}
+
+
+@media screen and (min-width: 40.0625em) {
+	div#modal.modal-new.modal-greyBg.iso-global-modal {
+    width: 41.25rem;
+    top: 10vh;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    margin-left: -20.625rem;
+	}
+
+	#modal.iso-global-modal .modal-header {
+		padding-right: 2.125rem;
+    padding-left: 2.125rem;
+	}
+
+	#modal.iso-global-modal .canada-redirect-section {
+    padding-right: 2.125rem;
+    padding-left: 2.125rem;
+	}
+
+	#modal.iso-global-modal .modal-footer {
+		padding-right: 2.125rem;
+    padding-left: 2.125rem;
+	}
+
+	#modal.iso-global-modal .cancel-and-apply-buttons .btn {
+    display: inline-block;
+    width: auto;
+    min-width: 10.9375rem;
+    padding-right: 1.875rem;
+    padding-left: 1.875rem;
+    margin-left: .75rem;
+    float: right;
+	}
+
+	#modal.iso-global-modal .cancel-and-apply-buttons .btn:last-child {
+    margin-left: 0;
+	}
+
+	#modal.iso-global-modal .cancel-and-apply-buttons .btn--underline {
+    min-width: unset;
+	}
+
+	#modal.iso-global-modal .cancel-and-apply-buttons::after {
+    clear: both;
+    content: "";
+    display: block;
+  }
+}
+
+@media screen and (max-width: 40em) {
+	#modal.iso-global-modal .modal-header {
+	  padding-right: 3.125rem;
+	  padding-left: 1.25rem;
+	}
+}
+
+@media screen and (max-width: 30em) {
+	#modal.iso-global-modal .modal-header {
+	  padding-right: .5rem;
+	  padding-left: 1.25rem;
+	}
+
+	#modal.iso-global-modal .modal-header h3 {
+		font-size: 16px;
+	}
+
+	div#modal.modal-new.iso-global-modal p.closer a.x {
+    background-size: 35%;
+  }
+}
+</style>
+
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'National.com',
+		test : 'National Canada Price Global Gateway',
+		cookieName : 'natCanadaRedirect',
+		customMbox : 'natCanadaRedirectClicks',
+		creative : "Challenger 1",
+		timeOut : 500,
+		content : {
+			modalHeader : '<div class="modal-header"><h3>Looking for our Canada website?</h3></div>',
+			modalBody : "<div class='contentPar parsys'>\
+										<div class='canada-redirect-section multiStepGeneric generic section'>\
+											<div class='modal-body'>\
+												<p>We noticed that you may be visiting a version of our website that doesn't match your location in Canada. Our Canadian website provides you with the most relevant prices, promotions and language preferences. Please confirm below to be directed to our Canada website.</p>\
+												<div class='input-option-container'>\
+													<input type='checkbox' id='iso-remember' name='iso-remember' value='on'>\
+													<label for='iso-remember' class='checkmark'>Remember my choice</label>\
+												</div>\
+											</div>\
+											<div class='modal-footer cancel-and-apply-buttons'>\
+												<button class='btn submit iso-redirect' id='iso-canada-redirect'>Yes, I am a Canada Resident</button>\
+												<button class='btn btn--opaque btn--underline iso-cancel-redirect close' >No, Stay Here</button>\
+											</div>\
+										</div>\
+									</div>"
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.dependsLoaded(function(){
+				isoTest.chall();
+				if (isoTest.debug === true) {
+					console.log("Test Ready!"); 
+				}
+			});
+	
+		},
+		chall : function() {
+      /*
+			setTimeout(function(){
+				if ($('.footer .insidersSignUp .anon a').length > 0) {
+					isoTest.checkLocalStorage();
+				}
+			}, isoTest.timeOut);
+      */
+
+      $(function(){
+      	isoTest.checkLocalStorage();
+      });
+      
+			$(document).on('click', '.iso-cancel-redirect', function() {
+				if (document.getElementById('iso-remember').checked) {
+      		isoTest.setLocalStorage();
+      	}
+      	$('#modal-outer, #modal, #mask').hide();
+			});
+
+			$(document).on('click', '#iso-canada-redirect', function() {
+				if (document.getElementById('iso-remember').checked) {
+      		isoTest.setLocalStorage();
+      	}
+      	window.location.href='https://beta.nationalcar.ca/en/home.html';
+			});
+
+		},
+		checkLocalStorage : function() {
+			var today = new Date();
+			if (localStorage.getItem("isoNatCanadaSeenUntil") === null || localStorage.getItem("isoNatCanadaSeenUntil") > today ) {
+				$('#modal-outer, #modal, #mask').show();
+        $('#modal').attr('class','modal-new modal-greyBg iso-global-modal');
+				isoTest.updateNationalModalText();
+			}
+		},
+		updateNationalModalText : function() {
+			$(isoTest.content.modalHeader).appendTo('.iso-global-modal .content');
+			$(isoTest.content.modalBody).appendTo('#modal.iso-global-modal .content');
+		},
+		setLocalStorage : function() {
+			var now = new Date();
+			now.setDate(now.getDate() + 30);
+			localStorage.setItem('isoNatCanadaSeenUntil', now);
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        "mbox": isoTest.customMbox,
+        "params": {
+            "click": element
+        },
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+      });
+		},
+		supplant : function (str, o) {
+			return str.replace(/{([^{}]*)}/g, function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : '';
+			});
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+      } else {
+        isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+      }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+        	return decodeURIComponent(pair[1]);
+        }
+      }
+    }
+	}
+	
+	isoTest.dependsLoaded(function(){ 
+    isoTest.init();
+  });
+})();
+</script>

@@ -1,0 +1,852 @@
+<style>
+html.iso-modal-open,
+html.iso-modal-open body { overflow: hidden; height: 100%; }
+#reservationFlow .reservation-flow.cars { background: #ffffff; }
+#reservationFlow .reservation-flow.cars .filter-bar { border-bottom: none; }
+#reservationFlow .reservation-flow.cars .cars-wrapper { padding: 0; }
+#reservationFlow .reservation-flow.cars .unavailable-toggle { margin-top: 0; float: none; }
+#reservationFlow .reservation-flow.cars .car-container { padding: 0 1.5%; width: 100%; height: auto; float: none; }
+#reservationFlow .reservation-flow.cars .car-container .car-cutoff { border-bottom: none; border-top: 3px solid #000000; padding: 0 0 50px; }
+#reservationFlow .reservation-flow.cars .car-container.previously-selected .car-cutoff { border-color: #169a5a; }
+#reservationFlow .reservation-flow.cars .car-container.previously-selected + .car-container .car-cutoff { border-top-color: #169a5a; }
+#reservationFlow .reservation-flow.cars .car-container .car { border: 0; }
+#reservationFlow .reservation-flow.cars .car-container.animated:hover .car { border: 0 !important; }
+#reservationFlow .reservation-flow.cars .car-container .car .detailed-view,
+#reservationFlow .reservation-flow.cars .car-container .car .default-view { position: relative; padding: 0; display: flex; flex-flow: row wrap; }
+/* Default View */
+#reservationFlow .reservation-flow.cars .car-container .car .car-image { height: auto; float: left; width: 25%; padding: 0 20px; }
+#reservationFlow .reservation-flow.cars .car-container .car .car-image img { position: relative; right: auto; top: auto; vertical-align: top; }
+#reservationFlow .reservation-flow.cars .car-container.animated .car .car-image img { right: auto; }
+#reservationFlow .reservation-flow.cars .car-container.animated:hover .car .car-image img { right: auto; }
+#reservationFlow .reservation-flow.cars .car-container .car .default-view .car-details { height: auto; float: left; width: 25%; padding: 20px 20px 0; }
+#reservationFlow .reservation-flow.cars .car-container .car .default-view .car-details .state-link { display: none; }
+#reservationFlow .isotest-feature-details { padding: 20px 20px 60px; width: 20%; border-left: 1px solid #dbdbdb; position: relative; }
+#reservationFlow .isotest-feature-details ul li.iso-feat-passenger:before {
+  background:url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2036.68%2046.666668%22%20height%3D%2246.667%22%20width%3D%2236.68%22%3E%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M25.967%2019.755l-3.006%201.38c.454.135.903.283%201.337.46%204.604%201.86%208.136%205.818%209.433%2010.677.35%201.31.547%202.683.547%204.102h2.4c0-1.41-.167-2.783-.47-4.102-1.228-5.32-4.782-9.755-9.53-12.19-.232-.117-.473-.218-.71-.327M33.867%2039.172c-.89%202.973-3.145%205.095-5.79%205.095H8.598c-2.64%200-4.893-2.123-5.78-5.095-.168-.56-.293-1.144-.356-1.754-.034-.342-.06-.688-.06-1.042H0c0%20.388.022.77.057%201.147.04.427.107.842.19%201.25.026.136.062.266.094.4%201.023%204.315%204.33%207.494%208.258%207.494h19.48c3.93%200%207.246-3.177%208.268-7.495.21-.89.33-1.826.33-2.796h-2.4c0%20.985-.148%201.925-.41%202.796M2.4%2036.374c0-1.42.198-2.792.55-4.102.49-1.825%201.29-3.525%202.348-5.032.052-.074.11-.145.162-.218l.003.002c.267-.367.543-.708.82-1.045%204.846-5.884%2010.96-7.314%2013.68-7.86.12-.026.245-.05.353-.073.363-.072.647-.13.838-.18%203.52-.938%205.733-3.72%206.124-7.535%200-.004%200-.01.002-.014.04-.393.08-.785.08-1.2%200-2.71-1.157-5.258-3.174-6.99C22.2.422%2019.65-.296%2017.01.11%2012.366.82%208.93%205.183%209.35%209.834c.012.128.05.25.066.376.208%201.547.818%202.97%201.743%204.175l2.248-1.03c-.796-.865-1.32-1.927-1.544-3.112-.04-.21-.102-.41-.12-.626-.31-3.412%202.216-6.613%205.628-7.134.24-.037.48-.06.717-.072.24-.008.482-.006.723.004%201.408.08%202.726.605%203.81%201.535%201.485%201.275%202.337%203.16%202.337%205.168%200%20.392-.025.844-.092%201.323-.27%201.92-1.252%204.287-4.332%205.108-.156.042-.39.086-.687.145-2.486.492-9.78%201.948-15.4%208.74-1.91%202.218-3.285%204.896-3.966%207.84C.18%2033.592%200%2034.96%200%2036.372h2.4%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center center / contain no-repeat content-box;
+}
+
+#reservationFlow .isotest-feature-details ul li.iso-feat-bag:before {
+  background:url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cpath%20fill%3D%22none%22%20d%3D%22M33.6%2014.2H6.4c-2.2%200-4%201.8-4%204v19c0%20.2.2.4.4.4h34.5c.2%200%20.4-.2.4-.4v-19c-.1-2.2-1.9-4-4.1-4z%22%2F%3E%3Cpath%20fill%3D%22%23231F20%22%20d%3D%22M33.6%2012.2h-5.8V5c0-2.6-2.1-4.6-4.7-4.6h-6.4c-2.6%200-4.6%202.1-4.6%204.6v3h2V5c0-1.5%201.2-2.6%202.6-2.6h6.4c1.5%200%202.7%201.2%202.7%202.6v7.2H6.4c-3.3%200-6%202.7-6%206v19c0%201.3%201.1%202.4%202.4%202.4h34.5c1.3%200%202.4-1.1%202.4-2.4v-19c-.1-3.3-2.8-6-6.1-6zm4%2010.9v14.1c0%20.2-.2.4-.4.4H2.8c-.2%200-.4-.2-.4-.4v-19c0-2.2%201.8-4%204-4h27.3c2.2%200%204%201.8%204%204v4.9z%22%2F%3E%3C%2Fsvg%3E") center center / contain no-repeat content-box;
+}
+
+#reservationFlow .isotest-feature-details ul li.iso-feat-additional:before {
+  background:url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221104%22%20height%3D%221096%22%20viewBox%3D%22-75.5%20-269.5%201104%201096%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M671.8%2056l-252%20263.2-131.6-138.6L200%20273l176.4%20184.8%2043.4%2046.2L760%20148.4%22%2F%3E%3Ccircle%20fill%3D%22none%22%20stroke%3D%22%23000000%22%20stroke-width%3D%2250%22%20stroke-miterlimit%3D%2210%22%20cx%3D%22480%22%20cy%3D%22280%22%20r%3D%22486%22%2F%3E%3C%2Fsvg%3E") center center / contain no-repeat content-box;
+}
+#reservationFlow .isotest-feature-details ul li:before {
+  content: "";
+  height: 16px;
+  top: 2px;
+  position: relative;
+  width: 16px;
+  margin: 0 15px 0 0;
+  display: inline-block;
+  vertical-align: top;
+
+}
+#reservationFlow .isotest-feature-details ul li { font-size: 14px; font-family: "DINLight",Arial,sans-serif; color: #666666; }
+#reservationFlow .isotest-feature-details ul li:nth-child(n+8) { display: none; }
+#reservationFlow .isotest-feature-details ul.active li:nth-child(n+8) { display: block; }
+#reservationFlow .isotest-feature-details span { font-family: "DINBold", Arial Black, Arial, sans-serif; font-size: 15px; color: #169a5a; text-transform: uppercase; position: absolute; bottom: 12px; line-height: 1; cursor: pointer; }
+#reservationFlow .isotest-feature-details span:hover { color: #006639; text-decoration: underline; }
+#reservationFlow .isotest-whats-included { font-size: 14px; display: block; line-height: 1; color: #169a5a; }
+#reservationFlow .isotest-whats-included:hover { color: #006639; text-decoration: underline; }
+#reservationFlow .reservation-flow.cars .car-container .car .car-header { float: none; width: auto; }
+#reservationFlow .reservation-flow.cars .car-container .car .car-header span { width: 100%; }
+#reservationFlow .reservation-flow.cars .car-container .car .car-header span:first-of-type { font-size: 15px; }
+#reservationFlow .reservation-flow.cars .car-container .car .default-view > .cf:last-of-type, .isotest-cf-price { width: 30%; float: left; border-left: 1px solid #dbdbdb; padding: 20px 20px 55px; position: relative; }
+#reservationFlow .reservation-flow.cars .car-container .car .rate-section { border-bottom: none; padding-top: 0; margin-top: 0; text-align: center; }
+#reservationFlow .reservation-flow.cars .car-container .car .rate-section span { display: inline; background: none; padding-right: 0; }
+#reservationFlow .reservation-flow.cars .car-container .car .rates { margin-top: 10px; display: flex; height: calc(100% - 30px); }
+#reservationFlow .reservation-flow.cars .car-container .car .rates .total-rate { display: none; }
+#reservationFlow .reservation-flow.cars .car-container .car .rates .included-text { display: none; }
+.isotest-whats-included { cursor: pointer; }
+#reservationFlow .reservation-flow.cars .car-container .car .rates .isotest-total-rate { float: left; width: 50%; text-align: center; }
+#reservationFlow .reservation-flow.cars .car-container .car .rates .rate-info .rate-normal,
+#reservationFlow .reservation-flow.cars .car-container .car .rates .isotest-rate-normal { font-family: "DINRegular", Arial Black, Arial, sans-serif; font-size: 42px; letter-spacing: -3px; margin-left: 0px; color: #000000; line-height: 1; }
+#reservationFlow .reservation-flow.cars .car-container .car .rates .isotest-rate-normal { vertical-align: top; line-height: 1; }
+.iso-super { font-size: 20px; position: relative; top: -16px; }
+.super-currency { letter-spacing: -1px; }
+.super-decimal { letter-spacing: -2px; margin-left: 2px; }
+#reservationFlow .reservation-flow.cars .car-container .car .rate-subtext,
+#reservationFlow .reservation-flow.cars .car-container .car .isotest-rate-subtext { position: relative; top: -5px; }
+#reservationFlow .reservation-flow.cars .car-container .car .select-button { position: absolute; bottom: 0; left: 20px; width: calc(100% - 40px); }
+#reservationFlow .reservation-flow.cars .unavailable-wrapper .sold-out-container { bottom: 0; height: 160px; position: absolute; right: 0; width: 30%; z-index: 99; }
+#reservationFlow .reservation-flow.cars .unavailable-wrapper .sold-out-container .change-location-button { width: 92%; left: 4%; }
+/* Detailed View */
+#reservationFlow .reservation-flow.cars .car-container .car .detailed-view.hiddenByFlip,
+#reservationFlow .reservation-flow.cars .car-container .car .default-view.hiddenByFlip { display: none; }
+/* Modal */
+.iso-modal.iso-loaded .modal-body { position:relative; z-index: 1; overflow: hidden; }
+.iso-modal-spinner { opacity: .8;left: 50%; top: 50%; position: absolute; width: 6.25rem; height: 6.25rem; margin-left: -3.125rem; margin-top: -3.125rem; }
+.iso-modal-spinner::before,
+.iso-modal-spinner::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 100%; border: 6px solid rgba(22,154,90,0.8); animation: anim-scaleup-fade 1.8s 0s infinite cubic-bezier(0.21,0.53,0.56,0.8); }
+.iso-modal-title-model { display: block; font-family: "DINLight",Arial,sans-serif; font-size: .65em; color:#656565; line-height: 1.2em; }
+.iso-modal-title-trans { display: block; font-size: .55em; font-family: "DINBold", Arial Black, Arial, sans-serif; text-transform: uppercase; }
+.iso-modal-image { position: absolute; z-index: 2; top: 20px; right:-20px; }
+.iso-data-group { padding-bottom: 25px; }
+.iso-data-title { display: block; font-family: "DINBold",Arial,sans-serif; text-transform: uppercase; border-top: 3px solid #181918; border-bottom: 1px solid #181918; padding: 8px 0 5px; margin-bottom: 8px; }
+.iso-data-row { overflow: hidden; display:block; padding: 5px 0 3px; }
+.iso-data-col { float:left; width:40%; display:block; }
+.iso-data-col:last-child { text-align: right; width:20%; }
+.modal-body h2 { border: none !important; margin-bottom: 3px !important; }
+.iso-modal.modal-container .modal-content .modal-header { font-family: "DINBold",Arial,sans-serif; }
+.iso-data-price-total { font-family: "DINRegular",Arial Black,Arial,sans-serif; font-size: 42px; letter-spacing: -3px; }
+.iso-data-price-total .super-decimal { padding-right: 2px; }
+.modal-buttons { overflow: hidden; }
+.modal-buttons button { float: right; letter-spacing: 0px; padding: 10px 70px 7px; }
+.modal-buttons .select-button {  }
+.modal-buttons .cancel-button { background: #656565; margin-right: 10px; }
+.iso-data-extras { display: none; }
+#reservationFlow #cars { visibility: hidden; }
+.reservation-flow.cars .filter-bar .filter-header .taxes-and-fees-tooltip .tooltip { z-index: 3; }
+.iso-flicker #reservationFlow .car .default-view { visibility: hidden !important; }
+.reservation-flow.cars .car-container .car .car-savings { position: static; margin-left: auto; width: 30%; order: 4; }
+.isotest-cf-price .day-rate.rate-info { border-right:1px solid #dbdbdb; }
+.filters-wrapper .selector:nth-child(2) { display: none; }
+.filters-wrapper .selector:nth-child(3) { display: none; }
+@media (max-width: 1250px) {
+  #reservationFlow .reservation-flow.cars .car-container .car .rates .rate-info .rate-normal, #reservationFlow .reservation-flow.cars .car-container .car .rates .isotest-rate-normal { font-size: 32px; }
+  #reservationFlow .reservation-flow.cars .car-container .car .rate-subtext, #reservationFlow .reservation-flow.cars .car-container .car .isotest-rate-subtext {
+    font-size: 11px;
+  }
+}
+@media (max-width: 768px) {
+  #reservationFlow .reservation-flow.cars .car-container { padding: 0 3%; }
+  #reservationFlow .reservation-flow.cars .car-container .car-cutoff { padding: 0 0 42px; }
+  #reservationFlow .reservation-flow.cars .car-container .car .car-image { padding: 0; }
+  #reservationFlow .reservation-flow.cars .car-container .car.sold-out .default-view > .cf { display: none; }
+  #reservationFlow .reservation-flow.cars .car-container .car .default-view .cf.car-details { float: right; width: 75%; padding: 20px 0 15px; display: block; }
+  #reservationFlow .reservation-flow.cars .car-container .car .car-header { position: relative; cursor: pointer; }
+  #reservationFlow .reservation-flow.cars .car-container .car .car-header h2 { color: #169a5a; }
+  #reservationFlow .reservation-flow.cars .car-container .car .car-header:after {
+    background:url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2215%22%20viewBox%3D%220%200%2020%2015%22%3E%3Cpath%20fill%3D%22%23189A5A%22%20d%3D%22M.497%205.264l1.92-2.304%207.776%206.24%207.583-6.096%201.92%202.352-9.503%207.584L.497%205.264%22%2F%3E%3C%2Fsvg%3E") center center / contain no-repeat content-box;
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 10px;
+    width: 18px;
+    height: 18px;
+  }
+  #reservationFlow .reservation-flow.cars .car-container .car.sold-out .car-header:after, #reservationFlow .reservation-flow.cars .car-container .car.sold-out .select-button { display: none; }
+  #reservationFlow .reservation-flow.cars .unavailable-wrapper .sold-out-container { position: static; height: auto; width: 75%; }
+  #reservationFlow .reservation-flow.cars .unavailable-wrapper .sold-out-container .change-location-button { position: static; margin-top: 20px; width: 100%; }
+  #reservationFlow .reservation-flow.cars .car-container .car .car-details.iso-mobile-open .car-header:after { transform: rotate(180deg); }
+  #reservationFlow .isotest-feature-details { float: right; width: 75%; border-left: none; display: none; padding: 0 0 10px; margin-left: auto; }
+  #reservationFlow .isotest-feature-details.iso-mobile-open { display: block; }
+  #reservationFlow .reservation-flow.cars .car-container .car .default-view > .cf:last-of-type, .isotest-cf-price { float: right; margin-left: auto; border-left: none; width: 75%; border-top: 1px solid #dbdbdb; padding: 15px 0 0; }
+  #reservationFlow .reservation-flow.cars .car-container .car .rate-section { float: left; }
+  #reservationFlow .reservation-flow.cars .car-container .car .rates { display: block; float: right; width: 60%; margin-top: 0; }
+  #reservationFlow .reservation-flow.cars .car-container .car .select-button { left: 0; position: relative; width: 100%; display: inline-block; }
+
+  #reservationFlow .isotest-whats-included { position: absolute; left: 0; top: 37px; }
+
+  .reservation-flow.cars .car-container .car .car-savings { width: 75%; }
+  .reservation-flow.cars .car-container .car .rates .rate-info:first-child { border-right: none; }
+
+  #reservationFlow .isotest-feature-details ul li:nth-child(n+8) { display: block; }
+
+  #reservationFlow .reservation-flow.cars .car-container .car .rates .rate-info .rate-normal,
+  #reservationFlow .reservation-flow.cars .car-container .car .rates .isotest-rate-normal { font-size: 34px; }
+
+  .iso-super { font-size: 14px; top: -14px; }
+  .show-all-less { display: none; }
+}
+@media (max-width: 550px) {
+  #reservationFlow .reservation-flow.cars .car-container .car .rates .rate-info .rate-normal, #reservationFlow .reservation-flow.cars .car-container .car .rates .isotest-rate-normal { font-size: 26px; }
+  }
+}
+</style>
+<script>
+(function($) {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.com",
+		test : "Vehicles List",
+		cookieName : 'ehiVehiclesList',
+		creative : "Challenger 1",
+		customMbox : 'ehiVehiclesListClicks',
+    services : enterprise.services.path,
+    locale : enterprise.locale,
+    included : '/reservations/vehicles/details?',
+		templates : {
+			mainFeatures : '<li class="iso-main-features iso-feat-{type}">{feature}</li>',
+			addFeatures : '<li class="iso-add-features iso-feat-{type}">{feature}</li>',
+      modal : '<div class="iso-modal modal-container active">\
+        <div class="modal-content">\
+          <div class="modal-header">\
+            <span>{whatsincluded}</span>\
+            <button class="close-modal"><i class="icon icon-close-x-white"></i></button>\
+          </div>\
+          <div class="modal-body">\
+            <div class="iso-modal-spinner"></div>\
+          </div>\
+        </div>\
+      </div>\
+    </div>',
+    included : '<h2><span class="iso-modal-title-name">{name}</span>\
+        <span class="iso-modal-title-model">{model}</span>\
+        <span class="iso-modal-title-trans">{transmission}</span>\
+      </h2>\
+      <img class="iso-modal-image" src="{imagePath}" />\
+      <div class="iso-data-group iso-data-vehicle">\
+        <span class="iso-data-title">{vehicle}</span>\
+        <span class="iso-data-row">\
+          <span class="iso-data-col">{rentalLength}</span>\
+          <span class="iso-data-col">{dailyRate}</span>\
+          <span class="iso-data-col">{totalDailyRate}</span>\
+        </span>\
+      </div>\
+      <div class="iso-data-group iso-data-extras">\
+        <span class="iso-data-title">{extras}</span>\
+        {extraRows}\
+      </div>\
+      <div class="iso-data-group iso-data-taxes">\
+        <span class="iso-data-title">{taxesfees}</span>\
+        {feeRows}\
+      </div>\
+      <div class="iso-data-group iso-data-total">\
+        <span class="iso-data-title">{esttotal}</span>\
+        <span class="iso-data-row">\
+          <span class="iso-data-col">&nbsp;</span>\
+          <span class="iso-data-col">&nbsp;</span>\
+          <span class="iso-data-col iso-data-price-total"><span class="iso-super super-currency">{priceCurrency}</span>{priceWhole}<span class="iso-super super-decimal">{priceDecimal}</span></span>\
+        </span>\
+      </div>\
+      <div class="modal-buttons">\
+        <button class="select-button" data-code="{code}">{select}</button>\
+        <button class="cancel-button">{close}</button>\
+      </div>\
+    ',
+			dataRow: '<span class="iso-data-row">\
+				<span class="iso-data-col">{label}</span>\
+				<span class="iso-data-col">{daily}</span>\
+				<span class="iso-data-col">{total}</span>\
+			</span>'
+		},
+    lang : 'en_US',
+    translations : {
+      "en_US" : {
+        "passengers" : "Passengers",
+        "bags" : "Bags",
+        "total" : "Total",
+        "whats-included" : "What's included?",
+        "close" : "Close",
+        "select" : "Select",
+        "vehicle" : "Vehicle",
+        "extras" : "Extras",
+        "taxes-fees" : "Taxes & Fees",
+        "estimated-total" : "Estimated Total",
+        "day" : "Day",
+        "days" : "Days",
+        "filters" : "Filters",
+        "clear" : "Clear",
+        "transmission" : "Transmission",
+        "details" : "Details",
+        "hide-details" : "Hide Details",
+        "show-all-details" : "Show All Details",
+        "show-less" : "Show Less",
+        "results" : "Results",
+        "included" : "Included",
+        "automatic" : "Automatic",
+        "manual" : "Manual",
+        "or-similar" : "or similar",
+        "vehicle-type" : "Vehicle Type",
+        "passenger-capacity" : "Passenger Capacity"
+      },
+      "de_DE" : {
+        "passengers" : "Sitzplätze",
+        "bags" : "Koffer",
+        "total" : "Gesamtkosten",
+        "whats-included" : "im Preis enthalten",
+        "close" : "Schließen",
+        "select" : "AUSWÄHLEN",
+        "vehicle" : "FAHRZEUG",
+        "extras" : "ZUSATZPRODUKTE",
+        "taxes-fees" : "Steuern und Gebühren",
+        "estimated-total" : "Voraussichtliche Gesamtkosten",
+        "day" : "Tag(e)",
+        "days" : "Tag(e)",
+        "filters" : "Filters",
+        "clear" : "Löschen",
+        "transmission" : "Getriebe",
+        "details" : "Details",
+        "hide-details" : "Details ausblenden",
+        "show-all-details" : "ALLE ANZEIGEN",
+        "show-less" : "WENIGER ANZEIGEN",
+        "results" : "Results",
+        "included" : "Inklusive",
+        "automatic" : "Automatik",
+        "manual" : "Schalter",
+        "or-similar" : "oder ähnlich",
+        "vehicle-type" : "Fahrzeugtyp",
+        "passenger-capacity" : "Sitzplätze"
+      },
+      "fr_FR" : {
+        "passengers" : "Nombre de passagers",
+        "bags" : "Valise(s)",
+        "total" : "Total",
+        "whats-included" : "Services inclus",
+        "close" : "Fermer",
+        "select" : "Sélectionner",
+        "vehicle" : "VÉHICULE",
+        "extras" : "SUPPLÉMENTS",
+        "taxes-fees" : "TAXES ET FRAIS",
+        "estimated-total" : "Montant total",
+        "day" : "jour(s)",
+        "days" : "jour(s)",
+        "filters" : "Filtres",
+        "clear" : "Supprimer",
+        "transmission" : "Transmission",
+        "details" : "Détails",
+        "hide-details" : "Masquer les détails",
+        "show-all-details" : "TOUT AFFICHER",
+        "show-less" : "AFFICHER MOINS",
+        "results" : "Results",
+        "included" : "Inclus",
+        "automatic" : "Automatique",
+        "manual" : "Manuelle",
+        "or-similar" : "ou similaire",
+        "vehicle-type" : "Type de véhicule",
+        "passenger-capacity" : "Nombre de passagers"
+      },
+      "ca_FR" : {
+        "passengers" : "Passagers",
+        "bags" : "Sacs",
+        "total" : "Total",
+        "whats-included" : "Ce qui est compris",
+        "close" : "Fermer",
+        "select" : "SÉLECTIONNER",
+        "vehicle" : "VÉHICULE",
+        "extras" : "Extra",
+        "taxes-fees" : "TAXES ET FRAIS",
+        "estimated-total" : "COÛT TOTAL ESTIMÉ",
+        "day" : "jour(s)",
+        "days" : "jour(s)",
+        "filters" : "FILTRE",
+        "clear" : "Supprimer",
+        "transmission" : "Transmission",
+        "details" : "Détails",
+        "hide-details" : "Masquer les détails",
+        "show-all-details" : "AFFICHER TOUT",
+        "show-less" : "AFFICHER MOINS",
+        "results" : "Results",
+        "included" : "Inclus",
+        "automatic" : "Automatique",
+        "manual" : "Manuelle",
+        "or-similar" : "ou semblable",
+        "vehicle-type" : "Type de véhicule",
+        "passenger-capacity" : "Capacité de passagers"
+      }
+    },
+		init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			//mboxDefine('',isoTest.customMbox);
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+			if (isoTest.debug === true) {
+				console.log("Test Running...");
+				console.log(isoTest.account + " - " + isoTest.portfolio);
+				console.log(isoTest.test + " - " + isoTest.creative);
+			}
+			isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded('#reservationFlow #cars .car', function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+	  			isoTest.chall();
+				});
+			});
+			$(window).on('hashchange',function() {
+				isoTest.elementLoaded('#reservationFlow #cars .car', function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+	  			isoTest.chall();
+				});
+			});
+		},
+		chall : function() {
+      isoTest.vehicles = isoTest.vehicleObj(ReservationStateTree.get(['model', 'carSelect', 'availableVehicles']));
+      $.ajaxSetup({
+        xhrFields : {
+          withCredentials : true
+        }
+      });
+      if (window.location.href.indexOf('.de') > -1) {
+        $('body').addClass('iso-domain-de');
+        if (window.location.href.indexOf('/de/') > -1) {
+          isoTest.lang = 'de_DE';
+        } else if (window.location.href.indexOf('/en/') > -1) {
+          isoTest.lang = 'en_US';
+        }
+      } else if (window.location.href.indexOf('.fr') > -1) {
+        $('body').addClass('iso-domain-fr');
+        if (window.location.href.indexOf('/fr/') > -1) {
+          isoTest.lang = 'fr_FR';
+        } else if (window.location.href.indexOf('/en/') > -1) {
+          isoTest.lang = 'en_US';
+        }
+      } else if (window.location.href.indexOf('.ca') > -1) {
+        $('body').addClass('iso-domain-ca');
+        if (window.location.href.indexOf('/fr/') > -1) {
+          isoTest.lang = 'ca_FR';
+        }
+      }
+      isoTest.formatCard(isoTest.vehicles);
+      $('.filter-selectors .filter-name input').on('click', function() {
+        setTimeout(function() {
+          isoTest.formatCard(isoTest.vehicles);
+        },200);
+      });
+      $('.filter-header-options li').on('click', function() {
+        $('body').addClass('iso-flicker');
+        setTimeout(function() {
+          isoTest.formatCard(isoTest.vehicles);
+        },200);
+      });
+		},
+    formatCard : function(o) {
+      $('.car-container').each(function(i, ele) {
+        var $priceContainer = $(this).find('.default-view .cf .rates.cf'),
+            $detailsContainer = $(this).find('.default-view .car-details'),
+            $carImage = $(this).find('.default-view .car-image'),
+            $rateNormal = $(this).find('.default-view .day-rate .rate-normal'),
+            $rateText = $rateNormal.text(),
+            $totalRateContainer = $(this).find('.default-view .total-rate'),
+            $totalRate = $totalRateContainer.find('.rate-normal'),
+            $totalText = $totalRate.text(),
+            $selectButton = $(this).find('.default-view .select-button'),
+            $carClass = $selectButton.data('car'),
+            $mainFeatures = $(this).find('.detailed-view .feature-details table tr td'),
+            $extraFeatures = $(this).find('.detailed-view .feature-details p span.feature-list'),
+            availableVehicles = ReservationStateTree.get(['model', 'carSelect', 'availableVehicles', i]),
+            featuresList = '',
+            featuresArr = [];
+        var currency = '',
+            totalPrice = '',
+            paymentType = 'PAYLATER';
+        if ($carClass !== undefined && o[$carClass] !== undefined  && o[$carClass].charges !== undefined && $.isEmptyObject(o[$carClass].charges) === false) {
+          if (o[$carClass].charges.PREPAY !== undefined) {
+            paymentType = 'PREPAY';
+          }
+          var currency = o[$carClass].charges[paymentType].total_price_view.symbol
+          if ($('.points-band').length > 0) {
+            $('body').addClass('iso-points');
+            paymentType = 'REDEMPTION';
+            currency = '';
+          } else {
+            $('body').removeClass('iso-points');
+          }
+          if (window.location.href.indexOf('.de') > -1) {
+            totalPrice = o[$carClass].charges[paymentType].total_price_view.amount+currency;
+          } else {
+            totalPrice = currency + o[$carClass].charges[paymentType].total_price_view.amount;
+          }
+          if (paymentType ==='REDEMPTION') {
+            totalPrice = totalPrice*_analytics.reservation.lengthOfRentalInDays;
+          }
+        }
+        if ($(this).find('.sold-out-container').length > 0) {
+          if (!$(this).find('.sold-out-container').hasClass('isotest-cf-price')) {
+  					$(this).find('.sold-out-container').addClass('isotest-cf-price');
+          }
+        } else {
+          if (!$(this).find('.car .default-view > .cf:last').hasClass('isotest-cf-price')) {
+            $(this).find('.car .default-view > .cf:last').addClass('isotest-cf-price');
+          }
+        }
+        if (!$(this).hasClass('isotest-vehicle-list')) {
+          $(this).addClass('isotest-vehicle-list');
+        }
+        if (!$carImage.next().hasClass('car-details')) {
+          $carImage.insertBefore($detailsContainer);
+        }
+        if ($(this).find('.car.sold-out').length === 0 && $(this).find('.isotest-feature-details').length === 0) {
+  				$mainFeatures.each(function(i, ele) {
+  					if (i > 0) {
+  						if (i === 1) {
+                featuresList += isoTest.supplant(isoTest.templates.mainFeatures, { feature : $(ele).text() + ' '+isoTest.translations[isoTest.lang]['passengers'], type : 'passenger' });
+  							featuresArr.push(featuresList);
+              }
+  						if (i === 2) {
+                featuresList += isoTest.supplant(isoTest.templates.mainFeatures, { feature : $(ele).text() + ' '+isoTest.translations[isoTest.lang]['bags'], type : 'bag' });
+                featuresArr.push(featuresList);
+              }
+  					}
+  				});
+  				$extraFeatures.each(function(i, ele) {
+            if ($(ele).text() !== isoTest.translations[isoTest.lang]['automatic'] && $(ele).text() !== isoTest.translations[isoTest.lang]['manual']) {
+              featuresList += isoTest.supplant(isoTest.templates.addFeatures, { feature : $(ele).text(), type : 'additional' });
+  						featuresArr.push(featuresList);
+  					}
+  				});
+  				$detailsContainer.after('\
+  					<div class="isotest-feature-details">\
+  						<ul>'
+  							+ featuresList +
+  						'</ul>'
+              + (featuresArr.length > 7 ? '<span class="show-all-less">'+isoTest.translations[isoTest.lang]['show-all-details']+'</span>' : '') +
+  					'</div>\
+  				');
+          $(this).find('.show-all-less').on('click', function(e) {
+            var $featureList = $(this).parent('.isotest-feature-details').find('ul');
+            if (!$featureList.hasClass('active')) {
+              $featureList.addClass('active');
+              $(this).text(isoTest.translations[isoTest.lang]['show-less']);
+            } else if ($featureList.hasClass('active')) {
+              $featureList.removeClass('active');
+              $(this).text(isoTest.translations[isoTest.lang]['show-all-details']);
+            }
+          });
+          $(this).find('.car-details').on('click', function() {
+            var $featuresList = $(this).parents('.default-view').find('.isotest-feature-details');
+            if (!$(this).hasClass('iso-mobile-open')) {
+              $featuresList.addClass('iso-mobile-open');
+              $(this).addClass('iso-mobile-open');
+            } else if ($(this).hasClass('iso-mobile-open')) {
+              $featuresList.removeClass('iso-mobile-open');
+              $(this).removeClass('iso-mobile-open');
+            }
+          });
+        }
+        if ($(this).find('.car.sold-out').length === 0 && $(this).find('.isotest-total-rate').length === 0) {
+  				if ($priceContainer.parents('.unavailable-wrapper').length === 0) {
+  					$priceContainer.append('\
+  						<div class="isotest-total-rate">\
+  							<div class="isotest-rate-normal">' + isoTest.formatTotal(totalPrice) + '</div>\
+  							<span class="isotest-rate-subtext">'+isoTest.translations[isoTest.lang]['total']+'</span>\
+  							<span class="isotest-whats-included">'+isoTest.translations[isoTest.lang]['whats-included']+'</span>\
+  						</div>\
+  					');
+            $(this).find('.isotest-whats-included').on('click', function(e) {
+      				var $carCode = $(this).parents('.default-view').find('.select-button').data('car');
+              isoTest.addModal($carCode);
+      			});
+  				}
+        } else if ($(this).find('.isotest-total-rate').length > 0) {
+          if (paymentType === 'REDEMPTION') {
+            $(this).find('.isotest-rate-normal').html(isoTest.formatPoints(totalPrice));
+          } else {
+            $(this).find('.isotest-rate-normal').html(isoTest.formatTotal(totalPrice));
+          }
+        }
+        if (!$selectButton.prev().hasClass('rates')) {
+          $selectButton.insertAfter($priceContainer);
+        }
+        if ($(this).find('.isotest-cf-price').find('.not-enough-points-block').length > 0) {
+          $(this).find('.isotest-cf-price').find('.not-enough-points-block').remove();
+        }
+        if ($(this).find('.not-enough-points-block').length > 0) {
+          $(this).find('.not-enough-points-block:eq(0)').appendTo($(this).find('.isotest-cf-price'));
+          if ($(this).find('.isotest-cf-price .select-button').length > 0) {
+            $(this).find('.isotest-cf-price .select-button').remove();
+          }
+        }
+        $rateNormal.html(isoTest.formatTotal($rateText));
+      });
+      $('body').removeClass('iso-flicker');
+      $('#reservationFlow #cars').css('visibility', 'visible');
+    },
+    vehicleObj : function(vehicleArr) {
+      return vehicleArr.reduce(function(o, v) {
+        o[v.code] = v;
+        return o;
+      }, {});
+    },
+    priceCall : function(car, locale, callback) {
+      var now = Date.now(),
+          url = isoTest.services + isoTest.included + '&now=' + now + '&carClass=' + car + '&locale=' + locale;
+      $.get(url).done(function(data) {
+				if (typeof callback === 'function') {
+	        callback(data);
+				}
+      });
+    },
+		selectCar : function(code, callback) {
+			$('.select-button[data-car='+code+']').trigger('click');
+		},
+    addModal : function(code) {
+			var $html = $('html'),
+					$redirect = $('#ip-redirect'),
+					modal = isoTest.supplant(isoTest.templates.modal, { 'whatsincluded' : isoTest.translations[isoTest.lang]['whats-included'] });
+      $redirect.after(modal);
+			$html.addClass('iso-modal-open');
+
+      isoTest.priceCall(code, isoTest.locale, function(data) {
+
+        if (data.messages && data.messages.length > 0) {
+          $('.iso-modal').addClass('iso-loaded');
+          $('.iso-modal .modal-body').html('<p class="global-error">'+data.messages[0].message+'</p>');
+        } else {
+          var included = {
+            'image' : data.images.ThreeQuarter.path,
+            'width' : data.images.ThreeQuarter.supported_widths[8],
+            'quality' : data.images.ThreeQuarter.supported_qualities[2],
+            'name' : data.name,
+            'model' : data.make_model_or_similar_text + ' or similar',
+            'rentalLength' : _analytics.reservation.lengthOfRentalInDays,
+  					'feeRows' : '',
+  					'extraRows' : '',
+  					'extrasCount' : 0,
+  					'code' : code,
+            'extras' : isoTest.translations[isoTest.lang]['extras'],
+            'taxesfees' : isoTest.translations[isoTest.lang]['taxes-fees'],
+            'select' : isoTest.translations[isoTest.lang]['select'],
+            'close' : isoTest.translations[isoTest.lang]['close'],
+            'vehicle' : isoTest.translations[isoTest.lang]['vehicle'],
+            'esttotal' : isoTest.translations[isoTest.lang]['estimated-total']
+          };
+
+  				for (var i = 0; i < data.filters.length; i++) {
+  					if (data.filters[i].filter_name === 'TRANSMISSION') {
+  						included.transmission = data.filters[i].description;
+  					}
+  				}
+
+          if (included.rentalLength > 1) {
+  					included.rentalLength = included.rentalLength + " " + isoTest.translations[isoTest.lang]['days']
+  				} else {
+  					included.rentalLength = included.rentalLength + " " + isoTest.translations[isoTest.lang]['day']
+  				}
+
+  				var prop = 'PAYLATER';
+  				if (data.vehicle_rates.PREPAY !== undefined) {
+  					prop = 'PREPAY';
+  				}
+
+  				included.priceCurrency = data.vehicle_rates[prop].price_summary.estimated_total_view.symbol;
+  				included.priceWhole = (data.vehicle_rates[prop].price_summary.estimated_total_view.amount+"").split(".")[0];
+  				included.priceDecimal = (data.vehicle_rates[prop].price_summary.estimated_total_view.amount+"").split(".")[1];
+
+
+  				for (var extra in data.extras[prop]) {
+  				  if(data.extras[prop].hasOwnProperty(extra)) {
+  						for (var i = 0; i < data.extras[prop][extra].length; i++) {
+  							if (data.extras[prop][extra][i].status === 'INCLUDED') {
+  								included.extraRows = included.extraRows + isoTest.supplant(isoTest.templates.dataRow, {
+  									'label': data.extras[prop][extra][i].name,
+  									'daily': '--',
+  									'total' : isoTest.translations[isoTest.lang]['included']
+  								});
+  								included.extrasCount += 1;
+  							}
+  						}
+  					}
+  				}
+
+  				for (var i = 0; i < data.vehicle_rates[prop].price_summary.payment_line_items.length; i++) {
+  			    if (data.vehicle_rates[prop].price_summary.payment_line_items[i].category === 'VEHICLE_RATE') {
+  						included.dailyRate = data.vehicle_rates[prop].price_summary.payment_line_items[i].rate_amount_payment.symbol + data.vehicle_rates[prop].price_summary.payment_line_items[i].rate_amount_payment.amount + ' / '+isoTest.translations[isoTest.lang]['day'];
+  						included.totalDailyRate = data.vehicle_rates[prop].price_summary.payment_line_items[i].total_amount_payment.symbol + data.vehicle_rates[prop].price_summary.payment_line_items[i].total_amount_payment.amount;
+  					} else {
+
+  						var feeLine = data.vehicle_rates[prop].price_summary.payment_line_items[i];
+  						var feeInfo = {
+  									'label': (feeLine.selected_equipment_quantity > 1) ? feeLine.description+' ('+feeLine.selected_equipment_quantity+')' : feeLine.description,
+  									'daily': '',
+  									'total' : feeLine.total_amount_payment.symbol + feeLine.total_amount_payment.amount
+  								};
+
+  						if (feeLine.rate_amount_payment.amount == 0) {
+  							feeInfo.daily = '--';
+  						} else {
+  							if (feeLine.selected_equipment_quantity > 1) {
+  								feeInfo.daily = feeLine.rate_amount_payment.symbol + (feeLine.rate_amount_payment.amount*feeLine.selected_equipment_quantity).toFixed(2) + ' / '+isoTest.translations[isoTest.lang]['day'];
+  							} else {
+  								feeInfo.daily = feeLine.rate_amount_payment.symbol + feeLine.rate_amount_payment.amount + ' / '+isoTest.translations[isoTest.lang]['day'];
+  							}
+  						}
+  						if (feeLine.status === 'INCLUDED') {
+  							feeInfo.total = isoTest.translations[isoTest.lang]['included'];
+  						}
+
+  						if (feeLine.category === 'FEE') {
+  							included.feeRows = included.feeRows + isoTest.supplant(isoTest.templates.dataRow, feeInfo);
+  						} else {
+  							included.extraRows = included.extraRows + isoTest.supplant(isoTest.templates.dataRow, feeInfo);
+  							included.extrasCount += 1;
+  						}
+  					}
+  				}
+
+          included.imagePath = isoTest.supplant(included.image, included);
+  				$('.iso-modal').addClass('iso-loaded');
+          $('.iso-modal .modal-body').html(isoTest.supplant(isoTest.templates.included, included));
+  				if (included.extrasCount > 0) {
+  					$('.iso-data-extras').show();
+  				}
+        }
+      });
+
+      $('.iso-modal .close-modal').on('click', function() {
+        isoTest.destroyModal();
+      });
+
+			$('body').on('click', function(e) {
+				if ($(e.target).hasClass('cancel-button')) {
+	        isoTest.destroyModal();
+				}
+				if ($(e.target).hasClass('select-button') && $(e.target).parents('.iso-modal').length > 0) {
+					isoTest.selectCar($(e.target).data('code'));
+	        isoTest.destroyModal();
+				}
+      });
+
+      isoTest.observeDOM(document.querySelector('html'), function() {
+        if ($html.hasClass('iso-modal-open')) {
+          $html.removeClass('iso-modal-open');
+        }
+        if ($('.iso-modal').length > 0) {
+          $('.iso-modal').remove();
+        }
+      });
+    },
+    destroyModal : function() {
+      $('html').removeClass('iso-modal-open');
+      $('.iso-modal').remove();
+    },
+    observeDOM : (function() {
+      var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+      return function(obj, callback) {
+        if (MutationObserver) {
+          var obs = new MutationObserver(function(mutations, observer) {
+            var modalClass = $.inArray('modal-open', mutations[0].target.classList);
+            if (mutations[0].attributeName === 'class' && modalClass > -1) {
+              callback();
+            }
+          });
+          obs.observe(obj, { attributes : true, attributeOldvalue : true });
+        }
+      }
+    })(),
+    keyboardClose : function(characterCode) {
+      var isEsc = false;
+      switch (characterCode) {
+        case 27:
+          isEsc = true;
+          break;
+        default:
+          break;
+      }
+      return isEsc;
+    },
+		isUpperCase : function(str) {
+			return (/^[^a-z]*$/).test(str);
+		},
+    titleCase : function(str) {
+			return str.replace(/\w\S*/g, function(txt) {
+				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+			});
+		},
+		formatTotal : function(str) {
+      if (window.location.href.indexOf('.fr') > -1 || window.location.href.indexOf('.de') > -1) {
+        if (str.indexOf(',') < str.indexOf('.') || (str.indexOf(',') === -1 && str.indexOf('.') > -1)) {
+          return str.replace(/\s/g, '').replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        } else {
+          return str.replace(/\s/g, '');
+        }
+      }
+			var totalAmount = str.replace(/\s/g, '');
+					totalAmount = totalAmount.replace(/(\u00A3|\u0024|CAD)/g, '<span class="iso-super super-currency">$1</span>'),
+					totalAmount = totalAmount.replace(/((\.)\d+)/g, '<span class="iso-super super-decimal">$1</span>');
+			return totalAmount;
+		},
+		formatPoints : function(str) {
+      if (window.location.href.indexOf('.de') > -1) {
+        return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ',00'+'Pts';
+      } else if (window.location.href.indexOf('.fr') > -1) {
+        return 'Pts' + str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ',00';
+      }
+			return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+			//mboxUpdate(isoTest.customMbox, 'click='+element);
+      adobe.target.trackEvent({
+          "mbox": isoTest.customMbox,
+          "params": {
+              "click": element
+          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+      });
+		},
+		supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+        var p = b.split(/\./),
+            c = o;
+        for (var i = 0; i < p.length; i++) {
+          if (c[p[i]] == null)
+            return a;
+          c = c[p[i]];
+        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		},
+		elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		}
+	}
+	isoTest.init();
+})(jQuery);
+</script>

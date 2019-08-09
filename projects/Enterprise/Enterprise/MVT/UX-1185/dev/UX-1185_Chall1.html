@@ -1,0 +1,240 @@
+<style>
+.vehicle-list {
+	display: flex;
+	flex-flow: wrap;
+}
+.vehicle-list__item {
+	order: 0;
+	width: 100%;
+}
+.vehicle-list__item.iso-preSelectedClass {
+	border: 0;
+	margin-top: -3px;
+}
+.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+	border: 3px solid #0A643A;
+	padding-right: 15px;
+	margin-right: -15px;
+}
+.iso-tag {
+	background: #0A643A;
+	color: #fff;
+	font-size: 14px;
+	padding: 4px 8px 1px 8px;
+	width: calc(100% + 15px);
+}
+.iso-unavailable-msg {
+	background: #f2f2f2;
+	border-bottom: .125rem solid #c3c3c3;
+	display: block;
+	font-size: 14px;
+	padding: 15px 20px;
+	width: 100%;
+}
+.vehicle-enough-points.cf, .vehicle-not-enough-points {
+	margin-right: -15px;
+	margin-top: -3px;
+}
+@media (max-width: 1081px){
+	.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+		padding-right: 0;
+		margin-right: 0;
+	}
+	.iso-tag {
+		width: 100%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca',
+		test : 'Featured Vehicle APAC (Full Scale)',
+		creative : 'Challenger 1',
+		filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
+		vehicleItem: '.vehicle-list__item',
+		lang: 'en_com',
+		template: '<div class="iso-tag">{tag}</div>',
+		featured: {
+			0: {
+				car: 'CFAR',
+				tag: '<strong>Feature Vehicle</strong>: Room for 5 but compact enough for high traffic driving and tight parking.'
+			},
+			1: {
+				car: 'CFAR',
+				tag: '<strong>Feature Vehicle</strong>: Room for 5 but compact enough for high traffic driving and tight parking.'
+			},
+			2: {
+				car: 'CFAR',
+				tag: '<strong>Feature Vehicle</strong>: Room for 5 but compact enough for high traffic driving and tight parking.'
+			},
+			3: {
+				car: 'CFAR',
+				tag: '<strong>Feature Vehicle</strong>: Room for 5 but compact enough for high traffic driving and tight parking.'
+			},
+			4: {
+				car: 'CFAR',
+				tag: '<strong>Feature Vehicle</strong>: Room for 5 but compact enough for high traffic driving and tight parking.'
+			},
+			5: {
+				car: 'CFAR',
+				tag: '<strong>Feature Vehicle</strong>: Room for 5 but compact enough for high traffic driving and tight parking.'
+			},
+			6: {
+				car: 'CFAR',
+				tag: '<strong>Feature Vehicle</strong>: Room for 5 but compact enough for high traffic driving and tight parking.'
+			}
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			isoTest.elementLoaded(isoTest.vehicleItem, function() {
+				isoTest.log('Test Ready!');
+				if(!ReservationStateTree.get(['model','carSelect','selectedCar']) && !ReservationStateTree.get(['model', 'carSelect', 'preSelectedCarClass'])){
+					isoTest.chall();
+				}
+			});
+
+			window.addEventListener('hashchange', isoTest.hashHandler, false);
+
+		},
+		hashHandler : function(){
+			if(/cars/.test(location.hash)){
+				isoTest.elementLoaded(isoTest.vehicleItem, function() {
+					if(!ReservationStateTree.get(['model','carSelect','selectedCar']) && !ReservationStateTree.get(['model', 'carSelect', 'preSelectedCarClass'])){
+						isoTest.chall();
+					}
+				});
+			}
+		},
+		chall : function(){
+			isoTest.log('chall()');
+
+			isoTest.runTest();
+		},
+		runTest : function() {
+			isoTest.log('runTest()');
+			isoTest.day = helpers.getQueryParam('dayOverride') ? helpers.getQueryParam('dayOverride') : new Date(ReservationStateTree.get(['session', 'reservationSession','pickup_time'])).getDay();
+			isoTest.vehicleClass = isoTest.featured[isoTest.day];
+			isoTest.labelVehicle();
+
+			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox,.vehicle-filter__header-link, .vehicle-redemption__options-cta, .iso-pay');
+			for(var i = 0; i < filterElements.length; i++) {
+		    filterElements[i].addEventListener('click', function(){
+					isoTest.log('Event: Filter Checkbox Click');
+					setTimeout(isoTest.labelVehicle,200);
+		    }, false);
+			}
+		},
+		labelVehicle: function(){
+			isoTest.log('labelVehicle()');
+			var vehicleItems = document.querySelectorAll('.vehicle-list > li');
+			for(var i = 0; i < vehicleItems.length; i++) {
+				vehicleItems[i].style.order = i+2;
+				if (vehicleItems[i].firstChild && vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points')) {
+					vehicleItems[i].className += " iso-nep-banner";
+					if (i === 0) {
+						vehicleItems[i].style.order = 0;
+					}
+				}
+		    if (!vehicleItems[i].classList.contains('iso-preSelectedClass') && vehicleItems[i].classList.contains('vehicle-list__item')) {
+					var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
+					var carClass = dataInfo[1];
+					var avail = dataInfo[2];
+					isoTest.log(carClass + ' :: ' + avail);
+					if(carClass == isoTest.vehicleClass.car && (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE')){
+						vehicleItems[i].style.order = 1;
+						vehicleItems[i].className += " iso-preSelectedClass";
+						var temp = document.createElement('template');
+						temp.innerHTML = helpers.supplant(isoTest.template, {
+		        	'tag' : isoTest.vehicleClass.tag
+		        });
+						vehicleItems[i].appendChild(temp.content);
+						var tag = vehicleItems[i].querySelector('.iso-tag');
+						vehicleItems[i].insertBefore(tag, vehicleItems[i].firstChild);
+			    }
+				} else if (vehicleItems[i].classList.contains('iso-preSelectedClass')) {
+					vehicleItems[i].style.order = 1;
+				}
+			}
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        'mbox': isoTest.customMbox,
+        'params': {
+          'click': element
+        },
+				'success': function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+	    });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	};
+	isoTest.init();
+})();
+</script>

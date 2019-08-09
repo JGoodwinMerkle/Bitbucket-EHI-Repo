@@ -1,0 +1,313 @@
+<style>
+.vehicle-filter__header-cta {
+	position: relative;
+}
+.vehicle-filter__content .tooltip-info [aria-describedby=TRANSMISSION] {
+	display: none;
+}
+.iso-tooltip {
+	clear: both;
+	display: block;
+	z-index: 1;
+}
+.iso-tooltip .tooltip-info__content{
+	right: -180px;
+	text-align: left;
+	text-transform: none;
+	top: 20px;
+	visibility: visible;
+	width: 255px;
+}
+.iso-tooltip .tooltip-info__arrow-up:after {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 11px solid #515151;
+    bottom: 100%;
+    content: ' ';
+	display: block;
+    height: 0;
+    left: auto;
+    margin: 0;
+    position: absolute;
+    right: 60px;
+    top: auto;
+    width: 0;
+}
+.vehicle-filter__mobile-cta .iso-tooltip .tooltip-info__content{
+	right: -50px;
+    top: -20px;
+}
+.vehicle-filter__mobile-cta .iso-tooltip .tooltip-info__arrow-up:after{
+    right: -15px;
+    top: 20px;
+    transform: rotate(90deg);
+}
+.iso-unavailable-msg {
+	background: #f2f2f2;
+	border-bottom: .125rem solid #c3c3c3;
+	display: block;
+	font-size: 14px;
+	padding: 15px 20px;
+	width: 100%;
+}
+@media (max-width: 67.5625em) {
+	.vehicle-filter__content .iso-tooltip {
+		display: none;
+	}
+}
+@media (max-width: 400px) {
+	.vehicle-filter__mobile-cta .iso-tooltip .tooltip-info__content{
+		right: -170px;
+		top: 20px;
+	}
+	.vehicle-filter__mobile-cta .iso-tooltip .tooltip-info__arrow-up:after{
+        right: 40px;
+	    top: -10px;
+	    transform: rotate(-180deg);
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Van Path Filter',
+		cookieName : 'enVehicleVanPathFilter',
+		customMbox : 'enVehicleVanPathFilterClicks',
+		creative : 'Challenger1',
+		filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
+		vanFilter : '.vehicle-filter__content input[value=Vans]',
+		manualFilter : '.vehicle-filter__content input[value=Manual]',
+		vehicleItem: '.vehicle-list__item',
+		template: '<span class="tooltip-info iso-tooltip">\
+			<span class="tooltip-info__content active tooltip-info__arrow-up" role="tooltip">\
+				<button aria-label="{close}" class="tooltip-info__close" type="button" aria-describedby="iso-tooltip"><i class="icon icon-close-white"></i></button>\
+				<span class="tooltip-info__description" id="iso-tooltip">{content}</span>\
+			</span>\
+		</span>',
+		content: {
+			en_com: {
+				filter: 'We have filtered vehicle class results based on your interest in Vans. Clear filters to see all vehicle classes available.'
+			},
+			en_ca: {
+				filter: 'We have filtered vehicle class results based on your interest in Vans. Clear filters to see all vehicle classes available.'
+			},
+			en_uk: {
+				filter: 'We have filtered vehicle class results based on your interest in Vans. Clear filters to see all vehicle classes available.'
+			},
+			en_ie: {
+				filter: 'We have filtered vehicle class results based on your interest in Vans. Clear filters to see all vehicle classes available.'
+			},
+			en_es: {
+				filter: 'We have filtered vehicle class results based on your interest in Vans. Clear filters to see all vehicle classes available.'
+			},
+			en_fr: {
+				filter: 'We have filtered vehicle class results based on your interest in Vans. Clear filters to see all vehicle classes available.'
+			},
+			en_de: {
+				filter: 'We have filtered vehicle class results based on your interest in Vans. Clear filters to see all vehicle classes available.'
+			},
+			es_com: {
+				filter: 'Hemos filtrado los resultados de las clases de vehículos según tu interés en camionetas. Limpia los filtros para ver todas las clases de vehículo disponibles.'
+			},
+			es_es: {
+				filter: 'Hemos filtrado los resultados de tipo de vehículo en función de su interés en furgonetas. Borrar filtros'
+			},
+			fr_fr: {
+				filter: 'Nous avons filtré les résultats de catégorie de véhicule en fonction de votre intérêt pour utilitaires. Supprimez les filtres'
+			},
+			fr_ca: {
+				filter: 'Nous avons filtré les résultats de catégories de véhicules en fonction de votre intérêt pour utilitaires. Effacer les filtres'
+			},
+			de_de: {
+				filter: 'Die Ergebnisse der Fahrzeugklassen wurden nach Ihren Interessen an Transporter gefiltert. Löschen Sie die Filter'
+			}
+		},
+		lang: 'en_com',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			isoTest.setLanguage();
+				
+			isoTest.elementLoaded(isoTest.vehicleItem, function() {	
+				isoTest.log('Test Ready!');	
+				if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
+					isoTest.chall();
+				} else {
+					isoTest.uncheckVan();
+				}
+			});
+
+			$(window).on('hashchange', function(){
+				if(/cars/.test(location.hash)){
+					isoTest.elementLoaded(isoTest.vehicleItem, function() {	
+						if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){	
+							isoTest.chall();
+						} else {
+							isoTest.uncheckVan();
+						}
+					});
+				}
+			});
+		},
+		chall : function() {
+			isoTest.log('chall()');
+			isoTest.unfilter();
+			isoTest.addTooltip();
+		},
+		unfilter: function () {
+			isoTest.log('unfilter()');
+			isoTest.elementLoaded(isoTest.vehicleItem, function() {
+				isoTest.elementLoaded(isoTest.vanFilter, function() {
+					if(!$(isoTest.vanFilter).is(':checked')){
+						$(isoTest.vanFilter).click();
+					}
+				});
+				isoTest.elementLoaded(isoTest.manualFilter, function() {
+					if($(isoTest.manualFilter).is(':checked')){
+						$(isoTest.manualFilter).click();
+					}
+				});
+			});
+		},
+		uncheckVan: function () {
+			isoTest.log('uncheckVan()');
+			isoTest.elementLoaded(isoTest.vehicleItem, function() {
+				isoTest.elementLoaded(isoTest.vanFilter, function() {
+					if($(isoTest.vanFilter).is(':checked')){
+						$(isoTest.vanFilter).click();
+					}
+				});
+				isoTest.elementLoaded(isoTest.manualFilter, function() {
+					if($(isoTest.manualFilter).is(':checked')){
+						$(isoTest.manualFilter).click();
+					}
+				});
+			});
+		},
+		addTooltip: function(){
+			isoTest.log('addTooltip()');
+			if($('.iso-tooltip').length == 0){
+				var content = isoTest.content[isoTest.lang].filter;
+				var $tooltip = helpers.supplant(isoTest.template, {
+					'content' : content,
+					'close' : enterprise.i18nReservation.resflowcarselect_0065
+				});
+
+				$(isoTest.filters).parent().prepend($tooltip);
+				$('.vehicle-filter__mobile-cta').prepend($tooltip);
+				isoTest.bindEvents();
+			}
+		},
+		bindEvents: function(){
+			$('.iso-tooltip .tooltip-info__close').click(function(){
+				$('.iso-tooltip').remove();
+			});
+		},
+		setLanguage: function(){
+			var lang = location.pathname.split('/')[1];
+			var domain = location.hostname.split('.').reverse()[0];
+			isoTest.lang = lang+'_'+domain;
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          'mbox': isoTest.customMbox,
+		          'params': {
+		              'click': element
+		          },
+					'success': function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Start...');
+			
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Ready!');
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

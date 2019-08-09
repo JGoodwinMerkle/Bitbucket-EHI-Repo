@@ -1,0 +1,325 @@
+<style>
+    body > section, .homepage .two-up-three-up, body .promotion-detail-content, body section.band { visibility:hidden; }
+    .iso-weekend-layout .addthis_sharing_toolbox { display: none; }
+    .iso-weekend-layout #reservationWidget .inner-container .date-time-form, .iso-weekend-layout #reservationWidget .inner-container .age-input, .iso-weekend-layout #reservationWidget .inner-container .coupon-chicklet, .iso-weekend-layout #reservationWidget .inner-container .booking-submit { display: block; opacity: 100; }
+
+    .promotion-detail-content .interrupter-band .image-block { background-image: url(/content/dam/ecom/promotions/weekend-special-car-960-250.jpg); background-position: center; background-size: auto 100%;}
+    .promotion-detail-content .img-container .content-bg-img { display: none; }
+    .promotion-detail-content .img-container img { visibility: hidden; }
+    .promotion-detail-content .interrupter-band-text li { font-size: 20px; line-height: 24px;}
+    .interrupter-band.content-left .gi:first-child{ margin: 2em 3%; }
+    .no-flexbox .interrupter-band.content-left .gi:first-child{ margin: 0 3%; }
+
+    .iso-weekend-layout .iso-weekend-details strong, .iso-weekend-layout #reservationWidget p strong, .iso-weekend-layout .iso-car-type strong { font-family: 'DINMedium', helvetica, Arial, sans-serif; font-weight: normal; }
+
+    .iso-weekend-layout #reservationWidget p { margin-bottom: 3em; }
+    .iso-weekend-layout #reservationWidget p a { color: #169a5a; font-family: 'DINMedium', helvetica, arial, sans-serif; cursor: pointer;}
+
+    .iso-weekend-layout .iso-weekend-details { display: block; height:335px; width: 100%; }
+    .iso-weekend-layout .iso-weekend-details p, .iso-weekend-layout .iso-weekend-details li { font-size: 19px; }
+    .iso-weekend-layout .iso-weekend-details .details { background: #e6e6e6; float:left; height: 100%; position: relative; width: 50%;}
+    .iso-weekend-layout .iso-weekend-details .details .section { margin: 0 0 0 60px; padding: 20px 0 0;}
+    .iso-weekend-layout .iso-weekend-details .details ul { margin: 0 80px 25px 0; }
+    .iso-weekend-layout .iso-weekend-details .details li { list-style: disc; margin: 0 0 7px 20px;}
+    .iso-weekend-layout .iso-weekend-details .details .simpletextband .band { max-width: auto;}
+    .iso-weekend-layout .iso-weekend-details .main-image { float: right; width: 50%; }
+    .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container {    background-image: url('//www.enterprise.com/content/ecom/en/car-rental/deals/weekend-specials/jcr:content/par/adaptiveimageband/image.img.full.high.jpg/1491838201064.jpg')
+     !important; height:335px; min-height: 100%; background-position: bottom; }
+    .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container img {display:none;}
+
+    .iso-weekend-layout .threeup h2 { font-family: 'DINBold', helvetica, arial, sans-serif; text-align: center;}
+    .iso-weekend-layout .three-up-band .gi:first-child, .iso-weekend-layout .three-up-band .gi, .iso-weekend-layout .three-up-band .gi:last-child { padding-top: 0;}
+    .iso-weekend-layout .iso-car-type .car-img { height: 220px; }
+    .iso-weekend-layout .iso-car-type .car-img img { height: 100%; width: auto; }
+    .iso-weekend-layout .iso-car-type strong { display:block; margin: 0 0 7px;}
+
+    @media (max-width: 80rem){
+        .iso-weekend-layout #reservationWidget p { margin: 10px;}
+        .iso-weekend-layout #reservationWidget .inner-container { margin-top: 1em;     padding-bottom: 1em;}
+        .iso-weekend-layout .iso-weekend-details .details, .iso-weekend-layout .iso-weekend-details .main-image { width: 50%; }
+        .iso-weekend-layout .iso-weekend-details, .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { height: 330px; }
+        .iso-weekend-layout .iso-weekend-details .band { margin: 0; }
+        .iso-weekend-layout .iso-weekend-details .details .section { margin: 0 0px 0 0; padding: 10px 20px 0 50px; left: 10px; position: absolute;}
+        .iso-weekend-layout .iso-weekend-details .details ul { margin: 0 0 10px 0; }
+        .iso-weekend-layout .iso-weekend-details .details li { margin: 0 0 0 20px; }
+    }
+
+    @media (max-width: 66rem){
+        .iso-weekend-layout .iso-weekend-details, .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { height: 310px; }
+        .iso-weekend-layout .iso-weekend-details p, .iso-weekend-layout .iso-weekend-details li { font-size: 17px;}
+        .iso-weekend-layout .iso-weekend-details .details .section { padding: 10px 20px 0 20px; }
+        .iso-weekend-layout .iso-weekend-details .promotion-detail-content .simpletextband .band {padding: 10px 0;}
+        .iso-weekend-layout .promotion-detail-content .simpletextband .band { padding: 10px 0;}
+        .iso-weekend-layout .iso-car-type .car-img { height: 150px; }
+        .iso-weekend-layout .threeup .band { padding: 0; }
+        .iso-weekend-layout .threeup .band .gi { width: 33.3333333%;}
+    }
+
+    @media (max-width: 48rem) {
+        #reservationWidget .inner-container { clear: both;}
+        .iso-weekend-layout .iso-weekend-details, .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { height: 250px;   }
+        .iso-weekend-layout .iso-weekend-details h1 { font-size: 24px; line-height: 1.1;}
+        .iso-weekend-layout .iso-weekend-details p, .iso-weekend-layout .iso-weekend-details li { font-size: 14px;}
+        .iso-weekend-layout .iso-weekend-details .details { overflow: hidden; }
+        .iso-weekend-layout .iso-weekend-details .details .section { padding: 10px 10px 0 15px; }
+        .iso-weekend-layout .iso-weekend-details .details ul { margin: 0 10px 10px 0;}
+        .iso-weekend-layout .threeup .band .gi { width: 50%;}
+    }
+
+    @media (max-width: 46rem) {
+        .iso-weekend-layout .iso-weekend-details, .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { height: 200px; }
+        .iso-weekend-layout .iso-weekend-details h1 { font-size: 24px; line-height: 1.1;}
+        .iso-weekend-layout .iso-weekend-details p, .iso-weekend-layout .iso-weekend-details li { font-size: 15px; }
+        .iso-weekend-layout .iso-weekend-details .details ul { margin: 0 0 10px 0;}
+        .iso-weekend-layout .iso-weekend-details .details { height: 150px; width: 100%;}
+        .iso-weekend-layout .iso-weekend-details .main-image { width: 100%; }
+        .iso-weekend-layout .iso-weekend-details .image-band.full-bleed .img-container { background-position: bottom;}
+        .iso-weekend-layout .promotion-detail-content .simpletextband .band { padding: 10px 0;}
+        .iso-weekend-layout .iso-weekend-details .details .section { left: initial; padding: 5px 10px 0 15px; }
+        .iso-weekend-layout .iso-car-type .car-img img { margin: 0 auto;}
+        .iso-weekend-layout .iso-car-type .type-details { display: table; margin:0 auto;}
+        .iso-weekend-layout .threeup .band .gi { width: 100%;}
+    }
+
+    @media (max-width:37rem){
+        .iso-weekend-layout .iso-weekend-details .details { height: 265px;}
+    }
+
+    @media (max-width: 46rem) and (orientation: landscape){
+        .iso-weekend-layout .iso-weekend-details .details, .iso-weekend-layout .iso-weekend-details .main-image { width: 50%;  height: 250px;}
+        .iso-weekend-layout .iso-weekend-details .main-image .band.full-bleed, .iso-weekend-layout .iso-weekend-details .main-image .section.adaptiveImageBand { height: inherit;}
+        .iso-weekend-layout .threeup .band .gi { width: 50%; float: left;}
+    }
+</style>
+<script>
+(function() {
+    'use strict';
+    var isoTest = {
+        debug : true,
+        account : "Enterprise",
+        portfolio : "Enterprise.com",
+        test : "weekend-special",
+        creative : "Challenger 1",
+    lang : 'en_US',
+    couponName : '$9.99 WEEKEND SPECIAL',
+    couponVal : 'EWES999',
+    tileHeading: '$9.99 WEEKEND RENTAL CAR SPECIAL',
+    homeTileP: 'Get away this weekend with rates starting at $9.99 per day.',
+    driveP: 'Get away this weekend with rates starting at $9.99 per day. Valid at participating neighborhood locations within North America only.',
+    driveFanP: 'Our great weekend rates are perfect for fans who want to hit an away game.',
+    content : {
+            other: 'Other Eligible Vehicles',
+            cars : [
+                {
+                    level: 'Intermediate',
+                    price: '$14.99',
+                    type: 'Hyundai Elantra',
+                    img: 'https://www.enterprise.com/content/dam/global-vehicle-images/cars/HYUN_ELAT_2012-2.png.wrend.480.270.png'
+                },
+                {
+                    level: 'Standard',
+                    price: '$17.99',
+                    type: 'Buick Verano',
+                    img: 'https://www.enterprise.com/content/dam/global-vehicle-images/cars/BUIC_VERA_2012.png.wrend.480.270.png'
+                },
+                {
+                    level: 'Fullsize',
+                    price: '$19.99',
+                    type: 'Nissan Altima',
+                    img: 'https://www.enterprise.com/content/dam/global-vehicle-images/cars/NISN_ALTI_2012-1.png.wrend.480.270.png'
+                }
+            ],
+            reservation : {
+                header: 'Book Promotion',
+                miles : '<strong>Need more than 100 miles per day?</strong> Enjoy great weekend rates and get unlimited mileage at most locations by removing the “$12.99 Weekend Special” above or <a href="https://www.enterprise.com/en/reserve.html#book">booking at everyday low rates</a>.',
+                bookingUrl: '/en/book.html'
+            },
+            details : {
+                list: [
+          'Great prices over the weekend',
+          'At airport and neighborhood locations',
+          'Including unlimited mileage where available'
+                ],
+                terms: 'Offer applies to the base rate charge (Time and Mileage) and does not apply to applicable to taxes, fees, surcharges, refueling, drop-off, delivery, youthful driver, additional driver, pick up, or one way charges or any optional product or service (such as optional damage waiver of $30 or less per day), which are the responsibility of the Renter. Offer valid at participating neighborhood locations within the U.S. and Puerto Rico only for rentals reserved in advance. Rental must begin on or after August 17, 2017 and end on or before August 29, 2017. Offer rate of $9.99 per day applies to an Economy or Compact car rented on Friday and ending the following Monday, and includes 100 miles per day. For certain locations, rates of less than $9.99 per day may be available. To see if a lower rate is available, go to the main reservation path on the enterprise.com home page, or contact the location in question directly, before visiting your local branch or making your booking. It is the renter’s responsibility to check for a lower rate. Enterprise reserves the right to terminate the offer or change the terms at any time. Offer is not valid at airport locations and availability is limited. Rates are as posted at time of reservation at enterprise.com. Offer cannot be combined with other coupons, offers or discounted rates. Renter and additional driver(s) must meet renting branch’s standard rental qualifications apply. Additional mandatory charges may be imposed, including, but not limited to, a customer facility charge, airport concession fee, tourism commission assessment, vehicle license recovery fee, or other government imposed taxes or fees. For more information, including an estimate of your total rental cost, visit our Internet Web site at www.enterprise.com. Please check your insurance policy and/or credit card agreement for rental vehicle coverage. Other restrictions, including holiday and blackout dates, may apply. Pick-up and drop-off service is subject to geographic and other restrictions. Void where prohibited.'
+            }
+        },
+        templates :{
+            details: '<div class="iso-weekend-details">\
+                <div class="details">\
+                </div>\
+                <div class="main-image"></div>\
+            </div>',
+            carType: '<div class="iso-car-type">\
+                <div class="car-img"><img /></div>\
+                <div class="type-details">\
+                    <strong></strong>\
+                    <p></p>\
+                </div>\
+            </div>',
+            chicklet: '<div class="coupon-chicklet removable"><a class="chicklet"><span class="iso-couponName"></span><span> </span><span aria-label="Clear Location">X</span></a></div>'
+        },
+        init : function() {
+            if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+                _satellite.setVar('TargetCampaign', isoTest.test);
+                _satellite.setVar('TargetCreative', isoTest.creative);
+                if (typeof window.isoSetTargetVars === 'function') {
+                    window.isoSetTargetVars();
+                }
+            }
+            if (isoTest.debug === true) {
+                console.log("Test Running...");
+                console.log(isoTest.account + " - " + isoTest.portfolio);
+                console.log(isoTest.test + " - " + isoTest.creative);
+            }
+        isoTest.dependsLoaded(function() {
+        isoTest.swapStaticText();
+        $("body > section, .homepage .two-up-three-up, body section.band").css("visibility", "visible");
+        if (window.location.href.indexOf("/en/car-rental/deals/weekend-specials.html") > -1) {
+          $('body').addClass('iso-weekend-layout');
+              isoTest.elementLoaded('#reservationWidget .booking-submit', function() {
+                    if (isoTest.debug === true) {
+                            console.log("Test Ready!");
+                        }
+                isoTest.chall();
+            $("body .promotion-detail-content").css("visibility", "visible");
+                });     
+        }   
+            });
+        },
+      elementLoaded : function (ele, callback) {
+            if (isoTest.debug === true) {
+                console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+            }
+            window.clearTimeout(isoTest.eleTimer);
+            //Check for jQuery and _a object
+            if ($(ele).length > 0) {
+                if (typeof callback === 'function') {
+                    if (isoTest.debug === true) {
+                        console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+                    }
+                    callback();
+                }
+            } else {
+                isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 500);
+            }
+        },
+      dependsLoaded : function (callback) {
+                if (isoTest.debug === true) {
+                    console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+                }
+                window.clearTimeout(isoTest.timer);
+                //Check for jQuery and _a object
+                if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+                    if (typeof callback === 'function') {
+                        if (isoTest.debug === true) {
+                            console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+                        }
+                        callback();
+                    }
+                } else {
+                    isoTest.timer = window.setTimeout(function() {
+                        isoTest.dependsLoaded(callback);
+                    }, 100);
+                }
+        },
+        swapStaticText : function() {
+            //home page tile
+        if (window.location.href.indexOf("/en/home.html") > -1) {
+                $('.reservationWidget+.two-up-three-up .text-capsule-item:first-child .text-capsule-tile__heading').text('$9.99 Weekend Rental Car');
+                $('.reservationWidget+.two-up-three-up .text-capsule-item:first-child .text-capsule-tile__text').text(isoTest.homeTileP);
+                //ncaa page
+        } else if (window.location.href.indexOf("/en/about/sponsorships/ncaa.html") > -1) {
+          $('.interrupter-small-band+.interrupter-tile .g-3up .col.type-2:first-child .headline').text('$9.99 Weekend Special');
+          $('.interrupter-small-band+.interrupter-tile .g-3up .col.type-2:first-child .cta-text').text('No matter where your next game is ... we can help you get there');                    
+                //nhl
+        } else if (window.location.href.indexOf("/en/about/sponsorships/nhl.html") > -1) {
+          $('.parbase+.threeup .g-3up .gi:last-child h4').text('Weekend Specials - $9.99');
+                //scenic drives page
+        } else if (window.location.href.indexOf("/en/inspiration/scenic-drives.html") > -1) {
+                $('.lob-page-recirc-band .gi:last-child h4').text('WEEKEND SPECIAL');
+                $('.lob-page-recirc-band .gi:last-child p').text(isoTest.driveP);
+                //weekend special 
+        } else if (window.location.href.indexOf("/en/car-rental/deals/weekend-specials.html") > -1) {
+                $('.promotion-detail-content h1').text(isoTest.tileHeading);
+          $('.reservation-toggle-header').text('Book Promotion');
+                $('.promotion-detail-content .interrupter-band-text ul li').each(function(index, element){
+            switch(index){
+                case 0:
+                    $(this).html('For rentals of <b>3 days, Friday - Monday</b>');
+                    break;
+                case 1:
+                    $(this).html('At participating <b>non-airport locations</b> in North America');
+                    break;
+                case 2:
+                    $(this).html('Starting at $9.99<sup>*</sup> for Economy or Compact and including <b>100 miles per day</b>');
+                    break;
+            }
+                });
+          $('.promotion-detail-content .interrupter-band-text p').html('<sup>*</sup>For full details, please read terms and conditions below.');
+          $('#book').append('<p><b>Need more than 100 miles per day?</b> Enjoy great weekend rates and get unlimited mileage at most locations by removing the coupon above or <a href="https://www.enterprise.com/en/reserve.html#book">booking at everyday low rates</a>.');
+        //weekend adventure
+        } else if (window.location.href.indexOf("/en/inspiration/weekend-adventures.html") > -1) {
+          $('.contextual-tile .lob-page-recirc-band .gi:last-child h4').text('WEEKEND SPECIAL');
+          $('.contextual-tile .lob-page-recirc-band .gi:last-child p').text(isoTest.driveP);
+        //deals
+        } else if (window.location.href.indexOf("/en/car-rental/deals.html") > -1) {
+          $('.simpletextband+.threeup .gi:eq(0) h3').text('$9.99 Weekend Rental Car');
+          $('.simpletextband+.threeup .gi:eq(0) p:eq(0)').text('Get away this weekend with rates starting at $9.99 per day.');
+        //
+        } else if (window.location.href.indexOf("/en/inspiration/most-driven-fans.html") > -1) {
+          $('.videoBand+.threeup .three-up-band .g-3up .gi:last-child .gi-wrap-test .cta-text p').text('Our $9.99 weekend car rental special is perfect for fans who want to hit an away game.');
+        }
+        },
+      setCid : function() {
+        ReservationStateTree.select(['model']).set('coupon', isoTest.couponVal);
+      },
+      setCouponName : function() {
+        if($('.coupon-field-wrapper .chicklet span:first-child').length > 0){
+            $('.coupon-field-wrapper .chicklet span:first-child').text(isoTest.couponName);
+        } else {
+            var $chicklet = $(isoTest.templates.chicklet);
+                $chicklet.find('span:first-child').text(isoTest.couponName);
+            $('.coupon-field-wrapper').addClass('couponChicklet-active').append($chicklet);
+        }
+    },
+    otherVehiclesLayout : function () {
+        var $threeup = $('.threeup.section');
+        var $header = $('<h2>' + isoTest.content.other + '</h2>');
+
+        $threeup.prepend($header);
+
+        $threeup.find('.gi').each(function(i){
+            var $vehicle = isoTest.getVehicle(i);
+            $(this).html($vehicle);
+        });
+      $threeup.find('.g.g-3up').append('<p>' + isoTest.content.details.terms + '</p>');
+    },
+    getVehicle : function(i){
+        var $layout = $(isoTest.templates.carType);
+        $layout.find('img').attr('src', isoTest.content.cars[i].img);
+        $layout.find('strong').text(isoTest.content.cars[i].level + 'at ' + isoTest.content.cars[i].price + ' per day');
+        $layout.find('p').text(isoTest.content.cars[i].type + ' or similar');
+            return $layout;
+    },
+    updateReservation : function () {
+        var $reservationWidget = $('#reservationWidget');
+        $reservationWidget.find('.inner-container').removeClass('collapsed').addClass('expanded');
+        $reservationWidget.find('h2').text(isoTest.content.reservation.header);
+
+            //var $extraMiles = $('<p>'+ isoTest.content.reservation.miles + '</p>');
+                    //$extraMiles.find('a').attr('href',isoTest.content.reservation.bookingUrl);
+
+            //$reservationWidget.find('#book').append($extraMiles);
+    },
+        chall : function() {
+      isoTest.setCid();
+      isoTest.setCouponName();
+      isoTest.updateReservation();
+            isoTest.otherVehiclesLayout();
+      $('.reservation-toggle-header').text('Book Now');
+      $('.promotion-detail-content > .simpletextband.section').remove();
+        }
+};
+    isoTest.init();
+})();
+</script>

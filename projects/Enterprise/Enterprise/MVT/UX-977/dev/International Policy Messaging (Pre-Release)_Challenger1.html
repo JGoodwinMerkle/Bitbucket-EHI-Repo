@@ -1,0 +1,255 @@
+<style>
+.iso-damageLink {
+	color: #169a5a;
+}
+.iso-exoticsTerms {
+	background: #f2f2f2;
+	display: none;
+	margin: 2em 0;
+	padding: 1.5em;
+}
+#commit .iso-exoticsTerms {
+	display: block;
+}
+.iso-exoticsTerms h3 {
+	color: #000;
+    font-family: "DINHeavy",Arial Black,Arial,Helvetica,sans-serif;
+    font-size: 19px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+.iso-exoticsTerms p {
+	font-size: 19px;
+	margin: 0;
+}
+.iso-exoticsTerms p a {
+	color: #169a5a;
+}
+@media (max-width: 48em) {
+	.iso-exoticsTerms {
+		margin: 1em 0;
+	}
+	.iso-exoticsTerms h3{
+		margin-bottom: 5px;
+	}
+	.iso-exoticsTerms p {
+		font-size: 15px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'International Policy Messaging',
+		cookieName : 'enInternationalPolicyMessaging',
+		customMbox : 'enInternationalPolicyMessagingClicks',
+		creative : "Control",
+		template : {
+			band : '<div class="iso-exoticsTerms"><h3>{header}</h3><p>{content}</p></div>',
+		 	modal : '<div role="dialog" aria-labelledby="global-modal-title" class="modal-container active iso-liability-modal">\
+				<div class="modal-content">\
+					<div class="modal-header">\
+						<span id="global-modal-title"></span>\
+						<button tabindex="0" class="close-modal" aria-label="Close">\
+							<i class="icon icon-close-x-white">X</i>\
+						</button>\
+					</div>\
+					<div class="modal-body cf">\
+						<div class="liability-modal">\
+							<div>\
+								<div class="summary">\
+									<p>{content}</p>\
+								</div>\
+							</div>\
+						</div>\
+					</div>\
+				</div>\
+			</div>'
+		},
+		content : {
+			modal : 'LIABILITY DAMAGE WAIVER (LDW) is mandatory and must be purchased at the rental counter.  The cost of this coverage will be specified in your confirmation email. The purchase of Collision Damage Waiver-Theft Protection (CDW-TP is also mandatory ) at the rental  counter unless you choose to utilize the CDW and TP coverage you obtained through your credit card company. See full details for <a href="#" class="iso-damageLink">LDW</a> and <a href="#" class="iso-damageLink">CDW-TP</a>.',
+			band: {
+				header: 'Policy Notice',
+				content: 'LIABILITY DAMAGE WAIVER (LDW) is mandatory and must be purchased at the rental counter. The cost of this coverage will be specified in your confirmation email. The purchase of Collision Damage Waiver-Theft Protection (CDW-TP) is also mandatory at the rental counter unless you choose to utilize the CDW and TP coverage you obtained through your credit card company. See full details for <a href="#" class="iso-damageLink">LDW</a> and <a href="#" class="iso-theftLink">CDW-TP</a>.'
+			}
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			// adobe.target.getOffer({
+			// 	"mbox": isoTest.customMbox,
+			// 	"success": function(offers) {
+			// 		adobe.target.applyOffer( { "offer": offers } );
+			// 	},
+			// 	"error": function(status, error) {
+
+			// 	}
+			// });
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded('#commit', function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();
+			});
+
+			$(window).on('hashchange', function(){
+				if(/commit/.test(window.location.hash)){	
+					isoTest.elementLoaded('#commit', function() {
+						isoTest.chall();
+					});
+				} 
+			});
+		},
+		chall : function() {
+			/*
+			var $modal = helpers.supplant(isoTest.template.modal,{
+				'content': isoTest.content.modal
+			});
+			$('body').append($modal);
+			*/
+			if($('.iso-exoticsTerms').length == 0 && window.location.hash == '#commit'){
+				var $terms = helpers.supplant(isoTest.template.band,{
+					'header': isoTest.content.band.header,
+					'content': isoTest.content.band.content
+				});
+
+				$('.verification-header').prepend($terms);
+			}
+			isoTest.addEvents();
+		},
+		addEvents : function(){
+			/*
+			$('.iso-liability-modal .close-modal').click(function(e){
+				e.preventDefault();
+				isoTest.removeModal();
+			});
+			*/
+			$('.iso-exoticsTerms .iso-damageLink').click(function(e){
+				e.preventDefault()
+				$('#rentalFacts li').each(function() {
+					if ($(this).find('button').text().indexOf('Loss Damage Waiver') > -1) {
+						$(this).find('button').click();
+					}
+				});
+			});
+
+			$('.iso-exoticsTerms .iso-theftLink').click(function(e){
+				e.preventDefault()
+				$('#rentalFacts li').each(function() {
+					if ($(this).find('button').text().indexOf('Collision Damage Waiver') > -1) {
+						$(this).find('button').click();
+					}
+				});
+			});
+
+			
+			
+		},
+		removeModal : function(){
+			$('.iso-liability-modal').remove();
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

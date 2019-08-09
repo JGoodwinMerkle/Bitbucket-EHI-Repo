@@ -1,0 +1,365 @@
+<style>
+.booking-widget .location-search .location-field, .booking-widget .location-search .location-chicklet {
+	border: 2px solid #c3c3c3; 
+}
+.date-time-label span:nth-child(2):after, .location-input-label > span:first-child:after, .age-input label > span:first-child:after{
+    content: "*";
+}
+.location-input-label .sublabel{
+	display: table;
+	width: 100%;
+}
+.location-input-label .sublabel span.iso-strong{
+	font-family: "DINMedium",Arial,sans-serif;
+}
+.location-input-label .sublabel > span:first-child {
+	float: right;
+}
+.location-input-label .sublabel > span:last-child {
+	float: left;
+}
+#locations-list {
+	background: #f2f2f2;
+	border: 2px solid #c3c3c3;
+	min-height: 278px;
+}
+.booking-widget .location-search .locationInput-active .select-location-state {
+    border: 2px solid #c3c3c3;
+}
+#locations-list li a{
+	background-image:url("/etc/designs/ecom/dist/img/icons/png/nav-carrot-green.png");
+    background-size: auto 17px;
+    background-position: right;
+    background-repeat: no-repeat;
+    margin-right: 2px;
+}
+#locations-list li a:after {
+    content: "Select";
+    float: right;
+    font-size: 15px;
+    margin-right: 10px;
+    margin-top: 2px;
+}
+#locations-list li a:hover, #locations-list li.highlighted a {
+	background-color: #169A5A;
+	background-image: url("/etc/designs/ecom/dist/img/icons/png/nav-carrot-white.png");
+	color: #fff;
+}
+#locations-list li a:hover small, #locations-list li.highlighted a small{
+	color: #fff;
+}
+#coupon {
+	margin-top: 0;
+}
+.iso-couponSub {
+  clear: both;
+  display: inline-block;
+  font-size: 15px;
+	margin-top: 1.25rem;
+}
+.iso-couponSub span:first-child {
+	text-transform: uppercase;
+	font-family: "DINLight",Arial,sans-serif;
+}
+.iso-couponSub .iso-mem {
+	margin-left: 5px;
+}
+#reservationWidget .collapsed .iso-eplusSub {
+	display: none;
+}
+#reservationWidget .expanded .iso-eplusSub {
+	display: block;
+}
+.iso-eplusSub {
+	clear:both;
+}
+.iso-eplusSub a {
+	color: #169a5a;
+	cursor: pointer;
+	padding:3px 0 0 18px;
+	background:url('//www.enterprise.com/etc/designs/ecom/dist/img/plus.gif') no-repeat center left;
+}
+.iso-eplusSub a:hover {
+	color: #006639;
+	text-decoration: underline;
+}
+.booking-widget .coupon-input {
+	margin-bottom: .75rem;
+}
+.iso-typeahead {
+	position: absolute;
+	z-index: 4;
+	top: 0;
+	left: 0;
+	width:100%;
+	height:100%;
+	background:url('//www.enterprise.com/content/dam/ecom/hosted/empty-state-bg.png') no-repeat left top;
+}
+.iso-typeahead:last-child {
+	display: none;
+}
+.iso-typeahead:first-child {
+	display: block;
+}
+.booking-widget .booking-submit {
+	margin-top: 0 !important;
+}
+@media (max-width: 66em){
+	#locations-list {
+		min-height: 380px;
+	}
+	.booking-widget .booking-submit {
+		margin-top: 42px !important;
+	}
+	.iso-couponSub {
+		font-size: 14px;
+	}
+}
+@media (max-width: 53em){
+	.iso-couponSub {
+		font-size: 14px;
+	}
+	.booking-widget .booking-submit {
+		margin-top: 42px !important;
+	}
+}
+@media (max-width: 48em){
+	.inner-container.expanded .age-input {
+		margin-bottom: 0;
+	}
+	.iso-couponSub {
+		margin-left: 16px;
+	}
+	.booking-widget .booking-submit {
+		margin-top: 42px !important;
+	}
+	.iso-eplusSub {
+		margin:0 3%;
+	}
+}
+@media (max-width: 46.8em) {
+	#locations-list {
+		min-height: 580px;
+	}
+	#location-text-box-pickup {
+		position: relative;
+	}
+	#location-text-box-pickup .sublabel > span:first-child {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+	.iso-couponSub {
+		margin-left: 16px;
+	}
+
+	.booking-widget .booking-submit {
+		margin-top: 16px !important;
+	}
+}
+@media (max-width: 35.75em){
+	#locations-list {
+		min-height: 680px;
+	}
+	#locations-list li a:after{
+		content: "";
+	}
+	#location-text-box-pickup > span > span:first-child {
+		display: none;
+	}
+}
+
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Widget Location Selection',
+		cookieName : 'enWidgetLocationSelection',
+		customMbox : 'enWidgetLocationSelectionClicks',
+		creative : "Challenger 1",
+		resWidget: '#reservationWidget',
+		locSubLbl: '.location-input-label .sublabel',
+		content: {
+			locationSub: 'Search <span class="iso-strong">ZIP, city, or airport</span> and <span class="iso-strong">select from list</span>',
+			required: '* Required Field'
+		},
+		couponBlock: '<div class="iso-couponSub"><span>Promotion code or account number</span></div>',
+		eplusBlock: '<div class="iso-eplusSub"><span class="iso-mem"><a class="iso-signIn">Sign in to Enterprise Plus&reg; to earn points on this reservation</a></span></div>',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			/*adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});*/
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.resWidget, function() {	
+				isoTest.log("Test Ready!");	
+				isoTest.bindViewModify();
+				isoTest.chall();	
+			});
+		},
+		bindViewModify : function() {
+			$('#viewModifyCancelBookingWidget').on('click', function() {
+				if ($(this).find('span').text().indexOf('RESERVATION') > -1) {
+					isoTest.elementLoaded('.booking-widget .booking-submit', function() {	
+						isoTest.chall();
+					});
+				}
+			});
+		},
+		chall : function() {
+			isoTest.preload([
+		    '/etc/designs/ecom/dist/img/icons/png/nav-carrot-green.png',
+				'/etc/designs/ecom/dist/img/icons/png/nav-carrot-white.png',
+				'//www.enterprise.com/etc/designs/ecom/dist/img/plus.gif',
+				'//www.enterprise.com/content/dam/ecom/hosted/empty-state-bg.png'
+			]);
+			isoTest.expandWidget();
+			isoTest.updateLabels();
+			isoTest.setTypeahead();
+		},
+		preload : function(arrayOfImages) {
+	    $(arrayOfImages).each(function(){
+        $('<img/>')[0].src = this;
+	    });
+		},
+		expandWidget : function() {
+			if (window.location.href.indexOf('car-rental.html') > -1) {
+				$('#reservationWidget .inner-container').removeClass('collapsed').addClass('expanded');
+			}
+		},
+		setTypeahead : function() {
+			$('#pickupLocationTextBox, #dropoffLocationTextBox').on("click blur change input focus", function() {
+				isoTest.insertTypeahead();
+			});
+			$('body').on("click", '.location-search .location-chicklet-clear', function() {
+				isoTest.insertTypeahead();
+			});
+		},
+		insertTypeahead : function() {
+			isoTest.elementLoaded('[id=locations-list]', function() {	
+				if ($('[id=locations-list]').find('.iso-typeahead').length === 0) {
+					$('[id=locations-list]').append('<div class="iso-typeahead"></div>');
+				}
+			});
+		},
+		updateLabels : function(){
+			$('.location-input-label .sublabel > span:nth-child(2)').html(isoTest.content.locationSub);
+			$('#location-text-box-pickup .sublabel > span:first-child').html(isoTest.content.required);
+
+			var $couponField = $('.coupon-field-wrapper');
+			$couponField.prepend($(isoTest.couponBlock));
+			$couponField.find('#coupon').attr('placeholder','');
+
+			//var $bookButton = $('.reservationWidget .booking-submit');
+			//$bookButton.before($(isoTest.eplusBlock));
+
+			isoTest.addEvents();
+		},
+		addEvents : function(){
+			$('.iso-mem a').click(function(e){
+				e.preventDefault();
+				$("html, body").animate({ scrollTop: 0 }, "slow");
+				$('#signInJoinButton').click();
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        "mbox": isoTest.customMbox,
+        "params": {
+            "click": element
+      	},
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+    	});
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

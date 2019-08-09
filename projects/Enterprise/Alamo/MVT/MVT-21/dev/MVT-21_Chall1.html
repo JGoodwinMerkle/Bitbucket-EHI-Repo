@@ -1,0 +1,185 @@
+<style>
+	.selectCar .sortVehicle {
+		display: none;
+	}
+	.selectCar .vehicleListTemplate .iso-sortVehicle {
+	    margin: 15px 0;
+	    padding: 0 3%;
+	}
+	@media screen and (min-width: 560px) {
+		.selectCar .vehicleListTemplate .iso-sortVehicle {
+		    padding: 0;
+		}
+	}
+	.selectCar .vehicleListTemplate .iso-sortVehicle label {
+		font-weight: bold;
+    	margin-right: 8px;
+	}
+	
+	ul.carList.sort-recommended {
+		display: flex;
+    	flex-direction: column;
+	}
+	.sort-recommended > * {
+		order: 100;
+	}
+	.sort-recommended [data-sipp*="MVAR"] {
+		order: 1;
+	}
+	.sort-recommended [data-sipp*="IFAR"] {
+		order: 2;
+	}
+	.sort-recommended [data-sipp*="SFAR"] {
+		order: 3;
+	}
+	.sort-recommended [data-sipp*="PCAR"] {
+		order: 4;
+	}
+	.sort-recommended .selectedRow {
+		order: 0;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : true,
+		account : 'Enterprise',
+		portfolio : 'Alamo.com',
+		test : 'Sort By Recommended Vehicles',
+		creative : 'Challenger 1',
+		selector : '.carList',
+		template : '<div class="iso-sortVehicle"><label for="isoTestSort">Sort Cars By:</label><select name="sortBy" id="isoTestSort"><option value="Recommended">Recommended</option><option value="Lowest to Highest Price">Lowest to Highest Price</option><option value="Highest to Lowest Price">Highest to Lowest Price</option></select></div>',	
+		init : function() {
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.selector, function() {	
+				isoTest.log('Test Ready!');	
+  				isoTest.chall();
+			});
+		},
+		chall : function() {
+			isoTest.log('fn:Chall');
+			
+			var carList = document.querySelector('ul.carList');
+
+			// Add new dropdown
+			document.querySelector('.sortVehicle').insertAdjacentHTML("afterend", isoTest.template);
+			
+			isoTest.addDataPrice();
+			isoTest.sortLowHigh();
+			carList.classList.add('sort-recommended');
+			isoTest.addDataSIPP();
+			isoTest.sortingLogic();
+			isoTest.trackClicksFilter();
+		},
+		addDataPrice : function() {
+			// Add data-price attribute to each vehicle module
+			var amt = document.querySelectorAll('.priceInfoDetails .price span[data-bind*="currencySymbol"]:first-child');
+			Array.from(amt).forEach(function (price, index) {
+				var amtCleaned = Number(price.innerText.replace(/[^0-9.-]+/g,'')).toFixed(2);
+				price.closest('li').setAttribute('data-price', amtCleaned);
+			});		
+		},
+		addDataSIPP : function() {
+			// Add data-sipp attribute to each vehicle module
+			Array.from(_a.carClassesDisplayed).forEach(function (item, index) {
+				var itemSIPP = item.code;
+				var itemStatus = item.status;
+				var listing = document.querySelectorAll('ul.carList > li');
+				for (var i = 0; i < listing.length; ++i) {
+					try {
+						if (!listing[index].hasAttribute("data-sipp")) {
+					    	listing[index].setAttribute('data-sipp', itemSIPP);
+					    	break; 
+						}
+					} catch(error) { }
+				}
+			});
+		},
+		sortLowHigh : function() {
+			Array.prototype.slice.call(document.querySelectorAll(".carList > li[data-price]")).sort(function(a, b) {
+			  a = a.getAttribute("data-price");
+			  b = b.getAttribute("data-price");
+
+			  return a.localeCompare(b, undefined, {numeric: true});
+			}).forEach(function(node) {
+			  node.parentNode.appendChild(node);
+			});
+		},
+		sortHighLow : function() {
+			Array.prototype.slice.call(document.querySelectorAll(".carList > li[data-price]")).sort(function(a, b) {
+			  a = a.getAttribute("data-price");
+			  b = b.getAttribute("data-price");
+
+			  return -a.localeCompare(b, undefined, {numeric: true});
+			}).forEach(function(node) {
+			  node.parentNode.appendChild(node);
+			});
+		},
+		sortingLogic : function() {
+			var dropdownSelect = document.querySelector('#isoTestSort');
+			var carList = document.querySelector('ul.carList');
+			dropdownSelect.addEventListener('change', function (event) {
+				if (dropdownSelect.value == 'Recommended') {
+			    	carList.classList.add('sort-recommended');
+					isoTest.sortLowHigh();
+					isoTest.trackClicks('Recommended');
+			    } 
+			    if (dropdownSelect.value == 'Lowest to Highest Price') {
+			    	carList.classList.remove('sort-recommended');
+					isoTest.sortLowHigh();
+					isoTest.trackClicks('Low to High');			    	
+			    }
+			    if (dropdownSelect.value == 'Highest to Lowest Price') {
+			    	carList.classList.remove('sort-recommended');
+			    	isoTest.sortHighLow();
+			    	isoTest.trackClicks('High to Low');
+			    }
+			}, false);
+		},
+		trackClicksFilter : function() {
+			document.querySelector('.vehicleFilter').addEventListener('click', function (event) {
+				if (event.target.matches('#suvs')) {
+					isoTest.trackClicks('Filter: SUVs');
+				}
+				if (event.target.matches('#cars')) {
+					isoTest.trackClicks('Filter: Cars');
+				}
+				if (event.target.matches('#vans')) {
+					isoTest.trackClicks('Filter: Vans');
+				}
+				if (event.target.matches('#trucks')) {
+					isoTest.trackClicks('Filter: Trucks');
+				}
+			});
+		},
+		trackClicks : function(link) {
+			var linkName = isoTest.test + ' : ' + link +' Selected';
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName);
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+	isoTest.init();
+})();
+</script>

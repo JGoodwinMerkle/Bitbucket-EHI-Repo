@@ -1,0 +1,419 @@
+<style>
+#start-reservation .booking-widget {
+    margin-top: 0 !important;
+}
+#start-reservation .container {
+	display: table !important;
+    max-width: 1365px;
+    margin: 0 auto;
+}
+#start-reservation .inner-container {
+	border-right: 2px solid #ccc;
+	float: left;
+	margin: 5% 0 !important;
+	padding: 0 4% !important;
+	width: 70% !important;
+}
+#start-reservation .booking-widget {
+	width: 100%;
+}
+.booking-widget .date-time-selector .label-container {
+	width: 46%;
+}
+.booking-widget .date-time-selector .time-label, .booking-widget .date-time-selector .date-label {
+	width: 50%;
+}
+.booking-widget div.arrow {
+   
+}
+.booking-widget .age-input label {
+	/*margin-top: 0;*/
+	font-size: 14px;
+}
+.iso-details {
+	background-color: #00a664;
+	background-image: url(/content/dam/ecom/hosted/cars_lines.png);
+	background-position-x: right;
+	background-position-y: calc(100% - 50px);
+	background-repeat: no-repeat;
+	background-size: 100%;
+	float: right;
+    margin: 5% 2%;
+    height: 485px;
+    padding: 2%;
+    position: relative;
+    width: 26%;
+}
+.iso-details h2 {
+	color: #181918;
+	font-size: 38px;
+	margin-bottom: 25px;
+	text-transform: uppercase;
+}
+.iso-details h2 span {
+	color: #fff;
+}
+.iso-details p {
+	bottom: 0;
+	color: #fff;
+	font-size: 12px;
+	font-weight: 300;
+	line-height: 1.25;
+	position: absolute;
+	width: 84%;
+}
+.iso-details a {
+	background: #fff;
+	color: #179a5a;
+	font-weight: 900;
+    padding: 9px 25px;
+}
+.iso-pickupService-modal {
+	display: none;
+}
+@media (max-width: 1400px){
+	#start-reservation .booking-widget .date-time-form {
+		width: 100%;
+	}
+	.booking-widget .age-input {
+		margin: 0px;
+		width: auto;
+	}
+	.booking-widget .age-input label {
+		margin-top: 22px;
+	}
+	.iso-details {
+    	height: 585px;
+	}
+}
+@media (max-width: 1350px){
+	.inner-container.expanded .age-input, .booking-widget .age-input #age, .coupon-field-wrapper, .booking-widget .custom-label .coupon-input {
+		width: 100%;
+	}
+}
+/*@media (max-width: 1058px){
+	.booking-widget div.arrow {
+		margin-left: 1.5% !important;
+		margin-right: 1.5% !important;
+	}
+}*/
+@media (max-width: 1160px){
+	#start-reservation .inner-container{
+		border: 0;
+		width: 100% !important;
+	}
+	#start-reservation .inner-container {
+		margin-bottom: 0 !important;
+	}
+	.iso-details {
+		background-position-y: top;
+		height: 350px;
+		margin: 0 3% 20px;
+		width: 96%;
+	}
+	.iso-details.iso-de {
+	}
+	.iso-details.iso-de h2{
+		max-width: 50%;
+	}
+	.iso-details h2 span {
+		display: block;
+		max-width: 40%;
+	}
+	.iso-details.iso-de h2 span {
+		display: inline;
+		max-width: auto;
+	}
+	.iso-details a {
+		left: 2%;
+	}
+	.iso-details p {
+		margin-top: 30px;
+		position: relative;
+	}
+}
+@media (min-width: 1057px){
+	.booking-widget .age-input {
+		width: 27%;
+	}
+}
+@media (max-width: 1020px){
+	.iso-details p {
+		margin-top: 20px;
+		position: absolute;
+	}
+}
+@media (max-width: 930px) {
+	.iso-details {
+		background-position-y: calc(100% - 50px);
+		height: 330px;
+	}
+	.iso-details.iso-de {
+		height: 350px;
+	}
+}
+@media (max-width: 760px) {
+	.iso-details {
+	}
+}
+@media (max-width: 674px){
+	.iso-details {
+		height: 330px;
+		padding: 3%;
+		width: 94%;
+	}
+	.iso-details.iso-de {
+		height: 350px;
+	}
+	.iso-details.iso-de h2 {
+		max-width: none;
+	}
+	.iso-details h2 span {
+		max-width: none;
+	}
+}
+@media (max-width: 560px){
+	.iso-details {
+		height: 410px;
+	}
+	.iso-details.iso-de {
+		height: 430px;
+	}
+	.iso-details h2 span {
+		display: inline;
+	}
+}
+@media (max-width: 500px){
+	.iso-details.iso-de {
+		/*background-position-y: 200px;*/
+	}
+}
+@media (max-width: 430px){
+	.iso-details.iso-de {
+		/*background-position-y: 230px;*/
+	}
+}
+@media (max-width: 360px){
+	/*.iso-details {
+		background-position-y: 230px;
+	}
+	.iso-details.iso-de {
+		background-position-y: 270px;
+	}*/
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Pick Up Service (EU)',
+		cookieName : 'enPickUpService',
+		customMbox : 'enPickUpServiceClicks',
+		creative : 'Challenger 1',
+		selector: '#start-reservation .inner-container',
+		pageType: 'branch',
+		template: '<div class="iso-details iso-{lang}">\
+			<h2>{heading}</h2>\
+			<a href="#">{learnMore}</a>\
+			<p>{terms}</p>\
+		</div>',
+		modal: '<div role="dialog" aria-labelledby="global-modal-title" class="modal-container active iso-pickupService-modal">\
+					<div class="modal-content">\
+						<div class="modal-header">\
+							<span id="global-modal-title"></span>\
+							<button tabindex="0" class="close-modal" aria-label="Close">\
+								<i class="icon icon-close-x-white">X</i>\
+							</button>\
+						</div>\
+						<div class="modal-body cf">\
+							<div class="pickupService-modal">\
+								<div>\
+									<div class="summary">\
+										<h2>{modalHeader}</h2>\
+										<p>{modalContent}</p>\
+									</div>\
+								</div>\
+							</div>\
+						</div>\
+					</div>\
+				</div>',
+		content: {
+			en : {
+				heading: 'We\'ll Pick You Up <span>And Drop You Off For Free</span>',
+				learnMore: 'Learn more',
+				terms: 'Available at non-airpot branches and during normal business hours.',
+				modalHeader: 'Try our free pick-up and drop-off service',
+				modalContent: 'Our free pick-up & drop-off service is available at non-airport branches and during normal business hours. To schedule your pick-up time or make additional arrangements, ask for this when your rental branch calls to confirm your reservation. Returning your vehicle is just as simple, just bring the car back to your local branch and we will drop you off. <br />Service subject to conditions.'
+			},
+			es : {
+				heading: '“TE RECOGEMOS” <span>Y TE LLEVAMOS DE VUELTA GRATIS.</span>',
+				learnMore: 'MÁS INFO',
+				terms: 'Disponible en horario comercial en nuestras oficinas (excluidos aeropuertos  y algunas  estaciones de AVE)',
+				modalHeader: 'Pruebe nuestro servicio de recogida y traslado gratuito',
+				modalContent: 'Nuestro servicio de traslado para la recogida y devolución gratuito de vehículos, está disponible en todas nuestras oficinas de ciudad dentro del horarios de atención al público. <br>Excluidos aeropuertos y estaciones AVE de Madrid y Barcelona. Servicio “Te recogemos” – imprescindible contactar con la oficina de alquiler para confirmar disponibilidad. <br />Devolver los vehículos es igual de sencillo. Solo tiene que entregarlo en la oficina de alquiler y nosotros le llevaremos de vuelta.'
+			},
+			fr : {
+				heading: 'TESTEZ NOTRE SERVICE <span>DE PICK-UP/DROP OFF* GRATUIT</span>',
+				learnMore: 'EN SAVOIR PLUS',
+				terms: 'Disponible pendant les heures d’ouvertures de nos agences (hors aéroports)',
+				modalHeader: 'Essayez notre service de pick-up et drop-off gratuit',
+				modalContent: 'Notre service de pick-up et drop-off (prise en charge/dépose) gratuit est disponible auprès de nombreuses agences, hors aéroports, durant les heures d\'ouvertures. Pour bénéficier de notre service de pick-up/drop-off gratuit, une fois votre réservation effectuée en ligne, contactez votre agence de location Enterprise par téléphone. <br />La procédure de restitution du véhicule est tout aussi simple : il vous suffit de déposer la voiture à votre agence de location, puis nous vous ramènerons.<br />Service soumis à conditions.'
+			},
+			de : {
+				heading: 'Wir holen Sie kostenlos ab <span>und bringen Sie wieder nach Hause.</span>',
+				learnMore: 'MEHR ERFAHREN',
+				terms: 'Verfügbar während Öffnungszeiten an teilnehmenden Filialen (mit Ausnahme von Flughafenstationen)',
+				modalHeader: 'Testen Sie unseren kostenlosen Abhol- und Bringservice',
+				modalContent: 'Unser kostenloser Abhol- und Bringservice ist an Stadtfilialen (außerhalb von Flughäfen) während der regulären Geschäftszeiten verfügbar. <br />Um einen Termin für den kostenlosen Abholservice zu vereinbaren, bitten wir Sie, dies nach Ihrer Online-Reservierung telefonisch mit Ihrer Filiale abzustimmen. <br />Die Rückgabe erfolgt genauso einfach. Sie bringen das Fahrzeug zur Station und wir fahren Sie nach Hause. Service vorbehaltlich lokaler Einschränkungen.'
+			}
+		},
+		lang: 'en',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+				
+			if(window._analytics && window._analytics.pageInfo && window._analytics.pageInfo.pageName){
+				isoTest.chall();
+			} else {
+				var aInt = setInterval(function () {
+					if(window._analytics && window._analytics.pageInfo && window._analytics.pageInfo.pageName){
+						clearInterval(aInt);
+						isoTest.chall();
+					}
+				}, 100);
+			}
+		},
+		chall : function() {
+			isoTest.setLanguage();
+			if(_analytics.pageInfo.pageName == 'branchpage'){
+				isoTest.pageType = location.pathname.indexOf('airport') > -1 ? 'airport' : 'branch';
+				isoTest.elementLoaded(isoTest.selector, function() {	
+					isoTest.log("Test Ready!");	
+	  				isoTest.addPanel();
+				});
+			}
+		},
+		addPanel: function(){
+			if($('.iso-details').length == 0){
+				var $panel = helpers.supplant(isoTest.template, {
+					'heading' : isoTest.content[isoTest.lang].heading,
+					'learnMore' : isoTest.content[isoTest.lang].learnMore,
+					'terms' : isoTest.content[isoTest.lang].terms,
+					'lang' : isoTest.lang
+				});
+				$(isoTest.selector).after($panel);
+
+				var $modal = helpers.supplant(isoTest.modal, {
+					'modalHeader' : isoTest.content[isoTest.lang].modalHeader,
+					'modalContent' : isoTest.content[isoTest.lang].modalContent
+				});
+				$('body').append($modal);
+				isoTest.bindEvents();
+			}
+		},
+		bindEvents: function(){
+			$('.iso-details a').click(isoTest.modalShow);
+			$('.iso-pickupService-modal .close-modal').click(isoTest.modalHide);
+		},
+		modalHide: function(){
+			$('.iso-pickupService-modal').hide();
+		},
+		modalShow: function(){
+			$('.iso-pickupService-modal').show();
+			isoTest.trackClicks(isoTest.test + ' : Learn More');
+		},
+		setLanguage: function(){
+			isoTest.lang = location.pathname.split('/')[1];
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(linkName) {
+			s.linkTrackVars = 'eVar20'; 
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Start...');
+			
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Ready!');
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

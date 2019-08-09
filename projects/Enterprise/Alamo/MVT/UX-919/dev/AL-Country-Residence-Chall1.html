@@ -1,0 +1,135 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Alamo.com",
+		test : "Country of Residence",
+		cookieName : 'alCountryOfResidence',
+		creative : "Challenger 1",
+		customMbox : 'alCountryOfResidenceClicks',
+		previouslyRun : false,
+		country : 'CN',
+		init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+				isoTest.previouslyRun = !_satellite.readCookie('previousRun') ? isoTest.previouslyRun : Boolean(_satellite.readCookie('previousRun'));
+			}
+			//mboxDefine('',isoTest.customMbox);
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+			if (isoTest.debug === true) {
+				console.log("Test Running...");
+				console.log(isoTest.account + " - " + isoTest.portfolio);
+				console.log(isoTest.test + " - " + isoTest.creative);
+			}
+			//isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded('input[name=countryOfResidenceResident]', function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+					if(!isoTest.previouslyRun){
+	  				isoTest.chall();
+					}
+				});
+			//});
+		},
+		chall : function() {
+			var $selectElem = $('select[name=countryOfResidence]');
+			$('input[name=countryOfResidenceResident]').prop('checked',false);
+			$selectElem.parent().show();
+
+			isoTest.elementLoaded('select[name=countryOfResidence]',function(){
+				var selectInterval = setInterval(function(){
+					if($selectElem.val()=='US'){
+						clearInterval(selectInterval);
+						$('option[value='+isoTest.country+']').attr('selected','selected');
+					}
+				},100);
+			});
+
+			isoTest.elementLoaded('.submitButton', function(){
+				$('.submitButton').click(function(){
+					_satellite.setCookie('previousRun',true);
+				});
+			});
+
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+			//mboxUpdate(isoTest.customMbox, 'click='+element);
+      adobe.target.trackEvent({
+          "mbox": isoTest.customMbox,
+          "params": {
+              "click": element
+          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+      });
+		},
+		elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				//console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0 && $(ele).is(':visible')) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - "+ele+" - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		}
+	}
+
+	isoTest.dependsLoaded(function(){
+		 isoTest.init();
+	});
+})();
+</script>

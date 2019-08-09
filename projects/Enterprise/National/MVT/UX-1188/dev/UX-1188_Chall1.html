@@ -1,0 +1,1100 @@
+<style>
+	/*	MRA 2.0 styles	*/
+	.iso-terms-scroll {
+		bottom: 45px;
+		left: 0;
+		opacity: 1;
+		position: fixed;
+		right: 0;
+		text-align: center;
+		transition: all 0.6s ease-in-out;	
+		visibility: visible;
+		z-index: 1;
+	}
+	
+	.iso-terms-scroll.hide {
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.iso-terms-scroll button {
+		background: rgba(0,0,0,0.7);
+		border-radius: 50px;
+		color: #b4d88a;
+		font-size: 14px;
+		font-weight: bold;
+		padding: 10px 20px;
+		position: relative;
+		text-decoration: none;
+		text-transform: uppercase;
+	}
+	.iso-terms-scroll button:hover, .iso-terms-scroll button:focus, .iso-terms-scroll button:active {
+		background: rgba(0,0,0,0.9);
+		color: #b4d88a;
+	}
+
+	.iso-terms-scroll button::after {		
+		background-image: url('/content/dam/National/ux/large-down-chevron.png');
+		background-size: 100%;
+		background-repeat: no-repeat;
+		bottom: -30px;
+		content: '';
+		height: 20px;
+		left: 50%;
+		position: absolute;
+		right: 0;
+		transform: translateX(-50%);
+		width: 60px;
+	}
+
+	.iso-print-terms {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	.iso-print-terms a.print-terms {
+		text-decoration: none;
+		font-size: 0.95rem;
+	}
+
+	.cancel-and-apply-buttons .print-terms {
+		display: none;
+	}
+
+	@media screen and (max-width: 56.9375em) {
+		.iso-print-terms {
+			display: none;
+		}
+	}
+	
+
+	/*	MRA 1.0 styles	*/
+
+	.terms-container {
+		padding-bottom: 2.25rem;
+	}
+
+	.terms-container .terms__action-bar {
+		display: none;
+	}
+
+	.terms-container .rich-text.iso-hidden-text {
+		display: none;
+	}
+
+	.terms-container .zl-section.terms-consent-banner.zl-section--bgcolor-medium-gray {
+		display: none;
+	}
+
+	.terms-container .rich-text.iso-terms-main-container {
+		display: block;
+		position: relative;
+	}
+
+	.terms-container .rich-text h3 {
+		letter-spacing: normal;
+	}
+
+	.terms-container .rich-text .iso-terms-accept-header {
+		font-size: 14px;
+		margin-bottom: .85rem;
+	}
+
+	.terms-container .rich-text li {
+		letter-spacing: normal;
+	}
+
+	.terms-container .rich-text .iso-ecModal.iso-header-link,
+	.terms-container .rich-text .iso-maModal.iso-header-link {
+		font-size: 12px;
+    font-family: 'OpenSans-Extrabold', 'Open Sans Extrabold', 'Open Sans';
+    font-weight: 800;
+	}
+
+	.terms-container .rich-text .iso-generic {
+		list-style-type: upper-alpha;
+		margin-bottom: 2rem;
+	}
+
+	.terms-container .rich-text .iso-generic li {
+		padding-left: 10px;
+	}
+
+	.terms-container .rich-text .iso-generic-child {
+	  counter-reset: list;
+	  padding-left: 0;
+    margin-left: -1.5625rem;
+    margin-top: 0;
+    margin-bottom: 0;
+	}
+
+	.terms-container .rich-text .iso-generic-child > li {
+	  list-style: none;
+	}
+
+	.terms-container .rich-text .iso-generic-child > li:before {
+	  content: "("counter(list, lower-roman)")";
+	  counter-increment: list;
+	  margin-right: 10px;
+	}
+
+	.terms-container .rich-text .iso-specific-rental {
+		list-style-type: lower-roman;
+		margin-top: 0;
+    padding-left: 5.5625rem;
+	}
+
+	.terms-container .rich-text .iso-terms-list {
+		margin-top: 0;
+	}
+
+	.terms-container .rich-text .iso-terms-list li {
+		font-size: 12px;
+		line-height: 16px;
+    margin-bottom: 16px;
+	}
+
+	.terms-container .rich-text .terms-consent-banner__cta-container.cancel-and-apply-buttons {
+		margin-bottom: .5rem;
+		padding-top: .5rem;
+	}
+
+	.terms-container .rich-text .terms-consent-banner__cta-container.cancel-and-apply-buttons .print-terms.link {
+		text-decoration: none;
+		position: absolute;
+		padding-top: 6px;
+	}
+
+	.terms-container .rich-text .iso-maModal,
+	.terms-container .rich-text .iso-ecModal {
+		text-decoration: underline;
+		color: #00703c;
+		cursor: pointer;
+		font-size: 100%;
+	}
+
+	.terms-container .rich-text .iso-ecModal:hover,
+	.terms-container .rich-text .iso-ecModal:focus,
+	.terms-container .rich-text .iso-maModal:hover,
+	.terms-container .rich-text .iso-maModal:focus {
+		color: #231f20;
+	}
+
+	.terms-container .rich-text .iso-ecModal:focus,
+	.terms-container .rich-text .iso-maModal:focus {
+		color: #231f20;
+		outline: -webkit-focus-ring-color auto 5px;
+	}
+
+	#iso-mraTerms-modal-container.iso-hidden-modal,
+	#iso-eclub-modal-container.iso-hidden-modal {
+		display: none;
+	}
+
+	/*eclub terms modal*/
+	#iso-eclubRules .rich-text ol {
+		padding-left: 0;
+    margin-top: 0;
+	}
+
+	#iso-eclubRules .iso-ualpha-list {
+		list-style-type: upper-alpha;
+    list-style-position: inside;
+    font-size: .875rem;
+	}
+
+	#iso-eclubRules table td {
+		vertical-align: middle;
+	}
+
+	#iso-eclubRules .iso-num-list {
+		list-style-type: decimal;
+    list-style-position: inside;
+    font-size: .875rem;
+	}
+
+	#iso-eclubRules .iso-num-list-padding {
+		padding-bottom: 44px;
+	}
+
+	#iso-eclubRules .iso-list-indent {
+		text-indent: 10px;
+	}
+
+	#iso-eclubRules .iso-num-list a {
+		text-decoration: underline;
+	}
+
+	#iso-eclubRules .iso-num-list.iso-main-list {
+		counter-reset: section;
+		list-style-type: none;
+	}
+
+	#iso-eclubRules .iso-num-list.iso-main-list li::before {
+		counter-increment: section;
+  	content: counters(section,"") ". ";
+	}
+
+	#iso-eclubRules .iso-num-list.iso-main-list .iso-subsection::before {
+		counter-increment: section;
+  	content: counters(section,".") " ";
+	}
+
+	/*mra terms modal*/
+	#iso-mraTerms .iso-generic {
+		list-style-type: upper-alpha;
+		list-style-position: inside;
+    font-size: .875rem;
+	}
+
+	#iso-mraTerms .iso-generic li {
+		padding-bottom: 10px;
+	}
+
+	#iso-mraTerms .iso-generic-child {
+	  counter-reset: list;
+	  list-style-position: inside;
+	}
+
+	#iso-mraTerms .iso-generic-child > li {
+	  list-style: none;
+	}
+
+	#iso-mraTerms .iso-generic-child > li::before {
+	  content: "("counter(list, lower-roman)")";
+	  counter-increment: list;
+	  margin-right: 10px;
+	}
+
+	#iso-mraTerms .iso-specific-rental {
+		list-style-type: lower-roman;
+		margin-top: 0;
+    padding-left: 5.5625rem;
+	}
+
+	#iso-mraTerms .iso-ualpha-list {
+		list-style-type: upper-alpha;
+    list-style-position: inside;
+    font-size: .875rem;
+	}
+
+	#iso-mraTerms .iso-num-list {
+		list-style-type: decimal;
+    list-style-position: inside;
+    font-size: .875rem;
+    padding-left: 0;
+	}
+
+	#iso-mraTerms .iso-num-list-padding {
+		padding-bottom: 22px;
+	}
+
+	#iso-mraTerms .iso-list-indent {
+		text-indent: 10px;
+	}
+
+	#iso-mraTerms .iso-lalpha-list {
+		list-style-type: lower-alpha;
+    list-style-position: inside;
+    padding-left: 0;
+	}
+
+	#iso-mraTerms .iso-subsection-num {
+		counter-reset: list;
+		padding-left: 0;
+	}
+
+	#iso-mraTerms .iso-subsection-num > li {
+	  list-style: none;
+	}
+
+	#iso-mraTerms .iso-subsection-num > li::before {
+	  content: "("counter(list, decimal)") ";
+	  counter-increment: list;
+	}
+
+	#iso-mraTerms .iso-subsection-lalpha {
+		counter-reset: item;
+	}
+
+	#iso-mraTerms .iso-subsection-lalpha > li {
+	  list-style: none;
+	}
+
+	#iso-mraTerms .iso-subsection-lalpha > li::before {
+	  content: "("counter(item, lower-alpha)") ";
+	  counter-increment: item;
+	}
+
+	#iso-mraTerms #iso-master-main .terms-consent-banner__cta-container.cancel-and-apply-buttons {
+		display: none;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Nationalcar.com',
+		test : 'EMC Enrollment 2.0',
+		creative : 'Challenger 1',
+		selector: '.terms-container .rich-text',
+		template: '<div class="rich-text iso-terms-main-container">\
+								<div class="iso-print-terms"><a class="print-terms link" href="/en/emerald-club/enroll-terms.html" target="_blank" data-allow-unload="true"><span class="icon icon--print"><span class="icon__text">Print</span></span>Print</a></div>\
+								<p>Please read and accept the terms and conditions in the links below before proceeding.</p>\
+								<div class="iso-terms-scroll"><button>Scroll Down to Accept</button></div> \
+								<p>\
+									<span tabindex="0" aria-label="EMERALD CLUB PROGRAM RULES AND CONDITIONS" class="iso-ecModal iso-header-link iso-terms-link">EMERALD CLUB PROGRAM RULES AND CONDITIONS</span>\
+									<br />\
+									Program rules, membership information and legal aspects of the loyalty program.\
+								</p>\
+								<p>\
+									<span tabindex="0" aria-label="MASTER RENTAL AGREEMENT" class="iso-maModal iso-maModal-main iso-header-link iso-terms-link">MASTER RENTAL AGREEMENT</span>\
+									<br />\
+									All Emerald Club members are required to sign this agreement prior to renting a vehicle. Since this program allows you to use time-saving services like the ability to skip the counter on the day of your rental, you must accept this agreement when registering.\
+								</p>\
+								<ol class="iso-generic">\
+									<li><span tabindex="0" aria-label="General Rental Terms and Conditions Applicable to Rentals in All Locations" class="iso-maModal link-one iso-terms-link">General Rental Terms and Conditions Applicable to Rentals in All Locations</span></li>\
+									<li><span tabindex="0" aria-label="Additional Rental Terms and Conditions Applicable only to Rentals in United States and Canada" class="iso-maModal link-two iso-terms-link">Additional Rental Terms and Conditions Applicable only to Rentals in United States and Canada</span></li>\
+									<li><span tabindex="0" aria-label="Additional Rental Terms and Conditions Applicable only to Rentals in France, Germany, Ireland, Spain and the United Kingdom" class="iso-maModal link-three iso-terms-link">Additional Rental Terms and Conditions Applicable only to Rentals in France, Germany, Ireland, Spain and the United Kingdom</span></li>\
+									<ol class="iso-generic-child">\
+										<li><span tabindex="0" aria-label="General Rental Terms for France, Germany, Ireland, Spain and United Kingdom" class="iso-maModal link-four iso-terms-link">General Rental Terms for France, Germany, Ireland, Spain and United Kingdom</span></li>\
+										<li><span tabindex="0" aria-label="Specific Rental Terms for France, Germany, Ireland, Spain and United Kingdom" class="iso-maModal link-five iso-terms-link">Specific Rental Terms for France, Germany, Ireland, Spain and United Kingdom</span>\
+											<ol class="iso-specific-rental">\
+												<li><span tabindex="0" aria-label="Specific Rental Terms for France" class="iso-maModal link-six iso-terms-link">Specific Rental Terms for France</span></li>\
+												<li><span tabindex="0" aria-label="Specific Rental Terms for Germany" class="iso-maModal link-seven iso-terms-link">Specific Rental Terms for Germany</span></li>\
+												<li><span tabindex="0" aria-label="Specific Rental Terms for United Kingdom and Ireland" class="iso-maModal link-eight iso-terms-link">Specific Rental Terms for United Kingdom and Ireland</span></li>\
+												<li><span tabindex="0" aria-label="Specific Rental Terms for Spain" class="iso-maModal link-nine iso-terms-link">Specific Rental Terms for Spain</span></li>\
+											</ol>\
+										</li>\
+									</ol>\
+									<li><span tabindex="0" aria-label="Additional Rental Terms and Conditions Applicable only to Rentals in Belgium, Italy, Netherlands and Switzerland" class="iso-maModal link-ten iso-terms-link">Additional Rental Terms and Conditions Applicable only to Rentals in Belgium, Italy, Netherlands and Switzerland</span></li>\
+									<li><span tabindex="0" aria-label="Additional Rental Terms and Conditions Applicable only to Rentals in Latin American Caribbean" class="iso-maModal link-eleven iso-terms-link">Additional Rental Terms and Conditions Applicable only to Rentals in Latin American Caribbean</span></li>\
+								</ol>\
+								<div class="iso-tc">\
+									<h3 class="iso-terms-accept-header">By clicking "Accept", I agree to the following:</h3>\
+									<ol class="iso-terms-list">\
+										<li>I have read, are aware of, and will accept full responsibility for and are bound by the Emerald Club Program Rules and Conditions and Master Rental Agreement.</li>\
+										<li>If I am resident of the U.S. or Canada, I further acknowledge and consent to the Dispute Resolution Provision – Mandatory Arbitration Agreement contained in the Emerald Club Program Rules and Conditions and Master Rental Agreement.</li>\
+										<li>If I am a resident of the U.S. or Canada, I further agree the terms of the Emerald Club Program Rules and Conditions and Master Rental Agreement will be binding on me when I click on the “Accept” button during the registration for the Emerald Club thereby confirming that I have read, are aware of, and will accept full responsibility for and are bound by the Emerald Club Program Rules and Conditions and Master Rental Agreement.</li>\
+										<li>If I am a resident outside of the U.S. or Canada, I agree that the terms of the Emerald Club Program Rules and Conditions and Master Rental Agreement become effective and is deemed to be accepted by me when I take possession of a vehicle in the US, in Canada or a participating location in Europe or Latin America and the Caribbean at a National Car Rental location, thereby confirming that I have read, are aware of, and will accept full responsibility for and are bound by the terms and conditions contained in this Rental Agreement.</li>\
+										<li>I also understand that I have the right to receive a paper copy of the Agreement.</li>\
+										<li>I consent for Owner or Owner\'s representative to contact me at the phone number(s) provided in connection with this Rental Agreement to deliver, or cause to be delivered, informational or transactional outreach, including customer surveys, via live, prerecorded, or autodialed calls or texts. I understand that my consent to receiving these calls or texts is not a condition of any purchase or Rental Agreement. </li>\
+										<li>I understand that rental vehicles may be equipped with technology that collects and transmits data from my rental vehicle. This may include information collected from event data recorders, global positioning devices, Onstar® systems, or any other similar technology.  When installed and where permissible, this technology will enable Owner to collect and use information such as: (1) location information; (2) collision information; and (3) vehicle operation information, such as operational condition, mileage, tire pressure and fuel status, and other diagnostic and performance information.  Once collected, this information may be combined with information I have provided Owner and used to generate safety, performance, and other similar information so that Owner can deliver better services. Owner\'s use of information collected from the rental vehicle may include sharing information with third parties such as service providers, partners, and as explained in Owner\'s privacy policy, which is available at www.nationalcar.com. Owner\'s use of the information may also include storage of this information after the expiration of my rental agreement. I also understand that renting the vehicle does not prohibit Owner, from obtaining and using data collected from the vehicle.</li>\
+									</ol>\
+								</div>\
+							</div>',
+		modal: '<div id="{id}" class="ReactModal__Overlay ReactModal__Overlay--after-open modal__overlay modal__overlay--lightbox iso-terms-link" aria-modal="true">\
+					<div class="ReactModal__Content ReactModal__Content--after-open modal__content modal__content--lightbox zl-section--bgcolor-light " tabindex="-1" role="alertdialog" aria-label="{termsTitle}">\
+						<div class="modal__flex">\
+							<div class="modal__header">\
+								<h3>{termsTitle}</h3>\
+								<button type="button" class="modal__btn-close icon icon--close iso-terms-link" aria-label="Close the modal">\
+									<span class="icon__text">Close the modal</span>\
+								</button>\
+							</div>\
+							<div class="modal__body" tabindex="0">\
+								{content}\
+							</div>\
+						</div>\
+					</div>\
+				</div>',
+		content: {
+			ec : {
+				id: 'iso-eclubRules',
+				termsTitle: 'Emerald Club Program Rules And Conditions',
+				content: '<p><strong>Preamble:</strong></p>\
+									<p>This document consists of the following agreements:</p>\
+									<p><strong>The Emerald Club Program Rules and Conditions (including the Mandatory Arbitration Agreement - for US and Canadian residents only)</strong> which you will agree to when you click on the "I Accept" button during the registration for the Emerald Club.</p>\
+									<p><strong>Emerald Club Program Rules And Conditions</strong></p>\
+									<ol class="iso-num-list">\
+										<li><strong>General</strong></li>\
+										<li><strong>Emerald Club Program</strong></li>\
+									</ol>\
+									<br />\
+									<br />\
+									<p><strong>EMERALD CLUB PROGRAM RULES AND CONDITIONS</strong></p>\
+									<ol class="iso-ualpha-list iso-list-indent rich-text">\
+										<li><u>General</u>\
+										<br />\
+										<br />\
+										<br />\
+											<ol class="iso-num-list iso-main-list">\
+												<li class="iso-num-list-padding"><strong>Contracting Parties:</strong> For customers who reside in participating countries in the European Economic Area (EEA) and Switzerland the Emerald Club ("Program") Program Rules and Conditions ("Agreement") is entered into between the customer enrolling into the Emerald Club ("you" and "your") and EAN Data Services UK Limited, Enterprise House, Vicarage Road, Surrey, Egham TW20 9FB, which is the data controller for all legal purposes. If you reside in a participating country outside the EEA and Switzerland, including the United States, Canada, Australia, and Latin American Caribbean, the Agreement is entered into between you and EAN Services, LLC, 600 Corporate Park Drive, St. Louis, Missouri 63105 (Both EAN Data Services UK Limited and EAN Services, LLC, in their respective capacities, are hereinafter collectively referred to as "Administrator").</li>\
+												<li class="iso-num-list-padding"><strong>How to become a Member:</strong> By submitting the completed application form for the Program via our brand websites <a href="http://www.nationalcar.com">www.nationalcar.com</a>, where available, or to an agent working for an affiliate of Administrator in the U.S, Canada, the EEA and Switzerland, Australia, and the Latin American Caribbean you submit an offer to Administrator to enroll as a member in the Program ("Member") subject to this Agreement. After assessing your application, Administrator will send you an email and confirm your membership at which point in time you and Administrator are bound by this Agreement. Administrator will send your Membership Number via email to the email address provided. Before submitting your application online, all information you entered into the application form will be displayed in an application summary for your examination. You may then identify and correct any input errors prior to submitting your application. This Agreement can be concluded in the following languages: English, French, Spanish, Portuguese, Italian, and German. In the event of a conflict between the version of the Agreement in your local language and a version in a different language, including English, the version of the Agreement in your local language will prevail. Where the Agreement is not available in your local language, the English version will control. The contract terms will be stored by Administrator after conclusion of the contract and will be available to you via one of our branded websites, such as <a href="http://www.nationalcar.com">www.nationalcar.com</a>. You may print or save a copy of the Agreement before submitting your application.</li>\
+												<li class="iso-num-list-padding"><strong>Your Profile:</strong> You agree to provide Administrator with true, current and accurate information in your Program online account ("Profile"), including your name, address, telephone number, email address, driver\'s license and credit card information. You agree to promptly update your Profile or otherwise notify Administrator if any of the information contained in your Profile has changed. If you update your email address on your Profile at any time through a rental transaction, you agree that Administrator may rely on the updated email address for future communications under this Program. If your Membership Number or any credit card listed in your Profile (a) is lost, stolen or invalidated, (b) you suspect it is being used without your permission, or (c) expires, you will promptly notify Administrator. You agree that it is your responsibility to notify Administrator of any such changes and Administrator is entitled to rely upon any and all information provided by you and contained in your Profile as being current and accurate. You understand that the information contained in your Profile will be part of any rental agreement you conclude as a Member with Administrator\'s affiliates or licensees. Administrator may update your Profile as necessary to correct contract ID numbers.</li>\
+												<li class="iso-num-list-padding"><strong>Changes to the Agreement:</strong> If Administrator decides to change or amend the Agreement, Administrator (a) will give you written notice of those changes or amendments to the Agreement, and (b) provide you with a hyperlink to an Internet website address where the revised version of the Agreement can be found. <em>Members residing in Argentina, Australia, Austria, Belgium, Chile, Costa Rica, Denmark, Germany, Italy, Mexico, Portugal, Sweden, Switzerland and UK will need to consent to the revised version of the Agreement in order to be bound by it.</em> Members residing in other countries will need to discontinue using the Program when making rentals in order to decline such changes or amendments. You may also obtain a free copy of the latest version of the Agreement by visiting one of our branded websites, such as <a href="http://www.nationalcar.com">www.nationalcar.com</a>, or by contacting National Car Rental, Member Services, 8421 St. John Industrial Way, St. Louis, MO 63144, or at 1-800-962-7070, seven days a week, 8:00 a.m. – 8:00 p.m. Eastern Standard Time (depending on your country of residence, this call may be an international call, and may be subject to the relevant charges depending on your operator).</li>\
+												<li class="iso-num-list-padding"><strong>Electronic Communications:</strong> To the fullest extent permitted by applicable law, this Agreement and any notices or other communications regarding your Profile and/or your use of the Program ("<u>Communications</u>"), may be provided to you electronically and you agree to receive Communications in an electronic form. Electronic Communications may be delivered to the last electronic mail address in your Profile. All Communications in either electronic or paper format will be considered to be in "writing". <em>Unless you are a Member residing in the EEA and Switzerland, all Communications will be considered to have been received no later than five (5) business days after dissemination, whether or not you have received or retrieved the Communications.</em> Although Administrator reserves the right to provide Communications in paper format to you using your most recent postal address in your Profile, you expressly agree that any notice due under this Agreement may be given in email form to the email address provided by you and contained in your Profile. Without limiting anything contained in Chapter A, Section 3 (Your Profile), you expressly agree that it is your sole responsibility to keep your email address current and up-to-date and that Administrator may reasonably assume that any email sent by Administrator to the email address in your Profile will be received by you. Where permitted by law, your consent to receive Communications electronically is valid until you revoke your consent by terminating this Agreement. <em>For Members residing in Spain, Administrator will confirm receipt of your acceptance of this Agreement using the same means that you used to send your acceptance communication (e.g., if you used an electronic communication, Administrator will also use an electronic communication).</em>\
+													<br />\
+													<br />\
+													<em>This Section 5 in Chapter A does not apply to Members residing in Germany, Italy and Portugal.</em>\
+												</li>\
+												<li class="iso-num-list-padding"><strong>Transactional/Marketing emails:</strong> With your consent (where required by law), Administrator, its affiliates and/or their agents will provide to you certain transactional and marketing emails as a benefit of membership. Transactional emails will include confirmations of reservation requests for reservation requests made on any of the public websites of Administrator\'s affiliates that will be sent out directly following the placement of a reservation request. Transactional emails may also include but are not limited to the following: (a) reservation request reminders for reservation requests made on any of the public websites of Administrator\'s affiliates, (b) a monthly statement detailing your rental activity and award accruals, (c) arrival alerts containing directions and pertinent information, (d) return alerts confirming your return time and providing pertinent information regarding your National return location, (e) tolls and charges, and (f) notification of an expired driver\'s license or credit card. To receive marketing emails, you are required to provide an explicit opt-in on the Email Specials page, in the Member Application process, or in your Member profile. You can choose to opt out of certain or all of these transactional communications and any Marketing communications at any time by (i) signing in to your Profile on one of our branded websites, such as <a href="http://www.nationalcar.com">www.nationalcar.com</a>, or on our mobile app (ii) calling 1-800-962-7070 (depending on your country of residence, this call may be an international call, and may be subject to the relevant charges depending on your carrier) or (iii) following the procedure detailed in your Rental Agreement (as defined below) .</li>\
+												<li class="iso-num-list-padding"><strong>Privacy Policy of Administrator and Licensees:</strong> All information provided by you whether as a result of enrolling in the Emerald Club Program or otherwise in connection with the Emerald Club Program, is subject to the terms and conditions of the privacy policies of: EAN Data Services UK Limited, for all Members residing in the EEA and Switzerland; and EAN Services, LLC, for all other Members, which are available at <a href="http://www.nationalcar.com">www.nationalcar.com</a> and (for Members resident in Canada) at <a href="http://www.nationalcar.ca">www.nationalcar.ca</a> (the "<u>Privacy Policies</u>"). Administrator (either EAN Services, LLC or, in the case of Members residing in the EEA or Switzerland, EAN Data Services UK Limited, as applicable) reserve the right to amend either or both of the Privacy Policies from time to time. In the event of a change to a Privacy Policy, Administrator shall provide notice to Members in the manner set forth in the applicable Privacy Policy. Some National rental locations in the U.S., Canada, EEA, Australia, and the Latin American Caribbean are owned and operated by independent licensees that are not controlled by Administrator or its affiliates ("<u>Licensees</u>"). Administrator does not control the use of any personally identifiable or payment information collected by such Licensees. Licensees are required to identify themselves (i.e., at their locations and in their agreements, sales materials, business cards, marketing materials, advertisements and other National branded materials) as "An Independent National Car Rental Licensee" or by other similar terms. Each Licensee maintains its own privacy policy ("<u>Licensee Policy</u>"), and Administrator is not responsible for the information practices of any Licensee to the fullest extent permitted by law. If you disagree with any of the terms and conditions of the Privacy Policy and/or the Licensee Policy applicable to you, you may instruct Administrator to cancel your enrollment in the Program at any time. For the purposes of applicable data protection legislation, EAN Data Services UK Limited is the data controller for Members who are residents in the EEA and Switzerland.</li>\
+												<li class="iso-num-list-padding"><strong>Limitation of Liability:</strong>\
+													<br />\
+													<br />\
+													<ol class="iso-num-list iso-main-list">\
+														<li class="iso-num-list-padding iso-subsection"><strong>For Members residing in the EEA and Switzerland:</strong><br /><br /> In no event shall Administrator be liable to Members for any indirect, incidental or consequential damages or any loss or damage which is not within the reasonable control of Administrator; provided, however, nothing in this Agreement shall exclude or limit Administrator\'s liability for (i) the tort of deceit; (ii) death or personal injury caused by negligence; or (iii) any liability which cannot be excluded or limited by law.</li>\
+														<li class="iso-subsection"><strong>For Members residing in any other countries:</strong><br /><br /> Administrator shall not be liable to Member for any incidental, indirect, consequential, special, or punitive damages, or lost profits, goodwill, savings, or use, of any kind or nature arising out of, or relating to the performance, breach, or termination of this Agreement or any services, whether such damage or loss is foreseeable or not, whether Member has been advised of the possibility thereof or not, and whether such liability is asserted on the basis of contract, tort (including negligence or strict liability), or otherwise.<br /><br />\
+															<em>For Members residing in Australia, the limitation of liability above is subject to any rights the Member may have to compensation for loss under any applicable statutory guarantees or any other applicable laws which cannot be limited or excluded. This Agreement must be read subject to those statutory provisions.</em>\
+														</li>\
+													</ol>\
+												</li>\
+											</ol>\
+										</li>\
+										<li><u>Emerald Club Program</u>\
+										<br />\
+										<br />\
+										<br />\
+											<ol class="iso-num-list iso-main-list">\
+												<li class="iso-num-list-padding"><strong>Eligibility:</strong> Because of the nature of the services offered in the Program, you must be at least twenty-one (21) years old to enroll as a Member. If you are not twenty-one (21) or over, you cannot enroll in the Program, and Administrator will reject your application.</li>\
+												<li class="iso-num-list-padding"><strong>Rental agreements:</strong> Program membership does not guarantee your ability to rent vehicles from Administrator\'s affiliates or licensees. All rentals remain subject and subordinate to availability and any applicable qualifications and rental conditions. For example, the minimum or maximum age to rent may vary by country. See rental policies for renting location. In addition, all reservation requests are non-binding for the Member and the corresponding affiliate or licensee of Administrator. There is no no-show penalty for the Member (except Fixed Based Operator deliveries); the corresponding affiliate or licensee of Administrator is also not required to keep the vehicle available.</li>\
+												<li class="iso-num-list-padding"><strong>Renewal and Termination of Membership:</strong>\
+													<br />\
+													<br />\
+													<ol class="iso-num-list iso-main-list">\
+														<li class="iso-num-list-padding iso-subsection">Membership in the Program commences when Administrator confirms your enrollment ("<u>Enrollment Date</u>") and remains in effect until 11:59:59 p.m. Central Standard Time on December 31 of the following calendar year (the "<u>Initial Term</u>"). Thereafter, your membership in the Program shall be automatically renewed (each a "<u>Renewal</u>") for subsequent 12 months terms (each a "<u>Renewal Term</u>", and together with the Initial Term, the "<u>Term</u>") at 12:00:00 a.m. Central Standard Time on January 1 of the following calendar year (the "Renewal Date") provided: (a) you have not requested that Administrator terminate your enrollment in the Program prior to the applicable Renewal Date, and (b) Administrator has not decided not to renew your membership in the Program, in which case Administrator will inform you accordingly with two weeks\' notice prior to the applicable Renewal Date. Each Renewal shall be subject to the then-current Agreement. <em>Members residing in Argentina, Belgium, Chile, Costa Rica, Denmark, Germany, Italy, Mexico, Portugal, Spain, Sweden, Switzerland and UK must explicitly consent to the then-current Agreement for the Renewal to be effective. If such Member residing in any of the above-listed countries does not agree to the then-current Agreement, their membership cannot be renewed, and they will therefore be unable to continue renting a vehicle as an Emerald Club member and thereby earning rental credits under the Program.</em></li>\
+														<li class="iso-num-list-padding iso-subsection">The Member has the right to terminate enrollment in the Program at any time by giving notice to Administrator. Administrator reserves the right to terminate a membership at any time for good cause, including but not limited to a serious violation of this Agreement, a serious violation of any rental contract, harassment or other abusive behavior towards employees or customers of Administrator, its affiliates or licensees, failure to obey the instructions of Administrator\'s, its affiliate\'s or licensee\'s staff in charge, failure to pay any balance due for rentals, or fraudulent activity of the Member, by giving notice. The Member\'s right to terminate for good cause remains unaffected.</li>\
+														<li class="iso-num-list-padding iso-subsection"><em>In case of termination or non-renewal of membership of a Member residing in Austria, Denmark, and Germany, the rental credits and Free Days shall remain valid for the time period governed in Section 8 of this Chapter B below. With respect to Members residing in any other countries, the rental credits and Free Days are not valid after termination or non-renewal of the membership.</em> Rental credits relating to a rental car reservation request placed prior to the effective date of the termination will be added to the Member\'s account and will expire as governed in Section 8 of this Chapter B below.</li>\
+														<li class="iso-subsection">For purposes of the Emerald Club Program Rules and Conditions, the term "United States" shall mean the 50 United States, District of Columbia, and Puerto Rico.</li>\
+													</ol>\
+												</li>\
+												<li class="iso-num-list-padding"><strong>Membership Level:</strong>\
+													<br />\
+													<br />\
+													<ol class="iso-num-list iso-main-list">\
+														<li class="iso-num-list-padding iso-subsection">The Program has three membership levels: Emerald Club, Emerald Club Executive, and Emerald Club Executive Elite. Members attain their membership level based upon the number of "qualifying vehicle rentals". A "qualifying vehicle rental" is defined as the number of vehicle rentals with, or the number of days a Member rents a vehicle from (a) National rental locations in each calendar year in the U.S., Canada, Europe, Australia, the Asia Pacific region, and/or the Latin American Caribbean and (b) all participating Enterprise Rent-A-Car brand rental locations (non-participating Enterprise Rent-A-Car brand locations are listed in Section 4.2 of this Chapter B, below) in each calendar year in the U.S., Canada and participating locations in Europe, Australia, the Asia Pacific region and/or the Latin American Caribbean, unless the rental qualifies as one of the following types of rentals: (1) rentals on rate plans for accounts that do not allow employees to participate in award programs; (2) insurance replacement rentals; (3) dealer replacement, body shop or fleet replacement rentals; or (4) rentals by employees of Enterprise Holdings, Inc. or its affiliates or subsidiaries, licensee and licensee employees booked under an employee discount rate.</li>\
+														<li class="iso-num-list-padding iso-subsection"><strong>Qualifying vehicle rentals and rental credits are not available at the following, non-participating Enterprise Rent-A-Car brand locations in the U.S. and Canada:</strong> <u>UNITED STATES</u>: California: Arcata/Eureka Airport; Idaho: Fanning Falls Airport, Magic Valley Regional Airport; Kansas: Wichita Airport; Montana: Billings Airport; Bozeman Airport; Helena Regional Airport; Glacier Int\'l Airport; Missoula Int\'l Airport; South Dakota: Rapid City Regional Airport; Wisconsin: Outgamie County Airport; Austin Straubel Airport; Dane County Airport; General Mitchell Field; Wyoming: Jackson Hole Airport; <u>CANADA</u>: British Columbia: Comox Valley Airport; Kamloops Airport, Kelowna Int\'l Airport; North Peace Regional Airport; Ontario: Thunder Bay Int\'l Airport; Saskatchewan: Regina International Airport.</li>\
+														<li class="iso-num-list-padding iso-subsection">Membership levels are determined as follows on a calendar year basis:\
+															<br />\
+															<br />\
+															<table border="1" width="586" cellspacing="0" cellpadding="0">\
+																<tbody>\
+																	<tr>\
+																		<td width="236">\
+																			<p align="center"><u>Membership Level</u></p>\
+																		</td>\
+																		<td width="161">\
+																			<p align="center"><u>Qualifying Vehicle Rentals</u> :</p>\
+																		</td>\
+																		<td width="189">\
+																			<p align="center"><u>Qualifying Rental Days</u></p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="236">\
+																			<p align="center">Emerald Club</p>\
+																		</td>\
+																		<td width="161">\
+																			<p align="center">1-11</p>\
+																		</td>\
+																		<td width="189">\
+																			<p align="center">1-39</p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="236">\
+																			<p align="center">Emerald Club <em>Executive</em></p>\
+																		</td>\
+																		<td width="161">\
+																			<p align="center">12-24</p>\
+																		</td>\
+																		<td width="189">\
+																			<p align="center">40-84</p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="236">\
+																			<p align="center">Emerald Club <em>Executive Elite</em></p>\
+																		</td>\
+																		<td width="161">\
+																			<p align="center">25+</p>\
+																		</td>\
+																		<td width="189">\
+																			<p align="center">85+</p>\
+																		</td>\
+																	</tr>\
+																</tbody>\
+															</table>\
+														</li>\
+														<li class="iso-subsection">Members will be re-tiered periodically throughout each calendar year based upon the applicable Emerald Club Rules and Conditions. When a Member qualifies for a higher membership level, Administrator will send materials to the Member based on the higher membership level. In February of each year, Administrator will send new materials to each Member whose account activity in the prior year was insufficient to maintain their membership level. Members who enrolled through our partnership with Enterprise Rent-A-Car will receive tier qualification information from Enterprise Rent-A-Car.</li>\
+													</ol>\
+												</li>\
+												<li class="iso-num-list-padding"><strong>Associated Partner Reward or Frequent Traveler Programs:</strong> As a benefit of enrollment in the Program, Members may choose to earn frequent flyer miles, hotel points or other rewards offered in connection with our partners (each a "Partner Rewards Program"). Partner Rewards are available for National Car Rental and Enterprise Rent-A-Car rentals or for National Car Rental brand reservations serviced by Enterprise Rent-A-Car only when the Partner Rewards Program is a valid partner of the reservation brand and the rental is a qualifying rental. In the event that you enroll in certain Partner Reward Programs, you hereby authorize Administrator to collect an applicable Frequent Traveler Recovery Fee (Freq Trav Rec Fee) as further specified to you in the enrollment process or if you modify your profile to add a Partner Rewards Program. The Frequent Traveler Recovery Fee (Freq Trav Rec Fee) applies to qualifying rentals in the United States, Canada and Puerto Rico when the Renter chooses to earn miles/points in certain Partner Rewards Programs. The Frequent Traveler Recovery Fee offsets a portion of the expense paid by Administrator to the applicable Partner Rewards Program when Administrator purchases said miles/points. You may also be subject to additional restrictions and rules imposed by each partner\'s own Partner Rewards Program rules. A list of the Frequent Traveler Recovery Fees collected by Administrator is available atnationalcar.com. The fees may be in addition to any other fees or charges the airline, hotel or other partner may impose in connection with your use or redemption of any earned miles, points or other form of reward. You are responsible for understanding and complying with the rules, restrictions, and terms and conditions imposed by a partner in connection with such Partner Rewards Program.</li>\
+												<li class="iso-num-list-padding"><strong>Rental Credits and Free Days:</strong>\
+													<br />\
+													<br />\
+													<ol class="iso-num-list iso-main-list">\
+														<li class="iso-num-list-padding iso-subsection"><strong>Rental Credits:</strong> For vehicle rentals at National Car Rental and Enterprise Rent-A-Car brand locations in the U.S., Canada, and participating locations in Europe, Australia, the Asia Pacific region and the Latin American Caribbean, Members will receive one rental credit for each Qualifying Vehicle Rental of up to seven (7) consecutive days. For Qualifying Vehicle Rentals longer than seven (7) consecutive days, Member will receive one additional rental credit for every four (4) additional consecutive days of the same Qualifying Vehicle rental.<br /><br />\
+															Examples:\
+															<br />\
+															<br />\
+															<table border="1" width="397" cellspacing="0" cellpadding="0">\
+																<tbody>\
+																	<tr>\
+																		<td width="236">\
+																			<p align="center"><u>Qualifying Rental Days</u></p>\
+																		</td>\
+																		<td width="161">\
+																			<p align="center"><u>Total Rental Credits</u></p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="236">\
+																			<p align="center">1-7</p>\
+																		</td>\
+																		<td width="161">\
+																			<p>1</p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="236">\
+																			<p align="center">8-11</p>\
+																		</td>\
+																		<td width="161">\
+																			<p align="center">2</p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="236">\
+																			<p align="center">12-15</p>\
+																		</td>\
+																		<td width="161">\
+																			<p align="center">3</p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="236">\
+																			<p align="center">16-19</p>\
+																		</td>\
+																		<td width="161">\
+																			<p align="center">4</p>\
+																		</td>\
+																	</tr>\
+																</tbody>\
+															</table>\
+															<br />\
+															Consecutive, multiple or overlapping rentals in the same rental location do not qualify as additional consecutive days for purposes of receiving additional rental credits. For Non-qualifying vehicle rentals as defined in Section 4.1. of Chapter B above and for rentals from the non-participating Enterprise Rent-A-Car brand locations listed in Section 4.2 of Chapter B above, or when a Member chooses to receive mileage, credits or points for a Partner Rewards program (such as, but not limited to, an airline frequent flyer or hotel points program) or Members enrolled through our partnership with Enterprise Rent-A-Car who are earning Enterprise Plus points ("Non-Qualifying Vehicle Rentals") no rental credits will be issued. Rental credits will be issued at the completion of each rental and electronically stored in the Members\' Profile. Rental credits cannot be redeemed for cash or other value.\
+														</li>\
+														<li class="iso-num-list-padding iso-subsection"><strong>Free Days:</strong> Rental credits will, depending upon Membership level, be automatically converted to free rental days ("Free Days") (optional products, taxes and fees are not included):\
+															<br />\
+															<br />\
+															<table border="1" width="406" cellspacing="0" cellpadding="0">\
+																<tbody>\
+																	<tr>\
+																		<td width="180">\
+																			<p><u>Membership Level</u></p>\
+																		</td>\
+																		<td width="227">\
+																			<p><u>Rental Credits Needed for One Free Day </u></p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="180">\
+																			<p>Emerald Club</p>\
+																		</td>\
+																		<td width="227">\
+																			<p>7 (Valid for up to a mid-sized rental vehicle)</p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="180">\
+																			<p>Emerald Club <em>Executive</em></p>\
+																		</td>\
+																		<td width="227">\
+																			<p>6 (Valid for up to a full-size rental vehicle)</p>\
+																		</td>\
+																	</tr>\
+																	<tr>\
+																		<td width="180">\
+																			<p>Emerald Club <em>Executive</em> <em>Elite</em></p>\
+																		</td>\
+																		<td width="227">\
+																			<p>5 (Valid for any car class except Trucks and exotic vehicles)</p>\
+																		</td>\
+																	</tr>\
+																</tbody>\
+															</table>\
+															<br />\
+															Different thresholds may apply for certain Members depending upon where they reside. Please revert to your supplemental information for details. Free Days do not qualify for rental credits but will qualify toward membership levels. Member is responsible for all fees and taxes applicable to the rental credits and Free Days the Member earns under the Program. Payment for such fees and taxes shall be the sole responsibility of the Member.\
+														</li>\
+														<li class="iso-num-list-padding iso-subsection"><strong>Redemption of Free Days:</strong> Free Day(s) may be redeemed electronically when submitting a reservation request for a vehicle on our branded websites <a href="http://www.nationalcar.com">www.nationalcar.com</a>, our branded mobile app or Member may call 1-800-CARRENT (1-800-227-7368) (depending on your country of residence, this call may be an international call, and may be subject to the relevant charges depending on your operator). No paper certificates will be issued for Free Day(s). Free Day(s) can only be used on National Car Rental Brand reservation requests at participating National Car brand rental locations in the U.S., Canada, Australia, the Asia Pacific region the Latin American Caribbean (and, in Europe, for National Car rental brand reservations serviced by Enterprise). Free Days are combinable up to seven (7) consecutive days maximum on one rental. Members may redeem Free Days for periods of no longer than seven (7) Free Days per rental transaction. These Free Days do not include charges that are not included in the base rates of the particular applicable jurisdiction, such as (i) taxes, assessments, use fees or other governmentally imposed, authorized or permitted surcharges or pass-throughs, (ii) license recoupment fees, airport fees and concession recoupment fees, (iii) service charges and fees, (iv) vehicle license recovery fees, (v) damage waiver, the cost of optional insurance products, fuel charges, optional upgrades, underage driver\'s fees, infant seats or other optional items, (vi) charges or drop-off charges for one way rentals, or (vii) tolls or parking violations. Members entitled to a Free Day for a given class of vehicle may use the Free Day as partial payment for a more expensive vehicle class. Free Days are redeemable for passenger vehicles only.</li>\
+														<li class="iso-num-list-padding iso-subsection"><strong>Rental credits are non-transferable.</strong> Free Days are transferable to immediate family members of Member (e.g., spouse or domestic partner, child over the age of 21, parent) irrespective of their membership in the Program. Members may transfer up to three (3) Free Days per calendar year. Once transferred, Free Days cannot be returned to Member\'s account. Transferred Free Days may be redeemed electronically when submitting a reservation request for a vehicle on one of our branded websites, such as nationalcar.com, on our branded mobile app or customer may call 1-800-CARRENT (1-800-227-7368). (Depending on your country of residence, this call may be an international call and may be subject to the relevant charges depending on your operator.) No paper certificates will be issued for Free Days. Free Days can only be used on National Car Rental brand reservation requests at participating National Car Rental brand locations in the United States, Canada, Australia, the Asia Pacific region and Latin American Caribbean countries (and, in Europe, for National Car Rental brand reservations serviced by Enterprise). Free Days are combinable up to three (3) consecutive days maximum on one rental. Customers may redeem Free Days for periods of no longer than three (3) Free Days per rental transaction. These Free Days do not include charges that are not included in the base rates of the particular applicable jurisdiction, such as (i) taxes, assessments, use fees or other governmentally imposed, authorized or permitted surcharges or pass-throughs; (ii) license recoupment fees, airport fees and concession recoupment fees; (iii) service charges and fees; (iv) vehicle license recovery fees; (v) damage waiver, the cost of optional insurance products, fuel charges, optional upgrades, underage driver\'s fees, infant seats or other optional items; (vi) charges or drop-off charges for one way rentals; or (vii) tolls or parking violations. Free Days are redeemable for passenger vehicles only. Transferred Free Days are valid for one (1) year from the original month of transfer.</li>\
+														<li class="iso-subsection"><strong>Fraudulent Activity.</strong> If you attempt to use or earn Rental Credits or Free Days in a fraudulent way, we may: (a) Take away all Rental Credits and/or Free Days in your Emerald Club membership; and/or (b) Terminate your Emerald Club Membership. The Emerald Club program is intended to benefit individuals rather than companies. Members may use Rental Credits for any personal or business purposes they choose. For purposes of administrating the Emerald Club program, it is considered fraudulent and abusive for Members to use a single Emerald Club Account for the purpose of accumulating points for company use.</li>\
+													</ol>\
+												</li>\
+												<li class="iso-num-list-padding"><strong>Validity of rental credits and Free Days:</strong> Rental credits remain valid so long as the Member retains membership in the Program. Free Days will expire on December 31 of the year following the year in which they were earned or immediately upon cancellation or termination of membership in the Program. <em>For Members residing in Austria, Denmark and Germany: Rental credits remain valid only so long as such Member retains membership in the Program, but in no event less than 36 months starting from the day on which they were earned; Free Days will expire after 36 months starting from the day on which they were earned.</em></li>\
+												<li class="iso-num-list-padding"><strong>Benefits of Emerald Club <em>Executive</em> and Emerald Club <em>Executive Elite</em> Members:</strong> Emerald Club <em>Executive</em> and Emerald Club <em>Executive Elite</em> Members will be charged the rate for the next lower car class when renting a full-size through luxury vehicle (excluding specialty vehicles) from National rental locations in the U.S., Canada, and participating locations in Europe, Australia, the Asia Pacific region and the Latin America Caribbean.</li>\
+												<li class="iso-num-list-padding"><strong>Trademarks, Logos and Service Marks:</strong> "Emerald Club", "Emerald Club Program", "National Car Rental" and all associated trademarks, logos and service marks, along with the contents, structure, and features of the Program are the exclusive property of Administrator and its affiliates and nothing contained in the Rules or by your enrollment or participation in the Program should be construed as granting, by implication, estoppel, or otherwise, any license, interest or right in or to any of the foregoing.</li>\
+												<li class="iso-num-list-padding"><strong>Suspension and Alteration of the Program:</strong> To the fullest extent permitted by law and without prejudice to any statutory rights, Administrator reserves the right to terminate, restrict, suspend or otherwise alter this Agreement and/or the Program by providing 14 days\' prior notice to Member in accordance with Chapter A, Section 4 of the Agreement as set forth above. The Program is void where prohibited or restricted by law. <em>This Section 10 of Chapter B does not apply to Members residing in Argentina, Austria, Germany, Mexico, Poland and Portugal.</em></li>\
+												<li class="iso-num-list-padding"><strong>Force Majeure:</strong> Administrator may suspend or terminate the Program as a result of a force majeure event, including but not limited to fire, flood, earthquake, elements of nature or acts of God, labor strikes, or social or political disruptions that prevent Administrator from fulfilling its obligations under this Agreement.</li>\
+												<li class="iso-num-list-padding"><strong>Dispute Resolution Provision - Mandatory Arbitration Agreement:</strong> RENTER AND OWNER EACH WAIVE THEIR RIGHT TO A JURY TRIAL OR TO PARTICIPATE IN A CLASS ACTION PURSUANT TO THE FOLLOWING TERMS. RENTER AND OWNER AGREE TO ARBITRATE ANY AND ALL CLAIMS, CONTROVERSIES OR DISPUTES OF ANY KIND (“CLAIMS”) AGAINST EACH OTHER ARISING OUT OF OR RELATING IN ANY WAY TO THIS AGREEMENT, INCLUDING BUT NOT LIMITED TO, CLAIMS RELATING TO OWNER’S PRODUCTS AND SERVICES, CHARGES, ADVERTISINGS, OR RENTAL VEHICLES. FOR THE PURPOSES OF THIS DISPUTE RESOLUTION PROVISION, “RENTER” ALSO INCLUDES ANY AUTHORIZED DRIVER UNDER THE AGREEMENT, AND ANY OF RENTER’S AGENTS, BENEFICIARIES OR ASSIGNS, OR ANYONE ACTING ON BEHALF OF THE FOREGOING, AND “OWNER” ALSO INCLUDES ANY OF ITS EMPLOYEES, AGENTS, AFFILIATES, PARENTS, SUBSIDIARIES, BENEFICIARIES, ASSIGNS, AND VENDORS, INCLUDING BUT NOT LIMITED TO ITS SERVICE PROVIDERS AND MARKETING PARTNERS. RENTER AND OWNER AGREE THAT NO CLAIMS WILL BE PURSUED OR RESOLVED AS PART OF A CLASS ACTION, PRIVATE ATTORNEY GENERAL OR OTHER REPRESENTATIVE ACTION OR PROCEEDING, THAT NO ARBITRATION FORUM WILL HAVE JURISDICTION TO DECIDE ANY CLAIMS ON A CLASS-WIDE, COLLECTIVE, OR CONSOLIDATED BASIS, AND THAT NO RULES OR OTHER PROCEDURES FOR CLASS-WIDE OR COLLECTIVE ARBITRATION WILL APPLY. This Dispute Resolution Provision is to be broadly interpreted and applies to all Claims based in contract, tort, statute, or any other legal theory, and all Claims that arose prior to or after termination of the Rental Agreement. However, the parties agree that either party may bring an individual action in a small claims court with valid jurisdiction, provided that the action remains in that court (other than any appeal of the small claims court ruling), is made on behalf of or against Renter only and is not made part of a class action, private attorney general action or other representative or collective action. The parties also agree that claims against or by a third-party insurance company ostensibly providing coverage to Renter or any AAD or the application of Owner’s financial responsibility relating to the use or operation of Vehicle may be brought in a court with valid jurisdiction.<br />\
+													(1) Procedure. A party must send a written Notice of Dispute (“Notice”) describing (a) the nature and basis of the claim; and (b) the relief sought, to the other party. The Notice to Owner should be addressed to: CT Corporation, 208 S LaSalle, Suite 814, Chicago, IL 60604 (“Notice Address”). If Owner and Renter do not resolve the claim within thirty (30) days after the Notice is received, a party may commence an arbitration by filing a demand for arbitration with the American Arbitration Association (“AAA”) pursuant to its Consumer Arbitration Rules. Claims will be resolved pursuant to the AAA’s Consumer Arbitration Rules in effect at the time of the demand, as modified by this agreement. However, a single arbitrator will be selected according to AAA’s Commercial Arbitration Rules. The arbitrator will conduct hearings, if any, by teleconference or videoconference, rather than by personal appearances, unless the arbitrator determines upon request by Renter or by Owner that an in-person hearing is appropriate. Any in-person appearances will be held at a location which is reasonably convenient to both parties with due consideration of their ability to travel and other pertinent circumstances. If the parties are unable to agree on a location, such determination should be made by the AAA or by the arbitrator. The AAA rules are available online at <a href="http://www.adr.org">www.adr.org</a>. Except as required by law, neither a party nor an arbitrator may disclose the existence, content or results of any dispute or arbitration hereunder without the prior written consent of both parties.<br />\
+													(2) Arbitrator’s Authority: The arbitrator is bound by this Agreement, the Federal Arbitration Act (“FAA”) and AAA’s Consumer Arbitration Rules. The arbitrator has no authority to join or consolidate claims, or adjudicate joined and consolidated claims. The arbitrator has exclusive authority to resolve any dispute relating to the scope, interpretation, applicability, enforceability or formation of this Agreement, including whether it is void. The parties agree that the arbitrator’s decision and award will be final and binding and may be confirmed or challenged in any court with jurisdiction as permitted under the FAA. The arbitrator can award the same damages and relief as a court, but only in favor of an individual party and for a party’s individual claim.<br />\
+													(3) Arbitration Costs: Renter will be responsible for his/her share of any arbitration fees (e.g., filing, administrative, etc.), but only up to the amount of filing fees Renter would incur if the claims were filed in court. Owner will be responsible for all additional arbitration fees. Renter is responsible for all other costs/fees that it incurs in arbitration, e.g., fees for attorneys, expert witnesses, etc. Renter will not be required to reimburse Owner for any fees unless the arbitrator finds that the substance of Renter’s claim(s) or the relief sought is frivolous. If the arbitrator makes such a finding, AAA Rules will govern the payment of all fees, and Owner may seek reasonable attorney’s fees. Owner will pay all fees and costs it is required by law to pay.<br />\
+													(4) Governing Law and Enforcement: Notwithstanding anything in paragraph 24, this Dispute Resolution Provision is made pursuant to a transaction involving interstate commerce, and shall be governed by the FAA, 9 U.S.C. §§ 1-16. This Dispute Resolution Provision was drafted in compliance with the laws in all states, however, if any portion of it is deemed to be invalid or unenforceable or is found not to apply to a claim, the remainder of this Dispute Resolution Provision remains in full force and effect. Except, if the class-arbitration waiver provision is deemed unenforceable, any class action claim(s) must proceed in a court of competent jurisdiction.\
+												</li>\
+												<li class="iso-num-list-padding"><strong>DISPUTE RESOLUTION PROVISION - MANDATORY ARBITRATION AGREEMENT (CANADIAN RESIDENTS ONLY): RENTER AND OWNER EACH WAIVE THEIR RIGHT TO A JURY TRIAL OR TO PARTICIPATE IN A CLASS ACTION PURSUANT TO THE FOLLOWING TERMS. RENTER AND OWNER AGREE TO ARBITRATE ANY AND ALL CLAIMS, CONTROVERSIES OR DISPUTES OF ANY KIND ("CLAIMS") AGAINST EACH OTHER ARISING OUT OF OR RELATING IN ANY WAY TO THIS AGREEMENT, INCLUDING BUT NOT LIMITED TO, CLAIMS RELATING TO OWNER\'S PRODUCTS AND SERVICES, CHARGES, ADVERTISINGS, OR RENTAL VEHICLES. FOR THE PURPOSES OF THIS DISPUTE RESOLUTION PROVISION, "RENTER" INCLUDES ANY AUTHORIZED DRIVER UNDER THE AGREEMENT, AND ANY OF RENTER\'S AGENTS, BENEFICIARIES OR ASSIGNS, OR ANYONE ACTING ON BEHALF OF THE FOREGOING, AND "OWNER" INCLUDES ANY OF OWNER\'S EMPLOYEES, AGENTS, AFFILIATES, PARENTS, SUBSIDIARIES, BENEFICIARIES, ASSIGNS, AND ITS SERVICE PROVIDERS AND MARKETING PARTNERS. RENTER AND OWNER AGREE THAT NO CLAIMS WILL BE PURSUED OR RESOLVED AS PART OF A CLASS ACTION OR OTHER REPRESENTATIVE ACTION OR PROCEEDING, THAT NO ARBITRATION FORUM WILL HAVE JURISDICTION TO DECIDE ANY CLAIMS ON A CLASSWIDE, COLLECTIVE, OR CONSOLIDATED BASIS, AND THAT NO RULES FOR CLASS-WIDE OR COLLECTIVE ARBITRATION WILL APPLY.</strong><br />\
+													This Dispute Resolution Provision is to be broadly interpreted and applies to all Claims based in contract, tort, statute, or any other legal theory, and all Claims that arose prior to or after termination of the Rental Agreement. However, the parties agree that either party may bring an individual action in a small claims court with valid jurisdiction, provided that the action remains in that court, is made on behalf of or against Renter only and is not made part of a class action, or other representative collective action. The parties also agree that claims involving a third-party insurance company ostensibly providing coverage to Renter or any AAD or the application of Owner\'s financial responsibility relating to the use or operation of Vehicle may be brought in a court with valid jurisdiction.<br />\
+													(1) Procedure. A party must send a written Notice of Dispute ("Notice") describing (a) the nature and basis of the claim; and (b) the relief sought, to the other party. The Notice to Owner should be addressed to: Baker & McKenzie LLP, Brookfield Place, Suite 2100, 181 Bay Street (PO Box 874), Toronto, Ontario Canada – M5J 2T3 ("Notice Address"). If Renter and Owner do not resolve the claim within thirty (30) days after the Notice is received, either party may commence an arbitration by filing a Notice of Arbitration with the International Centre for Dispute Resolution Canada ("ICDR Canada") pursuant to its ICDR Canada Arbitration Rules. Claims will be resolved pursuant to the ICDR Canada\'s Arbitration Rules in effect at the time of the Notice of Arbitration, as modified by this agreement. The number of arbitrators shall be one. The arbitrator will conduct hearings, if any, by teleconference or videoconference, rather than by personal appearances, unless the arbitrator determines upon request of a party that an in-person hearing is appropriate. Any in-person appearances will be held at a location which is reasonably convenient to both parties. If the parties are unable to agree on a location, such determination shall be made by the arbitrator or ICDR Canada. The ICDR Canada Arbitration Rules are available online at www.icdr.org. The language of the arbitration shall be English. Except as may be required by law, neither a party nor its representatives may disclose the existence, content, or results of any arbitration hereunder without the prior written consent of all parties.<br />\
+													(2) Arbitrator\'s Authority: The arbitrator is bound by this Agreement, the applicable domestic arbitration act ("domestic arbitration act") and ICDR Canada\'s Arbitration Rules. The arbitrator has no authority to join or consolidate claims, or adjudicate joined and consolidated claims. The arbitrator has exclusive authority to resolve any dispute relating to the scope, interpretation, applicability, enforceability or formation of this agreement, including whether it is void. The parties agree that the arbitrator\'s decision and award will be final and binding. The arbitrator can award the same damages and relief as a court, but only in favor of an individual party and for a party\'s individual claim.<br />\
+													(3) Arbitration Costs: Renter will be responsible for Renter\'s share of any arbitration fees (e.g., filing, administrative, etc.), but only up to the amount of filing fees Renter would incur if the claims were filed in court. Owner will be responsible for all additional arbitration fees. Renter is responsible for all other costs/fees that Renter incurs in arbitration, e.g., fees for attorneys, expert witnesses, etc. Renter will not be required to reimburse Owner for any fees unless the arbitrator finds that the substance of Renter\'s claim(s) or the relief sought is frivolous. If the arbitrator makes such a finding, ICDR Canada Arbitration Rules will govern the payment of all fees, and Owner may seek reasonable attorney\'s fees. Owner will pay all fees and costs it is required by law to pay.<br />\
+													(4) Governing Law and Enforcement: The domestic arbitration act of the provincial or territorial judicial district of the Rental Location applies to this Dispute Resolution Provision and governs whether a claim is subject to arbitration. If any portion of the Dispute Resolution Provision is deemed to be invalid or unenforceable or is found not to apply to a claim, the remainder of the Dispute Resolution Provision remains in full force and effect. Except, if the class-arbitration waiver provision is deemed unenforceable, any class action claim(s) must proceed in a court of competent jurisdiction.\
+												</li>\
+												<li class="iso-num-list-padding"><strong>Applicable Law:</strong> For members residing in the EEA and Switzerland, this Agreement shall be construed and interpreted in accordance with the laws of England. For Members outside the EEA and Switzerland (except for Australia), this Agreement shall be construed and interpreted in accordance with the laws of the State of Missouri. For members residing in Australia, this Agreement shall be construed and interpreted in accordance with the laws of New South Wales, Australia. Notwithstanding the foregoing, the Master Rental Agreement shall be governed by the laws of the jurisdiction in which the renter picks up the vehicle. Applicable mandatory laws remain unaffected.</li>\
+												<li class="iso-num-list-padding"><strong>Questions:</strong> In case of complaints, comments or questions please contact our customer service center at National Car Rental, Member Services, 8421 St. John Industrial Way, St. Louis, MO 63144, Telephone: (800) 962-7070 seven days a week, 8 am – 8 pm EST).</li>\
+											</ol>\
+										</li>\
+									</ol>',
+			},
+			ma : {
+				id: 'iso-mraTerms',
+				termsTitle: 'Master Rental Agreement',
+				content: '<p>For Non-U.S./Non-Canadian Residents: The below Master Rental Agreement becomes effective and is deemed to be accepted by you when you take possession of a vehicle in a country for which the below Master Rental Agreement provides country-specific rental terms and conditions.</p>\
+									<p>For U.S./Canadian Residents: You will agree to the below Master Rental Agreement including the Mandatory Arbitration Agreement when you click on the "I Accept" button during the registration for the Emerald Club.</p>\
+									<p><strong>Master Rental Agreement - Table Of Contents</strong></p>\
+									<ol class="iso-generic">\
+										<li>General Rental Terms and Conditions Applicable to Rentals in All Locations</li>\
+										<li>Additional Rental Terms and Conditions Applicable only to Rentals in United States and Canada</li>\
+										<li>Additional Rental Terms and Conditions Applicable only to Rentals in France, Germany, Ireland, Spain and the United Kingdom</li>\
+										<ol class="iso-generic-child">\
+											<li>General Rental Terms for France, Germany, Ireland, Spain and United Kingdom</li>\
+											<li>Specific Rental Terms for France, Germany, Ireland, Spain and United Kingdom\
+												<ol class="iso-specific-rental">\
+													<li>Specific Rental Terms for France</li>\
+													<li>Specific Rental Terms for Germany</li>\
+													<li>Specific Rental Terms for United Kingdom and Ireland</li>\
+													<li>Specific Rental Terms for Spain</li>\
+												</ol>\
+											</li>\
+										</ol>\
+										<li>Additional Rental Terms and Conditions Applicable only to Rentals in Belgium, Italy, Netherlands and Switzerland</li>\
+										<ol class="iso-generic-child">\
+											<li>For Rentals Originating in Belgium</li>\
+											<li>For Rentals Originating in Italy</li>\
+											<li>For Rentals Originating in Netherlands</li>\
+											<li>For Rentals Originating in Switzerland</li>\
+										</ol>\
+										<li>Additional Rental Terms and Conditions Applicable only to Rentals in Latin American Caribbean</li>\
+										<ol class="iso-generic-child">\
+											<li>For Rentals Originating in Costa Rica</li>\
+										</ol>\
+									</ol>\
+									<br />\
+									<hr>\
+									<br />\
+									<p><strong>MASTER RENTAL AGREEMENT</strong></p>\
+									<div id="iso-master-main" class="rich-text"></div>'
+			}
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.selector, function() {	
+				isoTest.log('Test Ready!');	
+  				isoTest.chall();
+			});
+		},
+		chall : function() {
+			isoTest.log('fn:Chall');
+
+			document.querySelector(isoTest.selector).classList.add("iso-hidden-text");
+			document.querySelector(".terms-container .rich-text.iso-hidden-text").setAttribute('aria-hidden','true');
+
+			document.querySelector(isoTest.selector).insertAdjacentHTML("afterend", isoTest.template);
+
+			var tags = document.querySelectorAll('.terms-container .rich-text.iso-hidden-text > *');
+			for(var i = 0; i < tags.length; i++) {
+				if (tags[i].textContent === 'MASTER RENTAL AGREEMENT' && tags[i].nodeName === 'P' && tags[i].nodeType === 1) {
+					tags[i].remove();
+					i = tags.length;
+				} else {
+					tags[i].remove();
+				}
+			}
+
+			for(var i = 0; i < tags.length; i++) {
+				if (tags[i].textContent.indexOf('A. General Rental Terms and Conditions Applicable to Rentals in All Locations') > -1) {
+					tags[i].setAttribute("id", "isoMAGeneral");
+				}
+
+				if (tags[i].textContent.indexOf('B. ADDITIONAL RENTAL TERMS AND CONDITIONS APPLICABLE ONLY TO RENTALS IN UNITED STATES AND CANADA') > -1) {
+					tags[i].setAttribute("id", "isoMAUS");
+				}
+
+				if (tags[i].textContent.indexOf('C. ADDITIONAL RENTAL TERMS AND CONDITIONS APPLICABLE ONLY TO RENTALS IN FRANCE, GERMANY, IRELAND, SPAIN AND UNITED KINGDOM') > -1) {
+					tags[i].setAttribute("id", "isoMAEU");
+				}
+
+				if (tags[i].textContent.indexOf('(i) GENERAL RENTAL TERMS FOR FRANCE, GERMANY, IRELAND, SPAIN AND UNITED KINGDOM ("General Rental Terms")') > -1) {
+					tags[i].setAttribute("id", "isoMAGeneralEU");
+				}
+
+				if (tags[i].textContent.indexOf(' SPECIFIC RENTAL TERMS FOR FRANCE, GERMANY, UNITED KINGDOM/ IRELAND AND SPAIN ') > -1) {
+					tags[i].setAttribute("id", "isoMASpecificEU");
+				}
+
+				if (tags[i].textContent.indexOf('(1) SPECIFIC RENTAL TERMS FOR FRANCE') > -1) {
+					tags[i].setAttribute("id", "isoMAFrance");
+				}
+
+				if (tags[i].textContent.indexOf('(2) SPECIFIC RENTAL TERMS FOR GERMANY') > -1) {
+					tags[i].setAttribute("id", "isoMAGermany");
+				}
+
+				if (tags[i].textContent.indexOf('(3) SPECIFIC RENTAL TERMS FOR THE UNITED KINGDOM AND IRELAND') > -1) {
+					tags[i].setAttribute("id", "isoMAUKIE");
+				}
+
+				if (tags[i].textContent.indexOf('(4) SPECIFIC RENTAL TERMS FOR SPAIN') > -1) {
+					tags[i].setAttribute("id", "isoMASpain");
+				}
+
+				if (tags[i].textContent.indexOf('C. ADDITIONAL RENTAL TERMS AND CONDITIONS APPLICABLE ONLY TO RENTALS IN BELGIUM, ITALY, NETHERLANDS AND SWITZERLAND') > -1) {
+					tags[i].setAttribute("id", "isoMAEUB");
+				}
+
+				if (tags[i].textContent.indexOf('D. ADDITIONAL RENTAL TERMS AND CONDITIONS APPLICABLE ONLY TO RENTALS IN LATIN AMERICAN CARIBBEAN') > -1) {
+					tags[i].setAttribute("id", "isoMALAC");
+				}
+			}
+
+			var consentButtons = document.querySelector('.terms-container .terms-consent-banner__cta-container.cancel-and-apply-buttons');
+			var printBtn = document.querySelector('.terms-container .terms__action-bar .print-terms.link');
+			document.querySelector('.terms-container .rich-text.iso-terms-main-container').appendChild(consentButtons);
+			consentButtons.id = 'consentButtons';
+			document.querySelector('.terms-container .terms-consent-banner__cta-container.cancel-and-apply-buttons').insertAdjacentHTML("afterbegin", printBtn.outerHTML);
+
+			isoTest.elementLoaded('.cancel-and-apply-buttons', function() {
+				isoTest.hideScrollMsg();
+			});
+			window.addEventListener('scroll', isoTest.hideScrollMsg);
+
+			isoTest.addTermsModalContainer();
+			isoTest.addEclubModalContainer();
+			isoTest.addEvents();
+		},
+		hideScrollMsg : function() {
+			let scrollPos = 0;
+			const scrollLink = document.querySelector('.iso-terms-scroll');
+			var tcCancelAccept = document.querySelector('.cancel-and-apply-buttons');
+
+			let windowY = window.scrollY;
+			  // Scrolling down or at bottom of page on load
+			  if (windowY > scrollPos || isoTest.isInViewport(tcCancelAccept)) {
+			    scrollLink.classList.add('hide');
+			  }
+			  scrollPos = windowY;
+		},
+		isInViewport : function (elem) {
+		    var bounding = elem.getBoundingClientRect();
+		    return (
+		        bounding.top >= 0 &&
+		        bounding.left >= 0 &&
+		        bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+		        bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
+		    );
+		},
+		addTermsModalContainer : function() {
+			var $modal = helpers.supplant(isoTest.modal, {
+				'id': isoTest.content.ma.id,
+				'termsTitle': isoTest.content.ma.termsTitle,
+				'content': isoTest.content.ma.content
+			});
+
+			var termsModalContainer = document.createElement('div');
+			termsModalContainer.classList.add("iso-ReactModalPortal", "iso-hidden-modal");
+			termsModalContainer.setAttribute("id", "iso-mraTerms-modal-container");
+			termsModalContainer.innerHTML = $modal;
+
+			document.querySelector('body').appendChild(termsModalContainer);
+
+			var masterText = document.querySelector('.terms-container .rich-text.iso-hidden-text');
+			document.querySelector('#iso-mraTerms #iso-master-main').insertAdjacentHTML("afterbegin", masterText.innerHTML);
+		},
+		addEclubModalContainer : function() {
+			var $modal = helpers.supplant(isoTest.modal, {
+				'id': isoTest.content.ec.id,
+				'termsTitle': isoTest.content.ec.termsTitle,
+				'content': isoTest.content.ec.content
+			});
+
+			var eclubModalContainer = document.createElement('div');
+			eclubModalContainer.classList.add("iso-ReactModalPortal-eClub", "iso-hidden-modal");
+			eclubModalContainer.setAttribute("id", "iso-eclub-modal-container");
+			eclubModalContainer.innerHTML = $modal;
+
+			document.querySelector('body').appendChild(eclubModalContainer);
+		},
+		addEvents : function() {
+
+			document.addEventListener("keypress", function (event) {
+
+		    var keycode = (event.keyCode ? event.keyCode : event.which);
+    		if (keycode == '13') {
+    			if (event.target.matches('.iso-ecModal')) {
+    				event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.iso-maModal-main')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-one')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-two')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-three')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-four')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-five')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-six')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-seven')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-eight')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-nine')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-ten')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('.iso-maModal.link-eleven')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('#iso-eclubRules .modal__btn-close')) {
+						event.target.click();
+					}
+
+					if (event.target.matches('#iso-mraTerms .modal__btn-close')) {
+						event.target.click();
+					}
+		    }
+			}, false);
+
+			document.addEventListener('click', function (event) {
+
+				if (event.target.matches('.iso-ecModal')) {
+					document.querySelector('#iso-eclub-modal-container').classList.remove("iso-hidden-modal");
+					document.querySelector('#iso-eclub-modal-container').classList.add("iso-visible-modal");
+					document.querySelector('body').classList.add('ReactModal__Body--open');
+					document.querySelector('#iso-eclubRules .modal__btn-close').focus();
+					isoTest.trackClicks('EMERALD CLUB PROGRAM RULES AND CONDITIONS', 'EMERALD CLUB PROGRAM RULES AND CONDITIONS');
+				}
+
+				if (event.target.matches('.iso-maModal.iso-maModal-main')) {
+					document.querySelector('#iso-mraTerms-modal-container').classList.remove("iso-hidden-modal");
+					document.querySelector('#iso-mraTerms-modal-container').classList.add("iso-visible-modal");
+					document.querySelector('body').classList.add('ReactModal__Body--open');
+					document.querySelector('#iso-mraTerms .modal__btn-close').focus();
+					document.getElementById('iso-mraTerms-modal-container').getElementsByClassName('modal__body')[0].scrollTo(0,0);
+					isoTest.trackClicks('MASTER RENTAL AGREEMENT', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-one')) {
+					isoTest.scrollToAnchor('#isoMAGeneral');
+					isoTest.trackClicks('General Rental Terms and Conditions Applicable to Rentals in All Locations', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-two')) {
+					isoTest.scrollToAnchor('#isoMAUS');
+					isoTest.trackClicks('Additional Rental Terms and Conditions Applicable only to Rentals in United States and Canada', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-three')) {
+					isoTest.scrollToAnchor('#isoMAEU');
+					isoTest.trackClicks('Additional Rental Terms and Conditions Applicable only to Rentals in France, Germany, Ireland, Spain and the United Kingdom', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-four')) {
+					isoTest.scrollToAnchor('#isoMAGeneralEU');
+					isoTest.trackClicks('General Rental Terms for France, Germany, Ireland, Spain and United Kingdom', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-five')) {
+					isoTest.scrollToAnchor('#isoMASpecificEU');
+					isoTest.trackClicks('Specific Rental Terms for France, Germany, Ireland, Spain and United Kingdom', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-six')) {
+					isoTest.scrollToAnchor('#isoMAFrance');
+					isoTest.trackClicks('Specific Rental Terms for France', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-seven')) {
+					isoTest.scrollToAnchor('#isoMAGermany');
+					isoTest.trackClicks('Specific Rental Terms for Germany', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-eight')) {
+					isoTest.scrollToAnchor('#isoMAUKIE');
+					isoTest.trackClicks('Specific Rental Terms for United Kingdom and Ireland', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-nine')) {
+					isoTest.scrollToAnchor('#isoMASpain');
+					isoTest.trackClicks('Specific Rental Terms for Spain', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-ten')) {
+					isoTest.scrollToAnchor('#isoMAEUB');
+					isoTest.trackClicks('Additional Rental Terms and Conditions Applicable only to Rentals in Belgium, Italy, Netherlands and Switzerland', 'MASTER RENTAL AGREEMENT');
+				}
+
+				if (event.target.matches('.iso-maModal.link-eleven')) {
+					isoTest.scrollToAnchor('#isoMALAC');
+					isoTest.trackClicks('Additional Rental Terms and Conditions Applicable only to Rentals in Latin American Caribbean', 'MASTER RENTAL AGREEMENT');
+				}
+
+
+				if (event.target.matches('#iso-eclubRules.ReactModal__Overlay') || event.target.matches('#iso-eclubRules .modal__btn-close')) {
+					document.querySelector('#iso-eclub-modal-container').classList.remove("iso-visible-modal");
+					document.querySelector('#iso-eclub-modal-container').classList.add("iso-hidden-modal");
+					document.querySelector('body').classList.remove('ReactModal__Body--open');
+
+					var linkName = isoTest.test + ' : EMERALD CLUB PROGRAM RULES AND CONDITIONS Modal:Close';
+					s.linkTrackVars = 'eVar20';
+					s.eVar20 = linkName;  
+					s.tl(this, 'o', linkName);
+				}
+
+
+				if (event.target.matches('#iso-mraTerms.ReactModal__Overlay') || event.target.matches('#iso-mraTerms .modal__btn-close')) {
+					document.querySelector('#iso-mraTerms-modal-container').classList.remove("iso-visible-modal");
+					document.querySelector('#iso-mraTerms-modal-container').classList.add("iso-hidden-modal");
+					document.querySelector('body').classList.remove('ReactModal__Body--open');
+
+					var linkName = isoTest.test + ' : MASTER RENTAL AGREEMENT Modal:Close';
+					s.linkTrackVars = 'eVar20';
+					s.eVar20 = linkName;  
+					s.tl(this, 'o', linkName);
+				}
+
+				if (event.target.matches('.iso-terms-scroll') || event.target.matches('.iso-terms-scroll button')) {
+		    		var scrollTarget = document.getElementById('consentButtons');
+		    		scrollTarget.scrollIntoView();
+
+					var linkName = isoTest.test + ' : Scroll Down to Accept';
+					s.linkTrackVars = 'eVar20';
+					s.eVar20 = linkName;
+					s.tl(this, 'o', linkName);  
+				}
+
+			}, false);
+
+			document.addEventListener("keydown", function (event) {
+ 				if(event.keyCode == 27 || event.key == "Esc" || event.key == "Escape") {
+ 					if (document.querySelector('#iso-eclub-modal-container.iso-visible-modal')) {
+ 						document.querySelector('#iso-eclub-modal-container').classList.remove("iso-visible-modal");
+						document.querySelector('#iso-eclub-modal-container').classList.add("iso-hidden-modal");
+						document.querySelector('body').classList.remove('ReactModal__Body--open');
+ 					} 
+
+ 					if (document.querySelector('#iso-mraTerms-modal-container.iso-visible-modal')) {
+ 						document.querySelector('#iso-mraTerms-modal-container').classList.remove("iso-visible-modal");
+						document.querySelector('#iso-mraTerms-modal-container').classList.add("iso-hidden-modal");
+						document.querySelector('body').classList.remove('ReactModal__Body--open');
+ 					} 
+		    }
+			}, false);
+		},
+		scrollToAnchor : function (el) {
+			document.querySelector('#iso-mraTerms-modal-container').classList.remove("iso-hidden-modal");
+			document.querySelector('#iso-mraTerms-modal-container').classList.add("iso-visible-modal");
+
+			document.querySelector('body').classList.add('ReactModal__Body--open');
+			document.querySelector('#iso-mraTerms .modal__btn-close').focus();
+
+			isoTest.elementLoaded('#iso-mraTerms-modal-container.iso-visible-modal ' + el, function() {	
+				var elPosition = document.querySelector('#iso-master-main > ' + el).offsetTop;
+				var modalEl = document.getElementById('iso-mraTerms-modal-container').getElementsByClassName('modal__body')[0];
+				modalEl.scrollTo(0,elPosition);
+			});
+		},
+		trackClicks : function(link, totalLink) {
+			var linkName = isoTest.test + ' : ' + link + ' modal:open';
+			var totalLinkName = isoTest.test + ' : ' + totalLink + ' modal';
+			s.linkTrackVars = 'eVar20, prop23';
+			s.eVar20 = linkName; 
+			s.prop23 = totalLinkName; 
+			s.tl(this, 'o', linkName, totalLinkName);
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

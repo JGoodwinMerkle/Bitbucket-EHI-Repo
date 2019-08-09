@@ -1,0 +1,234 @@
+<style>
+  .iso-test.eplus.pre-expedited-banner.hide{ display: none; }
+  .iso-test.pre-expedited-banner{ width: 58em; margin: 0 auto 50px; }
+  .iso-test.pre-expedited-banner .content-container{ position: relative; width: calc(100% - 70px); }
+  .iso-test.pre-expedited-banner i.icon.icon-eplus-logo-black{ vertical-align: middle;}
+  .iso-test .eplus-actions{ position: absolute; top: -10px; right: 0; }
+  .iso-test .accented a{ color: #169a5a; text-transform: capitalize; font-weight: bold;}
+  .iso-test .btn{ border: 2px solid #169a5a; }
+  .iso-test .btn:hover{ border: 2px solid #006639; }
+  .iso-test .btn.btn-secondary{ background-color: white; color: #169a5a; border: 2px solid #169a5a; }
+  @media (max-width: 66em) { 
+    .iso-test.pre-expedited-banner{ width: 85%;} 
+  }
+  @media (max-width: 820px) {
+	.iso-test.pre-expedited-banner i.icon.icon-eplus-logo-black{ vertical-align: top;}
+    .iso-test .eplus-actions { position: relative; top: 0; margin-top: 10px;}
+    .iso-test .btn{ padding: .5em 2.5em; }
+    .iso-test .btn.btn-secondary{ margin-right: 5px;}
+  }
+  @media (max-width: 768px) {
+	.iso-test.eplus{ margin: 0 3% 10%; width: 94%; }
+    .iso-test .btn{ padding: .5em 2.5em; }
+  }
+  @media (max-width: 410px) {
+	.iso-test.pre-expedited-banner i.icon.icon-eplus-logo-black{ display: block; margin: auto;}
+    .iso-test.pre-expedited-banner .content-container{ width: 100%; margin: 10px 0 0 0;}
+    .iso-test .eplus-actions .btn{ display: block; width: 100%; margin-top: 15px; }
+  }
+</style>
+<script>
+(function($) {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.com",
+		test : "Eplus Home Offer",
+		creative : "Challenger 1",
+		lang : 'en_US',
+		target : '.reservationWidget',
+    signInPanel: '.login-widget',
+    originalOffer: { 
+        'heading': "Not an Enterprise Plus® member?", 
+        'content': "You could be earning points toward free rentals. What are you waiting for?", 
+        'icon': "/content/dam/enterprise/icons/promo-icons/loyalty.png.wrend.480.270.png",
+        'link':"/en/loyalty.html?icid=home.3up3-_-enroll-_-ENUS.NULL" 
+    },
+    newOffer: { 
+        'heading': "Our Customers Love Us", 
+        'content': "We ranked “Highest in Rental Car Customer Satisfaction” by J.D. Power.", 
+        'icon': "/content/dam/ecom/hosted/heart.png",
+        'link':"https://www.enterprise.com/en/about/2016-j-d-power-award.html?icid=home.3up3-_-jd.power-_-ENUS.NULL" 
+    },
+		templates : {
+			offer : '<div class="iso-test eplus pre-expedited-banner">\
+                 <i class="icon icon-eplus-logo-black" aria-hidden="true" role="presentation"></i>\
+                 <div class="content-container">\
+						        <span class="content-message">{copy}</span>\
+										<span class="cta-message accented" role="button"><a href="https://www.enterprise.com/en/loyalty.html">{learn}</a></span>\
+										<div class="eplus-actions">\
+											 <a class="btn btn-secondary" href="/en/enroll.html">{join}</a>\
+											 <a class="btn signin" href="#">{signIn}</a>\
+									 </div>\
+                </div>\
+        </div>'
+			},
+			translations : {
+	      "en_US" : {
+	        "join" : "join",
+	        "signIn" : "sign in",
+	        "copy" : "Earn points and make reservations even faster.",
+					"learn" : "learn more"
+	      },
+	      "de_DE" : {
+	        "join" : "beitreten",
+	        "signIn" : "anmelden",
+	        "copy" : "Punkte verdienen und reservieren noch schneller.",
+					"learn" : "erfahren Sie mehr"
+	      },
+	      "fr_FR" : {
+	        "join" : "joindre",
+	        "signIn" : "se connecter",
+	        "copy" : "Gagnez des points et faites des réservations encore plus rapidement.",
+					"learn" : "apprendre encore plus"
+	      }
+	    },
+    lang : 'en_US',
+		init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			if (isoTest.debug === true) {
+				console.log("Test Running...");
+				console.log(isoTest.account + " - " + isoTest.portfolio);
+				console.log(isoTest.test + " - " + isoTest.creative);
+			}
+      isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded(isoTest.target, function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+          setTimeout(function(){
+           if( !ReservationStateTree.get(['model','reservationSession','profile']) ){
+              isoTest.chall();
+            }
+          }, 100);
+				});
+        isoTest.elementLoaded(isoTest.signInPanel, function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+          let signInSwitch = $('.login-widget .utility-nav-label');
+          $(signInSwitch).on('click',isoTest.checkAuthticated);
+				});
+			});
+		},
+		supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+        var p = b.split(/\./),
+            c = o;
+        for (var i = 0; i < p.length; i++) {
+          if (c[p[i]] == null)
+            return a;
+          c = c[p[i]];
+        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		},
+    elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 500);
+	        }
+		},
+    dependsLoaded : function (callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		chall : function() {
+       isoTest.addOffer(isoTest.target);
+       isoTest.updateOffer(isoTest.newOffer);
+       isoTest.bindEvents();
+		},
+    bindEvents: function(){
+      let triggerSignin = $('.eplus-actions a.signin');
+      $(triggerSignin).on('click', isoTest.openSignIn);
+      $('html').on('analytics', function(obj) {
+        if (_analytics && _analytics.renter && _analytics.renter.authenticated === true) {
+          isoTest.hideEplus();
+          isoTest.updateOffer(isoTest.originalOffer);
+        } else if (_analytics && _analytics.renter && _analytics.renter.authenticated === false) {
+          isoTest.showEplus();
+          isoTest.updateOffer(isoTest.newOffer);
+        }
+      });
+    },
+    scrollTop: function(){
+      let page = $('html, body');
+      page.animate({scrollTop: 0}, 500);
+    },
+    openSignIn: function(e){
+      e.preventDefault();
+      isoTest.scrollTop();
+      $('.login-widget .utility-nav-label').click();
+    },
+		addOffer : function(target) {
+			var $reservation = $(target),
+			    $offer = isoTest.supplant(isoTest.templates.offer, {
+            'copy' : isoTest.translations[isoTest.lang]['copy'],
+            'learn' : isoTest.translations[isoTest.lang]['learn'],
+            'join' : isoTest.translations[isoTest.lang]['join'],
+            'signIn' : isoTest.translations[isoTest.lang]['signIn'],
+           });
+		  $reservation.after($offer);
+		},
+    updateOffer : function(offer){
+      var thirdOffer = $('.text-capsule-list .text-capsule-item:nth-child(3)');
+      var heading = $(thirdOffer).find('.text-capsule-tile__heading').text(offer.heading);
+      var link = $(thirdOffer).find('a').attr('href',offer.link);
+      var icon = $(thirdOffer).find('img').attr('src',offer.icon);
+      var content = $(thirdOffer).find('.text-capsule-tile__text').text(offer.content);
+    },
+    checkAuthticated : function(){
+      isoTest.elementLoaded('.login-field-container .btn:first', function(){
+        $('.login-field-container .btn:first').on('click',function(){
+            isoTest.elementLoaded('.utility-nav-content.authenticated',function(){
+              isoTest.hideEplus();
+            });
+        });
+      });
+    },
+    hideEplus : function(){
+      let ePlus = $('.iso-test.eplus.pre-expedited-banner');
+      ePlus.addClass('hide');
+      isoTest.updateOffer(isoTest.originalOffer);
+    },
+    showEplus : function(){
+      let ePlus = $('.iso-test.eplus.pre-expedited-banner');
+      ePlus.removeClass('hide');
+    }
+	}
+	isoTest.init();
+})(jQuery);
+</script>

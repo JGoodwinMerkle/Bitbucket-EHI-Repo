@@ -1,0 +1,257 @@
+<style>
+header h1 {
+	margin-bottom: 15px;
+}
+h2.iso-header {
+	margin: 40px 0 -30px;
+}
+a.iso-loyalty {
+	margin-bottom: 10px;
+}
+a.iso-loyalty:hover {
+	color: #006639;
+	text-decoration: underline;
+}
+ul.iso-programList {
+	column-count: 2;
+	margin: 0;
+}
+ul.iso-programList li {
+	display: inline-block;
+    margin: 0 0 34px 20px;
+    position: relative;
+}
+ul.iso-programList li:before {
+    content: "+";
+    font-size: 30px;
+    position: absolute;
+    top: 0px;
+    left: -20px;
+}
+ul.iso-programList strong {
+	display: inline-block;
+}
+.iso-content {
+	font-size: 17px;
+	line-height: 23px;
+}
+.iso-content sup {
+	font-size: 12px;
+}
+.iso-content strong {
+	font-weight: 600;
+}
+.iso-content p {
+	margin-bottom: 30px;
+}
+.iso-content p.iso-footnote {
+	font-size: 12px;
+	line-height: 14px;
+	margin-bottom: 10px;
+}
+.iso-drawer {
+	position: relative;
+}
+.iso-readMore {
+	background: transparent linear-gradient(rgba(0,0,0,0), #fff 60%);
+	bottom: 0;
+	display: none;
+	height: 90px;
+	left: 0;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+}
+.iso-readMore a {
+	bottom: 5px;
+	cursor: pointer;
+	font-weight: 600;
+	left: calc(50% - 55px);
+	position: absolute;
+}
+.iso-readMore i {
+	display: inline-block;
+	vertical-align: middle;
+}
+.iso-readMore i.icon-nav-carrot-down.carrot-up{
+	margin-top: -8px;
+	transform: rotate(180deg);
+}
+
+@media (max-width: 768px){
+	ul.iso-programList {
+		column-count: 1;
+	}
+	ul.iso-programList li:before {
+		font-size: 24px;
+		top: 6px;
+	}
+	.iso-content {
+		max-height: 170px;
+		overflow: hidden;
+		transition: max-height 0.5s ease;
+	}
+	.iso-content.show {
+		max-height: 1000px;
+		transition: max-height 0.5s ease;
+	}
+	.iso-readMore {
+		display: block;
+	}
+	.iso-drawer.active .iso-readMore {
+		clear: both;
+		height: 40px;
+		position: relative;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'ePlus Enrollment Details',
+		cookieName : 'ePlusEnrollmentDetails',
+		customMbox : 'ePlusEnrollmentDetailsClicks',
+		creative : 'Challenger 1',
+		selector: '#enroll header h1',
+		textReplacement: 'Create Your Enterprise Plus Account',
+		template: '<h1>JOIN ENTERPRISE PLUS</h1>\
+		<div class="iso-drawer">\
+			<div class="iso-content"><p><strong>It’s the most rewarding way to rent — and there’s no cost to enroll.</strong></p>\
+			<ul class="iso-programList">\
+				<li><strong> Earn a point for every qualifying rental dollar you spend.<sup>1</sup></strong>\
+					<br />Points never expire as long as you’re an active member.<sup>2</sup></li>\
+				<li><strong>Redeem points for free rental days<sup>3</sup> with no blackout dates.</strong>\
+					<br />Enjoy rewards at thousands of Enterprise locations worldwide</li>\
+				<li><strong>Achieve elite status and recognition for your loyalty.</strong>\
+					<br />Elite members earn free days<sup>3</sup> faster and receive free upgrades.</li>\
+				<li><strong>Enjoy faster check-in at participating rental locations.</strong>\
+					<br />Members have access to a dedicated check-in line.</li>\
+			</ul>\
+			<p><a href="/en/loyalty.html" class="iso-loyalty">See all Enterprise Plus benefits and rewards.</a></p>\
+			<p class="iso-footnote">1 Points are earned on qualifying dollars at participating locations, but points are not earned on fuel, taxes, surcharges and non-qualifying rentals.</p><p class="iso-footnote">2 With at least one qualifying Enterprise Plus program rental during every three-year period.</p><p class="iso-footnote">3 Free rental day covers base rate (time and mileage) only and does not apply to taxes, fees, surcharges and optional products, which are responsibility of the renter. Subject to availability.</p></div>\
+			<div class="iso-readMore"><a><i class="icon icon-nav-carrot-down"></i> <span>Read More</span></a></div>\
+		</div>',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.selector, function() {	
+				isoTest.log('Test Ready!');	
+  				isoTest.chall();
+			});
+		},
+		chall : function() {
+			var secondaryHeader = document.createElement('h2');
+			    secondaryHeader.setAttribute('class','iso-header');
+			    secondaryHeader.innerText = isoTest.textReplacement;
+			document.querySelector('#enroll header h1').replaceWith(secondaryHeader);
+
+			var enrollHeader = document.querySelector('#enroll header');
+    			enrollHeader.innerHTML = isoTest.template + enrollHeader.innerHTML;
+
+    		isoTest.bindEvents();
+		},
+		bindEvents: function(){
+    		document.querySelector('.iso-loyalty').addEventListener('click',function(){
+    			isoTest.trackClicks(this, 'Enroll:Learn More');
+    		});
+    		document.querySelector('.iso-readMore').addEventListener('click', isoTest.openCloseDrawer);
+		},
+		openCloseDrawer: function(){
+			isoTest.log('openCloseDrawer()');
+
+			var drawer = document.querySelector('.iso-drawer');
+			var carrot = drawer.querySelector('.iso-readMore i.icon');
+			var text = drawer.querySelector('.iso-readMore span');
+			var content = drawer.querySelector('.iso-content');
+
+			if(!drawer.classList.contains('active')){
+				drawer.classList.add('active');
+				content.classList.add('show');
+				carrot.classList.add('carrot-up');
+				text.innerText = 'Read Less';
+				isoTest.trackClicks(this, 'Enroll:Read More');
+			} else {
+				drawer.classList.remove('active');
+				content.classList.remove('show');
+				carrot.classList.remove('carrot-up');
+				text.innerText = 'Read More';
+				isoTest.trackClicks(this, 'Enroll:Read Less');
+			}
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, linkName) {
+			s.linkTrackVars = 'eVar20'; 
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

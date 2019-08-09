@@ -1,0 +1,167 @@
+<style>
+.iso-warning-container-sm {
+  background-color: rgba(242, 242, 242, 1); 
+  border-color: rgba(174, 174, 174, 1);
+  border-style: solid;
+  border-width: 1px;
+  box-sizing: border-box;
+  display: block;
+  margin-bottom: 13px;
+  width: 100%;
+}
+
+.iso-warning-container-xl {
+  display: none;
+}
+
+.iso-warning-inner {
+	padding: 9px 12px;
+}
+
+.iso-warning-img {
+	display: inline-block;
+	float: left;
+	height: 18px;
+  margin-right: 9px;
+  margin-top: 1px;
+  width: auto;
+}
+
+.iso-warning-text {
+	color: #333333;
+	display: inline-block;
+	font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  width: 92%;
+}
+
+.iso-warning-text .iso-bold {
+	font-weight: 700;
+}
+
+@media (min-width: 67.625em) {
+	.vehicle-select__aside {
+		margin-top: -30px;
+	}
+
+	.vehicle-select__main {
+		margin-top: 20px;
+	}
+
+	.iso-warning-container-sm {
+		display: none;
+	}
+
+	.iso-warning-container-xl {
+	  background-color: rgba(242, 242, 242, 1);
+	  border-color: rgba(174, 174, 174, 1);
+	  border-style: solid;
+	  border-width: 1px;
+	  box-sizing: border-box;
+	  display: block;
+	  margin-left: 300px;
+	  position: relative;
+	  top: 10px;
+	  width: 100%;
+	}
+}
+
+@media (max-width: 400px) {
+	.iso-warning-text {
+	  width: 88%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Selection Scarcity Message',
+		creative : 'Challenger 1',
+		selector : '.vehicle-select__header',
+		warningMessage : "<div class='iso-warning-inner'>\
+												<img class='iso-warning-img' alt='Warning Icon' src='https:&#47;&#47;www.enterprise.com&#47;content&#47;dam&#47;ecom&#47;hosted/warning_grey.svg'>\
+												<div class='iso-warning-text'>We're experiencing <span class='iso-bold'>high demand</span> at <span class='iso-airport-name'>{airport}</span> for <span class='iso-reservation-month'>{month}</span>. Book soon.</div>\
+											</div>",
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			var checkTree = setInterval( function() {
+
+				var branchName = ReservationStateTree.data.view.reservationSteps.pickupLocation;
+				var monthNumber = ReservationStateTree.data.view.reservationSteps.pickupDate._d.getMonth();
+				var fullMonth = ReservationStateTree.data.view.reservationSteps.pickupDate._locale._months[monthNumber];
+
+        if (branchName != null) {
+        	clearInterval(checkTree);
+        	var resInfo = helpers.supplant(isoTest.warningMessage, {
+        		'airport' : branchName,
+						'month' : fullMonth
+					});
+
+					document.querySelector(isoTest.selector).insertAdjacentHTML('afterend',"<div class='iso-warning-container-xl'>" + resInfo + "</div>");
+
+					document.querySelector('.vehicle-header__title').insertAdjacentHTML('afterend',"<div class='iso-warning-container-sm'>" + resInfo + "</div>");
+        }
+    	}, 100);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

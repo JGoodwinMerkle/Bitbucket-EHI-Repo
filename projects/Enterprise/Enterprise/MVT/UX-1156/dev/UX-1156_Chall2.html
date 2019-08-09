@@ -1,0 +1,162 @@
+<style>
+td.extras-row__third-item .extras-row__exclusions, td.extras-mobile-row__exclusions-item .extras-row__exclusions, td.extras-mobile-row__price-item .extras-row__exclusions, td.extras-row__details-text button.iso-exclusions-mobileBtn, td.extras-mobile-row__details-text button.iso-exclusions-btn {
+    display: none !important;
+}
+button.extras-row__exclusions {
+    font-size: 14px;
+    margin: 0 0 20px;
+}
+.extras-mobile-row__details-text p, .extras-row__details-text p{
+	font-size: 14px;
+}
+.extras-mobile-row__details-text ul, .extras-row__details-text ul {
+    list-style: disc;
+	margin: 10px 0 10px 18px;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'US Protection Products 2.0',
+		creative : 'Challenger 2',
+		selector: '.extras-section',
+		headline: 'Insurance and Other Protection Products',
+		content: {
+			CDW : 'Damage Waiver (DW) is optional and can be added to your rental now or at the counter.<br /><br />When you purchase DW, we will waive your responsibility for damage, loss, or theft of your rental vehicle as long as you do not violate the terms of the DW as listed on your rental agreement.',
+			RAP : 'Roadside Assistance Protection (RAP) is optional and can be added to your rental either now or at the counter. <br /><br />If you purchase RAP, we will waive your responsibility for providing 24/7 roadside assistance (where available) which includes:<br><ul><li>replacement of lost keys </li><li>flat tire service </li><li>lockout service </li><li>jumpstarts, and</li><li>fuel delivery service for up to 3 gallons</li></ul>',
+			PAI : 'Personal Accident Insurance/Personal Effects Coverage (PAI/PEC) is optional and can be added to your rental now or at the counter.<br /><ul><li>PAI covers you and your passengers in case of accidental death or injury requiring an ambulance or medical treatment.</li><li>PEC insures your personal effects and the belongings of those traveling with you.</li><li>Benefits are payable in addition to any other insurance coverage.</li></ul><br />See the full policy when you pick up your vehicle. ',
+			SLP : 'Supplemental Liability Protection (SLP) is optional and may be added to your rental now or at the counter.<br /><br />If purchased, SLP provides you and any authorized drivers with up to $1,000,000 coverage for third-party liability claims.<br /><br />See the full policy when you pick up your vehicle.'
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				_satellite.track('target_variables');
+			}
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.selector, function() {	
+				isoTest.log('Test Ready!');	
+  				isoTest.chall();
+			});
+			window.addEventListener('hashchange', isoTest.hashHandler, false);
+			window.addEventListener('resize', function(){
+				isoTest.log('fn: resize');
+
+				// The following code is due to poor base code: the content on the details keeps changing back on resize, plus there is a delay on the content update. kthxbai.
+				isoTest.updateContent();
+
+				var contentInt = setInterval(function(){
+					isoTest.updateContent();
+				},100);
+
+				setTimeout(function(){ clearInterval(contentInt) }, 1000);
+			});
+		},
+		hashHandler : function(){
+			if(/extras/.test(location.hash)){
+				isoTest.elementLoaded(isoTest.selector, function() {	
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.updateContent();
+			document.querySelectorAll('.extras-container h2')[0].innerText = isoTest.headline;
+			isoTest.swap();
+		},
+		updateContent: function(){
+			for(var i=0;i<Object.keys(isoTest.content).length;i++){
+				isoTest.updateExtra(Object.keys(isoTest.content)[i]);
+			}
+			isoTest.moveBtns();
+		},
+		updateExtra: function (code) {
+			var extraRow = document.querySelector('div[data-code^='+code+']').parentNode.parentNode.parentNode.parentNode;
+			var detailsSelector = extraRow.querySelector('.extras-row__details-text') ? '.extras-row__details-text' : '.extras-mobile-row__details-text';
+			var details = extraRow.querySelector(detailsSelector + ' div p') ? extraRow.querySelector(detailsSelector + ' div p') : extraRow.querySelector(detailsSelector + ' p');
+			details.innerHTML = isoTest.content[code];
+		},
+		moveBtns : function(){
+			var extraRows = document.querySelectorAll('.extras-row');
+			for (var i =0;i<extraRows.length;i++) {
+				var row = extraRows[i];
+				var btn = row.querySelector('.extras-row__third-item .extras-row__exclusions') ? row.querySelector('.extras-row__third-item .extras-row__exclusions') : row.querySelector('.extras-mobile-row__exclusions-item .extras-row__exclusions');
+				if(btn){
+					var details = row.querySelector('.extras-row__details-text') ? row.querySelector('.extras-row__details-text') : row.querySelector('.extras-mobile-row__details-text');
+
+					if(btn.parentNode.classList.contains('extras-mobile-row__exclusions-item')){
+						btn.classList.add('iso-exclusions-mobileBtn');
+					} else {
+						btn.classList.add('iso-exclusions-btn');
+					}
+
+					if(!details.querySelector('.extras-row__exclusions')){
+						details.insertAdjacentElement('beforeend',btn);
+					} else {
+						var oldbtn = details.querySelector('.extras-row__exclusions');
+						details.replaceChild(btn,oldbtn);
+					}
+
+					btn.addEventListener('click', function(){
+						isoTest.fireTag(this,isoTest.test + ' : View Exclusions');
+					});
+				}
+			};
+		},
+		swap: function(){
+			var extras = document.querySelectorAll('.extras-container');
+			extras[1].insertAdjacentElement('afterend',extras[0])
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+			s.linkTrackVars = 'eVar20'; 
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.init();
+})();
+</script>

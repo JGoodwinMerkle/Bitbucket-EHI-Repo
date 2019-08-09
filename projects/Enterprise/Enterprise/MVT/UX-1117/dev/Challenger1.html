@@ -1,0 +1,280 @@
+<style type="text/css">
+	.master-nav .sign-in .login-widget.active .utility-nav-label .icon.icon-utility-notch {
+		top: 120%;
+		opacity: 1;
+		-webkit-transition: all .3s;
+		-moz-transition: all .3s;
+		transition: all .3s;
+	}
+
+	#login-container .login-widget .utility-nav-content fieldset .field-container.right-container {
+		height: 33.5125rem;
+	}
+
+	#login-container .login-widget .utility-nav-content fieldset .login-field-container {
+		height: 473px;
+	}
+
+	#login-container .login-widget .utility-nav-content fieldset .emerald-club-login.active {
+		top: -546px;
+	}
+
+	#login-container .login-widget.active .utility-nav-content{
+		width: 18.75rem;
+		height: 33.5125rem;
+	}
+	#login-container .login-widget.active .field-container.left-container {
+		display: none;
+	}
+
+	#login-container .login-widget.active .field-container.right-container {
+		left: 0;
+		width: 100%;
+	}
+
+	#login-container #enterprise-login .close-modal {
+		background: transparent;
+    position: absolute;
+    right: 0;
+    padding: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+	}
+
+	#login-container #enterprise-login .login-field-container h4 {
+		line-height: 1.05em;
+		margin-left: 0px;
+	}
+
+	#login-container #enterprise-login .login-field-container .iso-signin-text {
+		font-size: 1.1rem;
+    margin-left: 0px;
+    margin-top: 1.5em;
+    margin-bottom: 0px;
+	}
+
+	#login-container #enterprise-login .brand-login-title p {
+		font-size: 1.1rem;
+		margin-bottom: 0em;
+		margin-left: 5px;
+		padding-left: 30px;
+	}
+
+	#login-container #enterprise-login .icon.icon-eplus-logo {
+		margin-top: 4px;
+		left: 0px;
+	}
+
+	@media (max-width: 44.6875rem) {
+		#login-container .login-widget.active .utility-nav-content {
+			width: 100%;
+			height: auto;
+		}
+
+		#login-container .login-widget.active .utility-nav-content fieldset .right-container .mask {
+			height: 534px; 
+		}
+
+		#login-container .login-widget.active .emerald-club.active.text-btn, 
+		#login-container .login-widget.active .enterprise-plus.active.text-btn {
+			background: #222324;
+    	border-top: 1px solid #393A3B;
+    	border-bottom: 1px solid #393A3B;
+		}
+
+		.reservationWidget.section.signinOpen {
+			margin-top: 534px;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca Enterprise.co.uk',
+		test : 'Welcome Back Sign In',
+		cookieName : 'enWelcomeBackSignIn',
+		customMbox : 'enWelcomeBackSignInClicks',
+		creative : "Challenger 1",
+		widget : '#login-container .login-widget',
+		enterpriseWidget : '#enterprise-login .login-field-container .brand-login-title',
+		widgetOpen : true,
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+	        _satellite.setVar('TargetCampaign', isoTest.test);
+	        _satellite.setVar('TargetCreative', isoTest.creative);
+	        // _satellite.track('target_variables');
+		    }
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.dependsLoaded(function(){
+				isoTest.elementLoaded(isoTest.widget, function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+	  			isoTest.chall(); 
+				});
+			});
+
+			$('body').on('click', function(e){
+				if ($(e.target).hasClass('btn') && $(e.target).hasClass('cancel') && $(e.target).parents('.logout-modal').length > 0) {
+					isoTest.dependsLoaded(function(){
+						isoTest.elementLoaded(isoTest.widget, function() {
+							// isoTest.log('signout');
+							isoTest.updateWidget();
+	  				});
+					});
+	  		}
+			});
+		},
+		chall : function() {
+			if ($('#signInJoinButton').length > 0) {
+				$('#login-container #signInJoinButton').trigger('click');
+			}
+			isoTest.updateWidget(); 
+			isoTest.addEvents();
+		},
+		updateWidget : function() {
+			isoTest.elementLoaded(isoTest.enterpriseWidget, function() {
+				isoTest.log('enter update widget');
+				$('#login-container .login-widget.active #enterprise-login .brand-login-title').html('<p>Welcome back,</p><p>Enterprise Plus member.</p><div class="iso-signin-text">Sign In</div>');
+				$('#login-container .login-widget.active #enterprise-login').prepend('<button class="close-modal" aria-label="Close"><i class="icon icon-close-x-white"></i></button>');
+
+				$('.reservationWidget.section').addClass("signinOpen");
+			});
+		},
+		addEvents : function() {
+			// isoTest.log('enter add events');
+
+			$('body').on('click', function(e){
+				if ($(e.target).hasClass('icon-close-x-white') && $(e.target).hasClass('icon') && $(e.target).parents('.login-widget.active .close-modal').length > 0) {
+					// isoTest.log('close clicked');
+					$('#signInJoinButton').trigger('click');
+				}
+			});
+
+			$(document).keyup(function(e) {
+ 				if(e.keyCode == 27 || e.key == "Esc" || e.key == "Escape") {
+ 					$('.reservationWidget.section').removeClass("signinOpen");
+ 					if ($('.login-widget.active').length > 0) {
+
+ 						// isoTest.log('esc clicked');
+						$('#signInJoinButton').trigger('click');
+ 					} 
+		    }
+			});
+
+			$('body').on('click', function(e){
+				if (e.target.matches('#signInJoinButton')) {
+					isoTest.log('button clicked');
+					isoTest.updateWidget();
+
+					setTimeout(function() { 
+						if ($('#login-container .login-widget.active').length < 1) {
+							isoTest.log('button clicked to close');
+							$('.reservationWidget.section').removeClass("signinOpen");
+						}
+					}, 500);
+				}
+			});
+
+			$(document).on('keypress', function(e) {
+		    var keycode = (e.keyCode ? e.keyCode : e.which);
+    		if (keycode == '13') {
+    			if ( e.target.matches('.login-widget.active .enterprise-login.active #utility-eplus-email') || e.target.matches('.login-widget.active .enterprise-login.active #utility-eplus-password') ) {
+		        // isoTest.log('sign in button enter');
+						isoTest.trackClicks(isoTest.test + ' : Sign In');
+		      }
+		    }
+			});
+
+			$('body').on('click', function(e){
+				if ($(e.target).hasClass('btn') && $(e.target).parents('.login-widget.active .enterprise-login.active').length > 0) {
+					// isoTest.log('sign in button');
+					isoTest.trackClicks(isoTest.test + ' : Sign In');
+				}
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(linkName) {
+			s.linkTrackVars = 'eVar20'; 
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		supplant : function (str, o) {
+			return str.replace(/{([^{}]*)}/g, function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : '';
+			});
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+      } else {
+        isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+      }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+        	return decodeURIComponent(pair[1]);
+        }
+      }
+    }
+	}
+	
+	isoTest.dependsLoaded(function(){ 
+    isoTest.init();
+  });
+})();
+</script>

@@ -1,0 +1,326 @@
+<style>
+.cars-wrapper {
+	display: flex;
+	flex-flow: wrap;
+}
+.reservation-flow.cars .car-container.iso-featured {
+	order: -1;
+}
+.reservation-flow.cars .car-container.iso-featured .car-cutoff {
+	border: 4px solid #006639;
+}
+.iso-featured .car-image {
+	position: relative !important;
+}
+.reservation-flow.cars .car-container.iso-featured .car .car-image img{
+	top: -50px !important;
+}
+.iso-msg {
+	bottom: 0;
+	font-size: 11px;
+	position: absolute;
+	right: 0;    
+	font-family: "DIN Next W01 Medium", Helvetica, Arial, sans-serif;
+    text-align: center;
+}
+.iso-msg span {
+	display: inherit;
+    width: 150px;
+    margin-top: 5px;
+}
+.iso-msg .green-box {
+	background: #15804d;
+	color: #fff;
+	margin: 0 auto;
+	padding: 6px 10px 4px;
+	text-transform: uppercase;
+	width: 125px;
+}
+.iso-msg .green-box:before {
+	content: " ";
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 7px solid #15804d;
+    position: absolute;
+    top: -7px;
+    left: 70px;
+}
+.iso-msg .green-box i {
+	display: inline-block;
+    margin-bottom: -10px;
+    margin-right: 3px;
+    width: 13px;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Featured Vehicle',
+		cookieName : 'enFeaturedVehicle',
+		customMbox : 'enFeaturedVehicleClicks',
+		creative : "Challenger 1",
+		findElement: '.cars-wrapper',
+		featuredList: ['IFAR', 'SFAR'],
+		featuredCode: 'IFAR',
+		carFilters: {
+			capacity: ['2','4','5','7','8','12','15'],
+			type: {
+				Cars: ['ECAR','CCAR','ICAR','SCAR','FCAR','PCAR','SSAR','XXAR','LCAR','STAR','FCAH','GXAR','UXAR','PXAR','WCAR','WXAR','RXAR'],
+				SUVs: ['IFAR','SFAR','PGAR','FFAR','PFAR','CFAR','RFAR','UFAR','WFAR'],
+				Vans: ['MVAR','RVAR','SKAR'],
+				Trucks: ['PPAR','SPAR']
+			}
+		},
+		template: '<div class="iso-msg"><div class="green-box"><i class="icon icon-alert-success-white"></i> Great Choice</div><span>Room for five, but compact enough for high traffic driving</span></div>',
+		filters: '<div class="iso-selector selector">\
+					<div id="filter-dropdown-button-158" class="selector-name" tabindex="0" role="button" aria-expanded="false" aria-controls="filter-dropdown-157">\
+						<span>Vehicle Type</span><span> </span><i class="icon icon-nav-carrot-down"></i>\
+					</div>\
+					<div id="filter-dropdown-157" class="filters is-collapsed" role="group" aria-labelledby="filter-dropdown-button-158">\
+						<label class="filter-name"><input type="checkbox" name="type" value="Cars"><span>Cars</span></label>\
+						<label class="filter-name"><input type="checkbox" name="type" value="SUVs"><span>SUVs</span></label>\
+						<label class="filter-name"><input type="checkbox" name="type" value="Vans"><span>Vans</span></label>\
+						<label class="filter-name"><input type="checkbox" name="type" value="Trucks"><span>Trucks</span></label>\
+						<div class="clear-button" tabindex="0" role="button" aria-expanded="false" aria-controls="filter-dropdown-157">DONE</div>\
+					</div>\
+				</div>\
+				<div class="iso-selector selector">\
+					<div id="filter-dropdown-button-160" class="selector-name" tabindex="0" role="button" aria-expanded="false" aria-controls="filter-dropdown-159">\
+						<span>Passenger Capacity</span><span> </span><i class="icon icon-nav-carrot-down"></i>\
+					</div>\
+					<div id="filter-dropdown-159" class="filters is-collapsed" role="group" aria-labelledby="filter-dropdown-button-160">\
+						<label class="filter-name"><input type="checkbox" name="capacity" value="2"><span>2</span></label>\
+						<label class="filter-name"><input type="checkbox" name="capacity" value="4"><span>4</span></label>\
+						<label class="filter-name"><input type="checkbox" name="capacity" value="5"><span>5</span></label>\
+						<label class="filter-name"><input type="checkbox" name="capacity" value="7"><span>7</span></label>\
+						<label class="filter-name"><input type="checkbox" name="capacity" value="8"><span>8</span></label>\
+						<label class="filter-name"><input type="checkbox" name="capacity" value="12"><span>12</span></label>\
+						<label class="filter-name"><input type="checkbox" name="capacity" value="15"><span>15</span></label>\
+						<div class="clear-button" tabindex="0" role="button" aria-expanded="false" aria-controls="filter-dropdown-159">DONE</div>\
+					</div>\
+				</div>',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			/*adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});*/
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.findElement, function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();
+				
+			});
+
+			$(window).on('hashchange', function(){
+				if(/cars/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.findElement, function() {	
+						isoTest.chall();
+					});
+				} 
+			});
+		},
+		chall : function() {
+			isoTest.checkFeatured();
+			isoTest.addFeatured();
+			//isoTest.swapFilters();
+		},
+		checkFeatured: function(){
+			//Looks for the availability of the featured vechile and looks for a backup listing if unavailable
+			if($('.cars-wrapper > .car-container [data-car='+isoTest.featuredCode+']').length == 0){
+				for(var i = 0; i < isoTest.featuredList.length; i++) {
+					if($('.cars-wrapper > .car-container [data-car='+isoTest.featuredList[i]+']').length > 0){
+						isoTest.featuredCode = isoTest.featuredList[i];
+						break;
+					}
+				}
+			}
+		},
+		addFeatured: function(){
+			var $featured = $('[data-car='+isoTest.featuredCode+']').parents('.car-container');	
+			$featured.addClass('iso-featured');
+			$featured.find('.car-image').append($(isoTest.template));
+
+			/*var $featuredOld = $('[data-car='+isoTest.featuredCode+']').parents('.car-container');	
+
+			var $featured = $featuredOld.clone();
+			$featured.attr('data-reactid','').addClass('iso-featured');
+			$featured.find('[data-reactid]').attr('data-reactid','');
+			$featured.find('.car-image').append($(isoTest.template));
+			$featured.prependTo('.cars-wrapper');
+
+			$featuredOld.hide();
+
+			$featured.find('.select-button').click(function(e){
+				e.preventDefault();
+				var code = $(this).data('car');
+
+				$featuredOld.find('.select-button').click();
+				//$('.car-container [data-car='+code+']:eq(0)').click();
+			});*/
+		},
+		swapFilters: function(){
+			//Recreating the filters to avoid React Errors
+			$('.filters-wrapper .selector').remove();
+			$('.filters-wrapper').prepend($(isoTest.filters));
+
+			isoTest.bindFilters();
+		},
+		bindFilters: function(){
+			$('.selector-name').click(function(){
+				$(this).parent().find('.filters').toggleClass('is-collapsed');
+			});
+			$('.filter-name').click(function(){
+				var types = $('.filters [name=type]:checked');
+				var capacity = $('.filters [name=capacity]:checked');
+				isoTest.updateList(types, capacity);
+			});
+		},
+		updateList: function(t,c){
+			var $carList = $('.car-container');
+			$carList.hide();
+
+			var showList = [];
+
+			if(t.length == 0 && c.length == 0){
+				$carList.show();
+				return;
+			} else {
+				var carCodes = isoTest.getCodes(t.serializeArray());
+				var capacityList = isoTest.getCapacity(c.serializeArray());
+
+				$.each($carList, function(i,car){
+					var carCode = $(car).find('.select-button:eq(0)').attr('data-car');
+					var capacity = $(car).find('.feature-details td:eq(1)').text();
+
+					if(carCodes.indexOf(carCode) > -1 && capacityList.indexOf(capacity) > -1){
+						showList.push(car);
+					}
+				});
+			}
+
+			$(showList).show();
+
+		},
+		getCodes: function(a){
+			a = a.length == 0 ? Object.keys(isoTest.carFilters.type) : a;
+			var codes = [];
+			console.log(a);
+			$.each(a,function(i, t){
+				t = t.value ? t.value : t;
+				$.merge(codes,isoTest.carFilters.type[t]);
+			});
+			return codes;
+		},
+		getCapacity: function(a){
+			if(a.length == 0){
+				return isoTest.carFilters.capacity;
+			}
+		    var list = [];
+		    $.each(a,function(i, t){
+		        list.push(t.value);
+		    });
+
+		    return list;
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

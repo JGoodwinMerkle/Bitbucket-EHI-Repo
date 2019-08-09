@@ -1,0 +1,526 @@
+<style>
+	#commit .rental-summary.section-content .view-header .edit.text-btn {
+		display: none;
+	}
+
+	#commit #rental-details .information-block,
+	#commit #price-details .information-block {
+		border: none;
+		padding: 0 30px;
+	}
+
+	#commit #rental-details .category-label,
+	#commit #price-details .category-label {
+		margin: 10px 0;
+	}
+
+	#commit #rental-details .information-block.vehicle {
+		display: none;
+	}
+
+	#commit #rental-details .information-block.extras {
+		display: none;
+	}
+
+	#commit #rental-details .information-block .edit.text-btn {
+		font-weight: 700;
+    font-size: 14px;
+    margin: 10px 0;
+		line-height: 1.1666666666em;
+	}
+
+	#commit #rental-details .information-block .pickup-time .amount {
+		float: none;
+		margin-left: 17px;
+	}
+
+	#commit #rental-details .information-block .info-block-details .amount {
+		float: none;
+	}
+
+	#commit #rental-details .information-block.age {
+		margin-bottom: 0;
+	}
+
+	#commit #rental-details .information-block.age .information-block.coupon .edit.text-btn {
+		display: none;
+	}
+
+	#commit #rental-details .information-block .dropoff-time .amount {
+		float: none;
+		margin-left: 23px;
+	}
+
+	#commit #rental-details .information-block.coupon {
+		margin-top: 10px;
+    margin-bottom: 30px;
+	}
+
+	/*#rental-details .information-block.age .information-block.coupon {
+		padding: 0px;
+		margin-top: 10px;
+    margin-bottom: 30px;
+	}*/
+
+	#commit #rental-details .information-block.coupon .category-label, 
+	#commit #rental-details .information-block.coupon .edit.text-btn {
+		display: none;
+	}
+
+	#commit #rental-details .information-block.coupon .category-label {
+		font-size: 14px;
+    font-weight: 700;
+    font-style: normal;
+    color: #181918;
+		margin: 10px 0;
+	}
+
+	#commit #rental-details .information-block.coupon .edit.text-btn {
+		font-weight: 700;
+    font-size: 14px;
+    margin: 10px 0;
+    line-height: 1.1666666666em;
+	}
+
+	#commit #rental-details .information-block .info-block-details, #rental-details .information-block span {
+		font-size: 15px;
+	}
+
+	#commit #rental-details .row,
+	#commit #rental-details .info-block-details,
+	#commit #rental-details .information-block.coupon,
+	#commit #price-details .information-block table,
+	#commit #price-details .upgrade-block .upgrade-category .upgrade-info {
+		color: #181918;
+	}
+
+	#commit #price-details .iso-header-container {
+		padding: 30px 20px 30px 30px;
+		display: inline-block;
+    width: 100%;
+    position: relative;
+	}
+
+	#commit #price-details .view-header {
+		width: 60%;
+    float: left;
+    padding: 0px;
+	}
+
+	#commit #price-details .iso-car-image-container {
+		width: 36%;
+		position: absolute;
+		right: 10px;
+		top: 30px;
+		overflow: hidden;
+	}
+
+	#commit #price-details .iso-car-image-container img {
+		position: relative;
+		top: -15px;
+		right: 5px;
+	}
+
+	#commit #price-details .iso-car-image-bg {
+		background-size: contain;
+    /*width: 34%;*/
+    height: 100px;
+    background-repeat: no-repeat;
+    background-position-y: center;
+	}
+
+	#commit #price-details .view-header .info-block-details__model {
+		display: block;
+    font-weight: 300;
+    font-size: 15px;
+    font-style: normal;
+    line-height: 18px;
+    margin-top: 5px;
+	}
+
+	#commit #price-details .view-header .info-block-details__transmission {
+		display: block;
+    font-weight: 300;
+    font-size: 15px;
+    font-style: normal;
+		margin-bottom: 10px;
+		margin-top: 2px;
+	}
+
+	#commit #price-details .information-block.vehicle .info-block-details__cartype {
+		display: none;
+	}
+
+	#commit #price-details .information-block .row__vehicle-rate {
+		padding-bottom: 0px;
+	}
+
+	#commit #price-details .information-block.vehicle tr td .info-block-details__model {
+		display: none;
+	}
+
+	#commit #linkToTaxesAndFees {
+		top: auto !important;
+		margin: 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    right: 30px;
+	}
+
+	#commit #price-details .information-block.extras table .edit.text-btn, 
+	#commit #price-details .information-block.vehicle table .edit.text-btn {
+		top: auto !important;
+    margin: 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    right: 30px;
+    position: absolute;
+	}
+
+	#commit #price-details #section-header-TaxesAndFees {
+		text-transform: uppercase;
+	}
+
+	#commit #price-details .information-block.taxes-and-rates {
+		margin-bottom: 30px;
+	}
+
+	#commit #price-details .information-block.pricing {
+		border-top: solid 1px #c3c3c3;
+    padding: 15px 0 0;
+    margin: 0 30px 40px;
+	}
+
+	#commit #price-details .upgrade-block .upgrade-category .upgrade-image {
+		display: none;
+	}
+
+	#commit #price-details .upgrade-block .upgrade-category .upgrade-info .vehicle-class-name-bold {
+		font-weight: 600;
+	}
+
+	#commit #price-details .upgrade-block .upgrade-category .upgrade-button {
+		font-weight: 700;
+	}
+
+	#commit #price-details .amount .currency .symbol {
+		font-size: 24px;
+    color: #181918;
+    top: 0px;
+	}
+
+	#commit #price-details .amount .currency .unit {
+		font-size: 36px;
+    margin-top: -6px;
+    font-weight: 300;
+    position: relative;
+    top: 0px;
+    color: #181918;
+	}
+
+	#commit #price-details .amount .currency .fraction {
+		font-size: 20px;
+    color: #181918;
+    font-weight: 300;
+    top: -5px;
+	}
+
+	@media (max-width: 900px) {
+		#commit #price-details .iso-car-image-container img {
+			position: relative;
+			top: 0px;
+			right: 5px;
+		}
+	}
+
+	@media (max-width: 748px) {
+		#commit #price-details .iso-car-image-container {
+			top: 0px;
+			width: 30%;
+		}
+
+		#commit #price-details .iso-car-image-container img {
+			top: 0px;
+		}
+	}
+
+	@media (max-width: 530px) {
+		#commit #price-details .iso-car-image-container {
+			top: 15px;
+			width: 36%;
+		}
+	}
+
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca Enterprise.co.uk',
+		test : 'Checkout Summary',
+		cookieName : 'enCheckoutSummary',
+		customMbox : 'enCheckoutSummaryClicks',
+		creative : "Challenger 1",
+		widget : '#commit #rental-details',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+	        _satellite.setVar('TargetCampaign', isoTest.test);
+	        _satellite.setVar('TargetCreative', isoTest.creative);
+	        _satellite.track('target_variables');
+		    }
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.dependsLoaded(function(){
+				isoTest.elementLoaded(isoTest.widget, function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+					isoTest.chall(); 
+				});
+			});
+
+			$(window).on('hashchange', function(){
+				if(/commit/.test(window.location.hash)){	
+					isoTest.dependsLoaded(function(){
+						isoTest.elementLoaded(isoTest.widget, function() {
+							if (isoTest.debug === true) {
+								console.log("Test Ready!");
+							}
+							isoTest.chall(); 
+						});
+					});
+				} 
+			});
+		},
+		chall : function() {
+			isoTest.updateRentalDetails();
+			isoTest.updatePriceDetails();
+			isoTest.addEvents();
+		},
+		updateRentalDetails : function() {
+			$('#commit .rental-summary.section-content').insertBefore('#price-details');
+			$('#commit #rental-details').removeClass('collapsed');
+			$('#commit #rental-details .information-block.time').insertBefore('#rental-details .information-block.pickup');
+			// $('#rental-details .information-block.coupon').appendTo('#rental-details .information-block.age');
+			$('#commit #rental-details .information-block.age .category-label').first().text("ADDITIONAL DETAILS");
+
+			var $pickupTime = $('#commit #rental-details .information-block .pickup-time .amount span');
+			var $dropoffTime = $('#commit #rental-details .information-block .dropoff-time .amount span');
+			var $pickupLabel = $('#commit #rental-details .information-block.pickup .category-label');
+			var $dropoffLabel = $('#commit #rental-details .information-block.dropoff .category-label');
+			var renterAgeText = $('#commit #rental-details .information-block.age .info-block-details').first().text();
+			var couponLabelText = $('#commit #rental-details .information-block.coupon .category-label').text();
+
+
+			$pickupTime.first().text( $pickupTime.first().text().split(', 20')[0] );
+			$dropoffTime.first().text( $dropoffTime.first().text().split(', 20')[0] );
+			$pickupLabel.text( $pickupLabel.text().replace('/', ' & ') );
+			$dropoffLabel.text("RETURN LOCATION");
+
+			if ($pickupLabel.text() === "PICK-UP") {
+				$pickupLabel.text("PICK-UP LOCATION");
+			}
+
+			$('#commit #rental-details .information-block.age .info-block-details').first().html('<span class="line-item"><span>Renter Age</span><span>:  </span></span><span class="amount">'+renterAgeText+'</span>');
+
+			if ($('#commit #rental-details .information-block.coupon .info-block-details').length > 0) {
+				$('#commit #rental-details .information-block.coupon .info-block-details').prepend('<span class="line-item"><span>'+couponLabelText+'</span><span>:  </span></span>');
+			} else {
+				$('#commit #rental-details .information-block.coupon').append('<div class="info-block-details"><span class="line-item"><span>'+couponLabelText+'</span><span>:  </span></span><span class="amount">--</span>');
+			}
+		},
+		updatePriceDetails : function() {
+			var carTypeText = $('#commit #price-details .information-block.vehicle tr td .info-block-details__cartype').text();
+			var carModelText = $('#commit #price-details .information-block.vehicle tr td .info-block-details__model').text();
+			var $carTransmission = $('#commit #price-details .information-block.vehicle tr td .info-block-details__transmission');
+			var $carImage = $('#commit #price-details .information-block.vehicle img');
+			var carImageSource = $('#commit #price-details .information-block.vehicle img').attr('src');
+			var $learnMoreButton = $('#commit #price-details .information-block.taxes-and-rates #linkToTaxesAndFees');
+			var $modifyVehicleButton = $('#commit #rental-details .information-block.vehicle .edit.text-btn');
+
+
+			$('#commit #price-details .view-header').wrap('<div class="iso-header-container"></div>')
+			$('#commit #price-details .view-header').text('');
+			$('#commit #price-details .view-header').append('<span class="iso-model-header">'+ carTypeText +'</span>');
+			$('#commit #price-details .view-header').append('<span class="info-block-details__model">'+ carModelText +'</span>');
+			$('#commit #price-details .view-header').append($carTransmission);
+			$('#commit #price-details .iso-header-container').append('<div class="iso-car-image-container"></div>');
+			$('#commit #price-details .iso-car-image-container').append($carImage);
+			$('#commit #price-details .information-block.vehicle table .category-label').after($modifyVehicleButton);
+			$('#commit #price-details .information-block.taxes-and-rates table .category-label').after($learnMoreButton);
+
+			if ( $('#commit #rental-details .information-block.extras').length > 0 ) {
+				var $modifyExtrasButton = $('#commit #rental-details .information-block.extras .edit.text-btn');
+				$('#commit #price-details .information-block.extras table .category-label').after($modifyExtrasButton);
+			}
+
+			if ( $('#commit #price-details .upgrade-block .upgrade-category .upgrade-info').length > 0 ) {
+				var upgradeText = $('#commit #price-details .upgrade-block .upgrade-category .upgrade-info').text();
+	      var vehicleClassName = upgradeText.match("the (.*) for")[1];
+	      var $upgradeTextElement = $('#commit #price-details .upgrade-block .upgrade-category .upgrade-info');
+
+	      $('#commit #price-details .upgrade-block .upgrade-category .upgrade-info').html(function(_, html) {
+				   return html.replace(vehicleClassName, '<span class="vehicle-class-name-bold">'+vehicleClassName+'</span>');
+				});
+	     }
+		},
+		addEvents : function() {
+			$('#commit #rental-details .information-block.time .edit.text-btn').on('click', function(){
+				isoTest.trackClicks(isoTest.test + ' : DateTime:Modify');
+			});
+
+			$('#commit #rental-details .information-block.pickup .edit.text-btn').on('click', function(){
+				if ( $('#rental-details .information-block.dropoff').length > 0) {
+					isoTest.trackClicks(isoTest.test + ' : Pickup:Modify');
+				} else {
+					isoTest.trackClicks(isoTest.test + ' : PickupReturn:Modify');
+				}
+			});
+
+			$('#commit #rental-details .information-block.dropoff .edit.text-btn').on('click', function(){
+				isoTest.trackClicks(isoTest.test + ' : Return:Modify');
+			});
+
+			$('#commit #rental-details .information-block.age .edit.text-btn').on('click', function(){
+				isoTest.trackClicks(isoTest.test + ' : AdditionalDetails:Modify');
+			});
+
+			$('#commit #rental-details .information-block.coupon .edit.text-btn').on('click', function(){
+				isoTest.trackClicks(isoTest.test + ' : AdditionalDetails:Modify');
+			});
+
+			$('#commit #price-details .information-block.vehicle .edit.text-btn').on('click', function(){
+				isoTest.trackClicks(isoTest.test + ' : Vehicle:Modify');
+			});
+
+			$('#commit #price-details .information-block.extras .edit.text-btn').on('click', function(){
+				isoTest.trackClicks(isoTest.test + ' : Extras:Modify');
+			});
+
+			$('#linkToTaxesAndFees').on('click', function(){
+				s.events=''; //as per analytics
+				var linkName = isoTest.test + ' : TaxesFees:LearnMore';
+				var totalLinkName = 'Learn More';
+				s.linkTrackVars = 'eVar20, prop23'; 
+				s.eVar20 = totalLinkName;
+				s.prop23 = linkName; 
+				s.tl(this, 'o', totalLinkName, linkName); 
+				s.eVar20 = '';
+				s.prop23 = '';
+			});
+
+			$('#commit #price-details .upgrade-button').on('click', function(){
+				s.events=''; //as per analytics
+				var linkName = isoTest.test + ' : Upgrade';
+				var totalLinkName = 'Upgrade';
+				s.linkTrackVars = 'eVar20, prop23';
+				s.eVar20 = totalLinkName; 
+				s.prop23 = linkName; 
+				s.tl(this, 'o', totalLinkName, linkName); 
+				s.eVar20 = '';
+				s.prop23 = '';
+
+				setTimeout(function(){ 
+					var carTypeText = $('#commit #price-details .information-block.vehicle tr td .info-block-details__cartype').text();
+					var carModelText = $('#commit #price-details .information-block.vehicle tr td .info-block-details__model').text();
+					$('#commit #price-details .view-header .iso-model-header').text(carTypeText);
+					$('#commit #price-details .view-header .info-block-details__model').text(carModelText);
+				}, 1600);
+			});
+
+			$('#commit #expedited .btn.save').on('click', function(){
+				$('#commit #rental-details .information-block.coupon .category-label').first().text("ADDITIONAL DETAILS");
+				$('#commit #rental-details .information-block.coupon .category-label').first().css('display','inline-block');
+				$('#commit #rental-details .information-block.coupon .edit.text-btn').first().css('display','block');
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(linkName) {
+			s.events=''; //as per analytics
+			var totalLinkName = 'MODIFY';
+			s.linkTrackVars = 'eVar20, prop23'; 
+			s.eVar20 = totalLinkName; 
+			s.prop23 = linkName; 
+			s.tl(this, 'o', totalLinkName, linkName); 
+			s.eVar20 = '';
+			s.prop23 = '';
+		},
+		supplant : function (str, o) {
+			return str.replace(/{([^{}]*)}/g, function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : '';
+			});
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+      } else {
+        isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+      }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+        	return decodeURIComponent(pair[1]);
+        }
+      }
+    }
+	}
+	
+	isoTest.dependsLoaded(function(){ 
+    isoTest.init();
+  });
+})();
+</script>

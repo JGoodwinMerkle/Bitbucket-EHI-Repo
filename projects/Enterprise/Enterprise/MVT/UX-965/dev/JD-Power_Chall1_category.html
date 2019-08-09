@@ -1,0 +1,357 @@
+<style>
+.iso-bookHere {    
+	background: #f3f3f3;
+    float: right;
+    width: 35%;
+}
+.iso-bookHere.category {
+	min-height: 640px;
+    background: #fff;
+}
+.iso-bookHere a {
+	color: #169a5a;
+}
+.iso-jdPower {
+	background: #fff;
+	border-bottom: 2px solid #ddd;
+	margin: 10px;
+	min-height: 640px;
+	padding: 4em 2em;
+}
+.iso-bookHere.category .iso-jdPower{
+	min-height: 0;
+    padding: 0em 4em;
+    margin: 70px 0px;
+    border-bottom: 0;
+    border-left: 1px solid #ddd;
+}
+.iso-award {    
+	margin: 20px 0 16px;
+	text-align: center;
+}
+.iso-award img {
+	height: 300px;
+}
+.iso-awardContent h2 {
+	font-size: 28px;
+	margin-bottom: 13px;
+}
+
+.iso-awardContent p {
+	font-size: 15px;
+}
+.iso-quote {
+	text-align: center;
+}
+.iso-disclosure p{
+	font-size: 12px;
+}
+.reserve-widget-band {
+	background: #fff;
+}
+.two-up-three-up.section{
+	clear: both;
+}
+#reservationWidget > div:first-of-type {
+	float: left;
+    width: 63%;
+}
+.reservationWidget {
+	background: #f3f3f3;
+}
+#reservationWidget .inner-container, .booking-widget, #reservationWidget .date-time-form, .booking-widget .age-input, .booking-widget .age-input #age, .coupon-field-wrapper, .booking-submit{
+	width: 100%;
+}
+#coupon {
+	width: 85%;
+}
+.booking-widget .date-time-selector .label-container{
+	width: 46%;
+}
+#reservationWidget .booking-widget label.date-label, #reservationWidget .booking-widget label.time-label {
+	width: 50%;
+}
+.dropoff .label-container {
+	float: right;
+}
+.booking-widget div.arrow {
+	width: 3%;
+    background-size: auto 100%;
+}
+#reservationWidget .inner-container > div{
+	padding: 0 3em;
+}
+#reservationWidget div.options {
+	float: left;
+	clear: both;
+}
+@media (max-width: 80em) {
+	.iso-jdPower.brand {
+		min-height: 0;
+		padding: 2em;
+	}
+	.booking-widget div.arrow{
+		width: 4%;
+	}
+	.booking-widget .date-time-selector .label-container{
+		width: 45%;
+	}
+}
+@media (max-width: 66em) {
+	#reservationWidget > div:first-of-type, .iso-bookHere {
+		width: 100%;
+	}
+	.iso-bookHere.category {
+		min-height: 0px;
+	}
+	.iso-bookHere.category .iso-jdPower {
+		margin: 0;
+		border-left: 0;
+	}
+	.iso-award {
+		float: left;
+		width: 50%;
+	}
+	.iso-awardContent {
+		margin-top: 20px;
+	    float: right;
+	    width: 50%;
+	}
+	.iso-awardContent h2 {
+		margin: 0 0 12px;
+	}
+	.booking-widget .date-time-selector .label-container{
+		width: 47%;
+	}
+}
+@media (max-width: 48em){
+	#reservationWidget .date-time-form {
+		width: 94%;
+	}
+	.booking-widget .date-time-selector {
+		margin: 0 3% 0 0;
+	}
+	.booking-widget .date-time-selector .label-container {
+		width: 100%;
+	}
+	.booking-widget div.arrow {
+		display: none;
+	}
+	.custom-select.age-input {
+		width: 94%;
+	}
+	#coupon {
+		width: 94%;
+	}
+	.iso-awardContent {
+		margin-top: 0;
+	}
+	.iso-award img { 
+		height: 300px; 
+	}
+	.iso-awardContent h2 {
+		margin: 0;
+	}
+}
+@media (max-width: 34em){
+	.iso-award {
+	    width: 100%;
+	}
+	.iso-awardContent {
+	    margin-top: 0;
+	    float: none;
+	    width: 100%;
+	}
+}
+
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'JD Power',
+		cookieName : 'enJDPower',
+		customMbox : 'enJDPowerClicks',
+		creative : "Challenger 1",
+		pageType: 'brand',
+		resWidget: '.reservationWidget',
+		template: '<section class="iso-bookHere {pageType}">\
+					  <div class="iso-jdPower cf">\
+					    <div class="iso-award">\
+					    	<img src="{awardImg}" />\
+					    </div>\
+					    <div class="iso-awardContent">\
+					      <div class="iso-quote">\
+					        <h2>{header}</h2>\
+					        <p>{quote}<br />\
+					          {content} <a href="{url}">{learnMore}</a>\
+					        </p>\
+					      </div>\
+					    </div>\
+					  </div>\
+					</section>',
+		content: {
+			header: 'We love our customers. Looks like the feeling is mutual.',
+			awardImg: '/content/dam/ecom/utilitarian/common/TrophyRentalCar16_Enterprise.png',
+			quote: '"Highest in Rental Car Customer Satisfaction"',
+			content: 'in the J.D. Power 2016 North America Rental Car Satisfaction Study.℠',
+			learnMore: 'Learn More',
+			url: '/en/about/2016-j-d-power-award.html'
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.resWidget, function() {	
+				isoTest.log("Test Ready!");	
+  			isoTest.chall();
+				
+			});
+		},
+		chall : function() {
+			isoTest.setType();
+			isoTest.expandWidget();
+			//isoTest.removeModules();
+			isoTest.adjustClasses();
+			isoTest.insertWhyBook();
+		},
+		insertWhyBook : function(){
+			var $whyBook = helpers.supplant(isoTest.template,{
+				'pageType': isoTest.pageType,
+				'header': isoTest.content.header,
+				'quote': isoTest.content.quote,
+				'content': isoTest.content.content,
+				'awardImg': isoTest.content.awardImg,
+				'learnMore': isoTest.content.learnMore,
+				'url': isoTest.content.url
+			});
+
+			$(isoTest.resWidget).find('#reservationWidget').append($whyBook);
+		},
+		adjustClasses : function(){
+			$(isoTest.resWidget).find('#reservationWidget').addClass('cf');
+			$(isoTest.resWidget).find('.reserve-widget-band').removeClass('cf');
+		},
+		expandWidget: function(){
+			$(isoTest.resWidget).find('.inner-container').removeClass('collapsed').addClass('expanded');
+		},
+		removeModules : function(){
+			$(isoTest.resWidget).nextAll().remove();
+		},
+		setType : function(){
+			isoTest.pageType = window.location.href.indexOf('car-rental') > -1 ? 'brand' : 'category';
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

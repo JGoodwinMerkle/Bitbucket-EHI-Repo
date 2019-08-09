@@ -1,0 +1,332 @@
+<style>
+	.iso-tooltip {
+		color: #169a5a;
+		margin-left: 5px;
+		position: relative;
+    	display: inline-block;
+    	font-weight: 400;
+	    font-style: normal;
+	    font-size: 14px;
+	    padding: 0;
+	    text-transform: initial;
+	    letter-spacing: normal;
+	    background: transparent;
+	}
+
+	.iso-tooltip:hover {
+		text-decoration: underline;
+	}
+
+	.iso-required {
+		display: none;
+	}
+
+	.iso-tooltip .iso-tooltiptext {	
+		background-color: rgba(81, 81, 81, 1);
+   		line-height: normal;
+    	padding: 15px 13.5px 0px;
+		position: absolute;
+	    text-transform: none;	
+	    text-align: left;
+	    visibility: hidden;
+	    width: 287px;
+	    z-index: 1;
+	    color: #FFFFFF;
+	    bottom: 160%;
+	    left: 50%;
+	    margin-left: -125px;
+	}
+
+	.iso-tooltip.open-tooltip .iso-tooltiptext {
+		cursor: auto;
+		visibility: visible;
+	}
+
+	.iso-tooltip .iso-tooltiptext p {
+	    font-size: 12px;
+	    font-weight: 300;
+	    width: 95%;
+	}
+
+	.iso-tooltip .iso-tooltiptext::after {
+		border-color: rgba(81, 81, 81, 1) transparent transparent transparent;
+		border-style: solid;
+		border-width: 12px;
+	    content: " ";
+	    position: absolute;
+	    top: 100%;
+	    left: 35%;
+	}	
+
+	.driver-details-header {
+		font-weight: 700;
+    	margin-bottom: 20px;
+    	font-size: 14px;
+	}
+
+	.iso-tooltip-close {
+		position: absolute;
+		top: 3px;
+		right: 2px;
+		background: transparent;
+		padding: 0.5em;
+	    font-weight: 800;
+	    font-style: normal;
+	    font-size: .9em;
+	    text-transform: uppercase;
+	    color: #fff;
+	    letter-spacing: .0675rem;
+	    border: none;
+	    cursor: pointer;
+	    border-radius: 0;
+	    margin: 0 1px 0;
+	}
+
+	.iso-tooltip-close i.icon {
+		width: 16px;
+		height: 16px;
+	}
+</style>
+<script>
+(function() {
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Method Of Payment',
+		cookieName : 'enMethodOfPayment',
+		customMbox : 'enMethodOfPaymentClicks',
+		creative : "Challenger 1",
+		widgetSelector: '.en_us.resflow-commit .reservation-flow.commit .verification-page .review-section #expedited .expedited-form #find-region',
+		paymentBlock: "<div class='field-container payment-type'>\
+										<label for='payment-type'>Payment Method <span class='iso-required'>*</span>\
+											<button class='iso-tooltip'>(What's This?)\
+												<span class='iso-tooltiptext'>\
+													<span role='button' tabindex='0' class='iso-tooltip-close' aria-label='Close'><i class='icon icon-close-x-white'></i></span>\
+													<p>We're asking for your method of payment because this may help us expedite your rental when you arrive. Paying with a bank debit card attached to a checking account? Please see our Renter Requirements policy for this location as there may be some rules and requirements.</p>\
+												</span>\
+											</button>\
+										</label>\
+										<select id='payment-type' class='styled'>\
+											<option class='iso-default' value=''>Please select an option</option>\
+											<option data-index='0' value='MOP Credit'>Credit Card</option>\
+											<option data-index='1' value='MOP Debit'>Debit Card</option>\
+											<option data-index='2' value='MOP None'>Prefer not to Answer</option>\
+										</select>\
+									</div>\
+									<div class='driver-details-header'>DRIVER'S LICENSE DETAILS</div>",
+		init : function() {
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+         		_satellite.setVar('TargetCampaign', isoTest.test);
+          		_satellite.setVar('TargetCreative', isoTest.creative);
+          		_satellite.track('target_variables');
+      		}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded(isoTest.widgetSelector, function() {	
+					isoTest.log("Test Ready!");	
+					isoTest.chall();	
+				});
+			});
+
+			$(window).on('hashchange', function(){
+				if(/commit/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.widgetSelector, function() {	
+						isoTest.chall();
+					});
+				} 
+			});
+		},
+		chall : function() {
+			$('.expedited-form section .field-container:first').prepend(isoTest.paymentBlock);
+			isoTest.checkFormValues();
+			isoTest.addEvents();
+		},
+		checkFormValues : function() {
+			setInterval( function(){
+				var paymentValue = $('#payment-type').val();
+				var licenseValue = $('#find-license').val();
+				if ($('#expedited').find('#find-region').length > 0) {
+					var regionValue = $('#find-region').val();
+					if (paymentValue != '' && licenseValue != '' && regionValue != '') {
+						$('#expedited .expedited-form .find-action .btn.save').removeClass('disabled');
+					} else {
+						$('#expedited .expedited-form .find-action .btn.save').addClass('disabled');
+					}
+				} else {
+					if (paymentValue != '' && licenseValue != '') {
+						$('#expedited .expedited-form .find-action .btn.save').removeClass('disabled');
+					} else {
+						$('#expedited .expedited-form .find-action .btn.save').addClass('disabled');
+					}
+				}
+			},1);
+		},
+		addEvents : function() {
+			$('.iso-tooltip').on('click', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				$('.iso-tooltip').addClass('open-tooltip');
+				var linkName = 'Tooltip';
+				s.linkTrackVars = 'eVar20';
+				s.eVar20 = linkName;
+				s.tl(this, 'o', linkName);
+			});
+
+			$('.iso-tooltip').on('keypress', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				if(e.keyCode == 13){
+					$('.iso-tooltip').addClass('open-tooltip');
+					var linkName = 'Tooltip';
+					s.linkTrackVars = 'eVar20';
+					s.eVar20 = linkName;
+					s.tl(this, 'o', linkName);
+				}
+			});
+
+			$('.iso-tooltip-close').on('click', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				$('.iso-tooltip').removeClass('open-tooltip');
+			});
+
+			$('.iso-tooltip-close').on('keypress', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				if(e.keyCode == 32 || e.keyCode == 13){
+			       $('.iso-tooltip').removeClass('open-tooltip');
+			    }
+			});
+
+			$('#expedited').on('click', '.btn.save', function() {
+				var paymentValue = $('#payment-type').val();
+
+				isoTest.elementLoaded('.renter-information', function() {	
+					$('.expedited-form .renter-information').prepend(isoTest.paymentBlock);
+					if (paymentValue != "") {
+						$("#payment-type option[value='"+paymentValue+"']").attr('selected','selected');
+					}
+					$('.iso-required').css('display', 'inline-block');
+					$('.iso-default').css('display', 'none');
+					isoTest.addEvents();
+				});
+			});
+
+			$('#expedited').on('click', '.expedited-form .edit.link-style', function() {
+				var paymentValue = $('#payment-type').val();
+
+				isoTest.dependsLoaded(function() {
+					isoTest.elementLoaded(isoTest.widgetSelector, function() {	
+						isoTest.chall();
+						isoTest.attachPaymentType(paymentValue);	
+					});
+				});
+			});
+
+			$('#reviewSubmit').on('click', function() {
+				var type = $('#payment-type').val();
+				ReservationStateTree.get().model.paymentType = type;
+				s.linkTrackVars = 'eVar89';
+				s.eVar89 = type;
+			});
+		},
+		attachPaymentType : function(type) {
+			if (type != "") {
+				$("#payment-type option[value='"+type+"']").attr('selected','selected');
+			}
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		  adobe.target.trackEvent({
+		  	"mbox": isoTest.customMbox,
+		    "params": {
+		    	"click": element
+		  	},
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+		  });
+		},
+		analyticsLoaded : function(callback){
+			isoTest.log('analyticsLoaded - Checking...');
+			var aTimer;
+			window.clearTimeout(aTimer);
+			if (_a && _a.stationId.length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('analyticsLoaded - Found!');
+					callback();
+				}
+	    } else {
+	      aTimer = window.setTimeout(function(){isoTest.analyticsLoaded(callback);}, 100);
+	    }
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	    } else {
+	      isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	    }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === "function") {
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}	
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	    var query = window.location.search.substring(1);
+	    var vars = query.split('&');
+	    for (var i = 0; i < vars.length; i++) {
+	      var pair = vars[i].split('=');
+	      if (decodeURIComponent(pair[0]) == variable) {
+	        return decodeURIComponent(pair[1]);
+	      }
+	    }
+	  }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

@@ -1,0 +1,215 @@
+<style>
+.car { visibility: hidden; }
+.iso-vehicle-price .day-rate.rate-info { display: none; }
+.iso-vehicle-price { background:#f1f1f1; position: relative; z-index: 1; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-section span { background:#f1f1f1; padding-left: 10px; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-section { margin: 10px 15%; text-align:center; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rates .rate-info { width:100%; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rate-normal { color:#181918; line-height: 1em; }
+.reservation-flow.cars .car-container .car .iso-vehicle-price .rates .included-text { margin:7px 0 17px; }
+.reservation-flow.cars .car-container.iso-car-container { height:620px; }
+@media only screen and (max-width: 1000px)  {
+  .reservation-flow.cars .car-container.iso-car-container { height:635px !important; }
+}
+@media only screen and (max-width: 768px)  {
+  .reservation-flow.cars .car-container.iso-car-container { height:625px !important; }
+}
+@media only screen and (max-width: 700px)  {
+  .reservation-flow.cars .car-container.iso-car-container { height:630px !important; }
+}
+@media only screen and (max-width: 415px)  {
+  .reservation-flow.cars .car-container.iso-car-container { height:550px !important; }
+  .iso-vehicle-price { margin-left:7%; margin-right:7%; }
+}
+.iso-price-label { right:0; bottom:100%; color:#fff; font-family: "DINLight",Helvetica,Arial,sans-serif; font-size: 14px; line-height: 1em; padding:7px 15px 4px 30px; text-transform: uppercase; position: absolute; z-index: 3; display: inline-block; overflow: hidden; }
+.iso-price-label span { position: relative; z-index: 4; }
+.iso-price-label:after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #181918; -webkit-transform-origin: 0 100%; -ms-transform-origin: 0 100%; transform-origin: 0 100%; -webkit-transform: skew(-45deg); -ms-transform: skew(-45deg); transform: skew(-45deg); z-index: 2;
+}
+@media (min-width: 1001px) {
+  .reservation-flow.cars .filter-bar .filter-header {
+      max-width: 60% !important;
+  }
+}
+@media only screen and (max-width: 1380px)  {
+  .iso-price-label { font-size: 12px; padding:7px 8px 4px 26px; }
+}
+@media only screen and (max-width: 1000px)  {
+  .iso-price-label { font-size: 14px; padding:7px 15px 4px 30px }
+}
+@media only screen and (max-width: 895px)  {
+  .iso-price-label { font-size: 12px; padding:7px 8px 4px 26px; }
+}
+@media only screen and (max-width: 700px)  {
+  .iso-price-label { font-size: 14px; padding:7px 15px 4px 30px }
+}
+@media only screen and (max-width: 365px)  {
+  .iso-price-label { font-size: 12px; padding:7px 8px 4px 26px; }
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.ca',
+		test : 'Vehicle Price Format',
+		cookieName : 'caVehiclePriceFormat',
+		customMbox : 'caVehiclePriceFormat',
+		creative : "Challenger 2",
+		carSelector: '#reservationFlow .cars-wrapper',
+    lang : (window.location.href.indexOf(/fr/) > -1) ? 'fr' : 'en',
+    content : {
+      en : {
+        'tabText' : 'Includes Taxes and Fees*',
+        'detailsText' : 'Rates, taxes and fees do not reflect rates, taxes and fees applicable to non-included coverages, extras added later or for rentals in Mexico, Costa Rica and Nicaragua coverages required if the customer fails to provide acceptable proof of current liability coverages.'
+      },
+      fr : {
+        'tabText' : 'Comprend les taxes et les frais*',
+        'detailsText' : 'Les tarifs, les taxes et les frais n\'incluent pas les tarifs, les taxes et les frais applicables aux couvertures non comprises, aux suppléments ajoutés ultérieurement et aux couvertures requises si le client ne fournit pas une preuve de couverture en responsabilité valide et acceptable.'
+      }
+    },
+		init : function() {
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			isoTest.elementLoaded(isoTest.carSelector, function() {	
+        $('.filter-bar').on('click', function(){
+          setTimeout(function(){
+            isoTest.chall();
+          }, 250);
+        });
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();	
+			});
+			$(window).on('hashchange', function(){
+				if(/cars/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.carSelector, function() {	
+            $('.filter-bar').on('click', function(){
+              setTimeout(function(){
+                isoTest.chall();
+              }, 250);
+            });
+						isoTest.chall();
+					});
+				}
+			});
+		},
+		chall : function() {
+			isoTest.adjustLayout();
+		},
+    adjustLayout : function() {
+      $('.car .rate-section').each(function(){
+        if ($(this).parents('.unavailable-wrapper').length === 0) {
+          if (!$(this).parent().hasClass('iso-vehicle-price')) {
+            $(this).parent().addClass('iso-vehicle-price');
+            $(this).parents('.car-container').addClass('iso-car-container');
+          }
+        }
+        if ($(this).find('.iso-price-label').length === 0) {
+          $('.iso-vehicle-price').append('<div class="iso-price-label"><span>'+isoTest.content[isoTest.lang].tabText+'</span></div>');
+        }
+      });
+      if (!$('.taxes-text').hasClass('iso-taxes')) {
+        $('.taxes-text').addClass('iso-taxes');
+        var taxes = $('.taxes-text span:first').text();
+        $('.taxes-text span:first').text('*'+taxes+' '+isoTest.content[isoTest.lang].detailsText);
+      }
+      $('.car').css('visibility','visible');
+    },
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

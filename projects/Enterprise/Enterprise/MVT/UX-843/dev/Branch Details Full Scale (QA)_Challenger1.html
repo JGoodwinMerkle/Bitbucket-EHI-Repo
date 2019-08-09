@@ -1,0 +1,374 @@
+<style>
+/* Widget band */
+#start-reservation .inner-container { padding: 2% 5%; }
+.booking-widget { width: auto; }
+/* Loading bar */
+.loading { margin-top: 125px !important; }
+/* Button for collapsed widget state */
+.featured-continue-btn.isoTest-continue-btn { width: 94%; height: 40px; margin: 0 3%; padding: 0.7em 1em; }
+/* Map band */
+.container #map-canvas { min-height: 250px; }
+/* Hours band */
+.band.full-bleed.hours-band { background-color: #f3f3f3; padding: 5rem 5%; overflow: hidden; }
+.band.full-bleed.hours-band .hours-image { width: 100%; }
+.isoTest-branch-details { margin: 0 0 50px; }
+.isoTest-branch-details .branch-name { font-size: 18px; font-family: "DINMedium",Arial,sans-serif; color: #181918; margin: 0; }
+.isoTest-branch-details .branch-addr1,
+.isoTest-branch-details .branch-addr2 { font-size: 16px; margin: 0; }
+.isoTest-branch-details .branch-phone a { font-size: 16px; font-family: "DINMedium",Arial,sans-serif; }
+.isoTest-branch-details a.btn { margin: 0 0 30px; padding: 0.5em 1em 0.3em; width: 100%; font-size: 1.2rem; }
+.isoTest-branch-details a i { background:  url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240.449%22%20height%3D%2240.018%22%20viewBox%3D%220%200%2040.449%2040.018%22%3E%3Cpath%20fill%3D%22%23FFF%22%20d%3D%22M35.35%2033.04c0%202.31-1.877%204.187-4.186%204.187H6.977c-2.308%200-4.186-1.878-4.186-4.187V8.853c0-2.31%201.88-4.187%204.187-4.187h13.12v-2.79H6.977C3.13%201.875%200%205.005%200%208.852V33.04c0%203.848%203.13%206.978%206.977%206.978h24.187c3.847%200%206.977-3.13%206.977-6.978V19.722h-2.79V33.04z%22%2F%3E%3Cpath%20fill%3D%22%23FFF%22%20d%3D%22M27.148%200v2.79h8.045L18.478%2019.508l1.973%201.973L37.66%204.273v7.604h2.79V0%22%2F%3E%3C%2Fsvg%3E') right center / 100% no-repeat; width: 12px; height: 12px; display: inline-block; margin: 0 0 0 6px; }
+.isoTest-branch-details .pick-you-up,
+.isoTest-branch-details .location-attribute { display: block; }
+.isoTest-branch-details i.icon { vertical-align: top; width: 14px; height: 14px; }
+.isoTest-branch-details .disabled .policy-label { font-size: 16px; color: #a3a4a5; line-height: 1; vertical-align: top; margin: 2px 0 0; }
+.isoTest-branch-details :not(.disabled) .policy-label { font-size: 16px; line-height: 1; vertical-align: top; margin: 2px 0 0; }
+.band.full-bleed.hours-band .gi { margin: 0; width: 100%; }
+.hours-band .hours-image .about-location { padding: 0; }
+.hours-band .hours-image .about-location #locationHours { padding: 0; margin: 0; }
+.hours-band .hours-image .about-location #locationHours .location-availability { margin: 0; }
+.about-location .availability-wrapper:nth-child(odd) { background-color: #e8e8e8; }
+.about-location .location-availability-header { font-size: 22px; margin: 0 0 10px; }
+.hours-band .hours-image .about-location #locationHours .location-availability .location-availability-control { width: 100%; margin: 0 0 20px; }
+.about-location .availability-datatable td, .about-location .availability-datatable th { width: 50%; }
+.about-location .location-hour-item { float: none; }
+/* Directions band */
+.wayfinding-band.band.full-bleed { padding: 5rem 5% 2.5rem; overflow: hidden; }
+.wayfinding-band { border: none; }
+.wayfinding-band .wayfinding-list { margin: 0; width: 100%; vertical-align: top; text-align: center; }
+.wayfinding-band .wayfinding-list li { padding: 0; }
+.wayfinding-band .wayfinding-list li img { display: block; position: static; width: 48px; height: 48px; margin: 0 auto 10px; }
+.wayfinding-band .wayfinding-list li:nth-child(1n+2)::before {background: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2053.333332%2050.093334%22%20height%3D%2250.093%22%20width%3D%2253.333%22%3E%3Cdefs%3E%3CclipPath%20id%3D%22a%22%3E%3Cpath%20d%3D%22M0%200h400v375.652H0V0z%22%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3Cg%3E%3Cg%3E%3Cg%3E%3Cg%20clip-path%3D%22url(%23a)%22%20fill%3D%22%23000%22%20transform%3D%22matrix(.133%200%200%20-.133%200%2050.093)%22%3E%3Cpath%20d%3D%22M385.004%20172.965H15c-8.285%200-15%206.71-15%2015%200%208.285%206.715%2015%2015%2015h333.793l-147.09%20147.082c-5.86%205.855-5.86%2015.36%200%2021.21%205.86%205.86%2015.352%205.86%2021.21%200L395.61%20198.57c4.288-4.29%205.578-10.742%203.253-16.347-2.324-5.606-7.793-9.258-13.86-9.258%22%2F%3E%3Cpath%20d%3D%22M212.31%200c-3.837%200-7.677%201.465-10.607%204.395-5.86%205.86-5.86%2015.35%200%2021.21L302.66%20126.552c5.86%205.86%2015.352%205.86%2021.21%200%205.86-5.86%205.86-15.35%200-21.21L222.915%204.395C219.984%201.465%20216.148%200%20212.31%200%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E") no-repeat center center;
+	background-size: 100%;
+	top: -42px;
+    content: "";
+    height: 20px;
+    left: 50%;
+    position: absolute;
+    transform: rotate(90deg);
+    width: 20px;
+	z-index: 1;
+	padding: 6px;
+	background-origin: content-box;
+	margin-left: -16px;
+}
+.wayfinding-band .wayfinding-list li:nth-child(1n+2) { margin-top: 1.6rem; display: inline-block; width: 100%; }
+.wayfinding-band .wayfinding-list li:last-child { margin-bottom: 0; }
+/* Nearby locations band */
+.location-detail-container.container .inner-container.nearby-locations { width: 100%; padding: 2.5rem 5% 2.5rem; overflow: hidden; margin: 0; }
+.location-detail-container.container .inner-container.nearby-locations .g { width: 100%; margin: 0; }
+.location-detail-container.container .inner-container.nearby-locations .g .nearby-details .address,
+.location-detail-container.container .inner-container.nearby-locations .g .nearby-details .name { text-align: left; }
+.nearby-locations .g .gi { border-top: 1px solid #c1c1c1; width: 100%; padding: 30px 0; overflow: hidden; }
+.isoTest-e-pin { float: left; margin: 0 10px 0 0; }
+.nearby-locations .g .gi .cf { float: left; }
+.location-detail-container.container .inner-container.nearby-locations a.btn.btn-small { display: none; }
+.nearby-locations .g .gi .cf .nearby-details h4 { font-family: "DINRegular",Arial Black,Arial,Helvetica,sans-serif; text-transform: none; font-size: 1.1em; }
+.nearby-locations .g .gi .cf .nearby-details h4 a { color: #169a5a; }
+.location-detail-container.container .inner-container.nearby-locations .nearby-details .address { margin: 0; }
+/* Intro paragraph band */
+.location-intro-paragraph { padding: 2.5rem 5% 0; width: 100%; }
+.location-intro-paragraph .inner-wrapper { width: 100%; max-width: 100%; margin: 0; border: none; }
+.location-intro-paragraph .inner-wrapper h2 { font-family: "DINLight",Arial Black,Arial,sans-serif; font-size: 1.7em; margin: 0 0 15px 0; }
+.location-intro-paragraph .inner-wrapper p { font-size: 20px; color: #777777; margin: 0; }
+/* Other details band */
+.location-other-details { padding: 0 5% 5rem; display: none; width: 100%; }
+.location-other-details .inner-wrapper { padding: 0; width: 100%; max-width: 100%; margin: 0; border-top: 3px solid #181918; }
+.location-other-details .inner-wrapper .g { margin: 0; }
+.location-other-details .inner-wrapper .g .isoTest-row { display: block; }
+.location-other-details .inner-wrapper .g .gi { width: 100%; flex: 1; border-bottom: 1px solid #cecece; padding: 20px 0 30px; }
+.location-other-details .inner-wrapper .g .gi:last-child { border-bottom: none; }
+.location-other-details .inner-wrapper .g .gi h2 { font-family: "DINMedium",Arial Black,Arial,sans-serif; font-size: 21px; margin: 0 0 10px; }
+.location-other-details .inner-wrapper .g .gi p { font-family: "DINLight",Arial,sans-serif; font-size: 16px; margin: 0; color: #777777;  }
+/* all section headers */
+.band.full-bleed.hours-band h2.isoTest-header,
+.wayfinding-band h2,
+.location-detail-container.container .inner-container.nearby-locations h2.center {
+	font-family: 'DINLight',Arial,sans-serif; margin: 0; width: 100%; font-size: 1.7em; margin: 0 0 25px;
+}
+.band.full-bleed.hours-band h2.isoTest-header,
+.location-detail-container.container .inner-container.nearby-locations h2.center { text-align: left; }
+.wayfinding-band h2 { text-align: center; }
+@media (min-width: 640px) {
+	.nearby-locations .g .gi { width: 49%; float: left; }
+	.nearby-locations .g .gi:nth-child(even) { margin: 0 0 0 2%; }
+
+	.location-other-details .inner-wrapper .g .isoTest-row { border-bottom: 1px solid #cecece; display: flex; }
+	.location-other-details .inner-wrapper .g .gi { width: 50%; border-bottom: none; }
+	.location-other-details .inner-wrapper .g .gi:nth-child(odd) { border-right: 1px solid #cecece; padding: 40px 50px 40px 0; }
+	.location-other-details .inner-wrapper .g .gi:nth-child(even) { padding: 40px 0 40px 50px; }
+}
+@media (min-width: 768px) {
+	.featured-continue-btn.isoTest-continue-btn { float: right; width: 165px; height: 35px; margin: 30px 0 0; }
+
+	.band.full-bleed.hours-band { padding: 5rem; }
+	.wayfinding-band.band.full-bleed { padding: 5rem 5rem 2.5rem; }
+	.location-detail-container.container .inner-container.nearby-locations { padding: 2.5rem 5rem 2.5rem; }
+	.location-intro-paragraph { padding: 2.5rem 5rem 0; }
+	.location-other-details { padding: 0 5rem 5rem; }
+
+	.isoTest-branch-details a.btn { width: auto; font-size: 0.875rem }
+
+	.isoTest-branch-details { float: left; width: 40%; padding: 0 40px 0 0; margin: 0; }
+	.band.full-bleed.hours-band .gi { margin: 0; float: right; width: 60%; }
+
+	.wayfinding-band h2,
+	.wayfinding-band .wayfinding-list { text-align: left; }
+	.wayfinding-band .wayfinding-list li { padding: 0 0 0 45px; }
+	.wayfinding-band .wayfinding-list li img { position: absolute; margin: -17px 0 0; width: 32px; height: 32px; }
+	.wayfinding-band .wayfinding-list li:nth-child(1n+2)::before {
+	    left: 0;
+		margin-left: 0;
+	}
+}
+@media (min-width: 900px) {
+	.loading { margin-top: 197px !important; }
+
+	.about-location .location-availability-header { display: inline-block; width: 50%; font-size: 18px; margin: 0; vertical-align: top; }
+	.hours-band .hours-image .about-location #locationHours .location-availability .location-availability-control { display: inline-block; width: 50%; margin: 0 0 20px; }
+}
+@media (min-width: 960px) {
+	.nearby-locations .g .gi { width: 32.33333%; }
+	.nearby-locations .g .gi:nth-child(even) { margin: 0; }
+	.nearby-locations .g .gi:nth-child(3n+2) { margin: 0 1.5%; }
+}
+@media (min-width: 1140px) {
+	.band.full-bleed.hours-band .hours-image { float: right; width: 75%; }
+	.wayfinding-band .wayfinding-list { float: left; width: 75%; }
+	.location-detail-container.container .inner-container.nearby-locations .g { float: left; width: 75%; }
+	.location-intro-paragraph .inner-wrapper { width: 75%; }
+
+	.isoTest-branch-details { width: 30%; padding: 0 80px 0 0; }
+	.band.full-bleed.hours-band .gi { width: 70%; }
+
+	.band.full-bleed.hours-band h2.isoTest-header,
+	.wayfinding-band h2,
+	.location-detail-container.container .inner-container.nearby-locations h2.center {
+		width: 25%; float: left; margin: 0; padding: 0 40px 0 0;
+	}
+}
+@media (min-width: 1180px) {
+	.booking-widget { width: 54.0625rem; }
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.com",
+		test : "Location Branch",
+		cookieName : 'ehiLocationBranch',
+		creative : "Challenger 1",
+		customMbox : 'ehiLocationBranchClicks',
+		classes : {
+			disabled : 'disabled',
+			available : 'icon-icon-checkmark-thin-green',
+			unavailable : 'icon-icon-unavailable-gray'
+		},
+		init : function() {
+            if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+                _satellite.setVar('TargetCampaign', isoTest.test);
+                _satellite.setVar('TargetCreative', isoTest.creative);
+                if (typeof window.isoSetTargetVars === 'function') {
+                    window.isoSetTargetVars();
+                }
+            }
+            //mboxDefine('',isoTest.customMbox);
+            adobe.target.getOffer({
+                "mbox": isoTest.customMbox,
+                "success": function(offers) {
+                    adobe.target.applyOffer( { "offer": offers } );
+                },
+                "error": function(status, error) {
+
+                }
+            });
+			if (isoTest.debug === true) {
+		    	console.log("Test Running...");
+		    	console.log(isoTest.account + " - " + isoTest.portfolio);
+		    	console.log(isoTest.test + " - " + isoTest.creative);
+			}
+			isoTest.dependsLoaded(function() {
+				//isoTest.elementLoaded('#location .search-results li:eq(0)', function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+					isoTest.chall();
+				//});
+			});
+		},
+		chall : function() {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - chall - Start...");
+			}
+
+			//$('.loading').prependTo('#map-canvas');
+
+			var numCols = $('.location-other-details .g .gi').length,
+				locationInfo = {
+					name : ReservationStateTree.get().model.pickup.location.details.name,
+					airportCode : ReservationStateTree.get().model.pickup.location.details.airport_code,
+					addr1 : ReservationStateTree.get().model.pickup.location.details.address.street_addresses[0],
+					addr2 : ReservationStateTree.get().model.pickup.location.details.address.street_addresses[1],
+					city : ReservationStateTree.get().model.pickup.location.details.address.city,
+					postal : ReservationStateTree.get().model.pickup.location.details.address.postal,
+					country : ReservationStateTree.get().model.pickup.location.details.address.country_code,
+					addrLink : $('.street a:first-child').prop('href'),
+					phoneNumber : ReservationStateTree.get().model.pickup.location.details.phones[0].phone_number,
+					phoneLink : $('.street a:last-child').prop('href'),
+					pickUp : ReservationStateTree.get().model.pickup.location.details.we_will_pick_you_up,
+					returns : ReservationStateTree.get().model.pickup.location.details.after_hours_return
+				};
+			$('#start-reservation .inner-container').removeClass('expanded').addClass('collapsed');
+			$('<a class="btn featured-continue-btn isoTest-continue-btn">Continue</a>').insertAfter('#book .booking-widget > .spinner-container');
+			$('.isoTest-continue-btn').on('click', function(e) {
+				isoTest.trackClicks('ExpandContinue');
+				$(this).remove();
+				$('#start-reservation .inner-container').removeClass('collapsed').addClass('expanded');
+			});
+			isoTest.wrapCol(numCols);
+			// Add additional information for hours section
+			$('.hours-band').prepend('<h2 class="isoTest-header">Branch Details</h2>');
+			$('.hours-band .hours-image').prepend('\
+				<div class="isoTest-branch-details">\
+					<p class="branch-name">' + locationInfo.name + '' + (locationInfo.airportCode !== null ? " (" + locationInfo.airportCode + ")" : '' ) + '</p>\
+					<p class="branch-addr1">' + locationInfo.addr1 + '</p>\
+					<p class="branch-addr2">' + (locationInfo.addr2 !== '' ? locationInfo.addr2 + ", " : '') + '' + locationInfo.city + ', ' + locationInfo.country + ', ' + locationInfo.postal + '</p>\
+					<p class="branch-phone"><a href="' + locationInfo.phoneLink + '">' + locationInfo.phoneNumber + '</a></p>\
+					<a class="btn" href="' + locationInfo.addrLink + '">Driving Directions<i class="icon"></i></a>\
+					<div class="pick-you-up ' + (locationInfo.pickUp ? '' : isoTest.classes.disabled) + '">\
+						<i class="icon ' + (locationInfo.pickUp ? isoTest.classes.available : isoTest.classes.unavailable) + '"></i>\
+						<span class="policy-label">Pick-Up Service</span>\
+					</div>\
+					<div class="location-attribute ' + (locationInfo.returns ? '' : isoTest.classes.disabled) + '">\
+						<i class="icon ' + (locationInfo.returns ? isoTest.classes.available : isoTest.classes.unavailable) + '"></i>\
+						<span class="policy-label">After Hours Returns</span>\
+					</div>\
+				</div>\
+			');
+			// Add map pin/remove button/add link
+			$('.nearby-locations .gi').prepend('<img class="isoTest-e-pin" src="https://dl.dropboxusercontent.com/s/s3l7a79kei7tido/e_pin.png" />');
+			$('.nearby-locations .gi .cf').each(function(i, el) {
+				var detailsLink = $(el).find('a.btn.btn-small').prop('href');
+				$(el).find('.nearby-details h4').wrapInner('<a href="' + detailsLink + '"></a>');
+				$(el).parent().find('img.isoTest-e-pin').wrap('<a href="' + detailsLink + '"></a>');
+			});
+            // Move map section below reservation widget
+			$('#map-canvas').insertAfter('#start-reservation');
+			// intro paragraph sometimes doesn't exist, so only move these two elements if it exists
+			if ($('.location-intro-paragraph').length > 0) {
+				// Move intro paragraph to bottom
+				$('.location-intro-paragraph').insertAfter('.location-detail-container:last');
+				// Move other details below intro paragraph
+				$('.location-other-details').insertAfter('.location-intro-paragraph');
+				$('.location-other-details').show();
+			}
+
+			// Tracking
+
+			$('body').on('click', '#continueButton', function() {
+              isoTest.trackClicks('WidgetContinue');
+            });
+
+			$('body').on('click', '.booking-widget .street a:first', function(e) {
+							e.preventDefault();
+              isoTest.trackClicks('DirectionsLink', $(this).attr('href'));
+            });
+
+			$('body').on('click', '.booking-widget .street a:last', function(e) {
+							e.preventDefault();
+              isoTest.trackClicks('PhoneNumberLink', $(this).attr('href'));
+            });
+
+			$('body').on('click', '.isoTest-branch-details .branch-phone a', function(e) {
+							e.preventDefault();
+              isoTest.trackClicks('PhoneNumberLinkNew', $(this).attr('href'));
+            });
+
+			$('body').on('click', '.isoTest-branch-details a.btn', function(e) {
+							e.preventDefault();
+              isoTest.trackClicks('DirectionsLinkNew', $(this).attr('href'));
+            });
+
+			$('body').on('click', '.location-availability-control .prev:not(.disabled)', function() {
+              isoTest.trackClicks('HoursPrev');
+            });
+
+			$('body').on('click', '.location-availability-control .next', function() {
+              isoTest.trackClicks('HoursNext');
+            });
+
+			$('body').on('click', '.nearby-locations a', function(e) {
+							e.preventDefault();
+              isoTest.trackClicks('NearbyViewDetailsLink', $(this).attr('href'));
+            });
+		},
+		wrapCol : function(amt) {
+			var divs = $('.location-other-details .g .gi');
+			for (var i = 0; i < amt; i += 2) {
+				divs.slice(i, i+2).wrapAll('<div class="isoTest-row"></div>');
+			}
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+			//mboxUpdate(isoTest.customMbox, 'click='+element);
+            adobe.target.trackEvent({
+                "mbox": isoTest.customMbox,
+                "params": {
+                    "click": element
+                }
+            });
+			if (url !== null) {
+				window.setTimeout("window.location.href='" + url + "'", 500);
+			}
+		},
+		elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if (((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) && typeof _analytics === "object" && ReservationStateTree.get().model.pickup.location.details.hasOwnProperty('address')) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		}
+	}
+	isoTest.init();
+})();
+</script>

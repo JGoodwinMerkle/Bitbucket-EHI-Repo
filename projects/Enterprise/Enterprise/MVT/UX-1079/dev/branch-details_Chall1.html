@@ -1,0 +1,326 @@
+<style>
+#start-reservation .booking-widget {
+    margin-top: 0 !important;
+}
+#start-reservation .container {
+	display: inline-block !important;
+}
+#start-reservation .inner-container {
+	border-right: 2px solid #ccc;
+	float: left;
+	margin: 5% 0 !important;
+	padding: 0 4% !important;
+	width: 68% !important;
+}
+#start-reservation .booking-widget {
+	width: 100%;
+}
+.booking-widget .date-time-selector .label-container {
+	width: 46%;
+}
+.booking-widget .date-time-selector .time-label, .booking-widget .date-time-selector .date-label {
+	width: 50%;
+}
+.booking-widget div.arrow {
+    margin: 3.5em 2.5% 1.5em 2.5% !important;
+    width: 3% !important;
+}
+.iso-details {
+	float: right;
+    margin: 5% 0;
+    padding: 0 4%;
+    width: 32%;
+}
+.iso-details h2 {
+	font-size: 28px;
+	margin-bottom: 15px;
+}
+.iso-details a {
+	cursor: pointer;
+}
+.iso-details ul {
+	list-style-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2053.333332%2053.333332%22%20height%3D%2217%22%20width%3D%2217%22%3E%3Cpath%20d%3D%22M16.14%2039.297L4.893%2028.05%200%2032.94l16.38%2016.382%2036.953-40.66L48.21%204.01z%22%20fill%3D%22%23169a5a%22%2F%3E%3C%2Fsvg%3E");
+    list-style-position: initial;
+    margin-left: 25px;
+}
+.iso-details li {
+	font-weight: normal;
+	margin-bottom: 15px;
+}
+.iso-details img{
+	float: right;
+    display: inline;
+    height: 85px;
+    margin: 0 0 15px 15px;
+    width: 105px;
+}
+.pickup .tip{
+	display: inline;
+	position: relative;
+}
+.iso-tooltip {
+	background: #515151;
+    color: #fff;
+    display: none;
+    font-size: 12px;
+    font-weight: 300;
+    padding: 10px 35px 10px 13px;
+    position: absolute;
+    right: -20%;
+    top: -150px;
+    width: 285px;
+}
+.iso-tooltip:after {
+    bottom: -8px;
+	content: " ";
+    height: 0;
+    border-top: 8px solid #515151;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    position: absolute;
+    right: 50px;
+}
+.iso-tooltip .close {
+    cursor: pointer;
+    font-size: 35px; 
+    position: absolute;
+    right: 8px;
+    top: 0px;
+}
+@media (max-width: 1400px){
+	#start-reservation .booking-widget .date-time-form {
+		width: 100%;
+	}
+	.booking-widget .age-input label {
+		margin-top: 20px;
+	}
+}
+@media (max-width: 1350px){
+	.inner-container.expanded .age-input, .booking-widget .age-input #age, .coupon-field-wrapper, .booking-widget .custom-label .coupon-input {
+		width: 100%;
+	}
+}
+@media (max-width: 1058px){
+	.booking-widget div.arrow {
+		margin-left: 1.5% !important;
+		margin-right: 1.5% !important;
+	}
+}
+@media (max-width: 980px){
+	.iso-details img {
+    	margin: 0 0 10px;
+	}
+}
+@media (max-width: 880px){
+	#start-reservation .inner-container, .iso-details{
+		width: 100% !important;
+		border: 0;
+	}
+	#start-reservation .inner-container {
+		margin-bottom: 0 !important;
+	}
+	.iso-details {
+		margin-top: 0;
+	}
+
+	.iso-details li.which img {
+		display: block;
+		float: none;
+		margin:10px 0 0;
+	}
+}
+@media (max-width: 375px){
+	.iso-tooltip {
+		right: auto;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Branch Details Panel',
+		cookieName : 'BranchDetailsPanel',
+		customMbox : 'BranchDetailsPanelClicks',
+		creative : 'Challenger 1',
+		selector: '#start-reservation .inner-container',
+		pageType: 'branch',
+		template: '<div class="iso-details">\
+			<h2>{title}</h2>\
+			<p><img alt="Recommended by Which?" data-original="/content/dam/ecom/hosted/which-logo.png" src="/content/dam/ecom/hosted/which-logo.png"> {content}</p>\
+			<ul>\
+				{list}\
+			</ul>\
+		</div>',
+		toolTip: '<div class="iso-tooltip">\
+			<div class="content">\
+				Available at non-airport branches and during normal business hours. Simply ask for this service when your rental branch calls to confirm your reservation. Once picked up and back at the branch, rental representative will complete your paper work and have you on the road. When your rental is complete, bring the car back to the branch and we will drop you off.\
+			</div>\
+			<div class="close">&times;</div>\
+		</div>',
+		content: {
+			airport: {
+				title: 'Why Choose Enterprise?',
+				content: 'Enterprise, a Which? Recommended Provider, has the largest branch network of any UK car rental company with over 450 locations throughout the country. Reserve online today and you\'ll benefit from:',
+				list: '<li>Competitive fully inclusive prices</li>\
+				<li>No hidden charges or credit card fees</li>\
+				<li>Easy and convenient one-way car rentals</li>\
+				<li>Award-winning customer service</li>\
+				<li class="which">Which? Recommended Provider</li>'
+			},
+			branch: {
+				title: 'Why Choose Enterprise?',
+				content: 'Enterprise, a Which? Recommended Provider, has the largest branch network of any UK car rental company with over 450 locations throughout the country. Reserve online today and you\'ll benefit from:',
+				list: '<li class="pickup">Free Pick-Up & Drop Off service <div class="tip"><a>(What\'s this?)</a></div></li>\
+				<li>Competitive fully inclusive prices</li>\
+				<li>No hidden charges or credit card fees</li>\
+				<li>Easy and convenient one-way car rentals</li>\
+				<li>Award-winning customer service</li>\
+				<li class="which">Which? Recommended Provider</li>'
+			}
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				_satellite.track('target_variables');
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			if(window._analytics && window._analytics.pageInfo && window._analytics.pageInfo.pageName){
+				isoTest.chall();
+			} else {
+				var aInt = setInterval(function () {
+					if(window._analytics && window._analytics.pageInfo && window._analytics.pageInfo.pageName){
+						clearInterval(aInt);
+						isoTest.chall();
+					}
+				}, 100);
+			}
+		},
+		chall : function() {
+			if(_analytics.pageInfo.pageName == 'branchpage'){
+				isoTest.pageType = location.pathname.indexOf('airport') > -1 ? 'airport' : 'branch';
+				isoTest.elementLoaded(isoTest.selector, function() {	
+					isoTest.log("Test Ready!");	
+	  				isoTest.addPanel();
+				});
+			}
+		},
+		addPanel: function(){
+			var $panel = helpers.supplant(isoTest.template, {
+				'title' : isoTest.content[isoTest.pageType].title,
+				'content' : isoTest.content[isoTest.pageType].content,
+				'list' : isoTest.content[isoTest.pageType].list
+			});
+			$(isoTest.selector).after($panel);
+
+			$('.iso-details .tip').append(isoTest.toolTip);
+			isoTest.bindEvents();
+		},
+		bindEvents: function(){
+			$('.iso-details .pickup a').click(isoTest.hideShow);
+			$('.iso-tooltip .close').click(isoTest.hideShow);
+		},
+		hideShow: function(){
+			$('.iso-tooltip').toggle();
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === "function") {
+					
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

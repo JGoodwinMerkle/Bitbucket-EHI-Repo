@@ -1,0 +1,802 @@
+<style>
+	section.vehicle-item__summary {
+		z-index: auto !important;
+	}
+
+	.iso-similar-link {
+		color: #169A5A;
+		cursor: pointer;
+	}
+
+	.iso-similar-link:hover {
+		text-decoration: underline;
+	}
+
+	.iso-similar-link:hover .iso-tooltip {
+		color: #FFFFFF;
+		background-color: #169A5A;
+	}
+
+	.iso-tooltip {
+		width: 17px;
+    height: 17px;
+    font-family: 'Georgia-BoldItalic', 'Georgia Bold Italic', 'Georgia';
+    font-weight: 700;
+    font-style: italic;
+    font-size: 12px;
+    color: #169A5A;
+    border: 1px solid #169A5A;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 16px;
+    position: relative;
+    margin-left: 5px;
+    background-color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+	}
+
+	.iso-tooltip:before{
+    content:'i';
+  }
+
+	.iso-tooltip:hover {
+		color: #FFFFFF;
+		background-color: #169A5A;
+	}
+
+	.iso-tooltip-text-container {
+		display: none;
+    width: 287px;
+    min-height: 130px;
+    background-color: rgba(81, 81, 81, 1);
+    padding: 15px 23px 5px 13.5px;
+		position: absolute;
+		z-index: 999;
+		left: -149px;
+    top: 28px;
+	}
+
+	.iso-tooltip-text-container.active {
+		display: block;
+	}
+
+	.iso-tooltip-text {
+    font-family: "din-2014",Arial,sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    color: #FFFFFF;
+    text-align: left;
+    line-height: 14px;
+	}
+
+	.iso-tooltip-close {
+		position: absolute;
+		top: 3px;
+		right: 2px;
+		background: transparent;
+		padding: 0.5em;
+    font-weight: 800;
+    font-style: normal;
+    font-size: .9em;
+    text-transform: uppercase;
+    color: #fff;
+    letter-spacing: .0675rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 0;
+    margin: 0 1px 0;
+	}
+
+	.iso-tooltip-close i.icon {
+		width: 16px;
+		height: 16px;
+	}
+
+	.iso-tooltip-text-container::after {
+		border-color: transparent transparent rgba(81, 81, 81, 1) transparent;
+		border-style: solid;
+		border-width: 12px;
+	  content: " ";
+	  position: absolute;
+	  top: -22px;
+    left: 50%;
+	}	
+
+	.similar-link-text {
+		color: #63C292;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+	.open-tooltip {
+		display: block !important;
+	}
+
+	.iso-similar-vehicles-modal h2 {
+		font-weight: 600;
+    font-style: normal;
+    font-size: 32px;
+    border: none;
+    color: #181918;
+    margin: 0 0 .5rem 0;
+	}
+
+	.modal-content.iso-similar-vehicles-modal p.iso-modal-disclaimer {
+		font-size: 16px;
+    color: #FFFFFF;
+    line-height: normal;
+    background-color: rgba(0, 0, 0, 1);
+    font-weight: 400;
+    height: auto;
+    padding: 5px 20px;
+    margin-bottom: 1.5em;
+	}
+
+	.modal-content.iso-similar-vehicles-modal p.iso-modal-disclaimer .bold {
+		font-weight: 700;
+	}
+
+	#similar-vehicles-list {
+		width: 100%;
+		-webkit-column-count: 3;
+  	-moz-column-count: 3;
+    column-count: 3;
+    -webkit-column-gap: 22px; 
+  	-moz-column-gap: 22px;
+    column-gap: 22px;
+	}
+
+	#similar-vehicles-list .similar-vehicle-item {
+    font-style: normal;
+    color: #333333;
+    border-bottom: solid .5px #D7D7D7;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+    width: 100%;
+	}
+
+	#similar-vehicles-list .similar-vehicle-item .vehicle-category {
+		font-weight: 700;
+    text-transform: uppercase;
+    line-height: 18px;
+    font-size: 14px;
+	}
+
+	#similar-vehicles-list .similar-vehicle-item .vehicle-models {
+		font-weight: 300;
+		line-height: 18px;
+		font-size: 14px;
+	}
+
+	@media (max-width: 940px) {
+		#similar-vehicles-list {
+			-webkit-column-count: 2;
+  		-moz-column-count: 2;
+			column-count: 2;
+		}
+	}
+
+	@media (max-width: 400px) {
+		#similar-vehicles-list {
+			-webkit-column-count: 1;
+  		-moz-column-count: 1;
+			column-count: 1;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca',
+		test : 'Enterprise Find Similar Vehicles',
+		cookieName : 'enFindSimilarVehicles',
+		customMbox : 'enFindSimilarVehiclesClicks',
+		creative : "Challenger 1",
+		tooltipContent : '<div class="iso-tooltip-text-container">\
+												<span role="button" tabindex="0" class="iso-tooltip-close" aria-label="Close">\
+													<i class="icon icon-close-x-white"></i>\
+												</span>\
+												<p class="iso-tooltip-text similar-cars-text">{similarVehicles}</p>\
+												<p class="iso-tooltip-text disclaimer-text">Please Note: Exact make and models are not always available at every location.</p>\
+												<p tabindex="0" class="iso-tooltip-text similar-link-text">See Similar Vehicles For All Car Classes</p>\
+											</div>',
+		modalContent : { 
+			modalBody : '<div class="modal-container iso-modal-container" role="dialog" aria-modal="true" tabindex="-1" >\
+							        <div class="modal-content iso-similar-vehicles-modal">\
+							          <div class="modal-header">SIMILAR VEHICLES\
+							            <button class="close-modal"><i class="icon icon-close-x-white">X</i></button>\
+							          </div>\
+							          <div class="modal-body">\
+							          	<h2>Similar Vehicles In Each Car Class</h2>\
+							          	<p class="iso-modal-disclaimer"><span class="bold">Please Note:</span> Exact make and models are not always available at every location.</p>\
+							          	<ul id="similar-vehicles-list">\
+							          	</ul>\
+							          </div>\
+							        </div>\
+							    	</div>',
+			modalList : "<li class='similar-vehicle-item'>\
+											<div class='vehicle-category'>{typeName}</div>\
+											<div class='vehicle-models'>{similarVehicles}</div>\
+										<li>"
+		},
+		similarVehicleTypes : {
+			ecar : {
+				typeName : 'Economy',
+				similarVehicles : 'Mitsubishi Mirage, Mitsubishi Mirage G4, Kia Rio, Chevrolet Spark'
+			},
+			ccar : {
+				typeName : 'Compact',
+				similarVehicles : 'Ford Fiesta, Hyundai Accent, Nissan Versa Note, Chevrolet Sonic, Nissan Versa'
+			},
+			icar : {
+				typeName : 'Intermediate',
+				similarVehicles : 'Mazda3, Ford Focus, Nissan Sentra, Chevrolet Cruze, Hyundai Elantra, Toyota Corolla'
+			},
+			scar : {
+				typeName : 'Standard',
+				similarVehicles : 'Kia Soul, Volkswagen Jetta'
+			},
+			sxar : {
+				typeName : 'Standard Special',
+				similarVehicles : 'Volkswagen Beetle'
+			},
+			fcar : {
+				typeName : 'Full Size',
+				similarVehicles : 'Nissan Altima, Ford Fusion, Hyundai Sonata, Chevrolet Malibu, Toyota Camry'
+			},
+			pcar : {
+				typeName : 'Premium',
+				similarVehicles : 'Nissan Maxima, Buick LaCrosse'
+			},
+			pxar : {
+				typeName : 'Premium Special',
+				similarVehicles : 'Ford Taurus, Chrysler 300, Chevrolet Impala (2014 and newer)'
+			},
+			lcar : {
+				typeName : 'Luxury',
+				similarVehicles : 'Cadillac XTS, Cadillac CTS, Lincoln MKZ'
+			},
+			ctar : {
+				typeName : 'Compact Convertible',
+				similarVehicles : 'Miata Convertible, Miata RF'
+			},
+			itar : {
+				typeName : 'Intermediate Convertible',
+				similarVehicles : 'Volkswagen Beetle Convertible, Mini Cooper Convertible'
+			},
+			star : {
+				typeName : 'Convertible',
+				similarVehicles : 'Chevrolet Camaro Convertible, Ford Mustang Convertible, Buick Cascada'
+			},
+			ssar : {
+				typeName : 'Sporty',
+				similarVehicles : 'Dodge Challenger, Chevrolet Camaro, Ford Mustang'
+			},
+			icam : {
+				typeName : 'Intermediate Plug-In Hybrid',
+				similarVehicles : 'Chevrolet Volt'
+			},
+			icae : {
+				typeName : 'Intermediate Electric',
+				similarVehicles : 'Nissan LEAF'
+			},
+			scah : {
+				typeName : 'Standard Hybrid',
+				similarVehicles : 'Toyota Prius'
+			},
+			fcah : {
+				typeName : 'Full Size Hybrid',
+				similarVehicles : 'Ford Fusion Hybrid'
+			},
+			rxar : {
+				typeName : 'Standard Elite',
+				similarVehicles : 'Audi A3, Mercedes Benz CLA250'
+			},
+			gxar : {
+				typeName : 'Full Size Elite',
+				similarVehicles : 'Infiniti Q50, Volvo V60, Volvo S60, Audi A4, Mercedes Benz C300'
+			},
+			uxar : {
+				typeName : 'Premium Elite',
+				similarVehicles : 'Audi A6, Lincoln Continental, BMW 530'
+			},
+			wcar : {
+				typeName : 'Executive Luxury Sedan',
+				similarVehicles : 'Mercedes Benz AMG E53, Maserati Ghibli'
+			},
+			wxar : {
+				typeName : 'Large Executive Luxury Sedan',
+				similarVehicles : 'Mercedes Benz S450, Audi A8, Tesla S Model, Porsche Panamera, BMW 740'
+			},
+			symr : {
+				typeName : 'American Muscle',
+				similarVehicles : 'Chevrolet Camaro SS, Ford Mustang GT, Chevrolet Camaro SS Convertible, Dodge Challenger R/T Scat Pack, Ford Mustang GT Convertible'
+			},
+			fymr : {
+				typeName : 'Exotic Sport',
+				similarVehicles : 'Infiniti Q60'
+			},
+			ltar : {
+				typeName : 'Luxury Convertible',
+				similarVehicles : 'BMW 430 Convertible'
+			},
+			gymr : {
+				typeName : 'Performance Sport',
+				similarVehicles : 'Chevrolet Corvette Convtertible, Chevrolet Corvette, Porsche Boxster'
+			},
+			pymr : {
+				typeName : 'Luxury Sport',
+				similarVehicles : 'Porsche Caymen'
+			},
+			eymr : {
+				typeName : 'Luxury Performance Sport',
+				similarVehicles : 'Mercedes Benz SL450, Porsche 911 Cabrio, Porsche 911, Jaguar F-Type SVR Coupe/Convtertible'
+			},
+			iymr : {
+				typeName : 'Super Sport',
+				similarVehicles : 'Lamborghini Huracan, Ferrari California, Aston Martin DB11 Volante, Audi R8 Spyder, Aston Martin DB11, Bentley Continental GT'
+			},
+			rfar : {
+				typeName : 'Standard Elite SUV',
+				similarVehicles : 'Mercedes Benz GLA250, Audi Q3, Lincoln MKC, Infiniti QX30, BMW X2'
+			},
+			ufar : {
+				typeName : 'Premium Elite SUV',
+				similarVehicles : 'Mercedes Benz GLC300, BMW X3, Land Rover Discovery Sport, Lincoln Nautilus, Audi Q5, Cadillac XT5'
+			},
+			wfar : {
+				typeName : 'Luxury Elite SUV',
+				similarVehicles : 'Audi Q7, Range Rover Evoque, Volvo XC90, Land Rover Discovery, BMW X5, Jaguar F-Pace, Meredes GLE'
+			},
+			lymr : {
+				typeName : 'Executive Luxury SUV',
+				similarVehicles : 'Porsche Cayenne, Porsche Macan, Range Rover Sport, Mercedes Benz GLS450, Maserati Levante, Range Rover Velar'
+			},
+			wzar : {
+				typeName : 'Large Executive Luxury SUV',
+				similarVehicles : 'Cadillac Escalade ESV, Tesla Model X, Range Rover, Lincoln Navigator L'
+			},
+			mvar : {
+				typeName : '7 Passenger Minivan',
+				similarVehicles : 'Dodge Grand Caravan, Kia Sedona, Chrysler Pacifica'
+			},
+			svar : {
+				typeName : '8 Passenger Minivan',
+				similarVehicles : 'Toyota Sienna'
+			},
+			rvar : {
+				typeName : '12 Passenger Van',
+				similarVehicles : 'Ford Transit Wagon, Chevrolet Express Passenger Van'
+			},
+			fvar : {
+				typeName : '15 Passenger Van',
+				similarVehicles : 'Chevrolet Express Passenger Van, Ford Transit Wagon'
+			},
+			ovar : {
+				typeName : '12 Passenger High Roof Van',
+				similarVehicles : 'Ford Transit Wagon'
+			},
+			uvar : {
+				typeName : '15 Passenger High Roof Van',
+				similarVehicles : 'Ford Transit Wagon'
+			},
+			jkar : {
+				typeName : 'Compact Cargo Van',
+				similarVehicles : 'Nissan NV200, RAM ProMaster City'
+			},
+			skar : {
+				typeName : 'Cargo Van',
+				similarVehicles : 'Chevrolet Express 1500 Cargo, Nissan NV1500 Standard, Ford Transit 150 Cargo, RAM ProMaster 1500'
+			},
+			rkar : {
+				typeName : 'Cargo Van',
+				similarVehicles : 'Chevrolet Express Cargo Van, RAM ProMaster, Ford Transit Cargo Van'
+			},
+			ukar : {
+				typeName : 'Cargo Van',
+				similarVehicles : 'Ford Transit Cargo, RAM ProMaster'
+			},
+			pgar : {
+				typeName : 'Premium Crossover',
+				similarVehicles : 'Ford Flex, Chevolet Traverse, Dodge Durango, Volkswagen Atlas'
+			},
+			ijar : {
+				typeName : 'Jeep Wrangler',
+				similarVehicles : 'Jeep Wrangler 2dr'
+			},
+			fjar : {
+				typeName : 'Jeep Wrangler',
+				similarVehicles : 'Jeep Wrangler Unlimited 4dr'
+			},
+			cfar : {
+				typeName : 'Compact SUV',
+				similarVehicles : 'Mazda CX-3, Ford EcoSport, Nissan Rogue Sport, Mitsubishi Outlander Sport, Hyundai Kona'
+			},
+			irar : {
+				typeName : 'Intermediate SUV',
+				similarVehicles : 'Jeep Cherokee, Ford Escape, Nissan Rogue, Toyota RAV4, Hyundai Tucson, Jeep Compass'
+			},
+			ifar : {
+				typeName : 'Intermediate SUV',
+				similarVehicles : 'Jeep Cherokee, Ford Escape, Nissan Rogue, Toyota RAV4, Hyundai Tucson, Jeep Compass'
+			},
+			srar : {
+				typeName : 'Standard SUV',
+				similarVehicles : 'Chevrolet Equinox, Hyundai Santa Fe, Dodge Journey, Ford Explorer, Nissan Pathfinder'
+			},
+			sfar : {
+				typeName : 'Standard SUV',
+				similarVehicles : 'Chevrolet Equinox, Nissan Pathfinder, Ford Explorer, Hyundai Santa Fe, Dodge Journey'
+			},
+			frar : {
+				typeName : 'Fullsize SUV',
+				similarVehicles : 'Chevrolet Tahoe, GMC Yukon, Ford Expedition, Nissan Armada'
+			},
+			ffar : {
+				typeName : 'Fullsize SUV',
+				similarVehicles : 'Chevrolet Tahoe, GMC Yukon, Ford Expedition, Nissan Armada'
+			},
+			prar : {
+				typeName : 'Premium SUV',
+				similarVehicles : 'GMC Yukon XL, Toyota Sequoia, Chevrolet Suburban, Ford Expedition Max'
+			},
+			pfar : {
+				typeName : 'Premium SUV',
+				similarVehicles : 'GMC Yukon XL, Toyota Sequoia, Chevrolet Suburban, Ford Expedition Max'
+			},
+			lfar : {
+				typeName : 'Luxury SUV',
+				similarVehicles : 'Cadillac Escalade, Lincoln Navigator, Infiniti QX80'
+			},
+			spar : {
+				typeName : 'Small Pickup',
+				similarVehicles : 'Chevrolet Colorado, Toyota Tacoma, Nissan Frontier'
+			},
+			ppar : {
+				typeName : 'Pickup',
+				similarVehicles : 'Chevrolet Silverado 1500, Ram 1500, Nissan Titan, Toyota Tundra, Ford F-150'
+			},
+			opar : {
+				typeName : 'Extra Large Pickup',
+				similarVehicles : 'Chevrolet Silverado 2500, Ram 2500, Ford F-250'
+			},
+			oqar : {
+				typeName : 'Extra Large Pickup',
+				similarVehicles : 'Chevrolet Silverado 2500, Ram 2500, Ford F-250'
+			},
+			upar : {
+				typeName : 'Extra Large Pickup',
+				similarVehicles : 'Chevrolet Silverado 3500, Ram 3500, Ford F-350'
+			},
+			uqar : {
+				typeName : 'Extra Large Pickup',
+				similarVehicles : 'Chevrolet Silverado 3500, Ram 3500, Ford F-350'
+			},
+			xxar : {
+				typeName : 'You Click. We Pick.',
+				similarVehicles : 'This is a special car class where you click on a great rate and we pick your vehicle at the time of rental. You’ll always get at least a compact-sized car which holds five passengers.'
+			}
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+	        _satellite.setVar('TargetCampaign', isoTest.test);
+	        _satellite.setVar('TargetCreative', isoTest.creative);
+	        _satellite.track('target_variables');
+		    }
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.dependsLoaded(function(){
+				isoTest.elementLoaded('#reservationFlow #cars .vehicle-list', function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+	  			isoTest.chall();
+				});
+			});
+
+			$(window).on('hashchange',function() {
+        if (window.location.hash === '#cars') {
+  				isoTest.dependsLoaded(function(){
+						isoTest.elementLoaded('#reservationFlow #cars .vehicle-list', function() {
+							if (isoTest.debug === true) {
+								console.log("Test Ready!");
+							}
+			  			isoTest.chall();
+						});
+					});
+        }
+			});
+
+			$(document).on('click', '.vehicle-filter__content .checkbox__label', function() {
+				// console.log("checkbox clicked");
+				setTimeout(function() {
+		  		isoTest.dependsLoaded(function(){
+						isoTest.elementLoaded('#reservationFlow #cars .vehicle-list', function() {
+			  			isoTest.chall();
+						});
+					});
+				}, 100);
+			});
+
+			$(document).on('click', '.vehicle-filter__header-link', function() {
+				// console.log("clear checkbox clicked");
+				setTimeout(function() {
+		  		isoTest.dependsLoaded(function(){
+						isoTest.elementLoaded('#reservationFlow #cars .vehicle-list', function() {
+			  			isoTest.chall();
+						});
+					});
+				}, 100);
+			});
+	
+		},
+		chall : function() {
+			isoTest.updateVehicleText();
+			isoTest.buildModal();
+			isoTest.buildCarInfo();
+			isoTest.addEvents();
+		},
+		updateVehicleText : function() {
+			$(".vehicle-item__models:contains('or similar')").html(function(_, html) {
+				if ($(this).find('.iso-similar-link').length === 0) {
+					return html.replace(/(or similar)/g, '<span tabindex="0" class="iso-similar-link">or similar<span class="iso-tooltip"></span></span>');
+				}
+			});
+		},
+		buildModal : function() {
+			if ($('.modal-content.iso-similar-vehicles-modal').length === 0) {
+				$('body').append(isoTest.modalContent.modalBody);
+			}
+
+			if ($('.similar-vehicle-item').length === 0) {
+				for (var key in isoTest.similarVehicleTypes) { 
+					if (isoTest.similarVehicleTypes.hasOwnProperty(key)) {
+						if (key != 'xxar') {
+							var foundInDom = -1;
+							$("#similar-vehicles-list .similar-vehicle-item").each(function (i) {
+							  if ($(this).find('.vehicle-category').text() === isoTest.similarVehicleTypes[key].typeName) {
+							    foundInDom = i;
+							  }
+							});
+							if (foundInDom < 0) {
+							  $('.iso-similar-vehicles-modal .modal-body #similar-vehicles-list').append(isoTest.supplant(isoTest.modalContent.modalList, isoTest.similarVehicleTypes[key]));
+							} else {
+							  var $foundItem = $("#similar-vehicles-list .similar-vehicle-item .vehicle-models:eq(" + foundInDom + ")");
+							  var newItem = isoTest.similarVehicleTypes[key].similarVehicles;
+
+							  var splitString = newItem.split(', ');
+								for (let i = 0; i < splitString.length; i++) {
+									if ($foundItem.text().indexOf(splitString[i]) == -1) {
+										$foundItem.text($foundItem.text()+', '+isoTest.similarVehicleTypes[key].similarVehicles);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		buildCarInfo : function() {
+			$(".iso-tooltip").each(function() {
+				var carID = $(this).parents(':has(.vehicle-item__tour-info)').first().find('.vehicle-item__tour-info').text().toLowerCase();
+				for (var key in isoTest.similarVehicleTypes) { 
+					if (isoTest.similarVehicleTypes.hasOwnProperty(key)) {
+						if ($(this).find('.iso-tooltip-text-container').length === 0) {
+							if (carID === key) {
+								$(this).append(isoTest.supplant(isoTest.tooltipContent, isoTest.similarVehicleTypes[key]));
+							}
+						}
+					}
+				}
+			});
+		},
+		addEvents : function() {
+
+			$('.similar-link-text').on('click', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				// console.log('modal open clicked');
+				var carID = $(this).parents(':has(.vehicle-item__tour-info)').first().find('.vehicle-item__tour-info').text();
+				var linkName = 'RW:CarClass:SimilarModal';
+				var individualLinkName = 'RW:CarClass:SimilarModal:' + carID;
+				s.linkTrackVars = 'eVar20,prop23';
+				s.eVar20 = linkName;
+				s.prop23 = individualLinkName;
+				s.tl(this, 'o', linkName, individualLinkName);
+
+				$('.modal-container.iso-modal-container').addClass('active');
+				$('html').addClass('modal-open');
+				$('body').attr("aria-hidden","true");
+				$('body').addClass('ReactModal__Body--open');
+
+				setTimeout(function() { $('.iso-modal-container button').focus(); }, 500);
+			});	
+
+			$('.iso-similar-link').on('click', function(e){
+				// console.log('tooltip open clicked');
+				var carID = $(this).parents(':has(.vehicle-item__tour-info)').first().find('.vehicle-item__tour-info').text();
+				var linkName = 'RW:CarClass:SimilarIcon';
+				var individualLinkName = 'RW:CarClass:SimilarIcon:' + carID;
+				s.linkTrackVars = 'eVar20,prop23';
+				s.eVar20 = linkName;
+				s.prop23 = individualLinkName;
+				s.tl(this, 'o', linkName, individualLinkName);
+				$(this).find('.iso-tooltip-text-container').addClass('active');
+			});
+
+			$('.iso-tooltip-close').on('click', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				// console.log('tooltip close clicked');
+				$(this).closest('.iso-tooltip-text-container.active').removeClass('active');
+			});
+
+			$(document).on('click', '.iso-similar-vehicles-modal .close-modal', function(){
+				// console.log('modal close clicked');
+				$('.modal-container.iso-modal-container').removeClass('active');
+				$('html').removeClass('modal-open');
+				$('body').removeClass('ReactModal__Body--open');
+
+				var $activeContainer = $('.vehicle-list').find('.iso-tooltip-text-container.active .similar-link-text').first();
+
+				setTimeout(function() { $activeContainer.focus(); }, 500);
+			});
+
+			$(document).keyup(function(e) {
+ 				if(e.keyCode == 27 || e.key == "Esc" || e.key == "Escape") {
+ 					if ($('.modal-container.iso-modal-container').hasClass('active')) {
+ 						$('.modal-container.iso-modal-container').removeClass('active');
+ 						$('html').removeClass('modal-open');
+						$('body').removeClass('ReactModal__Body--open');
+
+						var $activeContainer = $('.vehicle-list').find('.iso-tooltip-text-container.active .similar-link-text').first();
+
+						setTimeout(function() { $activeContainer.focus(); }, 500);
+ 					} else {
+			    	var $focused = $(":focus");
+			    	if ($($focused[0]).hasClass('iso-tooltip-close') || $($focused[0]).hasClass('similar-link-text')) {
+			    		// console.log('tooltip close esc');
+							$focused.closest('.iso-tooltip-text-container.active').removeClass('active');
+						} 
+					}
+		    }
+			});
+
+			$(document).keypress(function(e) {
+		    var key = e.which;
+ 				if(key == 13) {
+ 					var $focused = $(":focus");
+
+ 					if ($($focused[0]).hasClass('iso-similar-link')) {
+ 						// console.log('tooltip open enter');
+			    	var carID = $focused.parents(':has(.vehicle-item__tour-info)').first().find('.vehicle-item__tour-info').text();
+						var linkName = 'RW:CarClass:SimilarIcon';
+						var individualLinkName = 'RW:CarClass:SimilarIcon:' + carID;
+						s.linkTrackVars = 'eVar20,prop23';
+						s.eVar20 = linkName;
+						s.prop23 = individualLinkName;
+						s.tl(this, 'o', linkName, individualLinkName);
+						$focused.find('.iso-tooltip-text-container').addClass('active');
+					}
+
+					if ($($focused[0]).hasClass('similar-link-text')) {
+						// console.log('modal open enter');
+			    	var carID = $focused.parents(':has(.vehicle-item__tour-info)').first().find('.vehicle-item__tour-info').text();
+						var linkName = 'RW:CarClass:SimilarModal';
+						var individualLinkName = 'RW:CarClass:SimilarModal:' + carID;
+						s.linkTrackVars = 'eVar20,prop23';
+						s.eVar20 = linkName;
+						s.prop23 = individualLinkName;
+						s.tl(this, 'o', linkName, individualLinkName);
+
+						$('.modal-container.iso-modal-container').addClass('active');
+						$('html').addClass('modal-open');
+						$('body').attr("aria-hidden","true");
+						$('body').addClass('ReactModal__Body--open');
+
+						setTimeout(function() { $('.iso-modal-container button').focus(); }, 500);
+					}
+
+					if ($($focused[0]).hasClass('iso-tooltip-close')) {
+						// console.log('tooltip close enter');
+						$focused.closest('.iso-tooltip-text-container.active').removeClass('active');
+					}
+		    }
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        "mbox": isoTest.customMbox,
+        "params": {
+            "click": element
+        },
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+      });
+		},
+		supplant : function (str, o) {
+			return str.replace(/{([^{}]*)}/g, function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : '';
+			});
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+      } else {
+        isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+      }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+        	return decodeURIComponent(pair[1]);
+        }
+      }
+    }
+	}
+	
+	isoTest.dependsLoaded(function(){ 
+    isoTest.init();
+  });
+})();
+</script>

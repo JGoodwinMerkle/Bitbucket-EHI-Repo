@@ -1,0 +1,229 @@
+<style>
+	#book .same-location-checkbox input[type=checkbox] {
+	  -webkit-appearance: none;
+    display: block;
+    float: left;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    margin-right: 15px;
+    margin-bottom: 20px;
+	}
+
+	#book .same-location-checkbox span {
+		font-size: 16px;
+		font-weight: 300px;
+	}
+
+	#book input[type=checkbox]:checked {
+    border: 2px solid #169a5a;
+	}
+
+	#book input[type=checkbox]+.icon {
+    display: none;
+	}
+
+	#book input[type=checkbox]:checked+.icon {
+    display: block;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    margin: 6px 7px;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'One-Way Selector',
+		cookieName : 'enOneWaySelector',
+		customMbox : 'enOneWaySelectorClicks',
+		creative : "Challenger 3",
+		resWidget: '#reservationWidget',
+		checkbox: '<i class="icon icon-forms-checkmark-green"></i>',
+		init : function() {
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+		    	_satellite.setVar('TargetCampaign', isoTest.test);
+		        _satellite.setVar('TargetCreative', isoTest.creative);
+		        _satellite.track('target_variables');
+		    }
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			
+			isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded(isoTest.resWidget, function() {	
+					isoTest.log("Test Ready!");	
+					isoTest.chall();	
+				});
+			});
+
+			$(window).on('hashchange', function(){
+				isoTest.elementLoaded(isoTest.resWidget, function() {	
+					isoTest.log("Test Ready!");	
+					isoTest.chall();	
+				});
+			});
+		},
+		chall : function() {
+			$('#viewModifyCancelBookingWidget').click(function(){
+				isoTest.updateWidget();
+			});
+
+			isoTest.updateLabels();
+			isoTest.addEvents();
+		},
+		updateWidget: function() {
+			var bookingLink = $('#viewModifyCancelBookingWidget span.active');
+			if (bookingLink.text() === "Reserve a Rental Car" || bookingLink.text() === "START A RESERVATION") {
+				setTimeout(function(){
+					isoTest.updateLabels();
+				}, .1);
+			}
+		},
+		updateLabels : function(){
+			setTimeout(function(){
+				isoTest.elementLoaded('[class=locationInput-active]', function() {	
+					$(isoTest.checkbox).insertAfter('.same-location-checkbox input');
+				});
+			}, 100);
+		},
+		addEvents : function(){
+			$(document).on('click', '.same-location-checkbox', function(){
+				if (sessionStorage.getItem("iso-checked") === null){
+					sessionStorage.setItem("iso-checked", "true");
+					var linkName = 'Return to Different Location';
+					s.linkTrackVars = 'p3';
+					s.p3 = linkName;
+					s.tl(this, 'o', linkName);
+				}
+			});
+
+			$(document).on('click', '#continueButton', function(){
+				var pickUpLocation = ReservationStateTree.get().model.pickup.location.locationId;
+				var dropOffLocation = ReservationStateTree.get().model.dropoff.location.locationId;
+				if (pickUpLocation != dropOffLocation) {
+					isoTest.trackClicks('oneway');
+				}
+			});
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+			adobe.target.trackEvent({
+			 	"mbox": isoTest.customMbox,
+			  	"params": {
+			    	"click": element
+			  	},
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        "mbox": isoTest.customMbox,
+        "params": {
+          "click": element
+      	},
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+    	});
+		},
+		analyticsLoaded : function(callback){
+			isoTest.log('analyticsLoaded - Checking...');
+			var aTimer;
+			window.clearTimeout(aTimer);
+			if (_a && _a.stationId.length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('analyticsLoaded - Found!');
+					callback();
+				}
+	    } else {
+	      aTimer = window.setTimeout(function(){isoTest.analyticsLoaded(callback);}, 100);
+	    }
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	    } else {
+	      isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	    }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === "function") {
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	    var query = window.location.search.substring(1);
+	    var vars = query.split('&');
+	    for (var i = 0; i < vars.length; i++) {
+	      var pair = vars[i].split('=');
+	      if (decodeURIComponent(pair[0]) == variable) {
+	      	return decodeURIComponent(pair[1]);
+	      }
+	    }
+	  }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

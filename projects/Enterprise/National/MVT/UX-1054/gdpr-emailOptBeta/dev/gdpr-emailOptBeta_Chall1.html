@@ -1,0 +1,144 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Nationalcar.com',
+		test : 'GDPR Email OptIn',
+		cookieName : 'nlGDPREmailOptIn',
+		customMbox : 'nlGDPREmailOptInClicks',
+		creative : "Challenger 1",
+		enrollCheck: '.rewards-preferences__container [id*=updates]',
+		reviewCheck :'[id*=email-subscription]',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+			//listens to step 3 in enroll page
+			document.getElementById('analytics').addEventListener('analyticsPersonalInformation', isoTest.isCommVisible);
+			// checks if on step 3 in enroll page, in case of reload
+			if(location.pathname.indexOf('enroll.html') > -1){
+				setTimeout(function(){
+					if(document.querySelectorAll('.loyalty--divider').length > 0){
+						isoTest.log(isoTest.test + ' - Step 3')
+						isoTest.isCommVisible();
+					}
+				},1000);
+			}
+			
+			window.addEventListener('hashchange', function(){
+				isoTest.checkHash();
+			});
+			isoTest.checkHash();
+		},
+		checkHash : function(){
+			if(location.hash == '#/review'){
+				isoTest.elementLoaded(isoTest.reviewCheck, function() {	
+					isoTest.log("Test Ready!");	
+	  				isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			document.querySelector(isoTest.reviewCheck).checked = false;
+			document.querySelector(isoTest.reviewCheck).value = false;
+		},
+		isCommVisible: function(){
+			isoTest.log(isoTest.test + ' - COMMUNICATION_REWARD check');
+			var commContainer = document.getElementById('COMMUNICATION_REWARD');
+			if(commContainer){
+				var commInt = setInterval(function(){
+					isoTest.log('looking for COMMUNICATION_REWARD visibility');
+					if(commContainer.style.overflow == 'visible'){
+						isoTest.log('COMMUNICATION_REWARD is visible');
+						clearInterval(commInt);
+						isoTest.enrollUncheck();
+					}
+				}, 500);
+			}
+			
+			isoTest.enrollUncheck();
+		},
+		enrollUncheck: function () {
+			isoTest.log(isoTest.test + ' - enrollUncheck');
+			if(document.querySelector(isoTest.enrollCheck) && document.querySelector(isoTest.enrollCheck).checked==true){
+				var event = new MouseEvent('click', {
+							    view: window,
+							    bubbles: true,
+							    cancelable: true
+							  });
+				document.querySelector(isoTest.enrollCheck).dispatchEvent(event);
+			}
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.init();
+})();
+</script>

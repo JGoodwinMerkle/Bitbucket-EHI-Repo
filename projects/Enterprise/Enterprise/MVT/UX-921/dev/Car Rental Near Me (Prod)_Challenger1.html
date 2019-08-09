@@ -1,0 +1,129 @@
+<style>
+body > section { visibility:hidden; }
+.iso-location-near-me-layout .text.parbase.section,
+.iso-location-near-me-layout .threeup.section,
+.iso-location-near-me-layout .section.meet-the-fleet,
+.iso-location-near-me-layout .section.meet-the-fleet + .two-up-three-up.section,
+.iso-location-near-me-layout .interrupter-tile.section{
+	display: none;
+}
+  
+</style>
+<script>
+(function($) {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.com",
+		test : "Locations Near Me",
+		creative : "Challenger 1",
+		lang : 'en_US',
+		target: '.pick-up-location .location-btn span:nth-child(1)',
+		newHeading: 'Car Rental Near Me',
+	    firstOffer: { 
+	        'heading': "Our Customers Love Us", 
+	        'content': "We ranked “Highest in Rental Car Customer Satisfaction” by J.D. Power.", 
+	        'icon': "/content/dam/ecom/hosted/heart.png",
+	        'link': "https://www.enterprise.com/en/about/2016-j-d-power-award.html?icid=home.3up1-_-jd.power-_-ENUS.NULL" 
+	    },
+	    secondOffer: { 
+	        'heading': "Locations Across the U.S.", 
+	        'content': "As part of the largest rental car company in the world, we are almost anywhere you need us.", 
+	        'icon': "/content/dam/enterprise/designs/components/content/global/images/globe.png",
+	        'link': "https://www.enterprise.com/en/car-rental/locations/us.html?icid=home.3up2-_-us.locations-_-ENUS.NULL" 
+	    },
+	    thirdOffer: { 
+	        'heading': "A Massive Fleet", 
+	        'content': "Our lineup includes cars, minivans, SUVs, pickup trucks, cargo vans, and luxury vehicles.", 
+	        'icon': "/content/dam/enterprise/designs/components/content/global/images/tire.png",
+	        'link': "https://www.enterprise.com/en/car-rental/vehicles/us.html?icid=home.3up3-_-us.vehicles-_-ENUS.NULL" 
+	    },
+	init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			if (isoTest.debug === true) {
+				console.log("Test Running...");
+				console.log(isoTest.account + " - " + isoTest.portfolio);
+				console.log(isoTest.test + " - " + isoTest.creative);
+			}
+      isoTest.dependsLoaded(function(){
+      	isoTest.elementLoaded('h2.reservation-toggle-header',function(){
+          isoTest.updateHeading();
+      	});
+				isoTest.elementLoaded(isoTest.target, function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+          $('body').addClass('iso-location-near-me-layout');
+          isoTest.chall();  
+		    });
+			});
+		},
+    elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 500);
+	        }
+	},
+    dependsLoaded : function (callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+	},
+	useCurrentLocation: function(){
+		$(isoTest.target).click();
+	},
+	updateHeading : function(){
+		$('h2.reservation-toggle-header').text(isoTest.newHeading);
+	},
+	chall : function() {
+       isoTest.updateOffer(1, isoTest.firstOffer);
+       isoTest.updateOffer(2, isoTest.secondOffer);
+       isoTest.updateOffer(3, isoTest.thirdOffer);
+
+       $("body > section").css("visibility", "visible");
+
+       isoTest.useCurrentLocation();
+	},
+    updateOffer : function(target, newOffer){
+      var targetTile = $('.text-capsule-list .text-capsule-item:nth-child('+ target +')');
+      var heading = $(targetTile).find('.text-capsule-tile__heading').text(newOffer.heading);
+      var link = $(targetTile).find('a').attr('href',newOffer.link);
+      var icon = $(targetTile).find('img').attr('src',newOffer.icon);
+      var content = $(targetTile).find('.text-capsule-tile__text').text(newOffer.content);
+    }
+	}
+	isoTest.init();
+})(jQuery);
+</script>

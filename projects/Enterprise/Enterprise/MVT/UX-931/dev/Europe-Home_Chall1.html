@@ -1,0 +1,1062 @@
+<style>
+.three-up-band h4 {
+	display: none;
+}
+#reservationWidget h2.alpha {
+	font-family: "DINLight", Arial, Helvetica, sans-serif;
+	text-transform: none;
+}
+.iso-capsule {
+    margin: 0;
+    background: #f3f3f3;
+    border-top: 10px solid #f3f3f3;
+    border-bottom: 10px solid #f3f3f3;
+}
+.iso-capsule .text-capsule-list{
+	border: 0;
+	margin: 0;
+}
+.iso-capsule .text-capsule-tile.gutter-narrow{
+	padding: 20px 40px 10px 40px;
+}
+.iso-capsule .text-capsule-tile__image {
+    height: 50px;
+}
+.iso-car {
+	padding: 0 15px 20px 15px;
+}
+.iso-car section.text-capsule-tile.align-center.gutter-narrow {
+    padding: 40px;
+}
+.iso-car .text-capsule-tile__text p{
+	font-size: 15px;
+}
+.iso-locations {
+	padding: 6% 0 8% 0;
+}
+.iso-locations .parbase {
+	margin-bottom: 40px;
+	text-align: center;
+}
+.iso-locations .location-band.region-list .cf ul{
+	column-count: 3;
+}
+.iso-threeup,.iso-threeup * {
+	outline: 0;
+}
+.iso-threeup .interrupter-tile h2.headline {
+	padding:0 5px;
+}	
+.iso-threeup .lob-page-recirc-band.interrupter-tile .g.g-3up .col .content-container .cta-text{
+	margin: 30px 0 0;
+	display: block;
+}
+.iso-hero .interrupter-band .content-block{
+	display: table;
+}
+.lob-page-recirc-band.interrupter-tile .g.g-3up .col .content-container .cta-container a {
+	height: auto;
+}
+@media (max-width: 50em){
+	.iso-capsule .text-capsule-tile {
+	    border-bottom: 4px solid #f3f3f3;
+	}
+	.iso-locations .location-band.region-list .cf ul{
+		column-count: 2;
+	}
+}
+@media (max-width: 48em){
+	#reservationWidget h1 {
+		margin:30px 3% 0;
+	}
+	#reservationWidget h2 {
+		margin-top:0;
+	}
+}
+@media (max-width: 39.8em) {
+	.iso-locations .location-band.region-list .cf ul{
+		column-count: 1;
+	}
+}
+
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Europe Home 2.0',
+		cookieName : 'enEuropeHome2',
+		customMbox : 'enEuropeHome2Clicks',
+		creative : "Challenger 1",
+		lang: 'en_GB',
+		templates: {
+			capsules: '<div class="iso-capsule two-up-three-up section"><ul class="text-capsule-list"></ul></div>',
+			capsule: '<li class="text-capsule-item">\
+		        <a href="{url}">\
+		            <section class="text-capsule-tile align-center gutter-narrow">\
+		                <img class="text-capsule-tile__image" alt="Car Rental Email Offers" src="{image}">\
+		                <h2 class="text-capsule-tile__heading">{header}</h2>\
+		                <div style="display:none;"></div>\
+		                <div class="text-capsule-tile__text"><p>{content}</p>\
+		                </div>\
+		            </section>\
+		        </a>\
+		    </li>',
+		    hero: '<div class="iso-hero interrupter-small-band section"><section class="band interrupter-band full-bleed content-right black border-true">\
+					<section class="g g-2up">\
+						<section class="gi content-block vertical-align-">\
+							<div class="content-container horizontal-align-">\
+								<h3 class="headline ">{header}</h3>\
+								<span class="interrupter-band-text"><p>{content}</p></span>\
+								<div class="interrupter-band-cta">\
+									<a class="btn " href="{url}" aria-label="{cta}: {header}">\
+								   		{cta}\
+							 		</a>\
+							 	</div>	\
+							</div>\
+						</section>\
+						<section class="gi image-block">\
+							<div class="img-container">\
+								<div class="content-bg-img" style="background-image:url({image});"></div>\
+								<img class="content-fg-img" src="{image}" alt="Brad and Dave">\
+							</div>\
+						</section>\
+					</section>\
+				</section></div>',
+			car: '<div class="iso-capsule iso-car two-up-three-up section"><ul class="text-capsule-list home-lob-band at-element-marker"></ul></div>',
+			carItem: '<li class="text-capsule-item">\
+		        <a href="{url}">\
+		            <section class="text-capsule-tile align-center gutter-narrow">\
+		                <h2 class="text-capsule-tile__heading">{header}</h2>\
+		                <div style="display:none;"></div>\
+		                <div class="text-capsule-tile__text"><p>{content}</p>\
+		                </div>\
+		            </section>\
+		        </a>\
+		    </li>',
+			locations: '<div class="text parbase section"><h2>{header}</h2><p>{content}</p></div>',
+		    airports: '<div class="iso-airports gi"><h3>{title}</h3><ul></ul></div>',
+		    interrupter: '<div class="iso-threeup interrupter-tile section"><section class="band lob-page-recirc-band interrupter-tile full-bleed"><div class="g g-3up"></div></section></div>',
+		    interrupterItem: '<div class="col type-2">\
+			      <div class="content-container">\
+			          <div alt="{header}" class="content-bg-img" style="background-image: url(\'{image}\');">\
+			          </div>\
+			          <div class="content-container-content-wrap">\
+			              <div>\
+			                  <div class="eyebrow">{subheader}</div>\
+			                  <h2 class="headline" role="heading">{header}</h2>\
+			              </div>\
+			              <span class="cta-text">{content}</span>\
+			              <div class="cta-container">\
+			                  <a class="btn" href="{url}" aria-label="{header}">\
+			                    {cta}\
+			                  </a>\
+			              </div>\
+			          </div>\
+			    </div>\
+			</div>'
+		},
+		content: {
+			en_GB: {
+				header: 'Car hire in the UK and across the world',
+				subheader: 'Start a Reservation',
+				capsule: [{
+					header: 'Not an Enterprise Plus® member?',
+					img: '/content/dam/enterprise/icons/promo-icons/loyalty.png.wrend.480.270.png',
+					content: 'You could be earning points toward free rentals.',
+					url: '/en/loyalty.html?icid=home.three.up-_-loyalty-_-ENGB.NULL'
+				},{
+					header: 'Email Offers',
+					img: '/content/dam/enterprise/icons/promo-icons/email.png.wrend.480.270.png',
+					content: 'Don\'t miss an excuse to hit the road: our latest offers delivered to your inbox.',
+					url: '/en/email-specials.html?icid=home.three.up-_-email.specials-_-ENGB.NULL'
+				},{
+					header:'A Mobile App Loved by Our Customers',
+					img: '/content/dam/ecom/hosted/heart.png',
+					content: 'Our iOS and Android apps make it easier than ever to manage reservations on the go.',
+					url: '/en/car-hire/mobile-app.html'
+				}],
+				hero: {
+					header: 'Meet Brad and Dave',
+					content: 'Enterprise\'s Brad and Dave show how you get UK car hire with US customer service.',
+					cta: 'Learn More',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/uk-homepage/Brad-and-Dave.png',
+					url: '/en/about/brad-and-dave.html?icid=home.bd.interrupter-_-brad.and.dave-_-ENGB.NULL'
+				},
+				car: [{
+					  header: 'Enterprise Business Rentals',
+					  content: 'We offer specialised rental programmes for businesses and organisations. Whether you need transport for employees, have seasonal rental demands, or need an alternative to pool cars, we can develop a flexible programme that’s right for you.',
+					  url: '/en/business-car-hire.html?icid=home.LOB.three.up-_-business.car.hire-_-ENGB.NULL'
+					},{
+					  header: 'Exotic Car Collection',
+					  content: 'When only the best will do. Choose from an exceptional collection of premium vehicles and enjoy a seamless service experience. Our prestigious vehicles suit both business and pleasure, and are delivered and collected at your convenience.',
+					  url: '/en/exotic-car-hire.html?icid=home.LOB.three.up-_-exotic.car.hire-_-ENGB.NULL'
+					},{
+					  header: 'Enterprise Van Hire',
+					  content: 'Our van hire service is available across our wide range of UK locations. Whether moving home or simply transporting goods, we can help. Our large fleet ranges from small to extra-large vans so you can be sure that we have you covered.',
+					  url: '/en/van-hire.html?icid=home.LOB.three.up-_-van.hire-_-ENGB.NULL'
+				}],
+				locations: {
+					title: 'Popular Car Hire Locations in the UK',
+					content: 'Car hire with Enterprise Rent-A-Car is made easy because we take pride in always going the extra mile for our customers. We’re constantly improving our service to make your car rental experience the best it can be. We also offer a range of different mobility services that could suit your car rental needs both for leisure and for business. Whether you need car hire for a one way trip, a long term car hire for business, an hourly car hire to go to the local shops or hire of a luxury sports car for a special occasion, we have the right car hire service for you.',
+					airportTitle: 'Popular UK Airports',
+					destinationTitle: 'Popular UK Destinations',
+					airports: [{
+						airport: 'Heathrow Airport',
+						url: '/en/car-hire/locations/uk/heathrow-airport-u131.html'
+					},{
+						airport: 'Gatwick Airport',
+						url: '/en/car-hire/locations/uk/gatwick-airport-u130.html'
+					},{
+						airport: 'Manchester Airport',
+						url: '/en/car-hire/locations/uk/manchester-airport-u344.html'
+					},{
+						airport: 'Edinburgh Airport',
+						url: '/en/car-hire/locations/uk/edinburgh-airport-sc22.html'
+					},{
+						airport: 'Birmingham Airport',
+						url: '/en/car-hire/locations/uk/birmingham-airport-united-kingdom-u224.html'
+					}]
+				},
+				threeup: [{
+					header: 'Recommended by Which?',
+					subheader: 'Award Winning',
+					content: 'Recognised as a Recommended Provider 2016 by Which? See how customers rank us.',
+					cta: 'Learn More',
+					url: 'http://www.which.co.uk/home-and-garden/travel-and-leisure/reviews-ns/car-hire-comparison/recommended-car-hire-companies/?utm_campaign=bestbuyicon&utm_medium=endorsement&utm_source=enterprise',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/uk-homepage/Which-logo-2016.jpg.wrend.480.270.jpeg'				
+				},{
+					header: 'All Deals & Promotions',
+					subheader: 'Browse',
+					content: 'With over 7,200 locations in more than 70 countries worldwide, you\'ll find a deal just about anywhere you\'re driving.',
+					cta: 'Browse Offers & Promotions',
+					url: '/en/car-hire/deals.html',
+					img: '/content/dam/ecom/utilitarian/common/homepage-us/us-homepage-promotions-band.jpg.wrend.640.360.jpeg'				
+				},{
+					header: 'Places to Travel',
+					subheader: 'Discover',
+					content: 'Start planning your next road trip with a little help from Enterprise Rent-A-Car. From a peaceful road less travelled to a winding mountainous road of adventure, we can help you find it.',
+					cta: 'View Trip Ideas',
+					url: '/en/inspiration.html?icid=home.inspiration.interrupter-_-inspiration-_-ENGB.NULL',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/UK/uk-inspiration.jpg'				
+				}]
+			},
+			en_IE: {
+				header: 'Car hire in Ireland and across the world',
+				subheader: 'Start a Reservation',
+				capsule: [{
+					header: 'Weekend Special: €15,99',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'With rates as low as €15,99 per day, now is the perfect time to reserve the vehicle that fits your plans.',
+					url: '/en/car-hire/deals/weekend-specials.html'
+				},{
+					header: 'Email Offers',
+					img: '/content/dam/enterprise/icons/promo-icons/email.png.wrend.480.270.png',
+					content: 'Don\'t miss an excuse to hit the road: our latest offers delivered to your inbox.',
+					url: '/en/email-specials.html?icid=home.three.up-_-email.specials-_-ENGB.NULL'
+				},{
+					header:'Not an Enterprise Plus® member?',
+					img: '/content/dam/enterprise/icons/promo-icons/loyalty.png.wrend.480.270.png',
+					content: 'You could be earning points toward free rentals.',
+					url: '/en/loyalty.html'
+				}],
+				hero: {
+					header: 'Enterprise Business Rentals',
+					content: 'We\'re more than just vehicle rentals. Our custom business programmes scale to meet specific needs. We offer specialised rental programmes for businesses and organisations. Whether you need transport for employees, have seasonal rental demands, or want an alternative to pool cars, we can develop a flexible programme that’s right for your company.',
+					cta: 'Find out more',
+					img: '/content/dam/ecom/utilitarian/emea/business-rentals/business-rental-band.jpg',
+					url: '/en/business-car-hire.html'
+				},
+				car: [{
+					  header: 'Enterprise Van Hire',
+					  content: 'Need a van? Our fleet of small to large vans is ideal for your needs and available for daily, weekly or monthly hire.',
+					  url: '/en/van-hire.html'
+					}],
+				locations: {
+					title: 'Popular Car Hire Locations in Ireland',
+					content: 'Car hire with Enterprise Rent-A-Car is made easy because we take pride in always going the extra mile for our customers. We’re constantly improving our service to make your car rental experience the best it can be. We also offer a range of different mobility services that could suit your car rental needs both for leisure and for business. Whether you need car hire for a one way trip, a long term car hire for business or an hourly car hire to go to the local shops, we have the right car hire service for you.',
+					airportTitle: 'Popular Airports',
+					destinationTitle: 'Popular Destinations',
+					airports: [{
+						airport: 'Dublin Airport',
+						url: '/en/car-hire/locations/ireland/dublin-airport-i118.html'
+					},{
+						airport: 'Cork Airport',
+						url: '/en/car-hire/locations/ireland/cork-airport-i119.html'
+					},{
+						airport: 'Shannon Airport',
+						url: '/en/car-hire/locations/ireland/shannon-in-terminal-i132.html'
+					},{
+						airport: 'Edinburgh Airport',
+						url: '/en/car-hire/locations/uk/edinburgh-airport-sc22.html'
+					},{
+						airport: 'Donegal Airport',
+						url: '/en/car-hire/locations/ireland/donegal-airport-i128.html'
+					}]
+				},
+				threeup: [{
+					header: 'UEFA Europa League',
+					subheader: '',
+					content: 'We\'re big football fans over at Enterprise Rent-A-Car and have signed a three-year deal to be a worldwide sponsor of the UEFA Europa League.',
+					cta: 'Learn More',
+					url: '/en/about/sponsorships/uefa.html',
+					img: '/content/dam/de/uefa_promo3ab.jpg'				
+				},{
+					header: 'Another Way to Explore',
+					subheader: '',
+					content: 'Start planning your next road trip with a little help from Enterprise Rent-A-Car. From a peaceful road less travelled to a winding mountainous road of adventure, we can help you find it.',
+					cta: 'Get Inspired',
+					url: '/en/inspiration.html',
+					img: '/content/dam/ecom/utopian-travel-articles/explore/explore-beyond-malaga-feature.jpg'				
+				},{
+					header: 'Download the New Enterprise App',
+					subheader: '',
+					content: 'Our iOS and Android apps make it easier than ever to manage reservations on the go.',
+					cta: 'Learn More',
+					url: '/en/car-hire/mobile-app.html',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/uk-homepage/uk_enterprise_app.jpg.wrend.1280.720.jpeg'				
+				}]
+			},
+			de_DE: {
+				header: 'Ihre Autovermietung in Deutschland und weltweit',
+				subheader: 'Eine Reservierung vornehmen',
+				capsule: [{
+					header: 'Wochenend-Spezialangebot ab 14,99€ pro Tag',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'Bei mehr als 7.200 Stationen in mehr als 30 Ländern auf der ganzen Welt finden Sie - egal wo Sie hin möchten - immer ein passendes Angebot.',
+					url: '/de/autovermietung/angebote/wochenend-specials.html'
+				},{
+					header: 'Unser Sommerangebot!',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'Egal, ob Sie einen Tagesausflug planen oder in den Urlaub fahren: Wir haben den perfekten Mietwagen für jeden Anlass zu extra günstigen Sommerpreisen.',
+					url: '/de/autovermietung/angebote/deutschland-fruhling.html'
+				},{
+					header:'Unsere Transporter Sonderaktion – ab 19,99 €/Tag',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'Gültig von Montag bis Donnerstag. 200km/Tag sowie Haftungsbeschränkung mit 1.100 € Selbstbeteiligung bereits inklusive. Buchen Sie rechtzeitig: Limitiertes Kontingent!',
+					url: '/de/autovermietung/angebote/van-special.html?icid=home.three.up-_-van.special-_-DEDE.NULL'
+				}],
+				hero: {
+					header: 'Gutes Gefühl inklusive.',
+					content: 'Mit Worten nicht zu beschreiben, aber mit Musik: das gute Gefühl von großartigem Kundenservice.',
+					cta: 'MEHR ERFAHREN',
+					img: '/content/dam/ecom/utilitarian/emea/about/good-feeling-hero.jpg',
+					url: '/de/ueber-uns/der-enterprise-effekt.html'
+				},
+				car: [{
+					  header: 'Wir sind mehr als eine Autovermietung',
+					  content: 'Wir bieten Ihnen maßgeschneiderte Mobilitätslösungen für Ihr Unternehmen und helfen gerne bei der Ausarbeitung eines individuellen Business Rental Programms, das optimal auf Ihre Bedürfnisse zugeschnitten ist.',
+					  url: '/de/firmenkunden-autovermietung.html'
+					},{
+					  header: 'Enterprise Plus Mitglied werden und Treuepunkte sammeln',
+					  content: 'Wir belohnen Ihre Treue. Mit Enterprise Plus sammeln Sie Treuepunkte mit jedem Mietwagen und Transporter. Melden Sie sich jetzt kostenlos an und erfahren Sie mehr über exklusive Vorteile, Prämien und kostenfreie Miettage.',
+					  url: '/de/treueprogramm.html'
+					},{
+					  header: 'E-Mail-Angebote',
+					  content: 'Erhalten Sie unsere aktuellen Angebote per E-Mail: Registrieren Sie sich für unsere E-Mail Specials.',
+					  url: '/de/email-specials.html'
+				}],
+				locations: {
+					title: 'Beliebte Transporter- und Mietwagen-Stationen in Deutschland',
+					content: 'Enterprise Rent-A-Car ist die Autovermietung Ihres Vertrauens. Mit über 1,5 Millionen Fahrzeugen weltweit helfen wir Ihnen gerne dabei den richtigen Mietwagen oder Miettransporter zu finden. Bei uns steht der Kunde immer im Mittelpunkt, weshalb Sie bei uns nicht nur günstige Mietwagen, sondern auch erstklassiger Service erwartet. Egal ob Innenstadt, Bahnhof oder Flughafen - Besuchen Sie uns in einer unsere Mietwagen-Stationen für eine persönliche Beratung.',
+					airportTitle: 'Top-Flughafenstationen in Deutschland',
+					destinationTitle: 'Top-Städte in Deutschland',
+					airports: [{
+						airport: 'Frankfurt',
+						url: '/de/autovermietung/standorte/deutschland/frankfurt.html'
+					},{
+						airport: 'Düsseldorf',
+						url: '/de/autovermietung/standorte/deutschland/duesseldorf.html'
+					},{
+						airport: 'München',
+						url: '/de/autovermietung/standorte/deutschland/muenchen.html'
+					},{
+						airport: 'Hamburg',
+						url: '/de/autovermietung/standorte/deutschland/hamburg.html'
+					},{
+						airport: 'Stuttgart',
+						url: '/de/autovermietung/standorte/deutschland/stuttgart.html'
+					}]
+				},
+				threeup: [{
+					header: 'UEFA Europa League',
+					subheader: '',
+					content: 'Wir bei Enterprise sind große Fußballfans. Deshalb haben wir nun einen Dreijahresvertrag als Sponsor der UEFA Europa League abgeschlossen.',
+					cta: 'WEITERE INFORMATIONEN',
+					url: '/de/ueber-uns/sponsorships/uefa.html',
+					img: '/content/dam/de/uefa_promo3ab.jpg'				
+				},{
+					header: 'Urlaub mit dem Auto',
+					subheader: '',
+					content: 'Beginnen Sie jetzt mit der Planung Ihres nächsten Roadtrips und lassen Sie sich dabei ein wenig von Enterprise inspirieren. Ob Sie eine friedliche und abgelegene Reiseroute oder eine kurvenreiche und abenteuerliche Strecke in den Bergen suchen: Wir helfen Ihnen dabei, die richtige Route zu finden.',
+					cta: 'LASSEN SIE SICH INSPIRIEREN',
+					url: '/de/inspiration.html',
+					img: '/content/dam/ecom/utopian-travel-articles/explore/explore-beyond-paris-feature.jpg'				
+				},{
+					header: 'Die neue Enterprise-App',
+					subheader: '',
+					content: 'Mit unserer brandneuen App reservieren Sie Ihren Mietwagen bequem und einfach über Ihr Smartphone oder Tablet. Zudem können Sie mit der App von unterwegs Ihre Reservierungen anschauen und bearbeiten, sich die Wegbeschreibung zu einer unserer Mietwagen-Stationen anzeigen lassen, rund um die Uhr den Pannendienst erreichen und auf Ihr Enterprise Plus®-Konto zugreifen.',
+					cta: 'MEHR ERFAHREN',
+					url: '/de/autovermietung/mobile-app.html',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/uk-homepage/uk_enterprise_app.jpg.wrend.1280.720.jpeg'				
+				}]
+			},
+			en_DE: {
+				header: 'Car hire in Germany and across the world',
+				subheader: 'Start a Reservation',
+				capsule: [{
+					header: 'Weekend Special: 14,99€ per day',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'With rates as low as 14,99€ per day, now is the perfect time to reserve the vehicle that fits your plans.',
+					url: '/en/autovermietung/angebote/wochenend-specials.html'
+				},{
+					header: 'Enjoy Great Spring rates for your rental',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'Travel in total peace of mind this winter. You only have to make your selection between a wide range of vehicles adapted to your needs and budget.',
+					url: '/en/autovermietung/angebote/germany-spring-rates.html'
+				},{
+					header:'Van Special from 19,99 € / day',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'Valid from Monday to Thursday at participating locations - incl. 200 km / day and incl. liability with 1100 € excess.',
+					url: '/en/autovermietung/angebote/van-special.html?icid=home.three.up-_-van.special-_-DEDE.NULL'
+				}],
+				hero: {
+					header: 'Good feeling included.',
+					content: 'It can\'t be described with words, but it can be with music: the good feeling you get from great customer service.',
+					cta: 'Find out more',
+					img: '/content/dam/ecom/utilitarian/emea/about/good-feeling-hero.jpg',
+					url: '/en/ueber-uns/der-enterprise-effekt.html'
+				},
+				car: [{
+					  header: 'We\'re more than just vehicle rentals.',
+					  content: 'WOur custom business programmes scale to meet specific needs. We offer specialised rental programmes for businesses and organisations. Whether you need transport for employees, have seasonal rental demands, or want an alternative to pool cars, we can develop a flexible programme that’s right for your company.',
+					  url: '/en/firmenkunden-autovermietung.html'
+					},{
+					  header: 'Not an Enterprise Plus® member?',
+					  content: 'You could be earning points toward free rentals.',
+					  url: '/en/treueprogramm.html'
+					},{
+					  header: 'Email Offers',
+					  content: 'Don\'t miss an excuse to hit the road: our latest offers delivered to your inbox.',
+					  url: '/en/email-specials.html'
+				}],
+				locations: {
+					title: 'Popular Car and Van Hire Locations in Germany',
+					content: 'Car hire with Enterprise Rent-A-Car is made easy because we take pride in always going the extra mile for our customers. We’re constantly improving our service to make your car rental experience the best it can be. We also offer a range of different mobility services that could suit your car rental needs both for leisure and for business. Whether you need car hire for a one way trip, a long term car hire for business, an hourly car hire to go to the local shops or hire of a luxury sports car for a special occasion, we have the right car hire service for you.',
+					airportTitle: 'Popular Airports',
+					destinationTitle: 'Popular Locations',
+					airports: [{
+						airport: 'Frankfurt',
+						url: '/en/autovermietung/standorte/deutschland/frankfurt.html'
+					},{
+						airport: 'Dusseldorf',
+						url: '/en/autovermietung/standorte/deutschland/duesseldorf.html'
+					},{
+						airport: 'Munich',
+						url: '/en/autovermietung/standorte/deutschland/muenchen.html'
+					},{
+						airport: 'Hamburg',
+						url: '/en/autovermietung/standorte/deutschland/hamburg.html'
+					},{
+						airport: 'Stuttgart',
+						url: '/en/autovermietung/standorte/deutschland/stuttgart.html'
+					}]
+				},
+				threeup: [{
+					header: 'UEFA Europa League',
+					subheader: '',
+					content: 'We\'re big football fans over at Enterprise Rent-A-Car and have signed a three-year deal to be a worldwide sponsor of the UEFA Europa League.',
+					cta: 'Learn more',
+					url: '/en/ueber-uns/sponsorships/uefa.html',
+					img: '/content/dam/de/uefa_promo3ab.jpg'				
+				},{
+					header: 'Another Way to Explore',
+					subheader: '',
+					content: 'Start planning your next road trip with a little help from Enterprise. From a peaceful road less travelled to a winding mountainous road of adventure, we can help you find it.',
+					cta: 'Get Inspired',
+					url: '/en/inspiration.html',
+					img: '/content/dam/ecom/utopian-travel-articles/explore/explore-beyond-paris-feature.jpg'				
+				},{
+					header: 'The Enterprise App',
+					subheader: '',
+					content: 'Our iOS and Android apps make it easier than ever to manage reservations on the go.',
+					cta: 'Learn More and Download',
+					url: '/de/autovermietung/mobile-app.html',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/uk-homepage/uk_enterprise_app.jpg.wrend.1280.720.jpeg'				
+				}]
+			},
+			fr_FR: {
+				header: 'Location de voiture en France et à travers le monde',
+				subheader: 'Commencer une réservation',
+				capsule: [{
+					header: 'Offre spéciale week-end à 14,99 € par jour',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'Des voitures exceptionnelles à bas prix : Juste à temps pour le week-end !',
+					url: '/fr/location-voiture/offres/weekend-special.html'
+				},{
+					header: 'Pas encore membre d’Enterprise Plus ?',
+					img: '/content/dam/enterprise/icons/promo-icons/loyalty.png.wrend.480.270.png',
+					content: 'Inscrivez-vous gratuitement dès maintenant à Enterprise Plus afin de pouvoir bénéficier d’avantages exclusifs.',
+					url: '/fr/programme-enterprise-plus.html'
+				},{
+					header:'Offres envoyées par e-mail',
+					img: '/content/dam/enterprise/icons/promo-icons/email.png.wrend.480.270.png',
+					content: 'Ne ratez plus une seule occasion de prendre la route. Inscrivez-vous et recevez nos dernières offres par e-mail.',
+					url: '/fr/email-specials.html'
+				}],
+				hero: {
+					header: 'Nous vous proposons bien plus que des services de location de véhicule.',
+					content: 'Nos solutions pour les entreprises sont conçues pour répondre spécifiquement aux besoins professionnels. Vous avez besoin d’assurer la mobilité de vos employés ? Vous avez des besoins saisonniers ou ponctuels en matière de location ? Vous recherchez une solution alternative aux voitures de société ? Vous souhaitez plus de flexibilité ? Nous pouvons vous apporter un programme parfaitement adapté et des solutions personnalisées aux besoins de votre entreprise.',
+					cta: 'EN SAVOIR PLUS SUR NOS SOLUTIONS POUR LES ENTREPRISES',
+					img: '/content/dam/ecom/utilitarian/emea/business-rentals/business-rental-band.jpg',
+					url: '/fr/business-location-voiture.html'
+				},
+				locations: {
+					title: 'Location de voitures et d’utilitaire en France',
+					content: 'Anciennement connu sous le nom de Citer, Enterprise Rent-A-Car vous propose de louer une voiture ou un utilitaire parmi une large gamme de véhicules afin de répondre à vos besoins personnels ou professionnels. Avec plus de 135 agences en France, nous vous garantissons un service de qualité pour un très bon rapport qualité/prix. Nos agences situées en centre-ville, gare et aéroport vous permettent de profiter pleinement de nos services près de chez vous. Notre système de réservation en ligne permet une location de voiture avec Enterprise rapide et facile et vous trouverez nos meilleurs offres en ligne.',
+					airportTitle: 'Aéroports populaires en France',
+					destinationTitle: 'Destinations favorites en France',
+					airports: [{
+						airport: 'Paris Charles de Gaulle',
+						url: '/fr/location-voiture/agences/france/paris-charles-de-gaulle-f5c1.html'
+					},{
+						airport: 'Orly Ouest',
+						url: '/fr/location-voiture/agences/france/orly-aeroport-f5ac.html'
+					},{
+						airport: 'Nice Aéroport',
+						url: '/fr/location-voiture/agences/france/nice-aeroport-f551.html'
+					},{
+						airport: 'Marseille Aéroport',
+						url: '/fr/location-voiture/agences/france/marseille-aeroport-f532.html'
+					},{
+						airport: 'Lyon',
+						url: '/fr/location-voiture/agences/france/lyon.html'
+					}]
+				},
+				threeup: [{
+					header: 'Enterprise devient Sponsor officiel de l’UEFA Europa League',
+					subheader: '',
+					content: 'Chez Enterprise Rent-A-Car, nous sommes de grands fans de foot. C’est pourquoi nous sommes maintenant partenaire officiel de L’UEFA Europa League.',
+					cta: 'En savoir plus',
+					url: '/fr/a-propos/sponsoring/uefa.html	',
+					img: '/content/dam/de/uefa_promo3ab.jpg'				
+				},{
+					header: 'Et si voyager prenait une autre dimension',
+					subheader: '',
+					content: 'Commencez dès maintenant à planifier votre prochain voyage avec Enterprise. Que vous soyez à la recherche de tranquillité ou d’aventures, nous vous aidons à trouver votre route.',
+					cta: 'Laissez-vous inspirer',
+					url: '/fr/Inspiration.html',
+					img: '/content/dam/ecom/utopian-travel-articles/explore/explore-beyond-malaga-feature.jpg'				
+				},{
+					header: 'Application Enterprise',
+					subheader: '',
+					content: 'Notre toute nouvelle application vous permet d’accéder a votre compte Enterprise Plus®, de gérer vos réservations, d’obtenir l’itinéraire menant à une agence de location de voiture et de joindre l’assistance routière 24 h/24 et 7 j/7.',
+					cta: 'En savoir plus',
+					url: '/fr/location-voiture/mobile-app.html	',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/uk-homepage/uk_enterprise_app.jpg.wrend.1280.720.jpeg'				
+				}]
+			},
+			en_FR:{
+				header: 'Car hire in France and across the world',
+				subheader: 'Start a Reservation',
+				capsule: [{
+					header: 'Weekend Special, €14.99 per day',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'Enjoy weekend rates on a great variety of cars available to you at one of our neighbourhood locations.',
+					url: '/en/location-voiture/offres/weekend-offres-speciales.html'
+				},{
+					header: 'Not an Enterprise Plus® member?',
+					img: '/content/dam/enterprise/icons/promo-icons/loyalty.png.wrend.480.270.png',
+					content: 'You could be earning points toward free rentals.',
+					url: '/en/programme-enterprise-plus.html'
+				},{
+					header: 'Email Offers',
+					img: '/content/dam/enterprise/icons/promo-icons/email.png.wrend.480.270.png',
+					content: 'Don\'t miss an excuse to hit the road: our latest offers delivered to your inbox.',
+					url: '/en/email-specials.html'
+				}],
+				hero: {
+					header: 'We\'re more than just vehicle rentals.',
+					content: 'Our custom business programmes scale to meet specific needs. We offer specialised rental programmes for businesses and organisations. Whether you need transport for employees, have seasonal rental demands, or want an alternative to pool cars, we can develop a flexible programme that’s right for your company.',
+					cta: 'LEARN MORE ABOUT ENTERPRISE BUSINESS RENTALS',
+					img: '/content/dam/ecom/utilitarian/emea/business-rentals/business-rental-band.jpg',
+					url: '/en/business-location-voiture.html'
+				},
+				locations: {
+					title: '',
+					content: '',
+					airportTitle: 'Popular Airports in France',
+					destinationTitle: 'Popular Destinations in France',
+					airports: [{
+						airport: 'Paris Charles de Gaulle',
+						url: '/en/location-voiture/agences/france/paris-charles-de-gaulle-f5c1.html'
+					},{
+						airport: 'Orly Ouest',
+						url: '/en/location-voiture/agences/france/orly-aeroport-f5ac.html'
+					},{
+						airport: 'Nice Airport',
+						url: '/en/location-voiture/agences/france/nice-aeroport-f551.html'
+					},{
+						airport: 'Marseille Airport',
+						url: '/en/location-voiture/agences/france/marseille-aeroport-f532.html'
+					},{
+						airport: 'Lyon',
+						url: '/en/location-voiture/agences/france/lyon.html'
+					}]
+				},
+				threeup: [{
+					header: 'UEFA Europa League',
+					subheader: '',
+					content: 'We\'re big football fans over at Enterprise Rent-A-Car and have signed a three-year deal to be a worldwide sponsor of the UEFA Europa League.',
+					cta: 'Learn more',
+					url: '/en/a-propos/sponsoring/uefa.html	',
+					img: '/content/dam/de/uefa_promo3ab.jpg'				
+				},{
+					header: 'Another Way to Explore',
+					subheader: '',
+					content: 'Start planning your next road trip with a little help from Enterprise. From a peaceful road less travelled to a winding mountainous road of adventure, we can help you find it.',
+					cta: 'Get inspired',
+					url: '/en/Inspiration.html',
+					img: '/content/dam/ecom/utopian-travel-articles/explore/explore-beyond-malaga-feature.jpg'				
+				},{
+					header: 'The Enterprise App',
+					subheader: '',
+					content: 'Our iOS and Android apps make it easier than ever to manage reservations on the go.',
+					cta: 'Learn more and Download',
+					url: '/en/location-voiture/mobile-app.html	',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/uk-homepage/uk_enterprise_app.jpg.wrend.1280.720.jpeg'				
+				}]
+			},
+			es_ES: {
+				header: 'Furgonetas y coches de alquiler en España y en todo el mundo',
+				subheader: 'Inicia una reserva',
+				capsule: [{
+					header: 'Promoción de fin de semana 9,99€',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'La oferta es válida para alquileres hasta 31 de diciembre de 2017.',
+					url: '/es/alquiler-de-coches/ofertas-promociones/especial-fin-de-semana.html'
+				},{
+					header: 'Ofertas por correo electrónico',
+					img: '/content/dam/enterprise/icons/promo-icons/email.png.wrend.480.270.png',
+					content: 'No tienes excusas para salir de viaje. Te enviamos las últimas ofertas a tu email.',
+					url: '/es/email-specials.html'
+				},{
+					header:'Descuentos y Promociones',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'Con más de 7200 oficinas en más de 30 países, seguro que tenemos una oferta para ti.',
+					url: '/es/alquiler-de-coches/ofertas-promociones.html'
+				}],
+				hero: {
+					header: 'Alquiler de coches para empresas',
+					content: 'Ofrecemos soluciones de movilidad a medida para empresas y autónomos. Te ayudamos en la elaboración de un programa personalizado de alquiler diseñado específicamente para tu negocio que se adapte a tus necesidades.Independientemente de si necesitas transporte para tus empleados, tu necesidad de alquiler es estacional o por el contrario deseas tener una alternativa a los vehículos de tu flota, podemos desarrollar un programa flexible que sea apropiado para tu empresa. ',
+					cta: 'Descubre nuestros servicios de alquiler para empresas',
+					img: '/content/dam/ecom/utilitarian/emea/business-rentals/business-rental-band.jpg',
+					url: '/es/empresa-alquiler-de-coche.html'
+				},
+				car: [{
+					  header: 'Hágase socio de Enterprise Plus',
+					  content: '¿Quieres ahorrar alquilando tu coche? Regístrate en Enterprise Plus y empieza a acumular puntos para obtener alquileres gratuitos. Premiamos tu fidelidad cada vez que alquilas un coche o furgoneta. Inscríbete ahora y descubre todos los beneficios exclusivos para conseguir descuentos al alquilar un coche y conseguir días gratis en alquiler de automóviles. ¡Qué esperas!',
+					  url: '/es/fidelidad.html'
+					},{
+					  header: 'Alquiler de furgonetas de Enterprise',
+					  content: '¿Necesitas una furgoneta? Nuestra flota incluye todos los tamaños de furgonetas para alquilar por horas, días, semanas o varios meses, nos ajustamos a tus necesidades.',
+					  url: '/es/alquiler-de-furgonetas.html'
+					}],
+				locations: {
+					title: 'Oficinas de alquiler de vehículos en España más populares',
+					content: 'Enterprise Rent-A-Car es la empresa internacional líder en alquiler de coches y furgonetas en los principales destinos de España y todo el mundo. Con una flota de más de 1,5 millones de vehículos podemos ayudarle a encontrar el coche que se adapte mejor a sus necesidades. Además, disponemos de sucursales para la reserva de coches ya sea en las estaciones de trenes, puertos y aeropuertos nacionales e internacionales. Para nosotros, nuestros clientes siempre son lo más importante. Por este motivo, no solo ofrecemos la posibilidad de contratar coches baratos y al mejor precio sino también un servicio personalizado y de primera clase. Visítenos en una de nuestras oficinas de alquiler de coches para cualquier tipo de consulta o reserva que desee realizar.',
+					airportTitle: 'Oficinas en aeropuerto principales',
+					destinationTitle: 'Los destinos más populares',
+					airports: [{
+						airport: 'el Aeropuerto de Madrid',
+						url: '/es/alquiler-de-coches/destinos/espana/madrid-aeropuerto-e5c1.html'
+					},{
+						airport: 'Barcelona Aeropuerto',
+						url: '/es/alquiler-de-coches/destinos/espana/barcelona-aeropuerto-e5e1.html'
+					},{
+						airport: 'Palma De Mallorca Aeropuerto',
+						url: '/es/alquiler-de-coches/destinos/espana/mallorca-aeropuerto-e5a1.html'
+					},{
+						airport: 'Bilbao Aeropuerto',
+						url: '/es/alquiler-de-coches/destinos/espana/bilbao-aeropuerto-e5n2.html'
+					},{
+						airport: 'Valencia Aeropuerto',
+						url: '/es/alquiler-de-coches/destinos/espana/valencia-aeropuerto-e5e4.html'
+					}]
+				},
+				threeup: [{
+					header: 'Patrocinio de la UEFA Europa League',
+					subheader: '',
+					content: 'En Enterprise Rent-A-Car somos grandes fans del fútbol así que firmamos un contrato por tres años para ser patrocinadores mundiales de la liga europea de la UEFA.',
+					cta: 'Descubre más',
+					url: '/es/acerca-de/patrocinios/uefa.html',
+					img: '/content/dam/de/uefa_promo3ab.jpg'				
+				},{
+					header: 'Viajes y rutas para explorar',
+					subheader: '',
+					content: 'Empieza a planificar tu próximo viaje por carretera, Enterprise Rent-A-Car te ofrece algunas recomendaciones de rutas para descubrir nuevos destinos llenos de encanto. Tanto si estás buscando un itinerario tranquilo y menos transitado o por el contrario quieres una aventura por las serpenteantes y montañosas carreteras, nosotros te ayudamos a encontrar una ruta y que sea una experiencia inolvidable.',
+					cta: 'Inspírate',
+					url: '/es/inspiracion.html',
+					img: '/content/dam/ecom/locations/spain/barcelona/beyond-barcelona/monistrol-de-montserrat.jpg'				
+				},{
+					header: 'Enterprise App para su móvil',
+					subheader: '',
+					content: 'La nueva aplicación de alquiler de coches de Enterprise te permite elegir entre los diferentes modelos de automóviles online y realizar la reserva de una forma cómoda y rápida desde tu teléfono móvil. Además puedes utilizar la aplicación para obtener indicaciones de cómo llegar a una de las oficinas de alquiler, obtener asistencia en carretera las 24 horas los 7 días de la semana. Solo debes entrar en tu cuente de Enterprise Plus.®',
+					cta: 'Descubre más',
+					url: '/es/alquiler-de-coches/mobile-app.html',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/uk-homepage/uk_enterprise_app.jpg.wrend.1280.720.jpeg'				
+				}]
+			},
+			en_ES: {
+				header: 'Car hire in Spain and across the world',
+				subheader: 'Start a Reservation',
+				capsule: [{
+					header: 'Weekend Special €9.99',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'Available thru 31 December, 2017.',
+					url: '/en/alquiler-de-coches/ofertas-promociones/especial-fin-de-semana.html'
+				},{
+					header: 'Email Offers',
+					img: '/content/dam/enterprise/icons/promo-icons/email.png.wrend.480.270.png',
+					content: 'Don\'t miss an excuse to hit the road: our latest offers delivered to your inbox.',
+					url: '/en/email-specials.html'
+				},{
+					header:'Looking for a Deal?',
+					img: '/content/dam/enterprise/icons/promo-icons/deal.png.wrend.480.270.png',
+					content: 'With over 7,200 locations in more than 30 countries worldwide, you\'ll find a deal just about anywhere you\'re driving.',
+					url: '/en/alquiler-de-coches/ofertas-promociones.html'
+				}],
+				hero: {
+					header: 'We are much more than a vehicle rental company.',
+					content: 'We offer you a product tailored to your needs and we will personalise a programme designed especially for your business. Whether your rental needs are seasonal or whether you want an alternative to vehicle fleets, we will create a programme especially for you.',
+					cta: 'Learn more about Enterprise Business Rentals',
+					img: '/content/dam/ecom/utilitarian/emea/business-rentals/business-rental-band.jpg',
+					url: '/en/empresa-alquiler-de-coche.html'
+				},
+				car: [{
+					  header: 'Not an Enterprise Plus member?',
+					  content: 'You could be earning points toward free rentals.',
+					  url: '/en/fidelidad.html'
+					},{
+					  header: 'Enterprise Van Hire',
+					  content: 'Need a van? Our fleet of small to large vans is ideal for your needs and available for daily, weekly or monthly hire.',
+					  url: '/en/alquiler-de-furgonetas.html'
+					}],
+				locations: {
+					title: 'Popular Car and Van Hire Locations in Spain',
+					content: 'Car hire with Enterprise Rent-A-Car is made easy because we take pride in always going the extra mile for our customers. We’re constantly improving our service to make your car rental experience the best it can be. We also offer a range of different mobility services that could suit your car rental needs both for leisure and for business. Whether you need car hire for a one way trip, a long term car hire for business, an hourly car hire to go to the local shops or hire of a luxury sports car for a special occasion, we have the right car hire service for you.',
+					airportTitle: 'Popular Airports',
+					destinationTitle: 'Popular Destinations',
+					airports: [{
+						airport: 'Madrid Airport',
+						url: '/en/alquiler-de-coches/destinos/espana/madrid-aeropuerto-e5c1.html'
+					},{
+						airport: 'Barcelona Airport',
+						url: '/en/alquiler-de-coches/destinos/espana/barcelona-aeropuerto-e5e1.html'
+					},{
+						airport: 'Palma De Mallorca Airport',
+						url: '/en/alquiler-de-coches/destinos/espana/mallorca-aeropuerto-e5a1.html'
+					},{
+						airport: 'Bilbao Airport',
+						url: '/en/alquiler-de-coches/destinos/espana/bilbao-aeropuerto-e5n2.html'
+					},{
+						airport: 'Valencia Airport',
+						url: '/en/alquiler-de-coches/destinos/espana/valencia-aeropuerto-e5e4.html'
+					}]
+				},
+				threeup: [{
+					header: 'UEFA Europa League',
+					subheader: '',
+					content: 'We\'re big football fans over at Enterprise Rent-A-Car and have signed a three-year deal to be a worldwide sponsor of the UEFA Europa League.',
+					cta: 'Learn more',
+					url: '/en/acerca-de/patrocinios/uefa.html',
+					img: '/content/dam/de/uefa_promo3ab.jpg'				
+				},{
+					header: 'Another Way to Explore',
+					subheader: '',
+					content: 'Start planning your next road trip with a little help from Enterprise. From the peaceful road less traveled to a winding mountainous road of adventure, we can help you find it.',
+					cta: 'Get Inspired',
+					url: '/en/inspiracion.html',
+					img: '/content/dam/ecom/locations/spain/barcelona/beyond-barcelona/monistrol-de-montserrat.jpg'				
+				},{
+					header: 'The Enterprise App',
+					subheader: '',
+					content: 'Our iOS and Android apps make it easier than ever to manage reservations on the go.',
+					cta: 'Learn more and Download',
+					url: '/en/alquiler-de-coches/mobile-app.html',
+					img: '/content/dam/ecom/utilitarian/emea/Navigation/uk-homepage/uk_enterprise_app.jpg.wrend.1280.720.jpeg'				
+				}]
+			}
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded('#reservationWidget', function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();
+			});
+		},
+		chall : function() {
+
+			if(!$('#reservationWidget').hasClass('isoTest')){
+				isoTest.setLanguage();
+				isoTest.updateHeader();
+				isoTest.addCapsules();
+				isoTest.addHero();
+				isoTest.moveFleet();
+				isoTest.addLocations();
+				isoTest.threeup();
+				isoTest.hideSiblings();
+
+				$('#reservationWidget').addClass('isoTest');
+			}
+		},
+		updateHeader: function(){
+			console.trace();
+			var $reservationHeader = $('#reservationWidget h2.reservation-toggle-header');
+			$reservationHeader.before($('<h1>'+isoTest.content[isoTest.lang].header+'</h1>'));
+			$reservationHeader.text(isoTest.content[isoTest.lang].subheader);
+		},
+		addCapsules: function(){
+			var $reservation = $('.reservationWidget.section'),
+				$capsule = $(isoTest.templates.capsules);
+
+				$.each(isoTest.content[isoTest.lang].capsule, function(i, item){
+					var $c = helpers.supplant(isoTest.templates.capsule, {
+						'url': item.url,
+						'image':item.img,
+						'header':item.header,
+						'content':item.content
+					});
+					$capsule.find('ul').append($($c));
+				});
+
+			$reservation.after($capsule);
+		},
+		addHero: function(){
+			console.trace();
+			var $capsule = $('.iso-capsule'),
+				$hero = helpers.supplant(isoTest.templates.hero, {
+					'header': isoTest.content[isoTest.lang].hero.header,
+					'content': isoTest.content[isoTest.lang].hero.content,
+					'url': isoTest.content[isoTest.lang].hero.url,
+					'cta': isoTest.content[isoTest.lang].hero.cta,
+					'image': isoTest.content[isoTest.lang].hero.img
+				});
+
+			$capsule.after($hero);
+		},
+		moveFleet: function(){
+			var $hero = $('.iso-hero'),
+				$fleet = $('.meet-the-fleet.section');
+
+			$hero.after($fleet);
+
+			if(isoTest.content[isoTest.lang].car){
+				var $cars = $(isoTest.templates.car);
+
+				$.each(isoTest.content[isoTest.lang].car, function(i, item){
+					var $c = helpers.supplant(isoTest.templates.carItem, {
+						'url': item.url,
+						'header':item.header,
+						'content':item.content
+					});
+					$cars.find('ul').append($($c));
+				});
+
+				$fleet.append($cars);
+			}
+
+		},
+		addLocations: function(){
+			var $list = $('.linklistblock.section');
+			$list.addClass('iso-locations band');
+			$list.find('div:first').addClass('g g-3up');
+			$list.find('div.cf').addClass('g-2-3');
+			$list.find('h2').replaceWith($('<h3>'+isoTest.content[isoTest.lang].locations.destinationTitle+'</h3>'));
+			$list.find('section').removeClass('band');
+
+			var $locations = helpers.supplant(isoTest.templates.locations, {
+				'header': isoTest.content[isoTest.lang].locations.title,
+				'content': isoTest.content[isoTest.lang].locations.content
+			});
+
+			var $airports = $(helpers.supplant(isoTest.templates.airports,{
+				'title': isoTest.content[isoTest.lang].locations.airportTitle
+			}));
+
+			$.each(isoTest.content[isoTest.lang].locations.airports, function(i, airport){
+				var $item = $('<li><a href="'+airport.url+'">'+airport.airport+'</a></li>');
+				$airports.find('ul').append($item);
+			});
+
+			$list.find('div:first').prepend($airports);
+			$list.prepend($locations);
+			
+			$('.meet-the-fleet.section').after($list);
+		},
+		threeup: function(){
+			var $locations = $('.iso-locations'),
+				$threeup = $(isoTest.templates.interrupter);
+
+				$.each(isoTest.content[isoTest.lang].threeup, function(i, item){
+					var $i = helpers.supplant(isoTest.templates.interrupterItem, {
+						'url': item.url,
+						'image':item.img,
+						'header':item.header,
+						'subheader':item.subheader,
+						'cta': item.cta,
+						'content':item.content
+					});
+					$threeup.find('.g-3up').append($($i));
+				});
+
+			$locations.after($threeup);
+		},
+		hideSiblings: function(){
+			$('.iso-threeup').nextAll().remove();
+		},
+		setLanguage: function(){
+			if (window.location.href.indexOf('.de') > -1) {
+		        $('body').addClass('iso-de');
+		        if (window.location.href.indexOf('/de/') > -1) {
+		          isoTest.lang = 'de_DE';
+		        } else if (window.location.href.indexOf('/en/') > -1) {
+		          isoTest.lang = 'en_DE';
+		        }
+		    } else if (window.location.href.indexOf('.fr') > -1) {
+		        $('body').addClass('iso-fr');
+		        if (window.location.href.indexOf('/fr/') > -1) {
+		          isoTest.lang = 'fr_FR';
+		        } else if (window.location.href.indexOf('/en/') > -1) {
+		          isoTest.lang = 'en_FR';
+		        }
+		    } else if (window.location.href.indexOf('.es') > -1) {
+		        $('body').addClass('iso-es');
+		        if (window.location.href.indexOf('/es/') > -1) {
+		          isoTest.lang = 'es_ES';
+		        } else if (window.location.href.indexOf('/en/') > -1) {
+		          isoTest.lang = 'en_ES';
+		        }
+		    } else if (window.location.href.indexOf('.ie') > -1) {
+		        $('body').addClass('iso-ie');
+		        if (window.location.href.indexOf('/en/') > -1) {
+		          isoTest.lang = 'en_IE';
+		        } 
+		    }
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

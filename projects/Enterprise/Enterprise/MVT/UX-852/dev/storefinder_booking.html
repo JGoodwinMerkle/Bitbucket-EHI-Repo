@@ -1,0 +1,224 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Storefinder',
+		cookieName : 'enStorefinder',
+		customMbox : 'enStorefinderClicks',
+		creative : "Challenger 1",
+		resWidget : '#reservationFlow .inner-container',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.resWidget, function() {	
+				isoTest.log("Test Ready!");	
+  			isoTest.chall();
+				
+			});
+		},
+		chall : function() {
+			isoTest.setLocation();
+			//isoTest.setDate();
+		},
+		setLocation: function(){
+			var loc = JSON.parse(localStorage.getItem('storefinder'));
+			isoTest.updateLocationModel(loc);
+		},
+		updateLocationModel: function(loc) {
+			var model = {};
+			model['pickup'] = {
+		        location: {
+			        locationId: {
+			            $set : loc.locationId
+			        },
+			        locationName: {
+			            $set: loc.location
+			        },
+			        countryCode: {
+			        	$set: loc.countryCode
+			        },
+			        lat: {
+			            $set: loc.latitude
+			        },
+			        longitude: {
+			            $set: loc.longitude
+			        },
+			        airportCode: {
+			            $set: loc.airportCode
+			        },
+			        type: {
+			            $set: loc.type
+			        },
+			        locationType: {
+			            $set: loc.type
+			        }
+			    }
+		    };
+		    model['dropoff'] = {
+		        location: {
+			        locationId: {
+			            $set : loc.locationId
+			        },
+			        locationName: {
+			            $set: loc.location
+			        },
+			        countryCode: {
+			        	$set: loc.countryCode
+			        },
+			        lat: {
+			            $set: loc.latitude
+			        },
+			        longitude: {
+			            $set: loc.longitude
+			        },
+			        airportCode: {
+			            $set: loc.airportCode
+			        },
+			        type: {
+			            $set: loc.type
+			        },
+			        locationType: {
+			            $set: loc.type
+			        }
+			    }
+		    };
+			ReservationStateTree.select("model").update(model);
+			ReservationStateTree.select(["view", "reservationSteps"]).set("pickupLocation", loc.location);
+		    ReservationStateTree.select(["view", "reservationSteps"]).set("dropoffLocation", loc.location);
+		},
+		setDate: function () {
+			var pickupdate = new Date(ReservationStateTree.select(["model",'pickup']).get().date.momentDate._i);
+			if(pickupdate.getTime() == new Date('2018-12-10 12:00:00').getTime()){
+				isoTest.resetDate();
+			}
+		},
+		resetDate: function() {
+			var pickupDate = new Date(),
+				dropoffDate = new Date();
+			pickupDate.setDate(pickupDate.getDate()+1);
+			dropoffDate.setDate(pickupDate.getDate()+1);
+
+			var pd = pickupDate.toISOString(),
+				dd = dropoffDate.toISOString();
+			pd = pd.split('T')[0];
+			dd = dd.split('T')[0];
+
+		    isoTest.pickupDate = moment(pd+' 12:00:00');
+		    isoTest.dropoffDate = moment(dd+' 12:00:00');
+
+		    isoTest.updateDateModel();
+		},
+		updateDateModel: function () {
+			var model = {};
+			model['pickup'] = {
+		        date: {
+		            momentDate: {
+		                $set : isoTest.pickupDate
+		            } 
+		        }
+		    };
+		    model['dropoff'] = {
+		        date: {
+		            momentDate: {
+		                $set : isoTest.dropoffDate
+		            }  
+		        }
+		    };
+		    ReservationStateTree.select("model").update(model);
+		    ReservationStateTree.select(["view", "reservationSteps"]).set("pickupDate", moment(isoTest.pickupDate));
+		    ReservationStateTree.select(["view", "reservationSteps"]).set("dropoffDate", moment(isoTest.dropoffDate));
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

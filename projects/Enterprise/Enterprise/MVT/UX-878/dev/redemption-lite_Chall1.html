@@ -1,0 +1,269 @@
+<style>
+.reservation-flow.cars .filter-bar .filter-header .filter-header-options {
+	position: relative;
+}
+.iso-redeem {
+	color: #f2f2f2;
+	background: #333;
+	font-size: 13px;
+	padding: 15px 40px 15px 13px;
+	position: absolute;
+	right: calc(-100% - 60px);
+    top: 0;
+    width: 235px;
+}
+.iso-redeem:before {
+	content: " ";
+    height: 0;
+    border-right: 8px solid #333;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    position: absolute;
+    top: 20px;
+    left: -8px;
+}
+.iso-redeem .close {
+	color: #000;
+    cursor: pointer;
+    background: #fff;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    border: 1px solid #fff;
+    border-radius: 15px;
+    padding: 7px 2px;
+    line-height: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+@media (max-width: 1000px){
+	.iso-redeem {
+		padding: 5px 10px;
+		right: calc(-100% - 67px);
+		top: -5px;
+	}
+	.iso-redeem:before {
+		top:10px;
+	}
+}
+@media (max-width: 700px){
+	.iso-redeem {
+		clear: both;
+		display: table;
+		float: left;
+		font-size: 12px;
+		margin-top: 10px;
+		padding: 3px 8px;
+		position: relative;
+		right: auto;
+		top: auto;
+		width: 200px;
+	}
+	.iso-redeem:before {
+		top: -13px;
+	    left: 60px;
+	    border-right: 6px solid transparent;
+	    border-left: 6px solid transparent;
+	    border-bottom: 9px solid #333;
+	}
+	.iso-redeem .close {
+		top: 6px;
+	    font-size: 17px;
+	    padding: 6px 2px;
+	    right: 5px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Redemption Lite',
+		cookieName : 'enRedemptionLite',
+		customMbox : 'enRedemptionLiteClicks',
+		creative : "Challenger 1",
+		profile : ReservationStateTree.get(['model','reservationSession','profile']),
+		paymentOptSelector: '.filter-header-options ul',
+		hideNotification: false,
+		template: '<div class="iso-redeem hide"><div class="content">View price in dollars or points</div><div class="close">&times;</div></div>',
+		btnSelector: '.cars-wrapper .select-button:not(.prepay-learn-more)',
+		btnTxt: 'Select & Continue to Redeem',
+		btnTxtSelect: 'Select',
+		modalBtnTxt: 'Redeem',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+			isoTest.log(isoTest.profile);
+			
+			if(isoTest.profile){
+				isoTest.elementLoaded(isoTest.paymentOptSelector, function() {	
+					isoTest.log("Test Ready!");	
+	  				isoTest.chall();
+				});
+			}
+			
+			$(window).on('hashchange', function(){
+				if(/cars/.test(window.location.hash)){	
+					if(isoTest.profile){
+						isoTest.elementLoaded(isoTest.paymentOptSelector, function() {	
+							isoTest.log("Test Ready!");	
+			  				isoTest.chall();
+						});
+					}
+				}
+			});
+
+		},
+		chall : function() {
+			isoTest.hideNotification = Boolean(_satellite.readCookie('hideRedeem'));
+
+			if(isoTest.hideNotification == false){
+				isoTest.addNotification();
+			}
+
+			var redeemBtnInt = setInterval(function(){
+				if($(isoTest.paymentOptSelector).find('li:eq(1)').length > 0){
+					clearInterval(redeemBtnInt);
+					isoTest.bindRedeemButton();
+				}
+			}, 100);
+			
+			if($(isoTest.paymentOptSelector).find('li:eq(1)').hasClass('selected')){
+				isoTest.updateSelectBtn();
+			}
+		},
+		bindRedeemButton: function(){
+			$(isoTest.paymentOptSelector).find('li').click(function(){
+				isoTest.log('Redeem payment button click');
+				if($(this).is(':first-child')){
+					isoTest.updateBtn();
+				} else {
+					isoTest.elementLoaded('.cars .points-band', function(){
+						isoTest.updateSelectBtn();
+					});	
+				}
+			});
+		},
+		updateBtn: function(){
+			$(isoTest.btnSelector).text(isoTest.btnTxtSelect);
+		},
+		updateSelectBtn: function(){
+			$(isoTest.btnSelector).text(isoTest.btnTxt);
+			isoTest.bindBtnEvents();
+		},
+		bindBtnEvents: function(){
+			$(isoTest.btnSelector).click(function(){
+				var redeemInt = setInterval(function(){
+					isoTest.log('Checking - .redemptionModal-btn-ok');
+					if($('.redemptionModal-btn-ok').length > 0){
+						clearInterval(redeemInt);
+						$('.redemptionModal-btn-ok').text(isoTest.modalBtnTxt);
+					}
+				},200);
+			});
+		},
+		addNotification: function(){
+			$(isoTest.paymentOptSelector).after(isoTest.template);
+			isoTest.bindEvents();
+		},
+		bindEvents : function(){
+			$('.iso-redeem .close').click(function(){
+				_satellite.setCookie('hideRedeem', true);
+				$('.iso-redeem').addClass('hide');
+			});
+			$('.iso-redeem').removeClass('hide');
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

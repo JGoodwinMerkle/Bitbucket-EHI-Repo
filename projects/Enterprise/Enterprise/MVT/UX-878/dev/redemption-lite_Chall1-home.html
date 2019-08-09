@@ -1,0 +1,184 @@
+<style>
+.iso-eplus.pre-expedited-banner{ background: #f2f2f2; width: 90%; margin: 20px auto -40px; padding: 15px; border:0;}
+.iso-eplus.pre-expedited-banner .content-container{ font-family: "DINLight",Helvetica,Arial,sans-serif; font-size:15px; position: relative; width: calc(100% - 40px); 
+    margin-left: 10px; margin-top: 3px; }
+.pre-expedited-banner i.icon.icon-eplus-logo-black { height: 42px !important; width: 28px !important; background-size: 28px !important; float: left !important;}
+.iso-eplus .content-container a { color: #169a5a; }
+.iso-eplus .eplus-info{ float: right; text-align: right;}
+.iso-eplus .accented a{ color: #169a5a; text-transform: capitalize; font-weight: bold;}
+.iso-eplus h2, .iso-eplus h3 {color: #181918; font-family: "DINMedium",Helvetica,Arial,sans-serif; font-size:17px; text-transform: uppercase;}
+}
+  
+@media (max-width: 820px) {
+	.iso-eplus.pre-expedited-banner i.icon.icon-eplus-logo-black{ vertical-align: top;}
+	.iso-eplus.pre-expedited-banner .content-container { width: calc(100% - 40px); }
+	.iso-eplus .eplus-info { position: relative; top: 0; margin-top: 10px; float: left;
+	margin-left: 60px;}
+}
+@media (max-width: 768px) {
+	.iso-eplus.eplus{ width: 94%; }
+}
+@media (max-width: 748px) {
+	.iso-eplus.eplus{ margin-bottom: 0; }
+}
+@media (max-width: 590px) {
+  .iso-eplus.eplus{ margin: 0; width:100%; }
+	.iso-eplus.pre-expedited-banner i.icon.icon-eplus-logo-black{ margin: auto; float: left;}
+	.iso-eplus.pre-expedited-banner .content-container{ width: calc(100% - 50px); margin: 0 10px; display: inline-block;}
+	.iso-eplus .eplus-info { margin: 10px 0 0 40px;  width: calc(100% - 50px); float: left; text-align: left; display: inline-block;}
+}
+@media (max-width: 590px) {
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Redemption Lite',
+		cookieName : 'enRedemptionLite',
+		customMbox : 'enRedemptionLiteClicks',
+		creative : "Challenger 1",
+		widgetSelector: '.reserve-widget-band',
+		template: '<div class="iso-eplus eplus pre-expedited-banner hide cf">\
+		                 <i class="icon icon-eplus-logo-black" aria-hidden="true" role="presentation"></i>\
+		                 <div class="content-container">\
+		                 	<h2>Enterprise Plus</h2>\
+							<span class="content-message">While making a reservation, you will have the option to use your points on qualifying rentals by selecting the number of days you wish to redeem.</span>\
+		                </div>\
+		        </div>',
+		points: 0,
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.widgetSelector, function() {	
+				isoTest.log("Test Ready!");	
+  			isoTest.chall();
+				
+			});
+		},
+		chall : function() {
+			$(isoTest.widgetSelector).prepend(isoTest.template);
+
+			$('html').on('analytics', function(obj) {
+				isoTest.log('analytics run showHide');
+		        isoTest.showHide();
+		    });
+	      
+	      	if(window._analytics){
+	      		isoTest.log('on load run showHide');
+				isoTest.showHide();
+	      	}
+		},
+		showHide: function(){
+			if (_analytics && _analytics.renter && _analytics.renter.authenticated === true) {
+	          	isoTest.updatePoints();
+	        } else if (_analytics && _analytics.renter && _analytics.renter.authenticated === false) {
+	           	$('.iso-eplus.eplus.pre-expedited-banner').addClass('hide');
+	        }
+	    },
+	    updatePoints: function(){
+			var profile = null;
+
+			var profileInt = setInterval(function(){
+				profile = ReservationStateTree.get(['model','reservationSession','profile','basic_profile','loyalty_data']);
+				if(profile !== null){
+					clearInterval(profileInt);
+					isoTest.points = profile.points_to_date;
+					$('.eplus-info .content-message').html(isoTest.points);
+	          		$('.iso-eplus.eplus.pre-expedited-banner').removeClass('hide');
+				}
+			}, 200);
+	    },
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

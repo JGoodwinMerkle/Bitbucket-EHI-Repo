@@ -1,0 +1,183 @@
+<style>
+.iso-extra {
+	display: none;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Extras Bundle',
+		cookieName : 'enExtrasBundle',
+		customMbox : 'enExtrasBundleClicks',
+		creative : "Challenger 1",
+		extrasSelector: '.information-block.extras .info-block-details',
+		extrasItems: ['excess protection','roadside protection'],
+		template: '<div id="extras-row-header-1" class="row"><span class="line-item">peace of mind</span><div class="amount">{currency} {amount}</div></div>',
+		isBundleSelected: false,
+		total: 0,
+		currency: ReservationStateTree.select(["model",'reservationSession','defaultTopNavAmount']).get().symbol,
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.extrasSelector, function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();
+				
+			});
+
+			$(window).on('hashchange', function(){
+				if(/commit/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.extrasSelector, function() {	
+						isoTest.chall();
+					});
+				} 
+			});
+		},
+		chall : function() {
+			isoTest.total = 0;
+			isoTest.isBundleSelected = (_satellite.readCookie('bundleSelected')==='true');
+			if(isoTest.isBundleSelected){
+				isoTest.findBundleItems();
+				isoTest.getTotal();
+				isoTest.addBundleLine();
+			}
+		},
+		addBundleLine : function(){
+			var $lineItem = helpers.supplant(isoTest.template,{
+				'amount' : isoTest.total,
+				'currency' : isoTest.currency
+			});
+
+			$(isoTest.extrasSelector).prepend($lineItem);
+		},
+		getTotal : function(){
+			var t = 0;
+			$(isoTest.extrasSelector+':eq(0)').find('.iso-extra').each(function(){
+				var amount = $(this).find('.amount').text();
+					amount = parseFloat(amount.split(' ')[1]);
+				t +=amount;
+			});
+			isoTest.log(t);
+			isoTest.total = isoTest.getFormattedTotal(t);
+		},
+		getFormattedTotal: function(total){
+			var t = total.toString();
+			return t.slice(0,t.indexOf('.')+3);
+		},
+		findBundleItems: function(){
+			$(isoTest.extrasSelector).find('.line-item').each(function(){
+				var extra = $(this).text();
+				for(var i=0;i<isoTest.extrasItems.length;i++){
+					if(isoTest.extrasItems[i] == extra){
+						$(this).parent().addClass('iso-extra');
+					}
+				}
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+	});
+})();
+</script>

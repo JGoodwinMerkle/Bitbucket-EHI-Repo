@@ -1,0 +1,358 @@
+<style>
+	#book #location-text-box-dropoff {
+		margin-top: 21px;
+	}
+
+	#book #location-text-box-pickup .location-btn {
+		margin-top: 0px;
+	}
+
+	#book #location-text-box-pickup .location-btn span {
+		text-transform: initial;
+    font-weight: 300;
+    font-size: 16px;
+	}
+
+	#book #location-text-box-dropoff .location-btn {
+		margin-top: 0px;
+	}
+
+	#book #location-text-box-dropoff .location-btn span {
+		text-transform: initial;
+    font-weight: 300;
+    font-size: 16px;
+	}
+</style>
+
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'One-Way Selector',
+		cookieName : 'enOneWaySelector',
+		customMbox : 'enOneWaySelectorClicks',
+		creative : "Challenger 2",
+		resWidget: '#book',
+		locationId: null,
+		init : function() {
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+		        _satellite.setVar('TargetCampaign', isoTest.test);
+		        _satellite.setVar('TargetCreative', isoTest.creative);
+		        _satellite.track('target_variables');
+		    }
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			
+			isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded(isoTest.resWidget, function() {	
+					isoTest.log("Test Ready!");	
+					isoTest.chall();	
+				});
+			});
+
+			$(window).on('hashchange', function(){
+				isoTest.elementLoaded(isoTest.resWidget, function() {	
+					isoTest.log("Test Ready!");	
+					isoTest.chall();	
+				});
+			});
+		},
+		chall : function() {
+			isoTest.setSameLocationLabel();
+			isoTest.updateLabels();
+
+			isoTest.checkReservationTree();
+
+			isoTest.addEvents();
+		},
+		setSameLocationLabel : function() {
+			var model = {};
+
+
+			model['dropoff'] = {
+				location: {
+					locationId: {
+						$set : null
+					},
+					locationName: {
+						$set: 'Return to Same Location'
+					},
+					countryCode: {
+						$set: null
+					},
+					lat: {
+						$set: null
+					},
+					longitude: {
+						$set: null
+					},
+					airportCode: {
+						$set: null
+					},
+					type: {
+						$set: null
+					},
+					locationType: {
+						$set: null
+					}
+				}
+			};
+
+			ReservationStateTree.select("model").update(model);
+			ReservationStateTree.select(["view", "reservationSteps"]).set("dropoffLocation", null);
+		},
+		checkReservationTree : function() {
+			setInterval(function(){
+				var newId = ReservationStateTree.get().model.pickup.location.locationId;
+	
+				if (newId != isoTest.locationId) {
+
+					isoTest.locationId = newId;
+					var checkboxStatus = $('.same-location-checkbox input').is(":checked");
+
+					if (newId != null && checkboxStatus != true) {
+						isoTest.updateChickletText();
+					}
+
+					if (newId == null ) {
+						isoTest.setSameLocationLabel();
+					}
+				}
+			}, .1);
+		},
+		updateChickletText : function() {
+			$('.location-chicklet').last().children(':first-child').children(':first-child').hide();
+			$('.location-chicklet').last().children(':first-child').prepend("<span>Return to Same Location</span>");
+		},
+		updateWidget: function() {
+			var bookingLink = $('#viewModifyCancelBookingWidget span.active');
+			if (bookingLink.text() === "RERSERVE A RENTAL CAR" || bookingLink.text() === "START A RESERVATION") {
+
+				setTimeout(function(){
+					$(".location-btn").first().appendTo("#location-text-box-pickup");
+					$('.same-location-checkbox').hide();
+					$(".location-btn").last().appendTo("#location-text-box-dropoff");
+
+					isoTest.checkExpand();
+
+					isoTest.checkReservationTree();
+
+					var pickUpName = $('.location-chicklet').children(':first-child').children(':first-child')[0];
+					var dropOffName = $('.location-chicklet').children(':first-child').children(':first-child')[1];
+					if ( pickUpName.innerText == dropOffName.innerText ) {
+						isoTest.updateChickletText();
+					}
+				}, 50);
+			}
+		},
+		updateLabels : function(){
+			$('.same-location-checkbox').hide();
+			setTimeout(function(){
+
+				isoTest.elementLoaded('[class=locationInput-active]', function() {	
+					$(".location-btn").first().appendTo("#location-text-box-pickup");
+					// $('.same-location-checkbox').hide();
+				});
+
+				isoTest.elementLoaded('[id=location-text-box-dropoff]', function() {	
+					$(".location-btn").last().appendTo("#location-text-box-dropoff");
+				});
+			}, 200);
+
+			isoTest.checkExpand();
+		},
+		checkExpand : function(){
+			var checkForExpand = setInterval(function(){
+
+				if ($('.inner-container.expanded').length > 0) {
+					clearInterval(checkForExpand);
+					if($('#book .location-search .cf').hasClass('is-hidden')) {	
+						$('#book .location-search .cf.is-hidden').removeClass('is-hidden').addClass('drop-off-location');
+						var html = '<div class="location-chicklet"><div class="chicklet"><span>Return to Same Location</span><span style="display: none;"></span><span> </span></div><div class="chicklet location-chicklet-clear" tabindex="0" role="button" aria-label="Clear Location"><i class="icon icon-ENT-icon-close"></i></div></div>';
+						// $('.drop-off-location').append(html);
+
+					}
+				}
+
+				setTimeout(function(){
+					clearInterval(checkForExpand);
+				}, 7000)
+			},1);
+		},
+		addEvents : function(){
+			$('body').on("click", '#pickupLocationTextBox', function() {
+				if($('#book .location-search .cf').hasClass('is-hidden')) {	
+					$('#book .location-search .cf.is-hidden').removeClass('is-hidden').addClass('drop-off-location');
+				}
+			});
+
+			$('body').on("click", 'dropoffLocationTextBox', function(event) {
+				event.preventDefault();
+			});
+
+			$('#viewModifyCancelBookingWidget').click(function(){
+				isoTest.updateWidget();
+			});
+
+			$('body').on("click", '.location-chicklet-clear', function(e) {
+				var checkboxStatus = $('.same-location-checkbox input').is(":checked");
+				var closeIndex = $('.location-chicklet-clear').index(this);
+				$("#dropoffLocationTextBox").parents('.cf').first().addClass('drop-off-location');
+
+				if (closeIndex == 1 && checkboxStatus != true) {
+					$('.same-location-checkbox input').trigger('click');
+					$('.same-location-checkbox').hide();
+
+					if(sessionStorage.getItem("iso-removed") === null) {
+				  		sessionStorage.setItem("iso-removed", "true");
+						var linkName = 'Location (X)';
+						s.linkTrackVars = 'p3';
+						s.p3 = linkName;
+						s.tl(this, 'o', linkName);
+					}
+				} 
+
+				if ($('.location-chicklet-clear').length <= 1 && checkboxStatus == true) {
+					$('.same-location-checkbox input').trigger('click');
+					if($('#book .location-search .cf').hasClass('is-hidden')) {	
+						$('#book .location-search .cf.is-hidden').removeClass('is-hidden').addClass('drop-off-location');
+					}
+					$('.same-location-checkbox').hide();
+				} 
+
+			  	if(sessionStorage.getItem("iso-removed") === null && $(e.target).parents('.drop-off-location').length > 0) {
+			  		sessionStorage.setItem("iso-removed", "true");
+					var linkName = 'Location (X)';
+					s.linkTrackVars = 'p3';
+					s.p3 = linkName;
+					s.tl(this, 'o', linkName);
+			  	}
+			});
+
+			$(document).on('click', '#continueButton', function(){
+				var pickUpLocation = ReservationStateTree.get().model.pickup.location.locationId;
+				var dropOffLocation = ReservationStateTree.get().model.dropoff.location.locationId;
+				if (pickUpLocation != dropOffLocation) {
+					isoTest.trackClicks('oneway');
+				}
+			});
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+			adobe.target.trackEvent({
+			 	"mbox": isoTest.customMbox,
+			  	"params": {
+			    	"click": element
+			  	},
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+	      	adobe.target.trackEvent({
+		        "mbox": isoTest.customMbox,
+		        "params": {
+		        	"click": element
+		      	},
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+	    	});
+		},
+		analyticsLoaded : function(callback){
+			isoTest.log('analyticsLoaded - Checking...');
+			var aTimer;
+			window.clearTimeout(aTimer);
+			if (_a && _a.stationId.length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('analyticsLoaded - Found!');
+					callback();
+				}
+	    } else {
+	      aTimer = window.setTimeout(function(){isoTest.analyticsLoaded(callback);}, 100);
+	    }
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	    } else {
+	      isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	    }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === "function") {
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	    var query = window.location.search.substring(1);
+	    var vars = query.split('&');
+	    for (var i = 0; i < vars.length; i++) {
+	      var pair = vars[i].split('=');
+	      if (decodeURIComponent(pair[0]) == variable) {
+	      	return decodeURIComponent(pair[1]);
+	      }
+	    }
+	  }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

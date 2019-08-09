@@ -1,0 +1,644 @@
+<style>
+#reservationHeader nav { background-color: #ececec; }
+#reservationHeader nav ul.reservation-steps > li { background: url('data:image/svg+xml;charset=UTF-8,<svg%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20viewBox%3D"0%200%2053.333332%2050.093334"%20height%3D"50.093"%20width%3D"53.333"><defs><clipPath%20id%3D"a"><path%20d%3D"M0%200h400v375.652H0V0z"%20%2F><%2FclipPath><%2Fdefs><g><g><g><g%20clip-path%3D"url(%23a)"%20fill%3D"%23000000"%20transform%3D"matrix(.133%200%200-.133%200%2050.093)"><path%20d%3D"M385.004%20172.965H15c-8.285%200-15%206.71-15%2015%200%208.285%206.715%2015%2015%2015h333.793l-147.09%20147.082c-5.86%205.855-5.86%2015.36%200%2021.21%205.86%205.86%2015.352%205.86%2021.21%200L395.61%20198.57c4.288-4.29%205.578-10.742%203.253-16.347-2.324-5.606-7.793-9.258-13.86-9.258"%20%2F><path%20d%3D"M212.31%200c-3.837%200-7.677%201.465-10.607%204.395-5.86%205.86-5.86%2015.35%200%2021.21L302.66%20126.552c5.86%205.86%2015.352%205.86%2021.21%200%205.86-5.86%205.86-15.35%200-21.21L222.915%204.395C219.984%201.465%20216.148%200%20212.31%200"%20%2F><%2Fg><%2Fg><%2Fg><%2Fg><%2Fsvg>') no-repeat; background-position: right 63px; background-size: 12px auto; }
+#reservationHeader nav ul.reservation-steps > li.inactive,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li.inactive, #reservationFlow .iso-steps ul.mobile-reservation-steps li.inactive { pointer-events: none; cursor: default; }
+#reservationHeader nav ul.reservation-steps > li.seen { pointer-events: auto; cursor: pointer; }
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-step,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-step,
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-step {
+	margin-right: 4px;
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+    top: -1px;
+	width: 20px;
+	height: 20px;
+	border: 2px solid #6e6e6e;
+	border-radius: 50%;
+	font-size: 12px;
+	text-align: center;
+}
+/* START: Modify step block width */
+#reservationHeader nav ul.reservation-steps > li { transition: width 1s ease-in-out 0s; }
+#reservationHeader nav ul.reservation-steps > li.step-col-4:nth-child(1) { width: 30%; }
+#reservationHeader nav ul.reservation-steps > li.step-col-4:nth-child(4) { width: 20%; }
+
+#reservationHeader nav ul.reservation-steps > li.step-col-5:nth-child(1) { width: 24%; }
+#reservationHeader nav ul.reservation-steps > li.step-col-5:nth-child(4) { width: 18%; }
+#reservationHeader nav ul.reservation-steps > li.step-col-5:nth-child(5) { width: 18%; }
+/* END */
+
+/* START: Default all styles to 'Inactive' state */
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-step,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .step-title { color: #6e6e6e; font-size: 0.800rem; }
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item .step-title { color: #6e6e6e}
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .step-value,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .step-value { visibility: hidden; }
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item .step-value { display: none; }
+/* END */
+
+/* START: Update Active and Completed steps */
+#reservationHeader nav ul.reservation-steps > li.seen .reservation-nav-item .reservation-step,
+#reservationHeader nav ul.reservation-steps > li.modify .reservation-nav-item .reservation-step,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.active .reservation-step,
+#reservationFlow .iso-steps ul.mobile-reservation-steps > li .reservation-nav-item.active .reservation-step { border: 2px solid #181918; }
+#reservationFlow .iso-steps ul.mobile-reservation-steps > li .reservation-nav-item.completed .reservation-step,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.completed .reservation-step {
+	border: none;
+	text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+	background: #181918 url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M33.7%204l-18%2018.8-9.4-9.9L0%2019.5l12.6%2013.2%203.1%203.3L40%2010.6%22%2F%3E%3C%2Fsvg%3E") no-repeat center center;
+	background-size: 50%;
+}
+
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-step,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item.active .reservation-step { border: 2px solid #ffffff; }
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item.completed .reservation-step {
+	border: none;
+	text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+	background: #ffffff url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cpath%20d%3D%22M33.7%204l-18%2018.8-9.4-9.9L0%2019.5l12.6%2013.2%203.1%203.3L40%2010.6%22%2F%3E%3C%2Fsvg%3E") no-repeat center center;
+	background-size: 50%;
+}
+
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-step,
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-step { float: left; margin-bottom: 20px; }
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .step-value,
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item .step-value { padding-left: 24px; }
+
+#reservationHeader nav ul.reservation-steps > li.seen .reservation-nav-item .reservation-step,
+#reservationHeader nav ul.reservation-steps > li.seen .reservation-nav-item .step-title,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.active .reservation-step,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.active .step-title,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.completed .step-title,
+#reservationHeader nav ul.reservation-steps > li.modify .reservation-nav-item .reservation-step,
+#reservationHeader nav ul.reservation-steps > li.modify .reservation-nav-item .step-title,
+#reservationFlow .iso-steps ul.mobile-reservation-steps > li.seen .reservation-nav-item .reservation-step,
+#reservationFlow .iso-steps ul.mobile-reservation-steps > li.seen .reservation-nav-item .step-title,
+#reservationFlow .iso-steps ul.mobile-reservation-steps > li .reservation-nav-item.active .reservation-step,
+#reservationFlow .iso-steps ul.mobile-reservation-steps > li .reservation-nav-item.active .step-title,
+#reservationFlow .iso-steps ul.mobile-reservation-steps > li .reservation-nav-item.completed .step-title,
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item.completed .step-title { color: #181918; }
+
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item.active .step-value,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item.completed .step-value { visibility: visible; }
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item.active .step-value,
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item.completed .step-value { display: block; }
+
+#reservationHeader nav ul.reservation-steps > li.seen .reservation-nav-item .step-value,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.active .step-value,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.completed .step-value,
+#reservationHeader nav ul.reservation-steps > li.modify .reservation-nav-item .step-value { visibility: visible; padding: 7px 15px 0; font-size: 14px; }
+
+#reservationHeader nav ul.reservation-steps > li.seen .reservation-nav-item .step-value,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.active .step-value,
+#reservationHeader nav ul.reservation-steps > li.modify .reservation-nav-item .step-value { color: #6e6e6e; }
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.completed .step-value { color: #169A5A; font-weight: bold; }
+/* END */
+
+/* START: Hide default checkmark icon */
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.completed .step-title i,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item.completed .step-title i, #reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item.completed .step-title i { display: none; }
+/* END */
+
+/* START: New Date/Time format */
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .step-value.hide-step,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .step-value.hide-step,
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item .step-value.hide-step { display: none; }
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date {
+	font-family: "DINRegular", Arial, sans-serif;
+	padding: 7px 15px 0;
+	text-align: center;
+	font-size: 14px;
+	line-height: 16px;
+}
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .reservation-pickup,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .reservation-dropoff {
+	display: inline-block;
+	color: #169A5A;
+	font-weight: bold;
+}
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .pickup-date,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .dropoff-date { display: block; }
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .date-prefix,
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .date-range {
+	margin: 0 3px 0 0;
+	position: relative;
+	top: -10px;
+	color: #6e6e6e;
+	font-weight: bold;
+	font-size: 12px;
+}
+#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .date-range { margin-left: 3px; }
+/* END */
+
+/* START: Mobile styles */
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-date { font-size: 20px; color: #169a5a; padding-left: 24px; padding-bottom: 15px; line-height: 1; }
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-date .reservation-pickup,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-date .reservation-dropoff,
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-date .reservation-pickup,
+#reservationFlow .iso-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-date .reservation-dropoff { display: inline-block; }
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-date .pickup-date,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-date .dropoff-date { display: block; }
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-date .date-prefix,
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps ul.mobile-reservation-steps li .reservation-nav-item .reservation-date .date-range { margin: 0 5px; position: relative; top: -13px; font-size: 16px; color: #ddd; }
+/* END */
+
+.iso-modify { background:#f3f3f3; overflow: hidden; border-bottom: 3px solid #03975a; }
+.iso-modify.inactive { display: none; }
+.iso-desc { padding: 18px 20px 13px; position: relative; cursor: pointer; }
+.iso-desc h1 { font-family: "DINMedium", Arial Black, Arial, Helvetica, sans-serif; font-size: 14px; color: #03975a; letter-spacing: 1px; line-height: 1; }
+.iso-desc i { width: 14px; height: 14px; position: absolute; right: 20px; top: 17px; }
+.iso-desc i.active { background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2215%22%20viewBox%3D%220%200%2020%2015%22%3E%3Cpath%20fill%3D%22%23189A5A%22%20d%3D%22M19.697%2010.736l-1.92%202.304L10%206.8l-7.583%206.096-1.92-2.352L10%202.96l9.697%207.776%22%2F%3E%3C%2Fsvg%3E"); }
+.iso-steps { background:#f3f3f3; height:0; overflow: hidden; }
+.iso-steps .mobile-reservation-steps { }
+.iso-steps .mobile-reservation-steps li { padding: 25px 20px; border-top: 1px solid #cbcbcb; position: relative; }
+.iso-steps .mobile-reservation-steps li::after {background: #f3f3f3 url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2053.333332%2050.093334%22%20height%3D%2250.093%22%20width%3D%2253.333%22%3E%3Cdefs%3E%3CclipPath%20id%3D%22a%22%3E%3Cpath%20d%3D%22M0%200h400v375.652H0V0z%22%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3Cg%3E%3Cg%3E%3Cg%3E%3Cg%20clip-path%3D%22url(%23a)%22%20fill%3D%22%23000%22%20transform%3D%22matrix(.133%200%200%20-.133%200%2050.093)%22%3E%3Cpath%20d%3D%22M385.004%20172.965H15c-8.285%200-15%206.71-15%2015%200%208.285%206.715%2015%2015%2015h333.793l-147.09%20147.082c-5.86%205.855-5.86%2015.36%200%2021.21%205.86%205.86%2015.352%205.86%2021.21%200L395.61%20198.57c4.288-4.29%205.578-10.742%203.253-16.347-2.324-5.606-7.793-9.258-13.86-9.258%22%2F%3E%3Cpath%20d%3D%22M212.31%200c-3.837%200-7.677%201.465-10.607%204.395-5.86%205.86-5.86%2015.35%200%2021.21L302.66%20126.552c5.86%205.86%2015.352%205.86%2021.21%200%205.86-5.86%205.86-15.35%200-21.21L222.915%204.395C219.984%201.465%20216.148%200%20212.31%200%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E") no-repeat center center;
+	background-size: 100%;
+	bottom: -14px;
+    content: "";
+    height: 20px;
+    left: 38px;
+    position: absolute;
+    transform: rotate(90deg);
+    width: 20px;
+	z-index: 1;
+	padding: 6px;
+	background-origin: content-box;
+}
+.iso-steps .mobile-reservation-steps li:first-child { padding-top: 17px; }
+.iso-steps .mobile-reservation-steps li:last-child::after { content: none; }
+.iso-steps .mobile-reservation-steps li a:hover { color: #333333; }
+.iso-steps.active { height:auto; }
+.iso-steps .reservation-nav-item.completed { position: relative; }
+.iso-steps .reservation-nav-item.completed::after {
+	content: 'Modify';
+	font-family: "DINMedium", Arial Black, Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 700;
+	text-transform: uppercase;
+	color: #03975a;
+	position: absolute;
+	right: 20px;
+	top: 0;
+}
+.iso-steps .step-title { font-family: "DINMedium", Arial Black, Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 700; }
+.iso-steps .step-value,
+.iso-steps .reservation-date { font-family: "DINLight",Arial,sans-serif; font-weight: 700; font-size: 15px; }
+.iso-steps i { display: none; }
+.reservation-utility-nav .mobile-reservation-steps { display: none !important; }
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps { padding-top: 0; }
+#reservationHeader .reservation-sub-header .reservation-utility-nav li .res-utility-nav-content .mobile-steps .summary-container { margin-top: -3px; }
+
+@media (min-width: 769px) {
+	.iso-modify, .iso-steps { display: none; }
+}
+
+@media (min-width: 1001px) {
+	#reservationHeader nav ul.reservation-steps > li { background-size: 15px auto; background-position: right 67px; }
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .step-title { font-size: 0.875rem; }
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.active .step-value,
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.completed .step-value,
+	#reservationHeader nav ul.reservation-steps > li.modify .reservation-nav-item .step-value,
+	#reservationHeader nav ul.reservation-steps > li.seen .reservation-nav-item .step-value  { padding: 11px 20px 0; font-size: 18px; }
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date { padding: 11px 20px 0; font-size: 18px; line-height: 18px;}
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .date-prefix,
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .date-range { font-size: 14px; top: -12px; margin: 0 5px 0 0; }
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .date-range { margin-left: 5px; }
+}
+
+@media (min-width: 1400px) {
+	#reservationHeader nav ul.reservation-steps > li { background-size: 18px auto; background-position: right 70px; }
+	#reservationHeader nav ul.reservation-steps > li.step-col-4:nth-child(1) { width: 25%; }
+	#reservationHeader nav ul.reservation-steps > li.step-col-4:nth-child(4) { width: 25%; }
+
+	#reservationHeader nav ul.reservation-steps > li.step-col-5:nth-child(1) { width: 20%; }
+	#reservationHeader nav ul.reservation-steps > li.step-col-5:nth-child(4) { width: 20%; }
+	#reservationHeader nav ul.reservation-steps > li.step-col-5:nth-child(5) { width: 20%; }
+
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.active .step-value,
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item.completed .step-value,
+	#reservationHeader nav ul.reservation-steps > li.seen .reservation-nav-item .step-value,
+	#reservationHeader nav ul.reservation-steps > li.modify .reservation-nav-item .step-value {
+		padding: 11px 30px 0;
+		font-size: 20px;
+	}
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date {
+		font-size: 20px;
+		line-height: 22px;
+	}
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .date-prefix,
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .date-range {
+		font-size: 16px;
+		margin: 0 10px 0 0;
+		top: -15px;
+	}
+	#reservationHeader nav ul.reservation-steps > li .reservation-nav-item .reservation-date .date-range { margin-left: 10px }
+}
+.reservation-nav-item.active {
+	cursor: default !important;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.com",
+		test : "Progress Bar",
+		cookieName : 'ehiProgressBar',
+		creative : "Challenger 1",
+		currentLang : enterprise.language,
+		customMbox : 'ehiProgressBarClicks',
+		stepArray : ['#dateTime','#location/pickup','#location/dropoff','#location','#cars','#extras'],
+		init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+			mboxDefine('',isoTest.customMbox);
+			if (isoTest.debug === true) {
+		    	console.log("Test Running...");
+		    	console.log(isoTest.account + " - " + isoTest.portfolio);
+		    	console.log(isoTest.test + " - " + isoTest.creative);
+			}
+			isoTest.dependsLoaded(function() {
+				//isoTest.elementLoaded('nav', function() {
+					if (isoTest.debug === true) {
+						console.log("Test Ready!");
+					}
+					isoTest.chall();
+				//});
+			});
+		},
+		chall : function() {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - chall - Start...");
+			}
+
+			isoTest.setTargetCookie(isoTest.cookieName, isoTest.creative);
+
+			isoTest.changeNav();
+			isoTest.buildMobile();
+			isoTest.trackProgress();
+			$(window).on('hashchange',function() {
+				window.setTimeout(function() {
+					isoTest.updateNav();
+					isoTest.updateMobile();
+				}, 500);
+			});
+		},
+		buildMobile : function() {
+			var currentHash = window.location.hash;
+			$("#reservationFlow").prepend('<div class="iso-modify">\
+				<div class="iso-desc">\
+					<h1 class="page-heading alpha">Reservation Details</h1>\
+					<i class="icon icon-nav-carrot-down"></i>\
+				</div>\
+				<div class="iso-steps"></div>\
+			</div>');
+			$(".mobile-steps .mobile-reservation-steps").clone().appendTo('.iso-steps');
+			$('.iso-steps *').removeAttr('data-reactid');
+			$(".iso-desc").on("click", function() {
+				$(".iso-desc i").toggleClass("active");
+				$(".iso-steps").toggleClass("active");
+			});
+
+			var isoNavigation = $('.iso-steps li[data-stephash]'),
+				isoCurrentUrl = _analytics.pageInfo.contentName;
+			isoNavigation.each(function(i, ele) {
+				var stepHash = '#' + $(this).attr('data-stephash');
+				$(ele).find('.reservation-nav-item').wrap('<a href="' + isoCurrentUrl + '' + stepHash + '"></a>');
+			});
+
+			if ($.inArray(currentHash, isoTest.stepArray) == -1) {
+				$('.iso-modify').toggleClass('inactive');
+			}
+
+			$('.iso-modify .mobile-reservation-steps a').on('click', function() {
+				if ($(".iso-steps").hasClass('active')) {
+					$(".iso-steps").toggleClass("active");
+					$(".iso-desc i").toggleClass("active");
+				}
+			});
+		},
+		updateMobile : function() {
+			var currentHash = window.location.hash;
+			if ($.inArray(currentHash, isoTest.stepArray) >= 0) {
+				$('.iso-steps').empty();
+				$(".mobile-steps .mobile-reservation-steps").clone().appendTo('.iso-steps');
+				$('.iso-steps *').removeAttr('data-reactid');
+				var isoNavigation = $('.iso-steps li[data-stephash]'),
+					isoCurrentUrl = _analytics.pageInfo.contentName;
+				isoNavigation.each(function(i, ele) {
+					var stepHash = '#' + $(this).attr('data-stephash');
+					$(ele).find('.reservation-nav-item').wrap('<a href="' + isoCurrentUrl + '' + stepHash + '"></a>');
+				});
+
+				if ($('.iso-modify').hasClass('inactive')) {
+					$('.iso-modify').toggleClass('inactive');
+				}
+			} else {
+				if ($('.iso-steps').hasClass('active')) {
+					$('.iso-steps').toggleClass('active');
+					$(".iso-desc i").toggleClass("active");
+				}
+				if (!$('.iso-modify').hasClass('inactive')) {
+					$('.iso-modify').toggleClass('inactive');
+				}
+			}
+
+			$('.iso-modify .mobile-reservation-steps a').on('click', function() {
+				if ($(".iso-steps").hasClass('active')) {
+					$(".iso-steps").toggleClass("active");
+					$(".iso-desc i").toggleClass("active");
+				}
+			});
+		},
+		changeNav : function() {
+			var navItems = $('nav .reservation-nav-item'),
+				mobileNavItems = $('.mobile-reservation-steps .reservation-nav-item'),
+				extrasStep = $('li[data-stephash="extras"]'),
+				dateFormat = isoTest.setDateFormat(),
+				pickup = {
+					date : moment(ReservationStateTree.get().view.pickup.date).format(dateFormat.dateFormat),
+					time : moment(ReservationStateTree.get().view.pickup.date).format(dateFormat.timeFormat)
+				},
+				dropoff = {
+					date : moment(ReservationStateTree.get().view.dropoff.date).format(dateFormat.dateFormat),
+					time : moment(ReservationStateTree.get().view.dropoff.date).format(dateFormat.timeFormat)
+				};
+			if ((!_satellite.readCookie('tt_visit') && _analytics.reservation.carClassSelected === null) || (_satellite.readCookie('tt_review') === 'commit') && _analytics.reservation.carClassSelected === null) {
+				_satellite.setCookie('tt_visit', true);
+				_satellite.removeCookie('tt_review');
+			}
+			if (_satellite.readCookie('tt_review') === 'commit' || _satellite.readCookie('tt_review') === 'confirmed') {
+				if (!extrasStep.hasClass('modify')) {
+					extrasStep.addClass('modify');
+				}
+			}
+			navItems.each(function(i, ele) {
+				var stepTitle = $(ele).find('.step-title'),
+					stepText = $(stepTitle).find('span'),
+					newStepText = stepText.text().replace(/([0-9]+[.])/g, '').trim(),
+					step = i + 1;
+				stepText.text(newStepText);
+				stepTitle.prepend('<span class="reservation-step">' + step + '</span>');
+				if (i === 0) {
+					$(ele).find('.step-value').addClass('hide-step');
+					$('<div class="reservation-date">\
+						' + (dateFormat.prefix !== '' ? "<span class='date-prefix'>" + dateFormat.prefix + "</span>" : '') + '\
+						<div class="reservation-pickup">\
+							<span class="pickup-date">' + pickup.date + '</span>\
+							<span class="pickup-time">' + pickup.time + '</span>\
+						</div>\
+						<span class="date-range">' + dateFormat.toText + '</span>\
+						<div class="reservation-dropoff">\
+							<span class="dropoff-date">' + dropoff.date + '</span>\
+							<span class="dropoff-time">' + dropoff.time + '</span>\
+						</div>\
+					</div>').insertAfter($(ele).find('.step-title'));
+				}
+				if (!$(ele).hasClass('completed')) {
+					if (!$(ele).hasClass('active')) {
+						if (!_satellite.readCookie('tt_review')) {
+							$(ele).addClass('inactive');
+							$(ele).parent().addClass('inactive');
+						}
+					} else {
+						$(ele).addClass('seen');
+						//$(ele).parent().addClass('seen');
+					}
+				}
+				$(".reservation-nav-item .step-title span:contains('RENTAL DETAILS')").text("DATE & TIME");
+			});
+			mobileNavItems.each(function(i, ele) {
+				var stepTitle = $(ele).find('.step-title'),
+					stepText = $(stepTitle).find('span'),
+					newStepText = stepText.text().replace(/([0-9]+[.])/g, '').trim(),
+					step = i + 1;
+				stepText.text(newStepText);
+				stepTitle.prepend('<span class="reservation-step">' + step + '</span>');
+				if (i === 0) {
+					$(ele).find('.step-value').addClass('hide-step');
+					$('<div class="reservation-date">\
+						' + (dateFormat.prefix !== '' ? "<span class='date-prefix'>" + dateFormat.prefix + "</span>" : '') + '\
+						<div class="reservation-pickup">\
+							<span class="pickup-date">' + pickup.date + '</span>\
+							<span class="pickup-time">' + pickup.time + '</span>\
+						</div>\
+						<span class="date-range">' + dateFormat.toText + '</span>\
+						<div class="reservation-dropoff">\
+							<span class="dropoff-date">' + dropoff.date + '</span>\
+							<span class="dropoff-time">' + dropoff.time + '</span>\
+						</div>\
+					</div>').insertAfter($(ele).find('.step-title'));
+				}
+				if (!$(ele).hasClass('completed')) {
+					if (!$(ele).hasClass('active')) {
+						if (!_satellite.readCookie('tt_review')) {
+							$(ele).addClass('inactive');
+							$(ele).parent().addClass('inactive');
+						}
+					} else {
+						$(ele).addClass('seen');
+						//$(ele).parent().addClass('seen');
+					}
+				}
+			});
+		},
+		updateNav : function() {
+			var navItems = $('nav .reservation-nav-item'),
+				mobileNavItems = $('.mobile-reservation-steps .reservation-nav-item'),
+				extrasStep = $('li[data-stephash="extras"]');
+			if (_satellite.readCookie('tt_review') === 'commit' || _satellite.readCookie('tt_review') === 'confirmed') {
+				if (!extrasStep.hasClass('modify')) {
+					extrasStep.addClass('modify');
+				}
+			}
+			if (window.location.hash === '#commit') {
+				var isoReview = 'commit';
+				if (!_satellite.readCookie('tt_review')) {
+					_satellite.setCookie('tt_review', isoReview);
+					extrasStep.addClass('modify');
+				}
+			} else if (window.location.hash === '#confirmed') {
+				var isoReview = 'confirmed';
+				_satellite.setCookie('tt_review', isoReview);
+				_satellite.removeCookie('tt_visit');
+			}
+			navItems.each(function(i, ele) {
+				if (_analytics.reservation.previousHash === '#dateTime') {
+					var dateFormat = isoTest.setDateFormat(),
+						pickup = {
+							date : moment(ReservationStateTree.get().view.pickup.date).format(dateFormat.dateFormat),
+							time : moment(ReservationStateTree.get().view.pickup.date).format(dateFormat.timeFormat)
+						},
+						dropoff = {
+							date : moment(ReservationStateTree.get().view.dropoff.date).format(dateFormat.dateFormat),
+							time : moment(ReservationStateTree.get().view.dropoff.date).format(dateFormat.timeFormat)
+						};
+					if (i === 0) {
+						$('.pickup-date').html(pickup.date);
+						$('.pickup-time').html(pickup.time);
+						$('.dropoff-date').html(dropoff.date);
+						$('.dropoff-time').html(dropoff.time);
+					}
+				}
+				if ($(ele).hasClass('active') && !$(ele).hasClass('seen') && !$(ele).hasClass('completed')) {
+					//$(ele).addClass('seen');
+					//$(ele).parent().addClass('seen');
+				}
+				/*if ($(ele).hasClass('completed') && $(ele).parent().hasClass('seen')) {
+					$(ele).removeClass('seen');
+				}*/
+				if (($(ele).hasClass('active') && $(ele).parent().hasClass('inactive')) || $(ele).parent().hasClass('modify')) {
+					$(ele).parent().removeClass('inactive');
+				}
+			});
+			mobileNavItems.each(function(i, ele) {
+				if (_analytics.reservation.previousHash === '#dateTime') {
+					var dateFormat = isoTest.setDateFormat(),
+						pickup = {
+							date : moment(ReservationStateTree.get().view.pickup.date).format(dateFormat.dateFormat),
+							time : moment(ReservationStateTree.get().view.pickup.date).format(dateFormat.timeFormat)
+						},
+						dropoff = {
+							date : moment(ReservationStateTree.get().view.dropoff.date).format(dateFormat.dateFormat),
+							time : moment(ReservationStateTree.get().view.dropoff.date).format(dateFormat.timeFormat)
+						};
+					if (i === 0) {
+						$('.pickup-date').html(pickup.date);
+						$('.pickup-time').html(pickup.time);
+						$('.dropoff-date').html(dropoff.date);
+						$('.dropoff-time').html(dropoff.time);
+					}
+				}
+				if (($(ele).hasClass('active') && $(ele).parent().hasClass('inactive')) || $(ele).parent().hasClass('modify')) {
+					$(ele).parent().removeClass('inactive');
+				}
+			});
+		},
+		setDateFormat : function() {
+			if (window.location.href.indexOf("enterprise.co.uk") > -1) {
+				return {
+					prefix : '',
+					toText : 'to',
+					dateFormat : 'MMM D',
+					timeFormat : 'HH:mm'
+				};
+			} else {
+				switch (isoTest.currentLang) {
+					case 'en':
+						var rentalDetails = {
+							prefix : '',
+							toText : 'to',
+							dateFormat : 'MMM D',
+							timeFormat : 'h:mm A'
+						}
+						return rentalDetails;
+						break;
+					case 'es':
+						var rentalDetails = {
+							prefix : '',
+							toText : 'a',
+							dateFormat : 'MMM D',
+							timeFormat : 'h:mm A'
+						}
+						return rentalDetails;
+						break;
+				}
+			}
+		},
+		trackProgress : function() {
+			var stepArray = ['#dateTime','#location/pickup','#location/dropoff','#location','#cars','#extras'],
+				navigation = $('#reservationHeader li[data-stephash]');
+			navigation.on('click', function() {
+				var stepHash = '#' + $(this).attr('data-stephash'),
+					currentHash = _analytics.reservation.currentHash;
+				if ($.inArray(stepHash, stepArray) < $.inArray(currentHash, stepArray)) {
+					isoTest.trackClicks("BackStepClick");
+				} else if ($.inArray(stepHash, stepArray) > $.inArray(currentHash, stepArray)) {
+					if (!$(this).hasClass("inactive")) {
+						isoTest.trackClicks("ForwardStepClick");
+					}
+				} else {
+					isoTest.trackClicks("CurrentStepClick");
+				}
+			});
+			$('#enterpriseHomeLogo a').on('click', function() {
+				isoTest.trackClicks("LogoClick", $(this).attr("href"));
+			});
+			$('.reservation-steps li').on('click', function() {
+				if ($(this).hasClass("inactive")) {
+					isoTest.trackClicks("DisabledStepClick");
+				}
+			});
+			$('.iso-modify .iso-desc').on('click', function() {
+				isoTest.trackClicks("MobileExpand");
+			});
+			$('.reservation-utility-nav').on('click', function() {
+				if ($(window).width() < 769) {
+					isoTest.trackClicks("MobileTotal");
+				} else {
+					isoTest.trackClicks("DesktopTotal");
+				}
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+			mboxUpdate(isoTest.customMbox, 'click='+element);
+			if (url !== null) {
+				window.setTimeout("window.location.href='" + url + "'", 500);
+			}
+		},
+		elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if (((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) && typeof _analytics === "object") {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+	        }
+		}
+	}
+	isoTest.init();
+})();
+</script>

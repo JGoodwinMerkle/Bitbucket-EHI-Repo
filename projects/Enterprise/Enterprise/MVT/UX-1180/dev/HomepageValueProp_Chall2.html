@@ -1,0 +1,433 @@
+<style>
+.iso-modal-open { 
+	height: 100%; 
+	overflow: hidden;
+}
+
+.iso-modal {
+	display: hidden;
+}
+
+.iso-modal.active {
+	display: block;
+}
+
+.iso-modal.active .iso-modal-bold {
+	font-weight: 700;
+  line-height: 20px;
+}
+
+.iso-modal.active .iso-extra-space {
+	padding-bottom: 10px;
+}
+
+.iso-modal.active .iso-top-padding {
+	margin-top: 2em;
+}
+
+.iso-modal.active .iso-footnote {
+	font-size: 14px;
+}
+
+.iso-value-prop-banner.section {
+  box-sizing: content-box;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.iso-value-prop-banner.section .band.iso-band {
+  margin: 0 auto;	
+	max-width: 1024px;
+  padding: 0 0 10px;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-desktop {
+	width: 100%;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-mobile {
+	display: none;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-text-header {
+  font-style: normal;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container {
+	display: flex;
+  justify-content: space-between;
+	margin-top: 30px;
+	width: 100%;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item {
+	position: relative;
+	width: 23%;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-banner-image {
+	width: 100%;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item .iso-item-caption {
+	bottom: 10px;
+	color: #FFFFFF;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-desktop .iso-link-container {
+	margin-top: 25px;
+  text-align: center;
+  width: 100%;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-desktop .iso-details-link {
+	color: #169A5A;
+  cursor: pointer;
+  font-size: 17px;
+  font-style: normal;  
+  font-weight: 400;
+}
+
+.iso-value-prop-banner.section .iso-banner-container-desktop .iso-details-link:hover {
+	color: #15804d;
+}
+
+@media screen and (max-width: 1100px) {
+	.iso-value-prop-banner.section .band.iso-band {
+  	margin: 0 40px;
+  }
+
+  .iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item .iso-item-caption {
+  	font-size: 14px;
+	}
+}
+
+@media screen and (max-width: 980px) {
+  .iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item .iso-item-caption {
+  	font-size: 13px;
+	}
+}
+
+@media screen and (max-width: 850px) {
+  .iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item .iso-item-caption {
+  	font-size: 12px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+  .iso-value-prop-banner.section .band.iso-band {
+  	margin: 0 30px;
+  }
+}
+
+@media screen and (max-width: 800px) and (min-width: 500px) {
+	.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container {
+		display: block;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item {
+		margin-bottom: 1%;
+		width: 49%;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item.iso-left {
+		float: left;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item.iso-right {
+		float: right;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item.iso-bottom {
+		margin-bottom: 20px;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-desktop .iso-banner-image-container .iso-item .iso-item-caption {
+  	font-size: 15px;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-desktop .iso-link-container {
+		margin-bottom: 15px;
+	}
+}
+
+@media screen and (max-width: 499px) {
+	.iso-value-prop-banner.section .band.iso-band {
+		margin: 0 4% 4%;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-desktop {
+		display: none;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-mobile {
+		display: block;
+		width: 100%;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-mobile .iso-banner-image {
+		display: block;
+		width: 100%;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-mobile .iso-banner-text-container {
+		background: #f3f3f3;
+		display: block;
+		width: 100%;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-mobile .iso-banner-text-container .iso-banner-text-header {
+		font-size: 24px;
+	  font-style: normal;
+	  font-weight: 700;
+	  margin-bottom: 6px;
+	  padding-left: 20px;
+	  padding-top: 20px;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-mobile .iso-banner-text-container .iso-banner-list {
+	  list-style-position: inside;
+	  list-style-type: disc;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-mobile .iso-banner-text-container .iso-banner-list .iso-list-text {
+	  font-size: 16px;
+	  font-style: normal;
+	  font-weight: 300;
+	  line-height: 26px;
+	  margin-bottom: 0;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-mobile .iso-link-container {
+		margin-top: 18px;
+		padding-bottom: 20px;
+	  padding-left: 20px;
+	}
+
+	.iso-value-prop-banner.section .iso-banner-container-mobile .iso-banner-text-container .iso-details-link {
+		color: #169A5A;
+	  font-size: 14px;
+	  font-style: normal;
+	  font-weight: 400;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Homepage Value Prop',
+		creative : 'Challenger 2',
+		selector : '.reservationWidget.section',
+		bannerSection : "<div class='iso-value-prop-banner section'>\
+											<section class='band iso-band'>\
+												<div class='iso-banner-container-desktop'>\
+													<div class='iso-banner-text-header'>WHY CHOOSE ENTERPRISE</div>\
+													<div class='iso-banner-image-container'>\
+														<div class='iso-item iso-left'><img class='iso-banner-image' src='https:&#47;&#47;www.enterprise.com&#47;content&#47;dam&#47;ecom&#47;hosted&#47;customer_service_960x540.jpg'><div class='iso-item-caption'>Top Rated Customer Experience</div></div>\
+														<div class='iso-item iso-right'><img class='iso-banner-image' src='https:&#47;&#47;www.enterprise.com&#47;content&#47;dam&#47;ecom&#47;hosted&#47;locations_960x540.jpg'><div class='iso-item-caption'>7600+ Global Locations</div></div>\
+														<div class='iso-item iso-left iso-bottom'><img class='iso-banner-image' src='https:&#47;&#47;www.enterprise.com&#47;content&#47;dam&#47;ecom&#47;hosted&#47;pick_you_up_960x540.jpg'><div class='iso-item-caption'>We'll Pick You Up®</div></div>\
+														<div class='iso-item iso-right iso-bottom'><img class='iso-banner-image' src='https:&#47;&#47;www.enterprise.com&#47;content&#47;dam&#47;ecom&#47;hosted&#47;earn_rental_days_960x540.jpg'><div class='iso-item-caption'>Earn Free Rental Days</div></div>\
+													</div>\
+													<div class='iso-link-container'><a role='button' tabindex='0' class='iso-details-link'>See Details</a></div>\
+												</div>\
+												<div class='iso-banner-container-mobile'>\
+													<img class='iso-banner-image' src='https:&#47;&#47;www.enterprise.com&#47;content&#47;dam&#47;ecom&#47;hosted&#47;customer_service_960x540.jpg'>\
+													<div class='iso-banner-text-container'>\
+														<div class='iso-banner-text-header'>WHY CHOOSE ENTERPRISE</div>\
+														<ul class='iso-banner-list'>\
+															<li class='iso-list-text'>Top Rated Customer Experience</li>\
+															<li class='iso-list-text'>7600+ Global Locations</li>\
+															<li class='iso-list-text'>We'll Pick You Up®</li>\
+															<li class='iso-list-text'>Earn Free Rental Days</li>\
+														</ul>\
+														<div class='iso-link-container'><a role='button' tabindex='0' class='iso-details-link'>See Details</a></div>\
+													</div>\
+												</div>\
+											</section>\
+										</div>",
+		modalTemplate : '<div class="iso-modal modal-container" tabindex="0">\
+							<div class="modal-content">\
+								<div class="modal-header"><button class="close-modal"><i class="icon icon-close-x-white">X</i></button></div>\
+								<div class="modal-body">\
+									<h2>Why Choose Enterprise</h2>\
+									<p><div class="iso-modal-bold">Ranked #1. Five Years in a Row.</div><div>We\'re proud to receive the highest ranking in Rental Car Customer Satisfaction, according to the J.D. Power 2018 North America Rental Car Satisfaction Study&#8480;, for five years in a row<sup>1</sup>. We were recognized with the highest score in the following factors:  Reservation, Pick Up Process, Rental Car, Return Process, and Cost & Fee. </div></p>\
+									<p><div class="iso-modal-bold">More Than 7,600 Worldwide Locations</div><div>The Enterprise Rent-A-Car brand is part of the world\'s largest car rental provider – as measured by revenue, fleet, and employees. Enterprise has been expanding its award-winning customer service across the globe, and now operates more than 7,600 branch offices in over 85 countries and territories.</div></p>\
+									<p><div class="iso-modal-bold">Make it Easier with Free Pick Ups</div><div>Our free pick-up service is available at non-airport locations and during normal business hours. To schedule your pick up time or make additional arrangements, please call your local rental office directly. Once picked up and back at the office, a friendly rental representative will complete your paper work and have you on the road in no time. </div></p>\
+									<p><div class="iso-modal-bold">Get Rewarded with Enterprise Plus</div><div>With Enterprise Plus®, the more you rent, the more you earn. For every qualifying rental dollar spent at participating Enterprise locations worldwide, you earn a point. You can redeem points for free rental days<sup>2</sup> on any available car on any day — with no blackout dates — at thousands of participating locations worldwide.</div></p>\
+									<p class="iso-top-padding iso-footnote">1. Enterprise received the highest score in the J.D. Power 2014-2018 North America Rental Car Satisfaction Studies of customers\' satisfaction with their airport rental car experience. Visit <a target="_blank" href="https:&#47;&#47;www.jdpower.com&#47;awards">jdpower.com&#47;awards</a>.</p>\
+									<p class="iso-footnote">2. Free rental day covers base rate (time and mileage) only.</p>\
+									<div class="iso-extra-space"></div>\
+								</div>\
+							</div>\
+						</div>',
+		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			isoTest.addBannerSection();
+			isoTest.addEvents();
+
+			document.addEventListener("keypress", function (e) {
+				var keyCode = (e.keyCode ? e.keyCode : e.which);
+				var closeContainer = document.querySelector('.iso-modal .close-modal');
+				var closeButton = document.querySelector('.iso-modal .icon-close-x-white');
+				var modalLinkDesktop = document.querySelector('.iso-value-prop-banner .iso-banner-container-desktop .iso-details-link');
+				var modalLinkMobile = document.querySelector('.iso-value-prop-banner .iso-banner-container-mobile .iso-details-link');
+
+        if (keyCode == '13') {
+        	if (e.target == closeContainer || e.target == closeButton ) {
+	          isoTest.destroyModal();
+	        }
+
+	        if (e.target == modalLinkDesktop || e.target == modalLinkMobile ) {
+	        	isoTest.modalOpen();
+	        }
+        }
+			}, false);
+
+			document.addEventListener("keydown", function (e) {
+				var keyCode = (e.keyCode ? e.keyCode : e.which);
+  
+        if (keyCode == '27') {
+          if (document.querySelector('html').classList.contains('iso-modal-open')) {
+            isoTest.destroyModal();
+          }
+        }
+			}, false);
+		},
+		addBannerSection : function() {
+			document.querySelector('.reservationWidget.section').insertAdjacentHTML('afterend',isoTest.bannerSection);
+			document.querySelector('#ip-redirect').insertAdjacentHTML("afterend", isoTest.modalTemplate);
+		},
+		modalOpen : function() {
+			document.querySelector('.iso-modal').classList.add('active');
+			document.querySelector('html').classList.add('iso-modal-open');
+
+      var modalFocus = document.querySelector('.iso-modal');
+      isoTest.keepFocus(modalFocus);
+
+      modalFocus.focus();
+
+      isoTest.fireTag('.iso-details-link','See Details');
+		},
+		destroyModal : function() {
+      document.querySelector('html').classList.remove('iso-modal-open');
+      var elModal = document.querySelector('.iso-modal');
+			elModal.classList.remove('active');
+    },
+    keepFocus : function(context) {
+      var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+          firstTabbableElement = allTabbableElements[0],
+          lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+      var keyListener = function(e) {
+    		var keyCode = e.which || e.keyCode;
+
+    		e.preventDefault = e.preventDefault || function () {
+    			e.returnValue = false;
+    		};
+    		if (keyCode === 9) {
+          if (e.target === lastTabbableElement && !e.shiftKey) {
+    				e.preventDefault();
+    				firstTabbableElement.focus();
+          } else if (e.target === firstTabbableElement && e.shiftKey) {
+    				e.preventDefault();
+    				lastTabbableElement.focus();
+    			}
+    		}
+    	};
+    	context.addEventListener('keydown', keyListener, false);
+    },
+		addEvents : function() {
+			document.querySelector('.iso-modal .close-modal').addEventListener('click', function (e) {
+				isoTest.destroyModal();
+			}, false);
+
+			document.querySelector('.iso-modal .close-modal .icon-close-x-white').addEventListener('click', function (e) {
+				isoTest.destroyModal();
+			}, false);
+
+			document.querySelector('.iso-value-prop-banner .iso-banner-container-desktop .iso-details-link').addEventListener('click', function (e) {
+				isoTest.modalOpen();
+			}, false);
+
+			document.querySelector('.iso-value-prop-banner .iso-banner-container-mobile .iso-details-link').addEventListener('click', function (e) {
+				isoTest.modalOpen();
+			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

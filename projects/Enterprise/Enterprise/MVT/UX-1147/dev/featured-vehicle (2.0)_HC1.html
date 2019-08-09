@@ -1,0 +1,262 @@
+<style>
+.vehicle-list {
+	display: flex;
+	flex-flow: wrap;
+}
+.vehicle-list__item {
+	order: 0;
+	width: 100%;
+}
+.vehicle-list__item.iso-preSelectedClass {
+	border: 0;
+	margin-top: -3px;
+	order: -1;
+}
+.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+	border: 3px solid #0A643A;
+	padding-right: 15px;
+	margin-right: -15px;
+}
+.iso-tag {
+	background: #0A643A;
+	color: #fff;
+	font-size: 14px;
+	padding: 4px 8px 1px 8px;
+	width: calc(100% + 15px);
+}
+.iso-unavailable-msg {
+	background: #f2f2f2;
+	border-bottom: .125rem solid #c3c3c3;
+	display: block;
+	font-size: 14px;
+	padding: 15px 20px;
+	width: 100%;
+}
+@media (max-width: 1081px){
+	.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+		padding-right: 0;
+		margin-right: 0;
+	}
+	.iso-tag {
+		width: 100%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Featured Vehile 2.0',
+		cookieName : 'enFeaturedVehicle20',
+		customMbox : 'enFeaturedVehicle20Clicks',
+		creative : 'Challenger 1',
+		filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
+		vehicleItem: '.vehicle-list__item',
+		lang: 'en_com',
+		template: '<div class="iso-tag">{tag}</div>',
+		featured: {
+			0: {
+				car: 'MVAR',
+				tag: '<strong>Best Choice!</strong> Perfect for long road trips with room for 7 passengers.'
+			},
+			1: {
+				car: 'MVAR',
+				tag: '<strong>Best Choice!</strong> Perfect for long road trips with room for 7 passengers.'
+			},
+			2: {
+				car: 'MVAR',
+				tag: '<strong>Best Choice!</strong> Perfect for long road trips with room for 7 passengers.'
+			},
+			3: {
+				car: 'MVAR',
+				tag: '<strong>Best Choice!</strong> Perfect for long road trips with room for 7 passengers.'
+			},
+			4: {
+				car: 'IFAR',
+				tag: '<strong>Best Choice!</strong> Room for 5 but compact enough for high traffic driving.'
+			},
+			5: {
+				car: 'IFAR',
+				tag: '<strong>Best Choice!</strong> Room for 5 but compact enough for high traffic driving.'
+			},
+			6: {
+				car: 'IFAR',
+				tag: '<strong>Best Choice!</strong> Room for 5 but compact enough for high traffic driving.'
+			}
+		},
+		audience: {
+			branch: 'city',
+			group: ['65','06','52','54','46','03','26','41','53','08','15','19','39','58','10','17','18','24','29','48','C2','C5','C6','C7','16','36','57','23','C4','20']
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.vehicleItem, function() {	
+				isoTest.log('Test Ready!');	
+				if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
+					isoTest.chall();
+				} 
+			});
+
+			$(window).on('hashchange', function(){
+				if(/cars/.test(location.hash)){
+					isoTest.elementLoaded(isoTest.vehicleItem, function() {	
+						if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
+							isoTest.chall();
+						}
+					});
+				}
+			});
+		},
+		chall : function(){
+			isoTest.log('chall()');
+			var isBranchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']) == isoTest.audience.branch;
+			var groupNumber = ReservationStateTree.get(['session', 'reservationSession','pickupLocationWithDetail','location_id']).slice(0,2);
+			var isGroup = isoTest.checkGroup(groupNumber);
+
+			isoTest.log('isBranchType:: ' + isBranchType);
+			isoTest.log('isGroup:: ' + isGroup);
+
+			if(isBranchType && isGroup){
+				isoTest.runTest();
+			}
+		},
+		checkGroup: function(groupNumber){
+			isoTest.log('checkGroup()');
+			var checksOut = false;
+			$.each(isoTest.audience.group, function(i,g){
+				if(groupNumber.substring(0,g.length) == g){
+					checksOut = true;
+				}
+			});
+			return checksOut;
+		},
+		runTest : function() {
+			isoTest.log('runTest()');
+			isoTest.day = helpers.getQueryParam('dayOverride') ? helpers.getQueryParam('dayOverride') : new Date(ReservationStateTree.get(['session', 'reservationSession','pickup_time'])).getDay();
+			isoTest.vehicleClass = isoTest.featured[isoTest.day];
+			isoTest.labelVehicle();
+
+			$('.vehicle-filter__filter .checkbox__label-checkbox,.vehicle-filter__header-link').click(function() {
+				isoTest.log('Event: Filter Checkbox Click');
+				setTimeout(isoTest.labelVehicle,200);
+			});
+		},
+		labelVehicle: function(){
+			isoTest.log('labelVehicle()');
+			$(isoTest.vehicleItem + ':not(.iso-preSelectedClass)').each(function(){
+				var dataInfo = $(this).data('dtm-tracking').split('|');
+				var carClass = dataInfo[1];
+				var avail = dataInfo[2];
+				isoTest.log(carClass + ' :: ' + avail);
+			    if(carClass == isoTest.vehicleClass.car && (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE')){
+			        $(this).addClass('iso-preSelectedClass');
+			        var $tag = helpers.supplant(isoTest.template, {
+			        	'tag' : isoTest.vehicleClass.tag
+			        });
+			        $(this).prepend($tag);
+			    }
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          'mbox': isoTest.customMbox,
+		          'params': {
+		              'click': element
+		          },
+					'success': function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Start...');
+			
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					isoTest.log(isoTest.test + ' - ' + isoTest.creative + ' - dependsLoaded - Ready!');
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>

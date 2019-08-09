@@ -1,0 +1,243 @@
+<style>
+.iso-bookHere {
+	background: #f3f3f3;
+    width: 63%;
+    float: right;
+    padding: 3em;
+}
+.iso-quote {
+	text-align: center;
+}
+.iso-disclosure p{
+	font-size: 12px;
+}
+.reserve-widget-band {
+	float: left;
+	width: 37%;
+}
+.reservationWidget {
+	background: #f3f3f3;
+}
+#reservationWidget .inner-container, .booking-widget, #reservationWidget .date-time-form,  .booking-widget .date-time-selector .label-container, .booking-widget .age-input, .booking-widget .age-input #age, .coupon-field-wrapper, #coupon, .booking-submit{
+	width: 100%;
+}
+#reservationWidget div.options {
+	float: left;
+	clear: both;
+}
+#reservationWidget .inner-container > div {
+	padding: 0 3em;
+}
+#reservationWidget .booking-widget .date-time-selector label.time-label, #reservationWidget .booking-widget label.date-label{
+	width: 50%;
+}
+#reservationWidget .booking-widget div.arrow{
+	display: none;
+}
+@media (min-width: 1057px){
+	.coupon-field-wrapper, #coupon{
+		width: 100%;
+	}
+}
+@media (max-width: 66em) {
+	.reserve-widget-band, .iso-bookHere {
+		width: 100%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'JD Power',
+		cookieName : 'enJDPower',
+		customMbox : 'enJDPowerClicks',
+		creative : "Challenger 1",
+		resWidget: '.reservationWidget',
+		template: '<section class="iso-bookHere">\
+					  <div class="iso-jdPower">\
+					    <div class="iso-award">\
+					    	<img src="{awardImg}" />\
+					    </div>\
+					    <div class="iso-awardContent">\
+					      <div class="iso-quote">\
+					        <h2>{header}</h2>\
+					        <p><strong>{quote}</strong><br />\
+					          {content}\
+					        </p>\
+					      </div>\
+					      <div class="iso-disclosure">\
+					        <p>{disclosure}</p>\
+					      </div>\
+					    </div>\
+					  </div>\
+					  <div class="iso-fleet">\
+					    <div class="iso-fleetImage">\
+					    	<img src="{fleetImg}" />\
+					    </div>\
+					    <div class="iso-fleetContent">\
+					      <p>{fleetContent}</p>\
+					    </div>\
+					  </div>\
+					</section>',
+		content: {
+			header: 'We love our customers. Looks like the feeling is mutual.',
+			awardImg: '',
+			quote: '"Highest in Rental Car Customer Satisfaction"',
+			content: 'in the J.D. Power 2016 North America Rental Car Satisfaction Study℠',
+			disclosure: 'Disclosures: <br /> Enterprise received the highest numerical score in the J.D. Power 2014-2016 North America Rental Car Satisfaction Studies. 2016 study based on 11,303 total responses among 8 companies, measuring the opinions of business and leisure/personal travelers who rented a vehicle at an airport location, surveyed in September 2015-August 2016. Your experiences may vary. Visit jdpower.com',
+			fleetImg: '',
+			fleetContent: 'We have the <strong>largest car rental fleet in the world</strong>, with a large selection of cars, minivans, SUVs, trucks, cargo vans, and luxury vehicles.'
+		},
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.resWidget, function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();
+			});
+		},
+		chall : function() {
+			isoTest.expandWidget();
+			isoTest.removeModules();
+			isoTest.adjustClasses();
+			isoTest.insertWhyBook();
+		},
+		insertWhyBook : function(){
+			var $whyBook = helpers.supplant(isoTest.template,{
+				'header': isoTest.content.header,
+				'quote': isoTest.content.quote,
+				'content': isoTest.content.content,
+				'disclosure': isoTest.content.disclosure,
+				'fleetContent': isoTest.content.fleetContent,
+				'awardImg': isoTest.content.awardImg,
+				'fleetImg': isoTest.content.fleetImg
+			});
+
+			$(isoTest.resWidget).append($whyBook);
+		},
+		adjustClasses : function(){
+			$(isoTest.resWidget).addClass('cf');
+			$(isoTest.resWidget).find('.reserve-widget-band').removeClass('cf');
+		},
+		expandWidget: function(){
+			$(isoTest.resWidget).find('.inner-container').removeClass('collapsed').addClass('expanded');
+		},
+		removeModules : function(){
+			$(isoTest.resWidget).nextAll().remove();
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

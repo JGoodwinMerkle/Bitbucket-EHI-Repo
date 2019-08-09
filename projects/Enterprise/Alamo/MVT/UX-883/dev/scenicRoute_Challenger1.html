@@ -1,0 +1,128 @@
+<style>
+    .iso-test.section .relatedSection{ background-color: #005EAB; color: white; } 
+    .iso-test.section .relatedSection h4, .iso-test.section .relatedSection p{ color: white !important; } 
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Alamo.com",
+		test : "Scenic Route",
+		creative : "Challenger 1",
+		target: '.cq-colctrl-lt20-c1.parsys .section',
+		previouslyRun : false,
+		templates : {
+			offer : '<div class="iso-test container section">\
+		                 <div class="relatedSection">\
+		                     <div class="newsection parsys">\
+		                         <div class="textimage parbase section">\
+			                         <div class="text">\
+			                             <h4>{heading}</h4>\
+	                                     <p>{txt}</p>\
+	                                     <a href="/en_US/modals/hot-deals-on-wheels.modal.html" title="Sign Up" data-ajax="true" data-modal="sm" class="modal blueLink"><span class="bigYellowPointer">Sign Up</span></a>\
+	                                 </div>\
+		                         </div>\
+		                     </div>\
+		                 </div>\
+		                 <div style="clear:both">\
+				         </div>\
+                     </div>'
+			},
+		translations : {
+	      "en_US" : {
+	        "heading" : "Email Sign Up",
+	        "txt" : "Get Weekly deals, last-minute specials and travel tips sent to your inbox.",
+	      }
+	    },
+		lang : 'en_US',
+		supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+	        var p = b.split(/\./),
+	            c = o;
+	        for (var i = 0; i < p.length; i++) {
+	          if (c[p[i]] == null)
+	            return a;
+	          c = c[p[i]];
+	        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		},
+		addSignUp : function(target) {
+			var addBefore = $(target).first();
+            var signUp = isoTest.supplant(isoTest.templates.offer, {
+            'heading' : isoTest.translations[isoTest.lang]['heading'],
+            'txt' : isoTest.translations[isoTest.lang]['txt']
+           });
+		  $(signUp).insertBefore($(addBefore));
+		},
+		init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+				isoTest.previouslyRun = !_satellite.readCookie('previousRun') ? isoTest.previouslyRun : Boolean(_satellite.readCookie('previousRun'));
+			}
+			if (isoTest.debug === true) {
+				console.log("Test Running...");
+				console.log(isoTest.account + " - " + isoTest.portfolio);
+				console.log(isoTest.test + " - " + isoTest.creative);
+			}
+			isoTest.elementLoaded(isoTest.target, function() {
+				if (isoTest.debug === true) {
+					console.log("Test Ready!");
+				}
+				if(!isoTest.previouslyRun){
+  				isoTest.chall();
+				}
+			});
+		},
+		chall : function() {
+			isoTest.addSignUp(isoTest.target);
+		},
+		elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				//console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0 && $(ele).is(':visible')) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - "+ele+" - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		}
+	}
+
+	isoTest.dependsLoaded(function(){
+		 isoTest.init();
+	});
+})();
+</script>

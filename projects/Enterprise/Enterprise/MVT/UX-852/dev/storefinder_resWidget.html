@@ -1,0 +1,487 @@
+<style>
+.iso-resWidget .inner-container.expanded .date-time-form, .featuredcitypage section.featured-location-heading .date-time-form, .iso-resWidget .inner-container.expanded .age-input, .featuredcitypage section.featured-location-heading .age-input, .iso-resWidget .inner-container.expanded .coupon-field-wrapper, .featuredcitypage section.featured-location-heading .coupon-field-wrapper, .iso-resWidget .inner-container.expanded .booking-submit, .featuredcitypage section.featured-location-heading .booking-submit, .iso-resWidget .inner-container.expanded .loyalty-book, .featuredcitypage section.featured-location-heading .loyalty-book, .same-location-checkbox, .inner-container .options {
+	display: none !important;
+}
+.booking-widget .custom-select,.booking-widget .custom-select #age, .booking-widget .date-time-form,.coupon-field-wrapper .coupon-input,.coupon-field-wrapper{
+    width: 100% !important;
+}
+.booking-widget .date-time-selector .label-container{
+	width: 46% ;
+}
+.booking-widget div.arrow {
+	width: 3%;
+}
+.booking-widget .pickup.label-container label, .booking-widget .dropoff.label-container label {
+    width: 50%;
+}
+.iso-resWidget .inner-container.expanded {
+	min-height: auto !important;
+	width: 90%;
+}
+#reservationWidget {
+	float: left;
+	width: 70%;
+}
+.inner-container {
+	margin: 1em auto .125em auto;
+	min-width: 90% !important;
+	width: 90% !important;
+}
+.inner-container h2.alpha, #state-browse h3 {
+	color: #181918;
+	font-family: "DINMedium", Arial, Helvetica, sans-serif;
+	font-size: 28px;
+    text-transform: none;
+}
+.inner-container h2.alpha {
+    margin-bottom: -10px;
+	margin-top: 10px;
+}
+.booking-widget {
+	width: 100% !important;
+}
+.iso-header {
+	border-bottom: 2px solid #c3c3c3;
+}
+.iso-startResBand {
+	padding: 40px 60px 0 0;
+}
+#iso-startRes {
+	background: #fff;
+	border: 2px solid #169a5a;
+	color: #169a5a;
+	text-transform: uppercase;
+}
+#iso-startRes:hover {
+	background: #169a5a;
+	color: #fff;
+}
+#state-browse{
+	float: right;
+	width: 30%;
+}
+#state-browse .cf {
+	border-left: 1px solid #656565;
+    margin: 2em auto;
+    padding: 0 25px;
+}
+#state-browse .custom-select {
+	margin-top: 10px;
+}
+#state-browse select {
+	width: 100%;
+}
+#state-browse .btn, .iso-search.btn {
+    color: #fff;
+    font-family: "DINBold",Arial Black,Arial,sans-serif;
+    font-size: 18px;
+    height: 64px;
+    line-height: 28px;
+	padding: 20px;
+}
+#state-browse .btn {
+	margin-top: 35px;
+}
+/* Locations list updates */
+#locations-list {
+	background: #f2f2f2;
+	border: 2px solid #c3c3c3;
+	min-height: 200px;
+}
+.booking-widget .location-search .locationInput-active .select-location-state {
+    border: 2px solid #c3c3c3;
+}
+#locations-list li a{
+	background-image:url("/etc/designs/ecom/dist/img/icons/png/nav-carrot-green.png");
+    background-size: auto 17px;
+    background-position: right;
+    background-repeat: no-repeat;
+    margin-right: 2px;
+}
+#locations-list li a:after {
+    content: "Select";
+    float: right;
+    font-size: 15px;
+    margin-right: 10px;
+    margin-top: 2px;
+}
+#locations-list li a:hover, #locations-list li.highlighted a {
+	background-color: #169A5A;
+	background-image: url("/etc/designs/ecom/dist/img/icons/png/nav-carrot-white.png");
+	color: #fff;
+}
+#locations-list li a:hover small, #locations-list li.highlighted a small{
+	color: #fff;
+}
+.iso-typeahead {
+	position: absolute;
+	z-index: 4;
+	top: 0;
+	left: 0;
+	width:100%;
+	height:100%;
+	background:url('//www.enterprise.com/content/dam/ecom/hosted/empty-state-bg.png') no-repeat left top;
+}
+.iso-typeahead:last-child {
+	display: none;
+}
+.iso-typeahead:first-child {
+	display: block;
+}
+@media (max-width: 780px){
+
+	.iso-startResBand {
+		padding: 20px;
+	}
+	#state-browse, .iso-resWidget, #reservationWidget {
+		width: 100% !important;
+	}
+	#state-browse {
+		border-bottom: 2px solid #c3c3c3;
+    	margin-bottom: 20px;
+	}
+	#state-browse .cf {
+		border-left: 0;
+	    margin: 0 25px;
+	    padding: 25px 0;
+	    border-top: 1px solid #ccc;
+	}
+	.iso-resWidget .inner-container.expanded {
+		padding-bottom: 15px;
+		width: auto;
+    	margin: 0 25px;
+	}
+	#state-browse .btn, .iso-search.btn {
+	    padding: 5px 10px;
+	    height: auto;
+	    font-size: 14px;
+	}
+}
+@media (max-width: 768px){
+	/*.iso-resWidget .inner-container.expanded {
+		margin: 0;
+	}
+	.iso-resWidgetSearch {
+		margin: 0 3%;
+	}*/
+	.booking-widget .date-time-selector .label-container {
+		width: 100%;
+	}
+	.inner-container h2.alpha{
+		margin: 10px 0 0;
+	}
+	.booking-widget .location-search, .inner-container.expanded .date-time-form, .booking-widget .coupon-input {
+		margin: 0 !important;
+	}
+	.inner-container.expanded .age-input, .coupon-field-wrapper{
+		float: left;
+		margin: 10px 0 !important;
+		width: 100%;
+	}
+	.inner-container.expanded .booking-submit {
+		float: left;
+	    margin: 10px 0 0;
+	    width: 100%;
+	}
+	.booking-widget .location-search .location-btn{
+		margin-bottom: 0;
+	}
+	.booking-widget .date-time-selector .label-container.pickup {
+		margin-top: 0;
+	}
+}
+@media (max-width: 685px){
+	.iso-startResBand {
+		float: left;
+		padding-top: 0;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Storefinder',
+		cookieName : 'enStorefinder',
+		customMbox : 'enStorefinderClicks',
+		creative : "Challenger 1",
+		resWidgetSelector: '#reservationWidget .inner-container',
+		resButton: '<div class="iso-startResBand right"><a role="button" id="iso-startRes" href="http://enterprise.com/en/reserve.html" class="btn">Start a Reservation</a></div>',
+		searchBtn: '<div class="iso-resWidgetSearch"><a role="button" class="iso-search btn">Search</a></div>',
+		stateList: '<div id="state-browse"><div class="cf">\
+						<h3>Browse by State</h3>\
+						<div class="custom-select">\
+						    <label for="state"><span>State</span></label>\
+						    <select id="state">\
+						    	<option>Select a state</option>\
+						    </select>\
+						    <div class="btn iso-selectState">Browse</a>\
+						</div>\
+					</div></div>',
+		model: {},
+		pickupDate: '',
+		dropoffDate: '',
+		locListInt: null,
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.resWidgetSelector, function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();	
+			});
+		},
+		chall : function() {
+			isoTest.adjustLayout();
+			isoTest.bindInput();
+			isoTest.setTypeahead();
+
+			var chickletInt = setInterval(function(){
+				if($('.location-chicklet').length > 0){
+					clearInterval(chickletInt);
+					isoTest.chickletEvent();
+				}
+			},100);
+			setTimeout(function(){
+				clearInterval(chickletInt);
+			}, 1000);
+		},
+		setTypeahead : function() {
+			$('#pickupLocationTextBox, #dropoffLocationTextBox').on("click blur change input focus", function() {
+				isoTest.insertTypeahead();
+			});
+			$('body').on("click", '.location-search .location-chicklet-clear', function() {
+				isoTest.insertTypeahead();
+			});
+		},
+		insertTypeahead : function() {
+			isoTest.elementLoaded('[id=locations-list]', function() {	
+				if ($('[id=locations-list]').find('.iso-typeahead').length === 0) {
+					$('[id=locations-list]').append('<div class="iso-typeahead"></div>');
+				}
+			});
+		},
+		bindInput: function() {
+			$('#pickupLocationTextBox').keyup(function(){
+				if($(this).val().length < 3 || $('.auto-complete.no-results').length > 0 || $('#locations-list').length == 0){
+					if(!isoTest.locListInt){
+						isoTest.locationsInt();
+					}
+				}
+			});
+			$('#pickupLocationTextBox').click(function(){
+			    isoTest.log('pickupLocationTextBox click');
+			    if(!isoTest.locListInt){
+			    	isoTest.locationsInt();
+			    }
+			});
+		},
+		adjustLayout: function(){
+			//change location label
+			$('#location-text-box-pickup .sublabel span:eq(1)').text('(ZIP or City)');
+
+			//move map
+			$('.state-list').parents('.location-band').before($('.map-band'));
+
+			//header
+			var $header = $('.band.full-bleed:not(.map-band)');
+			$header.addClass('iso-header').find('.cf').append(isoTest.resButton);
+
+			//ResWidget
+			$('.inner-container h2').text('Find a Location');
+			$('.inner-container .options').remove();
+			$(isoTest.resWidgetSelector).parents('#reservationWidget').addClass('iso-resWidget');
+			$(isoTest.resWidgetSelector).find('.booking-widget').append(isoTest.searchBtn);
+			$('.iso-search').click(function(e) {
+				e.preventDefault();
+				var event = new Event('click', { bubbles: true });
+				var el = document.getElementById('continueButton');
+				el.dispatchEvent(event);
+			});
+
+			//State list
+			var $stateList = $(isoTest.stateList); //state template
+			//Get all links from section list and add them to dropdown
+			$('h3.state-title a').each(function() {
+				var url = $(this).attr('href'),
+					state = $(this).text();
+				var opt = $('<option value="'+url+'">'+state+'</option>');
+				$stateList.find('select').append(opt);
+			});
+			$('#reservationWidget').after($stateList);
+			$('.iso-selectState').click(function(){
+				window.location = $('#state option:selected').val();
+			});
+		},
+		chickletEvent: function () {
+			isoTest.log('chickletEvent');
+			$('.location-chicklet-clear').click(function(){
+		        if(!isoTest.locListInt){
+		        	isoTest.locationsInt();
+		        }
+		    });
+		},
+		locationsInt: function() {
+			isoTest.log('locationsInt');
+			isoTest.locListInt = setInterval(function(){
+		        isoTest.hideNonCity();
+		        if($('.location-group .icon-location-city').length > 0){
+		            isoTest.log('list shown');
+		            clearInterval(isoTest.locListInt);
+		            isoTest.locListInt = null;
+		            isoTest.bindEvents();
+		        }
+		    },100);
+		},
+		hideNonCity: function() {
+			$('.location-group > .icon:not(.icon-location-city)').parent().hide();
+		},
+		bindEvents: function () {
+			$('#locations-list li').click(function() {
+				if($(this).parents('.location-group').find('.icon').hasClass('icon-location-city')){
+					//isoTest.selectCity($(this).attr('id'));
+					$('#reservationWidget').addClass('iso-resWidget');
+					$('.iso-resWidgetSearch').show();
+				} else {
+					isoTest.resetDate();
+					$('#reservationWidget').removeClass('iso-resWidget');
+					$('.iso-resWidgetSearch').hide();
+				}
+
+				setTimeout(isoTest.chickletEvent, 200);
+			});
+		},
+		selectCity: function (city) {
+			isoTest.log(city);
+		    isoTest.pickupDate = moment('2018-12-10 12:00:00');
+		    isoTest.dropoffDate = moment('2018-12-13 12:00:00');
+		    isoTest.updateModel();
+		},
+		resetDate: function() {
+			var pickupDate = new Date(),
+				dropoffDate = new Date();
+			pickupDate.setDate(pickupDate.getDate()+1);
+			dropoffDate.setDate(pickupDate.getDate()+1);
+
+			var pd = pickupDate.toISOString(),
+				dd = dropoffDate.toISOString();
+			pd = pd.split('T')[0];
+			dd = dd.split('T')[0];
+
+		    isoTest.pickupDate = moment(pd+' 12:00:00');
+		    isoTest.dropoffDate = moment(dd+' 12:00:00');
+
+		    isoTest.updateModel();
+		},
+		updateModel: function () {
+			isoTest.model['pickup'] = {
+		        date: {
+		            momentDate: {
+		                $set : isoTest.pickupDate
+		            } 
+		        }
+		    };
+		    isoTest.model['dropoff'] = {
+		        date: {
+		            momentDate: {
+		                $set : isoTest.dropoffDate
+		            }  
+		        }
+		    };
+		    ReservationStateTree.select("model").update(isoTest.model);
+		    ReservationStateTree.select(["view", "reservationSteps"]).set("pickupDate", moment(isoTest.pickupDate));
+		    ReservationStateTree.select(["view", "reservationSteps"]).set("dropoffDate", moment(isoTest.dropoffDate));
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>

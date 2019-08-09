@@ -1,0 +1,45 @@
+<style type="text/css">
+	body, p, h1, h2, h3, h4, span, a, .alpha, .text-capsule-tile__heading {
+		font-family: "mplus-1m", sans-serif;
+		font-weight: 100;
+	}
+	h1, h2, h3, h4, .alpha, .text-capsule-tile__heading {
+		font-weight: 700;
+	}
+</style>
+  <script>
+(function() {
+  	var isoTest = {
+  		styleSelector: 'link[href$="webfonts.min.css"]',
+  		loaded: function(){
+  			console.log('font loaded');
+  			var stylesheet = document.querySelector(isoTest.styleSelector);
+  			if(stylesheet)
+  				stylesheet.parentNode.removeChild(stylesheet);
+  			
+  		},
+		removeStyleObj: function(){
+			if(window.enterprise){
+				enterprise.clientlibscss["ecom.webfonts"]='';
+				console.log('font override');
+			} else {
+				var fontInt = window.setInterval(function(){
+					if(window.enterprise && enterprise.clientlibscss){
+						enterprise.clientlibscss["ecom.webfonts"]='';
+						clearInterval(fontInt);
+						console.log('font override with timer');
+					}
+				},100);
+			}
+		}
+  	}
+  	isoTest.removeStyleObj();
+    var config = {
+      kitId: 'wvm8ynb',
+      scriptTimeout: 3000,
+      async: true, 
+      active: isoTest.loaded
+    },
+    h=document.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=document.createElement("script"),f=false,s=document.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+  })();
+  </script>

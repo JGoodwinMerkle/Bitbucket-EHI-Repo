@@ -1,0 +1,292 @@
+<style>
+.reservation-flow .reservation-step#extras  .upgrade-banner.iso-upgrade h3 {
+	color: #181918;
+	font-size: 16px;
+	font-weight: 700;
+	margin-bottom: -14px;
+}
+
+.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade-banner__info {
+	font-size: 16px;
+}
+
+.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade-banner__info>strong, .reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade-banner__text>strong { 
+	font-weight: 300;
+}
+
+.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade .upgrade-button {
+  border: 2px solid #169a5a;
+	padding: 6px 15px;
+	font-size: 14px;
+	font-weight: 400;
+	vertical-align: bottom;
+}
+
+.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade .upgrade-button:hover {
+	background: #006639;
+	border-color: #006639;
+	color: #fff;
+}
+
+/* mobile layout */
+.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade-banner__header figure,
+.reservation-flow .reservation-step#extras .upgrade-banner .upgrade-banner__header figure {
+  vertical-align: initial;
+  float: initial;
+  height: initial;
+  overflow: initial;
+}
+
+.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade-banner__text,
+.reservation-flow .reservation-step#extras .upgrade-banner .upgrade-banner__text {
+	float: right;
+  margin: 1.7em 0 1.3em 190px;
+  width: calc(100% - 180px);
+}
+
+.reservation-flow .reservation-step#extras .upgrade-banner .upgrade .upgrade-banner__header img {
+	top: -30px;
+}
+
+.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade .upgrade-banner__header img {
+	top: -20px;
+}
+
+@media (max-width: 768px){  
+	.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade{
+		text-align: left;
+	}
+
+	.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade h3 {
+		margin:0;
+	}
+
+	.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade img {
+		position: absolute;
+		top: -30px;
+	}
+
+	.reservation-flow .reservation-step#extras .upgrade-banner .upgrade .upgrade-banner__header img {
+		top: 0px;
+	}
+
+	.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade .upgrade-banner__header img {
+		top: -5px;
+	}
+
+	.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade .upgrade-button {
+		display: block;
+	}
+	.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade .upgrade-banner-text{
+		margin: 1.7em 0 1.3em 190px;
+	}
+
+	.reservation-flow .reservation-step#extras .upgrade-banner .upgrade-banner__header figure {
+	  float: initial;
+	}
+
+	.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade-banner__header figure {
+	  float: left;
+	}
+
+	.reservation-flow .reservation-step#extras .upgrade-banner .upgrade .upgrade-banner__text{
+		text-align: center;
+		float: initial;
+    margin: 0;
+    width: initial;
+	}
+
+	.reservation-flow .reservation-step#extras .upgrade-banner.iso-upgrade .upgrade .upgrade-banner__text{
+		text-align: left;
+		float: right;
+  	margin: 1.7em 0 1.3em 190px;
+  	width: calc(100% - 180px);
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca',
+		test : 'Improve Upgrade Experience 2.0',
+		cookieName : 'enImproveUpgradeExperience',
+		customMbox : 'enImproveUpgradeExperienceClicks',
+		creative : 'Challenger 1',
+		selector: '.extras-content',
+		upgradeSelector: '.upgrade-banner',
+		replacementTxt: 'You can get',
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+		
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.selector, function() {	
+				isoTest.log('Test Ready!');	
+  				isoTest.chall();
+			});
+			
+
+			$(window).on('hashchange', function(){
+				if(/extras/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.selector, function() {	
+						isoTest.log('Test Ready!');	
+		  				isoTest.chall();
+					});
+				} 
+			});
+		},
+		chall: function() {
+			if(_analytics.reservation.upgradeVehiclePossible){
+				isoTest.elementLoaded(isoTest.upgradeSelector, function() {
+		  			isoTest.improve();
+				});
+			}
+
+			isoTest.bindEvents();
+		},
+		improve : function() {
+
+			var elUpgradeDesktop = document.querySelector('.upgrade-banner .upgrade-banner__info');
+			var elUpgradeMobile = document.querySelector('.upgrade-banner .upgrade-banner__text');
+
+			if (elUpgradeDesktop != null) {
+				document.querySelector(isoTest.upgradeSelector).classList.add('iso-upgrade');
+				if (document.querySelector('.upgrade-banner.iso-upgrade .upgrade .iso-upgrade-header') == null) {
+					var newEl = document.createElement('h3');
+					newEl.innerHTML += 'Did you know?';
+
+					elUpgradeDesktop.prepend(newEl);
+					var replaceTxt = document.querySelectorAll('.upgrade-banner.iso-upgrade .upgrade-banner__info span')[0].innerHTML;
+					replaceTxt = replaceTxt.replace('Get', isoTest.replacementTxt);
+					document.querySelectorAll('.upgrade-banner.iso-upgrade .upgrade-banner__info span')[0].textContent = replaceTxt;
+					document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__info').classList.add("iso-upgrade-header");
+				}
+			}
+
+			if (elUpgradeMobile != null) {
+				document.querySelector(isoTest.upgradeSelector).classList.add('iso-upgrade');
+				if (document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__text.iso-upgrade-text .upgrade_button') == null && document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__text.iso-upgrade-text h3') == null) {
+					var newEl = document.createElement('h3');
+					newEl.innerHTML += 'Did you know?';
+
+					elUpgradeMobile.prepend(newEl);
+
+					var replaceTxtMobile = document.querySelectorAll('.upgrade-banner.iso-upgrade .upgrade-banner__text span')[0].innerHTML;
+					replaceTxtMobile = replaceTxtMobile.replace('Get', isoTest.replacementTxt);
+					document.querySelectorAll('.upgrade-banner.iso-upgrade .upgrade-banner__text span')[0].textContent = replaceTxtMobile;
+
+
+					var upgradeButton = document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__header .upgrade-button');
+					document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__text').append(upgradeButton);
+					document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__text .upgrade-button').classList.add("iso-upgrade-button-mobile");
+					document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__text').classList.add("iso-upgrade-text");
+				}
+			}
+		},
+		bindEvents : function(){
+			var elUpgradeDesktop = document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__info');
+			var elUpgradeMobile = document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__text');
+
+			var checkBannerChange = setInterval(function(){
+				if (elUpgradeDesktop != document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__info') || elUpgradeMobile != document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__text')) {
+					isoTest.improve();
+					elUpgradeDesktop = document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__info');
+					elUpgradeMobile = document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__text');
+				}
+			}, 500);
+
+			document.addEventListener('click', function (event) {
+				// console.log(event.target);
+				if (event.target.matches('.iso-upgrade-button-mobile'))  {
+					var carCode = ReservationStateTree.get(['session', 'reservationSession', 'upgrades', 'code']);
+					isoTest.trackClicks('RW:Extras:Upgrade Selected To:  '+ carCode);
+				}
+
+				if (event.target.matches('.upgrade-button'))  {
+					clearInterval(checkBannerChange);
+
+					var upgradeImageText = document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner-text');
+					var upgradeBannerHeader = document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__header');
+					var upgradeBannerText = document.querySelector('.upgrade-banner.iso-upgrade .upgrade-banner__text');
+					var upgradeImage = document.querySelectorAll('.upgrade-banner.iso-upgrade img')[0];
+
+					if (upgradeImageText != null) upgradeImageText.style.visibility = 'hidden';
+					if (upgradeBannerHeader != null) upgradeBannerHeader.style.visibility = 'hidden';
+					if (upgradeBannerText != null) upgradeBannerText.style.visibility = 'hidden';
+					if (upgradeImage != null) upgradeImage.style.visibility = 'hidden';
+				}
+			}, false);
+	  },
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(linkName) {
+			s.linkTrackVars = 'eVar20'; 
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

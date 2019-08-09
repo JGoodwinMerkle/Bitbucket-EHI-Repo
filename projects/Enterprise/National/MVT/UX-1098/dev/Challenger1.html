@@ -1,0 +1,165 @@
+<style>
+	#iso-optin-modal .modal__btn-close,
+	#iso-optin-modal .iso-btn-cancel,
+	#iso-optin-modal .iso-btn-signup {
+		cursor: pointer;
+	}
+	
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Nationalcar.com',
+		test : 'National Email Opt In',
+		cookieName : 'nlEmailOptIn',
+		customMbox : 'nlEmailOptInClicks',
+		creative : "Challenger 1",
+		timeOut : 10000,
+		modalCheck: '.ReactModalPortal',
+		modalhtml :'<div id="iso-optin-modal" class="ReactModal__Overlay ReactModal__Overlay--after-open modal__overlay modal__overlay--lightbox" aria-modal="true"><div class="ReactModal__Content ReactModal__Content--after-open modal__content modal__content--lightbox zl-section--bgcolor-light" tabindex="-1" role="alertdialog" aria-label="Want More Control?"><div class="modal__flex"><div class="modal__header"><h3>Want More Control?</h3><button type="button" class="modal__btn-close icon icon--close" aria-label="Close the modal"><span class="icon__text">Close the modal</span></button></div><div class="modal__body"><p>Sign up to receive email specials with rental car discounts, coupons, and other National offers.</p></div><div class="modal__footer cancel-and-apply-buttons"><button class="btn iso-btn-signup">Yes, send me offers!</button><button class="btn btn--opaque btn--underline iso-btn-cancel">Not at this time</button></div></div></div></div>',
+		init : function() {
+			
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+	    	_satellite.setVar('TargetCampaign', isoTest.test);
+	      _satellite.setVar('TargetCreative', isoTest.creative);
+	      _satellite.track('target_variables');
+		  }
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+			isoTest.elementLoaded(isoTest.modalCheck, function() {	
+				isoTest.log("Test Ready!");	
+  			isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			if (localStorage.getItem('nationalOptInSeen') === null) {
+				setTimeout(function(){
+					isoTest.triggerModal();
+				}, isoTest.timeOut);
+			}
+		},
+		triggerModal : function() {
+			isoTest.cookieModal();
+
+			var modalContainer = document.getElementsByClassName("ReactModalPortal")[1];
+			var newEl = document.createElement('div');
+			newEl.innerHTML += isoTest.modalhtml;
+			modalContainer.appendChild(newEl);
+
+			var linkName = 'Email Opt-in Modal';
+			s.linkTrackVars = 'eVar55,prop22';
+			s.eVar55 = linkName;
+			s.prop22 = linkName;
+			s.tl(this, 'o', linkName);
+			
+			document.addEventListener('click', function (event) {
+				if (event.target.matches('#iso-optin-modal .modal__btn-close')) {
+					var linkName = 'Close (X)';
+					s.linkTrackVars = 'eVar20';
+					s.eVar20 = linkName;
+					s.tl(this, 'o', linkName);
+					modalContainer.removeChild(newEl);
+				}
+
+				if (event.target.matches('#iso-optin-modal .iso-btn-cancel')) {
+					var linkName = 'Not Now';
+					s.linkTrackVars = 'eVar20';
+					s.eVar20 = linkName;
+					s.tl(this, 'o', linkName);
+					modalContainer.removeChild(newEl);
+				}
+
+				if (event.target.matches('#iso-optin-modal.ReactModal__Overlay')) {
+					modalContainer.removeChild(newEl);
+				}
+
+				if (event.target.matches('#iso-optin-modal .iso-btn-signup')) {
+					var linkName = 'Send Offers';
+					s.linkTrackVars = 'eVar20';
+					s.eVar20 = linkName;
+					s.tl(this, 'o', linkName);
+					window.location.href = 'https://www.nationalcar.com/en/support/email-specials.html';
+				}
+			}, false);
+
+			document.onkeydown = function(evt) {
+		    evt = evt || window.event;
+		    if (evt.keyCode == 27 || evt.key == "Esc" || evt.key == "Escape") {
+		        modalContainer.removeChild(newEl);
+		    }
+			}
+		},
+		cookieModal : function() {
+			localStorage.setItem('nationalOptInSeen','true');
+		},
+		supplant : function (str, o) {
+			return str.replace(/{([^{}]*)}/g, function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : '';
+			});
+		},
+		trackClicks : function(element, linkName) {
+			s.linkTrackVars = 'eVar20'; 
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		setLanguage: function(){
+	    isoTest.lang = location.pathname.split('/')[1];
+			isoTest.domain = location.hostname.split('.').reverse()[0];
+			isoTest.contentLang = isoTest.lang+'_'+isoTest.domain;
+			console.log(isoTest.contentLang);
+	  },
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    }
+	}
+
+	isoTest.init();
+})();
+</script>

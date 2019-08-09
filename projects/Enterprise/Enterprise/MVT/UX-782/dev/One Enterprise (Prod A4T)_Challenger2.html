@@ -1,0 +1,446 @@
+<style>
+.imageBand { visibility: hidden; }
+.iso-threeup, .iso-rentals { background-color: #f3f3f3 }
+.iso-threeup, .iso-deals { width: 100%; }
+.headbase section, .iso-about section { margin: 0 auto; width: 90%; max-width: 1280px; }
+.iso-threeup section { padding: 10px; overflow: hidden; display: flex; flex-wrap: wrap; }
+.iso-rentals section { overflow: hidden; display: flex; flex-wrap: wrap; }
+/* Threeup section */
+.iso-threeup section > div { background-color: #ffffff; border-bottom: 2px solid #dadada; width: 100%; margin: 0 0 10px 0; position: relative; text-align: left; }
+.iso-threeup a { padding: 35px 30px; display: block; text-decoration: none; }
+.iso-threeup img { float: left; }
+.iso-threeup .iso-threeup-content { overflow: hidden; }
+.iso-threeup h4 { font-family: "DINMedium",Arial Black,Arial,Helvetica,sans-serif; font-size: 18px; text-transform: none; margin: 0 0 8px 60px; }
+.iso-threeup p { font-size: 15px; color: #676767; margin: 0 0 0 60px; }
+/* Hero Banner section */
+.iso-hero section { padding: 0 0 90px; }
+.iso-hero-container { }
+.iso-hero-container .iso-hero-wrapper { position: relative; background: #fff url('/content/dam/ecom/hosted/one_enterprise_ch2_bg.jpg') no-repeat top center; padding: 70px 0; background-size: cover; }
+.iso-hero-container .iso-hero-content { background-color: #fff; margin: 0 auto; width: 90%; padding: 40px; text-align: center; box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.5); outline: 5px solid #fff; border: 8px solid #169a5a; outline-offset: -5px; position: relative; z-index: 2; }
+.iso-hero-container .iso-hero-content h3 { color: #000; font-size: 28px; margin: 0 0 0.3em 0; font-family: 'DINMedium',Helvetica,Arial,sans-serif; }
+.iso-hero-container .iso-hero-content p { font-size: 17px; color: #676767; }
+.iso-hero-container .iso-hero-content a { font-family: 'DINMedium',Helvetica,Arial,sans-serif; font-size: 16px; color: #169a5a; white-space: nowrap; }
+.iso-hero-container .iso-hero-content a i { width: 12px;height: 12px; display: inline-block; margin: 0 0 0 6px; }
+.iso-hero-container .iso-hero-content a:hover { color: #006639; text-decoration: underline; }
+.iso-hero-container .iso-hero-border-top { position: absolute; left: 0; right: 0; top: 10px; height: 4px; background-color: #169a5a; margin: 0 10px; }
+.iso-hero-container .iso-hero-border-right { position: absolute; top: 0; bottom: 0; right: 10px; width: 4px; background-color: #169a5a; margin: 10px 0; }
+.iso-hero-container .iso-hero-border-bottom { position: absolute; left: 0; right: 0; bottom: 10px; height: 4px; background-color: #169a5a; margin: 0 10px; }
+.iso-hero-container .iso-hero-border-left { position: absolute; top: 0; bottom: 0; left: 10px; width: 4px; background-color: #169a5a; margin: 10px 0; }
+.iso-hero-container .iso-hero-img { position: absolute; overflow: hidden; z-index: 1; text-align: center; width: 100%; display: none; height: 0px; }
+.iso-hero-container .iso-hero-img img { vertical-align: top; width: 90%; max-width: 1263px; }
+.iso-hero-container.dark-gray { background-color: #191919; }
+.iso-hero-container.dark-gray .iso-hero-content h3,
+.iso-hero-container.dark-gray .iso-hero-content p { color: #f3f3f3; }
+.iso-hero-container.dark-gray .iso-hero-content a { color: #169a5a; }
+/* Intro paragraph section */
+.headbase section { padding: 70px 0; }
+.headbase p { margin: 0; }
+.headbase.iso-intro-uk section { overflow: hidden; }
+.headbase.iso-intro-ca section,
+.headbase.iso-intro-com section { text-align: center; }
+.headbase.iso-intro-uk h1,
+.headbase.iso-intro.ca h1,
+.headbase.iso-intro-com h1 { font-family: "DINLight",Arial Black,Arial,Helvetica,sans-serif; font-size: 36px; text-transform: none; margin: 0 0 15px; }
+.headbase.iso-intro-uk p,
+.headbase.iso-intro.ca p,
+.headbase.iso-intro.com p { color: #676767; }
+/* About section */
+.iso-about section { overflow: hidden; padding: 70px 0 6% 0; }
+.iso-about section > div { width: 100%; overflow: hidden; margin: 0 0 35px; }
+.iso-about img { width: 100%; margin: 0 2% 0 0; }
+.iso-about .threeup-content { width: 100%; }
+.iso-about h3 { color: #000000; font-family: "DINMedium",Helvetica,Arial,sans-serif; margin: 0 0 5px; }
+.iso-about p { font-size: 15px; margin-bottom: 10px; color: #676767; }
+.iso-about a.btn { padding: 0.5em 1em 0.3em; }
+/* Meet the fleet updates */
+.meet-the-fleet-band .fleet-background-wrapper .fleet-content { padding-bottom: 0; }
+.meet-the-fleet-band .fleet-background-wrapper .fleet-content .fleet-cars { margin-top: -8%; }
+.meet-the-fleet-band .fleet-background-wrapper .fleet-content .fleet-carousel-nav { display: none; }
+/* Rentals section */
+.iso-rentals section { width: 100%; padding: 10px; }
+.iso-rentals section > div { background-color: #ffffff; border-bottom: 2px solid #dadada; width: 100%; margin: 0 0 10px 0; position: relative; text-align: left; }
+.iso-rentals section a { padding: 35px 30px; display: block; text-decoration: none; }
+.iso-rentals section div h4 { font-family: "DINMedium",Arial Black,Arial,Helvetica,sans-serif; font-size: 18px; text-transform: none; margin: 0 0 8px; }
+.iso-rentals section div p { font-size: 16px; color: #676767; margin: 0; }
+/* Deals section */
+.iso-deals { background-color: #ffffff; }
+.iso-deals section { overflow: hidden; }
+.iso-deals section > div { background-color: #f3f3f3; width: 100%; overflow: hidden; text-align: center; }
+.iso-deals img { width: 100%; vertical-align: top; }
+.iso-deals .threeup-content { width: 100%; padding: 20px 40px 40px; }
+.iso-deals span { font-size: 20px; }
+.iso-deals h3 { color: #000000; font-family: "DINMedium",Helvetica,Arial,sans-serif; margin: 0 0 15px; font-size: 27px; }
+.iso-deals p { font-size: 15px; margin-bottom: 20px; color: #676767; }
+.iso-deals a.btn { padding: 0.5em 1.5em 0.3em; font-size: 13px; width: 90%; }
+/* Link List */
+.linklistblock section { padding: 70px 0; width: 90%; margin: 0 auto; max-width: 1280px; }
+.linklistblock section ul li { width: 50% !important; clear: none !important; float: left; }
+@media (min-width: 39.8em) {
+  /* Deals/About */
+	.iso-about section > div { width: 100%; overflow: hidden; margin: 0 0 15px; font-family: "DINLight",Arial,sans-serif; }
+	.iso-about img { float: left; width: 48%; margin: 0 2% 0 0; }
+	.iso-about .threeup-content { float: left; width: 50%; }
+	.iso-about h3 { margin: 0 0 15px; }
+	.iso-about p { margin-bottom: 1em; }
+}
+@media (min-width: 48em) {
+  .iso-threeup section > div { float: left; width: calc(33.33333% - 10px); margin: 0 10px 0 0; text-align: center; }
+  .iso-threeup section > div:last-child { width: 33.33333%; margin: 0; }
+  .iso-threeup a { padding: 30px; }
+  .iso-threeup img { float: none; }
+  .iso-threeup h4 { margin: 0 0 8px 0; }
+  .iso-threeup p { margin: 0; }
+  /* Rentals */
+  .iso-rentals section { margin: 0 auto; width: 90%; max-width: 1280px; padding: 0 0 6% 0; }
+  .iso-rentals section > div { float: left; width: calc(50% - 20px); margin: 0 20px 0 0; text-align: center; }
+  .iso-rentals section > div:last-child { width: 50%; margin: 0; }
+  .iso-rentals section div p { margin: 0; }
+  .iso-rentals section a { padding: 50px; }
+  /* Hero Banner */
+	.iso-hero-container .iso-hero-img .iso-img-container { position: static; height: auto; padding-bottom: 56.25%; }
+	.iso-hero-container .iso-hero-img .iso-img-container img { display: none; }
+	.iso-hero-container .iso-hero-img .iso-img-container div { display: block; position: absolute; width: 50%; height: 100%; background-size: cover; background-position: center center; background-repeat: no-repeat; }
+  /* Deals section */
+  .iso-deals section { padding: 3px 0; display: flex; }
+  .iso-deals section > div { float: left; width: calc(33.33333% - 3px); margin: 0 3px 0 0; }
+  .iso-deals section > div:last-child { width: 33.33333%; margin: 0; }
+  .iso-deals a.btn { width: auto; }
+  /* Link List */
+	.linklistblock section ul li { width: 33.33333% !important; }
+
+  .iso-hero-container .iso-hero-wrapper { padding: 100px 0; }
+  .iso-hero-container .iso-hero-content { width: 600px; padding: 40px 80px; }
+  .iso-hero-container .iso-hero-img { display: block; height: auto; }
+}
+@media (min-width: 60em) {
+  /* Headbase section */
+  .headbase.iso-intro-uk h1,
+  .headbase.iso-intro-uk p { float: left; }
+  .headbase.iso-intro-uk h1 { width: 34%; margin: 0; }
+  .headbase.iso-intro-uk p { width: 66%; }
+  /* Threeup sections */
+  .iso-about section > div { float: left; width: 33.33333%; padding: 0 0.625rem; margin: 0; }
+  .iso-about section > div:first-child { padding: 0 1.25rem 0 0; }
+  .iso-about section > div:last-child { padding: 0 0 0 1.25rem; }
+  .iso-about img { width: 100%; float: none; margin: 0 0 20px; }
+  .iso-about .threeup-content { float: none; width: 100%; }
+  .iso-about h3 { }
+  .iso-about p { line-height: 1.5; }
+  /* Link List */
+	.linklistblock section h2,
+	.linklistblock section ul { float: left; }
+	.linklistblock section h2 { width: 34%; margin: 0; padding: 0 50px 0 0; }
+	.linklistblock section ul { width: 66%; }
+}
+@media (min-width: 66em) {
+
+}
+</style>
+<script>
+(function($) {
+	'use strict';
+	var topDomain = window.location.hostname.split('.'),
+			locale = topDomain[topDomain.length - 1].toUpperCase();
+	var isoTest = {
+		debug : false,
+		account : "Enterprise",
+		portfolio : "Enterprise.co.uk",
+		test : "Homepage Engagement",
+		cookieName : 'ehiHomepageEngagement',
+		creative : "Challenger 3",
+		customMbox : 'ehiHomeEngagementClicks',
+		content : {
+			COM : {
+        threeup : [
+          { img : '/content/dam/ecom/hosted/deals_medium.png', class : 'deals', heading : '$9.99 Weekend Rental Car', copy : 'Get away this weekend with rates starting at $9.99 per day.', linkHref : '/en/car-rental/deals/weekend-specials.html?icid=home.ab.oneenterprise.chal2-_-weekend.rates-_-ENGB.NULL' },
+					{ img : '/content/dam/ecom/hosted/ico-mvt-email-offers.png', class : 'email', heading : 'Email Offers', copy : 'Don\'t miss an excuse to hit the road: our latest offers delivered to your inbox.', linkHref : '/en/email-specials.html?icid=home.ab.oneenterprise.chal2-_-email.signup-_-ENCA.NULL' },
+					{ img : '/content/dam/ecom/hosted/ico-e-plus.png', class : 'eplus', heading : 'Plus Your Points', copy : 'Now through January 20, 2017 earn double Enterprise Plus® points on your rentals when you register and rent.', linkHref : 'https://plusyourpoints.enterprise.com/?langpref=US_EN&CID=20595&cm_mmc=Lacek-_-Loyalty-_-Promotion_20595_X8QY-_-BannerAd' }
+				],
+				hero : {
+					img : '/content/dam/ecom/hosted/one_enterprise_ch2_car_lineup.png',
+          bgImg : '/content/dam/ecom/hosted/one_enterprise_ch2_bg.jpg',
+          heading : 'Car Rental and Much More',
+					copy : 'Enterprise Rent-A-Car provides more than just traditional car rental. We\'re your global transportation solution.',
+          heroLinks : [
+            { linkText : 'Moving Trucks & Vans', linkHref : 'http://www.enterprisetrucks.com/truckrental/en_US.html?cm_mmc=EnterpriseWebsite-_-Home-_-ab.oneenterprise.chal2-_-en_US' },
+            { linkText : 'Exotic Car Collection', linkHref : 'http://exoticcars.enterprise.com/?utm_source=Enterprise&utm_medium=Referral&utm_campaign=ABOneEnterprise&cm_mmc=EnterpriseWebsite-_-Homepage-_-chal2-_-ENUS' },
+            { linkText : 'Car Sales', linkHref : 'http://www.enterprisecarsales.com/?utm_source=Enterprise&utm_medium=Referral&utm_campaign=ABOneEnterprise&cm_mmc=EnterpriseWebsite-_-Homepage-_-chal2-_-ENUS' },
+            { linkText : 'Car Sharing', linkHref : 'http://www.enterprisecarshare.com/us/en/home.html?cm_mmc=EnterpriseWebsite-_-Home-_-ab.oneenterprise.chal2-_-en_US' },
+            { linkText : 'Commuting', linkHref : 'http://www.enterpriserideshare.com/vanpool/en.html?cm_mmc=EnterpriseWebsite-_-Home-_-ab.oneenterprise.chal2-_-en_US' }
+          ]
+				},
+				intro : {
+					location : 'com',
+					heading : 'Car Rental and Much More',
+					copy : 'Enterprise Rent-A-Car provides more than just traditional car rental. We\'re your global transportation solution.'
+				},
+				aboutSection : [
+					{ img : '/content/dam/ecom/hosted/car-sales-military.jpg', heading : 'Car Sales Military Appreciation Offer', copy : 'This November, Enterprise Car Sales is honored to extend a special offer as our way of saying thank you to all Veterans and Members of the U.S. Armed Forces and their families.', linkHref : 'https://www.enterprisecarsales.com/ct-hub?CUR=HR_Military&phonenumber=vetmil&utm_campaign=Veterans&utm_source=ERAC_Home&utm_medium=Banner&utm_term=201611&cm_mmc=ERAC-_-Veterans-_-Home_Page-_-Banner', linkText : 'Learn more about offer' },
+					{ img : '/content/dam/ecom/hosted/enterprise-mobile-app.jpeg', heading : 'Introducing the New Enterprise App', copy : 'Our mobile app lets you manage reservations on the go, get directions to a car rental branch, and more.', linkHref : '/en/car-rental/mobile-app.html?icid=home.ab.oneenterprise.chal2-_-app.page-_-ENUS.NULL', linkText : 'Get our app' },
+					{ img : '/content/dam/ecom/utilitarian/common/homepage-us/us-homepage-promotions-band.jpg.wrend.640.360.jpeg', heading : 'Looking for a Deal?', copy : 'With over 7,200 locations in more than 30 countries worldwide, we just might have one for you!', linkHref : '/en/car-rental/deals.html?icid=home.ab.oneenterprise.chal2-_-deals-_-ENGB.NULL', linkText : 'Browse Offers & Promotions' }
+				],
+				rentalsSection : [
+					{ heading : 'Enterprise Business Rentals', copy : 'Our custom rental programs are designed to meet your company\'s needs. We offer long-term car rentals, group car rentals and car rental programs for meetings.', linkHref : '/en/business-car-rental.html?icid=home.ab.oneenterprise.chal2-_-business-_-ENCA.NULL' },
+					{ heading : 'Replacement Vehicles', copy : 'If your vehicle is in the shop, you still need to drive to work, to school and everywhere life takes you. After an accident the average time for repair is 11 days. We have the vehicle you need to keep your life moving.', linkHref : '/en/car-rental/insurance-replacement.html?icid=home.ab.oneenterprise.chal2-_-insurance.replacement-_-ENCA.NULL' }
+				],
+				dealsSection : [
+					{ img : '/content/dam/ecom/hosted/life-at-enterprise-lisa-candid.jpeg', label : 'About Us', heading : 'Meet Our People', copy : 'People like Lisa make us Enterprise Rent-A-Car.', linkHref : '/en/about/corporate-culture.html?icid=home.ab.oneenterprise.chal2-_-people-_-ENGB.NULL', linkText : 'Meet Our People' },
+					{ img : '/content/dam/ecom/hosted/ncaa-football.jpg', label : 'Proud Sponsor', heading : 'Enterprise + NCAA', copy : 'We have been a proud partner of the NCAA® and its mission to support and help student-athletes succeed both on and off the field since 2005.', linkHref : '/en/about/sponsorships/ncaa.html?icid=home.ab.oneenterprise.chal2-_-sponsorship-_-ENGB.NULL', linkText : 'Learn More' },
+					{ img : '/content/dam/ecom/general/Homepage/inspiration-grand-tetons-us.jpg.wrend.1280.720.jpeg', label : 'Travel & Lifestyle', heading : 'Another Way To Explore', copy : 'Start planning your next road trip with a little help from Enterprise Rent-A-Car.', linkHref : '/en/inspiration.html?icid=home.ab.oneenterprise.chal2-_-inspiration-_-ENGB.NULL', linkText : 'Get Inspired' }
+				]
+			}
+		},
+		templates : {
+			threeup : '<div>\
+        <a href="{linkHref}">\
+  				<img src="{img}" />\
+  				<h4>{heading}</h4>\
+  				<p>{copy}</p>\
+        </a>\
+			</div>',
+			hero : '<div class="iso-hero-container">\
+        <div class="iso-hero-wrapper">\
+          <div class="iso-hero-content">\
+            <h3>{heading}</h3>\
+            <p>{copy}</p>\
+            <div>\
+              <a href="{heroLinks.0.linkHref}" target="_blank">{heroLinks.0.linkText}<i class="icon icon-nav-external-link-green"></i></a> | <a href="{heroLinks.1.linkHref}" target="_blank">{heroLinks.1.linkText}<i class="icon icon-nav-external-link-green"></i></a><br />\
+              <a href="{heroLinks.2.linkHref}" target="_blank">{heroLinks.2.linkText}<i class="icon icon-nav-external-link-green"></i></a> | <a href="{heroLinks.3.linkHref}" target="_blank">{heroLinks.3.linkText}<i class="icon icon-nav-external-link-green"></i></a> | <a href="{heroLinks.4.linkHref}" target="_blank">{heroLinks.4.linkText}<i class="icon icon-nav-external-link-green"></i></a>\
+            </div>\
+          </div>\
+          <div class="iso-hero-img">\
+            <img src="{img}" />\
+          </div>\
+        </div>\
+			</div>',
+			intro : '<div class="headbase section iso-intro-{location}">\
+				<section>\
+					<h1>{heading}</h1>\
+					<p>{copy}</p>\
+				</section>\
+			</div>',
+			aboutSection : '<div>\
+				<img src="{img}" />\
+				<div class="threeup-content">\
+					<h3>{heading}</h3>\
+					<p>{copy}</p>\
+					<a href="{linkHref}" class="btn">{linkText}</a>\
+				</div>\
+			</div>',
+      aboutSectionApp : '<div>\
+				<img src="{img}" />\
+				<div class="threeup-content">\
+					<h3>{heading}</h3>\
+					<p>{copy}</p>\
+					<a href="{iosHref}" class="btn">{iosText}</a>\
+					<a href="{androidHref}" class="btn">{androidText}</a>\
+				</div>\
+			</div>',
+			rentalsSection : '<div>\
+        <a href="{linkHref}">\
+  				<h4>{heading}</h4>\
+  				<p>{copy}</p>\
+        </a>\
+			</div>',
+			dealsSection : '<div>\
+				<img src="{img}" />\
+				<div class="threeup-content">\
+					<span>{label}</span>\
+					<h3>{heading}</h3>\
+					<p>{copy}</p>\
+					<a href="{linkHref}" class="btn">{linkText}</a>\
+				</div>\
+			</div>'
+		},
+		init : function() {
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+			//mboxDefine('',isoTest.customMbox);
+			adobe.target.getOffer({
+				"mbox": isoTest.customMbox,
+				"success": function(offers) {
+					adobe.target.applyOffer( { "offer": offers } );
+				},
+				"error": function(status, error) {
+
+				}
+			});
+			if (isoTest.debug === true) {
+				console.log("Test Running...");
+				console.log(isoTest.account + " - " + isoTest.portfolio);
+				console.log(isoTest.test + " - " + isoTest.creative);
+			}
+			isoTest.dependsLoaded(function() {
+				//isoTest.elementLoaded('#location .search-results li:eq(0)', function() {
+				if (isoTest.debug === true) {
+					console.log("Test Ready!");
+				}
+				isoTest.chall();
+				//});
+			});
+		},
+		chall : function() {
+			isoTest.buildThreeup();
+			isoTest.moveSections();
+			isoTest.buildSections();
+
+      $('.iso-hero-img img').one('load', function() {
+        var imgHeight = $('.iso-hero-img').height(),
+            btmHeight = imgHeight / 2.25;
+        $('.iso-hero-img').css({
+          'bottom' : '-' + btmHeight + 'px'
+        });
+        $('.iso-hero-wrapper').css({
+          'margin-bottom' : (btmHeight) + 'px'
+        });
+      });
+
+      $(window).resize(function() {
+        var imgHeight = $('.iso-hero-img').height(),
+            btmHeight = imgHeight / 2.25;
+        $('.iso-hero-img').css({
+          'bottom' : '-' + btmHeight + 'px'
+        });
+        $('.iso-hero-wrapper').css({
+          'margin-bottom' : (btmHeight) + 'px'
+        });
+			});
+		},
+		buildThreeup : function() {
+			var threeupSections = '',
+					$widget = $('.reservationWidget');
+			for (var i = 0; i < isoTest.content[locale].threeup.length; i++) {
+				threeupSections += isoTest.supplant(isoTest.templates.threeup, isoTest.content[locale].threeup[i]);
+			}
+			$widget.after('\
+			<div class="threeup section iso-threeup">\
+				<section>'
+					+ threeupSections +
+				'</section>\
+			</div>');
+		},
+		moveSections : function() {
+			$('.meet-the-fleet').insertAfter('.iso-threeup');
+		},
+		buildSections : function(callback) {
+			var $fleet = $('.meet-the-fleet'),
+					$threeup = $('.iso-threeup'),
+					beforeSections = '',
+					afterSections = '',
+					hero = isoTest.supplant(isoTest.templates.hero, isoTest.content[locale].hero),
+					aboutSection = '',
+					rentalsSection = '',
+					dealsSection = '';
+			for (var i = 0; i < isoTest.content[locale].aboutSection.length; i++) {
+        aboutSection += isoTest.supplant(isoTest.templates.aboutSection, isoTest.content[locale].aboutSection[i]);
+			}
+			aboutSection = '<div class="threeup section iso-about"><section>' + aboutSection + '</section></div>';
+			for (var i = 0; i < isoTest.content[locale].rentalsSection.length; i++) {
+				rentalsSection += isoTest.supplant(isoTest.templates.rentalsSection, isoTest.content[locale].rentalsSection[i]);
+			}
+			rentalsSection = '<div class="threeup section iso-rentals"><section>' + rentalsSection + '</section></div>';
+			for (var i = 0; i < isoTest.content[locale].dealsSection.length; i++) {
+				dealsSection += isoTest.supplant(isoTest.templates.dealsSection, isoTest.content[locale].dealsSection[i]);
+			}
+			dealsSection = '<div class="threeup section iso-deals"><section>' + dealsSection + '</section></div>';
+			beforeSections = hero + aboutSection;
+			afterSections = rentalsSection + dealsSection;
+			// remove everything after the fleet band after moving it
+			$fleet.nextUntil('.linklistblock').remove();
+
+			$threeup.after(beforeSections);
+
+			// append sections after fleet
+			$fleet.after(afterSections);
+		},
+    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+        var p = b.split(/\./),
+            c = o;
+        for (var i = 0; i < p.length; i++) {
+          if (c[p[i]] == null)
+            return a;
+          c = c[p[i]];
+        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+    createClickTracking : function(o) {
+			$(o.ele).on(o.type, function(e) {
+				if (o.def === true)
+					e.preventDefault();
+				if (o.link === true) {
+					isoTest.trackClicks(o.metric, $(this).attr('href'));
+				} else {
+					isoTest.trackClicks(o.metric);
+				}
+			});
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+			//mboxUpdate(isoTest.customMbox, 'click='+element);
+      adobe.target.trackEvent({
+          "mbox": isoTest.customMbox,
+          "params": {
+              "click": element
+          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+      });
+		},
+		elementLoaded : function (ele, callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.eleTimer);
+			//Check for jQuery and _a object
+			if ($(ele).length > 0) {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - elementLoaded - Ready!");
+					}
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) {
+			if (isoTest.debug === true) {
+				console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			}
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if (((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) && typeof _analytics === "object") {
+				if (typeof callback === 'function') {
+					if (isoTest.debug === true) {
+						console.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					}
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		}
+	}
+	isoTest.init();
+})(jQuery);
+</script>

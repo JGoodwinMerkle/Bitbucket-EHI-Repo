@@ -1,0 +1,435 @@
+<style>
+	#expedited .view-header .edit.link-style {
+		display: none;
+	}
+
+	#expedited .expedited-disclaimer #iso-skip-section-btn {
+		margin-left: 0;
+    display: block;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #c3c3c3;
+    width: 100%;
+    text-align: left;
+	}
+
+	#personal-information .field-container.requestPromotion label {
+		margin-bottom: 5px;
+	}
+
+	#personal-information .field-container.requestPromotion .privacy-disclaimer {
+		margin-left: 38px;
+	}	
+
+	#expedited .expedite-optional-text {
+		top: 7px;
+    float: right;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 20px;
+	}
+
+	#expedited .expedited-disclaimer {
+    position: relative;
+    width: 100%;
+    margin-bottom: 30px;
+	}
+
+	#expedited .expedited-disclaimer .iso-disclaimer-text {
+		font-size: 14px;
+    line-height: 18px;
+    width: 75%;
+	}
+
+	#expedited .iso-bold {
+		font-weight: 600;
+	}
+
+	#expedited .expedited-disclaimer .iso-disclaimer-list {
+  	list-style-type: none;
+	}
+
+	#expedited .expedited-disclaimer .iso-disclaimer-list li {
+		padding-left: .6em;
+    text-indent: -.6em;
+	}
+
+	#expedited .expedited-disclaimer .iso-disclaimer-list li::before {
+	  content: "•";
+	  margin-right: 0.4em;
+	}
+
+	#expedited .expedited-disclaimer .iso-disclaimer-image-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 23%;
+	}
+
+	#expedited .expedited-disclaimer .iso-disclaimer-image {
+    height: 54px;
+    position: absolute;
+    top: 0;
+    right: 0;
+	}
+
+	#expedited .expedited-form .find-action {
+		position: relative;
+	}
+
+	#expedited .expedited-form .find-action .btn.save.disabled {
+		border-color: #666666;
+		color: #666666;
+	}
+
+	#expedited .expedited-form .find-action .search-disclaimer {
+    position: absolute;
+	}
+
+	#expedited .expedited-form .find-action .search-disclaimer .icon.icon-included-theftprotection-2 {
+		display: none;
+	}
+
+	#expedited .expedited-form .find-action .search-disclaimer .icon.iso-disclaimer-icon {
+		width: 16px;
+    height: 19px;
+    background-size: 15px;
+    position: relative;
+    top: 0;
+    background-image: url('https://cdn-assets-cloud.frontify.com/local/frontify/h_lNxVXLqrDqb2kyrixW3lMmUl7n-aBRzJUzyvzD7_9fL1JNOW7PCjV5FJWoKm__DqCGviWH7ThHSkFvQmgzt1j-in4NBsgXiRGjRgFZL_GsUZo6RMAMKG21R7sZQHYk?width=800');
+	}
+
+	#expedited .expedited-form .find-action .search-disclaimer .disclaimer-content {
+		display: none;
+	}
+
+	#expedited .expedited-form .find-action .search-disclaimer .iso-disclaimer-content {
+    margin-left: 10px; 
+    position: relative;
+    font-size: 14px;
+    top: -23px;
+    left: 10px;
+    line-height: 18px;
+    color: #181818;
+	}
+
+	@media screen and (max-width: 850px) and (min-width: 749px) {
+		#expedited .expedited-form .find-action .search-disclaimer .iso-disclaimer-content {
+			display: block;
+			vertical-align: bottom;
+			position: initial;
+			margin-left: 20px;
+		}
+
+		#expedited .expedited-form .find-action .search-disclaimer .icon.iso-disclaimer-icon {
+			display: block;
+    	top: 18px;
+    	margin-right: 10px;
+		}
+
+		#expedited .expedited-form .find-action .search-disclaimer {
+    	position: initial;
+		}
+
+		#expedited .expedited-form .find-action {
+			position: initial;
+		}
+	}
+
+	@media screen and (max-width: 992px) and (min-width: 881px) {
+		#expedited .view-header {
+			font-size: 22px;
+		}
+
+		#expedited .expedite-optional-text {
+			top: 3px
+		}
+	}
+
+	@media screen and (max-width: 880px) and (min-width: 771px) {
+		#expedited .view-header {
+			font-size: 18px;
+		}
+
+		#expedited .expedite-optional-text {
+			top: 0px
+		}
+
+		#expedited .expedited-disclaimer .iso-disclaimer-text {
+	    width: 70%;
+		}
+
+		#expedited .expedited-disclaimer .iso-disclaimer-image-container {
+	    width: 28%;
+		}
+	}
+
+	@media screen and (max-width: 770px) and (min-width: 749px) {
+		#expedited .view-header {
+			font-size: 17px;
+		}
+
+		#expedited .expedite-optional-text {
+			top: 0px
+		}
+
+		#expedited .expedited-disclaimer .iso-disclaimer-text {
+	    width: 70%;
+		}
+
+		#expedited .expedited-disclaimer .iso-disclaimer-image-container {
+	    width: 28%;
+		}
+	}
+
+	@media screen and (max-width: 537px) {
+		#expedited .view-header {
+			font-size: 22px;
+		}
+
+		#expedited .expedite-optional-text {
+			top: 3px
+		}
+
+		#expedited .expedited-form .find-action .search-disclaimer .iso-disclaimer-content {
+			display: block;
+			vertical-align: bottom;
+			position: initial;
+			margin-left: 20px;
+		}
+
+		#expedited .expedited-form .find-action .search-disclaimer .icon.iso-disclaimer-icon {
+			display: block;
+    	top: 18px;
+    	margin-right: 10px;
+		}
+
+		#expedited .expedited-form .find-action .search-disclaimer {
+    	position: initial;
+		}
+
+		#expedited .expedited-form .find-action {
+			position: initial;
+		}
+	}
+
+	@media screen and (max-width: 469px) {
+		#expedited .view-header {
+			font-size: 19px;
+		}
+
+		#expedited .expedite-optional-text {
+			top: 1px
+		}
+
+		#expedited .expedited-disclaimer .iso-disclaimer-text {
+	    width: 70%;
+		}
+
+		#expedited .expedited-disclaimer .iso-disclaimer-image-container {
+	    width: 28%;
+		}
+	}
+
+	@media screen and (max-width: 411px) {
+		#expedited .view-header {
+			font-size: 17px;
+		}
+
+		#expedited .expedite-optional-text {
+			top: 0px
+		}
+
+		#expedited .expedited-disclaimer .iso-disclaimer-image {
+	    height: 40px;
+		}
+	}
+
+	@media screen and (max-width: 385px) {
+		#expedited .view-header {
+			font-size: 15.5px;
+		}
+
+		#expedited .expedite-optional-text {
+			top: -1px
+			font-size: 10px;
+		}
+	}
+
+	@media screen and (max-width: 347px) {
+		#expedited .view-header {
+			font-size: 13.5px;
+		}
+
+		#expedited .expedite-optional-text {
+			top: -3px
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Expedited Benefits',
+		cookieName : 'enExpeditedBenefits',
+		customMbox : 'enExpeditedBenefitsClicks',
+		creative : "Challenger 3",
+		widgetSelector: '.en_us.resflow-commit .reservation-flow.commit .verification-page .review-section #expedited .expedited-form #find-region',
+		disclaimer : "<div id='iso-disclaimer-section'>\
+										<div class='iso-disclaimer-text'>\
+											Add more rental details now and spend less time at the counter. By providing this information now <span class='iso-bold'>we'll be better prepared to serve you</span> and give you a better experience when you arrive.\
+										</div>\
+										<div class='iso-disclaimer-image-container'>\
+											<img class='iso-disclaimer-image' src='https://www.enterprise.com/content/dam/ecom/hosted/ico-handshake.png'>\
+										</div>\
+									</div>",
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+	        _satellite.setVar('TargetCampaign', isoTest.test);
+	        _satellite.setVar('TargetCreative', isoTest.creative);
+	        // _satellite.track('target_variables');
+		    }
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded(isoTest.widgetSelector, function() {	
+					isoTest.log("Test Ready!");	
+					isoTest.chall();	
+				});
+			});
+
+			$(window).on('hashchange', function(){
+				if(/commit/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.widgetSelector, function() {	
+						isoTest.chall();
+					});
+				} 
+			});
+		},
+		chall : function() {
+			isoTest.updateExpeditedForm();
+			isoTest.addEvents();
+		},
+		updateExpeditedForm : function() {
+			$('#expedited .expedite-statc-text').text('Help Us Get Ready For Your Arrival');
+			$('#expedited .expedite-optional-text').text('Optional');
+			$('#expedited .expedited-disclaimer').first().html(isoTest.disclaimer);
+			$('#expedited .expedited-form .find-action .btn.save').text('Next');
+			$('#expedited .expedited-form .find-action .search-disclaimer').append('<i class="icon iso-disclaimer-icon"></i><p class="iso-disclaimer-content">Your information will be submitted over a <span class="iso-bold">secure connection.</span></p>');
+		},
+		addEvents : function() {
+			$('#expedited .btn.save').on('click', function() {
+				isoTest.trackClicks(isoTest.test + ' : Next');
+				isoTest.elementLoaded('.renter-information', function() {	
+					var skipSectionButton = '<button type="button" id="iso-skip-section-btn" class="edit link-style">Skip This Section</button>'
+					$('#expedited .expedited-disclaimer').first().prepend(isoTest.disclaimer);
+					$('#expedited #iso-disclaimer-section').after(skipSectionButton);
+					$('#expedited .view-header .edit.link-style').addClass('iso-hidden-link');
+					isoTest.addEvents();
+				});
+			});
+
+			$('#iso-skip-section-btn').on('click', function() {
+				$('#expedited .iso-hidden-link').trigger('click');
+			});
+
+			$('#expedited .view-header .edit.link-style.iso-hidden-link').on('click', function() {
+				isoTest.trackClicks(isoTest.test + ' : Skip Section');
+				isoTest.elementLoaded('#find-region', function() {	
+					isoTest.updateExpeditedForm();
+					isoTest.addEvents();
+				});
+			});
+
+			$('#iso-skip-section-btn').on('keypress', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				if(e.keyCode == 13){
+			    $('#expedited .iso-hidden-link').trigger('click');
+			  }
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(linkName) {
+			s.linkTrackVars = 'eVar20'; 
+			s.eVar20 = linkName; 
+			s.tl(this, 'o', linkName); 
+		},
+		supplant : function (str, o) {
+			return str.replace(/{([^{}]*)}/g, function (a, b) {
+				var r = o[b];
+				return typeof r === 'string' || typeof r === 'number' ? r : '';
+			});
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+      } else {
+        isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+      }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+        	return decodeURIComponent(pair[1]);
+        }
+      }
+    }
+	}
+	
+	isoTest.dependsLoaded(function(){ 
+    isoTest.init();
+  });
+})();
+</script>

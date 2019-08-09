@@ -1,0 +1,267 @@
+<style>
+.reevoomark_badge {
+    margin: 10px auto 0;
+    width: 200px !important;
+}
+.reservation-flow.cars .car .detailed-view reevoo-reviewable-badge {
+	display: none;
+}
+.reevoomark_badge a.reviews, .reevoomark_badge a.reviews span{
+	color: #169a5a !important;
+}
+.reservation-flow.cars .car-container .car .select-button {
+	bottom: 10% !important;
+}
+@media (min-width: 1800px){
+	.reservation-flow.cars .car-container .car .select-button {
+		bottom: 5% !important;
+	}
+}
+@media (min-width: 1201px) and (max-width: 1799px){
+	.reservation-flow.cars .car-container .car .select-button {
+		bottom: 8% !important;
+	}
+}
+@media (max-width: 1200px){
+	.reservation-flow.cars .car-container .car .select-button {
+		bottom: 10% !important;
+	}
+}
+@media (max-width: 1100px){
+	.reservation-flow.cars .car-container .car .select-button {
+		bottom: 7% !important;
+	}
+}
+@media (max-width: 700px){
+	.reservation-flow.cars .car-container.has-promotion {
+	    height: 630px !important;
+	}
+}
+@media (max-width: 415px){
+	.reservation-flow.cars .car-container.has-promotion {
+	    height: 520px !important;
+	}
+	.reservation-flow.cars .car-container.has-promotion .car button.select-button {
+		bottom: 9% !important;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Reevoo Vehicle Reviews',
+		cookieName : 'enReevooVehicleReviews',
+		customMbox : 'enReevooVehicleReviewsClicks',
+		creative : "Challenger 1",
+		carSelector: '#reservationFlow .cars-wrapper',
+		filterSelectors: '.filter-selectors .filter-name input',
+		clearFilterSelector : '.filter-selectors .clear-vehicle-filters',
+		template: '<reevoo-reviewable-badge trkref="ENTRP" sku="{sku}" class="iso-review"></reevoo-reviewable-badge>',
+		resultsLength: 0,
+		init : function() {
+
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+				
+			isoTest.elementLoaded(isoTest.carSelector, function() {	
+				isoTest.log("Test Ready!");	
+  				isoTest.chall();	
+			});
+
+			$(window).on('hashchange', function(){
+				if(/cars/.test(window.location.hash)){	
+					isoTest.elementLoaded(isoTest.carSelector, function() {	
+						isoTest.chall();
+					});
+				} 
+			});
+
+		},
+		chall : function() {
+			isoTest.addReviews();
+
+			$(isoTest.filterSelectors).click(function(){
+				isoTest.log(isoTest.test + ' ::: CLICKED '+ isoTest.filterSelectors);
+				setTimeout(isoTest.addReviews, 1000);
+				isoTest.checkClearFilter();				
+			});
+
+			isoTest.clearFilterReset();
+			isoTest.bindFilters();
+		},
+		checkClearFilter : function(){
+			if($(isoTest.clearFilterSelector).length == 0){
+				isoTest.log(isoTest.test + ' ::: ClearFilter Does Not Exist');
+				var filterIntrvl = setInterval(function(){
+					isoTest.log(isoTest.test + ' ::: Checking for ClearFilter')
+					if($(isoTest.clearFilterSelector).length > 0){
+						clearInterval(filterIntrvl);
+						isoTest.clearFilterReset();
+					}
+				}, 100);
+			}
+		},
+		clearFilterReset : function(){
+			$(isoTest.clearFilterSelector).click(function(){
+				isoTest.log(isoTest.test + ' ::: CLICKED '+ isoTest.clearFilterSelector);
+				isoTest.reviewsReset();
+			});
+		},
+		addReviews : function(){
+			$('.iso-review').remove();
+			var $vehicles = $('#reservationFlow .cars-wrapper > .car-container');
+			$.each($vehicles, function(){
+				if($(this).find('.iso-review').length == 0){
+
+					var $btn = $(this).find('.default-view button.select-button');
+					$btn = $btn.length == 0 ? $(this).find('.default-view .not-enough-points-block') : $btn;
+					//var type = $btn.data('car');
+					var type = $btn.attr('data-car');
+					var $review = helpers.supplant(isoTest.template, {
+						sku : type
+					});
+					$btn.before($review);
+				}
+			});
+			isoTest.resultsLength = $vehicles.length;
+		},
+		reviewsReset: function(){
+			var featuredInt = setInterval(function(){
+				if($('#reservationFlow .cars-wrapper > .car-container').length != isoTest.resultsLength){
+					clearInterval(featuredInt);
+					isoTest.addReviews();
+				} else {
+					setTimeout(function(){
+						clearInterval(featuredInt);
+						isoTest.addReviews();
+					},2000);
+				}
+			},200);
+		},
+		bindFilters: function(){
+			$('.filter-name,.clear-button').click(function(){
+				isoTest.reviewsReset();
+			});
+
+			$('.filter-header-options ul li:eq(1)').click(function() {
+				$('.iso-review').remove();
+				setTimeout(isoTest.addReviews,1000);
+			});
+
+			$('.filter-header-options ul li:eq(0)').click(function() {
+				$('.iso-review').remove();
+				setTimeout(isoTest.addReviews,1000);
+			});
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+		      adobe.target.trackEvent({
+		          "mbox": isoTest.customMbox,
+		          "params": {
+		              "click": element
+		          },
+					"success" : function() {
+						if (url !== null) {
+							window.location.href=url;
+						}
+					}
+		      });
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function (callback) { 
+				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+				window.clearTimeout(isoTest.timer);
+				//Check for jQuery and _a object
+				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+					if (typeof callback === "function") {
+						
+						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+						
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						isoTest.dependsLoaded(callback);
+					}, 100);
+				}
+			},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	      var query = window.location.search.substring(1);
+	      var vars = query.split('&');
+	      for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == variable) {
+	        	return decodeURIComponent(pair[1]);
+	        }
+	      }
+	    },
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		 isoTest.init();
+		});
+})();
+</script>
+<script id="reevoomark-loader" type="text/javascript" charset="utf-8">
+  (function(w,d,u,i,f,s,l) {
+    s=d.createElement('script');s.type='text/javascript';s.src=u;
+    l=d.getElementById(i);l.parentNode.insertBefore(s,l);w['ReevooMarkHandlerName']=f;
+    w[f]=function(){(w[f].q=w[f].q||[]).push(arguments)}
+  })(window, document, '//cdn.mark.reevoo.com/assets/reevoo_mark.js', 'reevoomark-loader', 'reevooMark');
+</script>

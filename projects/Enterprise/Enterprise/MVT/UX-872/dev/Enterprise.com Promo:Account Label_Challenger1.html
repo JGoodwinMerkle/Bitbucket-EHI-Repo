@@ -1,0 +1,214 @@
+<style>
+	#book .coupon-field-wrapper {
+		margin: 18px 0 0 0;
+	}
+
+	#book #coupon {
+		color: #181918;
+	}
+
+	#book #iso-couponSub {
+		display: block;
+	}
+
+	#book label#iso-couponSub {
+		font-family: "DINMedium",Arial,sans-serif;
+	  font-size: 15px;
+	}
+
+	#book #iso-couponSub .iso-couponOp {
+		font-family: "DINLight",Helvetica,Arial,sans-serif;
+		text-transform: capitalize;
+	}
+
+	#book #coupon {
+		margin:	.1875rem 0 0 0;
+	}
+
+	#book .booking-widget .booking-submit {
+		margin-top: 42px;
+	}
+
+	@media (min-width: 1057px) {
+		#book .booking-widget .date-time-form {
+			margin-bottom: 1.5em;
+		}
+
+		#book .booking-widget .booking-submit {
+			margin-top: 4px;
+		}
+	}
+
+	@media (max-width: 48em) {
+		#book .coupon-field-wrapper {
+			margin: 0 3% 16px;
+		}
+
+		#book #coupon {
+			margin: .1875rem 0 0 0;
+			padding: .8em .5em .5em .5em;
+			width: 100%;
+		}
+
+		#book .booking-widget .booking-submit {
+			margin: 25px 3% 0px 0px;
+		}
+	}
+
+	@media (max-width: 46.8em) {
+		#book .booking-widget .booking-submit {
+			margin: auto;
+		}
+	}
+</style>
+
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		debug : false,
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Promo/Account Label',
+		cookieName : 'enPromoAccountLabel',
+		customMbox : 'enPromoAccountLabelClicks',
+		creative : "Challenger 1",
+		resWidget: '#reservationWidget',
+		couponBlock: '<div class="custom-select"><label id="iso-couponSub">Promotion code or account number<span class="iso-couponOp"> (Optional)</span></label></div>',
+		init : function() {
+			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+
+			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				if (typeof window.isoSetTargetVars === 'function') {
+					window.isoSetTargetVars();
+				}
+			}
+
+			isoTest.log("Test Running...");
+			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			
+			isoTest.dependsLoaded(function() {
+				isoTest.elementLoaded(isoTest.resWidget, function() {	
+					isoTest.log("Test Ready!");	
+					isoTest.chall();	
+				});
+			});
+		},
+		chall : function() {
+			$('#viewModifyCancelBookingWidget').click(function(){
+				isoTest.updateWidget();
+			});
+
+			isoTest.checkPath();
+			isoTest.updateLabels();
+		},
+		updateWidget: function() {
+			var bookingLink = $('#viewModifyCancelBookingWidget span.active');
+			if (bookingLink.text() === "Reserve a Rental Car" || bookingLink.text() === "START A RESERVATION") {
+				setTimeout(function(){
+					isoTest.checkPath();
+					isoTest.updateLabels();
+				}, .1);
+			}
+		},
+		checkPath: function() {
+			if (location.pathname.indexOf('car-rental.html') > -1) {
+				$('#reservationWidget .inner-container').removeClass('collapsed').addClass('expanded');
+			}
+		},
+		updateLabels : function() {
+			var $couponField = $('.coupon-field-wrapper');
+			$couponField.prepend($(isoTest.couponBlock));
+			$couponField.find('#coupon').attr('placeholder','');
+		},
+		setTargetCookie : function (test, creative) {
+			if (test && creative) {
+				_satellite.setCookie('tt_info', test + '|' + creative);
+			}
+		},
+		setTrackingCookie : function(page) {
+			_satellite.setCookies('tt_review', page);
+		},
+		trackClicks : function(element, url) {
+			var url = url || null;
+      adobe.target.trackEvent({
+        "mbox": isoTest.customMbox,
+        "params": {
+          "click": element
+      	},
+				"success" : function() {
+					if (url !== null) {
+						window.location.href=url;
+					}
+				}
+    	});
+		},
+		analyticsLoaded : function(callback){
+			isoTest.log('analyticsLoaded - Checking...');
+			var aTimer;
+			window.clearTimeout(aTimer);
+			if (_a && _a.stationId.length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('analyticsLoaded - Found!');
+					callback();
+				}
+	    } else {
+	      aTimer = window.setTimeout(function(){isoTest.analyticsLoaded(callback);}, 100);
+	    }
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					callback();
+				}
+	    } else {
+	      isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	    }
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+				
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
+				if (typeof callback === "function") {
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		getQueryParam: function(variable) {
+	    var query = window.location.search.substring(1);
+	    var vars = query.split('&');
+	    for (var i = 0; i < vars.length; i++) {
+	      var pair = vars[i].split('=');
+	      if (decodeURIComponent(pair[0]) == variable) {
+	      	return decodeURIComponent(pair[1]);
+	      }
+	    }
+	  }
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>
