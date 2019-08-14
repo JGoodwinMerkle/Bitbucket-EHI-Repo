@@ -15,7 +15,6 @@
 		font-weight: bold;
     	margin-right: 8px;
 	}
-	
 	ul.carList.sort-recommended {
 		display: flex;
     	flex-direction: column;
@@ -77,7 +76,7 @@
 		},
 		addDataPrice : function() {
 			// Add data-price attribute to each vehicle module
-			var amt = document.querySelectorAll('.priceInfoDetails .price span[data-bind*="currencySymbol"]:first-child');
+			var amt = document.querySelectorAll('.priceInfoDetails span[data-bind*="currencySymbol"]');
 			Array.from(amt).forEach(function (price, index) {
 				var amtCleaned = Number(price.innerText.replace(/[^0-9.-]+/g,'')).toFixed(2);
 				price.closest('li').setAttribute('data-price', amtCleaned);
@@ -88,15 +87,12 @@
 			Array.from(_a.carClassesDisplayed).forEach(function (item, index) {
 				var itemSIPP = item.code;
 				var itemStatus = item.status;
+				var itemName = item.name;
 				var listing = document.querySelectorAll('ul.carList > li');
-				for (var i = 0; i < listing.length; ++i) {
-					try {
-						if (!listing[index].hasAttribute("data-sipp")) {
-					    	listing[index].setAttribute('data-sipp', itemSIPP);
-					    	break; 
-						}
-					} catch(error) { }
-				}
+				var vehicleName = document.querySelector('h2[data-id=' + CSS.escape(itemName) + ']');
+				try {
+					vehicleName.closest('li').setAttribute('data-sipp', itemSIPP);
+				} catch(error) { }
 			});
 		},
 		sortLowHigh : function() {
