@@ -1,0 +1,39 @@
+<style>
+.chooseAddOn #left {
+	display: flex;
+	flex-direction: column;
+}
+.chooseAddOn #left form:nth-of-type(1) {
+	margin-top: 25px;
+	order: 1;
+}
+.chooseAddOn #left form:nth-of-type(2) {
+	order: 0;
+}
+.chooseAddOn #left form:nth-of-type(3) {
+	order: 3;
+}
+.chooseAddOn.section #left .coverageDetail {
+    margin-top: 0;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Alamo',
+		test : 'Alamo Extras Display Order Swap',
+		creative : 'Challenger 1',
+		selector: '#left',
+		init : function() {
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				_satellite.track('target_variables');
+			}			
+		},
+	};
+	isoTest.init();
+})();
+</script>
