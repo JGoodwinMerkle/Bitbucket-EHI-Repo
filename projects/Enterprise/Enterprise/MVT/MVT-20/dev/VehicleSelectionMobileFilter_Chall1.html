@@ -8,7 +8,7 @@
 		portfolio : 'Enterprise.com',
 		test : 'Vehicle Selection Mobile Filter',
 		creative : 'Challenger 1',
-		selector: 'body',
+		selector: '.vehicle-select__header',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -30,9 +30,26 @@
 			
 		},
 		chall : function() {
+		
+			document.addEventListener("scroll", function(){
+				if (!isoTest.elInViewport()) {
+					console.log('add button');
+				} else {
+					console.log('remove button');
+				}
+			});
 
-			// Your code goes here
 
+		},
+		elInViewport : function() {
+			var filterEl = document.querySelector('.vehicle-select__header');
+			var rect = filterEl.getBoundingClientRect();
+		  var elemTop = rect.top;
+		  var elemBottom = rect.bottom;
+		  var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+
+		  console.log(isVisible);
+		  return isVisible;
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
