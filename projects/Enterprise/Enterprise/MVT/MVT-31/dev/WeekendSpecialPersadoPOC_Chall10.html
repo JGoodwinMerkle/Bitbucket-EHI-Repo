@@ -1,4 +1,19 @@
 <style>
+.promotionpage .promotion-detail-content .interrupter-band-text ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+.promotionpage .promotion-detail-content .interrupter-band-text ul li:before {
+  content: '\2714';
+  margin-right: 1.25rem;
+}
+
+@media only screen and (max-width: 779px) and (min-width: 769px)  {
+	.promotionpage #reservationWidget #book #continueButton {
+  	padding: 20px 10px;
+  }
+}
 </style>
 <script>
 (function() {
@@ -8,7 +23,14 @@
 		portfolio : 'Enterprise.com',
 		test : 'Weekend Special Persado POC',
 		creative : 'Challenger 10',
-		selector: 'body',
+		selector: '.promotionpage #reservationWidget #book #continueButton',
+		updatedOfferHeadline : 'WEEKEND DISCOUNTS: UNLOCKED',
+		updatedOfferDetails : '<li>Friday through Monday rentals</li>\
+													<li>Participating neighborhood locations</li>\
+													<li>100 miles per day included</li>\
+													<li>Offer applies to base rate (time and mileage) only</li>',
+		updatedFormHeadline : 'ENTER YOUR DETAILS HERE',
+		updatedCTA : 'SEE OPTIONS',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -30,9 +52,10 @@
 			
 		},
 		chall : function() {
-
-			// Your code goes here
-
+			document.querySelector('.promotionpage .promotion-detail-content .headline').innerHTML = isoTest.updatedOfferHeadline;
+			document.querySelector('.promotionpage .promotion-detail-content .interrupter-band-text ul').innerHTML = isoTest.updatedOfferDetails;
+			document.querySelector('.promotionpage #reservationWidget .reservation-toggle-header').innerHTML = isoTest.updatedFormHeadline;
+			document.querySelector('.promotionpage #reservationWidget #book #continueButton').innerHTML = isoTest.updatedCTA;
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
@@ -59,7 +82,7 @@
 					callback();
 				}
 	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
 	    supplant : function(str, o) {

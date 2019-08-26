@@ -1,4 +1,17 @@
 <style>
+.promotionpage .promotion-detail-content .interrupter-band-text ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+.promotionpage .promotion-detail-content .interrupter-band-text ul li:before {
+  content: '\2714';
+  margin-right: 1.25rem;
+}
+
+.promotionpage .promotion-detail-content .interrupter-band-text ul .list-header {
+	margin-bottom: 1.5rem;
+}
 </style>
 <script>
 (function() {
@@ -8,7 +21,16 @@
 		portfolio : 'Enterprise.com',
 		test : 'Weekend Special Persado POC',
 		creative : 'Challenger 8',
-		selector: 'body',
+		selector: '.promotionpage #reservationWidget #book #continueButton',
+		updatedOfferHeadline : "YOU'RE GETTING SAVINGS FOR THE WEEKEND",
+		updatedOfferDetails : '<div class="list-header"><u>Offer applies to:</u></div>\
+													<li>Friday through Monday rentals</li>\
+													<li>Participating neighborhood locations</li>\
+													<li>Base rate (time and mileage) only</li>\
+													<div class="list-header"><u>Included:</u></div>\
+													<li>100 miles per day</li>',
+		updatedFormHeadline : 'START A RESERVATION',
+		updatedCTA : 'SUBMIT',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -30,9 +52,10 @@
 			
 		},
 		chall : function() {
-
-			// Your code goes here
-
+			document.querySelector('.promotionpage .promotion-detail-content .headline').innerHTML = isoTest.updatedOfferHeadline;
+			document.querySelector('.promotionpage .promotion-detail-content .interrupter-band-text ul').innerHTML = isoTest.updatedOfferDetails;
+			document.querySelector('.promotionpage #reservationWidget .reservation-toggle-header').innerHTML = isoTest.updatedFormHeadline;
+			document.querySelector('.promotionpage #reservationWidget #book #continueButton').innerHTML = isoTest.updatedCTA;
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
@@ -59,7 +82,7 @@
 					callback();
 				}
 	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
 	    supplant : function(str, o) {
