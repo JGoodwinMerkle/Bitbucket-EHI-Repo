@@ -1,4 +1,25 @@
 <style>
+.iso-filter { display: none; }
+
+@media screen and (max-width: 40.8125em) {
+	.iso-filter {
+		background-color: #656565;
+		border-radius: 17.5px;
+		bottom: 10px;
+		color: #FFFFFF;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 700;
+		left: 50%;
+		padding: 8px 5px;
+		position: fixed;
+		text-align: center;
+		text-transform: uppercase;
+		transform: translate(-50%, -50%);
+		width: 120px;
+	  z-index: 9;
+	}
+}
 </style>
 <script>
 (function() {
@@ -27,29 +48,79 @@
 				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
+
+			window.addEventListener(hashchange, isoTest.viewChange, false);
+
 			
 		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				isoTest.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
 		chall : function() {
-		
-			document.addEventListener("scroll", function(){
-				if (!isoTest.elInViewport()) {
-					console.log('add button');
-				} else {
-					console.log('remove button');
-				}
+			document.querySelector('.resflow-cars').insertAdjacentHTML('afterbegin',"<button class='iso-filter'>FILTERS</button>");
+			isoTest.addEvents();
+
+			window.addEventListener('resize', function(event){
+			  if (window.innerWidth <= 653) {
+			  	if (!isoTest.elInViewport()) {
+						document.querySelector('.iso-filter').style.display = 'block';
+
+					} else {
+						document.querySelector('.iso-filter').style.display = 'none';
+					}
+			  } else {
+			  	document.querySelector('.iso-filter').style.display = 'none';
+			  }
 			});
 
-
+		
 		},
 		elInViewport : function() {
-			var filterEl = document.querySelector('.vehicle-select__header');
+			var filterEl = document.querySelector('.vehicle-select__aside');
 			var rect = filterEl.getBoundingClientRect();
 		  var elemTop = rect.top;
 		  var elemBottom = rect.bottom;
-		  var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+		  var isVisible = (elemTop >= 0) || (elemBottom >= 0);
 
-		  console.log(isVisible);
 		  return isVisible;
+		},
+		addEvents : function() {
+			document.addEventListener("scroll", function(){
+				if (window.innerWidth <= 653) {
+					if (!isoTest.elInViewport()) {
+						document.querySelector('.iso-filter').style.display = 'block';
+
+					} else {
+						document.querySelector('.iso-filter').style.display = 'none';
+					}
+				}
+			});
+
+			document.querySelector('.iso-filter').addEventListener('click', function (e) {
+				if (window.innerWidth <= 653) {
+					isoTest.fireTag('.iso-filter','Filter Pill CTA');
+					document.querySelector('.vehicle-header__sub-title').scrollIntoView();
+					document.querySelector('#vehicle-filter-cta-expand').click();
+				}
+			}, false);
+
+			// document.addEventListener("keypress", function (e) {
+			// 	var keyCode = (e.keyCode ? e.keyCode : e.which);
+
+   //    	if (keyCode == '13') {
+   //    	}
+			// }, false);
+
+			// document.addEventListener("keydown", function (e) {
+			// 	var keyCode = (e.keyCode ? e.keyCode : e.which);
+
+   //    	if (keyCode == '27') {
+   //    	}
+			// }, false);
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
