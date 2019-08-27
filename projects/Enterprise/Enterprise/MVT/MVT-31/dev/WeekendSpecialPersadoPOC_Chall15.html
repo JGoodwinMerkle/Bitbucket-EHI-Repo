@@ -55,13 +55,6 @@
 			document.querySelector('.promotionpage #reservationWidget .reservation-toggle-header').innerHTML = isoTest.updatedFormHeadline;
 			document.querySelector('.promotionpage #reservationWidget #book #continueButton').innerHTML = isoTest.updatedCTA;
 		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
-		},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);

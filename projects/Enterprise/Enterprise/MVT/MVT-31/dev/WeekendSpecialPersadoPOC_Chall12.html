@@ -1,12 +1,17 @@
 <style>
 .promotionpage .promotion-detail-content .interrupter-band-text ul {
   list-style: none;
-  margin-left: 0;
+}
+
+.promotionpage .promotion-detail-content .interrupter-band-text ul li {
+	padding-left: 1.25rem;
 }
 
 .promotionpage .promotion-detail-content .interrupter-band-text ul li:before {
+	color: #181918;
   content: '\2714';
-  margin-right: 1.25rem;
+  left: 0;
+  position: absolute;
 }
 
 .promotionpage .promotion-detail-content .interrupter-band-text ul .list-footnote,
@@ -58,13 +63,6 @@
 			document.querySelector('.promotionpage .promotion-detail-content .interrupter-band-text ul').innerHTML = isoTest.updatedOfferDetails;
 			document.querySelector('.promotionpage #reservationWidget .reservation-toggle-header').innerHTML = isoTest.updatedFormHeadline;
 			document.querySelector('.promotionpage #reservationWidget #book #continueButton').innerHTML = isoTest.updatedCTA;
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
