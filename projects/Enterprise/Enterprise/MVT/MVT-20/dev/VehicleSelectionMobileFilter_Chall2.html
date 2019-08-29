@@ -1,4 +1,13 @@
 <style>
+@media screen and (max-width: 40.8125em) {
+	.iso-sticky-filter {
+		border-bottom: 1px solid #c3c3c3; 
+		position: sticky;   
+	  top: -15px;
+	  width: 100%;
+	  z-index: 99;
+	}
+}
 </style>
 <script>
 (function() {
@@ -8,7 +17,7 @@
 		portfolio : 'Enterprise.com',
 		test : 'Vehicle Selection Mobile Filter',
 		creative : 'Challenger 2',
-		selector: 'body',
+		selector: '.vehicle-select__header',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -27,19 +36,40 @@
 				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
+
+			window.addEventListener(hashchange, isoTest.viewChange, false);
 			
 		},
-		chall : function() {
-
-			// Your code goes here
-
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				isoTest.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
 		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
+		chall : function() {
+			var vehicleHeader = document.querySelector('.vehicle-select__header');
+			vehicleHeader.insertAdjacentHTML('afterend','<span class="iso-sticky-filter"></span>');
+
+			var stickyFilter = document.querySelector('.iso-sticky-filter');
+			stickyFilter.appendChild(document.querySelector('.vehicle-select__aside'));
+
+			if (window.innerWidth <= 653) {
+				stickyFilter.prepend(vehicleHeader);
+			}
+
+			window.addEventListener('resize', function(event){
+			  if (window.innerWidth <= 653) {
+			  	if (!document.querySelector('.iso-sticky-filter .vehicle-select__header')) {
+			  		stickyFilter.prepend(vehicleHeader);
+			  	}
+			  } else {
+			  	if (document.querySelector('.iso-sticky-filter .vehicle-select__header')) {
+			  		document.querySelector('.vehicle-select').prepend(vehicleHeader);
+			  	}
+			  }
+			});
+
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
@@ -59,7 +89,7 @@
 					callback();
 				}
 	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
 	    supplant : function(str, o) {
