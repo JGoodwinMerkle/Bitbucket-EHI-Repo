@@ -1,4 +1,15 @@
 <style>
+.promotionpage .promotion-detail-content .interrupter-band-text ul .list-header {
+	margin-bottom: 1.5rem;
+	margin-left: -1.25rem;
+}
+
+@media only screen and (max-width: 936px) and (min-width: 769px)  {
+	.promotionpage #reservationWidget #book #continueButton {
+  	padding: 20px 10px;
+  	font-size: 15px;
+  }
+}
 </style>
 <script>
 (function() {
@@ -6,9 +17,18 @@
 	var isoTest = {
 		account : 'Enterprise',
 		portfolio : 'Enterprise.com',
-		test : 'Vehicle Selection Scarcity Message',
-		creative : 'Challenger 0',
-		selector: 'body',
+		test : 'Weekend Special Persado POC',
+		creative : 'Challenger 15',
+		selector: '.promotionpage #reservationWidget #book #continueButton',
+		updatedOfferHeadline : "WE'RE HELPING YOU SAVE ON WEEKEND ADVENTURES",
+		updatedOfferDetails : '<div class="list-header"><u>Offer applies to:</u></div>\
+													<li>Friday through Monday rentals</li>\
+													<li>Participating neighborhood locations</li>\
+													<li>Base rate (time and mileage) only</li>\
+													<div class="list-header"><u>Included:</u></div>\
+													<li>100 miles per day</li>',
+		updatedFormHeadline : 'ENTER YOUR DETAILS HERE',
+		updatedCTA : 'VIEW NEXT STEP',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -30,16 +50,10 @@
 			
 		},
 		chall : function() {
-
-			// Your code goes here
-
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
+			document.querySelector('.promotionpage .promotion-detail-content .headline').innerHTML = isoTest.updatedOfferHeadline;
+			document.querySelector('.promotionpage .promotion-detail-content .interrupter-band-text ul').innerHTML = isoTest.updatedOfferDetails;
+			document.querySelector('.promotionpage #reservationWidget .reservation-toggle-header').innerHTML = isoTest.updatedFormHeadline;
+			document.querySelector('.promotionpage #reservationWidget #book #continueButton').innerHTML = isoTest.updatedCTA;
 		},
 		log : function(obj){
 			if(isoTest.debug === true){

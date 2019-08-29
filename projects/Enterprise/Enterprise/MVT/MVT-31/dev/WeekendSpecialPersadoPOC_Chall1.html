@@ -6,9 +6,16 @@
 	var isoTest = {
 		account : 'Enterprise',
 		portfolio : 'Enterprise.com',
-		test : 'Vehicle Selection Scarcity Message',
-		creative : 'Challenger 0',
-		selector: 'body',
+		test : 'Weekend Special Persado POC',
+		creative : 'Challenger 1',
+		selector: '.promotionpage #reservationWidget #book #continueButton',
+		updatedOfferHeadline : 'WEEKEND CAR RENTAL SPECIAL',
+		updatedOfferDetails : '<li>Friday through Monday rentals</li>\
+													<li>Participating neighborhood locations</li>\
+													<li>100 miles per day included</li>\
+													<li>Offer applies to base rate (time and mileage) only</li>',
+		updatedFormHeadline : 'START A RESERVATION',
+		updatedCTA : 'CONTINUE',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -30,16 +37,10 @@
 			
 		},
 		chall : function() {
-
-			// Your code goes here
-
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
+			document.querySelector('.promotionpage .promotion-detail-content .headline').innerHTML = isoTest.updatedOfferHeadline;
+			document.querySelector('.promotionpage .promotion-detail-content .interrupter-band-text ul').innerHTML = isoTest.updatedOfferDetails;
+			document.querySelector('.promotionpage #reservationWidget .reservation-toggle-header').innerHTML = isoTest.updatedFormHeadline;
+			document.querySelector('.promotionpage #reservationWidget #book #continueButton').innerHTML = isoTest.updatedCTA;
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
