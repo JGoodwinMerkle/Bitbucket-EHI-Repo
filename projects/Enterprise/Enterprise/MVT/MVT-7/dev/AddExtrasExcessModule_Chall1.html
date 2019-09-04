@@ -2,6 +2,12 @@
 	#extras .cta-container__action .btn.iso-continue {
 		display: block;
 	}
+
+	.iso-modal-open { 
+		height: 100%; 
+		overflow: hidden;
+	}
+
 	#extras h2.excess-modal-header {
 		border: 0;
 		font-size: 28px;
@@ -119,11 +125,11 @@
 		</style>',
 		extrasCode: 'EXS',
 		continueBtn: '<button class="iso-continue btn extras-header__btn-continue">CONTINUE TO REVIEW</button>',
-		modal: '<div role="dialog" aria-modal="true" aria-labelledby="global-modal-title" class="iso-excess-modal modal-container" aria-describedby="global-modal-content">\
+		modal: '<div role="dialog" aria-modal="true" aria-labelledby="global-modal-title" class="iso-excess-modal modal-container" aria-describedby="global-modal-content" tabindex="0">\
 						<div class="modal-content">\
 							<div class="modal-header">\
 								<span id="global-modal-title">Your excess protection</span>\
-								<button class="close-modal" aria-label="Close"><i class="icon icon-close-x-white">X</i></button>\
+								<button id="iso-close-modal" class="close-modal" aria-label="Close" tabindex="0"><i class="icon icon-close-x-white">X</i></button>\
 							</div>\
 							<div class="modal-body cf">\
 								<div>\
@@ -142,6 +148,7 @@
 							</div>\
 						</div>\
 					</div>',
+		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
 		pricingFileURL: '/content/dam/mvt/ent002',
 		locationPricing: {},
 		init : function() {
@@ -222,12 +229,13 @@
 			var modal = document.querySelector('.iso-excess-modal');
 			//close, continue button, escape key
 			modal.querySelector('.close-modal').addEventListener('click', isoTest.moveOn, false);
+			modal.addEventListener('click', isoTest.moveOn, false);
 			modal.querySelector('.iso-waiver-fee').addEventListener('click',function(){
 				isoTest.moveOn();
 				isoTest.fireTag(e.target,'Continue with a waiver fee');
 			}, false);
 			document.addEventListener('keydown',function(e){
-				if(event.keyCode == 27 || event.key == 'Esc' || event.key == 'Escape') {
+				if(e.keyCode == 27 || e.key == 'Esc' || e.key == 'Escape') {
 					isoTest.moveOn();
 				}
 			});
@@ -267,11 +275,43 @@
 
 				document.querySelector('.iso-excess-modal').classList.add('active');
 				document.querySelector('.iso-load').classList.add('hide');
+
+				document.querySelector('html').classList.add('iso-modal-open');
+				var modalFocus = document.querySelector('.iso-excess-modal.active');
+
+				modalFocus.focus();
+      	isoTest.keepFocus(modalFocus);
+      	
+      	setTimeout(function(){document.getElementById('iso-close-modal').focus(); }, 500);
 			});
 		},
 		hideModal : function () {
+			document.querySelector('html').classList.remove('iso-modal-open');
 			document.querySelector('.iso-excess-modal').classList.remove('active');
 		},
+		keepFocus : function(context) {
+      var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+          firstTabbableElement = allTabbableElements[0],
+          lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+      var keyListener = function(e) {
+    		var keyCode = e.which || e.keyCode;
+
+    		e.preventDefault = e.preventDefault || function () {
+    			e.returnValue = false;
+    		};
+    		if (keyCode === 9) {
+          if (e.target === lastTabbableElement && !e.shiftKey) {
+    				e.preventDefault();
+    				firstTabbableElement.focus();
+          } else if (e.target === firstTabbableElement && e.shiftKey) {
+    				e.preventDefault();
+    				lastTabbableElement.focus();
+    			}
+    		}
+    	};
+    	context.addEventListener('keydown', keyListener, false);
+    },
 		bindEvents: function(){
 			document.querySelectorAll('button.iso-continue').forEach(function(isoBtn){
 				isoBtn.addEventListener('click',function(){
