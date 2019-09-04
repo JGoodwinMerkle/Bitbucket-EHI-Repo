@@ -1,0 +1,414 @@
+<style>
+	#extras .cta-container__action .btn.iso-continue {
+		display: block;
+	}
+
+	.iso-modal-open { 
+		height: 100%; 
+		overflow: hidden;
+	}
+
+	#extras h2.excess-modal-header {
+		border: 0;
+		font-size: 28px;
+		font-weight: 400;
+		line-height: 38px;
+		margin: 0 3em .75em 3em;
+		text-align: center;
+	}
+	#extras .excess-modal-content {
+		display: inline-block;
+		position: relative;
+		width:100%;
+	}
+	#extras .excess-modal-content .iso-half {
+    float: left;
+    height: 200px;
+    position: relative;
+		width: 50%;
+}
+	#extras .excess-modal-content .iso-half:last-child {
+		border-left: 1px solid #ccc;
+	  margin: 0;
+	}
+	#extras .excess-modal-content .iso-half button {
+		font-size: 15px;
+		font-weight: 500;
+		margin: 0 2.5em;
+		padding: .5em 1.5em;
+		position: absolute;
+		top: calc(50% - 25px);
+	}
+	#extras .excess-modal-content button:hover {
+	    background: #006639;
+	}
+	#extras .excess-modal-content button.iso-waiver-fee {
+		background: #fff;
+		border: 2px solid #169a5a;
+		color: #169a5a;
+	}
+	#extras .excess-modal-content button.iso-waiver-fee:hover {
+		background: #006639;
+		border-color: #006639;
+		color: #fff;
+	}
+	#extras .excess-modal-content span {
+		background: #fff;
+		color: #c9c9c9;
+		font-size: 15px;
+		line-height: 25px;
+		position: absolute;
+		right: calc(50% - 10px);
+		top: calc(50% - 12px);
+		z-index: 2;
+	}
+	#extras .iso-load {
+		background: rgba(255,255,255,.9);
+		height: 200px;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+		z-index: 3;
+	}
+	#extras .iso-load .loading {
+		top: 50%;
+	}
+@media (max-width: 1164px) {
+	#extras .excess-modal-content .iso-half button.iso-add-excess {
+		margin-left: 0;
+	}
+	#extras .excess-modal-content .iso-half button.iso-waiver-fee {
+		margin-right: 0;
+	}
+	#extras h2.excess-modal-header {
+		margin: 0 1em .75em 1em;
+	}
+}
+@media (max-width: 1140px) {
+	#extras h2.excess-modal-header {
+		margin-botton: 0;
+	}
+	#extras .excess-modal-content .iso-half {
+    height: 100px;
+    width: 100%;
+	}
+	#extras .excess-modal-content .iso-half:last-child{
+		border-top: 1px solid #ccc;
+		border-left: 0;
+	}
+	#extras .excess-modal-content .iso-half button {
+    margin: 0;
+    width: 100%;
+	}
+	#extras .excess-modal-content button.iso-waiver-fee {
+		margin-top: 1em;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.co.uk',
+		test : 'Add Extras Excess Module',
+		creative : 'Challenger 1',
+		selector: '.extras-header__btn-continue',
+		btnCss : '<style id="isoBtnStyle">\
+			#extras .cta-container__action .btn {\
+				display: none;\
+			}\
+			#extras .cta-container__action .btn.show {\
+				display: block !important;\
+			}\
+		</style>',
+		extrasCode: 'EXS',
+		continueBtn: '<button class="iso-continue btn extras-header__btn-continue">CONTINUE TO REVIEW</button>',
+		modal: '<div role="dialog" aria-modal="true" aria-labelledby="global-modal-title" class="iso-excess-modal modal-container" aria-describedby="global-modal-content" tabindex="0">\
+						<div class="modal-content">\
+							<div class="modal-header">\
+								<span id="global-modal-title">Your excess protection</span>\
+								<button id="iso-close-modal" class="close-modal" aria-label="Close" tabindex="0"><i class="icon icon-close-x-white">X</i></button>\
+							</div>\
+							<div class="modal-body cf">\
+								<div>\
+									<div class="global-modal__actions" id="global-modal-content">\
+										<div>\
+											<h2 class="excess-modal-header">Are you sure you do not want to reduce your damage waiver excess{reduced}?</h2>\
+											<div class="excess-modal-content">\
+												<div class="iso-load hide"><div class="loading"></div></div>\
+												<div class="iso-half"><button class="iso-add-excess">Add excess protection for just £{perday} a day</button></div>\
+												<span> Or </span>\
+												<div class="iso-half"><button class="iso-waiver-fee">Continue with a £{starting} waiver fee</button></div>\
+											</div>\
+										</div>\
+									</div>\
+								</div>\
+							</div>\
+						</div>\
+					</div>',
+		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+		pricingFileURL: '/content/dam/mvt/ent002',
+		locationPricing: {},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+
+		},
+		viewChange : function(){
+			if(/extras/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+	  			isoTest.chall();
+				});
+			} else if(/timeout/.test(location.hash)){
+				isoTest.hideModal();
+			}
+		},
+		chall : function() {
+			if(!document.querySelector('.add-remove[data-code='+isoTest.extrasCode+']')){
+				isoTest.log('fn chall : missing EXS');
+				return false;
+			}
+			isoTest.getReservationInfo();
+			isoTest.getPricing(); //get the file asap to avoid longer load time on modal
+			isoTest.replaceBtn();
+		},
+		getReservationInfo : function(){
+			isoTest.locationid = ReservationStateTree.get(['session','reservationSession','pickup_location','id']);
+			isoTest.carClass = ReservationStateTree.get(['session','reservationSession','selectedCarClassDetails','code']);
+			isoTest.excessDaily = isoTest.getDailyPrice();
+		},
+		getDailyPrice : function(){
+			// this is easier than dealing with the mobile component view!!!!
+			var price;
+			var chargeType = ReservationStateTree.get(['session','reservationSession','chargeType']);
+			var reservationExtras = ReservationStateTree.get(['session','reservationSession','selectedCarClassDetails','extras'])[chargeType];
+			reservationExtras.insurance.forEach(function(extra){
+				if(extra.code == isoTest.extrasCode){
+					price = extra.rate_amount_view.amount;
+				}
+			});
+			return price;
+		},
+		addModal : function(){
+			isoTest.locationPricing = isoTest.pricingFile[isoTest.locationid];
+			var carPricing = isoTest.locationPricing[isoTest.carClass];
+			var reduced = carPricing ? ' to £' + carPricing.reduced : '';
+			var starting = carPricing ? carPricing.starting : '1,400';
+			isoTest.log(carPricing);
+			var modal = helpers.supplant(isoTest.modal, {
+				'reduced' : reduced,
+				'starting' : starting,
+				'perday' : isoTest.excessDaily
+			});
+
+			if(!document.querySelector('.iso-excess-modal')){
+				document.querySelector('.extras-view').insertAdjacentHTML('beforeend',modal);
+				isoTest.bindModalEvents();
+			}
+		},
+		bindModalEvents: function(){
+			var modal = document.querySelector('.iso-excess-modal');
+			//close, continue button, escape key
+			modal.querySelector('.close-modal').addEventListener('click', isoTest.moveOn, false);
+			modal.addEventListener('click', isoTest.moveOn, false);
+			modal.querySelector('.iso-waiver-fee').addEventListener('click',function(){
+				isoTest.moveOn();
+				isoTest.fireTag(e.target,'Continue with a waiver fee');
+			}, false);
+			document.addEventListener('keydown',function(e){
+				if(e.keyCode == 27 || e.key == 'Esc' || e.key == 'Escape') {
+					isoTest.moveOn();
+				}
+			});
+
+			//add extra button
+			modal.querySelector('.iso-add-excess').addEventListener('click',function(e){
+				isoTest.addExcess();
+				isoTest.fireTag(e.target,'Add excess protection');
+			}, false);
+		},
+		addExcess : function(){
+			var excessBtn = document.querySelector('.add-remove[data-code='+isoTest.extrasCode+']');
+			isoTest.triggerBtn(excessBtn.querySelector('button'));
+			document.querySelector('.iso-load').classList.remove('hide');
+
+			var eInt = setInterval(function(){
+				if(excessBtn.classList.contains('remove') && !document.querySelector('.cta-container__action .loading') && !document.querySelector('#extras #globalErrorsContainer')){
+					clearInterval(eInt);
+					isoTest.moveOn();
+				} else if (document.querySelector('#extras #globalErrorsContainer')){ //just in case things fail
+					clearInterval(eInt);
+					isoTest.hideModal();
+				}
+			}, 200);
+		},
+		moveOn : function(){
+			isoTest.hideModal();//close modal before moving on just in case there's an error
+			var continueBtn = document.querySelector(isoTest.selector + ':not(.iso-continue)');
+			isoTest.triggerBtn(continueBtn);
+		},
+		showModal: function () {
+			helpers.elementLoaded('.iso-excess-modal', function(){
+				var propName = isoTest.test + ' : Modal Open';
+				s.linkTrackVars = 'prop23';
+				s.prop23 = propName;
+				s.tl(this, 'o', propName);
+
+				document.querySelector('.iso-excess-modal').classList.add('active');
+				document.querySelector('.iso-load').classList.add('hide');
+
+				document.querySelector('html').classList.add('iso-modal-open');
+				var modalFocus = document.querySelector('.iso-excess-modal.active');
+
+				modalFocus.focus();
+      	isoTest.keepFocus(modalFocus);
+      	
+      	setTimeout(function(){document.getElementById('iso-close-modal').focus(); }, 500);
+			});
+		},
+		hideModal : function () {
+			document.querySelector('html').classList.remove('iso-modal-open');
+			document.querySelector('.iso-excess-modal').classList.remove('active');
+		},
+		keepFocus : function(context) {
+      var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+          firstTabbableElement = allTabbableElements[0],
+          lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+      var keyListener = function(e) {
+    		var keyCode = e.which || e.keyCode;
+
+    		e.preventDefault = e.preventDefault || function () {
+    			e.returnValue = false;
+    		};
+    		if (keyCode === 9) {
+          if (e.target === lastTabbableElement && !e.shiftKey) {
+    				e.preventDefault();
+    				firstTabbableElement.focus();
+          } else if (e.target === firstTabbableElement && e.shiftKey) {
+    				e.preventDefault();
+    				lastTabbableElement.focus();
+    			}
+    		}
+    	};
+    	context.addEventListener('keydown', keyListener, false);
+    },
+		bindEvents: function(){
+			document.querySelectorAll('button.iso-continue').forEach(function(isoBtn){
+				isoBtn.addEventListener('click',function(){
+					if(document.querySelector('.add-remove[data-code='+isoTest.extrasCode+']').classList.contains('remove')){
+						isoTest.moveOn();
+					} else {
+						isoTest.showModal();
+					}
+				}, false);
+			});
+		},
+		replaceBtn: function () {
+			document.querySelector('.extras-view').insertAdjacentHTML('beforeend',isoTest.btnCss); //add button css now that we know things worked
+
+			document.querySelectorAll('.cta-container__action').forEach(function(ctaContainer){
+				ctaContainer.querySelector('button').classList.add('hide');
+				ctaContainer.insertAdjacentHTML('beforeend',isoTest.continueBtn);
+			});
+
+			isoTest.bindEvents();
+		},
+		getPricing: function(){
+				if(!isoTest.pricingFile) {
+					var xhttp = new XMLHttpRequest();
+				  xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200) {
+				     isoTest.pricingFile = JSON.parse(this.responseText);
+						 isoTest.log('getPricing :: prices file loaded');
+						 isoTest.addModal();
+				    }
+					};
+					xhttp.onerror = function(){
+						isoTest.putBackBtn();
+					};
+					xhttp.open("GET",isoTest.pricingFileURL, true);
+					xhttp.send();
+				} else {
+					isoTest.addModal();
+				}
+		},
+		putBackBtn : function() {
+			document.querySelectorAll(isoTest.selector + 'button').forEach(function(btn){
+				if(btn.classList.contains('iso-continue')){
+					btn.classList.add('hide');
+				} else {
+					btn.classList.add('show');
+				}
+			});
+			var btnCss = document.querySelector('#isoBtnStyle'); //remove button css just in case json file failure
+			btnCss.parentNode.removeChild(btnCss);
+		},
+		triggerBtn : function(el){
+			var e = new Event('click', { bubbles: true });
+			el.dispatchEvent(e);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
