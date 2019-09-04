@@ -26,7 +26,7 @@
 						//Boolean - corporate traffic;
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
 						//Boolean - Authenticated traffic checks if profile is present
-						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profile']) ? true : false;
+						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						//String - Gets any coupon or other CID, returns null if none is added;
 						var cid = ReservationStateTree.get(['model','coupon']);
 						//String - Gets contract type, returns empty value if no contract exists. This is not checked in the if statement because the contract object does not exist if the cid value is empty
@@ -61,7 +61,7 @@
 						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
 						isoHash.isLioLoaded()) {
 
-						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profile']) ? true : false;
+						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						// String - Pickup location type (e.g. airport, city, etc.)
 						var branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']);
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
@@ -108,7 +108,7 @@
 						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
 						isoHash.isLioLoaded()) {
 
-						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profile']) ? true : false;
+						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						var branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']);
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
 						var cid = ReservationStateTree.get(['model','coupon']);
@@ -157,7 +157,7 @@
 						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
 						isoHash.isLioLoaded()) {
 
-						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profile']) ? true : false;
+						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
 						var cid = ReservationStateTree.get(['model','coupon']);
 						var cidType = ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) ? ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) : '';
@@ -167,7 +167,7 @@
 						var groupNumber = ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']);
 						var lioSegments = isoHash.isLioEnabled ? window.lio.segmentsArray.toString() : '';
 						// String - User loyalty type and level (e.g. Plus, Emerald Club, etc.)
-						var loyaltyTier = authTraffic ? ReservationStateTree.get(['session', 'reservationSession','profile','basic_profile','loyalty_data','loyalty_tier']) : '';
+						var loyaltyTier = authTraffic ? ReservationStateTree.get(['session', 'reservationSession','profileResponse','profile','basic_profile','loyalty_data','loyalty_tier']) : '';
 						// Boolean - Oneway or roundtrip reservation
 						var oneway = !ReservationStateTree.get(['model','sameLocation']);
 						var payType = ReservationStateTree.get(['session', 'reservationSession','chargeType']);
@@ -217,7 +217,7 @@
 						isoHash.isLioLoaded()) {
 
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
-						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profile']) ? true : false;
+						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						// String - Reserved car class code
 						var carCode = ReservationStateTree.get(['session', 'reservationSession', 'selectedCarClassDetails','code']);
 						var cid = ReservationStateTree.get(['model','coupon']);
@@ -267,7 +267,7 @@
 						isoHash.isLioLoaded()){
 
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
-						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profile']) ? true : false;
+						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						var carCode = ReservationStateTree.get(['session', 'reservationSession', 'selectedCarClassDetails','code']);
 						var cid = ReservationStateTree.get(['model','coupon']);
 						var cidType = ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) ? ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) : '';
@@ -305,7 +305,7 @@
 						isoHash.isLioLoaded()) {
 
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
-						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profile']) ? true : false;
+						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						var cid = ReservationStateTree.get(['model','coupon']);
 						var cidType = ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) ? ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) : '';
 						var currency = ReservationStateTree.get(['session','reservationSession','view_currency_code']);

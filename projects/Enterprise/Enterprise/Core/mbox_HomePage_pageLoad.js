@@ -9,7 +9,7 @@
 			var domain = location.hostname.split('.').reverse()[0];
 			isoHomepage.isLioEnabled = isoHomepage.lioDomains.indexOf(domain) > -1;
       if(localStorage.getItem('sdsat_stagingLibrary')=='true' && /xqa|int/.test(location.hostname)) { //temp workaround staging
-				isoHash.isLioEnabled = false;
+				isoHomepage.isLioEnabled = false;
 			}
 		},
     mboxName : 'HomePage',
@@ -21,7 +21,7 @@
         typeof window.ReservationStateTree !== 'null' &&
         isoHomepage.isLioLoaded()) {
           var authTraffic = false;
-          var profile = ReservationStateTree.get(['session','reservationSession','profile']);
+          var profile = ReservationStateTree.get(['session','reservationSession','profileResponse']);
           var lioSegments = isoHomepage.isLioEnabled ? window.lio.segmentsArray.toString() : '';
           var loyaltyTier = _satellite.readCookie('renterTier');
         	var pypAuth = _satellite.readCookie('tt_sawPyp');
