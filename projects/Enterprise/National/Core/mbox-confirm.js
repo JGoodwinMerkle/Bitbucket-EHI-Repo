@@ -1,16 +1,19 @@
 (function(){
 	var isoRes = {
 		generateMbox: function(){
-			_satellite.notify('------- confirm -------');
+			_satellite.logger.log('------- confirm -------');
 
-			adobe.target.getOffer({  
+			adobe.target.getOffer({
 	        	"mbox": isoRes.confirm.mboxName,
             	"params" : isoRes.confirm.params(),
-	          	"success": function(offers) {          
-	        		adobe.target.applyOffer( { "offer": offers } );
-	        		_satellite.notify('@@ ResFunnelConfirm mbox generated');
-	        	},  
-	        	"error": function(status, error) {          
+	          	"success": function(offers) {
+	        		adobe.target.applyOffer( {
+								"offer": offers,
+								"mbox" : isoRes.confirm.mboxName
+							 } );
+	        		_satellite.logger.log('@@ ResFunnelConfirm mbox generated');
+	        	},
+	        	"error": function(status, error) {
 	         	}
 	        });
 		},
@@ -49,19 +52,19 @@
 					clearInterval(paramInt);
 					isoRes.generateMbox();
 				}
-			},100);	
+			},100);
 		},
 		dependenciesLoaded: function(){
 			// Clear interval check after 10 seconds in case any dependency fails
 			var actTimer = setTimeout(function(){
 				clearInterval(actInt);
-				_satellite.notify('@@ dependencies NOT FOUND');
+				_satellite.logger.log('@@ dependencies NOT FOUND');
 			}, 10000);
 
 			// Check for all mbox dependencies: Adobe Target library, Analytics object
 			var actInt = setInterval(function(){
-				_satellite.notify('@@ CHECKING dependencies');
-				if(window._analytics && 
+				_satellite.logger.log('@@ CHECKING dependencies');
+				if(window._analytics &&
 					window.adobe &&
 					window.adobe.target){
 						clearInterval(actInt);
