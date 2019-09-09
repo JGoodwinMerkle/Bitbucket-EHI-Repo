@@ -1,0 +1,157 @@
+<style>
+.iso-filter { display: none; }
+
+@media screen and (max-width: 40.8125em) {
+	.iso-filter {
+		background-color: #656565;
+		border-radius: 17.5px;
+		bottom: 10px;
+		color: #FFFFFF;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 700;
+		left: 50%;
+		padding: 8px 5px;
+		position: fixed;
+		text-align: center;
+		text-transform: uppercase;
+		transform: translate(-50%, -50%);
+		width: 120px;
+	  z-index: 9;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Selection Mobile Filter',
+		creative : 'Challenger 1',
+		selector: '.vehicle-select__header',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+			window.addEventListener(hashchange, isoTest.viewChange, false);
+
+			
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				isoTest.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			document.querySelector('.resflow-cars').insertAdjacentHTML('afterbegin',"<button class='iso-filter' tabindex='0'>FILTERS</button>");
+			isoTest.addEvents();
+
+			window.addEventListener('resize', function(event){
+			  if (window.innerWidth <= 653) {
+			  	if (!isoTest.elInViewport()) {
+						document.querySelector('.iso-filter').style.display = 'block';
+
+					} else {
+						document.querySelector('.iso-filter').style.display = 'none';
+					}
+			  } else {
+			  	document.querySelector('.iso-filter').style.display = 'none';
+			  }
+			});
+
+		
+		},
+		elInViewport : function() {
+			var filterEl = document.querySelector('.vehicle-select__aside');
+			var rect = filterEl.getBoundingClientRect();
+		  var elemTop = rect.top;
+		  var elemBottom = rect.bottom;
+		  var isVisible = (elemTop >= 0) || (elemBottom >= 0);
+
+		  return isVisible;
+		},
+		addEvents : function() {
+			document.addEventListener("scroll", function(){
+				if (window.innerWidth <= 653) {
+					if (!isoTest.elInViewport()) {
+						document.querySelector('.iso-filter').style.display = 'block';
+						// document.querySelector('.iso-filter').focus();
+					} else {
+						document.querySelector('.iso-filter').style.display = 'none';
+					}
+				}
+			});
+
+			document.querySelector('.iso-filter').addEventListener('click', function (e) {
+				if (window.innerWidth <= 653) {
+					isoTest.fireTag('.iso-filter','Filter Pill CTA');
+					document.querySelector('.vehicle-header__sub-title').scrollIntoView();
+					if (!document.querySelector('.vehicle-filter--active')) {
+						document.querySelector('#vehicle-filter-cta-expand').click();
+					}
+				}
+			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
