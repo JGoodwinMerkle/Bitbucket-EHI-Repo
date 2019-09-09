@@ -69,31 +69,31 @@
 		template: '<div class="iso-tag"><strong>{tag}</strong></div>',
 		featured: {
 			0: {
-				car: 'FYMR',
+				car: 'WCAE',
 				tag: 'Try Something New!'
 			},
 			1: {
-				car: 'FYMR',
+				car: 'WCAE',
 				tag: 'Try Something New!'
 			},
 			2: {
-				car: 'FYMR',
+				car: 'WCAE',
 				tag: 'Try Something New!'
 			},
 			3: {
-				car: 'FYMR',
+				car: 'WCAE',
 				tag: 'Try Something New!'
 			},
 			4: {
-				car: 'FYMR',
+				car: 'WCAE',
 				tag: 'Try Something New!'
 			},
 			5: {
-				car: 'FYMR',
+				car: 'WCAE',
 				tag: 'Try Something New!'
 			},
 			6: {
-				car: 'FYMR',
+				car: 'WCAE',
 				tag: 'Try Something New!'
 			}
 		},
@@ -175,7 +175,8 @@
 		},
 		labelVehicle: function(){
 			isoTest.log('labelVehicle()');
-			var featCarClass = isoTest.branchType == 'airport' ? isoTest.airportCarOverride : isoTest.vehicleClass.car;
+			var featCarClass = isoTest.vehicleClass.car;
+			//var featCarClass = isoTest.branchType == 'airport' ? isoTest.airportCarOverride : isoTest.vehicleClass.car;
 			isoTest.log(featCarClass);
 			var vehicleItems = document.querySelectorAll('.vehicle-list > li');
 			for(var i = 0; i < vehicleItems.length; i++) {

@@ -1,19 +1,22 @@
 //enables access to action store on page load
-window.emitMvtEvents = true; 
+window.emitMvtEvents = true;
 (function(){
 	var isoRes = {
 		generateMbox: function(page){
-			_satellite.notify('------- ' + page + ' -------');
+			_satellite.logger.log('------- ' + page + ' -------');
 
-			adobe.target.getOffer({  
+			adobe.target.getOffer({
 	        	"mbox": isoRes[page].mboxName,
             	"params" : isoRes[page].params(),
-	          	"success": function(offers) {          
-	        		adobe.target.applyOffer( { "offer": offers } );
-					isoRes[page].generated = true;
-	        		_satellite.notify('@@ ' + isoRes[page].mboxName + ' mbox generated');
-	        	},  
-	        	"error": function(status, error) {          
+	          	"success": function(offers) {
+	        		adobe.target.applyOffer( {
+								"offer": offers ,
+								"mbox": isoRes[page].mboxName
+							} );
+							isoRes[page].generated = true;
+	        		_satellite.logger.log('@@ ' + isoRes[page].mboxName + ' mbox generated');
+	        	},
+	        	"error": function(status, error) {
 	         	}
 	        });
 		},
@@ -128,7 +131,7 @@ window.emitMvtEvents = true;
 		init: function(){
 			// Gets all recorded actions
 			actionStore.subscribe('mvt', action => {
-				_satellite.notify('@@ actionStore SUBSCRIBE');
+				_satellite.logger.log('@@ actionStore SUBSCRIBE');
 				// Only generate mboxes once page is ready after session success
 				if(action == 'RESERVATION_ACTIVE_SCREEN'){
 					var page = location.hash.split('/')[1];
@@ -142,7 +145,7 @@ window.emitMvtEvents = true;
 							}
 						},100);
 					} else {
-						_satellite.notify('@@ isoRes[page] not found or mbox already generated');
+						_satellite.logger.log('@@ isoRes[page] not found or mbox already generated');
 					}
 				}
 			});
@@ -151,19 +154,18 @@ window.emitMvtEvents = true;
 			// Clear interval check after 10 seconds in case any dependency fails
 			var actTimer = setTimeout(function(){
 				clearInterval(actInt);
-				_satellite.notify('@@ actionStore FAILED');
-				console.log('@@ actionStore FAILED');
+				_satellite.logger.log('@@ actionStore FAILED');
 			}, 10000);
 
 			// Check for all mbox dependencies: Adobe Target library, Analytics object, and actionStore object
 			var actInt = setInterval(function(){
-				_satellite.notify('@@ CHECKING actionStore');
-				if(window._analytics && 
+				_satellite.logger.log('@@ CHECKING actionStore');
+				if(window._analytics &&
 					window.adobe &&
 					window.adobe.target &&
-					window.actionStore && 
-					typeof actionStore  == 'object' 
-					&& typeof actionStore.subscribe  == 'function'){
+					window.actionStore &&
+					typeof actionStore  == 'object' &&
+					typeof actionStore.subscribe  == 'function'){
 						clearInterval(actInt);
 						clearTimeout(actTimer);
 						isoRes.init();
