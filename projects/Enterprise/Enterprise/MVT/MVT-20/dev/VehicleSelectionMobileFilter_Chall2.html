@@ -1,0 +1,116 @@
+<style>
+@media screen and (max-width: 40.8125em) {
+	.iso-sticky-filter {
+		border-bottom: 1px solid #c3c3c3; 
+		position: sticky;  
+		position: -webkit-sticky; 
+	  top: -15px;
+	  width: 100%;
+	  z-index: 99;
+	}
+
+	.iso-sticky-filter .vehicle-filter--active .vehicle-filter__content {
+		margin-bottom: 0;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Selection Mobile Filter',
+		creative : 'Challenger 2',
+		selector: '.vehicle-select__header',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+			window.addEventListener(hashchange, isoTest.viewChange, false);
+			
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				isoTest.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			var vehicleHeader = document.querySelector('.vehicle-select__header');
+			vehicleHeader.insertAdjacentHTML('afterend','<div class="iso-sticky-filter"></div>');
+
+			var stickyFilter = document.querySelector('.iso-sticky-filter');
+			stickyFilter.appendChild(document.querySelector('.vehicle-select__aside'));
+
+			if (window.innerWidth <= 653) {
+				stickyFilter.prepend(vehicleHeader);
+			}
+
+			window.addEventListener('resize', function(event){
+			  if (window.innerWidth <= 653) {
+			  	if (!document.querySelector('.iso-sticky-filter .vehicle-select__header')) {
+			  		stickyFilter.prepend(vehicleHeader);
+			  	}
+			  } else {
+			  	if (document.querySelector('.iso-sticky-filter .vehicle-select__header')) {
+			  		document.querySelector('.vehicle-select').prepend(vehicleHeader);
+			  	}
+			  }
+			});
+
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
