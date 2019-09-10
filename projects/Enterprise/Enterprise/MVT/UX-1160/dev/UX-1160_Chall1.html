@@ -13,24 +13,24 @@
 			img : '/content/dam/ecom/hosted/enterprisesubscription_640x360_hiking.jpg',
 			content : 'Subscribe with Enterprise is a hassle-free alternative to owning or leasing. Get access to a variety of vehicles, we’ll even cover the insurance and maintenance.',
 			cta : 'Learn More About Subscribe',
-			url : '/en/car-rental-by-month-subscription.html?icid=home.page-_-3up-_-car.rental.by.month-_-ENUS.NULL'
+			url : '/en/car-rental-by-month-subscription.html?icid=home.page-3upcar.rental.by.month_-ENUS.NULL'
 		},
 		init : function() {
 
 			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
-			
+
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
 				//_satellite.track('target_variables');
 			}
-		
+
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-				
-			isoTest.elementLoaded(isoTest.selector, function() {	
-				isoTest.log('Test Ready!');	
+
+			isoTest.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
 		},
@@ -39,7 +39,7 @@
 			var band = document.querySelector(isoTest.selector);
 			var subscribe = band.children[1];
 				subscribe = subscribe.querySelector('h4').innerText.indexOf('Rent. Buy. Share.') > -1 ? subscribe : band.children[0];
-			
+
 			var headline = subscribe.querySelector('h4');
 				headline.innerText = isoTest.content.headline;
 			var img = subscribe.querySelector('img');
@@ -57,9 +57,9 @@
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
-			s.linkTrackVars = 'eVar20'; 
-			s.eVar20 = linkName; 
-			s.tl(this, 'o', linkName); 
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		elementLoaded : function (ele, callback) {
 			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
@@ -73,13 +73,13 @@
 	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-		
+
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
 		}
-		
+
 	}
 
 	var helpers = {
