@@ -67,7 +67,7 @@ satelliteFn="
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
-				_satellite.track('target_variables');
+				//_satellite.track('target_variables');
 			}
 "
 accountLog="isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);"
@@ -112,17 +112,17 @@ get_resFunnel (){
 	resFunction=''
 	if [[ "${resFunnel}" == true ]]
 	then
-		resListener='
+		resListener="
 		window.addEventListener('hashchange', isoTest.viewChange, false);
-		'
-		resFunction='
+		"
+		resFunction="
 		viewChange : function(){
 			if(/viewName/.test(location.hash)){
-				isoTest.elementLoaded(isoTest.selector, function() {
+				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
 			}
-		},'
+		},"
 	fi
 }
 
@@ -193,7 +193,7 @@ cat <<EOT >> ${folderName}/dev/${titleConcat}_${challName}.html
 					callback();
 				}
 	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
 	    supplant : function(str, o) {
