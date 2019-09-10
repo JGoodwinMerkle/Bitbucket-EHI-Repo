@@ -104,8 +104,22 @@
     margin: 0;
     width: 100%;
 	}
+	#extras .excess-modal-content button.iso-add-excess {
+		bottom: 2.5em;
+		top: auto;
+	}
 	#extras .excess-modal-content button.iso-waiver-fee {
-		margin-top: 1em;
+		top: 2.5em;
+	}
+	#extras .excess-modal-content span {
+		text-align:center;
+		width: 25px;
+	}
+}
+@media (max-width: 636px) {
+	#extras h2.excess-modal-header{
+		font-size: 22px;
+		line-height: 28px;
 	}
 }
 </style>
@@ -213,7 +227,7 @@
 		},
 		addModal : function(){
 			isoTest.locationPricing = isoTest.pricingFile[isoTest.locationid];
-			var carPricing = isoTest.locationPricing[isoTest.carClass];
+			var carPricing = isoTest.locationPricing ? isoTest.locationPricing[isoTest.carClass] : null;
 			var reduced = carPricing ? ' to £' + carPricing.reduced : '';
 			var starting = carPricing ? carPricing.starting : '1,400';
 			isoTest.log(carPricing);
