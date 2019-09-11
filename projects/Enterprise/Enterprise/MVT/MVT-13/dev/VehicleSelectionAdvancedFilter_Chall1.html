@@ -1,4 +1,41 @@
 <style>
+.vehicle-filter__filter-list {
+	display: block !important;
+	width: 100% !important;
+}
+
+.vehicle-filter__filter-title {
+	display: inline-block !important;
+}
+
+.vehicle-filter__filter-title.iso-price-header {
+  float: right;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 200;
+  font-style: normal;
+  text-transform: none;
+  margin-top: 2px;
+}
+
+.vehicle-filter__filter-list .checkbox__label {
+	display: inline !important;
+}
+
+.vehicle-filter__filter-list .iso-filter-price {
+	float: right;
+	font-weight: 200;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+@media (max-width: 67.5625em) {
+	.vehicle-filter__header {
+		position: relative !important;
+    padding-bottom: 2px !important;
+    padding-top: 19px !important;
+	}
+}
 </style>
 <script>
 (function() {
@@ -9,6 +46,8 @@
 		test : 'Vehicle Selection Advanced Filter',
 		creative : 'Challenger 1',
 		selector: '.vehicle-list',
+		carCostObject: {},
+		passengerCostObject: {},
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -39,30 +78,74 @@
 			}
 		},
 		chall : function() {
-			var cars = ReservationStateTree.get().model.carSelect.filteredVehicles;
+			isoTest.findFilterPrice();
+			isoTest.updatefilterWidget();
+		},
+		findFilterPrice : function() {
+			var cars = ReservationStateTree.get().model.carSelect.availableVehicles;
+			var carFilters = ReservationStateTree.get().model.carSelect.filters.CLASS;
+			var passengerFilters = ReservationStateTree.get().model.carSelect.filters.PASSENGERS;
+
 			if (cars != null) {
-				cars.forEach(function(car) {
-					var carStatus = car.status;
-					var carFilterType = car.category.value;
-					if (carStatus != "SOLD_OUT" && carFilterType == "Cars") {
-						var carTotalPrice = car.charges.PAYLATER.total_price_payment.amount;
-						console.log(carTotalPrice);
-						var min = 0;
-						if (carTotalPrice) {
-
+				for (var key in carFilters) {
+					var lowestPrice = Number.POSITIVE_INFINITY;
+					var tmp;
+					for (var i=cars.length-1; i>=0; i--) {
+						var carStatus = cars[i].status;
+						var carFilterType = cars[i].category.value;
+						if (carStatus != "SOLD_OUT") {
+							if (carStatus != "RESTRICTED_AT_RETAIL_RATE") {
+								if (carFilterType == key) {
+									tmp = cars[i].charges.PAYLATER.total_price_payment.amount;
+							    if (tmp < lowestPrice) lowestPrice = Math.round(tmp);
+		
+								}
+							}
 						}
-						// for (var i = 1; i < car.length; i++) {
-							// console.log('car[i]: ' + car[i]);
-							// console.log('car[i]: ' + car[i]);
-							// if (car[i] < car[lowest]) lowest = i;
-							// console.log("low");
-							// console.log(lowest);
-						// }
 					}
-				  // console.log(carFilterType);
-				});
-			}
+					if (lowestPrice == "Infinity") lowestPrice = "--";
+					isoTest.carCostObject[key] = lowestPrice;
+				}
 
+				for (var key in passengerFilters) {
+					var lowestPrice = Number.POSITIVE_INFINITY;
+					var tmp;
+					for (var i=cars.length-1; i>=0; i--) {
+						var carStatus = cars[i].status;
+						var carFilterPassengerCode = cars[i].filters.PASSENGERS.filter_code;
+						if (carStatus != "SOLD_OUT") {
+							if (carStatus != "RESTRICTED_AT_RETAIL_RATE") {
+								if (parseInt(carFilterPassengerCode) >= key) {
+									tmp = cars[i].charges.PAYLATER.total_price_payment.amount;
+							    if (tmp < lowestPrice) lowestPrice = Math.round(tmp);
+							    
+								}
+							}
+						}
+					}
+					if (lowestPrice == "Infinity") lowestPrice = "--";
+					isoTest.passengerCostObject[key] = lowestPrice;
+				}
+			}
+		},
+		updatefilterWidget : function() {
+			document.querySelectorAll('.vehicle-filter__filter-title')[0].insertAdjacentHTML("afterend", "<span class='vehicle-filter__filter-title iso-price-header'>Price from</span>");
+			document.querySelectorAll('.checkbox__text').forEach(function(label) { 
+				var filterLabel = label.innerText;
+				var filterPrice;
+				if (isoTest.carCostObject[filterLabel] != null) {
+					filterPrice = isoTest.carCostObject[filterLabel];
+				}
+
+				if (isoTest.passengerCostObject[filterLabel] != null) {
+					filterPrice = isoTest.passengerCostObject[filterLabel];
+				}
+				if (filterPrice != "--") {
+					label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>$" + filterPrice + "</span>");
+				} else {
+					label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>" + filterPrice + "</span>");
+				}
+			});
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
