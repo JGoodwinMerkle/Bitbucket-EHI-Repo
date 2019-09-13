@@ -41,7 +41,8 @@
 							'corpTraffic': corpTraffic,
 							'authTraffic': authTraffic,
 							'cid': cid,
-							'cdp' : lioSegments
+							'cdp' : lioSegments,
+							'currency' : currency
 						};
 					} else {
 						return false;
