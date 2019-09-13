@@ -1,8 +1,6 @@
 (function(){
 	var isoRes = {
 		generateMbox: function(){
-			_satellite.logger.log('------- confirm -------');
-
 			adobe.target.getOffer({
 	        	"mbox": isoRes.confirm.mboxName,
             	"params" : isoRes.confirm.params(),
@@ -21,7 +19,6 @@
 			mboxName: 'ResFunnelConfirm',
 			params: function(){
 				if(_analytics.gma &&
-					_analytics.gma.logged_in &&
 					_analytics.customer_type &&
 					_analytics.gbo &&
 					_analytics.gbo.reservation &&
@@ -32,9 +29,10 @@
 					_analytics.gbo.reservation.car_class_details.vehicle_rates[0] &&
 					_analytics.gbo.reservation.car_class_details.vehicle_rates[0].price_summary &&
 					_analytics.gbo.reservation.car_class_details.vehicle_rates[0].price_summary.total_charged){
+						var isAuth = _analytics.gbo && _analytics.gbo.profile ? true : false;
 						var corpTraffic = _analytics.customer_type == 'CORPORATE' ? true : false;
 						return {
-							'authTraffic': _analytics.gma.logged_in,
+							'authTraffic': isAuth,
 							'corpTraffic': corpTraffic,
 							'pickupId': _analytics.gbo.reservation.pickup_location.id,
 							'orderId' : _analytics.gbo.reservation.confirmation_number,
@@ -58,7 +56,9 @@
 			// Clear interval check after 10 seconds in case any dependency fails
 			var actTimer = setTimeout(function(){
 				clearInterval(actInt);
-				_satellite.logger.log('@@ dependencies NOT FOUND');
+				_satellite.logger.error('@@ Dependencies FAILED');
+				window._analytics ? _satellite.logger.debug('@@ _analytics :: OK') : _satellite.logger.error('@@ _analytics :: Missing');
+				window.adobe ? _satellite.logger.debug('@@ adobe :: OK') : _satellite.logger.error('@@ adobe :: Missing');
 			}, 10000);
 
 			// Check for all mbox dependencies: Adobe Target library, Analytics object

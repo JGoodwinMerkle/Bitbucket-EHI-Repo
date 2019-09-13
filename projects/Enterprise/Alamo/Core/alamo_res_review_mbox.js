@@ -5,7 +5,9 @@ try {
             adobe.target.getOffer({
                 "mbox": mbox,
                 "params": {
-                    stationId: _a.stationId
+                    stationId: _a.stationId,
+                    cid: _a.customerNumber,
+                    coupon: _a.couponCode
                 },
                 "success": function(offers) {
                     adobe.target.applyOffer({

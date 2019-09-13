@@ -3,12 +3,10 @@ window.emitMvtEvents = true;
 (function(){
 	var isoRes = {
 		generateMbox: function(page){
-			_satellite.logger.log('------- ' + page + ' -------');
-
 			adobe.target.getOffer({
-	        	"mbox": isoRes[page].mboxName,
-            	"params" : isoRes[page].params(),
-	          	"success": function(offers) {
+	        "mbox": isoRes[page].mboxName,
+          	"params" : isoRes[page].params(),
+          	"success": function(offers) {
 	        		adobe.target.applyOffer( {
 								"offer": offers ,
 								"mbox": isoRes[page].mboxName
@@ -17,19 +15,20 @@ window.emitMvtEvents = true;
 	        		_satellite.logger.log('@@ ' + isoRes[page].mboxName + ' mbox generated');
 	        	},
 	        	"error": function(status, error) {
+							_satellite.logger.error(error);
 	         	}
-	        });
+	     });
 		},
 		start: {
 			mboxName: 'ResFunnelStart',
 			generated: false,
 			params: function(){
 				if(_analytics.gma &&
-					_analytics.gma.logged_in &&
 					_analytics.customer_type){
+						var isAuth = _analytics.gbo && _analytics.gbo.profile ? true : false;
 						var corpTraffic = _analytics.customer_type == 'CORPORATE' ? true : false;
 						return {
-							'authTraffic': _analytics.gma.logged_in,
+							'authTraffic': isAuth,
 							'corpTraffic': corpTraffic
 						}
 				}
@@ -41,11 +40,11 @@ window.emitMvtEvents = true;
 			generated: false,
 			params: function(){
 				if(_analytics.gma &&
-					_analytics.gma.logged_in &&
 					_analytics.customer_type){
+						var isAuth = _analytics.gbo && _analytics.gbo.profile ? true : false;
 						var corpTraffic = _analytics.customer_type == 'CORPORATE' ? true : false;
 						return {
-							'authTraffic': _analytics.gma.logged_in,
+							'authTraffic': isAuth,
 							'corpTraffic': corpTraffic
 						}
 				}
@@ -57,11 +56,11 @@ window.emitMvtEvents = true;
 			generated: false,
 			params: function(){
 				if(_analytics.gma &&
-					_analytics.gma.logged_in &&
 					_analytics.customer_type){
+						var isAuth = _analytics.gbo && _analytics.gbo.profile ? true : false;
 						var corpTraffic = _analytics.customer_type == 'CORPORATE' ? true : false;
 						return {
-							'authTraffic': _analytics.gma.logged_in,
+							'authTraffic': isAuth,
 							'corpTraffic': corpTraffic
 						}
 				}
@@ -73,14 +72,14 @@ window.emitMvtEvents = true;
 			generated: false,
 			params: function(){
 				if(_analytics.gma &&
-					_analytics.gma.logged_in &&
 					_analytics.customer_type &&
 					_analytics.gbo &&
 					_analytics.gbo.reservation &&
 					_analytics.gbo.reservation.pickup_location){
+						var isAuth = _analytics.gbo.profile ? true : false;
 						var corpTraffic = _analytics.customer_type == 'CORPORATE' ? true : false;
 						return {
-							'authTraffic': _analytics.gma.logged_in,
+							'authTraffic': isAuth,
 							'corpTraffic': corpTraffic,
 							'pickupId': _analytics.gbo.reservation.pickup_location.id
 						}
@@ -93,14 +92,14 @@ window.emitMvtEvents = true;
 			generated: false,
 			params: function(){
 				if(_analytics.gma &&
-					_analytics.gma.logged_in &&
 					_analytics.customer_type &&
 					_analytics.gbo &&
 					_analytics.gbo.reservation &&
 					_analytics.gbo.reservation.pickup_location){
+						var isAuth = _analytics.gbo.profile ? true : false;
 						var corpTraffic = _analytics.customer_type == 'CORPORATE' ? true : false;
 						return {
-							'authTraffic': _analytics.gma.logged_in,
+							'authTraffic': isAuth,
 							'corpTraffic': corpTraffic,
 							'pickupId': _analytics.gbo.reservation.pickup_location.id
 						}
@@ -113,14 +112,14 @@ window.emitMvtEvents = true;
 			generated: false,
 			params: function(){
 				if(_analytics.gma &&
-					_analytics.gma.logged_in &&
 					_analytics.customer_type &&
 					_analytics.gbo &&
 					_analytics.gbo.reservation &&
 					_analytics.gbo.reservation.pickup_location){
+						var isAuth = _analytics.gbo.profile ? true : false;
 						var corpTraffic = _analytics.customer_type == 'CORPORATE' ? true : false;
 						return {
-							'authTraffic': _analytics.gma.logged_in,
+							'authTraffic': isAuth,
 							'corpTraffic': corpTraffic,
 							'pickupId': _analytics.gbo.reservation.pickup_location.id
 						}
@@ -130,10 +129,9 @@ window.emitMvtEvents = true;
 		},
 		init: function(){
 			// Gets all recorded actions
-			actionStore.subscribe('mvt', action => {
-				_satellite.logger.log('@@ actionStore SUBSCRIBE');
-				// Only generate mboxes once page is ready after session success
-				if(action == 'RESERVATION_ACTIVE_SCREEN'){
+			actionStore.subscribe('mvt', function(action) {
+				// Generate mboxes when react is ready OR in case the mbox rule load time also check for last action
+				if(action == 'RESERVATION_ACTIVE_SCREEN' || action == 'RESERVATION_RENTAL_TERMS'){
 					var page = location.hash.split('/')[1];
 					//Checks the code for the reservation step exists and that the mbox has yet to be created
 					if(isoRes[page] !== 'undefined' && !isoRes[page].generated){
@@ -145,7 +143,7 @@ window.emitMvtEvents = true;
 							}
 						},100);
 					} else {
-						_satellite.logger.log('@@ isoRes[page] not found or mbox already generated');
+						_satellite.logger.warn('@@ '+ page +' not found or mbox already generated');
 					}
 				}
 			});
@@ -154,12 +152,14 @@ window.emitMvtEvents = true;
 			// Clear interval check after 10 seconds in case any dependency fails
 			var actTimer = setTimeout(function(){
 				clearInterval(actInt);
-				_satellite.logger.log('@@ actionStore FAILED');
-			}, 10000);
+				_satellite.logger.error('@@ Dependencies FAILED');
+				window._analytics ? _satellite.logger.debug('@@ _analytics :: OK') : _satellite.logger.error('@@ _analytics :: Missing');
+				window.adobe ? _satellite.logger.debug('@@ adobe :: OK') : _satellite.logger.error('@@ adobe :: Missing');
+				window.actionStore ? _satellite.logger.debug('@@ actionStore :: OK') : _satellite.logger.error('@@ actionStore :: Failed');
+			}, 25000);
 
 			// Check for all mbox dependencies: Adobe Target library, Analytics object, and actionStore object
 			var actInt = setInterval(function(){
-				_satellite.logger.log('@@ CHECKING actionStore');
 				if(window._analytics &&
 					window.adobe &&
 					window.adobe.target &&

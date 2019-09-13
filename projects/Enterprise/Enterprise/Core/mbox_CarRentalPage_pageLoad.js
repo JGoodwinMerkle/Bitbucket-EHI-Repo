@@ -23,8 +23,8 @@
           var authTraffic = false;
           var profile = ReservationStateTree.get(['session','reservationSession','profileResponse']);
           var lioSegments = isoCarRental.isLioEnabled ? window.lio.segmentsArray.toString() : '';
-          var loyaltyTier = _satellite.readCookie('renterTier');
-        	var pypAuth = _satellite.readCookie('tt_sawPyp');
+          var loyaltyTier = _satellite.cookie.get('renterTier');
+        	var pypAuth = _satellite.cookie.get('tt_sawPyp');
           var cid = ReservationStateTree.get(['model','coupon']);
           //String - Gets contract type, returns empty value if no contract exists. This is not checked in the if statement because the contract object does not exist if the cid value is empty
           var cidType = ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) ? ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) : '';

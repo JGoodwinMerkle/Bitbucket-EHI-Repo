@@ -8,7 +8,9 @@ try{
                 "mbox": mbox,
                 "params": {
                     stationId: _a.stationId,
-                    bookingCountry: _a.bookingCountryCode
+                    bookingCountry: _a.bookingCountryCode,
+                    cid: _a.customerNumber,
+                    coupon: _a.couponCode
                 },
                 "success": function(offers) {
                     adobe.target.applyOffer({

@@ -7,7 +7,9 @@ try{
                 "params": {
                     stationId: _a.stationId,
                     bookingCountry: _a.bookingCountryCode,
-                    countryOfResidence: _a.countryResidenceCode
+                    countryOfResidence: _a.countryResidenceCode,
+                    cid: _a.customerNumber,
+                    coupon: _a.couponCode
                 },
                 "success": function(offers) {
                     adobe.target.applyOffer({
