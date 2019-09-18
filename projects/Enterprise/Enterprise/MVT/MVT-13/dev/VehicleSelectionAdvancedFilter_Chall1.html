@@ -66,20 +66,32 @@
 				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
-			
-		window.addEventListener(hashchange, isoTest.viewChange, false);
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);
 		
 		},
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
-				isoTest.elementLoaded(isoTest.selector, function() {
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
 			}
 		},
 		chall : function() {
-			isoTest.findFilterPrice();
-			isoTest.updatefilterWidget();
+			isoTest.checkForVehicles();
+		},
+		checkForVehicles : function() {
+			var checkForVehicles = setInterval(function(){
+				if (ReservationStateTree.get().model.carSelect.availableVehicles != null){
+					clearInterval(checkForVehicles);
+					isoTest.findFilterPrice();
+					isoTest.updatefilterWidget();
+				}
+
+				setTimeout(function(){
+					clearInterval(checkForVehicles);
+				}, 10000)
+			},1);
 		},
 		findFilterPrice : function() {
 			var cars = ReservationStateTree.get().model.carSelect.availableVehicles;
@@ -93,12 +105,12 @@
 					for (var i=cars.length-1; i>=0; i--) {
 						var carStatus = cars[i].status;
 						var carFilterType = cars[i].category.value;
+
 						if (carStatus != "SOLD_OUT") {
 							if (carStatus != "RESTRICTED_AT_RETAIL_RATE") {
 								if (carFilterType == key) {
 									tmp = cars[i].charges.PAYLATER.total_price_payment.amount;
 							    if (tmp < lowestPrice) lowestPrice = Math.round(tmp);
-		
 								}
 							}
 						}
@@ -131,8 +143,10 @@
 		updatefilterWidget : function() {
 			document.querySelectorAll('.vehicle-filter__filter-title')[0].insertAdjacentHTML("afterend", "<span class='vehicle-filter__filter-title iso-price-header'>Price from</span>");
 			document.querySelectorAll('.checkbox__text').forEach(function(label) { 
-				var filterLabel = label.innerText;
+
+				var filterLabel = label.innerHTML;
 				var filterPrice;
+
 				if (isoTest.carCostObject[filterLabel] != null) {
 					filterPrice = isoTest.carCostObject[filterLabel];
 				}
@@ -140,10 +154,20 @@
 				if (isoTest.passengerCostObject[filterLabel] != null) {
 					filterPrice = isoTest.passengerCostObject[filterLabel];
 				}
+
 				if (filterPrice != "--") {
-					label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>$" + filterPrice + "</span>");
+		
+					if (label.nextSibling == null) {
+						label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>$" + filterPrice + "</span>");
+					} else {
+						label.nextSibling.innerHTML = "$" + filterPrice;
+					}
 				} else {
-					label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>" + filterPrice + "</span>");
+					if (label.nextSibling == null) {
+						label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>" + filterPrice + "</span>");
+					} else {
+						label.nextSibling.innerHTML = filterPrice;
+					}
 				}
 			});
 		},
