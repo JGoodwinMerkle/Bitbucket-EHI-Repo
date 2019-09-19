@@ -155,7 +155,7 @@
 			});
 
 			window.addEventListener('hashchange', isoTest.hashHandler, false);
-			window.addEventListener('ttFeatVehicle', isoTest.chall, false);
+			window.addEventListener('ttFeatVehicle', isoTest.labelVehicle, false);
 		},
 		hashHandler : function(){
 			if(/cars/.test(location.hash)){
@@ -249,8 +249,8 @@
 					}
 				}
 			}
-			//var e = new Event('ttFeatOrder');
-			//window.dispatchEvent(e);
+			var e = new Event('ttFeatOrder');
+			window.dispatchEvent(e);
 		},
 		elementLoaded : function (ele, callback) {
 			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
