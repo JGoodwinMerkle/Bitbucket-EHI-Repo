@@ -264,11 +264,11 @@
 				for(var i=0;i < isoTest.vehicleItems.length; i++){
 					if(!isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass')){
 						isoTest.vehicleItems[i].style.order = o;
-						if(i==0 && isoTest.lastPreselectedIndex == -1 && !isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points')){
-							featVehicle.parentNode.style.order = -1;
-						} else if(i==0 && isoTest.lastPreselectedIndex == -1 && isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points')){
+						if(i==0 && isoTest.lastPreselectedIndex == -1 && (isoTest.vehicleItems[i].classList.contains('vehicle-list__unavailable-car') || isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points'))){
 							o +=1;
 							featVehicle.parentNode.style.order = o;
+						} else if(i==0 && isoTest.lastPreselectedIndex == -1 && !isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points')){
+							featVehicle.parentNode.style.order = -1;
 						} else if(i == isoTest.lastPreselectedIndex){
 							o +=1;
 							featVehicle.parentNode.style.order = o;
