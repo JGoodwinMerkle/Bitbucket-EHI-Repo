@@ -32,6 +32,14 @@
   display: none;
 }
 
+.vehicle-list.iso-available-vehicles {
+	display: flex;
+	flex-flow: wrap;
+}
+
+.vehicle-list.iso-available-vehicles .vehicle-list__item {
+	width: 100%;
+}
 
 </style>
 <script>
@@ -44,7 +52,7 @@
 		creative : 'Challenger 1',
 		selector: '.vehicle-list',
 		dropdown: '<div class="iso-filter-container">\
-								<select class="iso-dropdown-filter icon icon-arrow-down-green">\
+								<select id="iso-filter-sort" class="iso-dropdown-filter icon icon-arrow-down-green" name="Sort By">\
 								  <option class="iso-filter-opt opt-one" value="Recommended">Recommended</option>\
 								  <option class="iso-filter-opt opt-two" value="Price Low to High">Price Low to High</option>\
 								  <option class="iso-filter-opt opt-three" value="Price High to Low">Price High to Low</option>\
@@ -84,12 +92,140 @@
 
 			var sortContainer = document.querySelector('.vehicle-header__info');
 			sortContainer.innerHTML = isoTest.dropdown;
+			
+			document.getElementsByClassName('vehicle-list')[0].classList.add('iso-available-vehicles');
 
-			var cars = ReservationStateTree.get().model.carSelect.availableVehicles;
-			// var cars = ReservationStateTree.get().model.carSelect.filteredVehicles;
-			var carFilters = ReservationStateTree.get().model.carSelect.filters.CLASS;
-			var passengerFilters = ReservationStateTree.get().model.carSelect.filters.PASSENGERS;
+			isoTest.addEvents();
 
+		},
+		setOrder : function(elements, array) {
+			array.forEach(function (a, index) {
+				for (var i=elements.length-1; i>=0; i--) {
+					if (i == a.key) {
+						elements[i].style.order = index;
+
+					}
+				}	
+			});
+		},
+		removeOrder : function(elements) {
+			for (var i=elements.length-1; i>=0; i--) {
+					elements[i].style.order = "initial";
+			}
+		},
+		sortPriceHighToLow : function(obj) {
+			var arr = [];
+	    var prop;
+	    for (prop in obj) {
+	      if (obj.hasOwnProperty(prop)) {
+          if (obj[prop].status != "SOLD_OUT") {
+            if (obj[prop].category.value != "RESTRICTED_AT_RETAIL_RATE") {
+              arr.push({
+                'key': prop,
+                'value': obj[prop].charges.PAYLATER.total_price_payment.amount
+              });
+            }
+          }
+	      }
+	    }
+	    arr.sort(function(a, b) {
+	      return b.value - a.value;
+	    });
+	    return arr;
+		},
+		sortPriceLowToHigh : function(obj) {
+			var arr = [];
+	    var prop;
+	    for (prop in obj) {
+	      if (obj.hasOwnProperty(prop)) {
+          if (obj[prop].status != "SOLD_OUT") {
+            if (obj[prop].category.value != "RESTRICTED_AT_RETAIL_RATE") {
+              arr.push({
+                'key': prop,
+                'value': obj[prop].charges.PAYLATER.total_price_payment.amount
+              });
+            }
+          }
+	      }
+	    }
+	    arr.sort(function(a, b) {
+	      return a.value - b.value;
+	    });
+	    return arr;
+		},
+		highToLowSelected : function() {
+			var l = document.getElementsByClassName('vehicle-list__item');
+			for(var i = 0; i < l.length; i++) {
+				l[i].classList.add('iso-high-to-low');
+			}
+
+			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .iso-high-to-low');
+			// var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
+			var cars = ReservationStateTree.get().model.carSelect.filteredVehicles;
+			var highToLow = isoTest.sortPriceHighToLow(cars);
+			isoTest.setOrder(carsContainerList, highToLow);
+		},
+		lowToHighSelected : function() {
+			var l = document.getElementsByClassName('vehicle-list__item');
+			for(var i = 0; i < l.length; i++) {
+				l[i].classList.add('iso-low-to-high');
+			}
+
+			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
+			var cars = ReservationStateTree.get().model.carSelect.filteredVehicles;
+			var lowToHigh = isoTest.sortPriceLowToHigh(cars);
+			isoTest.setOrder(carsContainerList, lowToHigh);
+		},
+		recommendedSelected : function() {
+			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
+			isoTest.removeOrder(carsContainerList);
+		},
+		addEvents : function() {
+			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox input,.vehicle-filter__header-link');
+			for(var i = 0; i < filterElements.length; i++) {
+		    filterElements[i].addEventListener('click', function(){
+		    	// console.log('filter clicked');
+
+		    	var sortFilter = document.getElementById("iso-filter-sort");
+		 			var selectedValue = sortFilter.options[sortFilter.selectedIndex].value;
+		 			setTimeout(function(){
+				    if (selectedValue == "Recommended") {
+				    	// console.log('Recommended in filter');
+							isoTest.recommendedSelected();
+				   	}
+
+				   	if (selectedValue == "Price Low to High") {
+				    	// console.log('low to high in filter');
+							isoTest.lowToHighSelected();
+				   	}
+
+				   	if (selectedValue == "Price High to Low") {
+				    	// console.log('high to low in filter');
+							isoTest.highToLowSelected();
+				   	}
+				  }, 200);
+		    }, false);
+			}
+
+			document.addEventListener('input', function (event) {
+				if (event.target.id !== 'iso-filter-sort') return;
+
+				if (event.target.value === 'Recommended') {
+					// console.log('Recommended clicked');
+					isoTest.recommendedSelected();
+				}
+
+				if (event.target.value === 'Price Low to High') {
+					// console.log('low to high clicked');
+					isoTest.lowToHighSelected();
+				}
+
+				if (event.target.value === 'Price High to Low') {
+					// console.log('high to low clicked');
+					isoTest.highToLowSelected();
+				}
+
+			}, false);
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
