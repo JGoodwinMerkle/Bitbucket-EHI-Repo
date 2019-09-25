@@ -51,6 +51,7 @@
 		test : 'Vehicle Selection Sort By Drop Down',
 		creative : 'Challenger 1',
 		selector: '.vehicle-list',
+		preSelected: '.vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected',
 		dropdown: '<div class="iso-filter-container">\
 								<select id="iso-filter-sort" class="iso-dropdown-filter icon icon-arrow-down-green" name="Sort By">\
 								  <option class="iso-filter-opt opt-one" value="Recommended">Recommended</option>\
@@ -89,7 +90,7 @@
 			}
 		},
 		chall : function() {
-
+			console.log('chall()');
 			var sortContainer = document.querySelector('.vehicle-header__info');
 			sortContainer.innerHTML = isoTest.dropdown;
 			
@@ -98,10 +99,47 @@
 			isoTest.addEvents();
 
 		},
+		priceSort : function () {
+			console.log('priceSort()');
+			var cars = ReservationStateTree.get().model.carSelect.filteredVehicles;
+			var arr = [];
+	    var prop;
+	    for (prop in cars) {
+	      if (cars.hasOwnProperty(prop)) {
+          if (cars[prop].status != "SOLD_OUT") {
+            if (cars[prop].category.value != "RESTRICTED_AT_RETAIL_RATE") {
+              arr.push({
+                'key': prop,
+                'value': cars[prop].charges.PAYLATER.total_price_payment.amount,
+                'code' : cars[prop].code
+              });
+            }
+          }
+	      }
+	    }
+	    return arr;
+		},
+		sortPriceHighToLow : function(arr) {
+			console.log('sortPriceHighToLow()');
+	    arr.sort(function(a, b) {
+	      return b.value - a.value;
+	    });
+	    return arr;
+		},
+		sortPriceLowToHigh : function(arr) {
+			console.log('sortPriceLowToHigh()');
+	    arr.sort(function(a, b) {
+	      return a.value - b.value;
+	    });
+	    return arr;
+		},
 		setOrder : function(elements, array) {
+			console.log('setOrder()');
 			array.forEach(function (a, index) {
 				for (var i=elements.length-1; i>=0; i--) {
-					if (i == a.key) {
+					var dataInfo = elements[i].getAttribute('data-dtm-tracking').split('|');
+			    var carClass = dataInfo[1];
+					if (carClass == a.code) {
 						elements[i].style.order = index;
 
 					}
@@ -109,101 +147,96 @@
 			});
 		},
 		removeOrder : function(elements) {
-			for (var i=elements.length-1; i>=0; i--) {
-					elements[i].style.order = "initial";
-			}
-		},
-		sortPriceHighToLow : function(obj) {
-			var arr = [];
-	    var prop;
-	    for (prop in obj) {
-	      if (obj.hasOwnProperty(prop)) {
-          if (obj[prop].status != "SOLD_OUT") {
-            if (obj[prop].category.value != "RESTRICTED_AT_RETAIL_RATE") {
-              arr.push({
-                'key': prop,
-                'value': obj[prop].charges.PAYLATER.total_price_payment.amount
-              });
-            }
-          }
-	      }
-	    }
-	    arr.sort(function(a, b) {
-	      return b.value - a.value;
-	    });
-	    return arr;
-		},
-		sortPriceLowToHigh : function(obj) {
-			var arr = [];
-	    var prop;
-	    for (prop in obj) {
-	      if (obj.hasOwnProperty(prop)) {
-          if (obj[prop].status != "SOLD_OUT") {
-            if (obj[prop].category.value != "RESTRICTED_AT_RETAIL_RATE") {
-              arr.push({
-                'key': prop,
-                'value': obj[prop].charges.PAYLATER.total_price_payment.amount
-              });
-            }
-          }
-	      }
-	    }
-	    arr.sort(function(a, b) {
-	      return a.value - b.value;
-	    });
-	    return arr;
-		},
-		highToLowSelected : function() {
-			var l = document.getElementsByClassName('vehicle-list__item');
-			for(var i = 0; i < l.length; i++) {
-				l[i].classList.add('iso-high-to-low');
+			console.log('removeOrder()');
+			// for (var i=elements.length-1; i>=0; i--) {
+			// 		var dataInfo = elements[i].getAttribute('data-dtm-tracking').split('|');
+			//     var carClass = dataInfo[1];
+			//     var indexOrder = dataInfo[4];
+			// 		elements[i].style.order = indexOrder;
+			// }
+
+			var o = 0;
+			var featVehicle = document.querySelector('.iso-preSelectedClass .vehicle-item');
+			var vehicleItemsAll = document.querySelectorAll('.vehicle-list > li');
+			var lastPreselectedIndex = document.querySelectorAll(isoTest.preSelected).length -1;
+			var lastPreselected = document.querySelectorAll(isoTest.preSelected)[lastPreselectedIndex];
+			if(lastPreselected){
+				var vehicleItems = Array.prototype.slice.call(vehicleItemsAll);
+				lastPreselectedIndex = vehicleItems.indexOf(lastPreselected.parentNode);
 			}
 
-			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .iso-high-to-low');
-			// var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
-			var cars = ReservationStateTree.get().model.carSelect.filteredVehicles;
-			var highToLow = isoTest.sortPriceHighToLow(cars);
+			if(featVehicle){
+				if(!featVehicle.classList.contains('is-search-by-filter') || !featVehicle.classList.contains('is-pre-selected')){
+					for(var i=0;i < vehicleItemsAll.length; i++){
+						if(!vehicleItemsAll[i].classList.contains('iso-preSelectedClass')){
+							vehicleItemsAll[i].style.order = o;
+							if(i==0 && lastPreselectedIndex == -1 && !vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points')){
+								featVehicle.parentNode.style.order = -1;
+							} else if(i==0 && lastPreselectedIndex == -1 && vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points')){
+								o +=1;
+								featVehicle.parentNode.style.order = o;
+							} else if(i == lastPreselectedIndex){
+								o +=1;
+								featVehicle.parentNode.style.order = o;
+							}
+							o++;
+						} else {
+							if(i==0 && vehicleItemsAll[i].classList.contains('iso-preSelectedClass')){
+								featVehicle.parentNode.style.order = o;
+								o++;
+							}
+						}
+					}
+				}
+			}
+
+		},
+		highToLowSelected : function() {
+			console.log('highToLowSelected()');
+			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
+			var sortedPrice = isoTest.priceSort();
+			var highToLow = isoTest.sortPriceHighToLow(sortedPrice);
+			// console.log(highToLow);
 			isoTest.setOrder(carsContainerList, highToLow);
 		},
 		lowToHighSelected : function() {
-			var l = document.getElementsByClassName('vehicle-list__item');
-			for(var i = 0; i < l.length; i++) {
-				l[i].classList.add('iso-low-to-high');
-			}
-
+			console.log('lowToHighSelected()');
 			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
-			var cars = ReservationStateTree.get().model.carSelect.filteredVehicles;
-			var lowToHigh = isoTest.sortPriceLowToHigh(cars);
+			var sortedPrice = isoTest.priceSort();
+			var lowToHigh = isoTest.sortPriceLowToHigh(sortedPrice);
+			// console.log(lowToHigh);
 			isoTest.setOrder(carsContainerList, lowToHigh);
 		},
 		recommendedSelected : function() {
+			console.log('recommendedSelected()');
 			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
 			isoTest.removeOrder(carsContainerList);
 		},
 		addEvents : function() {
+			console.log('addEvents()');
 			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox input,.vehicle-filter__header-link');
 			for(var i = 0; i < filterElements.length; i++) {
-		    filterElements[i].addEventListener('click', function(){
-		    	// console.log('filter clicked');
-
+		    filterElements[i].addEventListener('click', function(event){
 		    	var sortFilter = document.getElementById("iso-filter-sort");
 		 			var selectedValue = sortFilter.options[sortFilter.selectedIndex].value;
 		 			setTimeout(function(){
 				    if (selectedValue == "Recommended") {
-				    	// console.log('Recommended in filter');
+				    	console.log('Recommended filter');
 							isoTest.recommendedSelected();
 				   	}
 
 				   	if (selectedValue == "Price Low to High") {
-				    	// console.log('low to high in filter');
+				   		console.log('Low to High Filter');
 							isoTest.lowToHighSelected();
+
 				   	}
 
 				   	if (selectedValue == "Price High to Low") {
-				    	// console.log('high to low in filter');
+				   		console.log('High to Low Filter');
 							isoTest.highToLowSelected();
 				   	}
-				  }, 200);
+				  }, 2001);
+				  
 		    }, false);
 			}
 
@@ -211,17 +244,17 @@
 				if (event.target.id !== 'iso-filter-sort') return;
 
 				if (event.target.value === 'Recommended') {
-					// console.log('Recommended clicked');
+					console.log('Recommended clicked');
 					isoTest.recommendedSelected();
 				}
 
 				if (event.target.value === 'Price Low to High') {
-					// console.log('low to high clicked');
+					console.log('low to high clicked');
 					isoTest.lowToHighSelected();
 				}
 
 				if (event.target.value === 'Price High to Low') {
-					// console.log('high to low clicked');
+					console.log('high to low clicked');
 					isoTest.highToLowSelected();
 				}
 
