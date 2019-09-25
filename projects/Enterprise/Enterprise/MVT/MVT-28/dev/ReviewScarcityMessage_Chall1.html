@@ -1,0 +1,100 @@
+<style>
+	.iso-scarcity {
+		background-color: #fff;
+		border: 1px solid #c3c3c3;
+		font-size: 14px;
+		margin-bottom: 1.5625rem;
+		padding: 14px 31px;
+	}
+	.iso-scarcity .content {
+		display: inline-block;
+		margin-left: 10px;
+		width: calc(100% - 30px);
+	}
+	.iso-scarcity .content small {
+		font-size: 11px;
+	}
+	.iso-icon .icon-nav-time {
+		background-image: url(/content/dam/ecom/hosted/ico-clock.png);
+		background-size: auto 100%;
+		float: left;
+	}
+@media (max-width: 46.8em) {
+	.iso-scarcity {
+		padding: 14px 20px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Review Scarcity Message',
+		creative : 'Challenger 1',
+		selector: '#commit .aside',
+		template : '<div class="iso-scarcity">\
+									<div class="iso-icon"><i class="icon icon-nav-time"></i></div>\
+									<div class="content"><strong>Book Now to Lock-in Your Rate</strong><br /><small>Pricing and availability subject to change.</small></div>\
+								</div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			if(!document.querySelector('.iso-scarcity')){
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',isoTest.template);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
