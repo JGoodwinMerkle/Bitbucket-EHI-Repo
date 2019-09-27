@@ -42,7 +42,7 @@
 			
 		},
 		chall : function() {
-			document.querySelector(isoTest.selector).insertAdjacentHTML('beforeend','<a href="https:\/\/www.enterprisecarsales.com/testdrivepoints?mcid=enterprise:36855506"><section class="text-capsule-tile align-center gutter-narrow"><img class="text-capsule-tile__image" src="/content/dam/enterprise/icons/promo-icons/loyalty.png.wrend.480.270.png" alt=""><h2 class="text-capsule-tile__heading">Test Drive and Earn 1,000 Bonus Points</h2><div style="display:none;"></div><div class="text-capsule-tile__text">Enterprise Plus® members, test drive at select Car Sales dealerships and earn bonus points. Restrictions apply.</div></section></a>');
+			document.querySelector(isoTest.selector).insertAdjacentHTML('beforeend','<a href="https:\/\/www.enterprisecarsales.com/testdrivepoints?mcid=enterprise:36855506"><section class="text-capsule-tile align-center gutter-narrow"><img class="text-capsule-tile__image" src="/content/dam/enterprise/icons/promo-icons/loyalty.png.wrend.480.270.png" alt="badge icon"><h2 class="text-capsule-tile__heading">Test Drive and Earn 1,000 Bonus Points</h2><div style="display:none;"></div><div class="text-capsule-tile__text">Enterprise Plus® members, test drive at select Car Sales dealerships and earn bonus points. Restrictions apply.</div></section></a>');
 
 			isoTest.bindEvents();
 		},
@@ -55,6 +55,15 @@
 	      	if(window._analytics){
 				isoTest.showHide();
 	      	}
+
+	      	document.querySelector(isoTest.selector).addEventListener('click', function(event) {
+	      		if (event.target.matches('.text-capsule-item:nth-of-type(3) a:nth-of-type(1) *')) {
+	      			isoTest.fireTag(this,'Homepage Car Sales Promo Tile: Non-Member');
+	      		}
+	      		if (event.target.matches('.text-capsule-item:nth-of-type(3) a:nth-of-type(2) *')) {
+	      			isoTest.fireTag(this,'Homepage Car Sales Promo Tile: Member');
+	      		}
+	      	});
 	    },
 	    showHide: function(){
 	    	if (_analytics && _analytics.renter && _analytics.renter.authenticated === true) {
@@ -67,8 +76,13 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
-		}
-
+		},
+		fireTag: function(element, value) {
+            var linkName = value ? value : element.innerText;
+            s.linkTrackVars = 'eVar20';
+            s.eVar89 = linkName;
+            s.tl(this, 'o', linkName);
+        }
 	}
 
 	var helpers = {
