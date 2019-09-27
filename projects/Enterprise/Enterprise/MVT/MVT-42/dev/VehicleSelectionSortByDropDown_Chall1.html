@@ -18,18 +18,18 @@
   -moz-appearance: none;
   appearance: none;
 	background-color: rgba(255, 255, 255, 1);
+	background-position-x: 175px;
+	background-position-y: center;
+	background-repeat: no-repeat;
+	background-size: 6%;
 	border-color: rgba(195, 195, 195, 1);
   border-radius: 0;
-  height: 39px;
-  width: 200px;
-  background-size: 6%;
-  background-position-y: center;
-  background-repeat: no-repeat;
-  background-position-x: 175px;
-  padding-left: 10px;
-  font-weight: 400;
-  font-size: 15px;
   color: #181918;
+  font-size: 15px;
+  font-weight: 400;
+  height: 39px;
+  padding-left: 10px;
+  width: 200px; 
 }
 
 .vehicle-header__info .iso-filter-container select.iso-dropdown-filter::-ms-expand {
@@ -51,8 +51,8 @@
 	}
 
 	.vehicle-header__info .iso-filter-header-mobile {
-		display: block;
 		color: #181918;
+		display: block;
 		font-size: 15px;
 		font-weight: 600; 
 	}
@@ -108,7 +108,7 @@
 		
 		},
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
+			if(/cars/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -116,6 +116,7 @@
 		},
 		chall : function() {
 			isoTest.log('chall()');
+
 			var viewport = document.querySelector("meta[name=viewport]");
 			viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
 
@@ -125,11 +126,12 @@
 			document.getElementsByClassName('vehicle-list')[0].classList.add('iso-available-vehicles');
 
 			isoTest.addEvents();
-
 		},
 		priceSort : function () {
 			isoTest.log('priceSort()');
-			var cars = ReservationStateTree.get().model.carSelect.filteredVehicles;
+
+
+			var cars = ReservationStateTree.get(['model','carSelect','filteredVehicles']);
 			var arr = [];
 	    var prop;
 	    for (prop in cars) {
@@ -155,6 +157,7 @@
 		},
 		sortPriceHighToLow : function(arr) {
 			isoTest.log('sortPriceHighToLow()');
+
 	    arr.sort(function(a, b) {
 	      return b.value - a.value;
 	    });
@@ -162,6 +165,7 @@
 		},
 		sortPriceLowToHigh : function(arr) {
 			isoTest.log('sortPriceLowToHigh()');
+
 	    arr.sort(function(a, b) {
 	      return a.value - b.value;
 	    });
@@ -169,6 +173,7 @@
 		},
 		setOrder : function(elements, array) {
 			isoTest.log('setOrder()');
+
 			array.forEach(function (a, index) {
 				for (var i=elements.length-1; i>=0; i--) {
 					var dataInfo = elements[i].getAttribute('data-dtm-tracking').split('|');
@@ -181,6 +186,7 @@
 		},
 		removeOrder : function(elements) {
 			isoTest.log('removeOrder()');
+
 			var o = 0;
 			var featVehicle = document.querySelector('.iso-preSelectedClass .vehicle-item');
 			var vehicleItemsAll = document.querySelectorAll('.vehicle-list > li');
@@ -215,10 +221,10 @@
 					}
 				}
 			}
-
 		},
 		highToLowSelected : function() {
 			isoTest.log('highToLowSelected()');
+
 			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
 			var sortedPrice = isoTest.priceSort();
 			var highToLow = isoTest.sortPriceHighToLow(sortedPrice);
@@ -226,6 +232,7 @@
 		},
 		lowToHighSelected : function() {
 			isoTest.log('lowToHighSelected()');
+
 			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
 			var sortedPrice = isoTest.priceSort();
 			var lowToHigh = isoTest.sortPriceLowToHigh(sortedPrice);
@@ -233,11 +240,13 @@
 		},
 		recommendedSelected : function() {
 			isoTest.log('recommendedSelected()');
+
 			var carsContainerList = document.querySelectorAll('.vehicle-list.iso-available-vehicles .vehicle-list__item');
 			isoTest.removeOrder(carsContainerList);
 		},
 		addEvents : function() {
 			isoTest.log('addEvents()');
+
 			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox,.vehicle-filter__header-link');
 			for(var i = 0; i < filterElements.length; i++) {
 		    filterElements[i].addEventListener('click', function(event){
@@ -250,18 +259,16 @@
 
 				   	if (selectedValue == "Price Low to High") {
 							isoTest.lowToHighSelected();
-
 				   	}
 
 				   	if (selectedValue == "Price High to Low") {
 							isoTest.highToLowSelected();
 				   	}
-				  }, 201);
-				  
+				  }, 201); 
 		    }, false);
 			}
 
-			document.addEventListener('input', function (event) {
+			document.addEventListener('onchange', function (event) {
 				if (event.target.id !== 'iso-filter-sort') return;
 
 				if (event.target.value === 'Recommended') {
@@ -308,7 +315,7 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
-		},
+		}
 	}
 
 	isoTest.init();
