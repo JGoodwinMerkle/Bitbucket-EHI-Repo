@@ -1,0 +1,105 @@
+<style>
+	.text-capsule-item:nth-of-type(3) a:nth-of-type(1) {
+		display: block;
+	}
+	.text-capsule-item:nth-of-type(3) a:nth-of-type(2) {
+		display: none;
+	}
+	.text-capsule-item:nth-of-type(3).user-auth a:nth-of-type(1) {
+		display: none;
+	}
+	.text-capsule-item:nth-of-type(3).user-auth a:nth-of-type(2) {
+		display: block;
+	} 
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Enterprise: Homepage Car Sales Promo Tile',
+		creative : 'Challenger 0',
+		selector: '.text-capsule-item:nth-of-type(3)',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			document.querySelector(isoTest.selector).insertAdjacentHTML('beforeend','<a href="https:\/\/www.enterprisecarsales.com/testdrivepoints?mcid=enterprise:36855506"><section class="text-capsule-tile align-center gutter-narrow"><img class="text-capsule-tile__image" src="/content/dam/enterprise/icons/promo-icons/loyalty.png.wrend.480.270.png" alt="badge icon"><h2 class="text-capsule-tile__heading">Test Drive and Earn 1,000 Bonus Points</h2><div style="display:none;"></div><div class="text-capsule-tile__text">Enterprise Plus® members, test drive at select Car Sales dealerships and earn bonus points. Restrictions apply.</div></section></a>');
+
+			isoTest.bindEvents();
+		},
+		bindEvents: function(){
+	      	// user signin
+	      	document.querySelector('html').addEventListener('analytics', function(obj) {
+	      		isoTest.showHide();
+	      	});
+	      
+	      	if(window._analytics){
+				isoTest.showHide();
+	      	}
+
+	      	document.querySelector(isoTest.selector).addEventListener('click', function(event) {
+	      		if (event.target.matches('.text-capsule-item:nth-of-type(3) a:nth-of-type(1) *')) {
+	      			isoTest.fireTag(this,'Homepage Car Sales Promo Tile: Non-Member');
+	      		}
+	      		if (event.target.matches('.text-capsule-item:nth-of-type(3) a:nth-of-type(2) *')) {
+	      			isoTest.fireTag(this,'Homepage Car Sales Promo Tile: Member');
+	      		}
+	      	});
+	    },
+	    showHide: function(){
+	    	if (_analytics && _analytics.renter && _analytics.renter.authenticated === true) {
+	          document.querySelector(isoTest.selector).classList.add('user-auth');
+	        } else if (_analytics && _analytics.renter && _analytics.renter.authenticated === false) {
+	          document.querySelector(isoTest.selector).classList.remove('user-auth');
+	        }
+	    },
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		},
+		fireTag: function(element, value) {
+            var linkName = value ? value : element.innerText;
+            s.linkTrackVars = 'eVar20';
+            s.eVar89 = linkName;
+            s.tl(this, 'o', linkName);
+        }
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>
