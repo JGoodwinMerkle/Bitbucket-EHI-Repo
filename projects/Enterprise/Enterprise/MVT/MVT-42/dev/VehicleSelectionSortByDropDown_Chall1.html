@@ -130,8 +130,8 @@
 		priceSort : function () {
 			isoTest.log('priceSort()');
 
-
 			var cars = ReservationStateTree.get(['model','carSelect','filteredVehicles']);
+			var paymentType = ReservationStateTree.get(['model','carSelect','payType']);
 			var arr = [];
 	    var prop;
 	    for (prop in cars) {
@@ -140,14 +140,14 @@
             if (cars[prop].status != "RESTRICTED_AT_RETAIL_RATE") {
               arr.push({
                 'key': prop,
-                'value': cars[prop].charges.PAYLATER.total_price_payment.amount,
-                'code' : cars[prop].code
+                'value': cars[prop]['charges'][paymentType]['total_price_view']['amount'],
+                'code' : cars[prop]['code']
               });
             } else {
             	arr.push({
                 'key': prop,
                 'value': 'x',
-                'code' : cars[prop].code
+                'code' : cars[prop]['code']
               });
             }
           }
@@ -197,26 +197,24 @@
 				lastPreselectedIndex = vehicleItems.indexOf(lastPreselected.parentNode);
 			}
 
-			if(featVehicle){
-				if(!featVehicle.classList.contains('is-search-by-filter') || !featVehicle.classList.contains('is-pre-selected')){
-					for(var i=0;i < vehicleItemsAll.length; i++){
-						if(!vehicleItemsAll[i].classList.contains('iso-preSelectedClass')){
-							vehicleItemsAll[i].style.order = o;
-							if(i==0 && lastPreselectedIndex == -1 && !vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points')){
-								featVehicle.parentNode.style.order = -1;
-							} else if(i==0 && lastPreselectedIndex == -1 && vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points')){
-								o +=1;
-								featVehicle.parentNode.style.order = o;
-							} else if(i == lastPreselectedIndex){
-								o +=1;
-								featVehicle.parentNode.style.order = o;
-							}
+			if(featVehicle && (!featVehicle.classList.contains('is-search-by-filter') || !featVehicle.classList.contains('is-pre-selected'))){
+				for(var i=0;i < vehicleItemsAll.length; i++){
+					if(!vehicleItemsAll[i].classList.contains('iso-preSelectedClass')){
+						vehicleItemsAll[i].style.order = o;
+						if(i==0 && lastPreselectedIndex == -1 && (vehicleItemsAll[i].classList.contains('vehicle-list__unavailable-car') || vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points'))){
+							o +=1;
+							featVehicle.parentNode.style.order = o;
+						} else if(i==0 && lastPreselectedIndex == -1 && !vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points')){
+							featVehicle.parentNode.style.order = -1;
+						} else if(i == lastPreselectedIndex){
+							o +=1;
+							featVehicle.parentNode.style.order = o;
+						}
+						o++;
+					} else {
+						if(i==0 && vehicleItemsAll[i].classList.contains('iso-preSelectedClass')){
+							featVehicle.parentNode.style.order = o;
 							o++;
-						} else {
-							if(i==0 && vehicleItemsAll[i].classList.contains('iso-preSelectedClass')){
-								featVehicle.parentNode.style.order = o;
-								o++;
-							}
 						}
 					}
 				}
