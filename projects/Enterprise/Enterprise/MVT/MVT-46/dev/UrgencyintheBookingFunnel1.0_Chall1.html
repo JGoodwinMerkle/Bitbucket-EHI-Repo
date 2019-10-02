@@ -159,9 +159,13 @@ i.icon.iso-warning-icon {
 			}
 		},
 		chall : function() {
-			document.querySelector(isoTest.selector).insertAdjacentHTML('afterend',"<div class='iso-warning-container-xl'>" + isoTest.warningMessage + "</div>");
+			if (document.querySelector('.iso-warning-container-xl') == null) {
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterend',"<div class='iso-warning-container-xl'>" + isoTest.warningMessage + "</div>");
+			}
 
-			document.querySelector('.vehicle-select__aside').insertAdjacentHTML('afterend',"<div class='iso-warning-container-sm'>" + isoTest.warningMessage + "</div>");
+			if (document.querySelector('.iso-warning-container-sm') == null) {
+				document.querySelector('.vehicle-select__aside').insertAdjacentHTML('afterend',"<div class='iso-warning-container-sm'>" + isoTest.warningMessage + "</div>");
+			}
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
