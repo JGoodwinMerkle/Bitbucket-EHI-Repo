@@ -69,21 +69,23 @@ i.icon.iso-warning-icon {
 	.iso-warning-text {
 		margin-top: -3px;
 	}
+
+	.iso-warning-text .iso-line2 {
+		display: block;
+	}
 }
 
-@media (max-width: 824px) {
+@media (max-width: 823px) {
 	.iso-warning-text {
 		margin-top: -3px;
 	}
-}
 
-@media screen and (max-width: 824px) and (min-width: 800px) {
-	.iso-warning-text {
-		width: 98%;
+	.iso-warning-text .iso-line2 {
+		display: block;
 	}
 }
 
-@media (max-width: 500px) {
+@media (max-width: 517px) {
 	i.icon.iso-warning-icon {
 		margin-left: 0px;
 	  margin-right: 10px;
@@ -95,14 +97,14 @@ i.icon.iso-warning-icon {
 	}
 }
 
-@media (max-width: 400px) {
+@media (max-width: 411px) {
 	i.icon.iso-warning-icon {
 	  height: 22px;
 	  width: 22px;
 	}
 }
 
-@media (max-width: 366px) {
+@media (max-width: 403px) {
 	.iso-warning-inner {
 		padding: 20px 12px;
 	}
@@ -113,6 +115,12 @@ i.icon.iso-warning-icon {
 
 	.iso-warning-text {
 		margin-top: -10.5px;
+	}
+}
+
+@media (max-width: 330px) {
+	.iso-warning-text .iso-line2 {
+		display: inline;
 	}
 }
 </style>
@@ -127,7 +135,7 @@ i.icon.iso-warning-icon {
 		selector : '.vehicle-select__header',
 		warningMessage : "<div class='iso-warning-inner'>\
 												<i class='icon ko icon-nav-time-white iso-warning-icon' title='icon-nav-time-white'></i>\
-												<div class='iso-warning-text'>We get lots of bookings for this destination. <span class='iso-bold'>Prices are likely to change - book now</span> to secure this price.</div>\
+												<div class='iso-warning-text'>We get lots of bookings for this destination. <span class='iso-line2'><span class='iso-bold'>Prices are likely to change - book now</span> to secure this price.</span></div>\
 											</div>",
 		init : function() {
 
