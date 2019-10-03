@@ -1,0 +1,203 @@
+<style>
+.iso-warning-container-sm {
+  background-color: #363636; 
+  box-sizing: border-box;
+  display: block;
+  height: 54px;
+  margin-bottom: 20px;
+  margin-left: .9375rem;
+  margin-right: .9375rem;
+}
+
+.iso-warning-container-xl {
+  display: none;
+}
+
+.iso-warning-inner {
+	height: 100%;
+	padding: 10px 12px;
+}
+
+i.icon.iso-warning-icon {
+	display: inline-block;
+	float: left;
+  height: 30px;
+  margin-left: 18px;
+  margin-right: 25px;
+  width: 30px;
+}
+
+.iso-warning-text {
+	color: #FFFFFF;
+	display: block;
+	font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  margin-top: 7px;
+}
+
+.iso-warning-text .iso-bold {
+	font-weight: 700;
+}
+
+@media (min-width: 1082px) {
+	.vehicle-select__aside {
+		margin-top: -54px;
+	}
+
+	.vehicle-select__main {
+		margin-top: 20px;
+	}
+
+	.iso-warning-container-sm {
+		display: none;
+	}
+
+	.iso-warning-container-xl {
+	  background-color: #363636;
+	  box-sizing: border-box;
+	  display: block;
+	  height: 54px;
+	  margin-left: 300px;
+	  position: relative;
+	  width: 100%;
+	}
+}
+
+@media screen and (max-width: 1140px) and (min-width: 1082px) {
+	.iso-warning-text {
+		margin-top: -3px;
+	}
+
+	.iso-warning-text .iso-line2 {
+		display: block;
+	}
+}
+
+@media (max-width: 823px) {
+	.iso-warning-text {
+		margin-top: -3px;
+	}
+
+	.iso-warning-text .iso-line2 {
+		display: block;
+	}
+}
+
+@media (max-width: 517px) {
+	i.icon.iso-warning-icon {
+		margin-left: 0px;
+	  margin-right: 10px;
+	}
+	.iso-warning-text {
+		font-size: 13px;
+		line-height: 15px;
+		margin-top: 2px;
+	}
+}
+
+@media (max-width: 411px) {
+	i.icon.iso-warning-icon {
+	  height: 22px;
+	  width: 22px;
+	}
+}
+
+@media (max-width: 403px) {
+	.iso-warning-inner {
+		padding: 20px 12px;
+	}
+
+	.iso-warning-container-sm {
+		height: 64px;
+	}
+
+	.iso-warning-text {
+		margin-top: -10.5px;
+	}
+}
+
+@media (max-width: 330px) {
+	.iso-warning-text .iso-line2 {
+		display: inline;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.co.uk',
+		test : 'Urgency in the Booking Funnel 1.0',
+		creative : 'Challenger 1',
+		selector : '.vehicle-select__header',
+		warningMessage : "<div class='iso-warning-inner'>\
+												<i class='icon ko icon-nav-time-white iso-warning-icon' title='icon-nav-time-white'></i>\
+												<div class='iso-warning-text'>We get lots of bookings for this destination. <span class='iso-line2'><span class='iso-bold'>Prices are likely to change - book now</span> to secure this price.</span></div>\
+											</div>",
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			if (document.querySelector('.iso-warning-container-xl') == null) {
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterend',"<div class='iso-warning-container-xl'>" + isoTest.warningMessage + "</div>");
+			}
+
+			if (document.querySelector('.iso-warning-container-sm') == null) {
+				document.querySelector('.vehicle-select__aside').insertAdjacentHTML('afterend',"<div class='iso-warning-container-sm'>" + isoTest.warningMessage + "</div>");
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
