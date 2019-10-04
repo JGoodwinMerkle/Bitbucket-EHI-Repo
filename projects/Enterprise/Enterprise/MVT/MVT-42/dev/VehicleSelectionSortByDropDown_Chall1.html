@@ -134,22 +134,19 @@
 			var paymentType = ReservationStateTree.get(['model','carSelect','payType']);
 			var arr = [];
 	    var prop;
+	    var totalpayment;
+	    var newValue;
 	    for (prop in cars) {
 	      if (cars.hasOwnProperty(prop)) {
           if (cars[prop].status != "SOLD_OUT") {
-            if (cars[prop].status != "RESTRICTED_AT_RETAIL_RATE") {
-              arr.push({
-                'key': prop,
-                'value': cars[prop]['charges'][paymentType]['total_price_view']['amount'],
-                'code' : cars[prop]['code']
-              });
-            } else {
-            	arr.push({
-                'key': prop,
-                'value': 'x',
-                'code' : cars[prop]['code']
-              });
-            }
+          	totalpayment = cars[prop]['charges'][paymentType]['total_price_view']['amount'];
+          	newValue = (cars[prop].status == "RESTRICTED_AT_RETAIL_RATE") ? 'x' : totalpayment;
+
+            arr.push({
+              'key': prop,
+              'value': newValue,
+              'code' : cars[prop]['code']
+            });
           }
 	      }
 	    }
@@ -201,11 +198,11 @@
 				for(var i=0;i < vehicleItemsAll.length; i++){
 					if(!vehicleItemsAll[i].classList.contains('iso-preSelectedClass')){
 						vehicleItemsAll[i].style.order = o;
-						if(i==0 && lastPreselectedIndex == -1 && (vehicleItemsAll[i].classList.contains('vehicle-list__unavailable-car') || vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points'))){
+						if(i==0 && lastPreselectedIndex == -1 && !vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points')){
+							featVehicle.parentNode.style.order = -1;
+						} else if(i==0 && lastPreselectedIndex == -1 && (vehicleItemsAll[i].classList.contains('vehicle-list__unavailable-car') || vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points'))){
 							o +=1;
 							featVehicle.parentNode.style.order = o;
-						} else if(i==0 && lastPreselectedIndex == -1 && !vehicleItemsAll[i].firstChild.classList.contains('vehicle-not-enough-points')){
-							featVehicle.parentNode.style.order = -1;
 						} else if(i == lastPreselectedIndex){
 							o +=1;
 							featVehicle.parentNode.style.order = o;
@@ -266,7 +263,7 @@
 		    }, false);
 			}
 
-			document.addEventListener('onchange', function (event) {
+			document.addEventListener('input', function (event) {
 				if (event.target.id !== 'iso-filter-sort') return;
 
 				if (event.target.value === 'Recommended') {
