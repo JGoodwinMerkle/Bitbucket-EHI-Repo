@@ -129,6 +129,10 @@
     padding-bottom: 0.8em;
 }
 
+.cf .field-container.country {
+    margin-top: 1em;
+}
+
 .error-expedited-radio {
     display: none;
     margin: 14px 0;
@@ -430,9 +434,16 @@
 .iso-expedited .icon {
 	float: right;
 	margin-left: 20px;
-    max-width: 70px;
+    max-width: auto;
 	width: 20%;
 }
+
+.iso-expedited .icon img {
+    float: right;
+    margin-top: 5px;
+    max-width: 60px;
+}
+
 .iso-expedited-skip {
 	border-bottom: 1px solid #d3d3d3;
     margin:10px 0 20px;
@@ -511,6 +522,8 @@
             formContentWrap.innerHTML = '<div class="error-container error-expedited-radio"><span class="error-prefix">ERROR:</span> Please make a selection.</div><h2 class="view-header"><span class="expedited-skip">Skip this section</span><span class="expedite-statc-text">Save Time At the Counter</span></h2><div class="expedited-disclaimer"><div class="iso-expedited"><div class="content"><p>Add more rental details and <strong>spend less time at the counter.</strong></p><ul><li>No payment is needed and you won\'t be charged right now.</li><li>You can still cancel at any time.</li><li>It should only take a couple of minutes.</li></ul></div><div class="icon"><img src="/content/dam/ecom/hosted/ico-clock.png"></div></div></div><form class="expedited-option"><p>Would you like to save time at the counter? *</p><span><input type="radio" name="group-1" value="yes" id="expedited-yes" class="expedited-radio" required><label for="expedited-yes">Yes, I\'d like to save time</label></span><span><input type="radio" name="group-1" value="no" id="expedited-no" class="expedited-radio"><label for="expedited-no">No, not today</label></span><input type="submit" value="" id="expedited-submit"></form><div class="expedited-no-note"><p>No problem. It will take a little longer to gather your information at the counter but we\'ll get you to your vehicle as quickly as we can.</p></div><div class="expedited-progress-bar"><div class="epb-step epb-step-1"><span>1</span><p>Lookup Your Details</p></div><div class="epb-arrow"><div class="arrow" aria-hidden="true">→</div></div><div class="epb-step epb-step-2"><span>2</span><p>Verify<span>/Complete</span> Your Details</p></div></div>';
             expeditedForm.parentNode.insertBefore( formContentWrap, expeditedForm );
 
+            
+
             // Add duplicate reserve button & hide real reserve button
             var realSubmit = document.querySelector('#reviewSubmit');
             realSubmit.classList.add('hide');
@@ -552,6 +565,10 @@
                         expeditedError.classList.remove('show');
                         isoTest.fireTag(this, 'Expedited Question: Yes');
                         expeditedForm.hidden = false;
+                        // Add required indicators to yes fields
+                        document.querySelector('.expedited-form label[for="find-country"]').textContent = 'Issuing Country *';
+                        document.querySelector('.expedited-form label[for="find-region"]').textContent = 'Issuing Authority *';
+                        document.querySelector('.expedited-form label[for="find-license"]').textContent = 'Driver\'s License Number *';
                     } else {
                         // NO chosen
                         expedited.classList.add('chose-no');
