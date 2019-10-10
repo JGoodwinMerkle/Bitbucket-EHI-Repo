@@ -261,7 +261,6 @@
 						typeof window.ReservationStateTree.data.session.reservationSession !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.corporate !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.selectedCarClassDetails !== 'undefined' &&
-						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
 						isoHash.isLioLoaded()){
 
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
