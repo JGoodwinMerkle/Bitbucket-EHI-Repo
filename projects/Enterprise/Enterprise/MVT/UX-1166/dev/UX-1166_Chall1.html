@@ -52,20 +52,20 @@
 		modifyCss : '<style id="iso-modify">#modify,.modal-overlay { display: none; }</style>',
 		init : function() {
 
-			isoTest.debug = true; //Boolean(helpers.getQueryParam('debug'));
-			
+			//isoTest.debug = true; //Boolean(helpers.getQueryParam('debug'));
+
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
 				//_satellite.track('target_variables');
 			}
-		
+
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-				
-			isoTest.elementLoaded(isoTest.header, function() {	
-				isoTest.log('Test Ready!');	
+
+			isoTest.elementLoaded(isoTest.header, function() {
+				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
 
@@ -73,7 +73,7 @@
 		},
 		hashHandler : function(){
 			if(/details/.test(location.hash)){
-				isoTest.elementLoaded(isoTest.header, function() {	
+				isoTest.elementLoaded(isoTest.header, function() {
 					isoTest.chall();
 				});
 			}
@@ -120,17 +120,18 @@
 			isoTest.log('fn:: triggerModify');
 			document.querySelector('body').insertAdjacentHTML('beforeend',isoTest.modifyCss);
 			var modifyInt = setInterval(function () {
-				if(document.querySelector('.information-block.vehicle .edit')){
+				if(document.querySelector('a[data-dtm-tracking^=vehicle_details]')){
 					clearInterval(modifyInt);
-					isoTest.triggerBtn('.information-block.vehicle .edit');
-					isoTest.selectView();	
+					isoTest.triggerBtn('a[data-dtm-tracking^=vehicle_details]');
+					isoTest.selectView();
 				}
 			},200);
 		},
 		triggerBtn : function(selector) {
 			isoTest.log('fn:: triggerBtn:: '+ selector);
-			var event = new Event('click', { bubbles: true });
-			document.querySelector(selector).dispatchEvent(event);
+      document.querySelector(selector).click();
+			// var event = new Event('click', { bubbles: true });
+			// document.querySelector(selector).dispatchEvent(event);
 		},
 		selectView : function(){
 			isoTest.log('fn:: selectView');
@@ -144,9 +145,9 @@
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
-			s.linkTrackVars = 'eVar20'; 
-			s.eVar20 = linkName; 
-			s.tl(this, 'o', linkName); 
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		elementLoaded : function (ele, callback) {
 			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
@@ -160,13 +161,13 @@
 	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-		
+
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
 		}
-		
+
 	}
 
 	var helpers = {
