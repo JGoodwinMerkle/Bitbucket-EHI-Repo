@@ -238,11 +238,37 @@
 		    }, false);
 			}
 
-			var sortElements = document.querySelectorAll('.iso-filter-opt');
-			for(var i = 0; i < sortElements.length; i++) {
+			if (/Edge\/\d./i.test(navigator.userAgent)) {
+				var sortElements = document.querySelectorAll('.iso-filter-opt');
+				for(var i = 0; i < sortElements.length; i++) {
 
-				sortElements[i].addEventListener('click', function(event){
-		    	if (event.target.value === 'Recommended') {
+					sortElements[i].addEventListener('click', function(event){
+			    	if (event.target.value === 'Recommended') {
+							// console.log('recommended');
+							isoTest.fireTag('.opt-one','Sort Recommended');
+							isoTest.recommendedSelected();
+						}
+
+						if (event.target.value === 'Price Low to High') {
+							// console.log('low to high');
+							isoTest.fireTag('.opt-two','Sort Price Low to High');
+							isoTest.lowToHighSelected();
+						}
+
+						if (event.target.value === 'Price High to Low') {
+							// console.log('high to low');
+							isoTest.fireTag('.opt-three','Sort Price High to Low');
+							isoTest.highToLowSelected();
+						}
+			    }, false);
+				}
+			} else {
+				document.addEventListener('input', function (event) {
+					// console.log('input listener');
+					// console.log(event.target.value);
+					if (event.target.id !== 'iso-filter-sort') return;
+
+					if (event.target.value === 'Recommended') {
 						// console.log('recommended');
 						isoTest.fireTag('.opt-one','Sort Recommended');
 						isoTest.recommendedSelected();
@@ -259,9 +285,11 @@
 						isoTest.fireTag('.opt-three','Sort Price High to Low');
 						isoTest.highToLowSelected();
 					}
-		    }, false);
 
+				}, false);
 			}
+
+
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
