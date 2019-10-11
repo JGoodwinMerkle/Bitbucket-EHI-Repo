@@ -219,6 +219,7 @@
 			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox,.vehicle-filter__header-link');
 			for(var i = 0; i < filterElements.length; i++) {
 		    filterElements[i].addEventListener('click', function(event){
+		    	// console.log(filterElements[i]);
 		    	var sortFilter = document.getElementById("iso-filter-sort");
 		 			var selectedValue = sortFilter.options[sortFilter.selectedIndex].value;
 		 			setTimeout(function(){
@@ -237,25 +238,30 @@
 		    }, false);
 			}
 
-			document.addEventListener('input', function (event) {
-				if (event.target.id !== 'iso-filter-sort') return;
+			var sortElements = document.querySelectorAll('.iso-filter-opt');
+			for(var i = 0; i < sortElements.length; i++) {
 
-				if (event.target.value === 'Recommended') {
-					isoTest.fireTag('.opt-one','Sort Recommended');
-					isoTest.recommendedSelected();
-				}
+				sortElements[i].addEventListener('click', function(event){
+		    	if (event.target.value === 'Recommended') {
+						// console.log('recommended');
+						isoTest.fireTag('.opt-one','Sort Recommended');
+						isoTest.recommendedSelected();
+					}
 
-				if (event.target.value === 'Price Low to High') {
-					isoTest.fireTag('.opt-two','Sort Price Low to High');
-					isoTest.lowToHighSelected();
-				}
+					if (event.target.value === 'Price Low to High') {
+						// console.log('low to high');
+						isoTest.fireTag('.opt-two','Sort Price Low to High');
+						isoTest.lowToHighSelected();
+					}
 
-				if (event.target.value === 'Price High to Low') {
-					isoTest.fireTag('.opt-three','Sort Price High to Low');
-					isoTest.highToLowSelected();
-				}
+					if (event.target.value === 'Price High to Low') {
+						// console.log('high to low');
+						isoTest.fireTag('.opt-three','Sort Price High to Low');
+						isoTest.highToLowSelected();
+					}
+		    }, false);
 
-			}, false);
+			}
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
