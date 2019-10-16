@@ -2,10 +2,10 @@
 (function() {
 	'use strict';
 	var isoTest = {
-		account : 'EHI',
-		portfolio : 'Enterprise',
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca',
 		test : 'PYP 2019',
-		creative : 'Challenger 1',
+		creative : 'Loyalty Not Registered',
 		selector: '.custom-banner__cta',
 		BannerContent : '.custom-banner .custom-banner__content',
 		BannerCTA : '.custom-banner .custom-banner__ctas-wrapper',
@@ -59,7 +59,7 @@
 		},
 		bindEvents: function(){
 	      	document.querySelector(isoTest.selector).addEventListener('click', function(event) {
-	      		isoTest.fireTag(this,'CTA Click');
+	      		isoTest.fireTag(this, isoTest.creative + ' : REGISTER NOW');
 	      	});
 	    },
 		fireTag : function(element, value) {
