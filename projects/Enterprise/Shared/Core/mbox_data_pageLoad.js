@@ -7,9 +7,10 @@
 			return isoData.isLioEnabled ? typeof window.lio !== 'undefined' && typeof window.lio.segmentsArray !== 'undefined' && window.lio.segmentsArray.length > 0 : true;
 		},
 		checkLio : function(){
-			var domain = location.hostname.split('.').reverse()[0];
-			isoData.isLioEnabled = isoData.lioDomains.indexOf(domain) > -1;
-      isoData.brand = location.hostname.toLowerCase().split('.')[1];
+      var subdomains = location.hostname.toLowerCase().split('.');
+			var domain = subdomains.reverse()[0];
+      isoData.isLioEnabled = isoData.lioDomains.indexOf(domain) > -1;
+      isoData.brand = subdomains[1];
 		},
     enterpriseLoaded: function(){
       if (typeof window.enterprise !== 'undefined' &&
