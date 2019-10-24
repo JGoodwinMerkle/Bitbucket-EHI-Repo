@@ -1,0 +1,133 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca',
+		test : 'PYP 2019 Deals Tile',
+		creative : 'Challenger 0 - New/Anonymous',
+		selector: '.two-up-three-up.section .text-capsule-list .text-capsule-item .text-capsule-tile',
+		content: {
+			en_us : {
+				new: {
+					header: 'Plus Your Points Promotion',
+					text: 'Join Enterprise Plus now to be automatically registered to earn double points on qualifying rentals now through January 31, 2020. Terms apply.',
+					url: 'https:&#47;&#47;plusyourpoints.enterprise.com&#47;authenticate?langPref=en_us&TLGVC=E20A&TLG_CID=50606&icid=deals-_-3uptile-_-join.register-_-usen.50606'
+				},
+				loyaltyNonReg: {
+					header: 'Plus Your Points Promotion',
+					text: 'Enterprise Plus members, register for the Plus Your Points promotion to earn double points on qualifying rentals now through January 31, 2020. Terms apply.',
+					url: 'https:&#47;&#47;plusyourpoints.enterprise.com&#47;authenticate?langPref=en_us&TLGVC=E20A&TLG_CID=50607&icid=deals-_-3uptile-_-loyalty.register-_-usen.50607'
+				},
+				loyaltyReg: {
+					header: 'Plus Your Points Promotion',
+					text: 'Enterprise Plus members, earn double points on qualifying rentals during the Plus Your Points promotion now through January 31, 2020. Terms apply.',
+					url: 'https:&#47;&#47;plusyourpoints.enterprise.com&#47;authenticate?langPref=en_us&TLGVC=E20A&TLG_CID=50608&icid=deals-_-3uptile-_-loyalty.dashboard-_-usen.50608'
+				}
+			},
+			en_ca : {
+				new: {
+					header: 'Plus Your Points Promotion',
+					text: 'Join Enterprise Plus now to be automatically registered to earn double points on qualifying rentals now through January 31, 2020. Terms apply.',
+					url: 'https:&#47;&#47;plusyourpoints.enterprise.com&#47;authenticate?langPref=en_ca&TLGVC=E20A&TLG_CID=50606&icid=deals-_-3uptile-_-join.register-_-caen.50606'
+				},
+				loyaltyNonReg: {
+					header: 'Plus Your Points Promotion',
+					text: 'Enterprise Plus members, register for the Plus Your Points promotion to earn double points on qualifying rentals now through January 31, 2020. Terms apply.',
+					url: 'https:&#47;&#47;plusyourpoints.enterprise.com&#47;authenticate?langPref=en_ca&TLGVC=E20A&TLG_CID=50607&icid=deals-_-3uptile-_-loyalty.register-_-caen.50607'
+				},
+				loyaltyReg: {
+					header: 'Plus Your Points Promotion',
+					text: 'Enterprise Plus members, earn double points on qualifying rentals during the Plus Your Points promotion now through January 31, 2020. Terms apply.',
+					url: 'https:&#47;&#47;plusyourpoints.enterprise.com&#47;authenticate?langPref=en_ca&TLGVC=E20A&TLG_CID=50608&icid=deals-_-3uptile-_-loyalty.dashboard-_-caen.50608'
+				}
+			},
+			fr_ca: {
+				new: {
+					header: 'La promotion Plus Your Points',
+					text: 'Inscrivez-vous dès maintenant pour obtenir automatiquement le double de points sur les locations admissibles d’ici le 31 janvier 2020. Des conditions s’appliquent.',
+					url: 'https:&#47;&#47;plusyourpoints.enterprise.com&#47;authenticate?langPref=fr_ca&TLGVC=E20A&TLG_CID=50606&icid=deals-_-3uptile-_-join.register-_-cafr.50606'
+				},
+				loyaltyNonReg: {
+					header: 'La promotion Plus Your Points',
+					text: 'Les membres Enterprise Plus inscrits à la promotion Plus Your Points peuvent obtenir le double des points sur les locations admissibles d’ici le 31 janvier 2020. Des conditions s’appliquent.',
+					url: 'https:&#47;&#47;plusyourpoints.enterprise.com&#47;authenticate?langPref=fr_ca&TLGVC=E20A&TLG_CID=50607&icid=deals-_-3uptile-_-loyalty.register-_-cafr.50607'
+				},
+				loyaltyReg: {
+					header: 'La promotion Plus Your Points',
+					text: 'Les membres Enterprise Plus peuvent obtenir le double de points sur les locations admissibles du programme Plus Your Points d’ici le 31 janvier 2020. Des conditions s’appliquent.',
+					url: 'https:&#47;&#47;plusyourpoints.enterprise.com&#47;authenticate?langPref=fr_ca&TLGVC=E20A&TLG_CID=50608&icid=deals-_-3uptile-_-loyalty.dashboard-_-cafr.50608'
+				}
+			}
+		},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			var tileHeader = document.querySelectorAll('.two-up-three-up.section .text-capsule-list .text-capsule-item .text-capsule-tile .text-capsule-tile__heading')[0];
+			var tileText = document.querySelectorAll('.two-up-three-up.section .text-capsule-list .text-capsule-item .text-capsule-tile .text-capsule-tile__text p')[0];
+			var tileLink = document.querySelectorAll('.two-up-three-up.section .text-capsule-list .text-capsule-item a')[0];
+
+			var lang = enterprise.i18nlocale;
+
+			tileHeader.innerHTML = isoTest.content[lang].new.header;
+			tileText.innerHTML = isoTest.content[lang].new.text;
+			tileLink.setAttribute('href', isoTest.content[lang].new.url);
+
+			tileLink.addEventListener('click', function(event){
+				isoTest.fireTag('a','New/Anonymous : ' + lang);
+			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
