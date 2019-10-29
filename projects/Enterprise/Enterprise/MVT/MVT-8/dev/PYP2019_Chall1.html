@@ -1,0 +1,97 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca',
+		test : 'PYP 2019',
+		creative : 'Loyalty Not Registered',
+		selector: '.custom-banner__cta',
+		BannerContent : '.custom-banner .custom-banner__content',
+		BannerCTA : '.custom-banner .custom-banner__ctas-wrapper',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			
+			isoTest.updateBanner();
+			isoTest.bindEvents();
+
+		},
+		updateBanner : function() {
+			// .com EN
+			if (window.location.href.indexOf('https:\/\/www.enterprise.com/en/home.html') > -1) {
+			document.querySelector(isoTest.BannerContent).innerHTML = '<p>Enterprise Plus members, register for the Plus Your Points promotion to earn double points on qualifying rentals now through January 31, 2020. Terms apply.</p>';
+			document.querySelector(isoTest.BannerCTA).innerHTML = '<a class="custom-banner__cta  btn " href="https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=en_us&TLGVC=E20A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-usen.50602" target="_blank">REGISTER NOW</a>';
+			}
+			// .com ES
+			if (window.location.href.indexOf('https:\/\/www.enterprise.com/es/home.html') > -1) {
+			document.querySelector(isoTest.BannerContent).innerHTML = '<p>Miembros de Enterprise Plus, regístrense en la promoción Plus Your Points y ganen el doble de puntos en todos los alquileres que califiquen* desde hoy hasta el 31 de enero del 2020. Se aplican términos.</p>';
+			document.querySelector(isoTest.BannerCTA).innerHTML = '<a class="custom-banner__cta  btn " href="https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=es_pr&TLGVC=E20A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-pres.50602" target="_blank"> REGÍSTRESE AHORA</a>';
+			}
+			// .ca EN
+			if (window.location.href.indexOf('https:\/\/www.enterprise.ca/en/home.html') > -1) {
+			document.querySelector(isoTest.BannerContent).innerHTML = '<p>Enterprise Plus members, register for the Plus Your Points promotion to earn double points on qualifying rentals now through January 31, 2020. Terms apply.</p>';
+			document.querySelector(isoTest.BannerCTA).innerHTML = '<a class="custom-banner__cta  btn " href="https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=en_ca&TLGVC=E20A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-caen.50602" target="_blank">REGISTER NOW</a>';
+			}
+			// .ca FR
+			if (window.location.href.indexOf('https:\/\/www.enterprise.ca/fr/home.html') > -1) {
+			document.querySelector(isoTest.BannerContent).innerHTML = '<p>Les membres Enterprise Plus inscrits à la promotion Plus Your Points peuvent obtenir le double des points sur les locations admissibles d’ici le 31 janvier 2020. Des conditions s’appliquent.</p>';
+			document.querySelector(isoTest.BannerCTA).innerHTML = '<a class="custom-banner__cta  btn " href="https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=fr_ca&TLGVC=E20A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-cafr.50602" target="_blank">INSCRIVEZ-VOUS MAINTENANT</a>';
+			}
+		},
+		bindEvents: function(){
+	      	document.querySelector(isoTest.selector).addEventListener('click', function(event) {
+	      		isoTest.fireTag(this, isoTest.creative + ' : REGISTER NOW');
+	      	});
+	    },
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>
