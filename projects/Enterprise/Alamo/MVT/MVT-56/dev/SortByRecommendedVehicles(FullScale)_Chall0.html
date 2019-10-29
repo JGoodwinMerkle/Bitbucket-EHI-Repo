@@ -47,16 +47,22 @@
 		test : 'Sort By Recommended Vehicles (Full Scale)',
 		creative : 'Challenger 0',
 		selector : '.carList',
-		template : '<div class="iso-sortVehicle"><label for="isoTestSort">Sort Cars By:</label><select name="sortBy" id="isoTestSort"><option value="Featured">{value}</option><option value="Lowest to Highest Price">Lowest to Highest Price</option><option value="Highest to Lowest Price">Highest to Lowest Price</option></select></div>',	
+		template : '<div class="iso-sortVehicle"><label for="isoTestSort">Sort Cars By:</label><select name="sortBy" id="isoTestSort"><option value="Featured">{featured}</option><option value="Lowest to Highest Price">{lowToHigh}</option><option value="Highest to Lowest Price">{highToLow}</option></select></div>',	
 		translation: {
 			en_us : {
-				value : 'Featured'
+				featured : 'Featured',
+				lowToHigh : 'Lowest to Highest Price',
+				highToLow : 'Highest to Lowest Price'
 			},
 			es_es : {
-				value : 'Destacados'
+				featured : 'Destacados',
+				lowToHigh : 'Precio de menor a mayor',
+				highToLow : 'Precio de mayor a menor'
 			},
 			pt_br : {
-				value : 'Em destaque'
+				featured : 'Em destaque',
+				lowToHigh : 'Pre+ºo mais baixo para o pre+ºo mais alto',
+				highToLow : 'Pre+ºo mais alto para o pre+ºo mais baixo'
 			}
 		},
 		init : function() {
@@ -101,16 +107,18 @@
 			});		
 		},
 		addDataSIPP : function() {
-			Array.from(_a.carClassesDisplayed).forEach(function (item, index) {
-				var itemSIPP = item.code;
-				var itemStatus = item.status;
-				var itemName = item.name;
-				var listing = document.querySelectorAll('ul.carList > li');
-				var vehicleName = document.querySelector('h2[data-id=' + CSS.escape(itemName) + ']');
-				try {
-					vehicleName.closest('li').setAttribute('data-sipp', itemSIPP);
-				} catch(error) { }
-			});
+			var allCarsDisplayed = _a["carClassesDisplayed"];
+			var vehicles = document.querySelectorAll('.carList li .car-class-twisty h2');
+			if (allCarsDisplayed != null) {
+				for (var i=0; i < vehicles.length; i++) {
+					var carName = vehicles[i].getAttribute('data-id');
+					for (var key in allCarsDisplayed) {
+						if( allCarsDisplayed[key]['name'] == carName ) {
+							vehicles[i].closest('li').setAttribute('data-sipp', allCarsDisplayed[key]['code']);
+						}
+					}
+				}
+			}
 		},
 		sortLowHigh : function() {
 			Array.prototype.slice.call(document.querySelectorAll(".carList > li[data-price]")).sort(function(a, b) {
