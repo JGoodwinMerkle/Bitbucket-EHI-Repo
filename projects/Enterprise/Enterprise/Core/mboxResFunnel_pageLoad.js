@@ -1,17 +1,5 @@
 (function() {
 	var isoHash = {
-		lioDomains : ['com','uk'],
-		isLioLoaded : function(){
-			// when lytics is enabled for the listed domains check lio object, otherwise set to true
-			return isoHash.isLioEnabled ? typeof window.lio !== 'undefined' && typeof window.lio.segmentsArray !== 'undefined' && window.lio.segmentsArray.length > 0 : true;
-		},
-		checkLio : function(){
-			var domain = location.hostname.split('.').reverse()[0];
-			isoHash.isLioEnabled = isoHash.lioDomains.indexOf(domain) > -1;
-			if(localStorage.getItem('sdsat_stagingLibrary')=='true' && /xqa|int/.test(location.hostname)) { //temp workaround staging
-				isoHash.isLioEnabled = false;
-			}
-		},
 		steps: {
 			"#location": {
 				"mboxName": "ResFunnelLocation",
@@ -21,8 +9,7 @@
 						typeof window.ReservationStateTree.data.model !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.corporate !== 'undefined' &&
-						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
-						isoHash.isLioLoaded()) {
+						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined') {
 						//Boolean - corporate traffic;
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
 						//Boolean - Authenticated traffic checks if profile is present
@@ -34,7 +21,7 @@
 						//String - Gets 3-letter currency code selected by the user
 						var currency = ReservationStateTree.get(['session','reservationSession','view_currency_code']);
 						//String - Gets lytics audiences and creates a comma delimited string
-						var lioSegments = isoHash.isLioEnabled ? window.lio.segmentsArray.toString() : '';
+						var lioSegments = _satellite.getVar('en_lytics_segments');
 
 						return {
 							'step': 'location',
@@ -59,8 +46,7 @@
 						typeof window.ReservationStateTree.data.session.reservationSession.corporate !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.pickup_location !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.pickupLocationWithDetail !== 'undefined' &&
-						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
-						isoHash.isLioLoaded()) {
+						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined') {
 
 						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						// String - Pickup location type (e.g. airport, city, etc.)
@@ -71,7 +57,7 @@
 						var currency = ReservationStateTree.get(['session','reservationSession','view_currency_code']);
 						//String - Selected pickup location's four letter/integer group number
 						var groupNumber = ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']);
-						var lioSegments = isoHash.isLioEnabled ? window.lio.segmentsArray.toString() : '';
+						var lioSegments = _satellite.getVar('en_lytics_segments');
 						//Integer - Selected pick up location's peopleSoft ID
 						var peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','id']);
 						//String - Selected pickup location's two letter country code
@@ -106,8 +92,7 @@
 						typeof window.ReservationStateTree.data.session.reservationSession.corporate !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.pickup_location !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.pickupLocationWithDetail !== 'undefined' &&
-						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
-						isoHash.isLioLoaded()) {
+						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined') {
 
 						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						var branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']);
@@ -116,7 +101,7 @@
 						var cidType = ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) ? ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) : '';
 						var currency = ReservationStateTree.get(['session','reservationSession','view_currency_code']);
 						var groupNumber = ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']);
-						var lioSegments = isoHash.isLioEnabled ? window.lio.segmentsArray.toString() : '';
+						var lioSegments = _satellite.getVar('en_lytics_segments');
 						//String - Method of payment selected [PAYLATER,REDEMPTION,PREPAY,CURRENCY]
 						var payType = ReservationStateTree.get(['session', 'reservationSession','chargeType']);
 						var peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','id']);
@@ -155,8 +140,7 @@
 						typeof window.ReservationStateTree.data.session.reservationSession.pickup_location !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.pickup_time !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.pickupLocationWithDetail !== 'undefined' &&
-						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
-						isoHash.isLioLoaded()) {
+						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined') {
 
 						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
@@ -166,7 +150,7 @@
 						// String - Pickup location type (e.g. airport, city, etc.)
 						var branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']);
 						var groupNumber = ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']);
-						var lioSegments = isoHash.isLioEnabled ? window.lio.segmentsArray.toString() : '';
+						var lioSegments = _satellite.getVar('en_lytics_segments');
 						// String - User loyalty type and level (e.g. Plus, Emerald Club, etc.)
 						var loyaltyTier = authTraffic ? ReservationStateTree.get(['session', 'reservationSession','profileResponse','profile','basic_profile','loyalty_data','loyalty_tier']) : '';
 						// Boolean - Oneway or roundtrip reservation
@@ -214,8 +198,7 @@
 						typeof window.ReservationStateTree.data.session.reservationSession.confirmationNumber !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.pickupLocationWithDetail !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.selectedCarClassDetails !== 'undefined' &&
-						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
-						isoHash.isLioLoaded()) {
+						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined') {
 
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
 						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
@@ -227,7 +210,7 @@
 						// String - Reservation confirmation number
 						var confirmationNumber = ReservationStateTree.get(['session', 'reservationSession', 'confirmationNumber']);
 						var groupNumber = ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']);
-						var lioSegments = isoHash.isLioEnabled ? window.lio.segmentsArray.toString() : '';
+						var lioSegments = _satellite.getVar('en_lytics_segments');
 						var payType = ReservationStateTree.get(['session', 'reservationSession','chargeType']);
 						var peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','id']);
 
@@ -263,8 +246,7 @@
 						typeof window.ReservationStateTree.data.session !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.corporate !== 'undefined' &&
-						typeof window.ReservationStateTree.data.session.reservationSession.selectedCarClassDetails !== 'undefined' &&
-						isoHash.isLioLoaded()){
+						typeof window.ReservationStateTree.data.session.reservationSession.selectedCarClassDetails !== 'undefined'){
 
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
 						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
@@ -272,7 +254,7 @@
 						var cid = ReservationStateTree.get(['model','coupon']);
 						var cidType = ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) ? ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) : '';
 						var currency = ReservationStateTree.get(['session','reservationSession','view_currency_code']);
-						var lioSegments = isoHash.isLioEnabled ? window.lio.segmentsArray.toString() : '';
+						var lioSegments = _satellite.getVar('en_lytics_segments');
 						var payType = ReservationStateTree.get(['session', 'reservationSession','chargeType']);
 						var peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','id']);
 
@@ -301,15 +283,14 @@
 						typeof window.ReservationStateTree.data.model !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession !== 'undefined' &&
 						typeof window.ReservationStateTree.data.session.reservationSession.corporate !== 'undefined' &&
-						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined' &&
-						isoHash.isLioLoaded()) {
+						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined') {
 
 						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
 						var authTraffic = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse']) ? true : false;
 						var cid = ReservationStateTree.get(['model','coupon']);
 						var cidType = ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) ? ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) : '';
 						var currency = ReservationStateTree.get(['session','reservationSession','view_currency_code']);
-						var lioSegments = isoHash.isLioEnabled ? window.lio.segmentsArray.toString() : '';
+						var lioSegments = _satellite.getVar('en_lytics_segments');
 
 						return {
 							'step': 'book',
@@ -327,7 +308,6 @@
 			}
 		},
 		init: function() {
-			isoHash.checkLio(); // sets up checks for domains with lytics
 			isoHash.dependsLoaded(function() {
 				var hash = window.location.hash;
 				if (hash in isoHash.steps) {
@@ -364,19 +344,21 @@
 		dependsLoaded: function(callback) {
 			var hash = window.location.hash;
 			if (hash in isoHash.steps) {
-				window.clearTimeout(isoHash.timer);
-				if (typeof window.adobe !== 'undefined' &&
-					typeof window.adobe.target !== 'undefined' &&
-					isoHash.steps[hash]["depends"]() !== false) {
-					_satellite.notify('adobe + target + depends met');
-					if (typeof callback === 'function') {
-						callback();
+				var mInt = setInterval(function(){
+					if (typeof window.adobe !== 'undefined' &&
+						typeof window.adobe.target !== 'undefined' &&
+						typeof window._satellite !== 'undefined' &&
+						isoHash.steps[hash]["depends"]() !== false) {
+							clearInterval(mInt);
+							_satellite.logger.debug('adobe + target + depends met');
+							if (typeof callback === 'function') {
+								callback();
+							}
 					}
-				} else {
-					isoHash.timer = window.setTimeout(function() {
-						isoHash.dependsLoaded(callback);
-					}, 100);
-				}
+				},100);
+				setTimeout(function(){
+					clearInterval(mInt);
+				},10000);
 			}
 		}
 	};
