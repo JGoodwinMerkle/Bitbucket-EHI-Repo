@@ -33,7 +33,6 @@
 			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
-				_satellite.track('target_variables');
 			}
 		
 			isoTest.log('Test Running...');
