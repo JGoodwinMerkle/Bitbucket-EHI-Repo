@@ -70,11 +70,12 @@
 			
 		},
 		chall : function() {
-
-			document.querySelector('#utility-nav .language').insertAdjacentHTML('afterend','<li class="locations"><a href="/en/car-rental/locations.html"><span class="utility-nav-label"><i class="icon icon-pin-white"></i>Find a Location</span></a></li>');
-
-			document.querySelector('.mobile-utility').insertAdjacentHTML('beforeend','<li class="locations"><a href="/en/car-rental/locations.html"><span class="utility-nav-label"><i class="icon icon-pin-white"></i>Find a Location</span></a></li>');
-
+			if (!document.querySelector('#utility-nav .locations')) {
+				document.querySelector('#utility-nav .language').insertAdjacentHTML('afterend','<li class="locations"><a href="/en/car-rental/locations.html"><span class="utility-nav-label"><i class="icon icon-pin-white"></i>Find a Location</span></a></li>');
+			}
+			if (!document.querySelector('.mobile-utility .locations')) {
+				document.querySelector('.mobile-utility').insertAdjacentHTML('beforeend','<li class="locations"><a href="/en/car-rental/locations.html"><span class="utility-nav-label"><i class="icon icon-pin-white"></i>Find a Location</span></a></li>');
+			}
 			window.addEventListener('click', function () {
 				if (event.target.closest('li.locations')) {
 					isoTest.fireTag('a','Find a Location');
