@@ -56,7 +56,6 @@
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
-				// _satellite.track('target_variables');
 			}
 
 			isoTest.log('Test Running...');
@@ -173,6 +172,7 @@
 
 				var filterLabel = label.innerHTML;
 				var filterPrice;
+				var priceSymbol = ReservationStateTree.get(['session','reservationSession','defaultTopNavAmount','symbol']);
 
 				if (isoTest.transmissionCostObject[filterLabel] != null) {
 					filterPrice = isoTest.transmissionCostObject[filterLabel];
@@ -189,9 +189,9 @@
 				if (filterPrice != "--") {
 		
 					if (label.nextSibling == null) {
-						label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>$" + filterPrice + "</span>");
+						label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>"+ priceSymbol + filterPrice + "</span>");
 					} else {
-						label.nextSibling.innerHTML = "$" + filterPrice;
+						label.nextSibling.innerHTML = priceSymbol + filterPrice;
 					}
 				} else {
 					if (label.nextSibling == null) {
