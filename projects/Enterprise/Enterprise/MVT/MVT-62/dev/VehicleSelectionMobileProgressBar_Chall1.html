@@ -1,0 +1,195 @@
+<style>
+.reservation-steps-container .mobile-reservation-nav-slider {
+	color: transparent;
+}
+
+.reservation-steps-container .mobile-reservation-nav-slider .iso-header {
+	font-size: 13px;
+  font-weight: 400;
+  color: #656565;
+}
+
+.reservation-steps-container .mobile-reservation-nav-slider .iso-modify-btn {
+	display: inline-block;
+    /* margin-top: -6px; */
+    padding: 3px;
+    position: absolute;
+    right: 4%;
+    /* transform: rotate(45deg); */
+    /* top: 50%; */
+    color: #169a5a;
+    /* transition: all 0.5s; */
+    background: transparent;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.reservation-steps-container .mobile-reservation-nav-slider .iso-modify-btn .arrow.down {
+	float: left;
+    right: auto;
+    left: -13px;
+    /* font-size: 15px !important; */
+    /* width: 12.73px; */
+    /* height: 12.73px; */
+    /* margin-top: -10px;*/
+}
+
+
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Selection Mobile Progress Bar',
+		creative : 'Challenger 1',
+		selector: '[data-stephash="dateTime"]',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/location/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+
+			if(/extras/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			console.log('chall');
+			// var completedSteps = document.querySelectorAll('.reservation-steps-container .reservation-steps .step.step__col-4 .step__item.step-completed');
+
+			setTimeout(function(){
+
+
+				var dateTimeStep = document.querySelector('[data-stephash="dateTime"]');
+				var locationStep = document.querySelector('[data-stephash="location"]');
+				var locationPickupStep = document.querySelector('[data-stephash="location/pickup"]');
+				var locationDropoffStep = document.querySelector('[data-stephash="location/dropoff"]');
+				var carsStep = document.querySelector('[data-stephash="cars"]');
+
+
+				if (dateTimeStep.querySelector('.step-completed') != null) {
+					console.log('enter');
+					// console.log('true');
+					var pickupDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[0].innerText.split(', ')[1];
+					var dropoffDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[1].innerText.split(', ')[1];
+					console.log(pickupDate);
+					console.log(dropoffDate);
+		
+
+					if (locationStep == null) {
+						// console.log('true');
+						if (locationPickupStep.querySelector('.step-completed') != null) {
+							var pickupLocation = locationPickupStep.querySelector('.step__step-value').innerText;
+							console.log(pickupLocation);
+						}
+						if (locationDropoffStep.querySelector('.step-completed') != null) {
+							var dropoffLocation = locationDropoffStep.querySelector('.step__step-value').innerText;
+							console.log(dropoffLocation);
+						}
+					} else {
+						if (locationStep.querySelector('.step-completed') != null) {
+							var pickupDropoffLocation = locationStep.querySelector('.step__step-value').innerText;
+							console.log(pickupDropoffLocation);
+						}
+					}
+
+					if (carsStep.querySelector('.step-completed') != null) {
+						var carName = carsStep.querySelector('.step__step-value').innerText;
+						console.log(carName);
+					}
+
+					var newText = '<span class="iso-header">' + pickupDate + ' - ' + dropoffDate + '</span>';
+
+					document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerHTML = newText + '<button class="iso-modify-btn"><i class="arrow down"></i>MODIFY</button>';
+					// document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').style.color = '#169a5a';
+
+				} else {
+					console.log('does not exist');
+				}
+			},500);
+
+
+
+			// if (document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider') != null) {
+				// document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerText = pickupDate + ' - ' + dropoffDate;
+			// }
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
