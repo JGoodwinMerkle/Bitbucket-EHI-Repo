@@ -172,6 +172,13 @@
 		transform: translate(-120px, 0) !important;
 		width: 252px;
 	}
+} 
+
+@media (max-width: 1081px) {
+  li.vehicle-list__item:first-child {
+      border-top: .125rem solid #c3c3c3;
+      margin-top: 20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -239,7 +246,7 @@
 		template: '<div class="iso-vehicle-redemption">\
 								<div class="iso-btns">\
 								<span class="iso-button-border"></span>\
-									<button type="button" class="iso-pay-dollars iso-pay iso-active">PAY IN $ <span class="iso-currency-code">{currencycode}</span></button>\
+									<button type="button" class="iso-pay-dollars iso-pay iso-active">PAY IN {currencySymbol} <span class="iso-currency-code">{currencycode}</span></button>\
 									<button type="button" class="iso-pay-points vehicle-enough-points iso-pay">PAY IN POINTS</button>\
 								</div>\
 								<div class="iso-points vehicle-enough-points cf">\
@@ -268,6 +275,7 @@
 								</div>\
 							</div>',
 		countries: ['US','CA', 'USD'],
+    currency: (ReservationStateTree.get(['session','reservationSession','view_currency_code']) === 'EUR') ? '€' : '$',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -305,7 +313,7 @@
 			if(isoTest.countries.indexOf(isoTest.pickupCountry) > -1){
 				isoTest.log('fn:Chall:Add Banner');
 
-				isoTest.points = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse','profile','basic_profile','loyalty_data','points_to_date']);
+				isoTest.points = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse','profile','basic_profile','loyalty_data','points_to_date']).toLocaleString('en-US');
 
 				isoTest.addBanner();
 				isoTest.addTooltip();
@@ -340,7 +348,8 @@
 				'currencycode' : currencyCode,
 				'eplus' : enterprise.i18nReservation.resflowcarselect_0046,
 				'points' : isoTest.points,
-				'aboutPtDesc' : enterprise.i18nReservation.resflowcarselect_0050
+				'aboutPtDesc' : enterprise.i18nReservation.resflowcarselect_0050,
+        'currencySymbol' : isoTest.currency
 			});
 
 			var carSelect = document.querySelector('.vehicle-select__main');

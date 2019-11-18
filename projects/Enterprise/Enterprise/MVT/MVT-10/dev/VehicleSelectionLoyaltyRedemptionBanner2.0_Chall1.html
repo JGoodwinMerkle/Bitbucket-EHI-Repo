@@ -242,7 +242,7 @@
 		portfolio : 'Enterprise.com Enterprise.ca',
 		test : 'Vehicle Selection Loyalty Redemption Banner 2.0',
 		creative : 'Challenger 1',
-		selector: '.vehicle-redemption button',
+    selector: '.vehicle-redemption button',
 		template: '<div class="iso-points vehicle-enough-points cf">\
 					<div class="vehicle-enough-points__tier">\
 						<i class="icon icon-eplus-logo"></i>\
@@ -265,10 +265,11 @@
 								</span>\
 							</div>\
 						</div>\
-						<div class="iso-btns"><button type="button" class="iso-pay-dollars iso-pay iso-active">PAY IN $</button><button type="button" class="iso-pay-points iso-pay">PAY IN POINTS</button></div>\
+						<div class="iso-btns"><button type="button" class="iso-pay-dollars iso-pay iso-active">PAY IN {currencySymbol}</button><button type="button" class="iso-pay-points iso-pay">PAY IN POINTS</button></div>\
 					</div>\
 				</div>',
-		countries: ['US','CA', 'USD'],
+    countries: ['US','CA', 'USD'],
+    currency: (ReservationStateTree.get(['session','reservationSession','view_currency_code']) === 'EUR') ? '€' : '$',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -288,7 +289,7 @@
   				isoTest.chall();
 			});
 			
-		window.addEventListener('hashchange', isoTest.viewChange, false);
+		window.addEventListener('hashchange', isoTest.viewChange, false); 
 		
 		},
 		viewChange : function(){
@@ -306,7 +307,7 @@
 			if(isoTest.countries.indexOf(isoTest.pickupCountry) > -1){
 				isoTest.log('fn:Chall:Add Banner');
 
-				isoTest.points = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse','profile','basic_profile','loyalty_data','points_to_date']);
+				isoTest.points = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse','profile','basic_profile','loyalty_data','points_to_date']).toLocaleString('en-US');
 
 				isoTest.addBanner();
 				isoTest.addTooltip();
@@ -339,7 +340,8 @@
 			var banner = helpers.supplant(isoTest.template,{
 				'eplus' : enterprise.i18nReservation.resflowcarselect_0046,
 				'points' : isoTest.points,
-				'aboutPtDesc' : enterprise.i18nReservation.resflowcarselect_0050
+        'aboutPtDesc' : enterprise.i18nReservation.resflowcarselect_0050,
+        'currencySymbol' : isoTest.currency
 			});
 
 			var carSelect = document.querySelector('.vehicle-select__main');
