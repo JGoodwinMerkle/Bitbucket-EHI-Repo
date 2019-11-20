@@ -6,12 +6,12 @@
 } 
 
 .primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container {
-	margin-top: 95px;
 	padding-left: 30px;
 	padding-right: 30px;
-	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
+	margin-top: 95px;
+	text-align: center;
 }
 
 .primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo {
@@ -21,44 +21,66 @@
 }
 
 .primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .icon.icon-icon-promo-applied {
+	display: inline-block;
 	height: 45px;
 	width: 45px;
-	display: inline-block;
 }
 
 .primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .iso-promo-header {
-	margin-top: 15px;
+	color: #181918;
 	font-size: 22px;
 	font-weight: 600;
-	color: #181918;
+	margin-top: 15px;
 }
 
 .primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .iso-promo-text {
-	margin-top: 15px;
+	color: #181918;
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 22px;
-	color: #181918;
+	margin-top: 15px;
 }
 
 .primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .iso-promo-btn {
-	margin-top: 20px;
+	background-color: transparent;
+	border-color: rgba(22, 154, 90, 1);
+	border-style: solid;
+	border-width: 1px;
+	color: #169A5A;
 	font-weight: 600;
   font-size: 14px;
-  color: #169A5A;
   line-height: 30px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgba(22, 154, 90, 1);
-  /*padding: 20px;	*/
+  margin-top: 20px;
   text-align: center;
-  background-color: transparent;
 }
 
 .primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .iso-promo-btn:hover {
-	text-decoration: none;
-	color: #006639;
 	border-color: #006639;
+	color: #006639;
+	text-decoration: none;
+}
+
+#primary-nav .mobile-utility>li.iso-promo-mobile-container {
+	display: none;
+}
+
+@media (max-width: 885px) {
+	#primary-nav .mobile-utility>li.iso-promo-mobile-container {
+		border: 1px solid white;
+		display: block;
+		margin: 0 0 10px;
+	}
+
+	#primary-nav .mobile-utility>li.iso-promo-mobile-container .iso-promo-mobile {
+		padding: 10px 7px;
+	}
+
+	#primary-nav .mobile-utility>li.iso-promo-mobile-container .iso-promo-mobile .icon-icon-promo-applied-white {
+		height: 18px;
+		position: relative;
+		top: 0;
+    width: 18px;
+	}
 }
 </style>
 <script>
@@ -75,9 +97,16 @@
 									<i class="icon icon-icon-promo-applied" title="icon-icon-promo-applied"></i>\
 									<div class="iso-promo-header">Weekend Special</div>\
 									<div class="iso-promo-text">Get away with great "Weekend Special" rates at participating neighborhood locations.</div>\
-									<a class="iso-promo-btn btn" href="" target="_blank">UNLOCK YOUR OFFER</a>\
+									<a class="iso-promo-btn btn" href="https:&#47;&#47;www.enterprise.com/en/car-rental/deals/weekend-specials.html" target="_blank">UNLOCK YOUR OFFER</a>\
 								</div>\
 							</div>',
+		contentMobile: '<li class="iso-promo-mobile-container">\
+											<div class="iso-promo-mobile">\
+												<a href="https:&#47;&#47;www.enterprise.com/en/car-rental/deals/weekend-specials.html" class="utility-nav-button iso-promo-btn-mobile" target="_blank">\
+													<span class="utility-nav-label"><i class="icon icon-icon-promo-applied-white" title="icon-icon-promo-applied"></i>Weekend Car Rental Special</span>\
+												</a>\
+											</div>\
+										</li>',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -99,8 +128,23 @@
 			
 		},
 		chall : function() {
-			var promo = document.querySelector('.primary-nav>li #navContentRent.primary-nav-content .promo');
-			promo.innerHTML = isoTest.content;
+			if (document.querySelector('.iso-promo-container') == null) {
+				var promo = document.querySelector('.primary-nav>li #navContentRent.primary-nav-content .promo');
+				promo.innerHTML = isoTest.content;
+			}
+
+			if (document.querySelector('.iso-promo-mobile-container') == null) {
+				var mobilePromo = document.querySelectorAll('#primary-nav .mobile-utility.header-nav-item')[0];
+				mobilePromo.insertAdjacentHTML('beforeend', isoTest.contentMobile);
+			}
+
+			document.querySelector('.iso-promo-btn').addEventListener('click',function(e){
+				isoTest.fireTag(e.target,'UNLOCK YOUR OFFER');
+			}, false);
+
+			document.querySelector('.iso-promo-btn-mobile').addEventListener('click',function(e){
+				isoTest.fireTag(e.target,'Weekend Car Rental Special');
+			}, false);
 
 		},
 		fireTag : function(element, value) {
@@ -130,18 +174,6 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
 		}
 	}
 
