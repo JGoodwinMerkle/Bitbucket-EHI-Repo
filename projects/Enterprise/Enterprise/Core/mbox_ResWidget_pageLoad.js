@@ -1,6 +1,6 @@
 (function() {
-  var isoHomepage = {
-    mboxName : 'HomePage',
+  var isoResWidget = {
+    mboxName : 'ResWidget',
     depends : function() {
       if (typeof window.ReservationStateTree !== 'undefined' &&
         typeof window.ReservationStateTree.data !== 'undefined' &&
@@ -28,35 +28,46 @@
         return false;
       }
     },
+    mboxExists: function(){
+        var exists = false;
+        for (var i = 0; i < ttMETA.length; i++) {
+            if (ttMETA[i].MboxName === isoResWidget.mboxName) {
+                exists = true;
+            }
+        }
+        return exists;
+    },
     init : function() {
-      isoHomepage.dependsLoaded(function() {
-        var params = isoHomepage.depends();
-        adobe.target.getOffer({
-          "mbox": isoHomepage.mboxName+"FS",
-          "params" : params,
-          "success": function(offers) {
-            adobe.target.applyOffer( {
-              "mbox": isoHomepage.mboxName+"FS",
-              "offer": offers
-            });
-          },
-          "error" : function(){
+      isoResWidget.dependsLoaded(function() {
+        if(!isoResWidget.mboxExists()){
+          var params = isoResWidget.depends();
+          adobe.target.getOffer({
+            "mbox": isoResWidget.mboxName+"FS",
+            "params" : params,
+            "success": function(offers) {
+              adobe.target.applyOffer( {
+                "mbox": isoResWidget.mboxName+"FS",
+                "offer": offers
+              });
+            },
+            "error" : function(){
 
-          }
-        });
-        adobe.target.getOffer({
-          "mbox": isoHomepage.mboxName,
-          "params" : params,
-          "success": function(offers) {
-            adobe.target.applyOffer( {
-              "mbox": isoHomepage.mboxName,
-              "offer": offers
-            });
-          },
-					"error" : function(){
+            }
+          });
+          adobe.target.getOffer({
+            "mbox": isoResWidget.mboxName,
+            "params" : params,
+            "success": function(offers) {
+              adobe.target.applyOffer( {
+                "mbox": isoResWidget.mboxName,
+                "offer": offers
+              });
+            },
+  					"error" : function(){
 
-					}
-        });
+  					}
+          });
+        }
       });
     },
     dependsLoaded : function(callback) {
@@ -64,7 +75,8 @@
         if (typeof window.adobe !== 'undefined' &&
           typeof window.adobe.target !== 'undefined' &&
           typeof window._satellite !== 'undefined' &&
-  				isoHomepage.depends() !== false) {
+          typeof window.ttMETA !== 'undefined' &&
+  		isoResWidget.depends() !== false) {
             clearInterval(mInt);
             _satellite.logger.debug('adobe + target + depends met');
             if (typeof callback === 'function') {
@@ -77,5 +89,5 @@
       },10000);
     }
   };
-  isoHomepage.init();
+  isoResWidget.init();
 })();
