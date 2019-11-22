@@ -2,6 +2,9 @@
 	.inner-container {
 		transition: none;
 	}
+	.branchpage #start-reservation .inner-container {
+		padding: 5% 0;
+	}
 	.booking-widget .booking-submit .btn {
 		transition: none;
 		padding: 20px 5px;
@@ -82,8 +85,13 @@
 		},
 		chall : function() {
 
-			document.querySelector('.reservation-toggle-header').textContent = 'Reserve A Vehicle';
-			document.querySelector('#continueButton').textContent = 'See Options';
+			if (document.querySelector('.branchpage')) {
+				document.querySelector('#branch-page-booking-header').textContent = 'Reserve A Vehicle';
+			} else {
+				document.querySelector('.reservation-toggle-header').textContent = 'Reserve A Vehicle';
+			}
+
+			document.querySelector('#continueButton').textContent = 'Select My Vehicle';
 
 		},
 		fireTag : function(element, value) {
