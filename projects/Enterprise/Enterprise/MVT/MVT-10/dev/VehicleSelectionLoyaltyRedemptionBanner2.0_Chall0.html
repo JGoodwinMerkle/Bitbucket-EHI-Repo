@@ -8,7 +8,7 @@
 		portfolio : 'Enterprise.com Enterprise.ca',
 		test : 'Vehicle Selection Loyalty Redemption Banner 2.0',
 		creative : 'Challenger 0',
-		selector: 'body',
+		selector: '.vehicle-redemption button',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -32,7 +32,7 @@
 		
 		},
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
+			if(/cars/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -40,7 +40,26 @@
 		},
 		chall : function() {
 
-			// Your code goes here
+			var redeemBtns = document.querySelectorAll('.vehicle-redemption button');
+			var payBtn = redeemBtns[0];
+			var redeemBtn = redeemBtns[1];
+
+
+			document.querySelectorAll('.vehicle-redemption button')[0].addEventListener('click', function (e) {
+				isoTest.fireTag(e.target,'Pay in $');
+			});
+
+			document.querySelectorAll('.vehicle-redemption button')[2].addEventListener('click', function (e) {
+				isoTest.fireTag(e.target,'Pay in $');
+			});
+
+			document.querySelectorAll('.vehicle-redemption button')[1].addEventListener('click', function (e) {
+				isoTest.fireTag(e.target, 'Pay in Points');
+			});
+
+			document.querySelectorAll('.vehicle-redemption button')[3].addEventListener('click', function (e) {
+				isoTest.fireTag(e.target, 'Pay in Points');
+			});
 
 		},
 		fireTag : function(element, value) {
