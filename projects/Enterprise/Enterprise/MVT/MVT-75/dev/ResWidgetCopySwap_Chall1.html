@@ -31,6 +31,12 @@
 		},
 		chall : function() {
 
+			if (document.querySelector('.branchpage')) {
+				document.querySelector('#branch-page-booking-header').textContent = 'Start A Reservation';
+			} else {
+				document.querySelector('.reservation-toggle-header').textContent = 'Start A Reservation';
+			}
+
 			document.querySelector('#continueButton').textContent = 'Search';
 
 		},
