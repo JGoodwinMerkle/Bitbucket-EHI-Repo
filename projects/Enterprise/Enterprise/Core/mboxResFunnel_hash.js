@@ -341,8 +341,8 @@
 		mboxExists: function(hash){
 			var exists = false;
 			if (hash in isoHash.steps) {
-				for (var i = 0; i < ttMETA.length; i++) {
-					if (ttMETA[i].MboxName === isoHash.steps[hash].mboxName) {
+				for (var i = 0; i < ttMbox.length; i++) {
+					if (ttMbox[i].MboxName === isoHash.steps[hash].mboxName) {
 						exists = true;
 					}
 				}
@@ -355,7 +355,7 @@
 				var mInt = setInterval(function(){
 					if (typeof window.adobe !== 'undefined' &&
 						typeof window.adobe.target !== 'undefined' &&
-						typeof window.ttMETA !== 'undefined' &&
+						typeof window.ttMbox !== 'undefined' &&
 						typeof window._satellite !== 'undefined' &&
 						isoHash.steps[hash]["depends"]() !== false) {
 							clearInterval(mInt);
