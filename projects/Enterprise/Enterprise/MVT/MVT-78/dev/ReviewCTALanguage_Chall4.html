@@ -1,4 +1,10 @@
 <style>
+	@media (min-width: 29.75em) {
+		#reviewSubmit {
+			width: auto;
+			padding: 12px 24px;
+		}
+	}
 </style>
 <script>
 (function() {
@@ -6,9 +12,9 @@
 	var isoTest = {
 		account : 'EHI',
 		portfolio : 'Enterprise.com',
-		test : 'Res Widget Copy Swap',
-		creative : 'Challenger 1',
-		selector: '#continueButton',
+		test : 'Review CTA Language',
+		creative : 'Challenger 4',
+		selector: '#reviewSubmit',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -31,13 +37,7 @@
 		},
 		chall : function() {
 
-			if (document.querySelector('.branchpage')) {
-				document.querySelector('#branch-page-booking-header').textContent = 'Start a Reservation';
-			} else {
-				document.querySelector('.reservation-toggle-header').textContent = 'Start a Reservation';
-			}
-
-			document.querySelector('#continueButton').textContent = 'Search';
+			document.querySelector('#reviewSubmit').textContent = 'Complete My Booking';
 
 		},
 		fireTag : function(element, value) {

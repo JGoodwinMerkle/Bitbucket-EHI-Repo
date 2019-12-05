@@ -6,9 +6,9 @@
 	var isoTest = {
 		account : 'EHI',
 		portfolio : 'Enterprise.com',
-		test : 'Res Widget Copy Swap',
+		test : 'Review CTA Language',
 		creative : 'Challenger 1',
-		selector: '#continueButton',
+		selector: '#reviewSubmit',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -31,13 +31,7 @@
 		},
 		chall : function() {
 
-			if (document.querySelector('.branchpage')) {
-				document.querySelector('#branch-page-booking-header').textContent = 'Start a Reservation';
-			} else {
-				document.querySelector('.reservation-toggle-header').textContent = 'Start a Reservation';
-			}
-
-			document.querySelector('#continueButton').textContent = 'Search';
+			document.querySelector('#reviewSubmit').textContent = 'Reserve';
 
 		},
 		fireTag : function(element, value) {
