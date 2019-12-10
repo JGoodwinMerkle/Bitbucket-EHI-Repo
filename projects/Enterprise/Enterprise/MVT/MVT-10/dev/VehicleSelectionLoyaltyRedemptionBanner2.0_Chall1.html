@@ -1,0 +1,446 @@
+<style>
+.vehicle-redemption, .vehicle-select__main > .vehicle-enough-points, .iso-pointsTooltip.vehicle-enough-points__info:before {
+	display: none !important;
+}
+
+.vehicle-redemption.show, .vehicle-select__main > .vehicle-enough-points.show {
+	display: block !important;
+}
+
+.iso-points .vehicle-enough-points__tier-type {
+	font-weight: 600;
+}
+
+.vehicle-header__info > span:after {
+  content: ".";
+}
+
+.iso-pointsTooltip.vehicle-enough-points__info {
+  margin-left: 8px;
+	margin-top: -7px;
+}
+
+.iso-points .vehicle-enough-points__total-label {
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 24px;
+	vertical-align: bottom;
+}
+
+.iso-pointsTooltip .tooltip-info__arrow {
+	left: 0 !important;
+	top: 40px !important;
+	z-index: 2;
+}
+
+.iso-pointsTooltip .tooltip-info__content {
+	left: -20%;
+  top: 50px !important;
+}
+
+.iso-pointsTooltip.vehicle-enough-points__info .tooltip-info__cta {
+	font-weight: normal;
+}
+
+.iso-pointsTooltip.vehicle-enough-points__info .tooltip-info__content {
+	top: 30px;
+}
+
+.iso-points.vehicle-enough-points {
+	display: block !important;
+	padding: 20px 25px !important;
+}
+
+.iso-points .tooltip-info__cta.tooltip-info__icon-button {
+	position: relative;
+  top: 14px;
+}
+
+.iso-btns {
+  border-left: 1px solid #656565;
+	float: right;
+	height: 45px;
+  margin-left: 22px;
+}
+
+.iso-btns .iso-pay {
+  background: none;
+  border: 2px solid #fff;
+  color: #FFFFFF;
+	font-size: 14px;
+  font-weight: 400;
+  height: 44px;
+  position: relative;
+}
+
+.iso-btns .iso-pay.iso-pay-dollars {
+	margin-left: 27px;
+	width: 108px;
+}
+
+.iso-btns .iso-pay.iso-pay-dollars:after {
+  left: 44.11px;
+}
+
+.iso-btns .iso-pay.iso-pay-points {
+	margin-left: -1px;
+	width: 140px;
+}
+
+.iso-btns .iso-pay.iso-pay-points:after {
+  left: 60.11px;
+}
+
+.iso-btns .iso-pay.iso-active {
+	background-color: #FFFFFF;
+	color: #181918;
+	font-weight: 700;
+}
+
+.iso-btns .iso-pay:after {
+	content: '';
+  border-color: transparent transparent transparent transparent;
+  border-style: solid;
+  border-width: 0px 9.9px 9.9px 9.9px;
+  bottom: -2px;
+  display: block;
+  height: 0px;
+  position: absolute;
+  width: 0px;
+}
+
+.iso-btns .iso-pay.iso-active:after {
+  border-color: transparent transparent #393a3b transparent;
+}
+
+.iso-btns .iso-pay:hover {
+	background: #fff;
+	color: #169a5a;
+}
+
+.iso-btns .iso-pay.iso-active:hover {
+	background: #fff;
+	color: #181918;
+}
+
+@media (max-width: 67.5625em) {
+	.vehicle-header__info {
+		display: inline-block;
+	}
+
+	.iso-pointsTooltip.vehicle-enough-points__info {
+		float: right;
+	  margin-bottom: 0;
+	  width: auto;
+	}
+
+	.iso-pointsTooltip .tooltip-info__content {
+	  left: -290%;
+	}
+
+	.iso-points .vehicle-enough-points__tier {
+		display: initial !important;
+   	width: auto !important;
+	}
+
+	.iso-points .vehicle-enough-points__total-label {
+		display: inline;
+		font-size: 12px;
+		font-weight: 400;
+		line-height: 24px;
+		vertical-align: bottom;
+		width: 100%;
+	}
+
+	.iso-points .vehicle-enough-points__box-number-info {
+	  display: flex !important;
+	  text-align: right !important;
+		width: auto !important;
+	}
+
+	.iso-points .vehicle-enough-points__number {
+		margin: 0 !important;
+	}
+
+	.iso-points .vehicle-enough-points__total-points {
+		display: inline !important;
+	}
+
+	.iso-pointsTooltip.vehicle-enough-points__info {
+		display: inline;
+	}
+}
+
+@media (max-width: 816px) {
+	.vehicle-enough-points__total-label {
+		margin-right: 7px !important;
+	}
+
+	.iso-pointsTooltip.vehicle-enough-points__info {
+		margin-left: 10px;
+	}
+}
+
+@media (max-width: 742px) {
+	.iso-points.vehicle-enough-points {
+		display: block !important;
+		padding: 20px 22px !important;
+	}
+
+	.iso-points .vehicle-enough-points__box-number-info {
+		display: block !important;
+		float: none !important;
+	}
+
+	.iso-points .vehicle-enough-points__tier-type {
+		display: none;
+	}
+
+	.iso-points .vehicle-enough-points__number {
+		display: block;
+	}
+
+	.vehicle-enough-points__total-label {
+		margin-right: 5px !important;
+	}
+
+	.iso-pointsTooltip.vehicle-enough-points__info {
+		margin-left: 12px;
+	}
+
+	.iso-pointsTooltip .tooltip-info__content {
+		display: block !important;
+	  left: auto;
+	  right: -10px;
+	}
+
+	.iso-btns {
+    border: none;
+    display: inline-block;
+    float: none;
+    margin: 46px 0 0;
+    width: 100%;
+	}
+
+	.iso-btns .iso-pay.iso-pay-dollars,
+	.iso-btns .iso-pay.iso-pay-points {
+		margin: 0;
+		width: 50%;
+	}
+
+	.iso-btns .iso-pay.iso-pay-dollars:after,
+	.iso-btns .iso-pay.iso-pay-points:after {
+	  left: 47%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca',
+		test : 'Vehicle Selection Loyalty Redemption Banner 2.0',
+		creative : 'Challenger 1',
+    selector: '.vehicle-redemption button',
+		template: '<div class="iso-points vehicle-enough-points cf">\
+					<div class="vehicle-enough-points__tier">\
+						<i class="icon icon-eplus-logo"></i>\
+						<span class="vehicle-enough-points__tier-type">{eplus}</span>\
+					</div>\
+					<div class="vehicle-enough-points__box-number-info">\
+						<div class="vehicle-enough-points__number">\
+							<span class="vehicle-enough-points__total-label">TOTAL POINTS</span>\
+							<span class="vehicle-enough-points__total-points">{points}</span>\
+							<div class="iso-pointsTooltip vehicle-enough-points__info">\
+								<span class="tooltip-info">\
+									<span class="tooltip-info__arrow"></span>\
+									<span class="tooltip-info__content" aria-describedby="tooltip_79" role="tooltip">\
+										<button type="button" class="tooltip-info__close" aria-label="Close"><i class="icon icon-close-white"></i></button>\
+										<span class="tooltip-info__description" id="tooltip_79">{aboutPtDesc}</span>\
+									</span>\
+									<button type="button" class="tooltip-info__cta tooltip-info__icon-button">\
+										<i class="icon icon-icon-info-green"></i><i class="icon icon-icon-info-green-fill"></i>\
+									</button>\
+								</span>\
+							</div>\
+						</div>\
+						<div class="iso-btns"><button type="button" class="iso-pay-dollars iso-pay iso-active">PAY IN {currencySymbol}</button><button type="button" class="iso-pay-points iso-pay">PAY IN POINTS</button></div>\
+					</div>\
+				</div>',
+    countries: ['US','CA', 'USD'],
+    currency: (ReservationStateTree.get(['session','reservationSession','view_currency_code']) === 'EUR') ? '€' : '$',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false); 
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log('fn:Chall');
+			isoTest.pickupCountry = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','address','country_code']);
+			isoTest.log('fn:Chall:Country:'+isoTest.pickupCountry);
+
+			if(isoTest.countries.indexOf(isoTest.pickupCountry) > -1){
+				isoTest.log('fn:Chall:Add Banner');
+
+				isoTest.points = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse','profile','basic_profile','loyalty_data','points_to_date']).toLocaleString('en-US');
+
+				isoTest.addBanner();
+				isoTest.addTooltip();
+			} else {
+				isoTest.showAll();
+			}
+		},
+		showAll : function(){
+			document.querySelectorAll('.vehicle-redemption, .vehicle-enough-points, .vehicle-enough-points__info').forEach(function(n){
+				n.classList.add('show');
+			});
+		},
+		addTooltip: function(){
+			document.querySelector('.iso-pointsTooltip .tooltip-info__cta').addEventListener('click', isoTest.toggleTooltip);
+			document.querySelector('.iso-pointsTooltip .tooltip-info__close').addEventListener('click', isoTest.toggleTooltip);
+		},
+		toggleTooltip : function(){
+			var tooltip = document.querySelector('.iso-pointsTooltip .tooltip-info');
+
+			if(tooltip.classList.contains('active')){
+				tooltip.classList.remove('active');
+				tooltip.querySelector('.tooltip-info__cta').focus();
+			} else {
+				tooltip.classList.add('active');
+				tooltip.querySelector('.tooltip-info__close').focus();
+			}
+		},
+		addBanner : function(){
+			isoTest.log('fn:addBanner');
+			var banner = helpers.supplant(isoTest.template,{
+				'eplus' : enterprise.i18nReservation.resflowcarselect_0046,
+				'points' : isoTest.points,
+        'aboutPtDesc' : enterprise.i18nReservation.resflowcarselect_0050,
+        'currencySymbol' : isoTest.currency
+			});
+
+			var carSelect = document.querySelector('.vehicle-select__main');
+				carSelect.insertAdjacentHTML('afterbegin',banner);
+			var bannerC = carSelect.querySelector('.iso-points');
+
+			var enoughPt = carSelect.querySelector('.vehicle-enough-points');
+			if(enoughPt){
+				carSelect.replaceChild(bannerC, enoughPt);
+			}
+
+			var notEnoughPt = carSelect.querySelector('.vehicle-not-enough-points');
+			if(notEnoughPt){
+				enoughPt.insertAdjacentElement('afterend',enoughPt);
+			}
+
+			document.querySelector('.iso-pay-points').addEventListener('click', isoTest.triggerRedeemPoints);
+			document.querySelector('.iso-pay-dollars').addEventListener('click', isoTest.triggerRedeemDollars);
+		},
+		triggerRedeemDollars : function(element){
+			isoTest.log('fn:triggerRedeemDollars');
+			var redeemBtns = document.querySelectorAll('.vehicle-redemption button');
+			var payBtn = redeemBtns[0];
+
+			if(payBtn.parentNode.classList.contains('vehicle-redemption__options-item--active')){
+				isoTest.log('fn:Pay in Dollars clicked but already shown');
+			} else {
+				isoTest.log('fn:Pay in dollars clicked');
+
+				isoTest.triggerClick(payBtn);
+				document.querySelector('.iso-pay-points').classList.remove('iso-active');
+				document.querySelector('.iso-pay-dollars').classList.add('iso-active');
+				isoTest.fireTag(element,'Pay in $');
+			}
+		},
+		triggerRedeemPoints : function(element){
+			isoTest.log('fn:triggerRedeemPoints');
+			var redeemBtns = document.querySelectorAll('.vehicle-redemption button');
+			var payBtn = redeemBtns[0];
+			var redeemBtn = redeemBtns[1];
+
+			if(payBtn.parentNode.classList.contains('vehicle-redemption__options-item--active')){
+				isoTest.log('fn:Pay in Points Clicked');
+
+				isoTest.triggerClick(redeemBtn);
+				document.querySelector('.iso-pay-points').classList.add('iso-active');
+				document.querySelector('.iso-pay-dollars').classList.remove('iso-active');
+				isoTest.fireTag(element, 'Pay in Points');
+			} else {
+				isoTest.log('fn:Pay in Points Clicked but already shown');
+			}
+		},
+		triggerClick : function(element){
+			isoTest.log('fn:triggerClick');
+			var event = new Event('click', { bubbles: true });
+			element.dispatchEvent(event);		
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
