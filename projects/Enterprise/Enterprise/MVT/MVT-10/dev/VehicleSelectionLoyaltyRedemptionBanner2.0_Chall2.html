@@ -1,4 +1,78 @@
 <style>
+.vehicle-enough-points__tier {
+  float: left;
+  left: -6px;
+  position: relative;
+}
+
+.vehicle-enough-points__tier .icon {
+  display: inline-block;
+  height: 45px;
+  vertical-align: middle;
+  width: 45px;
+}
+
+.vehicle-enough-points__tier-type {
+	color: #fff;
+  display: inline-block;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  position: relative;
+  text-transform: uppercase;
+  top: 0;
+}
+
+.vehicle-enough-points__box-number-info {
+	float: right;
+	text-align: right;
+}
+
+.vehicle-enough-points__number {
+	color: #fff;
+  display: inline-block;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  position: relative;
+  top: 6px;
+}
+
+.vehicle-enough-points__total-label {
+  margin-right: 15px;
+  vertical-align: middle;
+}
+
+.vehicle-enough-points__total-points {
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  vertical-align: middle;
+}
+
+.vehicle-enough-points__info {
+	float: right;
+	position: relative;
+  top: 7px;
+}
+
+.vehicle-enough-points__info .tooltip-info__arrow {
+  bottom: -11px;
+  left: 70px;
+  top: initial;
+  transform: rotate(-180deg);
+}
+
+.vehicle-enough-points__info .tooltip-info__content {
+	bottom: initial;
+  font-size: 14px;
+  text-align: left;
+  top: 32px;
+  transform:translate(120px, 0px);
+  width: 252px;
+  z-index: 2;
+}
+
 .vehicle-redemption, .vehicle-select__main > .vehicle-enough-points, .iso-pointsTooltip.vehicle-enough-points__info:before {
 	display: none !important;
 }
@@ -188,6 +262,13 @@
 }
 
 @media (max-width: 67.5625em) {
+	.vehicle-enough-points__info .tooltip-info__content {
+		transform: translate(0, 0);
+    width: 80vw;
+    max-width: 320px;
+    z-index: 2;
+	}
+	
 	.iso-points-sm.iso-points.vehicle-enough-points {
 		display: block !important;
 		padding: 20px 25px !important;
