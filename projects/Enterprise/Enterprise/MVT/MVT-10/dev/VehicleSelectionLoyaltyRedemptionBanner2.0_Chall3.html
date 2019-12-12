@@ -218,6 +218,15 @@
 	color: #FFFFFF;
 }
 
+@media (min-width: 67.625em) {
+	.vehicle-select__main.iso-select-box .iso-btns,
+	.vehicle-select__main.iso-select-box .iso-points.vehicle-enough-points,
+	.vehicle-select__main.iso-select-box .vehicle-not-enough-points {
+		margin-right: -15px;
+	  padding-right: 15px;
+	}
+}
+
 @media (max-width: 67.5625em) {
 	.vehicle-enough-points__info .tooltip-info__content {
 		transform: translate(0, 0);
@@ -442,6 +451,15 @@
 
 			var carSelect = document.querySelector('.vehicle-select__main');
 			carSelect.insertAdjacentHTML('afterbegin',banner);
+
+			var isSelected = document.querySelector('.vehicle-select .vehicle-item.is-selected');
+			var isPreSelected = document.querySelector('.vehicle-select .vehicle-item.is-pre-selected');
+			var searchByFilter = document.querySelector('.vehicle-select .vehicle-item.is-search-by-filter');
+			var isPreferred = document.querySelector('.vehicle-select .vehicle-select .vehicle-item.is-preferred');
+
+			if (isSelected != null || isPreSelected != null || searchByFilter != null || isPreferred !=null ) {
+				document.querySelector('.vehicle-select__main').classList.add('iso-select-box');
+			}
 
 			document.querySelector('.iso-pay-points').addEventListener('click', isoTest.triggerRedeemPoints);
 			document.querySelector('.iso-pay-dollars').addEventListener('click', isoTest.triggerRedeemDollars);

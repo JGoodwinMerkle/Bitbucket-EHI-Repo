@@ -261,6 +261,14 @@
   left: 43%;
 }
 
+@media (min-width: 67.625em) {
+	.vehicle-select__main.iso-select-box,
+	.vehicle-select__main.iso-select-box .vehicle-not-enough-points {
+		margin-right: -15px;
+	  padding-right: 15px;
+	}
+}
+
 @media (max-width: 67.5625em) {
 	.vehicle-enough-points__info .tooltip-info__content {
 		transform: translate(0, 0);
@@ -552,6 +560,15 @@
 
 			var carSelectDesktop = document.querySelector('.vehicle-select__aside');
 			carSelectDesktop.insertAdjacentHTML('afterbegin',bannerDesktop);
+
+			var isSelected = document.querySelector('.vehicle-select .vehicle-item.is-selected');
+			var isPreSelected = document.querySelector('.vehicle-select .vehicle-item.is-pre-selected');
+			var searchByFilter = document.querySelector('.vehicle-select .vehicle-item.is-search-by-filter');
+			var isPreferred = document.querySelector('.vehicle-select .vehicle-select .vehicle-item.is-preferred');
+
+			if (isSelected != null || isPreSelected != null || searchByFilter != null || isPreferred !=null ) {
+				document.querySelector('.vehicle-select__main').classList.add('iso-select-box');
+			}
 
 			document.querySelector('.iso-points-desktop .iso-pay-points').addEventListener('click', isoTest.triggerRedeemPoints);
 			document.querySelector('.iso-points-desktop .iso-pay-dollars').addEventListener('click', isoTest.triggerRedeemDollars);
