@@ -36,7 +36,7 @@
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
-			
+
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
@@ -64,11 +64,11 @@
 
 				setTimeout(function(){ clearInterval(contentInt) }, 1000);
 			});
-			
+
 		},
 		hashHandler : function(){
 			if(/extras/.test(location.hash)){
-				helpers.elementLoaded(isoTest.selector, function() {	
+				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
 			}
@@ -87,10 +87,12 @@
 		},
 		updateExtra: function (code) {
 			isoTest.log('fn: updateExtra() : ' + code);
-			var extraRow = document.querySelector('div[data-code^='+code+']').parentNode.parentNode.parentNode.parentNode;
-			var detailsSelector = extraRow.querySelector('.extras-row__details-text') ? '.extras-row__details-text' : '.extras-mobile-row__details-text';
-			var details = extraRow.querySelector(detailsSelector + ' div p') ? extraRow.querySelector(detailsSelector + ' div p') : extraRow.querySelector(detailsSelector + ' p');
-			details.innerHTML = isoTest.content[code];
+			if(document.querySelector('div[data-code^='+code+']')){
+				var extraRow = document.querySelector('div[data-code^='+code+']').parentNode.parentNode.parentNode.parentNode;
+				var detailsSelector = extraRow.querySelector('.extras-row__details-text') ? '.extras-row__details-text' : '.extras-mobile-row__details-text';
+				var details = extraRow.querySelector(detailsSelector + ' div p') ? extraRow.querySelector(detailsSelector + ' div p') : extraRow.querySelector(detailsSelector + ' p');
+				details.innerHTML = isoTest.content[code];
+			}
 		},
 		moveBtns : function(){
 			var extraRows = document.querySelectorAll('.extras-row');
@@ -117,9 +119,9 @@
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
-			s.linkTrackVars = 'eVar20'; 
-			s.eVar20 = linkName; 
-			s.tl(this, 'o', linkName); 
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
