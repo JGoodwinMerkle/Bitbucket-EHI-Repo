@@ -61,6 +61,18 @@
 	font-size: 14px;
 }
 
+#prepay-container .prepay-checklist .checklist-section:before {
+	background-image: url('https:/\/cdn-assets-cloud.frontify.com/local/frontify/eyJwYXRoIjoiXC9wdWJsaWNcL3VwbG9hZFwvc2NyZWVuc1wvMTU4MTI4XC82OTQ3MTM2ZGFjOGRjZjZjYjliYTg3NzQ5ZjQyNGRmOS0xNTA4OTQzNTM0LnN2ZyJ9:frontify:WJvfYx9Ey4ltYa5nI_lGZ5YQSODLYp5KpCY03B8dhYI?width=800');
+	background-repeat: no-repeat;
+	content: '';
+  display: inline-block;
+  height: 15px;
+  float: left;
+  padding-right: 10px;
+  width: 15px;
+}
+
+
 #prepay-container .prepay-checklist .checklist-section .btn.checklist-header {
 	color: #333333;
 }
@@ -69,19 +81,11 @@
 	color: #333333;
 	font-size: 14px;
 	font-weight: 300;
-	line-height: 18px;
 }
 
 #prepay-container .prepay-checklist .checklist-section h3 .icon {
-	border: 2px solid #333333;
-}
-
-#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot {
-	-webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
+	/*border: 2px solid #333333;*/
+	display: none;
 }
 
 #prepay-container .iso-payment-wrapper {
@@ -182,6 +186,23 @@
 
 	#prepay-container .iso-payment-wrapper .credit-card-icons {
 		padding: 0;
+	}
+}
+
+@media (max-width: 29.75em) {
+	#prepay-container .prepay-checklist .checklist-expand {
+		display: block;
+		float: right;
+		position: absolute;
+    right: 0;
+	}
+
+	#prepay-container .prepay-checklist .checklist-section {
+		position: relative;
+	}
+
+	#prepay-container .prepay-checklist .checklist-section h3 {
+		width: 90%;
 	}
 }
 
@@ -306,20 +327,12 @@
 
 		 	document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .icon.icon-forms-checkmark')[0].classList.remove('icon-forms-checkmark-green');
 		 	document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .icon.icon-forms-checkmark')[1].classList.remove('icon-forms-checkmark-green');
-
-
-	 		document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot-down')[0].classList.add('icon-nav-carrot');
-	 		document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot-down')[1].classList.add('icon-nav-carrot');
-
-	 		document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot')[0].classList.remove('icon-nav-carrot-down');
-	 		document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot')[1].classList.remove('icon-nav-carrot-down');
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
 		}
-
 	}
 
 	var helpers = {
