@@ -5,37 +5,205 @@
 }
 
 #prepay-container .view-header {
-	    padding-top: 40px;
-    margin-right: 40px;
-    margin-left: 40px;
+  margin-left: 40px;
+  margin-right: 40px;
+  padding-top: 40px;
 }
-
 
 #prepay-container .cf {
-	    margin-right: 40px;
-    margin-left: 40px;
+	margin-left: 40px;
+	margin-right: 40px;
 }
-
 
 #prepay-container .prepay-label {
-	    margin-top: 0;
+	margin-top: 0;
 }
 
+#prepay-container .view-header .iso-icon-header {
+	background-size: auto 100%;
+	display: inline-block;
+	height: 18px;
+	margin-right: 10px;
+}
 
-#prepay-container {
+#prepay-container .view-header .iso-subheader {
+	font-size: 14px;
+	line-height: 18px;
+	margin-left: 10px;
+}
 
+#prepay-container .cf .prepay-label .iso-bold {
+	font-weight: 600;
+}
+
+#prepay-container .cf .prepay-label .iso-subtext {
+	display: block;
+	font-size: 12px;
+	margin-bottom: 34px;
+	margin-top: 20px;
 }
 
 #prepay-container .prepay-checklist {
 	background-color: #FFFFFF;
-	    border-left: none;
-    border-right: none;
-	    border-bottom: none;
-    width: 100%;
-    padding-right: 40px;
-    padding-left: 40px;
-    padding-top: 25px;
-    padding-bottom: 30px;
+	border-bottom: none;
+	border-left: none;
+  border-right: none;
+  padding: 25px 40px 30px;
+  width: 100%;
+}
+
+#prepay-container .prepay-checklist h2 {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+#prepay-container .prepay-checklist .checklist-section {
+	font-size: 14px;
+}
+
+#prepay-container .prepay-checklist .checklist-section .btn.checklist-header {
+	color: #333333;
+}
+
+#prepay-container .prepay-checklist .checklist-section h3 {
+	color: #333333;
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 18px;
+}
+
+#prepay-container .prepay-checklist .checklist-section h3 .icon {
+	border: 2px solid #333333;
+}
+
+#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot {
+	-webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+#prepay-container .iso-payment-wrapper {
+	border: solid 1px #C3C3C3;
+}
+
+#prepay-container .iso-payment-wrapper .credit-card-icons {
+	display: flex;
+  float: none;
+  justify-content: space-between;
+  margin: 43px auto 24px;
+  text-align: center;
+}
+
+#prepay-container .iso-payment-wrapper .iso-icon-header {
+	background-color: #F3F3F3;
+	background-blend-mode: color-burn;
+	background-position: center;
+	background-size: auto 100%;
+	height: 18px;
+	margin: -10px auto 0;
+	padding-left: 20.5px;
+	padding-right: 20.5px;
+}
+
+#prepay-container .iso-payment-wrapper #btnAddPaymentMethod {
+	background: #169A5A;
+	border: none;
+	color: #FFFFFF;
+	display: block;
+	float: none;
+	font-size: 16px;
+	margin-left: auto;
+  margin-right: auto;
+  padding: 15px 29px 14px;
+  width: auto;
+}
+
+#prepay-container .iso-payment-wrapper #btnAddPaymentMethod:hover {
+	background-color: #006639;
+}
+
+#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-icon-verifiedvisa, 
+#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-icon-mastersecure,
+#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-amex-safekey {
+	margin: 0;
+}
+
+#prepay-container .secure-disclaimer {
+	display: none;
+}
+
+@media (min-width: 1280px) {
+	#prepay-container .iso-payment-wrapper {
+		margin-left: 44px;
+		margin-right: 44px;
+	}
+}
+
+@media (max-width: 748px) {
+	#prepay-container .view-header {
+		
+	  margin-left: 20px;
+	  margin-right: 20px;
+	  padding-top: 20px;
+	}
+
+	#prepay-container .cf {
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+
+	#prepay-container .prepay-checklist {
+		margin-top: 40px;
+	  padding: 25px 20px 30px;
+	}
+
+	#prepay-container .iso-payment-wrapper #btnAddPaymentMethod {
+		margin-top: 35px;
+	}
+}
+
+@media (max-width: 39.8em) {
+	#prepay-container .view-header {
+		margin-bottom: 40px;
+	  padding-top: 0px;
+	}
+
+	#prepay-container .cf {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	#prepay-container .iso-payment-wrapper {
+    margin-left: -8px;
+    margin-right: -8px;
+	}
+
+	#prepay-container .iso-payment-wrapper .credit-card-icons {
+		padding: 0;
+	}
+}
+
+@media (max-width: 400px) {
+	#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-icon-verifiedvisa, 
+	#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-icon-mastersecure,
+	#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-amex-safekey {
+		height: 20px;
+		margin: 0;
+	}
+
+	#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-icon-verifiedvisa {
+		width: 39px;
+	}
+ 
+	#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-icon-mastersecure {
+		width: 45px;
+	}
+
+	#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-amex-safekey {
+		width: 61px;
+	}
 }
 </style>
 <script>
@@ -47,6 +215,39 @@
 		test : '(CONV) ENT 009 - Payment Section UX 1.0',
 		creative : 'Challenger 1',
 		selector: '#prepay-container',
+		content: {
+			en : {
+				header: "Pay now",
+				subheader: "Mandatory",
+				text: "Please use <span class='iso-bold'>debit card</span> or <span class='iso-bold'>credit card</span> (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>) in the name of the driver through our <span class='iso-bold'>safe & secure connection</span>.",
+				subtext: "We do not accept Maestro, Electron and prepaid cards",
+				cta: "Add payment details"
+			},
+			de : {
+				header: "Sofort Bezahlen",
+				subheader: "Pflichtfeld",
+				text: "Wir akzeptieren über unsere <span class='iso-bold'>sichere</span> Verbindung Zahlungen mit <span class='iso-bold'>Kreditkarten</span> oder <span class='iso-bold'>Debitkarten</span (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>), die auf den Namen des Fahrers ausgestellt sind.",
+				subtext: "Wir akzeptieren keine Maestro, V-Pay und Prepaid-Karten",
+				cta: "Zahlungsdaten hinzufügen"
+			},
+			es : {
+				header: "Pagar ahora",
+				subheader: "Obligatorio",
+				text: "Aceptamos pagos con tarjeta de <span class='iso-bold'>débito</span> o tarjeta de <span class='iso-bold'>crédito</span> (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>) al nombre del conductor a través de nuestra conexión <span class='iso-bold'>segura</span>.",
+				subtext: "No aceptamos tarjetas Maestro, Electron o de prepago",
+				cta: "Agregar datos de pago"
+			},
+			fr : {
+				header: "Paiement en ligne",
+				subheader: "Obligatoire",
+				text: "Nous acceptons les cartes de <span class='iso-bold'>crédit</span> et de <span class='iso-bold'>débit</span> (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>) établies au nom du conducteur grâce à une connexion <span class='iso-bold'>sécurisée</span>.",
+				subtext: "Les cartes Maestro, Electrons et prépayées ne sont pas acceptées",
+				cta: "Ajouter des détails de paiement"
+			}
+		},
+		templateHeader: '<i class="icon icon-included-theftprotection-2 iso-icon-header" title="icon-included-theftprotection-2"></i>{header}<span class="iso-subheader">({subheader})</span>',
+		templateBody: '{text}<span class="iso-subtext">({subtext})</span>',
+		templatePayment: '<div class="iso-payment-wrapper"><i class="icon icon-included-theftprotection-2 iso-icon-header" title="icon-included-theftprotection-2"></i></div>',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -70,7 +271,7 @@
 		
 		},
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
+			if(/commit/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -78,15 +279,40 @@
 		},
 		chall : function() {
 
-			// Your code goes here
+			var lang = location.pathname.split('/')[1];
 
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
+			var paymentHeader = helpers.supplant(isoTest.templateHeader, {
+          'header' : isoTest.content[lang].header,
+          'subheader' : isoTest.content[lang].subheader
+     	});
+
+     	var paymentBody = helpers.supplant(isoTest.templateBody, {
+          'text' : isoTest.content[lang].text,
+          'subtext' : isoTest.content[lang].subtext
+     	});
+
+		 	document.querySelector('#prepay-container .view-header').innerHTML = paymentHeader;
+		 	document.querySelector('#prepay-container .prepay-label').innerHTML = paymentBody;
+
+		 	document.querySelector('#prepay-container .prepay-label').insertAdjacentHTML('afterend', isoTest.templatePayment);
+		 	var elBtn = document.querySelector('#btnAddPaymentMethod');
+		 	var cardContainer = document.querySelector('.credit-card-icons');
+		 	document.querySelector('.iso-payment-wrapper').appendChild(elBtn);
+		 	document.querySelector('.iso-payment-wrapper').appendChild(cardContainer);
+		 	elBtn.innerHTML = isoTest.content[lang].cta;
+
+		 	document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .icon.icon-forms-checkmark-green')[0].classList.add('icon-forms-checkmark');
+		 	document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .icon.icon-forms-checkmark-green')[1].classList.add('icon-forms-checkmark');
+
+		 	document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .icon.icon-forms-checkmark')[0].classList.remove('icon-forms-checkmark-green');
+		 	document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .icon.icon-forms-checkmark')[1].classList.remove('icon-forms-checkmark-green');
+
+
+	 		document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot-down')[0].classList.add('icon-nav-carrot');
+	 		document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot-down')[1].classList.add('icon-nav-carrot');
+
+	 		document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot')[0].classList.remove('icon-nav-carrot-down');
+	 		document.querySelectorAll('#prepay-container .prepay-checklist .checklist-section .btn .icon.icon-nav-carrot')[1].classList.remove('icon-nav-carrot-down');
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
