@@ -8,6 +8,7 @@
   margin-left: 40px;
   margin-right: 40px;
   padding-top: 40px;
+  line-height: 18px;	
 }
 
 #prepay-container .cf {
@@ -27,6 +28,7 @@
 }
 
 #prepay-container .view-header .iso-subheader {
+	display: inline-block;
 	font-size: 14px;
 	line-height: 18px;
 	margin-left: 10px;
@@ -138,6 +140,10 @@
 	display: none;
 }
 
+#prepay-container .iso-payment-wrapper #btnAddPaymentMethod .iso-de {
+	display: none;
+}
+
 @media (min-width: 1280px) {
 	#prepay-container .iso-payment-wrapper {
 		margin-left: 44px;
@@ -225,6 +231,22 @@
 	#prepay-container .iso-payment-wrapper .credit-card-icons .icon.icon-amex-safekey {
 		width: 61px;
 	}
+
+	#prepay-container .iso-payment-wrapper #btnAddPaymentMethod {
+	  padding: 15px 20px 14px;
+	}
+}
+
+@media (max-width: 397px) {
+	#prepay-container .view-header .iso-subheader .iso-fr{
+		margin-left: 30px;
+	}
+}
+
+@media (max-width: 360px) {
+	#prepay-container .iso-payment-wrapper #btnAddPaymentMethod .iso-de {
+		display: block;
+	}
 }
 </style>
 <script>
@@ -238,35 +260,35 @@
 		selector: '#prepay-container',
 		content: {
 			en : {
-				header: "Pay now",
-				subheader: "Mandatory",
-				text: "Please use <span class='iso-bold'>debit card</span> or <span class='iso-bold'>credit card</span> (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>) in the name of the driver through our <span class='iso-bold'>safe & secure connection</span>.",
+				header: "Pay Now",
+				subheader: "(Mandatory)",
+				text: "Please use <span class='iso-bold'>debit</span> or <span class='iso-bold'>credit card</span> (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>) in the name of the driver through our <span class='iso-bold'>safe & secure connection</span>.",
 				subtext: "We do not accept Maestro, Electron and prepaid cards",
 				cta: "Add payment details"
 			},
 			de : {
 				header: "Sofort Bezahlen",
-				subheader: "Pflichtfeld",
-				text: "Wir akzeptieren über unsere <span class='iso-bold'>sichere</span> Verbindung Zahlungen mit <span class='iso-bold'>Kreditkarten</span> oder <span class='iso-bold'>Debitkarten</span (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>), die auf den Namen des Fahrers ausgestellt sind.",
+				subheader: "(Pflichtfeld)",
+				text: "Wir akzeptieren über unsere <span class='iso-bold'>sichere</span> Verbindung Zahlungen mit <span class='iso-bold'>Kreditkarten</span> oder <span class='iso-bold'>Debitkarten</span> (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>), die auf den Namen des Fahrers ausgestellt sind.",
 				subtext: "Wir akzeptieren keine Maestro, V-Pay und Prepaid-Karten",
-				cta: "Zahlungsdaten hinzufügen"
+				cta: "Zahlungsdaten <br class='iso-de'>hinzufügen"
 			},
 			es : {
-				header: "Pagar ahora",
-				subheader: "Obligatorio",
+				header: "Pagar Ahora",
+				subheader: "(Obligatorio)",
 				text: "Aceptamos pagos con tarjeta de <span class='iso-bold'>débito</span> o tarjeta de <span class='iso-bold'>crédito</span> (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>) al nombre del conductor a través de nuestra conexión <span class='iso-bold'>segura</span>.",
 				subtext: "No aceptamos tarjetas Maestro, Electron o de prepago",
 				cta: "Agregar datos de pago"
 			},
 			fr : {
-				header: "Paiement en ligne",
-				subheader: "Obligatoire",
+				header: "Paiement en Ligne",
+				subheader: "<span class='iso-fr'>(Obligatoire)</span>",
 				text: "Nous acceptons les cartes de <span class='iso-bold'>crédit</span> et de <span class='iso-bold'>débit</span> (<span class='iso-bold'>Visa</span>, <span class='iso-bold'>Mastercard</span> or <span class='iso-bold'>American Express</span>) établies au nom du conducteur grâce à une connexion <span class='iso-bold'>sécurisée</span>.",
 				subtext: "Les cartes Maestro, Electrons et prépayées ne sont pas acceptées",
-				cta: "Ajouter des détails de paiement"
+				cta: "Ajouter des détails<br>de paiement"
 			}
 		},
-		templateHeader: '<i class="icon icon-included-theftprotection-2 iso-icon-header" title="icon-included-theftprotection-2"></i>{header}<span class="iso-subheader">({subheader})</span>',
+		templateHeader: '<i class="icon icon-included-theftprotection-2 iso-icon-header" title="icon-included-theftprotection-2"></i>{header}<span class="iso-subheader">{subheader}</span>',
 		templateBody: '{text}<span class="iso-subtext">({subtext})</span>',
 		templatePayment: '<div class="iso-payment-wrapper"><i class="icon icon-included-theftprotection-2 iso-icon-header" title="icon-included-theftprotection-2"></i></div>',
 		init : function() {
