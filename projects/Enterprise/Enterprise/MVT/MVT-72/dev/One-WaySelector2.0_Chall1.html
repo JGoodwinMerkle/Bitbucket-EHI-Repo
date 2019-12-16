@@ -1,0 +1,145 @@
+<style>
+	.return-link .icon.icon-remove {
+		background-image: url('/content/dam/ecom/hosted/ico_minus_green.svg');
+	}
+	.same-location-info {
+		display: none !important;
+	}
+	.return-link {
+		display: block;
+		font-weight: bold;
+		padding: 10px 10px 10px 4px;
+		position: relative;
+		top: 0;
+	}
+	.return-link .icon {
+		float: left;
+	    margin-right: 8px;
+	    margin-top: 1px;
+	}
+	.booking-widget .location-search .location-btn {
+		float: none;
+	}
+	#location-text-box-dropoff {
+		display: inline-block;
+	}
+	.tooltip-info {
+		margin-left: 5px;
+	}
+	.different-return-link {
+
+	}
+	.same-return-link {
+		
+	}
+	@media (max-width: 29.75em) {
+		.return-link {
+			
+		}
+	}
+	@media (min-width: 46.8em) {
+		.return-link {
+			position: absolute;
+		    right: 10px;
+		    top: 32px;
+		}
+
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise.com',
+		test : 'One-Way Selector 2.0',
+		creative : 'Challenger 1',
+		selector: '.same-location-info',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+
+			// Your code goes here
+			document.querySelector('.pick-up-location .location-btn').insertAdjacentHTML('afterend','<a href class="return-link different-return-link"><i aria-hidden="true" role="presentation" class="icon icon-add"></i> Different Return</a><a href class="return-link same-return-link hide"><i aria-hidden="true" role="presentation" class="icon icon-remove"></i> Same Return</a>');
+			
+			var returnTooltip = document.querySelector('.same-location-info .tooltip-info');
+			document.querySelector('#location-text-box-dropoff').insertAdjacentElement('afterend', returnTooltip);
+
+			document.addEventListener('click', function (event) {
+				if (!event.target.closest('.return-link')) return;
+				event.preventDefault();
+				document.querySelector('.same-location-info input').click();
+				if (event.target.closest('.different-return-link')) {
+					document.querySelector('.same-return-link').classList.remove('hide');
+					document.querySelector('.different-return-link').classList.add('hide');
+				}
+				if (event.target.closest('.same-return-link')) {
+					document.querySelector('.same-return-link').classList.add('hide');
+					document.querySelector('.different-return-link').classList.remove('hide');
+				}
+			}, false);
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

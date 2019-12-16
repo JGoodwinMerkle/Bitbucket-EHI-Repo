@@ -1,0 +1,146 @@
+<style>
+	.same-location-info {
+		display: none !important;
+	}
+	.trip-type-radio {
+		display: block;
+		float: left;
+		margin-top: 13px;
+	}
+
+	/* radio styling */
+	.trip-type-radio label {
+		display: inline;
+		margin-right: 16px !important;
+	}
+	.trip-type-radio input[type='radio'] {
+	    -webkit-appearance: none;
+	       -moz-appearance: none;
+	            appearance: none;
+	    background: #ffffff;
+	    border: 2px solid gray;
+	    border-radius: 100%;
+	    min-width: 20px;
+	    min-height: 20px;
+	    padding: 0;
+	    position: relative;
+	    transform: translate(0, 4px);
+	}
+
+	.trip-type-radio input[type='radio']:before {
+	    border-radius: 100px;
+	    content: '';
+	    display: block;
+	    height: 9px;
+	    margin: 0px;
+	    width: 9px;
+	    position: absolute;
+	    transform: translate(-50%, -50%);
+	    top: 50%;
+	    left: 50%;
+	}
+
+	.trip-type-radio input[type='radio']:checked:before {
+	    background: #169a5a;
+	}
+
+	.trip-type-radio input[type='radio']:checked {
+	    border-color: #169a5a;
+	}
+
+	.trip-type-radio input[type='radio']:focus:invalid {
+	    border-color: #FEC621;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise.com',
+		test : 'One-Way Selector 2.0',
+		creative : 'Challenger 2',
+		selector: '.same-location-info',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+
+			// Your code goes here
+			document.querySelector('.pick-up-location .location-btn').insertAdjacentHTML('afterend','<div class="trip-type-radio"><div><input type="radio" id="roundtrip" name="triptype" value="roundtrip" checked><label for="roundtrip">Round trip</label><input type="radio" id="oneway" name="triptype" value="oneway"><label for="oneway">One-way</label></div></div>');
+
+			document.addEventListener('change', function (event) {
+				if (!event.target.matches('.trip-type-radio *')) return;
+				document.querySelector('.same-location-info input').click();
+				// if (event.target.matches('#roundtrip')) {
+					
+				// }
+				// if (event.target.matches('#oneway')) {
+				// 	document.querySelector('.same-location-info input').click();
+				// }
+			}, false);
+
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
