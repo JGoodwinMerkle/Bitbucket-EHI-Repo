@@ -1,0 +1,252 @@
+<style>
+.vehicle-filter__filter-list {
+	display: block !important;
+	width: 100% !important;
+}
+
+.vehicle-filter__filter-title {
+	display: inline-block !important;
+}
+
+.vehicle-filter__filter-title.iso-price-header {
+  float: right;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 200;
+  font-style: normal;
+  text-transform: none;
+  margin-top: 2px;
+}
+
+.vehicle-filter__filter-list .checkbox__label {
+	display: inline !important;
+}
+
+.vehicle-filter__filter-list .iso-filter-price {
+	float: right;
+	font-weight: 200;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+@media (max-width: 67.5625em) {
+	.vehicle-filter__header {
+		position: relative !important;
+    padding-bottom: 2px !important;
+    padding-top: 19px !important;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Selection Sort By Drop Down 2.0',
+		creative : 'Challenger 0',
+		selector: '.vehicle-list',
+		carCostObject: {},
+		passengerCostObject: {},
+		transmissionCostObject: {},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			// if (typeof store !== 'undefined' && typeof store.getState === 'function' && typeof store.getState().toJS === 'function') {
+				isoTest.checkForVehicles();
+			// }
+		},
+		checkForVehicles : function() {
+			var checkForVehicles = setInterval(function(){
+				if (store.getState().toJS()['app']['vehicles']['availableVehicles'] != null){
+					clearInterval(checkForVehicles);
+					isoTest.findFilterPrice();
+					isoTest.updatefilterWidget();
+				}
+
+				setTimeout(function(){
+					clearInterval(checkForVehicles);
+				}, 10000)
+			},1);
+		},
+		findFilterPrice : function() {
+			var cars = store.getState().toJS()['app']['vehicles']['availableVehicles'];
+			var carFilters = store.getState().toJS()['app']['vehicles']['filters']['CLASS'];
+			var passengerFilters = store.getState().toJS()['app']['vehicles']['filters']['PASSENGERS'];
+			var transmissionFilters = store.getState().toJS()['app']['vehicles']['filters']['TRANSMISSION'];
+			var paymentType = store.getState().toJS()['app']['vehicles']['payType'];
+
+			if (cars != null) {
+
+				for (var key in carFilters) {
+					var lowestPrice = Number.POSITIVE_INFINITY;
+					var tmp;
+					for (var i=cars.length-1; i>=0; i--) {
+						var carStatus = cars[i]['status'];
+						var carFilterType = cars[i]['category']['value'];
+
+						if (carStatus != "SOLD_OUT") {
+							if (carStatus != "RESTRICTED_AT_RETAIL_RATE") {
+								if (carFilterType == key) {
+									tmp = cars[i]['charges'][paymentType]['total_price_view']['amount'];
+							    if (tmp < lowestPrice) lowestPrice = Math.round(tmp);
+								}
+							}
+						}
+					}
+					if (lowestPrice == "Infinity") lowestPrice = "--";
+					isoTest.carCostObject[key] = lowestPrice;
+				}
+
+				for (var key in passengerFilters) {
+					var lowestPrice = Number.POSITIVE_INFINITY;
+					var tmp;
+					for (var i=cars.length-1; i>=0; i--) {
+						var carStatus = cars[i]['status'];
+						var carFilterPassengerCode = cars[i]['filters']['PASSENGERS']['filter_code'];
+						if (carStatus != "SOLD_OUT") {
+							if (carStatus != "RESTRICTED_AT_RETAIL_RATE") {
+								if (parseInt(carFilterPassengerCode) >= key) {
+									tmp = cars[i]['charges'][paymentType]['total_price_view']['amount'];
+							    if (tmp < lowestPrice) lowestPrice = Math.round(tmp); 
+								}
+							}
+						}
+					}
+					if (lowestPrice == "Infinity") lowestPrice = "--";
+					isoTest.passengerCostObject[key] = lowestPrice;
+
+				}
+
+				for (var key in transmissionFilters) {
+					var lowestPrice = Number.POSITIVE_INFINITY;
+					var tmp;
+					for (var i=cars.length-1; i>=0; i--) {
+						var carStatus = cars[i]['status'];
+						var carFilterTransmissionType = cars[i]['filters']['TRANSMISSION']['description'];
+
+						if (carStatus != "SOLD_OUT") {
+							if (carStatus != "RESTRICTED_AT_RETAIL_RATE") {
+								if (carFilterTransmissionType == key) {
+									tmp = cars[i]['charges'][paymentType]['total_price_view']['amount'];
+							    if (tmp < lowestPrice) lowestPrice = Math.round(tmp);
+								}
+							}
+						}
+					}
+					if (lowestPrice == "Infinity") lowestPrice = "--";
+					isoTest.transmissionCostObject[key] = lowestPrice;
+				}
+			}
+		},
+		updatefilterWidget : function() {
+			if (document.querySelector('.iso-price-header') == null) {
+				document.querySelectorAll('.vehicle-filter__filter-title')[0].insertAdjacentHTML("afterend", "<span class='vehicle-filter__filter-title iso-price-header'>Total from</span>");
+			}
+			
+			document.querySelectorAll('.checkbox__text').forEach(function(label) { 
+
+				var filterLabel = label.innerHTML;
+				var filterPrice;
+				var priceSymbol = ReservationStateTree.get(['session','reservationSession','defaultTopNavAmount','symbol']);
+
+				if (isoTest.transmissionCostObject[filterLabel] != null) {
+					filterPrice = isoTest.transmissionCostObject[filterLabel];
+				}
+
+				if (isoTest.carCostObject[filterLabel] != null) {
+					filterPrice = isoTest.carCostObject[filterLabel];
+				}
+
+				if (isoTest.passengerCostObject[filterLabel] != null) {
+					filterPrice = isoTest.passengerCostObject[filterLabel];
+				}
+
+				if (filterPrice != "--") {
+		
+					if (label.nextSibling == null) {
+						label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>"+ priceSymbol + filterPrice + "</span>");
+					} else {
+						label.nextSibling.innerHTML = priceSymbol + filterPrice;
+					}
+				} else {
+					if (label.nextSibling == null) {
+						label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>" + filterPrice + "</span>");
+					} else {
+						label.nextSibling.innerHTML = filterPrice;
+					}
+				}
+			});
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if (typeof store !== 'undefined' && typeof store.getState === 'function' && typeof store.getState().toJS === 'function') {
+				if (typeof callback === "function") {
+					
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		}
+		
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>
