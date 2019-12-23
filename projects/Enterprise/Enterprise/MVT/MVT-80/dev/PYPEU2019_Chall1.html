@@ -1,0 +1,169 @@
+<style>
+.custom-banner.custom-banner--enterprise-plus .custom-banner__content strong {
+	font-weight: bold;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.co.uk Enterprise.ie Enterprise.de Enterprise.fr Enterprise.es',
+		test : 'PYP EU 2019',
+		creative : 'Challenger 1 - Loyalty Not Registered',
+		selector: '.custom-banner__cta',
+		content: {
+			en_GB : {
+				nonMem: {
+					text: 'Earn double points on qualifying rentals with Plus Your Points! Promotion ends soon - join Enterprise Plus today. Terms apply.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=en_gb&TLGVC=E20A&TLG_CID=50601&icid=home-_-banner-_-join.register-_-gben.50601',
+					cta: 'JOIN | REGISTER'
+				},
+				eplusNonReg: {
+					text: '<strong>Plus Your Points is back!</strong> Earn double points on qualifying rentals. Register now! Enterprise Plus offer ends 31 January 2020. Terms apply.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=en_gb&TLGVC=E20A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-gben.50602',
+					cta: 'REGISTER NOW'
+				},
+				eplusMem: {
+					text: '<strong>Enterprise Plus members:</strong> Earn double points on qualifying rentals with Plus Your Points! Offer ends 31 January 2020. Terms apply.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=en_gb&TLGVC=E20A&TLG_CID=50603&icid=home-_-banner-_-loyalty.dashboard-_-gben.50603',
+					cta: 'VIEW DASHBOARD'
+				}
+			},
+			en_IE : {
+				nonMem: {
+					text: 'Earn double points on qualifying rentals with Plus Your Points! Promotion ends soon - join Enterprise Plus today. Terms apply.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=en_ie&TLGVC=E20A&TLG_CID=50601&icid=home-_-banner-_-join.register-_-ieen.50601',
+					cta: 'JOIN | REGISTER'
+				},
+				eplusNonReg: {
+					text: '<strong>Plus Your Points is back!</strong> Earn double points on qualifying rentals. Register now! Enterprise Plus offer ends 31 January 2020. Terms apply.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=en_ie&TLGVC=E20A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-ieen.50602',
+					cta: 'REGISTER NOW'
+				},
+				eplusMem: {
+					text: '<strong>Enterprise Plus members:</strong> Earn double points on qualifying rentals with Plus Your Points! Offer ends 31 January 2020. Terms apply.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=en_ie&TLGVC=E20A&TLG_CID=50603&icid=home-_-banner-_-loyalty.dashboard-_-ieen.50603',
+					cta: 'VIEW DASHBOARD'
+				}
+			},
+			es_ES : {
+				nonMem: {
+					text: '¡Gane puntos dobles en alquileres que califiquen con Plus Your Points! La promoción termina pronto: únase a Enterprise Plus hoy. Aplican términos.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=es_es&TLGVC=E20A&TLG_CID=50601&icid=home-_-banner-_-join.register-_-eses.50601',
+					cta: 'UNIRSE | REGISTRARSE'
+				},
+				eplusNonReg: {
+					text: '<strong>¡Plus Your Points de vuelta!</strong> Gane puntos dobles en alquileres calificados. ¡Regístrate ahora! La oferta Enterprise Plus finaliza el 31 de enero de 2020. Aplican términos.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=es_es&TLGVC=E20A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-eses.50602',
+					cta: 'REGISTRARSE AHORA'
+				},
+				eplusMem: {
+					text: '<strong>Socios de Enterprise Plus:</strong> ¡Gane puntos dobles en alquileres que califiquen con Plus Your Points! La oferta termina el 31 de enero de 2020. Aplican términos.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=es_es&TLGVC=E20A&TLG_CID=50603&icid=home-_-banner-_-loyalty.dashboard-_-eses.50603',
+					cta: 'VER EXTRACTO'
+				}
+			},
+			fr_FR : {
+				nonMem: {
+					text: "Pendant l’opération ‘Plus Your Points’, doublez vos points sur vos locations éligibles ! L’opération se termine bientôt - rejoignez Enterprise Plus aujourd'hui ! Offre soumise à conditions.<br>",
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=fr_fr&TLGVC=E20A&TLG_CID=50601&icid=home-_-banner-_-join.register-_-frfr.50601',
+					cta: 'ADHÉSION | INSCRIPTION'
+				},
+				eplusNonReg: {
+					text: "<strong>Opération spéciale « Plus Your Points » !</strong> Gagnez le double de points sur vos locations éligibles. Inscrivez-vous maintenant ! L'opération spéciale Entreprise Plus prend fin le 31 janvier 2020. Offre soumise à conditions.<br>",
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=fr_fr&TLGVC=E20A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-frfr.50602',
+					cta: 'INSCRIVEZ-VOUS DÈS MAINTENANT'
+				},
+				eplusMem: {
+					text: "<strong>Membres Enterprise Plus:</strong> Gagnez le double de points sur vos locations éligibles avec l’opération Plus Your Points! L’opération prend fin le 31 janvier 2020. Offre soumise à conditions.<br>",
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=fr_fr&TLGVC=E20A&TLG_CID=50603&icid=home-_-banner-_-loyalty.dashboard-_-frfr.50603',
+					cta: 'AFFICHER LE TABLEAU DE BORD'
+				}
+			},
+			de_DE : {
+				nonMem: {
+					text: "Sammeln Sie doppelte Punkte für qualifizierende Anmietungen mit der Plus Your Points-Bonusaktion! Promotion endet bald - treten Sie Enterprise Plus noch heute bei. Es gelten die Teilnahmebedingungen.<br>",
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=de_de&TLGVC=E20A&TLG_CID=50601&icid=home-_-banner-_-join.register-_-dede.50601',
+					cta: 'ANMELDEN | REGISTRIEREN'
+				},
+				eplusNonReg: {
+					text: '<strong>Die Plus Your Points-Bonusaktion ist zurück!</strong> Verdienen Sie doppelte Punkte für qualifizierende Anmietungen.  Jetzt registrieren! Das Enterprise Plus-Angebot endet am 31. Januar 2020. Es gelten die Teilnahmebedingungen.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=de_de&TLGVC=E20A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-dede.50602',
+					cta: 'MELDEN SIE SICH JETZT AN'
+				},
+				eplusMem: {
+					text: '<strong>Enterprise Plus-Mitglieder:</strong> Sammeln Sie mit Plus Your Points doppelte Punkte für qualifizierende Anmietungen! Das Angebot endet am 31. Januar 2020. Es gelten die Teilnahmebedingungen.<br>',
+					url: 'https:\/\/plusyourpoints.enterprise.com/authenticate?langPref=de_de&TLGVC=E20A&TLG_CID=50603&icid=home-_-banner-_-loyalty.dashboard-_-dede.50603',
+					cta: 'DASHBOARD ANZEIGEN'
+				}
+			}
+		},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			var lang = enterprise.locale;
+
+			var tileText = document.querySelector('.custom-banner.custom-banner--enterprise-plus .custom-banner__content p');
+			var tileLink = document.querySelector('.custom-banner.custom-banner--enterprise-plus .custom-banner__ctas-wrapper .custom-banner__cta.btn');
+
+			tileText.innerHTML = isoTest.content[lang].eplusNonReg.text;
+			tileLink.setAttribute('href', isoTest.content[lang].eplusNonReg.url);
+			tileLink.innerText = isoTest.content[lang].eplusNonReg.cta;
+
+			tileLink.addEventListener('click', function(event){
+				isoTest.fireTag('a', isoTest.content[lang].eplusNonReg.cta);
+			}, false);
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
