@@ -1,4 +1,35 @@
 <style>
+.vehicle-filter__filter-list {
+	display: block !important;
+	width: 100% !important;
+}
+
+.vehicle-filter__filter-title {
+	display: inline-block !important;
+}
+
+.vehicle-filter__filter-title.iso-price-header {
+  float: right;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 200;
+  font-style: normal;
+  text-transform: none;
+  margin-top: 2px;
+}
+
+.vehicle-filter__filter-list .checkbox__label {
+	display: inline !important;
+}
+
+.vehicle-filter__filter-list .iso-filter-price {
+	float: right;
+	font-weight: 200;
+  font-size: 13px;
+  margin-top: 5px;
+}
+/**/
+
 .vehicle-header__info .iso-filter-header-desktop {
   color: #181918;
 	font-size: 15px;
@@ -46,23 +77,66 @@
 }
 
 @media (max-width: 1081px){
+	.vehicle-filter__header {
+		position: relative !important;
+    padding-bottom: 2px !important;
+    padding-top: 19px !important;
+	}
+	
 	.vehicle-header__info .iso-filter-header-desktop {
 	  display: none;
 	}
 
 	.vehicle-header__info .iso-filter-header-mobile {
 		color: #181918;
-		display: block;
+		display: inline-block;
 		font-size: 15px;
 		font-weight: 600; 
 	}
 
 	.vehicle-header__info .iso-filter-container {
 		margin-left: 0px;
+		display: inline-block;
 	}
 
 	.vehicle-filter__mobile-cta {
     top: -52px;
+	}
+
+	.vehicle-header__info .iso-filter-container select.iso-dropdown-filter {
+		-webkit-appearance: none;
+	  -moz-appearance: none;
+	  appearance: none;
+	  /*background-position-x: 60px;*/
+	  background-position-x: 125px;
+	  /*background-size: 15%;*/
+	  background-size: 6%;
+	  border: none;
+	  color: #169A5A;
+	  font-size: 14px;
+	  font-weight: 400;
+	  height: auto;
+	  /*padding-left: 2px;*/
+	  padding-left: 10px;
+	  /*width: 75px;*/
+	  width: 140px;
+	}
+
+	.vehicle-filter__mobile-cta .btn .icon.iso-filter {
+		background-image: url(https:/\/d1icd6shlvmxi6.cloudfront.net/gsc/H7AF22/a8/da/56/a8da56bccce04629a14b7776d0731409/images/scratch/u11022.png?token=65c33c83b16023220d20a1cd1b35d09f808c49b64299f4426d91538e29c1ea02);
+		display: inline-block;
+		margin-right: 7px;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(-90deg);
+    vertical-align: bottom;
+    width: 18px;
+	}
+
+	.vehicle-filter__mobile-cta .btn.vehicle-filter__cta-expand {
+		text-transform: capitalize;
 	}
 }
 </style>
@@ -76,7 +150,7 @@
 		creative : 'Challenger 1',
 		selector: '.vehicle-list',
 		preSelected: '.vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected',
-		dropdown: '<div class="iso-filter-header-mobile">SORT BY</div>\
+		dropdown: '<div class="iso-filter-header-mobile">Sort by:</div>\
 							<div class="iso-filter-container">\
 								<select id="iso-filter-sort" class="iso-dropdown-filter icon icon-arrow-down-green" name="Sort By">\
 								  <option class="iso-filter-opt opt-one" value="Featured">Featured</option>\
@@ -85,6 +159,9 @@
 								</select>\
 							</div>\
 							<div class="iso-filter-header-desktop">SORT BY</div>',
+		carCostObject: {},
+		passengerCostObject: {},
+		transmissionCostObject: {},
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -117,6 +194,8 @@
 		chall : function() {
 			isoTest.log('chall()');
 
+			isoTest.checkForVehicles();
+
 			var viewport = document.querySelector("meta[name=viewport]");
 			viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
 
@@ -125,7 +204,131 @@
 			
 			document.getElementsByClassName('vehicle-list')[0].classList.add('iso-available-vehicles');
 
+			document.querySelector('.vehicle-filter__mobile-cta .btn.vehicle-filter__cta-expand').innerHTML = '<i class="icon iso-filter"></i>Filter';
+
 			isoTest.addEvents();
+		},
+		checkForVehicles : function() {
+			var checkForVehicles = setInterval(function(){
+				if (store.getState().toJS()['app']['vehicles']['availableVehicles'] != null){
+					clearInterval(checkForVehicles);
+					isoTest.findFilterPrice();
+					isoTest.updatefilterWidget();
+				}
+
+				setTimeout(function(){
+					clearInterval(checkForVehicles);
+				}, 10000)
+			},1);
+		},
+		findFilterPrice : function() {
+			var cars = store.getState().toJS()['app']['vehicles']['availableVehicles'];
+			var carFilters = store.getState().toJS()['app']['vehicles']['filters']['CLASS'];
+			var passengerFilters = store.getState().toJS()['app']['vehicles']['filters']['PASSENGERS'];
+			var transmissionFilters = store.getState().toJS()['app']['vehicles']['filters']['TRANSMISSION'];
+			var paymentType = store.getState().toJS()['app']['vehicles']['payType'];
+
+			if (cars != null) {
+
+				for (var key in carFilters) {
+					var lowestPrice = Number.POSITIVE_INFINITY;
+					var tmp;
+					for (var i=cars.length-1; i>=0; i--) {
+						var carStatus = cars[i]['status'];
+						var carFilterType = cars[i]['category']['value'];
+
+						if (carStatus != "SOLD_OUT") {
+							if (carStatus != "RESTRICTED_AT_RETAIL_RATE") {
+								if (carFilterType == key) {
+									tmp = cars[i]['charges'][paymentType]['total_price_view']['amount'];
+							    if (tmp < lowestPrice) lowestPrice = Math.round(tmp);
+								}
+							}
+						}
+					}
+					if (lowestPrice == "Infinity") lowestPrice = "--";
+					isoTest.carCostObject[key] = lowestPrice;
+				}
+
+				for (var key in passengerFilters) {
+					var lowestPrice = Number.POSITIVE_INFINITY;
+					var tmp;
+					for (var i=cars.length-1; i>=0; i--) {
+						var carStatus = cars[i]['status'];
+						var carFilterPassengerCode = cars[i]['filters']['PASSENGERS']['filter_code'];
+						if (carStatus != "SOLD_OUT") {
+							if (carStatus != "RESTRICTED_AT_RETAIL_RATE") {
+								if (parseInt(carFilterPassengerCode) >= key) {
+									tmp = cars[i]['charges'][paymentType]['total_price_view']['amount'];
+							    if (tmp < lowestPrice) lowestPrice = Math.round(tmp); 
+								}
+							}
+						}
+					}
+					if (lowestPrice == "Infinity") lowestPrice = "--";
+					isoTest.passengerCostObject[key] = lowestPrice;
+
+				}
+
+				for (var key in transmissionFilters) {
+					var lowestPrice = Number.POSITIVE_INFINITY;
+					var tmp;
+					for (var i=cars.length-1; i>=0; i--) {
+						var carStatus = cars[i]['status'];
+						var carFilterTransmissionType = cars[i]['filters']['TRANSMISSION']['description'];
+
+						if (carStatus != "SOLD_OUT") {
+							if (carStatus != "RESTRICTED_AT_RETAIL_RATE") {
+								if (carFilterTransmissionType == key) {
+									tmp = cars[i]['charges'][paymentType]['total_price_view']['amount'];
+							    if (tmp < lowestPrice) lowestPrice = Math.round(tmp);
+								}
+							}
+						}
+					}
+					if (lowestPrice == "Infinity") lowestPrice = "--";
+					isoTest.transmissionCostObject[key] = lowestPrice;
+				}
+			}
+		},
+		updatefilterWidget : function() {
+			if (document.querySelector('.iso-price-header') == null) {
+				document.querySelectorAll('.vehicle-filter__filter-title')[0].insertAdjacentHTML("afterend", "<span class='vehicle-filter__filter-title iso-price-header'>Total from</span>");
+			}
+			
+			document.querySelectorAll('.checkbox__text').forEach(function(label) { 
+
+				var filterLabel = label.innerHTML;
+				var filterPrice;
+				var priceSymbol = ReservationStateTree.get(['session','reservationSession','defaultTopNavAmount','symbol']);
+
+				if (isoTest.transmissionCostObject[filterLabel] != null) {
+					filterPrice = isoTest.transmissionCostObject[filterLabel];
+				}
+
+				if (isoTest.carCostObject[filterLabel] != null) {
+					filterPrice = isoTest.carCostObject[filterLabel];
+				}
+
+				if (isoTest.passengerCostObject[filterLabel] != null) {
+					filterPrice = isoTest.passengerCostObject[filterLabel];
+				}
+
+				if (filterPrice != "--") {
+		
+					if (label.nextSibling == null) {
+						label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>"+ priceSymbol + filterPrice + "</span>");
+					} else {
+						label.nextSibling.innerHTML = priceSymbol + filterPrice;
+					}
+				} else {
+					if (label.nextSibling == null) {
+						label.insertAdjacentHTML("afterend", "<span class='iso-filter-price'>" + filterPrice + "</span>");
+					} else {
+						label.nextSibling.innerHTML = filterPrice;
+					}
+				}
+			});
 		},
 		priceSort : function () {
 			isoTest.log('priceSort()');
@@ -288,8 +491,6 @@
 
 				}, false);
 			}
-
-
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
@@ -338,6 +539,8 @@
 		}
 	}
 
-	isoTest.init();
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
 })();
 </script>
