@@ -1,0 +1,167 @@
+<style>
+	.aside .pre-expedited-banner {
+		display: none;
+	}
+	.aside #personal-information {
+		margin-top: 25px;
+		padding: 40px;
+	}
+	.aside #personal-information .personal-entry-form{
+		margin-top: 0;
+	}
+	.aside #personal-information .view-header {
+		border-bottom: 3px solid #000;
+		margin-bottom: 25px;
+		padding: 0;
+	}
+
+	@media (max-width:748px){
+		#commit .verification-page .aside {
+			margin-bottom: 0;
+		}
+		#commit .review-section > .key-rental-facts-and-policies {
+			margin-top:-40px;
+		}
+		#commit .aside #personal-information {
+			display: block;
+			padding: 20px;
+		}
+		#commit .aside .pre-expedited-banner {
+			display: flex;
+		}
+		#commit .review-section .pre-expedited-banner {
+			display: none;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Review Layout Change',
+		creative : 'Challenger 4',
+		selector: '.complete-reservation',
+		aside: '.aside',
+		loyaltyDesc: '.pre-expedited-banner .pre-expedited-banner__description',
+		loyaltyTag: 'Sign in to earn points and speed through the form below.',
+		contact: '#personal-information',
+		aside: '.aside',
+		reviewSection: '.review-section',
+		loyaltyBtn: '.pre-expedited-banner__button',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+			window.addEventListener('resize',isoTest.chall,false);
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+			document.querySelector('html').addEventListener('analytics',isoTest.signIn, false);
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.updateLoyalty();
+			isoTest.policies = document.querySelector('.key-rental-facts-and-policies');
+			isoTest.personalInfo = document.querySelector(isoTest.contact);
+			isoTest.loyalty = document.querySelector('.pre-expedited-banner');
+
+			if(document.body.clientWidth <= 748){
+				isoTest.mobileView();
+			} else {
+				isoTest.desktopView();
+			}
+		},
+		updateLoyalty: function() {
+			var loyalty = document.querySelector(isoTest.loyaltyDesc);
+			if(loyalty){
+				loyalty.innerText = isoTest.loyaltyTag;
+			}
+		},
+		mobileView : function(){
+			document.querySelector(isoTest.selector).insertAdjacentElement('afterend',isoTest.policies);
+
+			if(isoTest.loyalty){
+				if(!document.querySelector(isoTest.aside + ' > .pre-expedited-banner')){
+					document.querySelector(isoTest.aside).insertAdjacentHTML('afterbegin',isoTest.loyalty.outerHTML);
+					isoTest.bindEvents();
+				}
+				if(!document.querySelector(isoTest.aside + ' ' + isoTest.contact)){
+					document.querySelector(isoTest.aside + ' > .pre-expedited-banner').insertAdjacentElement('afterend',isoTest.personalInfo);
+				}
+			} else {
+				if(!document.querySelector(isoTest.aside + ' ' + isoTest.contact)){
+					document.querySelector(isoTest.aside).insertAdjacentElement('afterbegin',isoTest.personalInfo);
+				}
+			}
+		},
+		desktopView : function(){
+			document.querySelector(isoTest.aside).insertAdjacentElement('beforeend',isoTest.policies);
+			if(document.querySelector(isoTest.reviewSection + ' > .pre-expedited-banner')){
+				if(!document.querySelector(isoTest.reviewSection + ' ' + isoTest.contact)){
+					document.querySelector(isoTest.reviewSection + ' > .pre-expedited-banner').insertAdjacentElement('afterend',isoTest.personalInfo);
+				}
+			} else {
+				if(!document.querySelector(isoTest.reviewSection + ' ' + isoTest.contact)){
+					document.querySelector(isoTest.reviewSection).insertAdjacentElement('afterbegin',isoTest.personalInfo);
+				}
+			}
+		},
+		bindEvents : function(){
+			document.querySelector(isoTest.aside + ' ' + isoTest.loyaltyBtn + ':first-child').addEventListener('click',function(e){
+				e.preventDefault();
+				document.querySelector(isoTest.reviewSection + ' ' + isoTest.loyaltyBtn + ':first-child').click();
+			},false);
+			document.querySelector(isoTest.aside + ' ' + isoTest.loyaltyBtn + ':last-child').addEventListener('click',function(e){
+				e.preventDefault();
+				document.querySelector(isoTest.reviewSection + ' ' + isoTest.loyaltyBtn + ':last-child').click();
+			},false);
+		},
+		signIn: function() {
+			if(/commit/.test(location.hash) && ReservationStateTree.get(['session','reservationSession','profileResponse'])){
+				if(document.querySelector(isoTest.aside + ' > .pre-expedited-banner')){
+					var aLoyalty = document.querySelector(isoTest.aside + ' > .pre-expedited-banner');
+					document.querySelector(isoTest.aside).removeChild(aLoyalty);
+				}
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
