@@ -2,45 +2,42 @@
 @media screen and (max-width: 748px) {
 	.reservation-steps-container .mobile-reservation-nav-slider {
 		color: transparent;
+		padding: 20px 3%;
 	}
 
 	.reservation-steps-container .mobile-reservation-nav-slider .iso-header {
+		color: #181918;
 		font-size: 14px;
 	  font-weight: 400;
-	  color: #181918;
-	}
-
-	.reservation-steps-container .mobile-reservation-nav-slider .iso-header-location {
-		/*display: block;*/
+	  text-transform: capitalize;
 	}
 
 	.reservation-steps-container .mobile-reservation-nav-slider .iso-modify-btn {
-		display: inline-block;
-	    /* margin-top: -6px; */
-	    padding: 3px;
-	    position: absolute;
-	    right: 4%;
-	    /* transform: rotate(45deg); */
-	    /* top: 50%; */
-	    color: #169a5a;
-	    /* transition: all 0.5s; */
-	    background: transparent;
-	    font-weight: 600;
-	    font-size: 13px;
+    background-color: transparent;
+    background-image: url(/content/dam/ecom/hosted/ico_CaretCircle_green.svg);
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 24px;
+    padding: 0px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);     
+ 		-moz-transform: translate(-50%,-50%);        
+  	-o-transform: translate(-50%,-50%);          
+  	-ms-transform: translate(-50%,-50%); 
+    transform: translate(-50%,-50%);
+    width: 24px;
 	}
 
-	.reservation-steps-container .mobile-reservation-nav-slider .iso-modify-btn .arrow.down {
-		float: left;
-	    right: auto;
-	    left: -13px;
-	    /* font-size: 15px !important; */
-	    /* width: 12.73px; */
-	    /* height: 12.73px; */
-	    /* margin-top: -10px;*/
+	.reservation-steps-container.mobile-open .mobile-reservation-nav-slider .iso-modify-btn {
+		-webkit-transform: translate(-50%,-50%) rotate(180deg);     
+ 		-moz-transform: translate(-50%,-50%) rotate(180deg);        
+  	-o-transform: translate(-50%,-50%) rotate(180deg);          
+  	-ms-transform: translate(-50%,-50%) rotate(180deg);         
+  	transform: translate(-50%,-50%) rotate(180deg); 
 	}
 }
-
-
 </style>
 <script>
 (function() {
@@ -93,12 +90,9 @@
 			}
 		},
 		chall : function() {
-			console.log('chall');
-			// var completedSteps = document.querySelectorAll('.reservation-steps-container .reservation-steps .step.step__col-4 .step__item.step-completed');
+			isoTest.log('chall');
 
 			setTimeout(function(){
-
-
 				var dateTimeStep = document.querySelector('[data-stephash="dateTime"]');
 				var locationStep = document.querySelector('[data-stephash="location"]');
 				var locationPickupStep = document.querySelector('[data-stephash="location/pickup"]');
@@ -111,68 +105,58 @@
 
 
 				if (dateTimeStep.querySelector('.step-completed') != null) {
-					console.log('dateTimeStep');
+					isoTest.log('dateTimeStep');
 
 					var pickupDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[0].innerText.split(', ')[1];
 					var dropoffDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[1].innerText.split(', ')[1];
-					console.log(pickupDate);
-					console.log(dropoffDate);
+					isoTest.log(pickupDate);
+					isoTest.log(dropoffDate);
 
 					var pickupTime = document.querySelectorAll('.step__step-date--line2')[0].innerText;
 					var dropoffTime = document.querySelectorAll('.step__step-date--line2')[1].innerText;
-					console.log(pickupTime);
-					console.log(dropoffTime);
+					isoTest.log(pickupTime);
+					isoTest.log(dropoffTime);
 
 					dateTimeText = '<span class="iso-header-date">' + pickupDate + ' @ ' + pickupTime + ' - ' + dropoffDate + ' @ ' + dropoffTime + '</span>';
 		
 
 					if (locationStep == null) {
-						// console.log('true');
 						if (locationPickupStep.querySelector('.step-completed') != null) {
-							console.log('locationPickupStep');
+							isoTest.log('locationPickupStep');
 							var pickupLocation = locationPickupStep.querySelector('.step__step-value').innerText;
-							console.log(pickupLocation);
+							isoTest.log(pickupLocation);
 						}
 						if (locationDropoffStep.querySelector('.step-completed') != null) {
-							console.log('locationDropoffStep');
+							isoTest.log('locationDropoffStep');
 							var dropoffLocation = locationDropoffStep.querySelector('.step__step-value').innerText;
-							console.log(dropoffLocation);
+							isoTest.log(dropoffLocation);
 						}
 						locationText = '<br><span class="iso-header-location">' + pickupLocation + '</span><br><span class="iso-header-location">' + dropoffLocation + '</span>';
 					} else {
 						if (locationStep.querySelector('.step-completed') != null) {
-							console.log('locationStep');
+							isoTest.log('locationStep');
 							var pickupDropoffLocation = locationStep.querySelector('.step__step-value').innerText;
-							console.log(pickupDropoffLocation);
+							isoTest.log(pickupDropoffLocation);
 
 							locationText = '<br><span class="iso-header-location">' + pickupDropoffLocation + '</span>';
 						}
 					}
 
 					if (carsStep.querySelector('.step-completed') != null) {
-						console.log('carsStep');
+						isoTest.log('carsStep');
 						var carName = carsStep.querySelector('.step__step-value').innerText;
-						console.log(carName);
+						isoTest.log(carName);
 
 						carText = '<br><span class="iso-header-car">' + carName + '</span>';
 					}
 
 					var newText = '<span class="iso-header">' + dateTimeText + locationText + carText + '</span>';
 
-					document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerHTML = newText + '<button class="iso-modify-btn"><i class="arrow down"></i></button>';
-					// document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').style.color = '#169a5a';
-
+					document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerHTML = newText + '<button class="iso-modify-btn"></button>';
 				} else {
-					console.log('does not exist');
+					isoTest.log('does not exist');
 				}
-			},1000);
-
-
-
-			// if (document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider') != null) {
-				// document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerText = pickupDate + ' - ' + dropoffDate;
-			// }
-
+			},1500);
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
