@@ -1,0 +1,511 @@
+<style>
+.iso-modal-open { 
+	height: 100%; 
+	overflow: hidden;
+}
+
+.iso-modal.iso-location-filters-modal {
+	display: none;
+}
+
+.iso-modal.iso-location-filters-modal.active {
+	display: block;
+}
+
+.iso-modal.iso-location-filters-modal .location-search-filters-modal__description {
+	font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.iso-modal.iso-location-filters-modal .ReactModal__Content--after-open.default-modal .modal-content .checkbox__label-checkbox {
+	width: 24px;
+	height: 24px;
+}
+
+.iso-modal.iso-location-filters-modal .ReactModal__Content--after-open.default-modal .modal-content .location-search-filters-modal__location-search-list li {
+	padding-bottom: 16px;
+}
+
+.iso-modal.iso-location-filters-modal .ReactModal__Content--after-open.default-modal .modal-content .checkbox__label  {
+	position: relative;
+}
+
+.iso-modal.iso-location-filters-modal .checkbox__label  .checkbox__text .icon {
+	display: inline-block;
+	margin-left: 8px;
+	position: absolute;
+}
+
+.iso-modal.iso-location-filters-modal .checkbox__label  .checkbox__text .icon {
+
+}
+
+.iso-modal.iso-location-filters-modal .location-search-filters-modal__header {
+	position: relative;
+}
+
+.iso-modal.iso-location-filters-modal .location-search-filters-modal__clear-all.btn {
+	font-weight: 700;
+  font-style: normal;
+  position: absolute;
+  top: .375rem;
+  right: -.25rem;
+  padding: .25rem;
+  text-transform: uppercase;
+  text-decoration: underline;
+  font-size: .875rem;
+  color: #169a5a;
+}
+
+#location-search-filter-1  .location-search-filter__container-content {
+	width: 100%;
+}
+
+#location-search-filter-1 .location-search-filter__container-content-header {
+  display: inline-block;
+}
+
+#location-search-filter-1 .location-search-filter__vehicle-filter {
+	display: inline-block;
+	margin-left: 66px;
+}
+
+#location-search-filter-1 .location-search-filter__vehicle-filter .vehicle-filters-trigger__label-text {
+	font-weight: 600;
+}
+
+#location-search-filter-1 .location-search-filter__container-filter.form-checkbox__label,
+#location-search-filter-1 .location-search-filter__container-filter.form-checkbox__label #location-search-open-time-filter,
+#location-search-filter-1 .location-search-filter__container-filter.form-checkbox__label .form-checkbox__text {
+	display: inline-block;
+}
+
+#location-search-filter-1  .location-search-filter__container-content-text {
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+
+#location-search-filter-1 .location-search-filter__location-type-filter {
+	display: inline-block;
+  margin-left: 30px;
+  min-width: 12.5rem;
+/*  margin: 0 0 0 2.1875rem;*/
+}
+
+
+#location-search-filter-1 .location-search-filter__location-type-filter .location-type-filters-trigger__label {
+	margin-top: 0;
+	padding-bottom: 0;
+}
+
+
+#location-search-filter-1 .location-search-filter__location-type-filter .location-type-filters-trigger__label .location-type-filters-trigger__label-text {
+	font-weight: 600;
+	font-style: normal;
+  display: inline-block;
+  font-size: .9375rem;
+  text-transform: uppercase;
+}
+
+
+#location-search-filter-1 .location-search-filter__location-type-filter .location-type-filters-trigger__button {
+  height: 3.125rem;
+  font-weight: 600;
+  font-style: normal;
+  margin-top: .1875rem;
+  position: relative;
+}
+
+#location-search-filter-1 .location-search-filter__location-type-filter .location-type-filters-trigger__button.btn .icon {
+	position: absolute;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  right: .375rem;
+  height: .75rem;
+  width: .75rem;
+}
+
+#location-search-filter-1 {
+	
+}
+
+#location-search-filter-1 {
+	
+}
+
+#location-search-filter-1 {
+	
+}
+
+#location .search-results-wrapper .search-results ul .location-result-item.iso-hidden {
+	display: none;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Location Results Advanced Filter',
+		creative : 'Challenger 1',
+		selector: '#location-search-filter-1 .location-search-filter__container-content',
+		selectorLocations: '#location .search-results-wrapper .search-results ul .location-result-item.active',
+		content: '<div class="location-type-filters-trigger location-search-filter__location-type-filter">\
+								<label class="location-type-filters-trigger__label" for="location-type-filters-trigger">\
+									<span class="location-type-filters-trigger__label-text">LOCATION TYPE</span>\
+								</label>\
+								<button class="btn location-type-filters-trigger__button btn-input" tabindex="0" type="button" role="button" name="location-type-filters-trigger">All Locations<i class="icon icon-nav-carrot-down"></i></button>\
+							</div>',
+		modal: '<div class="iso-location-filters-modal iso-modal" >\
+							<div class="ReactModal__Overlay ReactModal__Overlay--after-open modal-overlay fixed-overlay" aria-modal="true">\
+								<div class="ReactModal__Content ReactModal__Content--after-open default-modal fixed-scroll-modal" tabindex="-1" role="dialog" aria-describedby="modal-context">\
+									<div class="modal-inner">\
+										<div class="modal-header">\
+											<button class="close-modal" aria-label="Close" role="button" type="button"><i class="icon icon-close-x-white" aria-hidden="true">X</i></button>\
+										</div>\
+										<div class="modal-content cf">\
+											<div class="location-search-filters-modal" id="modal-context">\
+												<div class="location-search-filters-modal__header">\
+													<h2 class="location-search-filters-modal__title">Location Type</h2>\
+													<button class="btn location-search-filters-modal__clear-all btn-unstyled iso-clear-location-filter" tabindex="0" type="button" role="button">Clear All</button>\
+												</div>\
+												<p class="location-search-filters-modal__description">Select the location type(s) you want to search by.</p>\
+												<div class="location-search-filters-modal__location-search-list">\
+													<ul>\
+														<li>\
+															<label class="checkbox__label " tabindex="0" id="checkbox_location_1" aria-checked="false" role="checkbox">\
+																<span class="checkbox__label-checkbox">\
+																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="Exotics Locations">\
+																	<i class="icon icon-check-green"></i>\
+																</span>\
+																<span class="checkbox__text">Exotics Locations<i class="icon location-type-icon icon-icon-exotics" aria-label="Exotics"></i></span>\
+															</label>\
+														</li>\
+														<li>\
+															<label class="checkbox__label " tabindex="0" id="checkbox_location_2" aria-checked="false" role="checkbox">\
+																<span class="checkbox__label-checkbox">\
+																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="Airport Locations">\
+																	<i class="icon icon-check-green"></i>\
+																</span>\
+																<span class="checkbox__text">Airport Locations<i class="icon location-type-icon icon-location-airport" aria-label="Airport"></i></span>\
+															</label>\
+														</li>\
+														<li>\
+															<label class="checkbox__label " tabindex="0" id="checkbox_location_3" aria-checked="false" role="checkbox">\
+																<span class="checkbox__label-checkbox">\
+																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="Port Locations">\
+																	<i class="icon icon-check-green"></i>\
+																</span>\
+																<span class="checkbox__text">Port Locations<i class="icon location-type-icon icon-location-port_of_call" aria-label="Port of Call"></i></span>\
+															</label>\
+														</li>\
+														<li>\
+															<label class="checkbox__label " tabindex="0" id="checkbox_location_4" aria-checked="false" role="checkbox">\
+																<span class="checkbox__label-checkbox">\
+																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="Train Station Locations">\
+																	<i class="icon icon-check-green"></i>\
+																</span>\
+																<span class="checkbox__text">Train Station Locations<i class="icon location-type-icon icon-location-rail" aria-label="Rail"></i></span>\
+															</label>\
+														</li>\
+														<li>\
+															<label class="checkbox__label " tabindex="0" id="checkbox_location_5" aria-checked="false" role="checkbox">\
+																<span class="checkbox__label-checkbox">\
+																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="City Locations">\
+																	<i class="icon icon-check-green"></i>\
+																</span>\
+																<span class="checkbox__text">City Locations<i class="icon location-type-icon icon-location-city" aria-label="City"></i></span>\
+															</label>\
+														</li>\
+													</ul>\
+												</div>\
+											</div>\
+											<div class="modal-buttons-container ">\
+												<button class="btn modal-button iso-modal-cancel" type="button" role="button">Cancel</button>\
+												<button class="btn modal-button iso-modal-apply" type="button" role="button">Apply</button>\
+											</div>\
+										</div>\
+								  </div>\
+								</div>\
+							</div>\
+						</div>',
+		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/location/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log('chall()');
+
+			isoTest.addLocationFilter();
+			isoTest.addFilterModal();
+
+			isoTest.addEvents();
+
+			
+			helpers.elementLoaded(isoTest.selectorLocations, function() {
+				var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+				console.log(allLocations);
+				for(var i = 0; i < allLocations.length; i++) {
+					console.log(allLocations[i]);
+					if (allLocations[i].querySelector('.location-name .icon-location-port_of_call') != null) {
+						allLocations[i].classList.add('iso-hidden');
+						allLocations[i].classList.remove('active');
+					}
+					// if (portLocation.length != 0) {
+
+					// }
+				}
+			});
+
+			button.location_EN_1002360_rt
+
+
+		},
+		addLocationFilter : function() {
+			var vehicleFilterHeader = document.querySelector('#location-search-filter-1 .location-search-filter__container-content-header');
+
+			var vehicleTypeFilter = document.querySelector('#location-search-filter-1 .location-search-filter__vehicle-filter');
+
+			var openCheckbox = document.querySelector('#location-search-filter-1 .location-search-filter__container-filter.form-checkbox__label');
+
+			vehicleFilterHeader.after(vehicleTypeFilter);
+
+			vehicleTypeFilter.after(openCheckbox);
+
+			vehicleTypeFilter.insertAdjacentHTML('afterend', isoTest.content);
+		},
+		addFilterModal : function() {
+			if (document.querySelector('.iso-location-filters-modal.iso-modal') == null) {
+				document.querySelector('#ip-redirect').insertAdjacentHTML("afterend", isoTest.modal);
+			}
+		},
+		addEvents : function() {
+			document.querySelector('.iso-modal.iso-location-filters-modal .close-modal').addEventListener('click', function (e) {
+				isoTest.destroyModal();
+			}, false);
+
+			document.querySelector('.iso-modal.iso-location-filters-modal .close-modal .icon-close-x-white').addEventListener('click', function (e) {
+				isoTest.destroyModal();
+			}, false);
+
+			document.querySelector('#location-search-filter-1 .location-type-filters-trigger__button').addEventListener('click', function (e) {
+				isoTest.modalOpen();
+			}, false);
+
+
+			var filterElements = document.querySelectorAll('.iso-location-filters-modal.iso-modal .location-search-filters-modal__location-search-list .checkbox__label .location-type-checkbox');
+			for(var i = 0; i < filterElements.length; i++) {
+
+				filterElements[i].addEventListener('click', function(e){
+					if (e.target.parentNode.classList.contains('checked')) {
+						e.target.parentNode.classList.remove('checked');
+					} else {
+						e.target.parentNode.classList.add('checked');
+					}
+		    }, false);
+			}
+
+			document.querySelector('.iso-location-filters-modal.iso-modal .iso-modal-apply').addEventListener('click', function(e){
+
+				var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
+
+				if (allchecked.length == 0) {
+
+				} else {
+					for (var i = 0; i < allchecked.length; i++) {
+						console.log(allchecked[i].querySelector('.location-type-checkbox').value);
+					}
+				}
+
+				//look for each type of input value and reset page
+
+			}, false);
+
+			document.querySelector('.iso-location-filters-modal.iso-modal .iso-modal-cancel').addEventListener('click', function(e){
+				var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
+				if (allchecked.length > 0) {
+					for (var i = 0; i < allchecked.length; i++) {
+						allchecked[i].classList.remove('checked');
+					}
+				}
+			}, false);
+
+			document.querySelector('.iso-location-filters-modal.iso-modal .iso-clear-location-filter').addEventListener('click', function(e){
+				var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
+				if (allchecked.length > 0) {
+					for (var i = 0; i < allchecked.length; i++) {
+						allchecked[i].classList.remove('checked');
+					}
+				}
+			}, false);
+
+
+		},
+		modalOpen : function() {
+			document.querySelector('.iso-modal.iso-location-filters-modal').classList.add('active');
+			document.querySelector('html').classList.add('iso-modal-open');
+
+      var modalFocus = document.querySelector('.iso-modal.iso-location-filters-modal');
+      isoTest.keepFocus(modalFocus);
+
+      modalFocus.focus();
+
+      // isoTest.fireTag('.iso-details-link','See Details');
+		},
+		destroyModal : function() {
+      document.querySelector('html').classList.remove('iso-modal-open');
+      var elModal = document.querySelector('.iso-modal.iso-location-filters-modal');
+			elModal.classList.remove('active');
+    },
+    keepFocus : function(context) {
+      var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+          firstTabbableElement = allTabbableElements[0],
+          lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+      var keyListener = function(e) {
+    		var keyCode = e.which || e.keyCode;
+
+    		e.preventDefault = e.preventDefault || function () {
+    			e.returnValue = false;
+    		};
+    		if (keyCode === 9) {
+          if (e.target === lastTabbableElement && !e.shiftKey) {
+    				e.preventDefault();
+    				firstTabbableElement.focus();
+          } else if (e.target === firstTabbableElement && e.shiftKey) {
+    				e.preventDefault();
+    				lastTabbableElement.focus();
+    			}
+    		}
+    	};
+    	context.addEventListener('keydown', keyListener, false);
+    },
+		checkForLocations : function() {
+			var checkLocations = setInterval(function(){
+				if (store.getState().toJS()['app']['locationFinder']['locationSearch']['pickup'] != null){
+					clearInterval(checkLocations);
+					// isoTest.findFilterPrice();
+					// isoTest.updatefilterWidget();
+				}
+
+				setTimeout(function(){
+					clearInterval(checkLocations);
+				}, 10000)
+			},1);
+
+			// port
+			// icon location-type-icon icon-location-port_of_call
+			// "PORT_OF_CALL"
+
+			// airport
+			// icon location-type-icon icon-location-airport
+			// "AIRPORT"
+
+			// train
+			// icon location-type-icon icon-location-rail
+			// "RAIL"
+
+			// exotics
+			// icon location-type-icon icon-icon-exotics
+			// "CITY"
+			// attributes: "EXOTICS"
+
+			// city
+			//
+			// "CITY"
+
+			// document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active .location-information .location-name');
+
+			// document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			window.clearTimeout(isoTest.timer);
+			if (typeof store !== 'undefined' && typeof store.getState === 'function' && typeof store.getState().toJS === 'function') {
+				if (typeof callback === "function") {
+					
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>
