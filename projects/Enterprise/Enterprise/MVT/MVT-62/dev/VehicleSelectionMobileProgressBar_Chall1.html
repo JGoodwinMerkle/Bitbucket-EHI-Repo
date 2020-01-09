@@ -47,7 +47,7 @@
 		portfolio : 'Enterprise.com',
 		test : 'Vehicle Selection Mobile Progress Bar',
 		creative : 'Challenger 1',
-		selector: '[data-stephash="dateTime"]',
+		selector: '[data-stephash="dateTime"] .step-completed',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -71,19 +71,8 @@
 		
 		},
 		viewChange : function(){
-			if(/location/.test(location.hash)){
-				helpers.elementLoaded(isoTest.selector, function() {
-					isoTest.chall();
-				});
-			}
-
-			if(/cars/.test(location.hash)){
-				helpers.elementLoaded(isoTest.selector, function() {
-					isoTest.chall();
-				});
-			}
-
-			if(/extras/.test(location.hash)){
+			if(/location|cars|extras/.test(location.hash)){
+				isoTest.log('viewChange');
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -92,77 +81,101 @@
 		chall : function() {
 			isoTest.log('chall');
 
-			setTimeout(function(){
-				var dateTimeStep = document.querySelector('[data-stephash="dateTime"]');
-				var locationStep = document.querySelector('[data-stephash="location"]');
-				var locationPickupStep = document.querySelector('[data-stephash="location/pickup"]');
-				var locationDropoffStep = document.querySelector('[data-stephash="location/dropoff"]');
-				var carsStep = document.querySelector('[data-stephash="cars"]');
+			var dateTimeStep = document.querySelector('[data-stephash="dateTime"] .step-completed');
+			var locationStep = document.querySelector('[data-stephash="location"] .step-completed');
+			var locationPickupStep = document.querySelector('[data-stephash="location/pickup"] .step-completed');
+			var locationDropoffStep = document.querySelector('[data-stephash="location/dropoff"] .step-completed');
+			var carsStep = document.querySelector('[data-stephash="cars"] .step-completed');
 
-				var dateTimeText = '';
-				var locationText = '';
-				var carText = '';
+			var pickupDate = '';
+			var dropoffDate = '';
+			var pickupTime = '';
+			var dropoffTime = '';
+
+			var pickupLocation = '';
+			var dropoffLocation = '';
+			var pickupDropoffLocation = '';
+
+			var carName = '';
+
+			var dateTimeText = '';
+			var locationText = '';
+			var carText = '';
 
 
-				if (dateTimeStep.querySelector('.step-completed') != null) {
-					isoTest.log('dateTimeStep');
+			isoTest.log('dateTimeStep');
 
-					var pickupDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[0].innerText.split(', ')[1];
-					var dropoffDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[1].innerText.split(', ')[1];
-					isoTest.log(pickupDate);
-					isoTest.log(dropoffDate);
+			pickupDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[0].innerText.split(', ')[1];
+			dropoffDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[1].innerText.split(', ')[1];
+			isoTest.log(pickupDate);
+			isoTest.log(dropoffDate);
 
-					var pickupTime = document.querySelectorAll('.step__step-date--line2')[0].innerText;
-					var dropoffTime = document.querySelectorAll('.step__step-date--line2')[1].innerText;
-					isoTest.log(pickupTime);
-					isoTest.log(dropoffTime);
+			pickupTime = document.querySelectorAll('.step__step-date--line2')[0].innerText;
+			dropoffTime = document.querySelectorAll('.step__step-date--line2')[1].innerText;
+			isoTest.log(pickupTime);
+			isoTest.log(dropoffTime);
 
-					dateTimeText = '<span class="iso-header-date">' + pickupDate + ' @ ' + pickupTime + ' - ' + dropoffDate + ' @ ' + dropoffTime + '</span>';
-		
+			dateTimeText = '<span class="iso-header-date">' + pickupDate + ' @ ' + pickupTime + ' - ' + dropoffDate + ' @ ' + dropoffTime + '</span>';
 
-					if (locationStep == null) {
-						if (locationPickupStep.querySelector('.step-completed') != null) {
-							isoTest.log('locationPickupStep');
-							var pickupLocation = locationPickupStep.querySelector('.step__step-value').innerText;
-							isoTest.log(pickupLocation);
+
+			if (locationStep == null) {
+				if (locationPickupStep != null) {
+					helpers.checkStepLoaded(locationPickupStep, function() {
+						isoTest.log('locationPickupStep');
+						pickupLocation = locationPickupStep.querySelector('.step__step-value').innerText;
+						isoTest.log(pickupLocation);
+
+						if (locationDropoffStep != null) {
+							helpers.checkStepLoaded(locationDropoffStep, function() {
+								isoTest.log('locationDropoffStep');
+								dropoffLocation = locationDropoffStep.querySelector('.step__step-value').innerText;
+								isoTest.log(dropoffLocation);
+
+								locationText = '<br><span class="iso-header-location">' + pickupLocation + '</span><br><span class="iso-header-location">' + dropoffLocation + '</span>';
+							});
+						} else {
+							locationText = '<br><span class="iso-header-location">' + pickupLocation + '</span>';
 						}
-						if (locationDropoffStep.querySelector('.step-completed') != null) {
-							isoTest.log('locationDropoffStep');
-							var dropoffLocation = locationDropoffStep.querySelector('.step__step-value').innerText;
-							isoTest.log(dropoffLocation);
-						}
-						locationText = '<br><span class="iso-header-location">' + pickupLocation + '</span><br><span class="iso-header-location">' + dropoffLocation + '</span>';
-					} else {
-						if (locationStep.querySelector('.step-completed') != null) {
-							isoTest.log('locationStep');
-							var pickupDropoffLocation = locationStep.querySelector('.step__step-value').innerText;
-							isoTest.log(pickupDropoffLocation);
-
-							locationText = '<br><span class="iso-header-location">' + pickupDropoffLocation + '</span>';
-						}
-					}
-
-					if (carsStep.querySelector('.step-completed') != null) {
-						isoTest.log('carsStep');
-						var carName = carsStep.querySelector('.step__step-value').innerText;
-						isoTest.log(carName);
-
-						carText = '<br><span class="iso-header-car">' + carName + '</span>';
-					}
-
-					var newText = '<span class="iso-header">' + dateTimeText + locationText + carText + '</span>';
-
-					document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerHTML = newText + '<button class="iso-modify-btn"></button>';
-				} else {
-					isoTest.log('does not exist');
+					});
 				}
-			},1500);
+			} else {
+				helpers.checkStepLoaded(locationStep, function() {
+					isoTest.log('locationStep');
+					pickupDropoffLocation = locationStep.querySelector('.step__step-value').innerText;
+					isoTest.log(pickupDropoffLocation);
+
+					locationText = '<br><span class="iso-header-location">' + pickupDropoffLocation + '</span>';
+				});
+			}
+
+			if (carsStep != null) {
+				helpers.checkStepLoaded(carsStep, function() {
+					isoTest.log('carsStep');
+					carName = carsStep.querySelector('.step__step-value').innerText;
+					isoTest.log(carName);
+
+					carText = '<br><span class="iso-header-car">' + carName + '</span>';
+				});
+			}
+
+			var newText = '<span class="iso-header">' + dateTimeText + locationText + carText + '</span>';
+
+			document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerHTML = newText + '<button class="iso-modify-btn"></button>';
+
+
+			isoTest.addEvents();
+		},
+		addEvents : function() {
+			document.querySelector('.iso-modify-btn').addEventListener('click', function (e) {
+				isoTest.fireTag('.iso-modify-btn','Modify (Progress Bar)');
+			}, false);
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
+			s.linkTrackVars = 'eVar20,prop3';
 			s.eVar20 = linkName;
+			s.prop3 = linkName;
 			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
@@ -186,17 +199,17 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
+		checkStepLoaded: function (ele, callback) {
+			isoTest.log('checkStepLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.timer);
+			if (ele.querySelector('.step__step-value').innerText != "Select") {
+				if (typeof callback === 'function') {
+					isoTest.log('checkStepLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.timer = window.setTimeout(function(){helpers.checkStepLoaded(ele, callback);}, 200);
+	        }
 		}
 	}
 
