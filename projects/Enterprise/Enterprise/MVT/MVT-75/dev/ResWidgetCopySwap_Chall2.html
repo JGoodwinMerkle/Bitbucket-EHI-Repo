@@ -46,6 +46,9 @@
 		.booking-widget .age-input {
 			width: 233px
 		}
+		.coupon-field-wrapper {
+			width: 70%; 
+		}
 		.booking-widget .coupon-filters-wrapper .vehicle-filters-trigger {
 		    width: 233px;
 		}
@@ -66,7 +69,7 @@
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
-			
+
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
@@ -81,7 +84,7 @@
 				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
-			
+
 		},
 		chall : function() {
 
