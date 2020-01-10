@@ -533,12 +533,27 @@
 			    });
 			}); 
 
+			// Listen for slider drag
+			document.addEventListener('click', function(event) {
+				if (event.target.matches('.noUi-touch-area')) {
+				var linkName = 'Slider Handle Dragged';
+			        s.linkTrackVars = 'eVar20';
+					s.eVar20 = linkName;
+					s.tl(this, 'o', linkName);
+				}
+			});
+
 
 			// Listen to keydown events on the input field.
 			inputs.forEach(function (input, handle) {
 
 			    input.addEventListener('change', function () {
 			        priceRangeSlider.noUiSlider.setHandle(handle, this.value);
+			        // Input tracking
+			        var linkName = 'Slider Input Updated';
+			        s.linkTrackVars = 'eVar20';
+					s.eVar20 = linkName;
+					s.tl(this, 'o', linkName);
 			    });
 
 			    input.addEventListener('keydown', function (e) {
