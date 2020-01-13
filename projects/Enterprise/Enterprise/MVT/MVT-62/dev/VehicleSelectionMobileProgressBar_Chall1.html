@@ -102,13 +102,26 @@
 
 			isoTest.log('dateTimeStep');
 
-			pickupDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[0].innerText.split(', ')[1];
-			dropoffDate = dateTimeStep.querySelectorAll('.step__step-date--line1')[1].innerText.split(', ')[1];
+
+			var months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JLY', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+			var pickupDateReservation = ReservationStateTree.get()["model"]["pickup"]["date"]["momentDate"]["_i"];
+			if (pickupDateReservation != null) {
+				var pickupDateReservationUpdate = new Date(pickupDateReservation);
+				pickupDate = months[pickupDateReservationUpdate.getMonth()] + ' ' + pickupDateReservationUpdate.getDate();
+				pickupTime = pickupDateReservation.split('T')[1];
+			}
+
+			var dropoffDateReservation = ReservationStateTree.get()["model"]["dropoff"]["date"]["momentDate"]["_i"];
+			if (dropoffDateReservation != null) {
+				var dropoffDateReservationUpdate = new Date(dropoffDateReservation);
+				dropoffDate = months[dropoffDateReservationUpdate.getMonth()] + ' ' + dropoffDateReservationUpdate.getDate();
+				dropoffTime = dropoffDateReservation.split('T')[1];
+			}
+
 			isoTest.log(pickupDate);
 			isoTest.log(dropoffDate);
 
-			pickupTime = document.querySelectorAll('.step__step-date--line2')[0].innerText;
-			dropoffTime = document.querySelectorAll('.step__step-date--line2')[1].innerText;
 			isoTest.log(pickupTime);
 			isoTest.log(dropoffTime);
 
@@ -119,13 +132,13 @@
 				if (locationPickupStep != null) {
 					helpers.checkStepLoaded(locationPickupStep, function() {
 						isoTest.log('locationPickupStep');
-						pickupLocation = locationPickupStep.querySelector('.step__step-value').innerText;
+						pickupLocation = locationPickupStep.querySelector('.step__step-value').innerHTML;
 						isoTest.log(pickupLocation);
 
 						if (locationDropoffStep != null) {
 							helpers.checkStepLoaded(locationDropoffStep, function() {
 								isoTest.log('locationDropoffStep');
-								dropoffLocation = locationDropoffStep.querySelector('.step__step-value').innerText;
+								dropoffLocation = locationDropoffStep.querySelector('.step__step-value').innerHTML;
 								isoTest.log(dropoffLocation);
 
 								locationText = '<br><span class="iso-header-location">' + pickupLocation + '</span><br><span class="iso-header-location">' + dropoffLocation + '</span>';
@@ -138,7 +151,7 @@
 			} else {
 				helpers.checkStepLoaded(locationStep, function() {
 					isoTest.log('locationStep');
-					pickupDropoffLocation = locationStep.querySelector('.step__step-value').innerText;
+					pickupDropoffLocation = locationStep.querySelector('.step__step-value').innerHTML;
 					isoTest.log(pickupDropoffLocation);
 
 					locationText = '<br><span class="iso-header-location">' + pickupDropoffLocation + '</span>';
@@ -148,7 +161,7 @@
 			if (carsStep != null) {
 				helpers.checkStepLoaded(carsStep, function() {
 					isoTest.log('carsStep');
-					carName = carsStep.querySelector('.step__step-value').innerText;
+					carName = carsStep.querySelector('.step__step-value').innerHTML;
 					isoTest.log(carName);
 
 					carText = '<br><span class="iso-header-car">' + carName + '</span>';
