@@ -152,7 +152,9 @@
 		test : 'Location Results Advanced Filter',
 		creative : 'Challenger 1',
 		selector: '#location-search-filter-1 .location-search-filter__container-content',
+		mapSelector: 'img[src*="ENT-mappin-single-number-enterprise@2x"]',
 		selectorLocations: '#location .search-results-wrapper .search-results ul .location-result-item.active',
+		mapChangeSelector: '[aria-live=off]',
 		content: '<div class="location-type-filters-trigger location-search-filter__location-type-filter">\
 								<label class="location-type-filters-trigger__label" for="location-type-filters-trigger">\
 									<span class="location-type-filters-trigger__label-text">LOCATION TYPE</span>\
@@ -267,28 +269,108 @@
 
 			isoTest.addLocationFilter();
 			isoTest.addFilterModal();
+			
 
 			isoTest.addEvents();
 
-			
-			helpers.elementLoaded(isoTest.selectorLocations, function() {
-				var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
-				console.log(allLocations);
-				for(var i = 0; i < allLocations.length; i++) {
-					console.log(allLocations[i]);
-					if (allLocations[i].querySelector('.location-name .icon-location-port_of_call') != null) {
-						allLocations[i].classList.add('iso-hidden');
-						allLocations[i].classList.remove('active');
-					}
-					// if (portLocation.length != 0) {
+			// aria-live assertive
 
-					// }
+
+			document.addEventListener('click', function (event) {
+				isoTest.log(event.target);
+				// console.log(event.target.parentElement);
+				var parentEl = document.querySelector('#map-canvas');
+				var childEl = event.target;
+				if (isoTest.contains(parentEl,childEl)) {
+					parentEl = document.querySelector('#google-map-custom-controls-wrapper');
+					
+						if (isoTest.contains(parentEl,childEl)) {
+							window.setTimeout(function(){
+								isoTest.updatePage();
+							}, 20);
+						} else {
+							window.setTimeout(function(){
+								var mapPortIconImages = document.querySelectorAll('img[src*="port_of_call"]');
+								for(var i = 0; i < mapPortIconImages.length; i++) {
+									mapPortIconImages[i].parentNode.style.display = 'none';
+									mapPortIconImages[i].style.display = 'none';
+								}
+							}, 200);
+						}
+					
 				}
+					
+			}, false);
+
+			document.addEventListener('mouseup', function (event) {
+				isoTest.log('mouseup');
+
+				var parentEl = document.querySelector('#map-canvas');
+				var childEl = event.target;
+				if (isoTest.contains(parentEl,childEl)) {
+					parentEl = document.querySelector('#google-map-custom-controls-wrapper');
+					if (!isoTest.contains(parentEl,childEl)) {
+						window.setTimeout(function(){
+							console.log('true');
+							
+							helpers.elementLoaded(isoTest.mapChangeSelector, function() {
+								isoTest.updatePage();
+							});
+						}, 100);
+					}
+				}
+			}, false);
+		},
+		contains : function(parent, child) {
+			return parent !== child && parent.contains(child);
+		},
+		updatePage : function() {
+			isoTest.log('updatePage()');
+			helpers.elementLoaded(isoTest.selectorLocations, function() {
+				helpers.elementLoaded(isoTest.mapSelector, function() {
+					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+					// console.log(allLocations);
+					for(var i = 0; i < allLocations.length; i++) {
+						// console.log(allLocations[i]);
+						// if (document.querySelector('.iso-location-filters-modal.iso-modal .location-search-filters-modal__location-search-list #checkbox_location_3 .checkbox__label-checkbox').classList.contains('checked')) {	
+							if (allLocations[i].querySelector('.location-name .icon-location-port_of_call') != null) {
+								allLocations[i].classList.add('iso-hidden');
+								allLocations[i].classList.remove('active');
+								allLocations[i].getAttribute('data-dtm-tracking')
+								var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
+								
+								// window.setTimeout(function(){
+								helpers.elementLoaded(isoTest.mapSelector, function() {
+									var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
+									// console.log("locationID");
+									// console.log(locationID);
+									// console.log("mapData");
+									// console.log(mapData);
+									for(var i = 0; i < mapData.length; i++) {
+										mapData[i].style.display = "none";
+									}
+								});
+								// }, 10);		
+							}
+						// }
+					}
+
+			    // window.setTimeout(function(){
+			    helpers.elementLoaded(isoTest.mapSelector, function() {
+			      var mapPortIconImages = document.querySelectorAll('img[src*="port_of_call"]');
+						// console.log("mapPortIconImages");
+						// console.log(mapPortIconImages);
+						for(var i = 0; i < mapPortIconImages.length; i++) {
+							mapPortIconImages[i].parentNode.style.display = 'none';
+							mapPortIconImages[i].style.display = 'none';
+							// console.log(mapPortIconImages[i].parentNode);
+							// console.log(mapPortIconImages[i]);
+						}
+					});
+			    // }, 10);
+
+				});
 			});
-
-			button.location_EN_1002360_rt
-
-
 		},
 		addLocationFilter : function() {
 			var vehicleFilterHeader = document.querySelector('#location-search-filter-1 .location-search-filter__container-content-header');
@@ -367,6 +449,16 @@
 					}
 				}
 			}, false);
+
+			// $('img[src*="port_of_call"]')
+
+			// /etc/designs/ecom/dist/img/raster-icons/gmaps/ENT-mappin-single-number-port_of_call@2x.png
+
+			// /etc/designs/ecom/dist/img/raster-icons/gmaps/ENT-mappin-single-number-rail@2x.png
+
+			// /etc/designs/ecom/dist/img/raster-icons/gmaps/ENT-mappin-single-number-airport@2x.png
+
+			// /etc/designs/ecom/dist/img/raster-icons/gmaps/ENT-mappin-single-number-exotics@2x.png
 
 
 		},
