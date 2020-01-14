@@ -276,50 +276,7 @@
 			// aria-live assertive
 
 
-			document.addEventListener('click', function (event) {
-				isoTest.log(event.target);
-				// console.log(event.target.parentElement);
-				var parentEl = document.querySelector('#map-canvas');
-				var childEl = event.target;
-				if (isoTest.contains(parentEl,childEl)) {
-					parentEl = document.querySelector('#google-map-custom-controls-wrapper');
-					
-						if (isoTest.contains(parentEl,childEl)) {
-							window.setTimeout(function(){
-								isoTest.updatePage();
-							}, 20);
-						} else {
-							window.setTimeout(function(){
-								var mapPortIconImages = document.querySelectorAll('img[src*="port_of_call"]');
-								for(var i = 0; i < mapPortIconImages.length; i++) {
-									mapPortIconImages[i].parentNode.style.display = 'none';
-									mapPortIconImages[i].style.display = 'none';
-								}
-							}, 200);
-						}
-					
-				}
-					
-			}, false);
 
-			document.addEventListener('mouseup', function (event) {
-				isoTest.log('mouseup');
-
-				var parentEl = document.querySelector('#map-canvas');
-				var childEl = event.target;
-				if (isoTest.contains(parentEl,childEl)) {
-					parentEl = document.querySelector('#google-map-custom-controls-wrapper');
-					if (!isoTest.contains(parentEl,childEl)) {
-						window.setTimeout(function(){
-							console.log('true');
-							
-							helpers.elementLoaded(isoTest.mapChangeSelector, function() {
-								isoTest.updatePage();
-							});
-						}, 100);
-					}
-				}
-			}, false);
 		},
 		contains : function(parent, child) {
 			return parent !== child && parent.contains(child);
@@ -448,6 +405,41 @@
 						allchecked[i].classList.remove('checked');
 					}
 				}
+			}, false);
+
+			document.addEventListener('click', function (event) {
+				isoTest.log('click');
+				isoTest.log(event.target);
+				// console.log(event.target.parentElement);
+				var parentEl = document.querySelector('#map-canvas');
+				var childEl = event.target;
+				if (isoTest.contains(parentEl,childEl)) {
+					parentEl = document.querySelector('#google-map-custom-controls-wrapper');
+					
+						if (isoTest.contains(parentEl,childEl)) {
+							window.setTimeout(function(){
+								isoTest.updatePage();
+							}, 20);
+						} else {
+							window.setTimeout(function(){
+								var mapPortIconImages = document.querySelectorAll('img[src*="port_of_call"]');
+								console.log(mapPortIconImages);
+								for(var i = 0; i < mapPortIconImages.length; i++) {
+									mapPortIconImages[i].parentNode.style.display = 'none';
+									mapPortIconImages[i].style.display = 'none';
+								}
+							}, 300);
+
+							window.setTimeout(function(){
+								helpers.elementLoaded(isoTest.mapChangeSelector, function() {
+									console.log('run function');
+									isoTest.updatePage();
+								});
+							}, 100);
+						}
+					
+				}
+					
 			}, false);
 
 			// $('img[src*="port_of_call"]')
