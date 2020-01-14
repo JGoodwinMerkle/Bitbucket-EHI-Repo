@@ -533,6 +533,7 @@
 			    });
 			}); 
 
+
 			// Listen for slider drag
 			document.addEventListener('click', function(event) {
 				if (event.target.matches('.noUi-touch-area')) {
@@ -606,6 +607,7 @@
 	      	// Fire tag with slider values on vehicle selection
 	      	document.addEventListener('click', function (event) {
 	        	if (event.target.matches('.vehicle-pricing__button--select')) {
+	        		var values = priceRangeSlider.noUiSlider.get(); 
 	          		isoTest.fireSliderTag('Price Slider Final: ', values);
 	        	}
 	      	});

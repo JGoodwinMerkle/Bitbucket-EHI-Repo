@@ -548,7 +548,7 @@
 					s.tl(this, 'o', linkName);
 				}
 			});
-			
+
 
 			// Listen to keydown events on the input field.
 			inputs.forEach(function (input, handle) {
@@ -612,6 +612,7 @@
 	      	// Fire tag with slider values on vehicle selection
 	      	document.addEventListener('click', function (event) {
 	        	if (event.target.matches('.vehicle-pricing__button--select')) {
+	        		var values = priceRangeSlider.noUiSlider.get(); 
 	          		isoTest.fireSliderTag('Price Slider Final: ', values);
 	        	}
 	      	});
