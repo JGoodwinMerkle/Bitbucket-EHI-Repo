@@ -109,14 +109,14 @@
 			if (pickupDateReservation != null) {
 				var pickupDateReservationUpdate = new Date(pickupDateReservation);
 				pickupDate = months[pickupDateReservationUpdate.getMonth()] + ' ' + pickupDateReservationUpdate.getDate();
-				pickupTime = pickupDateReservation.split('T')[1];
+				pickupTime = pickupDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
 			}
 
 			var dropoffDateReservation = ReservationStateTree.get()["model"]["dropoff"]["date"]["momentDate"]["_i"];
 			if (dropoffDateReservation != null) {
 				var dropoffDateReservationUpdate = new Date(dropoffDateReservation);
 				dropoffDate = months[dropoffDateReservationUpdate.getMonth()] + ' ' + dropoffDateReservationUpdate.getDate();
-				dropoffTime = dropoffDateReservation.split('T')[1];
+				dropoffTime = dropoffDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
 			}
 
 			isoTest.log(pickupDate);
