@@ -40,7 +40,13 @@
 		},
 		chall : function() {
 			document.querySelector('.btn.mobile-reservation-nav-slider').addEventListener('click', function (e) {
-				isoTest.fireTag('.iso-modify-btn','Modify (Progress Bar)');
+				if (document.querySelector('.reservation-steps-container.mobile-open')) {
+					isoTest.log("collapse");
+					isoTest.fireTag('.iso-modify-btn','Modify (Progress Bar) Collapse');
+				} else {
+					isoTest.log("expand")
+					isoTest.fireTag('.iso-modify-btn','Modify (Progress Bar) Expand');
+				}
 			}, false);
 		},
 		fireTag : function(element, value) {

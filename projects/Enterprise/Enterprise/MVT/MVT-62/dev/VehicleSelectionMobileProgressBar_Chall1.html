@@ -72,7 +72,7 @@
 		},
 		viewChange : function(){
 			if(/location|cars|extras/.test(location.hash)){
-				isoTest.log('viewChange');
+				isoTest.log('VIEW CHANGE ----');
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -103,29 +103,37 @@
 			isoTest.log('dateTimeStep');
 
 
-			var months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JLY', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+			var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-			var pickupDateReservation = ReservationStateTree.get()["model"]["pickup"]["date"]["momentDate"]["_i"];
-			if (pickupDateReservation != null) {
-				var pickupDateReservationUpdate = new Date(pickupDateReservation);
-				pickupDate = months[pickupDateReservationUpdate.getMonth()] + ' ' + pickupDateReservationUpdate.getDate();
-				pickupTime = pickupDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
+			if (dateTimeStep != null) {
+				isoTest.log('enter dateTimeStep');
+
+				var pickupDateReservation = ReservationStateTree.get()["model"]["pickup"]["date"]["momentDate"]["_i"];
+
+				if (pickupDateReservation != null) {
+					var pickupDateReservationUpdate = new Date(pickupDateReservation);
+					pickupDate = months[pickupDateReservationUpdate.getMonth()] + ' ' + pickupDateReservationUpdate.getDate();
+					pickupTime = pickupDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
+				}
+
+
+				var dropoffDateReservation = ReservationStateTree.get()["view"]["dropoff"]["date"]["_i"];
+
+				if (dropoffDateReservation != null) {
+					var dropoffDateReservationUpdate = new Date(dropoffDateReservation);
+					dropoffDate = months[dropoffDateReservationUpdate.getMonth()] + ' ' + dropoffDateReservationUpdate.getDate();
+
+					dropoffTime = dropoffDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
+				}
+
+				isoTest.log(pickupDate);
+				isoTest.log(dropoffDate);
+
+				isoTest.log(pickupTime);
+				isoTest.log(dropoffTime);
+
+				dateTimeText = '<span class="iso-header-date">' + pickupDate + ' @ ' + pickupTime + ' - ' + dropoffDate + ' @ ' + dropoffTime + '</span>';
 			}
-
-			var dropoffDateReservation = ReservationStateTree.get()["model"]["dropoff"]["date"]["momentDate"]["_i"];
-			if (dropoffDateReservation != null) {
-				var dropoffDateReservationUpdate = new Date(dropoffDateReservation);
-				dropoffDate = months[dropoffDateReservationUpdate.getMonth()] + ' ' + dropoffDateReservationUpdate.getDate();
-				dropoffTime = dropoffDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
-			}
-
-			isoTest.log(pickupDate);
-			isoTest.log(dropoffDate);
-
-			isoTest.log(pickupTime);
-			isoTest.log(dropoffTime);
-
-			dateTimeText = '<span class="iso-header-date">' + pickupDate + ' @ ' + pickupTime + ' - ' + dropoffDate + ' @ ' + dropoffTime + '</span>';
 
 
 			if (locationStep == null) {
@@ -176,8 +184,14 @@
 			isoTest.addEvents();
 		},
 		addEvents : function() {
-			document.querySelector('.iso-modify-btn').addEventListener('click', function (e) {
-				isoTest.fireTag('.iso-modify-btn','Modify (Progress Bar)');
+			document.querySelector('.btn.mobile-reservation-nav-slider').addEventListener('click', function (e) {
+				if (document.querySelector('.reservation-steps-container.mobile-open')) {
+					isoTest.log("collapse");
+					isoTest.fireTag('.iso-modify-btn','Modify (Progress Bar) Collapse');
+				} else {
+					isoTest.log("expand")
+					isoTest.fireTag('.iso-modify-btn','Modify (Progress Bar) Expand');
+				}
 			}, false);
 		},
 		fireTag : function(element, value) {
@@ -212,13 +226,13 @@
 		checkStepLoaded: function (ele, callback) {
 			isoTest.log('checkStepLoaded::  ' + ele + ' - Checking...');
 			window.clearTimeout(isoTest.timer);
-			if (ele.querySelector('.step__step-value').innerText != "Select") {
+			if ((ele.querySelector('.step__step-value').innerText != "Select") && (ele.querySelector('.step__step-value').innerText != "SELECT")) {
 				if (typeof callback === 'function') {
 					isoTest.log('checkStepLoaded::  ' + ele + ' - Found!');
 					callback();
 				}
 	        } else {
-	            isoTest.timer = window.setTimeout(function(){helpers.checkStepLoaded(ele, callback);}, 200);
+	            isoTest.timer = window.setTimeout(function(){helpers.checkStepLoaded(ele, callback);}, 100);
 	        }
 		}
 	}
