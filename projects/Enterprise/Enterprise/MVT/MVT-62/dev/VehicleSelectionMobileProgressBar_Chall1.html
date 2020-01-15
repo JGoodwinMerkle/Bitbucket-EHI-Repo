@@ -108,7 +108,7 @@
 			if (dateTimeStep != null) {
 				isoTest.log('enter dateTimeStep');
 
-				var pickupDateReservation = ReservationStateTree.get()["model"]["pickup"]["date"]["momentDate"]["_i"];
+				var pickupDateReservation = ReservationStateTree.get()["view"]["pickup"]"date"]["_i"];
 
 				if (pickupDateReservation != null) {
 					var pickupDateReservationUpdate = new Date(pickupDateReservation);
