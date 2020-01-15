@@ -81,6 +81,18 @@
 		chall : function() {
 			isoTest.log('chall');
 
+			console.log("pickupDateReservation model");
+			console.log(ReservationStateTree.get()["model"]["pickup"]["date"]["momentDate"]["_i"]);
+
+			console.log("pickupDateReservation view");
+			console.log(ReservationStateTree.get()["view"]["pickup"]["date"]["_i"]);
+
+			console.log("dropoffDateReservation model");
+			console.log(ReservationStateTree.get()["model"]["dropoff"]["date"]["momentDate"]["_i"]);
+
+			console.log("dropoffDateReservation view");
+			console.log(ReservationStateTree.get()["view"]["dropoff"]["date"]["_i"]);
+
 			var dateTimeStep = document.querySelector('[data-stephash="dateTime"] .step-completed');
 			var locationStep = document.querySelector('[data-stephash="location"] .step-completed');
 			var locationPickupStep = document.querySelector('[data-stephash="location/pickup"] .step-completed');
@@ -108,7 +120,8 @@
 			if (dateTimeStep != null) {
 				isoTest.log('enter dateTimeStep');
 
-				var pickupDateReservation = ReservationStateTree.get()["view"]["pickup"]"date"]["_i"];
+				var pickupDateReservation = ReservationStateTree.get()["model"]["pickup"]["date"]["momentDate"]["_i"];
+				
 
 				if (pickupDateReservation != null) {
 					var pickupDateReservationUpdate = new Date(pickupDateReservation);
