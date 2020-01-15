@@ -235,6 +235,17 @@
 							</div>\
 						</div>',
 		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+		exoticsLocations : 'false',
+		airportLocations : 'false',
+		portLocations : 'false',
+		trainLocations: 'false',
+		cityLocations: 'false',
+		exoticsImage : 'exotics',
+		airportImage : 'airport',
+		portImage : 'port_of_call',
+		trainImage : 'rail',
+		cityImage : 'enterprise',
+		filtersListItems : '',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -270,61 +281,350 @@
 			isoTest.addLocationFilter();
 			isoTest.addFilterModal();
 			
+			// isoTest.filtersListItems = document.querySelectorAll('.checkbox__label-checkbox');
 
 			isoTest.addEvents();
-
-			// aria-live assertive
-
 
 
 		},
 		contains : function(parent, child) {
 			return parent !== child && parent.contains(child);
 		},
-		updatePage : function() {
+		checkForFilters : function(movement) {
+			isoTest.log("checkForFilters()");
+			var checkedLocations = document.querySelectorAll('.checkbox__label-checkbox');
+
+			if (document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0) {
+				isoTest.log('location filters checked');
+				for(var i = 0; i < checkedLocations.length; i++) {
+					if (!checkedLocations[i].classList.contains('checked')) {
+						if (checkedLocations[i].parentNode.id == "checkbox_location_1") {
+							isoTest.log("checkbox_location_1");
+							isoTest.exoticsLocations = 'false';
+							if (movement == "drag") {
+								isoTest.updateImages(isoTest.exoticsImage);
+							} else {
+								isoTest.updatePage(isoTest.exoticsImage);
+							}
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_2") {
+							isoTest.log("checkbox_location_2");
+							isoTest.airportLocations = 'false';
+							if (movement == "drag") {
+								isoTest.updateImages(isoTest.airportImage);
+							} else {
+								isoTest.updatePage(isoTest.airportImage);
+							}
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_3") {
+							isoTest.log("checkbox_location_3");
+							isoTest.portLocations = 'false';
+							if (movement == "drag") {
+								isoTest.updateImages(isoTest.portImage);
+							} else {
+								isoTest.updatePage(isoTest.portImage);
+							}
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_4") {
+							isoTest.log("checkbox_location_4");
+							isoTest.trainLocations = 'false';
+							if (movement == "drag") {
+								isoTest.updateImages(isoTest.trainImage);
+							} else {
+								isoTest.updatePage(isoTest.trainImage);
+							}
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_5") {
+							console.log("checkbox_location_5");
+							isoTest.cityLocations = 'false';
+							if (movement == "drag") {
+								isoTest.updateCityImages();
+							} else {
+								isoTest.updateCityFilter();
+							}
+						}	
+					} else {
+						if (checkedLocations[i].parentNode.id == "checkbox_location_1") {
+							isoTest.log("checkbox_location_1 true");
+							isoTest.exoticsLocations = 'true';
+							isoTest.removeUpdate(isoTest.exoticsImage);
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_2") {
+							isoTest.log("checkbox_location_2 true");
+							isoTest.airportLocations = 'true';
+							isoTest.removeUpdate(isoTest.airportImage);
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_3") {
+							isoTest.log("checkbox_location_3 true");
+							isoTest.portLocations = 'true';
+							isoTest.removeUpdate(isoTest.portImage);
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_4") {
+							isoTest.log("checkbox_location_4 true");
+							isoTest.trainLocations = 'true';
+							isoTest.removeUpdate(isoTest.trainImage);
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_5") {
+							console.log("checkbox_location_5 true");
+							isoTest.cityLocations = 'true';
+							isoTest.removeCityFilter();
+						}	
+					}
+				}
+			} else {
+				isoTest.log('no location filters checked');
+				isoTest.exoticsLocations = 'false';
+				isoTest.airportLocations = 'false';
+				isoTest.portLocations = 'false';
+				isoTest.trainLocations = 'false';
+				isoTest.cityLocations = 'false';
+				isoTest.removeUpdate(isoTest.exoticsImage);
+				isoTest.removeUpdate(isoTest.airportImage);
+				isoTest.removeUpdate(isoTest.portImage);
+				isoTest.removeUpdate(isoTest.trainImage);
+				isoTest.removeCityFilter();
+			}
+		},
+		checkForReloaded : function() {
+			isoTest.log("checkForReloaded()");
+			var checkedLocations = document.querySelectorAll('.checkbox__label-checkbox');
+
+			if (document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0) {
+				for(var i = 0; i < checkedLocations.length; i++) {
+					if (!checkedLocations[i].classList.contains('checked')) {
+						if (checkedLocations[i].parentNode.id == "checkbox_location_1") {
+							isoTest.log("checkbox_location_1 reload");
+							isoTest.mapReloaded(isoTest.exoticsImage);
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_2") {
+							isoTest.log("checkbox_location_2 reload");
+							isoTest.mapReloaded(isoTest.airportImage);
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_3") {
+							isoTest.log("checkbox_location_3 reload");
+							isoTest.mapReloaded(isoTest.portImage);
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_4") {
+							isoTest.log("checkbox_location_4 reload");
+							isoTest.mapReloaded(isoTest.trainImage);
+						}
+
+						if (checkedLocations[i].parentNode.id == "checkbox_location_5") {
+							isoTest.log("checkbox_location_5 reload");
+							isoTest.cityMapReloaded();
+						}
+					}
+				}
+			}
+		},
+		updateImages : function(itemImage) {
+			isoTest.log("updateImages()");
+			var images = document.querySelectorAll('img[src*="'+itemImage+'"]');
+			if (images.length > 0 ) {
+				for(var i = 0; i < images.length; i++) {
+					images[i].parentNode.style.display = 'none';
+					images[i].style.display = 'none';
+				}
+			}
+		},
+		updateCityImages : function() {
+			isoTest.log("updateImages()");
+			var images = document.querySelectorAll(isoTest.mapSelector);
+			if (images.length > 0 ) {
+				for(var i = 0; i < images.length; i++) {
+					images[i].parentNode.style.display = 'none';
+					images[i].style.display = 'none';
+				}
+			}
+		},
+		mapReloaded : function(itemImage) {
+			isoTest.log("mapReloaded()");
+			if (document.querySelectorAll('img[src*="'+itemImage+'"]').length > 0) {
+				isoTest.updatePage(itemImage);
+			}
+		},
+		cityMapReloaded : function() {
+			isoTest.log("cityMapReloaded()");
+			if (document.querySelectorAll(isoTest.mapSelector).length > 0) {
+				isoTest.updateCityFilter();
+			}
+		},
+		updatePage : function(image) {
 			isoTest.log('updatePage()');
 			helpers.elementLoaded(isoTest.selectorLocations, function() {
 				helpers.elementLoaded(isoTest.mapSelector, function() {
 					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
-					// console.log(allLocations);
-					for(var i = 0; i < allLocations.length; i++) {
-						// console.log(allLocations[i]);
-						// if (document.querySelector('.iso-location-filters-modal.iso-modal .location-search-filters-modal__location-search-list #checkbox_location_3 .checkbox__label-checkbox').classList.contains('checked')) {	
-							if (allLocations[i].querySelector('.location-name .icon-location-port_of_call') != null) {
-								allLocations[i].classList.add('iso-hidden');
-								allLocations[i].classList.remove('active');
-								allLocations[i].getAttribute('data-dtm-tracking')
-								var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
-								
-								// window.setTimeout(function(){
-								helpers.elementLoaded(isoTest.mapSelector, function() {
-									var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
-									// console.log("locationID");
-									// console.log(locationID);
-									// console.log("mapData");
-									// console.log(mapData);
-									for(var i = 0; i < mapData.length; i++) {
-										mapData[i].style.display = "none";
-									}
-								});
-								// }, 10);		
-							}
-						// }
-					}
 
-			    // window.setTimeout(function(){
-			    helpers.elementLoaded(isoTest.mapSelector, function() {
-			      var mapPortIconImages = document.querySelectorAll('img[src*="port_of_call"]');
-						// console.log("mapPortIconImages");
-						// console.log(mapPortIconImages);
-						for(var i = 0; i < mapPortIconImages.length; i++) {
-							mapPortIconImages[i].parentNode.style.display = 'none';
-							mapPortIconImages[i].style.display = 'none';
-							// console.log(mapPortIconImages[i].parentNode);
-							// console.log(mapPortIconImages[i]);
+					for(var i = 0; i < allLocations.length; i++) {
+						if (allLocations[i].querySelector('[class*="'+ image +'"]') != null) {
+							allLocations[i].classList.add('iso-hidden');
+							allLocations[i].classList.remove('active');
+							var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
+							
+							helpers.elementLoaded('img[src*="'+image+'"]', function() {
+								var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
+								for(var i = 0; i < mapData.length; i++) {
+									mapData[i].style.display = "none";
+								}
+							});
+						}
+					}
+	
+			    helpers.elementLoaded('img[src*="'+image+'"]', function() {
+			      var selectedImages = document.querySelectorAll('img[src*="'+image+'"]');
+				
+						for(var i = 0; i < selectedImages.length; i++) {
+							selectedImages[i].parentNode.style.display = 'none';
+							selectedImages[i].style.display = 'none';
 						}
 					});
-			    // }, 10);
+
+				});
+			});
+		},
+		updateOrder : function() {
+			isoTest.log('updateOrder()');
+
+			var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+
+			for(var i = 0; i < allLocations.length; i++) {
+				allLocations[i].querySelector('.location-index').innerHTML = i;
+				var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
+				var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
+				for(var a = 0; a < mapData.length; a++) {
+					mapData[a].innerHTML = i;
+				}
+			}
+				// if (allLocations[i].querySelector('[class*="'+ image +'"]') != null) {
+				// 	allLocations[i].classList.add('iso-hidden');
+				// 	allLocations[i].classList.remove('active');
+				// 	allLocations[i].getAttribute('data-dtm-tracking')
+				// 	var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
+					
+				// 	helpers.elementLoaded('img[src*="'+image+'"]', function() {
+				// 		var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
+				// 		for(var i = 0; i < mapData.length; i++) {
+				// 			mapData[i].style.display = "none";
+				// 		}
+				// 	});
+				// }
+			
+
+	  //   helpers.elementLoaded('img[src*="'+image+'"]', function() {
+	  //     var selectedImages = document.querySelectorAll('img[src*="'+image+'"]');
+		
+			// 	for(var i = 0; i < selectedImages.length; i++) {
+			// 		selectedImages[i].parentNode.style.display = 'none';
+			// 		selectedImages[i].style.display = 'none';
+			// 	}
+			// });
+
+
+		},
+		updateCityFilter : function() {
+			helpers.elementLoaded(isoTest.selectorLocations, function() {
+				helpers.elementLoaded(isoTest.mapSelector, function() {
+					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+
+					for(var i = 0; i < allLocations.length; i++) {
+						if (!allLocations[i].querySelector('i.icon')) {
+							allLocations[i].classList.add('iso-hidden');
+							allLocations[i].classList.remove('active');
+							var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
+							
+							helpers.elementLoaded(isoTest.mapSelector, function() {
+								var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
+								for(var i = 0; i < mapData.length; i++) {
+									mapData[i].style.display = "none";
+								}
+							});
+						}
+					}
+	
+			    helpers.elementLoaded(isoTest.mapSelector, function() {
+			      var selectedImages = document.querySelectorAll(isoTest.mapSelector);
+				
+						for(var i = 0; i < selectedImages.length; i++) {
+							selectedImages[i].parentNode.style.display = 'none';
+							selectedImages[i].style.display = 'none';
+						}
+					});
+
+				});
+			});
+		},
+		removeCityFilter : function() {
+			helpers.elementLoaded(isoTest.selectorLocations, function() {
+				helpers.elementLoaded(isoTest.mapSelector, function() {
+					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+
+					for(var i = 0; i < allLocations.length; i++) {
+						if (!allLocations[i].querySelector('i.icon')) {
+							allLocations[i].classList.add('active');
+							allLocations[i].classList.remove('iso-hidden');
+							var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
+							
+							helpers.elementLoaded(isoTest.mapSelector, function() {
+								var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
+								for(var i = 0; i < mapData.length; i++) {
+									mapData[i].style.display = "block";
+								}
+							});
+						}
+					}
+	
+			    helpers.elementLoaded(isoTest.mapSelector, function() {
+			      var selectedImages = document.querySelectorAll(isoTest.mapSelector);
+				
+						for(var i = 0; i < selectedImages.length; i++) {
+							selectedImages[i].parentNode.style.display = 'block';
+							selectedImages[i].style.display = 'block';
+						}
+					});
+
+				});
+			});
+		},
+		removeUpdate : function(image) {
+			isoTest.log('removeUpdate()');
+			helpers.elementLoaded(isoTest.selectorLocations, function() {
+				helpers.elementLoaded(isoTest.mapSelector, function() {
+					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.iso-hidden');
+
+					for(var i = 0; i < allLocations.length; i++) {
+						if (allLocations[i].querySelector('[class*="'+ image +'"]') != null) {
+							allLocations[i].classList.add('active');
+							allLocations[i].classList.remove('iso-hidden');
+							var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
+							
+							helpers.elementLoaded('img[src*="'+image+'"]', function() {
+								var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
+								for(var i = 0; i < mapData.length; i++) {
+									mapData[i].style.display = "block";
+								}
+							});
+						}
+					}
+	
+			    helpers.elementLoaded('img[src*="'+image+'"]', function() {
+			      var selectedImages = document.querySelectorAll('img[src*="'+image+'"]');
+				
+						for(var i = 0; i < selectedImages.length; i++) {
+							selectedImages[i].parentNode.style.display = 'block';
+							selectedImages[i].style.display = 'block';
+						}
+					});
 
 				});
 			});
@@ -347,13 +647,75 @@
 				document.querySelector('#ip-redirect').insertAdjacentHTML("afterend", isoTest.modal);
 			}
 		},
+		checkModalForChange : function() {
+			isoTest.log("checkModalForChange()");
+
+			var exoticsCheckbox = document.querySelector('#checkbox_location_1 .checkbox__label-checkbox');
+			var airportCheckbox = document.querySelector('#checkbox_location_2 .checkbox__label-checkbox');
+			var portCheckbox = document.querySelector('#checkbox_location_3 .checkbox__label-checkbox');
+			var trainCheckbox = document.querySelector('#checkbox_location_4 .checkbox__label-checkbox');
+			var cityCheckbox = document.querySelector('#checkbox_location_5 .checkbox__label-checkbox');
+
+			if (isoTest.exoticsLocations == "false") {
+				if (exoticsCheckbox.classList.contains('checked')) {
+					exoticsCheckbox.classList.remove('checked');
+				}
+			} else {
+				if (!exoticsCheckbox.classList.contains('checked')) {
+					exoticsCheckbox.classList.add('checked');
+				}
+			}
+
+			if (isoTest.airportLocations == "false") {
+				if (airportCheckbox.classList.contains('checked')) {
+					airportCheckbox.classList.remove('checked');
+				}
+			} else {
+				if (!airportCheckbox.classList.contains('checked')) {
+					airportCheckbox.classList.add('checked');
+				}
+			}
+
+			if (isoTest.portLocations == "false") {
+				if (portCheckbox.classList.contains('checked')) {
+					portCheckbox.classList.remove('checked');
+				}
+			} else {
+				if (!portCheckbox.classList.contains('checked')) {
+					portCheckbox.classList.add('checked');
+				}
+			}
+
+			if (isoTest.trainLocations == "false") {
+				if (trainCheckbox.classList.contains('checked')) {
+					trainCheckbox.classList.remove('checked');
+				}
+			} else {
+				if (!trainCheckbox.classList.contains('checked')) {
+					trainCheckbox.classList.add('checked');
+				}
+			}
+
+			if (isoTest.cityLocations == "false") {
+				if (cityCheckbox.classList.contains('checked')) {
+					cityCheckbox.classList.remove('checked');
+				}
+			} else {
+				if (!cityCheckbox.classList.contains('checked')) {
+					cityCheckbox.classList.add('checked');
+				}
+			}
+		},
 		addEvents : function() {
 			document.querySelector('.iso-modal.iso-location-filters-modal .close-modal').addEventListener('click', function (e) {
+				isoTest.checkModalForChange();
 				isoTest.destroyModal();
 			}, false);
 
 			document.querySelector('.iso-modal.iso-location-filters-modal .close-modal .icon-close-x-white').addEventListener('click', function (e) {
+				isoTest.checkModalForChange();
 				isoTest.destroyModal();
+
 			}, false);
 
 			document.querySelector('#location-search-filter-1 .location-type-filters-trigger__button').addEventListener('click', function (e) {
@@ -374,28 +736,29 @@
 			}
 
 			document.querySelector('.iso-location-filters-modal.iso-modal .iso-modal-apply').addEventListener('click', function(e){
+				// var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
 
-				var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
-
-				if (allchecked.length == 0) {
-
-				} else {
-					for (var i = 0; i < allchecked.length; i++) {
-						console.log(allchecked[i].querySelector('.location-type-checkbox').value);
-					}
-				}
-
-				//look for each type of input value and reset page
-
+				// if (allchecked.length == 0) {
+				// 	isoTest.checkForFilters("zoom");
+				// } else {
+					// for (var i = 0; i < allchecked.length; i++) {
+						// isoTest.log(allchecked[i].querySelector('.location-type-checkbox').value);
+						isoTest.destroyModal();
+						isoTest.checkForFilters("zoom");
+					// }
+				// }
 			}, false);
 
 			document.querySelector('.iso-location-filters-modal.iso-modal .iso-modal-cancel').addEventListener('click', function(e){
 				var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
-				if (allchecked.length > 0) {
-					for (var i = 0; i < allchecked.length; i++) {
-						allchecked[i].classList.remove('checked');
-					}
-				}
+
+				isoTest.checkModalForChange();
+				isoTest.destroyModal();
+				// if (allchecked.length > 0) {
+				// 	for (var i = 0; i < allchecked.length; i++) {
+				// 		allchecked[i].classList.remove('checked');
+				// 	}
+				// }
 			}, false);
 
 			document.querySelector('.iso-location-filters-modal.iso-modal .iso-clear-location-filter').addEventListener('click', function(e){
@@ -405,41 +768,45 @@
 						allchecked[i].classList.remove('checked');
 					}
 				}
+
+				// isoTest.exoticsLocations = 'false';
+				// isoTest.airportLocations = 'false';
+				// isoTest.portLocations = 'false';
+				// isoTest.trainLocations = 'false';
+				// isoTest.cityLocations = 'false';
 			}, false);
+	
 
 			document.addEventListener('click', function (event) {
-				isoTest.log('click');
-				isoTest.log(event.target);
-				// console.log(event.target.parentElement);
+				console.log(event.target);
 				var parentEl = document.querySelector('#map-canvas');
 				var childEl = event.target;
 				if (isoTest.contains(parentEl,childEl)) {
 					parentEl = document.querySelector('#google-map-custom-controls-wrapper');
-					
-						if (isoTest.contains(parentEl,childEl)) {
-							window.setTimeout(function(){
-								isoTest.updatePage();
-							}, 20);
-						} else {
-							window.setTimeout(function(){
-								var mapPortIconImages = document.querySelectorAll('img[src*="port_of_call"]');
-								console.log(mapPortIconImages);
-								for(var i = 0; i < mapPortIconImages.length; i++) {
-									mapPortIconImages[i].parentNode.style.display = 'none';
-									mapPortIconImages[i].style.display = 'none';
-								}
-							}, 300);
-
-							window.setTimeout(function(){
-								helpers.elementLoaded(isoTest.mapChangeSelector, function() {
-									console.log('run function');
-									isoTest.updatePage();
+					if (isoTest.contains(parentEl,childEl)) {
+						window.setTimeout(function(){
+							helpers.elementLoaded(isoTest.selectorLocations, function() {
+								helpers.elementLoaded(isoTest.mapSelector, function() {
+									isoTest.checkForFilters("zoom");
 								});
-							}, 100);
-						}
-					
+							});
+						}, 500);
+					} else {
+						window.setTimeout(function(){
+							isoTest.checkForFilters("drag");
+						}, 400);
+
+						window.setTimeout(function(){
+							helpers.elementLoaded(isoTest.mapChangeSelector, function() {
+								isoTest.checkForReloaded();
+							});
+						}, 600);
+					}
 				}
-					
+
+				// if (event.target == document.querySelector('.ReactModal__Content--after-open .modal-button-bar .modal-buttons-container .btn.modal-button')) {
+				// 	console.log('equals');
+				// }
 			}, false);
 
 			// $('img[src*="port_of_call"]')
