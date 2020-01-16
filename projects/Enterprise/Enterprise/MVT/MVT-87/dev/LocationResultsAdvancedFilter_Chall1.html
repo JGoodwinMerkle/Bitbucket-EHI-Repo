@@ -153,7 +153,7 @@
 		creative : 'Challenger 1',
 		selector: '#location-search-filter-1 .location-search-filter__container-content',
 		mapSelector: 'img[src*="ENT-mappin-single-number-enterprise@2x"]',
-		selectorLocations: '#location .search-results-wrapper .search-results ul .location-result-item.active',
+		selectorLocations: '#location .search-results-wrapper .search-results ul .location-result-item',
 		mapChangeSelector: '[aria-live=off]',
 		content: '<div class="location-type-filters-trigger location-search-filter__location-type-filter">\
 								<label class="location-type-filters-trigger__label" for="location-type-filters-trigger">\
@@ -280,15 +280,8 @@
 
 			isoTest.addLocationFilter();
 			isoTest.addFilterModal();
-			
-			// isoTest.filtersListItems = document.querySelectorAll('.checkbox__label-checkbox');
 
 			isoTest.addEvents();
-
-
-		},
-		contains : function(parent, child) {
-			return parent !== child && parent.contains(child);
 		},
 		checkForFilters : function(movement) {
 			isoTest.log("checkForFilters()");
@@ -392,6 +385,8 @@
 				isoTest.removeUpdate(isoTest.trainImage);
 				isoTest.removeCityFilter();
 			}
+
+			isoTest.updateOrder();
 		},
 		checkForReloaded : function() {
 			isoTest.log("checkForReloaded()");
@@ -427,6 +422,8 @@
 					}
 				}
 			}
+
+			isoTest.updateOrder();
 		},
 		updateImages : function(itemImage) {
 			isoTest.log("updateImages()");
@@ -464,12 +461,13 @@
 			isoTest.log('updatePage()');
 			helpers.elementLoaded(isoTest.selectorLocations, function() {
 				helpers.elementLoaded(isoTest.mapSelector, function() {
-					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+					// var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item');
 
 					for(var i = 0; i < allLocations.length; i++) {
 						if (allLocations[i].querySelector('[class*="'+ image +'"]') != null) {
 							allLocations[i].classList.add('iso-hidden');
-							allLocations[i].classList.remove('active');
+							allLocations[i].classList.remove('iso-active');
 							var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
 							
 							helpers.elementLoaded('img[src*="'+image+'"]', function() {
@@ -478,6 +476,8 @@
 									mapData[i].style.display = "none";
 								}
 							});
+						} else {
+							allLocations[i].classList.add('iso-active');
 						}
 					}
 	
@@ -496,51 +496,28 @@
 		updateOrder : function() {
 			isoTest.log('updateOrder()');
 
-			var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+			// var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+			var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.iso-active');
 
 			for(var i = 0; i < allLocations.length; i++) {
-				allLocations[i].querySelector('.location-index').innerHTML = i;
+				allLocations[i].querySelector('.location-index').innerHTML = i + 1;
 				var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
 				var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
 				for(var a = 0; a < mapData.length; a++) {
-					mapData[a].innerHTML = i;
+					mapData[a].innerHTML = i + 1;
 				}
 			}
-				// if (allLocations[i].querySelector('[class*="'+ image +'"]') != null) {
-				// 	allLocations[i].classList.add('iso-hidden');
-				// 	allLocations[i].classList.remove('active');
-				// 	allLocations[i].getAttribute('data-dtm-tracking')
-				// 	var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
-					
-				// 	helpers.elementLoaded('img[src*="'+image+'"]', function() {
-				// 		var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
-				// 		for(var i = 0; i < mapData.length; i++) {
-				// 			mapData[i].style.display = "none";
-				// 		}
-				// 	});
-				// }
-			
-
-	  //   helpers.elementLoaded('img[src*="'+image+'"]', function() {
-	  //     var selectedImages = document.querySelectorAll('img[src*="'+image+'"]');
-		
-			// 	for(var i = 0; i < selectedImages.length; i++) {
-			// 		selectedImages[i].parentNode.style.display = 'none';
-			// 		selectedImages[i].style.display = 'none';
-			// 	}
-			// });
-
-
 		},
 		updateCityFilter : function() {
 			helpers.elementLoaded(isoTest.selectorLocations, function() {
 				helpers.elementLoaded(isoTest.mapSelector, function() {
-					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+					// var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item');
 
 					for(var i = 0; i < allLocations.length; i++) {
 						if (!allLocations[i].querySelector('i.icon')) {
 							allLocations[i].classList.add('iso-hidden');
-							allLocations[i].classList.remove('active');
+							allLocations[i].classList.remove('iso-active');
 							var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
 							
 							helpers.elementLoaded(isoTest.mapSelector, function() {
@@ -549,6 +526,8 @@
 									mapData[i].style.display = "none";
 								}
 							});
+						} else {
+							allLocations[i].classList.add('iso-active');
 						}
 					}
 	
@@ -567,11 +546,12 @@
 		removeCityFilter : function() {
 			helpers.elementLoaded(isoTest.selectorLocations, function() {
 				helpers.elementLoaded(isoTest.mapSelector, function() {
-					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+					// var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
+					var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item');
 
 					for(var i = 0; i < allLocations.length; i++) {
 						if (!allLocations[i].querySelector('i.icon')) {
-							allLocations[i].classList.add('active');
+							allLocations[i].classList.add('iso-active');
 							allLocations[i].classList.remove('iso-hidden');
 							var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
 							
@@ -604,7 +584,7 @@
 
 					for(var i = 0; i < allLocations.length; i++) {
 						if (allLocations[i].querySelector('[class*="'+ image +'"]') != null) {
-							allLocations[i].classList.add('active');
+							allLocations[i].classList.add('iso-active');
 							allLocations[i].classList.remove('iso-hidden');
 							var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
 							
@@ -615,7 +595,7 @@
 								}
 							});
 						}
-					}
+					}document.querySelectorAll('img[src*="port"]');
 	
 			    helpers.elementLoaded('img[src*="'+image+'"]', function() {
 			      var selectedImages = document.querySelectorAll('img[src*="'+image+'"]');
@@ -736,29 +716,17 @@
 			}
 
 			document.querySelector('.iso-location-filters-modal.iso-modal .iso-modal-apply').addEventListener('click', function(e){
-				// var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
 
-				// if (allchecked.length == 0) {
-				// 	isoTest.checkForFilters("zoom");
-				// } else {
-					// for (var i = 0; i < allchecked.length; i++) {
-						// isoTest.log(allchecked[i].querySelector('.location-type-checkbox').value);
 						isoTest.destroyModal();
 						isoTest.checkForFilters("zoom");
-					// }
-				// }
+	
 			}, false);
 
 			document.querySelector('.iso-location-filters-modal.iso-modal .iso-modal-cancel').addEventListener('click', function(e){
-				var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
 
 				isoTest.checkModalForChange();
 				isoTest.destroyModal();
-				// if (allchecked.length > 0) {
-				// 	for (var i = 0; i < allchecked.length; i++) {
-				// 		allchecked[i].classList.remove('checked');
-				// 	}
-				// }
+
 			}, false);
 
 			document.querySelector('.iso-location-filters-modal.iso-modal .iso-clear-location-filter').addEventListener('click', function(e){
@@ -768,12 +736,6 @@
 						allchecked[i].classList.remove('checked');
 					}
 				}
-
-				// isoTest.exoticsLocations = 'false';
-				// isoTest.airportLocations = 'false';
-				// isoTest.portLocations = 'false';
-				// isoTest.trainLocations = 'false';
-				// isoTest.cityLocations = 'false';
 			}, false);
 	
 
@@ -809,17 +771,11 @@
 				// }
 			}, false);
 
-			// $('img[src*="port_of_call"]')
-
-			// /etc/designs/ecom/dist/img/raster-icons/gmaps/ENT-mappin-single-number-port_of_call@2x.png
-
-			// /etc/designs/ecom/dist/img/raster-icons/gmaps/ENT-mappin-single-number-rail@2x.png
-
-			// /etc/designs/ecom/dist/img/raster-icons/gmaps/ENT-mappin-single-number-airport@2x.png
-
-			// /etc/designs/ecom/dist/img/raster-icons/gmaps/ENT-mappin-single-number-exotics@2x.png
 
 
+		},
+		contains : function(parent, child) {
+			return parent !== child && parent.contains(child);
 		},
 		modalOpen : function() {
 			document.querySelector('.iso-modal.iso-location-filters-modal').classList.add('active');
@@ -859,44 +815,6 @@
     	};
     	context.addEventListener('keydown', keyListener, false);
     },
-		checkForLocations : function() {
-			var checkLocations = setInterval(function(){
-				if (store.getState().toJS()['app']['locationFinder']['locationSearch']['pickup'] != null){
-					clearInterval(checkLocations);
-					// isoTest.findFilterPrice();
-					// isoTest.updatefilterWidget();
-				}
-
-				setTimeout(function(){
-					clearInterval(checkLocations);
-				}, 10000)
-			},1);
-
-			// port
-			// icon location-type-icon icon-location-port_of_call
-			// "PORT_OF_CALL"
-
-			// airport
-			// icon location-type-icon icon-location-airport
-			// "AIRPORT"
-
-			// train
-			// icon location-type-icon icon-location-rail
-			// "RAIL"
-
-			// exotics
-			// icon location-type-icon icon-icon-exotics
-			// "CITY"
-			// attributes: "EXOTICS"
-
-			// city
-			//
-			// "CITY"
-
-			// document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active .location-information .location-name');
-
-			// document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item.active');
-		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
@@ -908,24 +826,7 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
-		},
-		dependsLoaded : function (callback) { 
-			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
-			window.clearTimeout(isoTest.timer);
-			if (typeof store !== 'undefined' && typeof store.getState === 'function' && typeof store.getState().toJS === 'function') {
-				if (typeof callback === "function") {
-					
-					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
-					
-					callback();
-				}
-			} else {
-				isoTest.timer = window.setTimeout(function() {
-					isoTest.dependsLoaded(callback);
-				}, 100);
-			}
 		}
-
 	}
 
 	var helpers = {
@@ -940,23 +841,9 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
 		}
 	}
 
-	isoTest.dependsLoaded(function(){ 
-		isoTest.init();
-	});
+	isoTest.init();
 })();
 </script>
