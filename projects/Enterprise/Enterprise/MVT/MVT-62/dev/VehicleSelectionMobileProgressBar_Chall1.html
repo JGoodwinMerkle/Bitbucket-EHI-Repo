@@ -48,6 +48,15 @@
 		test : 'Vehicle Selection Mobile Progress Bar',
 		creative : 'Challenger 1',
 		selector: '[data-stephash="dateTime"] .step-completed',
+		menuItems: {
+			dateTimePickup: ReservationStateTree.get()["view"]["pickup"]["date"]["_i"],
+			dateTimeDropoff: ReservationStateTree.get()["view"]["dropoff"]["date"]["_i"],
+			location: (document.querySelector('[data-stephash="location"] .step__step-value') ? document.querySelector('[data-stephash="location"] .step__step-value').innerHTML : null),
+			locationPickup: (document.querySelector('[data-stephash="location/pickup"] .step__step-value') ? document.querySelector('[data-stephash="location/pickup"] .step__step-value').innerHTML : null),
+			locationDropoff: (document.querySelector('[data-stephash="location/dropoff"] .step__step-value') ? document.querySelector('[data-stephash="location/dropoff"] .step__step-value').innerHTML : null),
+			cars: (document.querySelector('[data-stephash="cars"] .step__step-value') ? document.querySelector('[data-stephash="cars"] .step__step-value').innerHTML : null)
+		},
+		months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -81,120 +90,230 @@
 		chall : function() {
 			isoTest.log('chall');
 
-			console.log("pickupDateReservation model");
-			console.log(ReservationStateTree.get()["model"]["pickup"]["date"]["momentDate"]["_i"]);
+			isoTest.log(isoTest.menuItems);
 
-			console.log("pickupDateReservation view");
-			console.log(ReservationStateTree.get()["view"]["pickup"]["date"]["_i"]);
+			var checkMenuItems = setInterval(function(){
+				var newMenuItems = {
+					dateTimePickup: ReservationStateTree.get()["view"]["pickup"]["date"]["_i"],
+					dateTimeDropoff: ReservationStateTree.get()["view"]["dropoff"]["date"]["_i"],
+					location: (document.querySelector('[data-stephash="location"] .step__step-value') ? document.querySelector('[data-stephash="location"] .step__step-value').innerHTML : null),
+					locationPickup: (document.querySelector('[data-stephash="location/pickup"] .step__step-value') ? document.querySelector('[data-stephash="location/pickup"] .step__step-value').innerHTML : null),
+					locationDropoff: (document.querySelector('[data-stephash="location/dropoff"] .step__step-value') ? document.querySelector('[data-stephash="location/dropoff"] .step__step-value').innerHTML : null),
+					cars: (document.querySelector('[data-stephash="cars"] .step__step-value') ? document.querySelector('[data-stephash="cars"] .step__step-value').innerHTML : null)
+				};
 
-			console.log("dropoffDateReservation model");
-			console.log(ReservationStateTree.get()["model"]["dropoff"]["date"]["momentDate"]["_i"]);
+				if (isoTest.menuItems["dateTimePickup"] != newMenuItems["dateTimePickup"] ) {
+					isoTest.log("dateTimePickup not the same");
+					isoTest.log(newMenuItems["dateTimePickup"]);
+					isoTest.menuItems["dateTimePickup"] = newMenuItems["dateTimePickup"];
+					isoTest.updateDateTime();
+				}
 
-			console.log("dropoffDateReservation view");
-			console.log(ReservationStateTree.get()["view"]["dropoff"]["date"]["_i"]);
+				if (isoTest.menuItems["dateTimeDropoff"] != newMenuItems["dateTimeDropoff"]) {
+					isoTest.log("dateTimeDropoff not the same");
+					isoTest.log(newMenuItems["dateTimeDropoff"]);
+					isoTest.menuItems["dateTimeDropoff"] = newMenuItems["dateTimeDropoff"];
+					isoTest.updateDateTime();
+				}
 
-			var dateTimeStep = document.querySelector('[data-stephash="dateTime"] .step-completed');
-			var locationStep = document.querySelector('[data-stephash="location"] .step-completed');
-			var locationPickupStep = document.querySelector('[data-stephash="location/pickup"] .step-completed');
-			var locationDropoffStep = document.querySelector('[data-stephash="location/dropoff"] .step-completed');
-			var carsStep = document.querySelector('[data-stephash="cars"] .step-completed');
+				if (isoTest.menuItems["location"] != newMenuItems["location"]) {
+					isoTest.log("location not the same");
+					isoTest.log(newMenuItems["location"]);
+					isoTest.menuItems["location"] = newMenuItems["location"];
+					isoTest.updateLocationRoundTrip();
+				}
+
+				if (isoTest.menuItems["locationPickup"] != newMenuItems["locationPickup"]) {
+					isoTest.log("locationPickup not the same");
+					isoTest.log(newMenuItems["locationPickup"]);
+					isoTest.menuItems["locationPickup"] = newMenuItems["locationPickup"];
+					isoTest.updateLocationOneWayPickup();
+				}
+
+				if (isoTest.menuItems["locationDropoff"] != newMenuItems["locationDropoff"]) {
+					isoTest.log("locationDropoff not the same");
+					isoTest.log(newMenuItems["locationDropoff"]);
+					isoTest.menuItems["locationDropoff"] = newMenuItems["locationDropoff"];
+					isoTest.updateLocationOneWayDropoff();
+				}
+
+				if (isoTest.menuItems["cars"] != newMenuItems["cars"]) {
+					isoTest.log("cars not the same");
+					isoTest.log(newMenuItems["cars"]);
+					isoTest.menuItems["cars"] = newMenuItems["cars"];
+					isoTest.updateCar();
+				}
+			},100);
+
+			setTimeout(function(){ clearInterval(checkMenuItems) }, 10000);
+
+
+			document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerHTML = '<span class="iso-header"></span><button class="iso-modify-btn"></button>';
+
+			isoTest.updateDateTime();
+			isoTest.updateLocationRoundTrip();
+			isoTest.updateLocationOneWayPickup();
+			isoTest.updateLocationOneWayDropoff();
+			isoTest.updateCar();
+			isoTest.addEvents();
+
+		},
+		updateDateTime : function() {
+			isoTest.log("updateDateTime()");
 
 			var pickupDate = '',
 					dropoffDate = '',
 					pickupTime = '',
-					dropoffTime = '',
-					pickupLocation = '',
-					dropoffLocation = '',
-					pickupDropoffLocation = '',
-					carName = '',
-					dateTimeText = '',
-					locationText = '',
-					carText = '';
+					dropoffTime = '';
 
+			var dateTimePickupStep = isoTest.menuItems["dateTimePickup"];
+			var dateTimeDropoffStep = isoTest.menuItems["dateTimeDropoff"];
 
-			isoTest.log('dateTimeStep');
+			if ((dateTimePickupStep != null) && (typeof dateTimePickupStep == "string") && (dateTimeDropoffStep != null) && (typeof dateTimeDropoffStep == "string")) {
+				var dateTimeHeader = document.querySelector('.iso-header-date');
 
+				var pickupDateReservationUpdate = new Date(dateTimePickupStep);
+				pickupDate = isoTest.months[pickupDateReservationUpdate.getMonth()] + ' ' + pickupDateReservationUpdate.getDate();
+				pickupTime = pickupDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
 
-			var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-			if (dateTimeStep != null) {
-				isoTest.log('enter dateTimeStep');
-
-				var pickupDateReservation = ReservationStateTree.get()["model"]["pickup"]["date"]["momentDate"]["_i"];
-				
-
-				if (pickupDateReservation != null) {
-					var pickupDateReservationUpdate = new Date(pickupDateReservation);
-					pickupDate = months[pickupDateReservationUpdate.getMonth()] + ' ' + pickupDateReservationUpdate.getDate();
-					pickupTime = pickupDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
-				}
-
-
-				var dropoffDateReservation = ReservationStateTree.get()["view"]["dropoff"]["date"]["_i"];
-
-				if (dropoffDateReservation != null) {
-					var dropoffDateReservationUpdate = new Date(dropoffDateReservation);
-					dropoffDate = months[dropoffDateReservationUpdate.getMonth()] + ' ' + dropoffDateReservationUpdate.getDate();
-
-					dropoffTime = dropoffDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
-				}
+				var dropoffDateReservationUpdate = new Date(dateTimeDropoffStep);
+				dropoffDate = isoTest.months[dropoffDateReservationUpdate.getMonth()] + ' ' + dropoffDateReservationUpdate.getDate();
+				dropoffTime = dropoffDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true })
 
 				isoTest.log(pickupDate);
-				isoTest.log(dropoffDate);
-
 				isoTest.log(pickupTime);
+				isoTest.log(dropoffDate);
 				isoTest.log(dropoffTime);
 
-				dateTimeText = '<span class="iso-header-date">' + pickupDate + ' @ ' + pickupTime + ' - ' + dropoffDate + ' @ ' + dropoffTime + '</span>';
-			}
-
-
-			if (locationStep == null) {
-				if (locationPickupStep != null) {
-					helpers.checkStepLoaded(locationPickupStep, function() {
-						isoTest.log('locationPickupStep');
-						pickupLocation = locationPickupStep.querySelector('.step__step-value').innerHTML;
-						isoTest.log(pickupLocation);
-
-						if (locationDropoffStep != null) {
-							helpers.checkStepLoaded(locationDropoffStep, function() {
-								isoTest.log('locationDropoffStep');
-								dropoffLocation = locationDropoffStep.querySelector('.step__step-value').innerHTML;
-								isoTest.log(dropoffLocation);
-
-								locationText = '<br><span class="iso-header-location">' + pickupLocation + '</span><br><span class="iso-header-location">' + dropoffLocation + '</span>';
-							});
-						} else {
-							locationText = '<br><span class="iso-header-location">' + pickupLocation + '</span>';
-						}
-					});
+				if (!dateTimeHeader) {
+					document.querySelector('.iso-header').insertAdjacentHTML('afterbegin', '<span class="iso-header-date"><span class="iso-pickup-datetime">' + pickupDate + ' @ ' + pickupTime + '</span>  - <span class="iso-dropoff-datetime">' + dropoffDate + ' @ ' + dropoffTime + '</span></span>');
+				} else {
+					dateTimeHeader.innerHTML = '<span class="iso-pickup-datetime">' + pickupDate + ' @ ' + pickupTime + '</span>  - <span class="iso-dropoff-datetime">' + dropoffDate + ' @ ' + dropoffTime + '</span>';
 				}
-			} else {
-				helpers.checkStepLoaded(locationStep, function() {
-					isoTest.log('locationStep');
-					pickupDropoffLocation = locationStep.querySelector('.step__step-value').innerHTML;
+			}
+		},
+		updateLocationRoundTrip : function() {
+			isoTest.log('updateLocationRoundTrip()');
+			var locationStep = document.querySelector('[data-stephash="location"] .step-completed');
+			var pickupDropoffLocation = '';
+			var locationHeader = document.querySelector('.iso-header-location');
+
+			if (locationStep != null) {
+				if ((isoTest.menuItems["location"] != "Select") && (isoTest.menuItems["location"] != "SELECT") && (isoTest.menuItems["location"] != null)) {
+					pickupDropoffLocation = isoTest.menuItems["location"];
+
 					isoTest.log(pickupDropoffLocation);
 
-					locationText = '<br><span class="iso-header-location">' + pickupDropoffLocation + '</span>';
-				});
+					if (!locationHeader) {
+						document.querySelector('.iso-header').insertAdjacentHTML('beforeend','<br class="iso-header-location-break"><span class="iso-header-location">' + pickupDropoffLocation + '</span>');
+					} else {
+						locationHeader.innerHTML = pickupDropoffLocation;
+					}
+				} else {
+					if (locationHeader) {
+						locationHeader.remove();
+						document.querySelector('.iso-header-location-break').remove();
+					}
+				}
+			} else {
+				if (locationHeader) {
+					locationHeader.remove();
+					document.querySelector('.iso-header-location-break').remove();
+				}
 			}
+		},
+		updateLocationOneWayPickup: function() {
+			isoTest.log('updateLocationOneWayPickup()');
+
+			var locationPickupStep = document.querySelector('[data-stephash="location/pickup"] .step-completed');
+			var pickupLocation = '';
+			var locationHeaderPickup = document.querySelector('.iso-header-location.iso-location-pickup');
+
+			if (locationPickupStep != null) {
+				if ((isoTest.menuItems["locationPickup"] != "Select") && (isoTest.menuItems["locationPickup"] != "SELECT") && (isoTest.menuItems["locationPickup"] != null)) {
+
+					pickupLocation = isoTest.menuItems["locationPickup"];
+					isoTest.log(pickupLocation);
+
+					if (!locationHeaderPickup) {
+						document.querySelector('.iso-header').insertAdjacentHTML('beforeend','<br class="iso-header-pickup-location-break"><span class="iso-header-location iso-location-pickup">' + pickupLocation + '</span>');
+					} else {
+						locationHeaderPickup.innerHTML = pickupLocation;
+					}
+				} else {
+					if (locationHeaderPickup) {
+						locationHeaderPickup.remove();
+						document.querySelector('.iso-header-pickup-location-break').remove();
+					}
+				}
+			} else {
+				if (locationHeaderPickup) {
+					locationHeaderPickup.remove();
+					document.querySelector('.iso-header-pickup-location-break').remove();
+				}
+			}
+		},
+		updateLocationOneWayDropoff: function() {
+			isoTest.log('updateLocationOneWayDropoff()');
+
+			var locationDropoffStep = document.querySelector('[data-stephash="location/dropoff"] .step-completed');
+			var dropoffLocation = '';
+			var locationHeaderDropoff = document.querySelector('.iso-header-location.iso-location-dropoff');
+
+			if (locationDropoffStep != null) {
+				if ((isoTest.menuItems["locationDropoff"] != "Select") && (isoTest.menuItems["locationDropoff"] != "SELECT") && (isoTest.menuItems["locationDropoff"] != null) && (isoTest.menuItems["locationDropoff"] != isoTest.menuItems["locationPickup"])) {
+
+					dropoffLocation = isoTest.menuItems["locationDropoff"];
+					isoTest.log(dropoffLocation);
+
+					if (!locationHeaderDropoff) {
+						document.querySelector('.iso-header').insertAdjacentHTML('beforeend','<br class="iso-header-dropoff-location-break"><span class="iso-header-location iso-location-dropoff">' + dropoffLocation + '</span>');
+					} else {
+						locationHeaderDropoff.innerHTML = dropoffLocation;
+					}
+				} else {
+					if (dropoffLocation) {
+						dropoffLocation.remove();
+						document.querySelector('.iso-header-dropoff-location-break').remove();
+					}
+				}
+			} else {
+				if (dropoffLocation) {
+					dropoffLocation.remove();
+					document.querySelector('.iso-header-dropoff-location-break').remove();
+				}
+			}
+		},
+		updateCar : function() {
+			isoTest.log('updateCar()');
+
+			var carsStep = document.querySelector('[data-stephash="cars"] .step-completed');
+			var carName = '';
+			var carHeader = document.querySelector('.iso-header-car');
 
 			if (carsStep != null) {
-				helpers.checkStepLoaded(carsStep, function() {
-					isoTest.log('carsStep');
-					carName = carsStep.querySelector('.step__step-value').innerHTML;
+				if ((isoTest.menuItems["cars"] != "Select") && (isoTest.menuItems["cars"] != "SELECT") && (isoTest.menuItems["cars"] != null)) {
+
+					carName = isoTest.menuItems["cars"];
 					isoTest.log(carName);
 
-					carText = '<br><span class="iso-header-car">' + carName + '</span>';
-				});
+					if (!carHeader) {
+						document.querySelector('.iso-header').insertAdjacentHTML('beforeend','<br class="iso-header-car-break"><span class="iso-header-car">' + carName + '</span>');
+					} else {
+						carHeader.innerHTML = carName;
+					}
+				} else {
+					if (carHeader) {
+						carHeader.remove();
+						document.querySelector('.iso-header-car-break').remove();
+					}
+				}
+			} else {
+				if (carHeader) {
+					carHeader.remove();
+					document.querySelector('.iso-header-car-break').remove();
+				}
 			}
-
-			var newText = '<span class="iso-header">' + dateTimeText + locationText + carText + '</span>';
-
-			document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerHTML = newText + '<button class="iso-modify-btn"></button>';
-
-
-			isoTest.addEvents();
 		},
 		addEvents : function() {
 			document.querySelector('.btn.mobile-reservation-nav-slider').addEventListener('click', function (e) {
@@ -234,18 +353,6 @@
 				}
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
-		},
-		checkStepLoaded: function (ele, callback) {
-			isoTest.log('checkStepLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.timer);
-			if ((ele.querySelector('.step__step-value').innerText != "Select") && (ele.querySelector('.step__step-value').innerText != "SELECT")) {
-				if (typeof callback === 'function') {
-					isoTest.log('checkStepLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.timer = window.setTimeout(function(){helpers.checkStepLoaded(ele, callback);}, 100);
 	        }
 		}
 	}
