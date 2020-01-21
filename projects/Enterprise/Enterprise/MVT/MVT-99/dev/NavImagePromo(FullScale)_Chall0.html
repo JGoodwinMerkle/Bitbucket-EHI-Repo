@@ -1,0 +1,181 @@
+<style>
+.primary-nav>li #navContentRent.primary-nav-content .promo {
+	background-color: rgba(228, 228, 228, 1);
+  background-image: none !important;
+  border-bottom: 1px solid #c3c3c3;
+} 
+
+.primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container {
+	padding-left: 30px;
+	padding-right: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 95px;
+	text-align: center;
+}
+
+.primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 380px;
+}
+
+.primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .icon.icon-icon-promo-applied {
+	display: inline-block;
+	height: 45px;
+	width: 45px;
+}
+
+.primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .iso-promo-header {
+	color: #181918;
+	font-size: 22px;
+	font-weight: 600;
+	margin-top: 15px;
+}
+
+.primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .iso-promo-text {
+	color: #181918;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 22px;
+	margin-top: 15px;
+}
+
+.primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .iso-promo-btn {
+	background-color: transparent;
+	border-color: rgba(22, 154, 90, 1);
+	border-style: solid;
+	border-width: 1px;
+	color: #169A5A;
+	font-weight: 600;
+  font-size: 14px;
+  line-height: 30px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.primary-nav>li #navContentRent.primary-nav-content .promo .iso-promo-container .iso-promo-btn:hover {
+	border-color: #006639;
+	color: #006639;
+	text-decoration: none;
+}
+
+#primary-nav .mobile-utility>li.iso-promo-mobile-container {
+	display: none;
+}
+
+@media (max-width: 885px) {
+	#primary-nav .mobile-utility>li.iso-promo-mobile-container {
+		border: 1px solid white;
+		display: block;
+		margin: 0 0 10px;
+	}
+
+	#primary-nav .mobile-utility>li.iso-promo-mobile-container .iso-promo-mobile {
+		padding: 10px 7px;
+	}
+
+	#primary-nav .mobile-utility>li.iso-promo-mobile-container .iso-promo-mobile .icon-icon-promo-applied-white {
+		height: 18px;
+		position: relative;
+		top: 0;
+    width: 18px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Nav Image Promo (Full Scale)',
+		creative : 'Challenger 0',
+		selector: '.primary-nav>li #navContentRent.primary-nav-content .promo',
+		content: '<div class="iso-promo-container">\
+								<div class="iso-promo">\
+									<i class="icon icon-icon-promo-applied" title="icon-icon-promo-applied"></i>\
+									<div class="iso-promo-header">Weekend Special</div>\
+									<div class="iso-promo-text">Get away with great "Weekend Special" rates at participating neighborhood locations.</div>\
+									<a class="iso-promo-btn btn" href="https:&#47;&#47;www.enterprise.com/en/car-rental/deals/weekend-specials.html">UNLOCK YOUR OFFER</a>\
+								</div>\
+							</div>',
+		contentMobile: '<li class="iso-promo-mobile-container">\
+											<div class="iso-promo-mobile">\
+												<a href="https:&#47;&#47;www.enterprise.com/en/car-rental/deals/weekend-specials.html" class="utility-nav-button iso-promo-btn-mobile">\
+													<span class="utility-nav-label"><i class="icon icon-icon-promo-applied-white" title="icon-icon-promo-applied"></i>Weekend Car Rental Special</span>\
+												</a>\
+											</div>\
+										</li>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			if (document.querySelector('.iso-promo-container') == null) {
+				var promo = document.querySelector('.primary-nav>li #navContentRent.primary-nav-content .promo');
+				promo.innerHTML = isoTest.content;
+			}
+
+			if (document.querySelector('.iso-promo-mobile-container') == null) {
+				var mobilePromo = document.querySelectorAll('#primary-nav .mobile-utility.header-nav-item')[0];
+				mobilePromo.insertAdjacentHTML('beforeend', isoTest.contentMobile);
+			}
+
+			document.querySelector('.iso-promo-btn').addEventListener('click',function(e){
+				isoTest.fireTag(e.target,'UNLOCK YOUR OFFER');
+			}, false);
+
+			document.querySelector('.iso-promo-btn-mobile').addEventListener('click',function(e){
+				isoTest.fireTag(e.target,'Weekend Car Rental Special');
+			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
