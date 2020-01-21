@@ -134,33 +134,25 @@
 
 			isoTest.checkLocation();
 
-			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-				if (typeof window.isoSetTargetVars === 'function') {
-					window.isoSetTargetVars();
-				}
-			}
-
-			isoTest.log("Test Running...");
-			isoTest.log(isoTest.account + " - " + isoTest.portfolio);
-			isoTest.log(isoTest.test + " - " + isoTest.creative);
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
 			isoTest.elementLoaded(isoTest.filterSelector, function() {
-				isoTest.log("Test Ready!");
-  				isoTest.chall();
+				isoTest.log('Test Ready!');
+				isoTest.chall();
 			});
 
-			$(window).on('hashchange', function(){
+			window.addEventListener('hashchange', function() {
 				if(/cars|extras|commit|confirmed/.test(window.location.hash)){
 					isoTest.elementLoaded(isoTest.filterSelector, function() {
 						isoTest.checkLocation();
 						isoTest.chall();
 					});
 				} else {
-					$('body').removeClass('iso-exoticsJourney');
+					document.querySelector('body').classList.remove("iso-exoticsJourney");
 				}
-			});
+			}, false);
 		},
 		checkLocation : function(){
 			if(window._analytics && window._analytics.reservation){
@@ -176,62 +168,49 @@
 			isoTest.log('isValidLocation::::' + isoTest.validLocation);
 
 			if(!isoTest.validLocation){
-				$('body').removeClass('iso-exoticsJourney');
+				document.querySelector('body').classList.remove("iso-exoticsJourney");
 				return false;
 			}
-			isoTest.addTerms();
-			$('body').addClass('iso-exoticsJourney');
 
-			if($('.iso-exoticsLogo').length==0){
-				$('.header-logo-link').append($(isoTest.logo));
+			isoTest.addTerms();
+
+			document.querySelector('body').classList.add("iso-exoticsJourney");
+
+			if(!document.querySelector('.iso-exoticsLogo')) {
+				document.querySelector('#reservationHeader .header-logo-link#resHeaderEnterpriseHomeLogo').insertAdjacentHTML('beforeend', isoTest.logo);
+				document.querySelector('#primaryHeader .header-logo-link#enterpriseHomeLogo').insertAdjacentHTML('beforeend', isoTest.logo);
 			}
 
-			$('.iso-exoticsTerms a').click(function(e){
+			document.querySelector('.iso-exoticsTerms a').addEventListener('click', function (e) {
 				e.preventDefault();
-				$('.policy-link').click();
-			});
+				document.querySelector('.policy-link').click();
+			}, false);
+
 		},
 		addTerms : function(){
-			if($('.iso-exoticsTerms').length == 0 && window.location.hash != '#confirmed'){
+			if(!document.querySelector('.iso-exoticsTerms') && window.location.hash != '#confirmed'){
 				var $terms = helpers.supplant(isoTest.template,{
 					'header': isoTest.content[isoTest.lang].header,
 					'content': isoTest.content[isoTest.lang].content,
 					'link': isoTest.content[isoTest.lang].link
 				});
 
-				$('.reservation-steps-container').after($terms);
+				document.querySelector('.reservation-steps-container').insertAdjacentHTML("afterend", $terms);
 			}
 		},
 		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + " - Checking...");
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
 			window.clearTimeout(isoTest.eleTimer);
 			if (document.querySelectorAll(ele).length > 0) {
 				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + " - Found!");
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
 					callback();
 				}
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-		dependsLoaded : function (callback) {
-				isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
 
-				window.clearTimeout(isoTest.timer);
-				//Check for jQuery and _a object
-				if ((window.$ && $.isReady) || (window.jQuery && jQuery.isReady)) {
-					if (typeof callback === "function") {
-
-						isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
-
-						callback();
-					}
-				} else {
-					isoTest.timer = window.setTimeout(function() {
-						isoTest.dependsLoaded(callback);
-					}, 100);
-				}
-			},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
@@ -239,7 +218,6 @@
 		}
 
 	}
-
 	var helpers = {
 		getQueryParam: function(variable) {
 	      var query = window.location.search.substring(1);
@@ -265,8 +243,6 @@
 		}
 	}
 
-	isoTest.dependsLoaded(function(){
-		 isoTest.init();
-		});
+	isoTest.init();
 })();
 </script>
