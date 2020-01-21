@@ -129,6 +129,7 @@
 					isoTest.menuItems["locationPickup"] = newMenuItems["locationPickup"];
 					isoTest.updateLocationOneWayPickup();
 				}
+				
 
 				if (isoTest.menuItems["locationDropoff"] != newMenuItems["locationDropoff"]) {
 					isoTest.log("locationDropoff not the same");
@@ -155,7 +156,6 @@
 			isoTest.updateLocationOneWayPickup();
 			isoTest.updateLocationOneWayDropoff();
 			isoTest.updateCar();
-			isoTest.addEvents();
 
 		},
 		updateDateTime : function() {
@@ -314,25 +314,6 @@
 					document.querySelector('.iso-header-car-break').remove();
 				}
 			}
-		},
-		addEvents : function() {
-			document.querySelector('.btn.mobile-reservation-nav-slider').addEventListener('click', function (e) {
-				if (document.querySelector('.reservation-steps-container.mobile-open')) {
-					isoTest.log("collapse");
-					isoTest.fireTag('.iso-modify-btn','Modify (Progress Bar) Collapse');
-				} else {
-					isoTest.log("expand")
-					isoTest.fireTag('.iso-modify-btn','Modify (Progress Bar) Expand');
-				}
-			}, false);
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20,prop3';
-			s.eVar20 = linkName;
-			s.prop3 = linkName;
-			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
