@@ -40,7 +40,9 @@
 		},
 		chall : function() {
 
-			document.querySelector('.vehicle-filter__content > div:nth-child(2)').insertAdjacentHTML('beforebegin','<div class="vehicle-filter__filter"><span class="vehicle-filter__filter-title">Total Price Range</span><div class="price-range-slider"><div id="priceRangeSlider"></div><div class="prs-input-wrap"><span>Min</span><input type="text" id="input-with-keypress-0"></div><div class="prs-input-divider"> &mdash; </div><div class="prs-input-wrap"><span>Max</span><input type="text" id="input-with-keypress-1"></div></div></div>');
+            if (!document.querySelector('#priceRangeSlider')) {
+    			document.querySelector('.vehicle-filter__content > div:nth-child(2)').insertAdjacentHTML('beforebegin','<div class="vehicle-filter__filter"><span class="vehicle-filter__filter-title">Total Price Range</span><div class="price-range-slider"><div id="priceRangeSlider"></div><div class="prs-input-wrap"><span>Min</span><input type="text" id="input-with-keypress-0"></div><div class="prs-input-divider"> &mdash; </div><div class="prs-input-wrap"><span>Max</span><input type="text" id="input-with-keypress-1"></div></div></div>');
+            }
 
 
 			
@@ -57,9 +59,9 @@
 							var tmp = cars[i]['charges']['PAYLATER']['total_price_view']['amount'];
 							var tmp2 = cars[i]['charges']['PAYLATER']['total_price_view']['amount'];
 							
-					    	if (tmp < lowestPrice) lowestPrice = Math.floor(tmp);
-					    	if (tmp2 > highestPrice) highestPrice = Math.ceil(tmp2);
-					    }
+				    	if (tmp < lowestPrice) lowestPrice = Math.floor(tmp);
+				    	if (tmp2 > highestPrice) highestPrice = Math.ceil(tmp2);
+					  }
 					}
 					if (lowestPrice == "Infinity") lowestPrice = "--";
 					if (highestPrice == "Infinity") highestPrice = "--";
@@ -68,9 +70,7 @@
 					
 					
 				}
-
 			}
-
 
 			var priceRangeSlider = document.getElementById('priceRangeSlider');
 			var input0 = document.getElementById('input-with-keypress-0');
@@ -79,56 +79,76 @@
 
 			
 			noUiSlider.create(priceRangeSlider, {
-			    start: [isoTest.carCostLow[cars], isoTest.carCostHigh[cars]],
-			    connect: true,
-			    step: 1,
-			    behaviour: 'tap-drag',
-			    tooltips: true,
-			
-			    format: wNumb({
-			        decimals: 0,
-			        thousand: ',',
-			        prefix: '$',
-			    }),
-			    range: {
-			        'min': isoTest.carCostLow[cars],
-			        'max': isoTest.carCostHigh[cars]
-			    }
+    		    start: [isoTest.carCostLow[cars], isoTest.carCostHigh[cars]],
+    		    connect: true,
+    		    step: 1,
+    		    behaviour: 'tap-drag',
+    		    tooltips: true,
+    		
+    		    format: wNumb({
+        	        decimals: 0,
+        	        thousand: ',',
+        	        prefix: '$',
+    		    }),
+    		    range: {
+        	        'min': isoTest.carCostLow[cars],
+        	        'max': isoTest.carCostHigh[cars]
+    		    }
 			});
 
 
 			
 			var priceTotalFirst = document.querySelectorAll('.price-tile:nth-of-type(2) .price-tile__amount .unit');
 			for (var j = 0; j < priceTotalFirst.length; j++) {
-			  var total = priceTotalFirst[j].innerText;
+			    var total = priceTotalFirst[j].innerText;
 			
-			  priceTotalFirst[j].closest('.vehicle-select__main > .vehicle-list .vehicle-list__item').setAttribute('data-price-total', total);
+			    priceTotalFirst[j].closest('.vehicle-select__main > .vehicle-list .vehicle-list__item').setAttribute('data-price-total', total);
 			}
 
 
 			
 			priceRangeSlider.noUiSlider.on('update', function (values, handle) {
-			    inputs[handle].value = values[handle];
-			
+    		    inputs[handle].value = values[handle];
+    		
 
-			    var nodes = document.querySelectorAll('[data-price-total]');
-				for (var $el of nodes) {
-					
-					var priceTotal = ($el.getAttribute('data-price-total')).replace(/\,/g,'');
-					var lowValue = Number(values[0].replace(/[$€,]/g,''));
-					var highValue = Number(values[1].replace(/[$€,]/g,''));
-					
-				
-				
-			    	if (priceTotal >= lowValue && priceTotal <= highValue) {
-						
-						$el.classList.remove('hide-filtered');
-					} else {
-						
-						$el.classList.add('hide-filtered');
-					}
-				    
-				}
+    		    var nodes = document.querySelectorAll('[data-price-total]');
+    			for (var $el of nodes) {
+    				
+    				var priceTotal = ($el.getAttribute('data-price-total')).replace(/\,/g,'');
+    				var lowValue = Number(values[0].replace(/[$€,]/g,''));
+    				var highValue = Number(values[1].replace(/[$€,]/g,''));
+    				
+    			
+    			
+    		    	if (priceTotal >= lowValue && priceTotal <= highValue) {
+    					
+    					$el.classList.remove('hide-filtered');
+    				} else {
+    					
+    					$el.classList.add('hide-filtered');
+    				}
+
+
+
+                    var handleLowerRect = document.querySelector('.noUi-handle-lower').getBoundingClientRect();
+                    var handleUpperRect = document.querySelector('.noUi-handle-upper').getBoundingClientRect();
+
+                    var handleLowerX = handleLowerRect.left + handleLowerRect.width/2;
+                    var handleLowerY = handleLowerRect.top + handleLowerRect.height/2;
+                    var handleUpperX = handleUpperRect.left + handleUpperRect.width/2;
+                    var handleUpperY = handleUpperRect.top + handleUpperRect.height/2;
+
+                    var distanceSquared = Math.pow(handleLowerX - handleUpperX, 2) + Math.pow(handleLowerY - handleUpperY, 2);
+                    var distance = Math.sqrt(distanceSquared);
+
+                    if (distance < 35) {
+                        document.querySelector('.noUi-handle-lower .noUi-tooltip').style.left = 'calc('+distance+'% - 20%)';
+                        document.querySelector('.noUi-handle-upper .noUi-tooltip').style.left = 'calc(100% - '+distance+'% + 20%)';
+                    } else {
+                        document.querySelector('.noUi-handle-lower .noUi-tooltip').style.left = '50%';
+                        document.querySelector('.noUi-handle-upper .noUi-tooltip').style.left = '50%';
+                    }
+			    }
 			});
 
 
@@ -160,8 +180,8 @@
 			
 			document.addEventListener('click', function(event) {
 				if (event.target.matches('.noUi-touch-area')) {
-				var linkName = 'Slider Handle Dragged';
-			        s.linkTrackVars = 'eVar20';
+				  var linkName = 'Slider Handle Dragged';
+			    s.linkTrackVars = 'eVar20';
 					s.eVar20 = linkName;
 					s.tl(this, 'o', linkName);
 				}
@@ -176,8 +196,8 @@
 			
 			        var linkName = 'Slider Input Updated';
 			        s.linkTrackVars = 'eVar20';
-					s.eVar20 = linkName;
-					s.tl(this, 'o', linkName);
+    					s.eVar20 = linkName;
+    					s.tl(this, 'o', linkName);
 			    });
 
 			    input.addEventListener('keydown', function (e) {
@@ -276,8 +296,6 @@
 			
 			if (typeof store !== 'undefined' && typeof store.getState === 'function' && typeof store.getState().toJS === 'function') {
 				if (typeof callback === "function") {
-					
-					
 					
 					callback();
 				}
