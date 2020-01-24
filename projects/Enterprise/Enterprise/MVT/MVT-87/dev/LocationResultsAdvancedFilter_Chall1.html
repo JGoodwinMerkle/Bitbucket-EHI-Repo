@@ -654,7 +654,22 @@
 			}, false);
 
 			document.querySelector('.iso-location-filters-modal.iso-modal .iso-modal-apply').addEventListener('click', function(e){
-				isoTest.fireTag('.iso-modal-apply','Filter Location Type: Apply CTA');
+				var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
+				var checkedString = 'Filter Location Type: ';
+				if (allchecked.length > 0) {
+					for (var i = 0; i < allchecked.length; i++) {
+						var val = allchecked[i].querySelector('.location-type-checkbox').value;
+						if (checkedString == 'Filter Location Type: ') {
+							checkedString += val;
+						} else {
+							checkedString += ', ' + val;
+						}
+					}
+				} else {
+					checkedString += 'Filters Cleared';
+				}
+
+				isoTest.fireTagApply('.iso-modal-apply','Filter Location Type: Apply CTA', checkedString);
 				isoTest.destroyModal();
 			}, false);
 
@@ -838,6 +853,16 @@
 			s.linkTrackVars = 'eVar20';
 			s.eVar20 = linkName;
 			s.tl(this, 'o', linkName);
+		},
+		fireTagApply : function(element, value, items) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			var checkedName = items;
+				checkedName = isoTest.test ? isoTest.test + ' : ' + checkedName : checkedName;
+			s.linkTrackVars = 'eVar20,eVar89';
+			s.eVar20 = linkName;
+			s.eVar89 = checkedName;
+			s.tl(this, 'o', linkName, checkedName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
