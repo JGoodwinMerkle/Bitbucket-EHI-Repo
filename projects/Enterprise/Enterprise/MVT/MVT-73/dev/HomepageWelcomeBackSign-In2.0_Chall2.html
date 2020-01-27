@@ -1,0 +1,210 @@
+<style>
+	@-webkit-keyframes fadeInDown {
+	  from {
+	    opacity: 0;
+	    -webkit-transform: translate3d(0, -100%, 0);
+	    transform: translate3d(0, -100%, 0);
+	  }
+ 
+	  to {
+	    opacity: 1;
+	    -webkit-transform: translate3d(0, 0, 0);
+	    transform: translate3d(0, 0, 0);
+	  }
+	}
+	@keyframes fadeInDown {
+	  from {
+	    opacity: 0;
+	    -webkit-transform: translate3d(0, -100%, 0);
+	    transform: translate3d(0, -100%, 0);
+	  }
+
+	  to {
+	    opacity: 1;
+	    -webkit-transform: translate3d(0, 0, 0);
+	    transform: translate3d(0, 0, 0);
+	  }
+	}
+	.fadeInDown {
+	  -webkit-animation-name: fadeInDown;
+	  animation-name: fadeInDown;
+	  animation-duration: 1s;
+	}
+	.master-nav .sign-in .login-text {
+		border: 2px solid #ffffff;
+	}
+	.header-nav-item.sign-in {
+		position: relative;
+	}
+	.welcome-back-modal {
+		background: #000;
+	    top: 70px;
+	    padding: 20px 30px;
+	    position: absolute;
+	    right: 20px;
+	    width: 350px;
+	    z-index: 1;
+	}
+	.welcome-back-modal p {
+		color: #fff;
+		line-height: 1.3;
+		margin: 0;
+	}
+	.welcome-back-modal a {
+		color: #ffffff;
+		font-size: 23px;
+	    line-height: 1;
+	    position: absolute;
+	    right: -15px;
+    	top: -7px;
+	}
+	.welcome-back-modal i {
+		height: 16px;
+    	width: 16px;
+	}
+	.wbm-wrap {
+		position: relative;
+	}
+	.wbm-wrap:after {
+		border-left: solid transparent 10px;
+	    border-right: solid transparent 10px;
+	    border-bottom: solid #000000 10px;
+	    top: -30px;
+	    content: " ";
+	    height: 0;
+	    right: 50px;
+	    margin-left: -13px;
+	    position: absolute;
+	    width: 0;
+	}
+	@media (max-width: 885px) {
+		.welcome-back-modal {
+			position: initial;
+			width: 100%;
+		}
+		.wbm-wrap:after {
+			right: 100px;
+		}
+	}
+	@media (max-width: 945px) {
+		.utility-nav>li {
+			margin-right: 42px;
+		}
+		.header-nav-item.sign-in {
+			margin-right: 5px;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise.com',
+		test : 'Homepage Welcome Back Sign-In 2.0',
+		creative : 'Challenger 2',
+		selector: '.login-widget',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+
+			document.querySelector('#content-container').insertAdjacentHTML('afterend','<div class="welcome-back-modal fadeInDown"><div class="wbm-wrap"><a href="#"><i class="icon icon-close-x-white" aria-hidden="true"></i></a><p><strong>Welcome Back!</strong></p><p>Sign in to earn points on your next rental and redeem points on qualifying rentals.</p></div></div>');
+
+			//Hide message after 10s
+			setTimeout(function(){
+				document.querySelector('.welcome-back-modal').classList.add('hide');
+			}, 10000);
+
+			// Hide message if signed in
+			if (window._analytics && window._analytics.renter && window._analytics.renter.authenticated) {
+				if (_analytics.renter.authenticated == true) {
+		        	document.querySelector('.welcome-back-modal').classList.add('hide');
+		        }
+			} else {
+				var aInt = setInterval(function () {
+					if(window._analytics && window._analytics.renter && window._analytics.renter.authenticated){
+						clearInterval(aInt);
+						if (_analytics.renter.authenticated == true) {
+				        	document.querySelector('.welcome-back-modal').classList.add('hide');
+				        } else {
+				        	document.querySelector('.welcome-back-modal').classList.remove('hide');
+				        }
+					}
+				}, 100);
+			}
+
+
+			// Events
+			document.addEventListener('click', function (event) {
+				if (event.target.closest('.welcome-back-modal a')) {
+					document.querySelector('.welcome-back-modal').classList.add('hide');
+				}
+				if (event.target.matches('#signInJoinButton')) {
+					document.querySelector('.welcome-back-modal').classList.add('hide');
+				}
+			}, false);
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
