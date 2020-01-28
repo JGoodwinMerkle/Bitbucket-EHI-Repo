@@ -1,0 +1,98 @@
+<style>
+.iso-scarcity {
+	background-color: #fff;
+	border: 1px solid #c3c3c3;
+	font-size: 15px;
+	margin-bottom: 1.5625rem;
+	padding: 15px 18px;
+}
+
+.iso-scarcity .content {
+	display: inline-block;
+	line-height: 19px;
+	margin-left: 10px;
+	width: calc(100% - 30px);
+}
+
+.iso-scarcity .content strong {
+	font-weight: 700;
+}
+
+.iso-icon .icon-alert-caution {
+	float: left;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.co.uk',
+		test : '(CONV) ENT 007 - Communicate Free Items Early UK',
+		creative : 'Challenger 2',
+		selector: '#commit .aside',
+		template : '<div class="iso-scarcity">\
+									<div class="iso-icon"><i class="icon icon-alert-caution"></i></div>\
+									<div class="content">We get lots of bookings for this destination. <strong>Prices are likely to change - book now</strong> to secure this price.</div>\
+								</div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log('chall()');
+			
+			if(!document.querySelector('.iso-scarcity')){
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',isoTest.template);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
