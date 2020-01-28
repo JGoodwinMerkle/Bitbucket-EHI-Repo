@@ -169,14 +169,28 @@
 			var dateTimePickupStep = isoTest.menuItems["dateTimePickup"];
 			var dateTimeDropoffStep = isoTest.menuItems["dateTimeDropoff"];
 
+
 			if ((dateTimePickupStep != null) && (typeof dateTimePickupStep == "string") && (dateTimeDropoffStep != null) && (typeof dateTimeDropoffStep == "string")) {
 				var dateTimeHeader = document.querySelector('.iso-header-date');
 
-				var pickupDateReservationUpdate = new Date(dateTimePickupStep);
+				var dateFromPickerPickup = dateTimePickupStep.split('T')[0];
+				var timeFromPickerPickup = dateTimePickupStep.split('T')[1];
+
+				var datePartsPickup = dateFromPickerPickup.split("-");
+				var timePartsPickup = timeFromPickerPickup.split(":");
+				var pickupDateReservationUpdate = new Date(datePartsPickup[0], datePartsPickup[1]-1, datePartsPickup[2], timePartsPickup[0], timePartsPickup[1]);
+
+
 				pickupDate = isoTest.months[pickupDateReservationUpdate.getMonth()] + ' ' + pickupDateReservationUpdate.getDate();
 				pickupTime = pickupDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true });
 
-				var dropoffDateReservationUpdate = new Date(dateTimeDropoffStep);
+				var dateFromPickerDropoff = dateTimeDropoffStep.split('T')[0];
+				var timeFromPickerDropoff = dateTimeDropoffStep.split('T')[1];
+
+				var datePartsDropoff = dateFromPickerDropoff.split("-");
+				var timePartsDropoff = timeFromPickerDropoff.split(":");
+				var dropoffDateReservationUpdate = new Date(datePartsDropoff[0], datePartsDropoff[1]-1, datePartsDropoff[2], timePartsDropoff[0], timePartsDropoff[1]);
+
 				dropoffDate = isoTest.months[dropoffDateReservationUpdate.getMonth()] + ' ' + dropoffDateReservationUpdate.getDate();
 				dropoffTime = dropoffDateReservationUpdate.toLocaleString('en-US', { hour: 'numeric',minute: 'numeric', hour12: true })
 
