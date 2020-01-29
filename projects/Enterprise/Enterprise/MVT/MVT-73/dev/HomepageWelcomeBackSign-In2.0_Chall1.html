@@ -104,6 +104,7 @@
 			document.querySelector('.welcome-back-banner a').addEventListener('click', function (e) {
 				e.preventDefault();
 				document.querySelector('#signInJoinButton').click();
+					document.querySelector('.login-widget .utility-nav-label').focus();
 				isoTest.fireTag(this,'Banner Click');
 			});
 
