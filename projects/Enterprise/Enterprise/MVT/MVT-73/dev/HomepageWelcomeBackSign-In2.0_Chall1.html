@@ -36,6 +36,8 @@
 			display: -webkit-flex;
 			display: flex;
 			line-height: 1;
+			margin: 0;
+			padding: 0 10px;
 		}
 		.master-nav .sign-in span.login-text {
 			margin: auto;
@@ -47,7 +49,14 @@
 			font-size: 14px;
 		}
 	}
-
+	@media (max-width: 945px) {
+		.utility-nav>li {
+			margin-right: 42px;
+		}
+		.header-nav-item.sign-in {
+			margin-right: 5px;
+		}
+	}
 </style>
 <script>
 (function() {
