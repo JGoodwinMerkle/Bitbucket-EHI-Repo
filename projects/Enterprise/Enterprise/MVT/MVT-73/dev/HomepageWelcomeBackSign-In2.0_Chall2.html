@@ -84,6 +84,11 @@
 	    position: absolute;
 	    width: 0;
 	}
+	@media (max-width: 39.8em) {
+		.master-nav .sign-in .login-widget div.utility-nav-label {
+			padding: 0 10px;
+		}
+	}
 	@media (max-width: 885px) {
 		.welcome-back-modal {
 			position: initial;
@@ -99,7 +104,7 @@
 			display: -webkit-flex;
 			display: flex;
 			line-height: 1;
-    		padding: 0;
+			padding: 0 10px;
 		}
 		.master-nav .sign-in span.login-text {
 			margin: auto;
@@ -138,11 +143,17 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});
-			
+			var checkForModal = setInterval( function() {
+				if (document.querySelector('body.ReactModal__Body--open') == null) {
+					clearInterval(checkForModal);
+					helpers.elementLoaded(isoTest.selector, function() {
+						isoTest.log('Test Ready!');
+		  				isoTest.chall();
+					});
+				} else {
+					isoTest.log('modal open');
+				}
+			}, 100);
 		},
 		chall : function() {
 
