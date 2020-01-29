@@ -19,6 +19,7 @@
   width: 100%;
 }
 
+
 .iso-dark {
 	background-color: #393A3B;
 	color: #FFFFFF;
@@ -45,30 +46,49 @@
 }
 
 .iso-free-text .iso-list .icon.iso-check-icon {
-	background-image: url('https://www.enterprise.co.uk/content/dam/eu-cro/eucro-hp-benefits-icon-tick.png');
+	background-image: url('https:/\/\www.enterprise.co.uk/content/dam/eu-cro/eucro-hp-benefits-icon-tick.png');
 }
 
 .iso-free-text .iso-bold {
 	font-weight: 700;
 }
 
+@media (min-width: 71em) {
+	.iso-free-text {
+	  padding: 15px 15px 16px 215px;
+	}
+}
+
+
 @media (min-width: 67.625em) {
 	.iso-free-banner {
 	  padding: 0px 0px 30px 0px;
 	}
+}
 
+@media (max-width: 70.9375em) {
 	.iso-free-text {
-	  padding: 15px 15px 16px 217px;
+	  padding: 15px 15px 16px 165px;
 	}
 }
 
-@media (max-width: 748px) {
-	.iso-free-banner {
-	  padding: 0px 0px 24px 0px;
+@media (max-width: 67.5625em) {
+	.iso-free-text {
+	  padding: 15px 15px 16px 150px;
 	}
 
+	.iso-free-text-container {
+		margin-left: .46875rem;
+	}
+}
+
+@media (max-width: 47.9375em) {
 	.iso-free-text {
-	  padding: 15px;
+	  padding: 15px 15px 16px 115px;
+	}
+
+	.iso-free-banner {
+	  padding: 0px 0px 24px 0px;
 	}
 
 	.iso-light.iso-free-text {
@@ -85,6 +105,16 @@
 		padding-top: 8px;
 	}
 }
+
+@media (max-width: 40.8125em) {
+	.iso-free-text {
+	  padding: 15px 15px 16px 0px;
+	}
+
+	.iso-free-text-container {
+		margin-left: .9375rem;
+	}
+}
 </style>
 <script>
 (function() {
@@ -97,12 +127,16 @@
 		selector : '.vehicle-select__main',
 		freeMessage : "<div class='iso-free-banner cf'>\
 										<div class='iso-free-text iso-dark'>\
-											<div class='iso-bold'>All of these rentals include</div>\
-											<div class='iso-list'><i class='icon iso-check-icon'></i><span class='iso-list-text'>Free, unlimited mileage</span></div>\
-											<div class='iso-list'><i class='icon iso-check-icon'></i><span class='iso-list-text'>Damage waiver to reduce your excess</span></div>\
+											<div class='iso-free-text-container'>\
+												<div class='iso-bold'>All of these rentals include</div>\
+												<div class='iso-list'><i class='icon iso-check-icon'></i><span class='iso-list-text'>Free, unlimited mileage</span></div>\
+												<div class='iso-list'><i class='icon iso-check-icon'></i><span class='iso-list-text'>Damage waiver to reduce your excess</span></div>\
+											</div>\
 										</div>\
 										<div class='iso-free-text iso-light'>\
-											<div class='iso-list'><i class='icon icon-star-black'></i><span class='iso-list-text'>You can reduce the excess even more on the next step</span></div>\
+											<div class='iso-free-text-container'>\
+												<div class='iso-list'><i class='icon icon-star-black'></i><span class='iso-list-text'>You can reduce the excess even more on the next step</span></div>\
+											</div>\
 										</div>\
 									</div>",
 		init : function() {
