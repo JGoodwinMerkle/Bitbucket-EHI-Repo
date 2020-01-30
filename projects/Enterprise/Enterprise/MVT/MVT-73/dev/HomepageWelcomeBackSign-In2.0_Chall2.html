@@ -154,11 +154,11 @@
 				} else {
 					isoTest.log('modal open');
 				}
-			}, 100);
+			}, 900);
 		},
 		chall : function() {
 
-			document.querySelector('#content-container').insertAdjacentHTML('afterend','<div class="welcome-back-modal fadeInDown"><div class="wbm-wrap"><a href="#"><i class="icon icon-close-x-white" aria-hidden="true"></i></a><p><strong>Welcome Back!</strong></p><p>Sign in to earn points on your next rental and redeem points on qualifying rentals.</p></div></div>');
+			document.querySelector('.nav-container').insertAdjacentHTML('afterend','<div class="welcome-back-modal fadeInDown"><div class="wbm-wrap"><a href="#"><i class="icon icon-close-x-white" aria-hidden="true"></i></a><p><strong>Welcome Back!</strong></p><p>Sign in to earn points on your next rental and redeem points on qualifying rentals.</p></div></div>');
 
 			//Hide message after 10s
 			setTimeout(function(){
