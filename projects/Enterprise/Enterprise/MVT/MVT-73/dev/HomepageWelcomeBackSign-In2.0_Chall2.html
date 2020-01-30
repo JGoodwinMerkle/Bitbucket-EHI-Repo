@@ -144,17 +144,19 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			var checkForModal = setInterval( function() {
-				if (document.querySelector('body.ReactModal__Body--open') == null) {
-					clearInterval(checkForModal);
-					helpers.elementLoaded(isoTest.selector, function() {
+			
+			helpers.elementLoaded(isoTest.selector, function() {
+				var checkForModal = setInterval( function() {
+					if (document.querySelector('body.ReactModal__Body--open') == null) {
+						clearInterval(checkForModal);
 						isoTest.log('Test Ready!');
-		  				isoTest.chall();
-					});
-				} else {
-					isoTest.log('modal open');
-				}
-			}, 900);
+	  					isoTest.chall();
+	  				} else {
+						isoTest.log('Modal Open');
+					}
+				}, 900);
+			});
+				
 		},
 		chall : function() {
 
