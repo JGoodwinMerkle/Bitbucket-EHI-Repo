@@ -1,12 +1,8 @@
 <style>
 @media (max-width: 799px) {
-	.two-up-three-up.section.iso-offer-section .text-capsule-list {
-	}
-
-	.two-up-three-up.section.iso-offer-section .text-capsule-item {
-	}
-
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
+	  border-bottom: none;
+	  box-shadow: 2px 2px 3px #dddddd;
 	  display: flex;
 	}
 
@@ -39,29 +35,52 @@
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-list {
+		height: 120px;
 	  position: relative;
-	  height: 120px;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item {
-	    position: absolute;
-	    left: 0px;
-	    top: 0px;
-	    /*width: 100%;*/
-	    /*height: 100%;*/
-	    opacity: 0;
-	    z-index: 1;
-	    width: 100%;
-	    height: 100%;
-	    -webkit-transition: opacity 1s;
-	    -moz-transition: opacity 1s;
-	    -o-transition: opacity 1s;
-	    transition: opacity 1s;
+    left: 0px;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    -webkit-transition: opacity 1s;
+    -moz-transition: opacity 1s;
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+    width: 100%;
+    z-index: 1;
 	}
 
 	.two-up-three-up.section.iso-offer-section .showing{
-	    opacity: 1;
-	    z-index: 2;
+    opacity: 1;
+    z-index: 2;
+	}
+
+	.special-carousel-nav-container {
+		background: #f3f3f3;
+		height: 29px;
+	}
+
+	.special-carousel-nav {
+		display: flex;
+		justify-content: center;
+		padding-top: 6px;
+	}
+
+	.special-carousel-nav-item {
+		background-color: rgba(188, 188, 188, 1);
+		cursor: pointer;
+		height: 6px;
+		margin: 0px 4.5px 0;
+		padding: 0;
+		width: 38px;
+	}
+
+	.special-carousel-nav-item.active {
+		background-color: rgba(22, 154, 89, 1);
+		height: 10px;
 	}
 }
 
@@ -98,11 +117,17 @@
 		test : 'Homepage 3-Up Tiles Mobile Layout',
 		creative : 'Challenger 1',
 		selector: '.two-up-three-up.section .text-capsule-list',
-		buttons: ' <div class="buttons">\
-						    <button class="controls special-carousel-nav-item" aria-selected></button>\
-						    <button class="controls" id="pause">&#10074;&#10074;</button>\
-						    <button class="controls" id="next">&gt;</button>\
+		buttons: ' <div class="special-carousel-nav-container">\
+								<div class="special-carousel-nav">\
+							    <button class="special-carousel-nav-item active" id="special-tab-1"></button>\
+							    <button class="special-carousel-nav-item" id="special-tab-2"></button>\
+							    <button class="special-carousel-nav-item" id="special-tab-3""></button>\
+							  </div>\
 						  </div>',
+		slideCarousel: '',
+		currentSlide: 0,
+		slides: '.two-up-three-up.section.iso-offer-section .text-capsule-list .text-capsule-item',
+		tabs: '.two-up-three-up.section.iso-offer-section .special-carousel-nav-item',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -126,6 +151,17 @@
 		chall : function() {
 			isoTest.log('chall()');
 
+			isoTest.updateLayout();
+
+			isoTest.slides = document.querySelectorAll(isoTest.slides);
+			isoTest.tabs = document.querySelectorAll(isoTest.tabs);
+			isoTest.slides[0].classList.add('showing');
+
+			isoTest.slideCarousel = window.setInterval(function(){isoTest.updateCarousel();},3000);
+
+			isoTest.addEvents();
+		},
+		updateLayout : function() {
 			document.querySelectorAll('.two-up-three-up.section')[0].classList.add('iso-offer-section');
 
 			var sections = document.querySelectorAll('.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile');
@@ -140,29 +176,52 @@
 				sections[i].querySelector('.iso-wrapper').appendChild(text);
 			}
 
-			var slides = document.querySelectorAll('.two-up-three-up.section.iso-offer-section .text-capsule-list .text-capsule-item');
-			console.log(slides);
-			slides[0].id = "special-1";
-			slides[1].id = "special-2";
-			slides[2].id = "special-3";
-
-			slides[0].classList.add('showing');
-			var currentSlide = 0;
-
-			// var slideInterval = setInterval( function() {
-			// 	slides[currentSlide].className = 'text-capsule-item';
-			// 	currentSlide = (currentSlide+1)%slides.length;
-			// 	slides[currentSlide].className = 'text-capsule-item showing';
-			// },2000);
-
-
+			document.querySelector('.iso-offer-section').insertAdjacentHTML('beforeend', isoTest.buttons);
 		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
+		newSlide : function() {
+			for(var i = 0; i < isoTest.slides.length; i++) {
+				if (i == isoTest.currentSlide) {
+					isoTest.slides[i].classList.add('showing');
+				} else {
+					isoTest.slides[i].classList.remove('showing');
+				}
+			}
+
+			for(var i = 0; i < isoTest.tabs.length; i++) {
+				if (i == isoTest.currentSlide) {
+					isoTest.tabs[i].classList.add('active');
+				} else {
+					isoTest.tabs[i].classList.remove('active');
+				}
+			}
+		},
+		updateCarousel : function() {
+			isoTest.slides[isoTest.currentSlide].className = 'text-capsule-item';
+			isoTest.tabs[isoTest.currentSlide].className = 'special-carousel-nav-item';
+			isoTest.currentSlide = (isoTest.currentSlide+1)%isoTest.slides.length;
+			isoTest.slides[isoTest.currentSlide].className = 'text-capsule-item showing';
+			isoTest.tabs[isoTest.currentSlide].className = 'special-carousel-nav-item active';
+		},
+		addEvents : function() {
+			for(var i = 0; i < isoTest.tabs.length; i++) {
+				isoTest.tabs[i].addEventListener('click', function(e){
+					window.clearInterval(isoTest.slideCarousel);
+					if (e.target.id == 'special-tab-1') {
+						isoTest.currentSlide = 0;
+					}
+
+					if (e.target.id == 'special-tab-2') {
+						isoTest.currentSlide = 1;
+					}
+
+					if (e.target.id == 'special-tab-3') {
+						isoTest.currentSlide = 2;
+					}
+
+					isoTest.newSlide();
+						isoTest.slideCarousel = window.setInterval(function(){isoTest.updateCarousel();},3000);
+		    }, false);
+			}
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
@@ -184,18 +243,6 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
 		}
 	}
 
