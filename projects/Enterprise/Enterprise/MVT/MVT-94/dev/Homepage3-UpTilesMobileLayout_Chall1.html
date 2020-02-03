@@ -1,4 +1,93 @@
 <style>
+@media (max-width: 799px) {
+	.two-up-three-up.section.iso-offer-section .text-capsule-list {
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item {
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
+	  display: flex;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .text-capsule-tile__image {
+		align-self: center;
+		margin-bottom: 15px;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper {
+		margin-left: 16px;
+	  text-align: left;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__heading {
+		font-size: 18px;
+		margin-bottom: 8px;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__text {
+		margin-bottom: 10px;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__text p {
+		font-size: 16px;
+		margin-bottom: 0em;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
+		padding: 20px 40px 10px 40px;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-list {
+	  position: relative;
+	  height: 120px;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item {
+	    position: absolute;
+	    left: 0px;
+	    top: 0px;
+	    /*width: 100%;*/
+	    /*height: 100%;*/
+	    opacity: 0;
+	    z-index: 1;
+	    width: 100%;
+	    height: 100%;
+	    -webkit-transition: opacity 1s;
+	    -moz-transition: opacity 1s;
+	    -o-transition: opacity 1s;
+	    transition: opacity 1s;
+	}
+
+	.two-up-three-up.section.iso-offer-section .showing{
+	    opacity: 1;
+	    z-index: 2;
+	}
+}
+
+@media (max-width: 48.75rem) {
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
+		padding: 20px 4% 10px 4%;
+	}
+}
+
+@media (max-width: 687px) { 
+	.two-up-three-up.section.iso-offer-section .text-capsule-list {
+		height: 135px;
+	}
+}
+
+@media (max-width: 500px) {
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper {
+		margin-left: 14px;
+	}
+}
+
+@media (max-width: 395px) { 
+	.two-up-three-up.section.iso-offer-section .text-capsule-list {
+		height: 156px;
+	}
+}
 </style>
 <script>
 (function() {
@@ -8,7 +97,12 @@
 		portfolio : 'Enterprise.com Enterprise.ca',
 		test : 'Homepage 3-Up Tiles Mobile Layout',
 		creative : 'Challenger 1',
-		selector: 'body',
+		selector: '.two-up-three-up.section .text-capsule-list',
+		buttons: ' <div class="buttons">\
+						    <button class="controls special-carousel-nav-item" aria-selected></button>\
+						    <button class="controls" id="pause">&#10074;&#10074;</button>\
+						    <button class="controls" id="next">&gt;</button>\
+						  </div>',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -30,8 +124,37 @@
 			
 		},
 		chall : function() {
+			isoTest.log('chall()');
 
-			// Your code goes here
+			document.querySelectorAll('.two-up-three-up.section')[0].classList.add('iso-offer-section');
+
+			var sections = document.querySelectorAll('.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile');
+
+			for(var i = 0; i < sections.length; i++) {
+				var wrapper = "<div class='iso-wrapper'></div>";
+				var header = sections[i].querySelector('.text-capsule-tile__heading');
+				var text = sections[i].querySelector('.text-capsule-tile__text');
+
+				header.insertAdjacentHTML('beforebegin',wrapper);
+				sections[i].querySelector('.iso-wrapper').appendChild(header);
+				sections[i].querySelector('.iso-wrapper').appendChild(text);
+			}
+
+			var slides = document.querySelectorAll('.two-up-three-up.section.iso-offer-section .text-capsule-list .text-capsule-item');
+			console.log(slides);
+			slides[0].id = "special-1";
+			slides[1].id = "special-2";
+			slides[2].id = "special-3";
+
+			slides[0].classList.add('showing');
+			var currentSlide = 0;
+
+			// var slideInterval = setInterval( function() {
+			// 	slides[currentSlide].className = 'text-capsule-item';
+			// 	currentSlide = (currentSlide+1)%slides.length;
+			// 	slides[currentSlide].className = 'text-capsule-item showing';
+			// },2000);
+
 
 		},
 		fireTag : function(element, value) {
