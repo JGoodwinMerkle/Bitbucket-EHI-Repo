@@ -555,11 +555,11 @@
 						
 						helpers.elementLoaded('div[class*="'+ locationID +'"]', function() {
 							var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
-							for(var i = 0; i < mapData.length; i++) {
+							for(var x = 0; x < mapData.length; x++) {
 								if (status == "unchecked") {
-									mapData[i].style.display = "none";
+									mapData[x].style.display = "none";
 								} else {
-									mapData[i].style.display = "block";
+									mapData[x].style.display = "block";
 								}
 							}
 						});
@@ -771,8 +771,8 @@
 
 			var checkedLocations = document.querySelectorAll('.checkbox__label-checkbox');
 
-			for(var i = 0; i < checkedLocations.length; i++) {
-				var checkedLocationID = checkedLocations[i].id;
+			for(var x = 0; x < checkedLocations.length; x++) {
+				var checkedLocationID = checkedLocations[x].id;
 				isoTest.checkedFilters[checkedLocationID] = 'false';
 				isoTest.updatePage(checkedLocationID,'checked');	
 			}
