@@ -1,0 +1,123 @@
+<style>
+	.mobile-results-header {
+	    background: #fff;
+	    border-bottom: 3px solid #333;
+	    /*border-bottom: 3px solid #dbdbdb;*/
+	    /*box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.3);*/
+	    padding-bottom: 5px;
+	    position: -webkit-sticky;
+	    position: sticky;
+	    top: 0;
+	    z-index: 2;
+	}
+	#select-item-1 {
+		border-top: 0;
+	}
+	@media (max-width: 48em) {
+		.location-search-filter__mobile-toggle-button {
+			color: #169a5a !important;
+			padding-left: 28px !important;
+			position: relative;
+			text-transform: none;
+		}
+		.location-search-filter__mobile-toggle-button::before {
+			content: '';
+			background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/ico_filter_green.svg');
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: 100%;
+			height: 20px;
+		    width: 19px;
+		    position: absolute;
+		    top: 0px;
+		    left: 0px;
+			transform: rotate(-90deg);
+		}
+		.location-search-filter__mobile-toggle-button .icon {
+			display: none !important;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Location Results Mobile Header Anchoring',
+		creative : 'Challenger 1',
+		selector: '.mobile-results-header',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+
+
+			document.querySelector('.mobile-results-header').appendChild(document.querySelector('.location-search-filter'));
+
+			// Jump to top of content on tab switch
+			window.addEventListener('click', function (event) {
+				// Get filter height
+				var stickyFilterHeight = document.querySelector('.mobile-results-header').offsetHeight;
+				if (event.target.closest('.mobile-results-header button')) {
+					// Check if scroll is needed
+					if (document.querySelector('.mobile-results-header').getBoundingClientRect().top < stickyFilterHeight) {
+						// Scroll to top of content, minus sticky filter height
+						document.querySelector('.search-results-wrapper').scrollIntoView();
+						window.scrollBy(0, -stickyFilterHeight);
+					}
+				}
+			}, false);
+
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>
