@@ -2,6 +2,10 @@
 .iso-mileage-filter .vehicle-filter__filter-list {
 	width: 100%;
 }
+
+.vehicle-list__item.iso-mileage-hidden {
+	display: none;
+}
 </style>
 <script>
 (function() {
@@ -68,12 +72,14 @@
 			}
 		},
 		chall : function() {
+			isoTest.log("chall()");
 			document.querySelector('.vehicle-filter__header').insertAdjacentHTML('afterend', isoTest.content);
 
 			isoTest.findMileage();
 			isoTest.addEvents();
 		},
 		findMileage : function() {
+			isoTest.log("findMileage()");
 			var vehicleItems = document.querySelectorAll('.vehicle-list__item');
 			for(var i = 0; i < vehicleItems.length; i++) {
 				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
@@ -81,23 +87,20 @@
 				var avail = dataInfo[2];
 				if (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE') {
 					isoTest.checkMileage(carClass, function(mileage){
-						console.log(mileage);
-						console.log(isoTest.mileageObject);
+						isoTest.log(mileage);
 					});
-				} else {
-					isoTest.mileageObject[carCode] = 'unavailable';
 				}
 			}
 		},
 		checkMileage : function(carCode, callback) {
+			isoTest.log("checkMileage()");
 			var url = enterprise.services.path + '/reservations/carClassDetails?carClassCode=';
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200) {
 	        var carDetails = JSON.parse(xhttp.responseText);
         	var hasUnlimited = carDetails.car_class_details.mileage_info.unlimited_mileage;
-        	console.log(carCode);
-       		console.log(carDetails.car_class_details.mileage_info.unlimited_mileage);
+
        		isoTest.mileageObject[carCode] = hasUnlimited;
        		
        		callback(hasUnlimited);
@@ -109,39 +112,85 @@
 			xhttp.send();
 		},
 		checkForFilters : function() {
+			isoTest.log("checkForFilters()");
 			var unlimited = document.querySelector('#checkbox_unlimited_mileage-label .checkbox__label-checkbox.checked');
 			var limited = document.querySelector('#checkbox_limited_mileage-label .checkbox__label-checkbox.checked');
 
+			var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
+
+			if ((unlimited && limited) || (!unlimited && !limited)) {
+				if (vehicleItemsHidden.length > 0) {
+					for(var i = 0; i < vehicleItemsHidden.length; i++) {
+						vehicleItemsHidden[i].classList.remove('iso-mileage-hidden');
+					}
+
+					isoTest.checkEmptyList();
+				}
+			} else {
+				if (unlimited || limited) {
+					var status;
+					unlimited ? status = true : status = false;
+					isoTest.updateItems(status);
+
+					isoTest.checkEmptyList();
+				}
+			}
+		},
+		checkEmptyList : function() {
+			isoTest.log("checkEmptyList()");
+			var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
 			var vehicleItems = document.querySelectorAll('.vehicle-list__item');
+
+			if (vehicleItems.length == vehicleItemsHidden.length) {
+				document.querySelector('.vehicle-list__empty-message').style.display = "block";
+			} else {
+				document.querySelector('.vehicle-list__empty-message').style.display = "none";
+			}
+		},
+		updateItems : function(status) {
+			isoTest.log("updateItems()");
+			var vehicleItems = document.querySelectorAll('.vehicle-list__item');
+
 			for(var i = 0; i < vehicleItems.length; i++) {
 				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
 				var carClass = dataInfo[1];
-				var avail = dataInfo[2];
-				if (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE') {
-					
-				}
-			}
-
-			if (unlimited) {
-				if (limited) {
-
+				
+				if (isoTest.mileageObject[carClass] == status) {
+					vehicleItems[i].classList.remove('iso-mileage-hidden');
+				} else {
+					vehicleItems[i].classList.add('iso-mileage-hidden');
 				}
 			}
 		},
 		addEvents : function() {
-			var filterElements = document.querySelectorAll('.vehicle-filter__filter.iso-mileage-filter .checkbox__label-checkbox input');
+			isoTest.log("addEvents()");
+			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox input');
 			for(var i = 0; i < filterElements.length; i++) {
 				filterElements[i].addEventListener('click', function(event){
-					if (event.target.parentNode.classList.contains("checked")) {
-						console.log('remove');
-						event.target.parentNode.classList.remove('checked');
-					} else {
-						console.log('add');
-						event.target.parentNode.classList.add('checked');
+					if ((event.target.id == 'checkbox_unlimited') || (event.target.id == 'checkbox_limited')) {
+						if (event.target.parentNode.classList.contains("checked")) {
+							event.target.parentNode.classList.remove('checked');
+						} else {
+							event.target.parentNode.classList.add('checked');
+
+							if (event.target.id == 'checkbox_unlimited') {
+								isoTest.fireTag('#checkbox_unlimited', "RW:CarClass:Filter:Unlimited");
+							} else {
+								isoTest.fireTag('#checkbox_limited', "RW:CarClass:Filter:Limited");
+							}
+						}
 					}
-		
+					
+					setTimeout(function(){isoTest.checkForFilters() }, 100);
 				}, false);
 			}
+
+			document.querySelector('.vehicle-filter__header-cta').addEventListener('click', function(event){
+				document.querySelector('#checkbox_unlimited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+				document.querySelector('#checkbox_limited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+
+				setTimeout(function(){isoTest.checkForFilters() }, 100);
+			}, false);
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
@@ -170,18 +219,6 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
 		}
 	}
 
