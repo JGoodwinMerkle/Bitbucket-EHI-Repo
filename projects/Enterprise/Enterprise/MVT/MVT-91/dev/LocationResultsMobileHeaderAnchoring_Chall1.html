@@ -1,19 +1,20 @@
 <style>
 	.mobile-results-header {
-	    background: #fff;
-	    border-bottom: 3px solid #333;
-	    /*border-bottom: 3px solid #dbdbdb;*/
-	    /*box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.3);*/
-	    padding-bottom: 5px;
-	    position: -webkit-sticky;
-	    position: sticky;
-	    top: 0;
-	    z-index: 2;
-	}
-	#select-item-1 {
-		border-top: 0;
+		display: block !important;
 	}
 	@media (max-width: 48em) {
+		.mobile-results-header {
+		    background: #fff;
+		    border-bottom: 3px solid #333;
+		    padding-bottom: 5px;
+		    position: -webkit-sticky;
+		    position: sticky;
+		    top: 0;
+		    z-index: 2;
+		}
+		#select-item-1 {
+			border-top: 0;
+		}
 		.location-search-filter__mobile-toggle-button {
 			color: #169a5a !important;
 			padding-left: 28px !important;
@@ -22,7 +23,7 @@
 		}
 		.location-search-filter__mobile-toggle-button::before {
 			content: '';
-			background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/ico_filter_green.svg');
+			background-image: url('/content/dam/ecom/hosted/ico_filter_green.svg');
 			background-position: center center;
 			background-repeat: no-repeat;
 			background-size: 100%;
@@ -35,6 +36,11 @@
 		}
 		.location-search-filter__mobile-toggle-button .icon {
 			display: none !important;
+		}
+	}
+	@media (min-width: 768px) {
+		.mobile-results-header > button {
+			display: none;
 		}
 	}
 </style>
@@ -65,10 +71,18 @@
 				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);
 			
 		},
+		viewChange : function(){
+			if(/location/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
 		chall : function() {
-
 
 			document.querySelector('.mobile-results-header').appendChild(document.querySelector('.location-search-filter'));
 
@@ -86,14 +100,6 @@
 				}
 			}, false);
 
-
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
