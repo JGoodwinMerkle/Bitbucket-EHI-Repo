@@ -1,6 +1,6 @@
 <style>
-.iso-modal-open { 
-	height: 100%; 
+.iso-modal-open {
+	height: 100%;
 	overflow: hidden;
 }
 
@@ -375,6 +375,7 @@
 										<p class='location-result-item__content-container-text'><span>Sorry, we couldn't find any locations matching your search criteria.  Please adjust filters.</span></p>\
 									</div>\
 								</li>",
+		clearBtn : '<button class="btn location-search-filter__clear-all btn-unstyled" tabindex="0" type="button" role="button">Clear All</button>',
 		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
 		checkedFilters : {
 			exotics : 'false',
@@ -389,7 +390,7 @@
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
-			
+
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
@@ -404,9 +405,9 @@
 				isoTest.log('Test Ready!');
   			isoTest.chall();
 			});
-			
+
 		window.addEventListener('hashchange', isoTest.viewChange, false);
-		
+
 		},
 		viewChange : function(){
 			if(/location/.test(location.hash)){
@@ -497,7 +498,7 @@
 					isoTest.filtersCheckedNumber = checkedLength;
 					document.querySelector('.location-type-filters-trigger__button').innerHTML = 'Locations ('+checkedLength+')<i class="icon icon-nav-carrot-down"></i>';
 				}
-		
+
 				for(var i = 0; i < checkedLocations.length; i++) {
 					var checkedLocationID = checkedLocations[i].id;
 
@@ -506,7 +507,7 @@
 						isoTest.updatePage(checkedLocationID, 'unchecked');
 					} else {
 						isoTest.checkedFilters[checkedLocationID] = 'true';
-						isoTest.updatePage(checkedLocationID,'checked');					
+						isoTest.updatePage(checkedLocationID,'checked');
 					}
 				}
 			} else {
@@ -514,17 +515,34 @@
 					isoTest.filtersCheckedNumber = 0;
 					document.querySelector('.location-type-filters-trigger__button').innerHTML = 'All Locations<i class="icon icon-nav-carrot-down"></i>';
 				}
-			
+
 				for(var i = 0; i < checkedLocations.length; i++) {
 					var checkedLocationID = checkedLocations[i].id;
 					isoTest.checkedFilters[checkedLocationID] = 'false';
-					isoTest.updatePage(checkedLocationID,'checked');	
+					isoTest.updatePage(checkedLocationID,'checked');
 				}
 
 				window.clearInterval(isoTest.counter);
 			}
 
+			isoTest.updateClearBtn();
 			isoTest.updateOrder();
+		},
+		updateClearBtn: function(){
+			var filterHeader = document.querySelector('.location-search-filter__container-content-header');
+			var vehicleTypeFilter = document.querySelector('.vehicle-filters-trigger__button');
+			var hasLocations = document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0;
+
+			if(!filterHeader.querySelector('.location-search-filter__clear-all')){
+				if(vehicleTypeFilter.innerText == 'All Vehicles' && hasLocations){
+					filterHeader.insertAdjacentHTML('beforeend',isoTest.clearBtn);
+				}
+			} else {
+				if(vehicleTypeFilter.innerText == 'All Vehicles' && !hasLocations){
+					var clearBtn = filterHeader.querySelector('.location-search-filter__clear-all');
+					filterHeader.removeChild(clearBtn);
+				}
+			}
 		},
 		updatePage : function(image, status) {
 			isoTest.log("updatePage()");
@@ -552,7 +570,7 @@
 							allLocations[i].setAttribute('data-active', 'active');
 						}
 						var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
-						
+
 						helpers.elementLoaded('div[class*="'+ locationID +'"]', function() {
 							var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
 							for(var x = 0; x < mapData.length; x++) {
@@ -690,13 +708,12 @@
 			}, false);
 
 			document.addEventListener('click', function (event) {
-				isoTest.log(event.target);
+			//	isoTest.log(event.target);
 
 				if (event.target.classList.contains('modal-button')) {
 					isoTest.updateFilterCaptionText();
 				}
 
-			
 				if (event.target.classList.contains('iso-location-chicklet-clear') || event.target.classList.contains('iso-icon-location-close')) {
 					isoTest.updateForNewLocation();
 				}
@@ -721,12 +738,27 @@
 
 					isoTest.filtersCheckedNumber = 0;
 				}
+
+				if(event.target.classList.contains('location-search-filter__clear-all')){
+					var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
+					if (allchecked.length > 0) {
+						for (var i = 0; i < allchecked.length; i++) {
+							allchecked[i].classList.remove('checked');
+						}
+						isoTest.checkForFilters();
+					}
+				}
+				//Tracking
+				if(event.target.name == 'location-search'){
+					isoTest.fireTag(event.target, 'Filter Location Type: ' + event.target.value);
+				}
+
 			}, false);
 
 
 			document.addEventListener("keydown", function (e) {
 				var keyCode = (e.keyCode ? e.keyCode : e.which);
-  
+
         if (keyCode == '27') {
           if (document.querySelector('html').classList.contains('iso-modal-open')) {
           	isoTest.fireTag('esc','Filter Location Type: Close');
@@ -774,7 +806,7 @@
 			for(var x = 0; x < checkedLocations.length; x++) {
 				var checkedLocationID = checkedLocations[x].id;
 				isoTest.checkedFilters[checkedLocationID] = 'false';
-				isoTest.updatePage(checkedLocationID,'checked');	
+				isoTest.updatePage(checkedLocationID,'checked');
 			}
 
 			isoTest.updateOrder();
@@ -815,7 +847,7 @@
       var modalFocus = document.querySelector('.iso-modal.iso-location-filters-modal');
       isoTest.keepFocus(modalFocus);
 
-      modalFocus.focus();
+      modalFocus.querySelector('.close-modal').focus();
 		},
 		destroyModal : function() {
 			isoTest.log("destroyModal()");
