@@ -25,7 +25,7 @@
 		portfolio : 'Enterprise.com',
 		test : 'U.S. Protection Products Pilot 2.0 FS',
 		creative : 'Challenger 0',
-		selector: '.extras-section',
+		selector: '.cta-container',
 		headline: 'Insurance and Other Protection Products',
 		content: {
 			CDW : 'Damage Waiver (DW) is optional and can be added to your rental now or at the counter.<br /><br />When you purchase DW, we will waive your responsibility for damage, loss, or theft of your rental vehicle as long as you do not violate the terms of the DW as listed on your rental agreement.',
@@ -75,8 +75,10 @@
 		},
 		chall : function() {
 			isoTest.log('fn: chall()');
-			isoTest.updateContent();
-			document.querySelectorAll('.extras-container h2')[0].innerText = isoTest.headline;
+			if (document.querySelectorAll('.extras-content > .extras-container').length === 2) {
+				isoTest.updateContent();
+				document.querySelectorAll('.extras-container h2')[0].innerText = isoTest.headline;
+			}
 		},
 		updateContent: function(){
 			isoTest.log('fn: updateContent()');

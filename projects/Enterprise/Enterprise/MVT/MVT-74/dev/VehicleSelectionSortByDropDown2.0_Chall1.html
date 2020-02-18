@@ -28,7 +28,12 @@
   font-size: 13px;
   margin-top: 5px;
 }
-/**/
+
+.vehicle-header__info .vehicle-header__info-texts {
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: baseline;
+}
 
 .vehicle-header__info .iso-filter-header-desktop {
   color: #181918;
@@ -81,6 +86,10 @@
 		position: relative !important;
     padding-bottom: 2px !important;
     padding-top: 19px !important;
+	}
+
+	.vehicle-header__info .vehicle-header__info-texts {
+		display: block;
 	}
 	
 	.vehicle-header__info .iso-filter-header-desktop {
@@ -199,7 +208,7 @@
 			var viewport = document.querySelector("meta[name=viewport]");
 			viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
 
-			var sortContainer = document.querySelector('.vehicle-header__info');
+			var sortContainer = document.querySelector('.vehicle-header__info .vehicle-header__info-texts');
 			sortContainer.innerHTML = isoTest.dropdown;
 			
 			document.getElementsByClassName('vehicle-list')[0].classList.add('iso-available-vehicles');
