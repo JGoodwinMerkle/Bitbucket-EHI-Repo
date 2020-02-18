@@ -1,61 +1,4 @@
 <style>
-	.inner-container {
-		transition: none;
-	}
-	.branchpage #start-reservation .inner-container {
-		padding: 5% 0;
-	}
-	.booking-widget .booking-submit .btn {
-		transition: none;
-		padding: 20px 5px;
-	}
-	@media (max-width: 270px) {
-		.booking-widget .booking-submit .btn {
-			height: auto;
-		}
-	}
-	@media (max-width: 66em) {
-		.booking-widget .coupon-filters-wrapper .vehicle-filters-trigger {
-			flex: 0 0 33%;
-		}
-		.booking-widget .booking-submit .btn {
-			letter-spacing: 0.0675rem;
-		}
-	}
-	@media (max-width: 66em) and (min-width: 48em) {
-		.booking-widget .booking-submit .btn {
-			letter-spacing: normal;
-		}
-	}
-	@media (min-width: 48em) {
-		.coupon-field-wrapper {
-			width: 61.5%;
-		}
-	}
-	@media (min-width: 46.8em) {
-		.booking-widget .booking-submit {
-			width: 33%;
-		}
-	}
-	@media (max-width: 48em) {
-		.booking-widget .coupon-filters-wrapper .vehicle-filters-trigger {
-			flex: 0 0 100%;
-		}
-	}
-	@media (min-width: 1057px) {
-		.booking-widget .age-input {
-			width: 233px
-		}
-		.coupon-field-wrapper {
-			width: 70%; 
-		}
-		.booking-widget .coupon-filters-wrapper .vehicle-filters-trigger {
-		    width: 233px;
-		}
-		.booking-widget .booking-submit {
-		    width: 233px;
-		}
-	}
 </style>
 <script>
 (function() {
@@ -63,13 +6,13 @@
 	var isoTest = {
 		account : 'EHI',
 		portfolio : 'Enterprise.com',
-		test : 'Res Widget Copy Swap',
-		creative : 'Challenger 2',
-		selector: '#continueButton',
+		test : 'One-Way Selector 2.0',
+		creative : 'Challenger 0',
+		selector: '.same-location-info',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
-
+			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
@@ -84,17 +27,20 @@
 				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
-
+			
 		},
 		chall : function() {
 
-			if (document.querySelector('.branchpage')) {
-				document.querySelector('#branch-page-booking-header').textContent = 'Start a Reservation';
-			} else {
-				document.querySelector('.reservation-toggle-header').textContent = 'Start a Reservation';
-			}
-
-			document.querySelector('#continueButton').textContent = 'Check Availability';
+			// Your code goes here
+			document.addEventListener('click', function (event) {
+				if (event.target.closest('.checkbox__label-checkbox')) {
+					if (document.querySelector('.checkbox__label-checkbox.checked')) {
+						isoTest.fireTag(this,'Different Return');
+					} else {
+						isoTest.fireTag(this,'Same Return');
+					}
+				}
+			}, false);			
 
 		},
 		fireTag : function(element, value) {
