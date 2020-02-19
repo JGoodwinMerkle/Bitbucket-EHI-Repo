@@ -1,11 +1,6 @@
 <style>
-<<<<<<< HEAD
-.iso-modal-open { 
-	height: 100%; 
-=======
 .iso-modal-open {
 	height: 100%;
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 	overflow: hidden;
 }
 
@@ -319,16 +314,7 @@
 												<div class="location-search-filters-modal__location-search-list">\
 													<ul>\
 														<li>\
-															<label class="checkbox__label" tabindex="0" id="checkbox_location_1" aria-checked="false" role="checkbox">\
-																<span class="checkbox__label-checkbox" id="exotics">\
-																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="Exotics Locations">\
-																	<i class="icon icon-check-green"></i>\
-																</span>\
-																<span class="checkbox__text">Exotics Locations<i class="icon location-type-icon icon-icon-exotics" aria-label="Exotics"></i></span>\
-															</label>\
-														</li>\
-														<li>\
-															<label class="checkbox__label " tabindex="0" id="checkbox_location_2" aria-checked="false" role="checkbox">\
+															<label class="checkbox__label " tabindex="0" id="checkbox_location_1" aria-checked="false" role="checkbox">\
 																<span class="checkbox__label-checkbox" id="airport">\
 																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="Airport Locations">\
 																	<i class="icon icon-check-green"></i>\
@@ -337,7 +323,25 @@
 															</label>\
 														</li>\
 														<li>\
-															<label class="checkbox__label " tabindex="0" id="checkbox_location_3" aria-checked="false" role="checkbox">\
+															<label class="checkbox__label " tabindex="0" id="checkbox_location_2" aria-checked="false" role="checkbox">\
+																<span class="checkbox__label-checkbox" id="city">\
+																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="City Locations">\
+																	<i class="icon icon-check-green"></i>\
+																</span>\
+																<span class="checkbox__text">City Locations<i class="icon location-type-icon icon-location-city" aria-label="City"></i></span>\
+															</label>\
+														</li>\
+														<li>\
+															<label class="checkbox__label" tabindex="0" id="checkbox_location_3" aria-checked="false" role="checkbox">\
+																<span class="checkbox__label-checkbox" id="exotics">\
+																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="Exotics Locations">\
+																	<i class="icon icon-check-green"></i>\
+																</span>\
+																<span class="checkbox__text">Exotics Locations<i class="icon location-type-icon icon-icon-exotics" aria-label="Exotics"></i></span>\
+															</label>\
+														</li>\
+														<li>\
+															<label class="checkbox__label " tabindex="0" id="checkbox_location_4" aria-checked="false" role="checkbox">\
 																<span class="checkbox__label-checkbox"  id="port_of_call">\
 																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="Port Locations">\
 																	<i class="icon icon-check-green"></i>\
@@ -346,21 +350,12 @@
 															</label>\
 														</li>\
 														<li>\
-															<label class="checkbox__label " tabindex="0" id="checkbox_location_4" aria-checked="false" role="checkbox">\
+															<label class="checkbox__label " tabindex="0" id="checkbox_location_5" aria-checked="false" role="checkbox">\
 																<span class="checkbox__label-checkbox" id="rail">\
 																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="Train Station Locations">\
 																	<i class="icon icon-check-green"></i>\
 																</span>\
 																<span class="checkbox__text">Train Station Locations<i class="icon location-type-icon icon-location-rail" aria-label="Rail"></i></span>\
-															</label>\
-														</li>\
-														<li>\
-															<label class="checkbox__label " tabindex="0" id="checkbox_location_5" aria-checked="false" role="checkbox">\
-																<span class="checkbox__label-checkbox" id="city">\
-																	<input class="location-type-checkbox" type="checkbox" name="location-search" value="City Locations">\
-																	<i class="icon icon-check-green"></i>\
-																</span>\
-																<span class="checkbox__text">City Locations<i class="icon location-type-icon icon-location-city" aria-label="City"></i></span>\
 															</label>\
 														</li>\
 													</ul>\
@@ -380,17 +375,14 @@
 										<p class='location-result-item__content-container-text'><span>Sorry, we couldn't find any locations matching your search criteria.  Please adjust filters.</span></p>\
 									</div>\
 								</li>",
-<<<<<<< HEAD
-=======
 		clearBtn : '<button class="btn location-search-filter__clear-all btn-unstyled" tabindex="0" type="button" role="button">Clear All</button>',
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
 		checkedFilters : {
-			exotics : 'false',
 			airport : 'false',
+			city : 'false',
+			exotics : 'false',
 			port_of_call : 'false',
-			rail : 'false',
-			city : 'false'
+			rail : 'false'
 		},
 		counter : '',
 		locationsNumber : '',
@@ -398,11 +390,7 @@
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
-<<<<<<< HEAD
-			
-=======
 
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
@@ -417,21 +405,20 @@
 				isoTest.log('Test Ready!');
   			isoTest.chall();
 			});
-<<<<<<< HEAD
-			
-		window.addEventListener('hashchange', isoTest.viewChange, false);
-		
-=======
 
 		window.addEventListener('hashchange', isoTest.viewChange, false);
 
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 		},
 		viewChange : function(){
 			if(/location/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
+			} else {
+				if (document.querySelector('.iso-location-filters-modal.iso-modal') != null) {
+					window.clearInterval(isoTest.counter);
+					document.querySelector('.iso-location-filters-modal.iso-modal').remove();
+				}
 			}
 		},
 		chall : function() {
@@ -516,11 +503,7 @@
 					isoTest.filtersCheckedNumber = checkedLength;
 					document.querySelector('.location-type-filters-trigger__button').innerHTML = 'Locations ('+checkedLength+')<i class="icon icon-nav-carrot-down"></i>';
 				}
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 				for(var i = 0; i < checkedLocations.length; i++) {
 					var checkedLocationID = checkedLocations[i].id;
 
@@ -529,11 +512,7 @@
 						isoTest.updatePage(checkedLocationID, 'unchecked');
 					} else {
 						isoTest.checkedFilters[checkedLocationID] = 'true';
-<<<<<<< HEAD
-						isoTest.updatePage(checkedLocationID,'checked');					
-=======
 						isoTest.updatePage(checkedLocationID,'checked');
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 					}
 				}
 			} else {
@@ -541,35 +520,27 @@
 					isoTest.filtersCheckedNumber = 0;
 					document.querySelector('.location-type-filters-trigger__button').innerHTML = 'All Locations<i class="icon icon-nav-carrot-down"></i>';
 				}
-<<<<<<< HEAD
-			
-				for(var i = 0; i < checkedLocations.length; i++) {
-					var checkedLocationID = checkedLocations[i].id;
-					isoTest.checkedFilters[checkedLocationID] = 'false';
-					isoTest.updatePage(checkedLocationID,'checked');	
-=======
 
 				for(var i = 0; i < checkedLocations.length; i++) {
 					var checkedLocationID = checkedLocations[i].id;
 					isoTest.checkedFilters[checkedLocationID] = 'false';
 					isoTest.updatePage(checkedLocationID,'checked');
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 				}
 
 				window.clearInterval(isoTest.counter);
 			}
 
-<<<<<<< HEAD
-			isoTest.updateOrder();
-		},
-=======
 			isoTest.updateClearBtn();
 			isoTest.updateOrder();
 		},
 		updateClearBtn: function(){
+			isoTest.log("updateClearBtn()");
 			var filterHeader = document.querySelector('.location-search-filter__container-content-header');
 			var vehicleTypeFilter = document.querySelector('.vehicle-filters-trigger__button');
 			var hasLocations = document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0;
+			console.log(filterHeader);
+			console.log(vehicleTypeFilter);
+			console.log(hasLocations);
 
 			if(!filterHeader.querySelector('.location-search-filter__clear-all')){
 				if(vehicleTypeFilter.innerText == 'All Vehicles' && hasLocations){
@@ -582,7 +553,6 @@
 				}
 			}
 		},
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 		updatePage : function(image, status) {
 			isoTest.log("updatePage()");
 			var allLocations = document.querySelectorAll('#location .search-results-wrapper .search-results ul .location-result-item');
@@ -609,11 +579,7 @@
 							allLocations[i].setAttribute('data-active', 'active');
 						}
 						var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
-<<<<<<< HEAD
-						
-=======
 
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 						helpers.elementLoaded('div[class*="'+ locationID +'"]', function() {
 							var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
 							for(var x = 0; x < mapData.length; x++) {
@@ -750,21 +716,13 @@
 				}
 			}, false);
 
-			document.addEventListener('click', function (event) {
-<<<<<<< HEAD
-				isoTest.log(event.target);
-=======
+			document.querySelector('#location').addEventListener('click', function (event) {
 			//	isoTest.log(event.target);
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 
 				if (event.target.classList.contains('modal-button')) {
 					isoTest.updateFilterCaptionText();
 				}
 
-<<<<<<< HEAD
-			
-=======
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 				if (event.target.classList.contains('iso-location-chicklet-clear') || event.target.classList.contains('iso-icon-location-close')) {
 					isoTest.updateForNewLocation();
 				}
@@ -789,8 +747,6 @@
 
 					isoTest.filtersCheckedNumber = 0;
 				}
-<<<<<<< HEAD
-=======
 
 				if(event.target.classList.contains('location-search-filter__clear-all')){
 					var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
@@ -806,17 +762,12 @@
 					isoTest.fireTag(event.target, 'Filter Location Type: ' + event.target.value);
 				}
 
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 			}, false);
 
 
 			document.addEventListener("keydown", function (e) {
 				var keyCode = (e.keyCode ? e.keyCode : e.which);
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
         if (keyCode == '27') {
           if (document.querySelector('html').classList.contains('iso-modal-open')) {
           	isoTest.fireTag('esc','Filter Location Type: Close');
@@ -827,11 +778,17 @@
 
 
 			var filterElements = document.querySelectorAll('.iso-location-filters-modal.iso-modal .location-search-filters-modal__location-search-list .checkbox__label .location-type-checkbox');
+			
 			for(var i = 0; i < filterElements.length; i++) {
+				console.log("Filter Elements: " + filterElements[i]);
 				filterElements[i].addEventListener('click', function(e){
+					console.log('clicked checkbox');
+					console.log(e.target.parentNode.classList);
 					if (e.target.parentNode.classList.contains('checked')) {
+						console.log('checked');
 						e.target.parentNode.classList.remove('checked');
 					} else {
+						console.log('not checked');
 						e.target.parentNode.classList.add('checked');
 					}
 		    }, false);
@@ -864,11 +821,7 @@
 			for(var x = 0; x < checkedLocations.length; x++) {
 				var checkedLocationID = checkedLocations[x].id;
 				isoTest.checkedFilters[checkedLocationID] = 'false';
-<<<<<<< HEAD
-				isoTest.updatePage(checkedLocationID,'checked');	
-=======
 				isoTest.updatePage(checkedLocationID,'checked');
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 			}
 
 			isoTest.updateOrder();
@@ -909,11 +862,7 @@
       var modalFocus = document.querySelector('.iso-modal.iso-location-filters-modal');
       isoTest.keepFocus(modalFocus);
 
-<<<<<<< HEAD
-      modalFocus.focus();
-=======
       modalFocus.querySelector('.close-modal').focus();
->>>>>>> d898b4645a5b5a84ba6639c7883d9b07b4bcfeda
 		},
 		destroyModal : function() {
 			isoTest.log("destroyModal()");
