@@ -1,0 +1,216 @@
+<style>
+	.vl-show-more {
+		padding: 2em 1em;
+		text-align: center;
+	}
+	.vl-show-more-text {
+		font-weight: 400;
+	}
+	.vl-show-more-prog {
+		background: #c3c3c3;
+		height: 4px;
+		margin: 0 auto;
+		margin-bottom: 1.5em;
+		position: relative;
+		width: 70%;
+	}
+	.vl-show-more-prog-bar {
+		background: #169a5a;
+		content: '';
+		height: 7px;
+		position: absolute;
+		top: -2px;
+		right: 50%;
+		bottom: -2px;
+		left: 0;	
+	}
+	.btn-show-more {
+		background: #fff;
+		border: 2px solid #169a5a;
+		color: #169a5a;
+		margin-top: 2em;
+		padding: 0.8em 10%;
+	}
+	.btn-show-more:hover, .btn-show-more:focus {
+		border: 2px solid #006639;
+	}
+	/*.unavailable-vehicles__button {
+		border-top: 2px solid #c3c3c3;
+		border-bottom: 2px solid #c3c3c3;
+	}*/    
+	.sm-hide {
+		display: none;
+	}
+	.unavailable-vehicles__wrapper .sm-hide {
+		display: list-item;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Vehicle Selection Show More Results',
+		creative : 'Challenger 2',
+		selector: '.vehicle-list',
+		vlQty: '',
+		showMoreClicks: '0',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+			
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			isoTest.getVlQty();
+			if (isoTest.vlQty > 19) {
+				isoTest.insertShowMore();
+				isoTest.updateShowMore();
+				isoTest.globalEvents();
+			}
+
+		},
+		getVlQty : function() {
+			// Get vehicle list quantity
+			isoTest.vlQty = document.querySelector('.vehicle-header__result-total').innerText.slice(0,-8);
+		},
+		insertShowMore : function() {
+			// Insert show more content
+			document.querySelector('ul.vehicle-list').insertAdjacentHTML('afterend','<div class="vl-show-more"><div class="vl-show-more-prog"><div class="vl-show-more-prog-bar"></div></div><div class="vl-show-more-text">Showing 20 of <span class="vl-show-more-qty"></span> Available Vehicles</div><button class="btn btn-show-more">Show 20 More Vehicles</button></div>');
+			// Hide unavailable vehicles on load
+			document.querySelector('.unavailable-vehicles').classList.add('hide');
+		},
+		updateShowMore : function() {
+			// Logic for updating the show more section
+			if (isoTest.showMoreClicks == 0) {
+				document.querySelector('.vl-show-more-prog-bar').style.right = 'calc(100% - ((20/' + isoTest.vlQty + ') * 100%))';
+				document.querySelector('.vl-show-more-qty').innerText = isoTest.vlQty;
+				if (isoTest.vlQty <= 19) {
+					document.querySelector('.btn-show-more').classList.add('hide');
+				} else {
+					document.querySelector('.btn-show-more').classList.remove('hide');
+				}
+			} else {
+				document.querySelector('.vl-show-more-prog-bar').style.right = '0';
+				document.querySelector('.vl-show-more-text').innerHTML = 'Showing <span class="vl-show-more-qty">' + isoTest.vlQty + '</span> of <span class="vl-show-more-qty">' + isoTest.vlQty + '</span> Available Vehicles';
+			}	
+
+			// Loop through vehicle list
+			var vehicleList = document.querySelector('.vehicle-select__main > .vehicle-list');
+			var myNodeList = vehicleList.getElementsByClassName('vehicle-list__item');
+			helpers.forEach(myNodeList, function (index, value) {
+			 	if (isoTest.showMoreClicks == 0) {
+					if (index > 19) {
+						value.classList.add('sm-hide');
+					}
+					if (index <= 19) {
+						var indexPlus = index + 1;
+						document.querySelector('.vl-show-more-prog-bar').style.right = 'calc(100% - (('+ indexPlus +'/' + isoTest.vlQty + ') * 100%))';
+						document.querySelector('.vl-show-more-text').innerHTML = 'Showing ' + indexPlus + ' of <span class="vl-show-more-qty">' + isoTest.vlQty + '</span> Available Vehicles';
+					}
+				}
+			});
+		},
+		globalEvents : function() {
+			var myNodeList = document.getElementsByClassName('vehicle-list__item');
+			window.addEventListener('click', function (event) {
+				
+				// Clicks on show all
+				if (event.target.closest('.btn-show-more')) {
+					// Hasn't clicked show more
+					if (isoTest.showMoreClicks == 0) {
+						isoTest.showMoreClicks = '1';
+						helpers.forEach(myNodeList, function (index, value) {
+							if (index > 19) {
+								value.classList.remove('sm-hide');
+							}
+						});
+						document.querySelector('.vl-show-more-prog-bar').style.right = '0';
+						document.querySelector('.unavailable-vehicles').classList.remove('hide');
+						document.querySelector('.btn-show-more').classList.add('hide');
+						document.querySelector('.vl-show-more-text').innerHTML = 'Showing <span class="vl-show-more-qty">' + isoTest.vlQty + '</span> of <span class="vl-show-more-qty">' + isoTest.vlQty + '</span> Available Vehicles';
+					} else
+					// Has clicked show more
+					if (isoTest.showMoreClicks == 1) {
+						helpers.forEach(myNodeList, function (index, value) {
+							value.classList.remove('sm-hide');
+						});
+					}
+				}
+
+				// Clicks on sorting or clear sorting
+				if (event.target.closest('.checkbox__label-checkbox')||('.vehicle-filter__header-link')) {
+					isoTest.getVlQty();
+
+					helpers.forEach(myNodeList, function (index, value) {
+						value.classList.remove('sm-hide');
+					});
+
+					isoTest.updateShowMore();
+				}
+
+			}, false);
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		forEach : function (array, callback, scope) {
+		  for (var i = 0; i < array.length; i++) {
+		    callback.call(scope, i, array[i]);
+		  }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>
