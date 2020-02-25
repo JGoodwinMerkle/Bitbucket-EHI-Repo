@@ -21,8 +21,9 @@
 	margin-top: 0;
 }
 .iso-logo img {
-	max-height: 80px;
-	width: auto;
+	max-height: 150px;
+	max-width: 220px;
+	width: 100%;
 }
 </style>
 <script>
@@ -36,11 +37,11 @@
 		selector: '.confirmed-page__right-column',
 		template: '<div class="iso-usaa section-content">\
 			<div class="iso-logo">\
-				<img src="https://www.enterprise.com/content/dam/ecom/hosted/11_CS_RGB_HOR.png" title="Enterprise Car Share" alt="Enterprise Care Share" />\
+				<img src="https:\/\/www.enterprise.com/content/dam/ecom/hosted/11_CS_RGB_HOR.png" title="Enterprise Car Share" alt="Enterprise Care Share" />\
 			</div>\
 			<div class="content">\
 				<p>Buy a quality, used 1-3 year-old car, truck, van or SUV with the latest tech and features.</p>\
-				<p><a href="https://www.enterprisecarsales.com/" target="_blank">Shop now at EnterpriseCarSales.com <i class="icon icon-nav-external-link"></i></a></p>\
+				<p><a href="https:\/\/www.enterprisecarsales.com/" target="_blank">Shop now at EnterpriseCarSales.com <i class="icon icon-nav-external-link"></i></a></p>\
 			</div>\
 			</div>',
 		init : function() {
@@ -62,6 +63,15 @@
   				isoTest.chall();
 			});
 			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/confirmed/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
 		},
 		chall : function() {
 
