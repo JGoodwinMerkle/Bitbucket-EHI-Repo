@@ -1,0 +1,117 @@
+<style>
+	.inner-container {
+		transition: none;
+	}
+	.branchpage #start-reservation .inner-container {
+		padding: 5% 0;
+	}
+	.booking-widget .booking-submit .btn {
+		transition: none;
+		padding: 20px 5px;
+	}
+	@media (max-width: 270px) {
+		.booking-widget .booking-submit .btn {
+			height: auto;
+		}
+	}
+	@media (max-width: 66em) {
+		.booking-widget .coupon-filters-wrapper .vehicle-filters-trigger {
+			flex: 0 0 33%;
+		}
+		.booking-widget .booking-submit .btn {
+			letter-spacing: 0.0675rem;
+		}
+	}
+	@media (max-width: 66em) and (min-width: 48em) {
+		.booking-widget .booking-submit .btn {
+			letter-spacing: normal;
+		}
+	}
+	@media (min-width: 48em) {
+		.coupon-field-wrapper {
+			width: 61.5%;
+		}
+	}
+	@media (min-width: 46.8em) {
+		.booking-widget .booking-submit {
+			width: 33%;
+		}
+	}
+	@media (max-width: 48em) {
+		.booking-widget .coupon-filters-wrapper .vehicle-filters-trigger {
+			flex: 0 0 100%;
+		}
+	}
+	@media (min-width: 1057px) {
+		.booking-widget .age-input {
+			width: 233px
+		}
+		.coupon-field-wrapper {
+			width: 70%;
+		}
+		.booking-widget .coupon-filters-wrapper .vehicle-filters-trigger {
+		    width: 233px;
+		}
+		.booking-widget .booking-submit {
+		    width: 233px;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Res Widget Copy Swap 2.0',
+		creative : 'Challenger 1',
+		selector: '#continueButton',
+		header: 'h2#branch-page-booking-header,h2.reservation-toggle-header',
+		content: {
+			headline: 'Start A Reservation',
+			cta: 'Check Availability'
+		},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+		},
+		chall : function() {
+			document.querySelectorAll(isoTest.header)[0].innerText = isoTest.content.headline;
+			document.querySelector(isoTest.selector).textContent = isoTest.content.cta;
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>
