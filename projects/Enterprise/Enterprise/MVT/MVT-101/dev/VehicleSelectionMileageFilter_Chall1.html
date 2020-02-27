@@ -124,6 +124,8 @@
 						vehicleItemsHidden[i].classList.remove('iso-mileage-hidden');
 					}
 
+					document.querySelector('.unavailable-vehicles').style.display = "block";
+
 					isoTest.checkEmptyList();
 				}
 			} else {
@@ -133,6 +135,7 @@
 					isoTest.updateItems(status);
 
 					isoTest.checkEmptyList();
+					document.querySelector('.unavailable-vehicles').style.display = "none";
 				}
 			}
 		},
@@ -140,12 +143,22 @@
 			isoTest.log("checkEmptyList()");
 			var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
 			var vehicleItems = document.querySelectorAll('.vehicle-list__item');
+			var amount;
 
 			if (vehicleItems.length == vehicleItemsHidden.length) {
 				document.querySelector('.vehicle-list__empty-message').style.display = "block";
 			} else {
 				document.querySelector('.vehicle-list__empty-message').style.display = "none";
 			}
+
+
+			if (vehicleItemsHidden.length > 0) {
+				amount = vehicleItems.length - vehicleItemsHidden.length;
+			} else {
+				amount = vehicleItems.length;
+			}
+
+			document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = amount + ' Results';
 		},
 		updateItems : function(status) {
 			isoTest.log("updateItems()");
@@ -161,6 +174,7 @@
 					vehicleItems[i].classList.add('iso-mileage-hidden');
 				}
 			}
+
 		},
 		addEvents : function() {
 			isoTest.log("addEvents()");
