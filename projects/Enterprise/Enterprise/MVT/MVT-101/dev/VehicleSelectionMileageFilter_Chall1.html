@@ -6,6 +6,36 @@
 .vehicle-list__item.iso-mileage-hidden {
 	display: none;
 }
+
+.vehicle-filter__amount-selected {
+	display: none;
+}
+
+#vehicle-filter-cta-expand .vehicle-filter__amount-selected {
+	display: none;
+}
+
+.iso-vehicle-filter__amount-selected {
+  font-size: 15px;
+  margin-left: 5px;
+  vertical-align: baseline;
+  font-weight: 400;
+  font-style: normal;
+  top: -1px;
+  position: relative;
+  line-height: 1;
+}
+
+.iso-mobile-vehicle-filter__amount-selected {
+	font-weight: 600;
+    font-style: normal;
+    font-size: .875rem;
+	    margin-left: 5px;
+    vertical-align: baseline;
+    top: -1px;
+    position: relative;
+    line-height: 1;
+}
 </style>
 <script>
 (function() {
@@ -80,7 +110,7 @@
 		},
 		findMileage : function() {
 			isoTest.log("findMileage()");
-			var vehicleItems = document.querySelectorAll('.vehicle-list__item');
+			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
 			for(var i = 0; i < vehicleItems.length; i++) {
 				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
 				var carClass = dataInfo[1];
@@ -99,11 +129,14 @@
 			xhttp.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200) {
 	        var carDetails = JSON.parse(xhttp.responseText);
-        	var hasUnlimited = carDetails.car_class_details.mileage_info.unlimited_mileage;
-
-       		isoTest.mileageObject[carCode] = hasUnlimited;
+	        var hasUnlimited;
+	        // console.log(carDetails);
+	        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.mileage_info && typeof carDetails.car_class_details.mileage_info.unlimited_mileage === "boolean") {
+        		hasUnlimited = carDetails.car_class_details.mileage_info.unlimited_mileage;
+        		isoTest.mileageObject[carCode] = hasUnlimited;
        		
-       		callback(hasUnlimited);
+       			callback(hasUnlimited);
+	        }
 		    }
 			};
 			url = url + carCode;
@@ -123,26 +156,25 @@
 					for(var i = 0; i < vehicleItemsHidden.length; i++) {
 						vehicleItemsHidden[i].classList.remove('iso-mileage-hidden');
 					}
-
-					document.querySelector('.unavailable-vehicles').style.display = "block";
-
-					isoTest.checkEmptyList();
-				}
+				} 
+				isoTest.checkEmptyList();
+				document.querySelector('.unavailable-vehicles').style.display = "block";
 			} else {
 				if (unlimited || limited) {
 					var status;
 					unlimited ? status = true : status = false;
 					isoTest.updateItems(status);
 
-					isoTest.checkEmptyList();
 					document.querySelector('.unavailable-vehicles').style.display = "none";
+
+					isoTest.checkEmptyList();
 				}
 			}
 		},
 		checkEmptyList : function() {
 			isoTest.log("checkEmptyList()");
 			var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
-			var vehicleItems = document.querySelectorAll('.vehicle-list__item');
+			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
 			var amount;
 
 			if (vehicleItems.length == vehicleItemsHidden.length) {
@@ -151,18 +183,50 @@
 				document.querySelector('.vehicle-list__empty-message').style.display = "none";
 			}
 
-
 			if (vehicleItemsHidden.length > 0) {
 				amount = vehicleItems.length - vehicleItemsHidden.length;
 			} else {
 				amount = vehicleItems.length;
 			}
 
-			document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = amount + ' Results';
+			if (document.querySelector('.vehicle-header__title .vehicle-header__result-total')) {
+				document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = amount + ' Results';
+			}
+
+
+			isoTest.checkFilterCount();
+		},
+		checkFilterCount : function() {
+			isoTest.log("checkFilterCount()");
+
+			var filterCount = document.querySelectorAll('.vehicle-filter__filter .checkbox__label .checkbox__label-checkbox.checked').length;
+
+			var elemFilterAmount = document.querySelector('.iso-vehicle-filter__amount-selected');
+			var elemFilterAmountMobile = document.querySelector('.iso-mobile-vehicle-filter__amount-selected');
+
+			if (!elemFilterAmount) {
+				document.querySelector('.vehicle-filter__header-title').insertAdjacentHTML("beforeend", '<span class="iso-vehicle-filter__amount-selected">('+ filterCount +')</span>');
+			} else {
+				if (filterCount > 0) {
+					elemFilterAmount.innerHTML = '(' + filterCount + ')';
+				} else {
+					elemFilterAmount.parentNode.removeChild(elemFilterAmount);
+				}
+			}
+
+			if (!elemFilterAmountMobile) {
+				document.querySelector('#vehicle-filter-cta-expand').insertAdjacentHTML("beforeend", '<span class="iso-mobile-vehicle-filter__amount-selected">('+ filterCount +')</span>');
+			} else {
+				if (filterCount > 0) {
+					elemFilterAmountMobile.innerHTML = '(' + filterCount + ')';
+				} else {
+					elemFilterAmountMobile.parentNode.removeChild(elemFilterAmountMobile);
+				}
+			}
 		},
 		updateItems : function(status) {
 			isoTest.log("updateItems()");
-			var vehicleItems = document.querySelectorAll('.vehicle-list__item');
+			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
 
 			for(var i = 0; i < vehicleItems.length; i++) {
 				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
@@ -174,7 +238,6 @@
 					vehicleItems[i].classList.add('iso-mileage-hidden');
 				}
 			}
-
 		},
 		addEvents : function() {
 			isoTest.log("addEvents()");
