@@ -374,7 +374,7 @@
 		account : 'Enterprise',
 		portfolio : 'Enterprise.com',
 		test : 'Location Results Filter Redesign',
-		creative : 'Challenger 1',
+		creative : 'Challenger 2',
 		selector: '.location-search-filter__container .location-search-filter__container-content',
 		mapSelector: 'ENT-mappin-single-number-enterprise@2x',
 		selectorLocations: '#location .search-results-wrapper .search-results ul .location-result-item.active',
@@ -524,7 +524,7 @@
 		addLocationExpand : function() {
 			isoTest.log('addLocationExpand()');
 			if (document.querySelector('.map-toggle') && !document.querySelector('.map-toggle .iso-filters-desktop-expand')) {
-				document.querySelector('.map-toggle').insertAdjacentHTML('afterbegin','<div class="iso-filters-desktop-expand"><i class="icon iso-filter"></i><span class="iso-filter-text">Filter</span><i class="icon iso-filter-arrow icon-nav-carrot-up-green"></i></div>');
+				document.querySelector('.map-toggle').insertAdjacentHTML('afterbegin','<div class="iso-filters-desktop-expand"><i class="icon iso-filter"></i><span class="iso-filter-text">Filter</span><i class="icon iso-filter-arrow icon-nav-carrot-down"></i></div>');
 			}
 
 			if (document.querySelector('.gi .location-search__max-result-error') && !document.querySelector('.gi .iso-filter-shown-text')) {
@@ -538,6 +538,10 @@
 			if (!document.querySelector('.location-search-filter__mobile-header .iso-filters-mobile-expand')) {
 				document.querySelector('.location-search-filter__mobile-header .location-search-filter__mobile-toggle-button').insertAdjacentHTML('afterend','<button class="iso-filters-mobile-expand"><i class="icon iso-filter"></i><span class="iso-filter-text">Filter</span><i class="icon iso-filter-arrow icon-nav-carrot-down"></i></button>');
 			}
+
+			if (document.querySelector('.location-search-filter__container')) {
+				document.querySelector('.location-search-filter__container').classList.add('iso-hide');
+			}
 		},
 		checkForSearchByVehicleOnLoad : function() {
 			isoTest.log('checkForSearchByVehicleOnLoad()');
@@ -545,9 +549,14 @@
 				document.querySelector('.location-search-filter .location-search-filter__mobile-toggle-button').click();
 
 				var mobileFilterArrow = document.querySelector('.iso-filters-mobile-expand .icon.iso-filter-arrow');
+				var desktopFilter = document.querySelector('.location-search-filter__container');
+				var desktopFilterArrow = document.querySelector('.iso-filters-desktop-expand .icon.iso-filter-arrow');
 
 				mobileFilterArrow.classList.add('icon-nav-carrot-up-green');
 				mobileFilterArrow.classList.remove('icon-nav-carrot-down');
+				desktopFilter.classList.remove('iso-hide');
+				desktopFilterArrow.classList.add('icon-nav-carrot-up-green');
+				desktopFilterArrow.classList.remove('icon-nav-carrot-down');
 
 				document.querySelector('.location-search-filter__container .location-search-filter__container-content .iso-clear-btn').classList.remove('iso-hide');
 				document.querySelector('.gi .location-search-filter__container-content-text.desktop.iso-filter-shown-text').classList.remove('iso-hide');
