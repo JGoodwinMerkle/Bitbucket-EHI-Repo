@@ -50,12 +50,12 @@
 		selector: '.confirmed-page__right-column',
 		template: '<div class="iso-usaa section-content">\
 			<div class="iso-logo">\
-				<img src="https://www.enterprise.com/content/dam/ecom/hosted/USAA_icon_blue.png" title="USAA - For USAA Members" />\
+				<img src="https:\/\/www.enterprise.com/content/dam/ecom/hosted/USAA_icon_blue.png" title="USAA - For USAA Members" />\
 			</div>\
 			<div class="content">\
 				<h3>Report This Rental and Save</h3>\
 				<p>Report your car rental on your USAA Member Travel Privileges account and receive 300 Vacation Points to use on your next vacation.</p>\
-				<p><a href="http://www.usaa.com" target="_blank">Visit USAA.com <i class="icon icon-nav-external-link"></i></a></p>\
+				<p><a href="http:\/\/www.usaa.com" target="_blank">Visit USAA.com <i class="icon icon-nav-external-link"></i></a></p>\
 			</div>\
 			</div>',
 		init : function() {
@@ -79,7 +79,7 @@
 			});
 		},
 		chall : function() {
-			document.querySelector('.confirmed-page__right-column').insertAdjacentHTML("afterbegin", isoTest.template);
+			document.querySelector(".confirmed-page__right-column .checklist-container").insertAdjacentHTML("beforebegin",isotTest.template);
 		},
 		elementLoaded : function (ele, callback) {
 			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
