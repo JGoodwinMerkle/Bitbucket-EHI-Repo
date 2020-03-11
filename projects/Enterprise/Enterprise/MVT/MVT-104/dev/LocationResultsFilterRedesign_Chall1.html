@@ -586,7 +586,7 @@
 					clearInterval(checkResultsChange);
 
 					isoTest.locationsNumber = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]').length;
-					document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " Results";
+					document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " RESULTS";
 				}
 			},100);
 
@@ -630,9 +630,9 @@
 			isoTest.locationsNumber = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]').length;
 
 			if (document.querySelector('.iso-results-num') == null) {
-				document.querySelector('.location-search-filter__mobile-header span').insertAdjacentHTML('beforebegin','<span class="iso-results-num">'+isoTest.locationsNumber+' Results</span>');
+				document.querySelector('.location-search-filter__mobile-header span').insertAdjacentHTML('beforebegin','<span class="iso-results-num">'+isoTest.locationsNumber+' RESULTS</span>');
 			} else {
-				document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " Results";
+				document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " RESULTS";
 			}
 		},
 		addLocationClearIcon : function() {
@@ -1169,8 +1169,8 @@
 			isoTest.log("updateFilteredNumber()");
 			
 			window.setTimeout(function(){
-				document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " Results";
-				document.querySelector('.search-results-count small').innerHTML = isoTest.locationsNumber + " Results";
+				document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " RESULTS";
+				document.querySelector('.search-results-count small').innerHTML = isoTest.locationsNumber + " RESULTS";
 			}, 500);
 		},
 		modalOpen : function() {
