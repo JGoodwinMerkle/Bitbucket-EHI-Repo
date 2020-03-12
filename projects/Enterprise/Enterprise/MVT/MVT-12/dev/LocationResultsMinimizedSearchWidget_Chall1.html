@@ -15,6 +15,29 @@
 
 .location-details .location-search .gi {
 	/*padding-bottom: 8px;*/
+	/*margin-bottom: .5em;*/
+}
+
+.resflow-location #content-container .iso-sticky-footer {
+	position: sticky;
+    bottom: 0;
+    /*height: 42px;*/
+    width: 100%;
+    background-color: rgba(242, 242, 242, 1);
+    left: 0;
+    z-index: 9999;
+    font-weight: 400;
+    font-size: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    -webkit-box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.247058823529412);
+    box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.247058823529412);
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.resflow-location #content-container .iso-sticky-footer .iso-bold {
+	font-weight: 700;
 }
 
 .location-details .location-search .gi .location-input-container {
@@ -75,10 +98,20 @@
 .location-details .location-search .map-toggle {
 	margin-top: 0;
 	margin-bottom: 0;
+	padding-left: 14px;
+}
+
+.map-toggle .iso-results-num-desktop-expand {
+	bottom: 19px;
+	color: #797979;
+	display: none;
+	font-size: 16px;
+	font-weight: 600;
+	position: absolute;
 }
 
 .map-toggle .btn.btn-unstyled {
-	bottom: 20px;
+	bottom: 19px;
 	font-size: 16px;
 	font-weight: 600;
 	letter-spacing: normal;
@@ -428,6 +461,69 @@
 }
 
 @media (max-width: 768px){
+	.reservation-step .search-results-wrapper {
+		background-color: #dbdbdb;
+		-webkit-box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.247058823529412);
+	    box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.247058823529412);
+	}
+
+	.reservation-step .search-results-wrapper .search-results { 
+		margin-left: 6px;
+	    margin-right: 6px;
+	    min-width: 95%;
+	}
+
+	.resflow-location #content-container .iso-sticky-footer {
+	    /*height: 52px;*/
+	    font-size: 14px;
+	    padding-top: 8px;
+	    padding-bottom: 8px;
+	}
+
+	.iso-search-widget .iso-results-num-desktop,
+	.map-toggle .iso-results-num-desktop-expand {
+		display: none;
+	}
+
+	.location-details .location-search .gi {
+		/*margin-bottom: 0px !important;*/
+		/*padding-bottom: 0px !important;*/
+		padding-top: 0px;
+	}
+
+	.location-details .location-search--user-friendly .user-friendly-required {
+		font-size: 14px;
+	}
+
+	.location-details .location-search .location-input-label {
+		font-size: 14px;
+	}
+
+	.location-details .location-search {
+		padding-top: 0px !important;
+	}
+
+	.iso-search-widget {
+		padding: 0 0 0px 10px;
+		width: 100%;
+	}
+
+	.iso-search-widget .iso-change-btn {
+		display: block;
+	}
+
+	.location-details .location-search .search-results-count span {
+		font-size: 22px;
+	}
+
+	.iso-search-widget .iso-current-location {
+		font-size: 18px;
+	}
+
+	.iso-search-widget .iso-change-btn {
+		font-size: 14px;
+	}
+
 	.location-details .location-search {
 		padding-top: 20px;
 	}
@@ -648,6 +744,26 @@
 				console.log(currentLocation);
 				document.querySelector('.iso-search-widget .iso-current-location').innerHTML = currentLocation;
 			}
+
+			if (document.querySelector('.map-toggle') && !document.querySelector('.map-toggle .iso-results-num-desktop-expand')) {
+				document.querySelector('.map-toggle').insertAdjacentHTML('afterbegin','<div class="iso-results-num-desktop-expand"></div>');
+			}
+
+			var sameLocation = ReservationStateTree.get()['model']['sameLocation'];
+			var header = document.querySelectorAll('.location-details .search-results-count span')[0];
+
+			if (sameLocation != true) {
+				if (document.querySelector('.reservation-step').getAttribute('id') === "location/dropoff") {
+					header.innerHTML = "CHOOSE A RETURN LOCATION";
+				} else {
+					header.innerHTML = "CHOOSE A PICK-UP LOCATION";
+				}
+			}
+
+			if (!document.querySelector('.resflow-location #content-container .iso-sticky-footer')) {
+				document.querySelector('.resflow-location #content-container .footer').insertAdjacentHTML('afterend','<div class="iso-sticky-footer"><span class="iso-bold">Not seeing what you are looking for?</span> Try refining your search by ZIP Code or zooming in on the map.</div>');
+			}
+
 		},
 		checkForSearchByVehicleOnLoad : function() {
 			isoTest.log('checkForSearchByVehicleOnLoad()');
@@ -684,8 +800,9 @@
 					clearInterval(checkResultsChange);
 
 					isoTest.locationsNumber = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]').length;
-					document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " Results";
+					document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " RESULTS";
 					document.querySelector('.iso-results-num-desktop').innerHTML = isoTest.locationsNumber + " RESULTS: ";
+					document.querySelector('.iso-results-num-desktop-expand').innerHTML = isoTest.locationsNumber + " RESULTS";
 				}
 			},100);
 
@@ -729,12 +846,13 @@
 			isoTest.locationsNumber = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]').length;
 
 			if (document.querySelector('.iso-results-num') == null) {
-				document.querySelector('.location-search-filter__mobile-header span').insertAdjacentHTML('beforebegin','<span class="iso-results-num">'+isoTest.locationsNumber+' Results</span>');
+				document.querySelector('.location-search-filter__mobile-header span').insertAdjacentHTML('beforebegin','<span class="iso-results-num">'+isoTest.locationsNumber+' RESULTS</span>');
 			} else {
-				document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " Results";
+				document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " RESULTS";
 			}
 
 			document.querySelector('.iso-results-num-desktop').innerHTML = isoTest.locationsNumber + " RESULTS: ";
+			document.querySelector('.iso-results-num-desktop-expand').innerHTML = isoTest.locationsNumber + " RESULTS";
 		},
 		addLocationClearIcon : function() {
 			isoTest.log('addLocationClearIcon()');
@@ -994,6 +1112,10 @@
 			document.querySelector('.iso-search-widget .iso-change-btn').addEventListener('click', function (e) {
 				document.querySelector('.iso-search-widget').style.display = 'none';
 				document.querySelector('.location-details .location-search .gi .location-input-container').style.display = 'block';
+				document.querySelector('.location-details .location-search .gi').style.marginBottom = '10px';
+				document.querySelector('.map-toggle .iso-results-num-desktop-expand').style.display = 'flex';
+				isoTest.fireTag('.iso-change-btn','Change Location CTA');
+
 				isoTest.updateForNewLocation();
 			}, false);
 
@@ -1280,8 +1402,9 @@
 			isoTest.log("updateFilteredNumber()");
 
 			window.setTimeout(function(){
-				document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " Results";
+				document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " RESULTS";
 				document.querySelector('.iso-results-num-desktop').innerHTML = isoTest.locationsNumber + " RESULTS: ";
+				document.querySelector('.iso-results-num-desktop-expand').innerHTML = isoTest.locationsNumber + " RESULTS";
 				// document.querySelector('.search-results-count small').innerHTML = isoTest.locationsNumber + " Results";
 			}, 500);
 		},
