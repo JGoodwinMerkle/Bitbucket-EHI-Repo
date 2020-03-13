@@ -38,8 +38,8 @@
 #commit .iso-driverTooltip .iso-tooltip-container {
 	display: block;
 	position: absolute;
-  visibility: hidden;
-  width: 100%;
+  	visibility: hidden;
+  	width: 100%;
 }
 
 #commit .iso-driverTooltip .iso-tooltip-container.active {
@@ -50,28 +50,28 @@
 	background: transparent;
 	color: #333333;
 	cursor: pointer;
-  font-size: 12px;
-  font-weight: 300;
-  letter-spacing: normal;
-  margin: 0;
-  padding: 0;
-  text-decoration: underline;
-  text-transform: initial;
+	font-size: 12px;
+	font-weight: 300;
+	letter-spacing: normal;
+	margin: 0;
+	padding: 0;
+	text-decoration: underline;
+	text-transform: initial;
 }
 
 #commit .iso-driverTooltip .iso-tooltip-info__arrow {
 	border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 11px solid #707070;
-  display: block;
+  	border-right: 10px solid transparent;
+  	border-top: 11px solid #707070;
+  	display: block;
 	height: 0;
-  left: 42%;
-  margin:	0;
-  position: absolute;
-  top: 2px;
-  transform: rotate(-180deg);
-  width: 0;
-  z-index: 2;
+	left: 42%;
+	margin:	0;
+	position: absolute;
+	top: 2px;
+	transform: rotate(-180deg);
+	width: 0;
+	z-index: 2;
 }
 
 #commit .iso-driverTooltip .tooltip-info__content {
@@ -80,14 +80,14 @@
 	font-size: 12px;
 	line-height: 16px;
 	min-height: 114px;
-  padding: 10px 27px 10px 10px;
-  position: relative;
-  right: 0;
-  text-align: left;
-  top: 9px;
-  transform: none;
-  visibility: hidden;
-  width: 227px;
+	padding: 10px 27px 10px 10px;
+	position: relative;
+	right: 0;
+	text-align: left;
+	top: 9px;
+	transform: none;
+	visibility: hidden;
+	width: 227px;
 }
 
 #commit .iso-driverTooltip .iso-tooltip-container.active .tooltip-info__content {
@@ -106,58 +106,58 @@
 
 #commit .iso-driverTooltip .tooltip-info__cta.tooltip-info__icon-button {
 	position: relative;
-  top: 14px;
+	top: 14px;
 }
 
 #commit .iso-container input[type='radio'] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background: #ffffff;
-  border: 1px solid #a3a4a5;
-  border-radius: 100%;
-  height: 1.25rem;
-  margin-right: 10px;
-  padding: 0;
-  position: relative;
-  width: 1.25rem;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background: #ffffff;
+	border: 1px solid #a3a4a5;
+	border-radius: 100%;
+	height: 1.25rem;
+	margin-right: 10px;
+	padding: 0;
+	position: relative;
+	width: 1.25rem;
 }
 
 #commit .iso-container input[type='radio']:before {
-  border-radius: 100%;
-  content: '';
-  display: block;
+	border-radius: 100%;
+	content: '';
+	display: block;
 }
 
 #commit .iso-container input[type='radio']:checked:before {
-  background: #169a5a;
-  height: .75rem;
-  left: 50%;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%); 
-  width: .75rem;
+	background: #169a5a;
+	height: .75rem;
+	left: 50%;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%); 
+	width: .75rem;
 }
 
 #commit .iso-container input[type='radio']:checked {
-  border: 2px solid #169a5a;
+	border: 2px solid #169a5a;
 }
 
 #commit .additional-driver label {
 	display: inline;
 	font-weight: 300;
-  left: 30px;
-  padding: 0;
-  position: absolute;
-  top: 1px;
+	left: 30px;
+	padding: 0;
+	position: absolute;
+	top: 1px;
 }
 
 #commit .additional-driver span {
-  display: block;
-  height: 20px;
-  margin-bottom: 13px;
-  position: relative;
+	display: block;
+	height: 20px;
+	margin-bottom: 13px;
+	position: relative;
 }
 </style>
 <script>
@@ -173,7 +173,7 @@
 			en : {
 				header: "Let us know if you are thinking of adding an additional driver.",
 				subtext: "(You will be able to <span class='iso-bold'>add an additional driver</span> in branch. Don’t worry if you’re not sure yet – just bring the <div class='iso-button-container iso-driverTooltip'></div> and let us know on the day!)",
-				tooltip: "All drivers must be present and provide a full valid driving license. If the driving license is written in a language and characters different to those of the country of rental, an International Driving Permit is also required.",
+				tooltip: "All drivers must be present and provide a full valid driving license,. If the driving license is written in a language and characters different to those of the country of rental, an International Driving Permit is also required. Please note Additional drivers must meet all renter requirements.  A daily surcharge will apply.",
 				buttontext: "required documents",
 				yes: "Yes",
 				no: "No",
@@ -182,7 +182,7 @@
 			es : {
 				header: "Háganos saber si está pensando añadir un conductor extra.",
 				subtext: "(Podrá <span class='iso-bold'>añadir un conductor</span> extra en la sucursal. No se preocupe si no está seguro todavía - solo traiga <div class='iso-button-container iso-driverTooltip'></div> y háganoslo saber en el día!)",
-				tooltip: "Todos los conductores deben presentar un carnet de conducir. Si el carnet de conducir está escrito en un idioma y caracteres diferentes al del país de alquiler, se necesitará un carnet de conducir internacional.",
+				tooltip: "Todos los conductores deberán estar presentes y poseer un carnet de conducir vigente . Si el idioma del carnet así como el alfabeto utilizado en el mismo fuera diferente al del país donde se alquila el coche, será necesaria la presentación de un carnet internacional expedido por las autoridades competentes. Por favor, téngase en cuenta que los conductores adicionales también deberán cumplir con todos los requisitos anteriormente descriptos para el alquiler del coche. Se les aplicará una tarifa extra diaria.",
 				buttontext: "los documentos necesarios",
 				yes: "Sí",
 				no: "No",
@@ -191,7 +191,7 @@
 			fr : {
 				header: "Aurez-vous besoin d'ajouter un conducteur supplémentaire?",
 				subtext: "(Vous pourrez <span class='iso-bold'>ajouter un conducteur supplémentaire</span> en agence. Aucun problème si vous ne le savez pas encore, pensez juste à apporter <div class='iso-button-container iso-driverTooltip'></div> et mentionnez-le le jour de votre départ!)",
-				tooltip: "Tous les conducteurs doivent présenter un permis de conduire en cours de validité. Si le permis de conduire est écrit dans une langue aux caractères différents de celui du pays de location, un permis international est également demandé.",
+				tooltip: "Tous les conducteurs devront se présenter munis d’un permis de conduire en cours de validité. Si le permis de conduire est écrit dans une langue aux caractères différents de celui du pays de location, un permis international sera également demandé. Les conducteurs additionels seront soumis aux mêmes conditions de location que le conducteur principal. Des frais journaliers seront appliqués.",
 				buttontext: "les documents nécessaires",
 				yes: "Oui",
 				no: "Non",
@@ -200,7 +200,7 @@
 			de : {
 				header: "Lassen Sie uns wissen, wenn Sie zusätzliche Fahrer anmelden möchten.",
 				subtext: "(Sie können die <span class='iso-bold'>Zusatzfahrer-Option</span> direkt in der Filiale buchen. Lassen Sie es uns einfach vor Ort am Tag der Anmietung wissen und bringen Sie die für Zusatzfahrer <div class='iso-button-container iso-driverTooltip'></div> mit!)",
-				tooltip: "Alle zusätzlichen Fahrer müssen einen gültigen Führerschein vorlegen. Wenn sich die Sprache des Führerscheins und dessen Alphabet von denen des Mietlandes unterscheiden, ist zusätzlich ein internationaler Führerschein erforderlich.",
+				tooltip: "Alle Fahrer müssen anwesend sein und einen gültigen Führerschein vorlegen. Wenn sich die Sprache des Führerscheins und dessen Alphabet von denen des Mietlandes unterscheiden, ist zusätzlich ein internationaler Führerschein erforderlich. Bitte beachten Sie, dass zusätzliche Fahrer alle Mietbedingungen erfüllen müssen. Ein täglicher Zuschlag wird verrechnet.",
 				buttontext: "benötigten Dokumente",
 				yes: "Ja",
 				no: "Nein",
@@ -208,24 +208,24 @@
 			}
 		},
 		template: "<div class='iso-container'>\
-								<div class='iso-banner-text-container'>\
-									<div class='iso-header'>{header}</div>\
-									<div class='iso-subtext'>{subtext}</div>\
-									<fieldset class='additional-driver'>\
-										<span><input type='radio' name='group-additional' value='{yes}' id='additional-yes' class='additional-radio' required><label for='additional-yes'>{yes}</label></span>\
-										<span><input type='radio' name='group-additional' value='{no}' id='additional-no' class='additional-radio'><label for='additional-no'>{no}</label></span>\
-										<span><input type='radio' name='group-additional' value='{notsure}' id='additional-notsure' class='additional-radio'><label for='additional-notsure'>{notsure}</label></span>\
-									</fieldset>\
-								</div>\
-							</div>",
+						<div class='iso-banner-text-container'>\
+							<div class='iso-header'>{header}</div>\
+							<div class='iso-subtext'>{subtext}</div>\
+							<fieldset class='additional-driver'>\
+								<span><input type='radio' name='group-additional' value='{yes}' id='additional-yes' class='additional-radio' required><label for='additional-yes'>{yes}</label></span>\
+								<span><input type='radio' name='group-additional' value='{no}' id='additional-no' class='additional-radio'><label for='additional-no'>{no}</label></span>\
+								<span><input type='radio' name='group-additional' value='{notsure}' id='additional-notsure' class='additional-radio'><label for='additional-notsure'>{notsure}</label></span>\
+							</fieldset>\
+						</div>\
+					</div>",
 		tooltip: "<button class='iso-btn-tooltip' role='button' aria-label='{buttontext}'>{buttontext}</button>\
-							<div class='iso-tooltip-container'>\
-								<span class='iso-tooltip-info__arrow'></span>\
-								<span class='tooltip-info__content' aria-describedby='tooltip_driver_reassurance' role='tooltip'>\
-										<button type='button' class='tooltip-info__close' aria-label='Close'><i class='icon icon-close-white'></i></button>\
-										<span class='tooltip-info__description' id='tooltip_driver_reassurance'>{tooltip}</span>\
-								</span>\
-							</div>",
+					<div class='iso-tooltip-container'>\
+						<span class='iso-tooltip-info__arrow'></span>\
+						<span class='tooltip-info__content' aria-describedby='tooltip_driver_reassurance' role='tooltip'>\
+								<button type='button' class='tooltip-info__close' aria-label='Close'><i class='icon icon-close-white'></i></button>\
+								<span class='tooltip-info__description' id='tooltip_driver_reassurance'>{tooltip}</span>\
+						</span>\
+					</div>",
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
