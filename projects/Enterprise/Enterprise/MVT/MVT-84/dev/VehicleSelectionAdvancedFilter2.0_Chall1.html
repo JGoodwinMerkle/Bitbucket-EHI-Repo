@@ -419,73 +419,105 @@
 		},
 		chall : function() {
 
+            isoTest.addSliderWrap();
+            isoTest.initializeSlider();
+            isoTest.updateSlider();
+			isoTest.eventTracking();
+
+		},
+        addSliderWrap : function() {
             if (!document.querySelector('#priceRangeSlider')) {
-                document.querySelector('.vehicle-filter__content > div:nth-child(2)').insertAdjacentHTML('beforebegin','<div class="vehicle-filter__filter"><span class="vehicle-filter__filter-title">Total Price Range</span><div class="price-range-slider"><div id="priceRangeSlider"></div><div class="prs-input-wrap"><span>Min</span><input type="text" id="input-with-keypress-0"></div><div class="prs-input-wrap"><span>Max</span><input type="text" id="input-with-keypress-1"></div></div></div>');
+                document.querySelector('.vehicle-filter__content > div:nth-child(2)').insertAdjacentHTML('beforebegin','<div class="vehicle-filter__filter"><span class="vehicle-filter__filter-title">Total Price Range</span><div class="price-range-slider"><div id="priceRangeSlider"></div><div class="prs-input-wrap"><span>Min</span><input type="text" id="input-with-keypress-0" title="Enter Minimum Total Price"></div><div class="prs-input-wrap"><span>Max</span><input type="text" id="input-with-keypress-1" title="Enter Maximum Total Price"></div></div></div>');
             }
-			
-			// Set initial min and max value
-			var cars = store.getState().toJS()['app']['vehicles']['availableVehicles'];
-			if (cars != null) {
-				for (var price in cars) {
-					var lowestPrice = Number.POSITIVE_INFINITY;
-					var highestPrice = 0;
-					var tmp;
-					var tmp2;
-					for (var i=cars.length-1; i>=0; i--) {
-						var carStatus = cars[i]['status'];
-						if (carStatus == "AVAILABLE_AT_RETAIL_RATE") {
-							var tmp = cars[i]['charges']['PAYLATER']['total_price_view']['amount'];
-							var tmp2 = cars[i]['charges']['PAYLATER']['total_price_view']['amount'];
-							
-					    	if (tmp < lowestPrice) lowestPrice = Math.floor(tmp);
-					    	if (tmp2 > highestPrice) highestPrice = Math.ceil(tmp2);
-					    }
-					}
-					if (lowestPrice == "Infinity") lowestPrice = "--";
-					if (highestPrice == "Infinity") highestPrice = "--";
-					isoTest.carCostLow[cars] = lowestPrice;
-					isoTest.carCostHigh[cars] = highestPrice;
-					//console.log('lowest price: ' + lowestPrice);
-					//console.log('highest price: ' + highestPrice);
-				}
+        },
+        initializeSlider : function() {
 
-			}
+            var priceRangeSlider = document.getElementById('priceRangeSlider');
+
+            // Set initial min and max value
+            var cars = store.getState().toJS()['app']['vehicles']['availableVehicles'];
+            if (cars != null) {
+                for (var price in cars) {
+                    var lowestPrice = Number.POSITIVE_INFINITY;
+                    var highestPrice = 0;
+                    var tmp;
+                    var tmp2;
+                    for (var i=cars.length-1; i>=0; i--) {
+                        var carStatus = cars[i]['status'];
+                        if (carStatus == "AVAILABLE_AT_RETAIL_RATE") {
+                            var tmp = cars[i]['charges']['PAYLATER']['total_price_view']['amount'];
+                            var tmp2 = cars[i]['charges']['PAYLATER']['total_price_view']['amount'];
+                            
+                            if (tmp < lowestPrice) lowestPrice = Math.floor(tmp);
+                            if (tmp2 > highestPrice) highestPrice = Math.ceil(tmp2);
+                        }
+                    }
+                    if (lowestPrice == "Infinity") lowestPrice = "--";
+                    if (highestPrice == "Infinity") highestPrice = "--";
+                    isoTest.carCostLow[cars] = lowestPrice;
+                    isoTest.carCostHigh[cars] = highestPrice;
+                    //console.log('lowest price: ' + lowestPrice);
+                    //console.log('highest price: ' + highestPrice);
+                }
+            }
+
+            // noUiSlider - slider plugin
+            if (!document.querySelector('#priceRangeSlider.noUi-target')) {
+                noUiSlider.create(priceRangeSlider, {
+                    start: [isoTest.carCostLow[cars], isoTest.carCostHigh[cars]],
+                    connect: true,
+                    step: 1,
+                    behaviour: 'tap-drag',
+                    tooltips: true,
+                    // wNumb - currency formatting plugin
+                    format: wNumb({
+                        decimals: 0,
+                        thousand: ',',
+                        prefix: '$',
+                    }),
+                    range: {
+                        'min': isoTest.carCostLow[cars],
+                        'max': isoTest.carCostHigh[cars]
+                    }
+                });
+            }
+
+            // Set currency symbol
+            var currency = store.getState().toJS()['app']['vehicles']['availableVehicles'][0]['charges']['PAYLATER']['total_price_view']['symbol'];
+            if (currency == "€") {
+                priceRangeSlider.noUiSlider.updateOptions({
+                   format: wNumb({
+                        decimals: 0,
+                        thousand: ',',
+                        prefix: '€',
+                    }), 
+                });
+            }
+
+            // Accessibility - skip handles
+            helpers.elementLoaded('.noUi-handle-upper', function() {
+                document.querySelector('.noUi-handle-lower').setAttribute('tabindex','-1');
+                document.querySelector('.noUi-handle-upper').setAttribute('tabindex','-1');
+            });
+
+        },
+        updateSlider : function() {
+
+            // Set price in data attribute for each car listing
+            var priceTotalFirst = document.querySelectorAll('.price-tile:nth-of-type(2) .price-tile__amount .unit');
+            for (var j = 0; j < priceTotalFirst.length; j++) {
+              var total = priceTotalFirst[j].innerText;
+              //console.log(total);
+              priceTotalFirst[j].closest('.vehicle-select__main > .vehicle-list .vehicle-list__item').setAttribute('data-price-total', total);
+            }
 
 
-			var priceRangeSlider = document.getElementById('priceRangeSlider');
-			var input0 = document.getElementById('input-with-keypress-0');
-			var input1 = document.getElementById('input-with-keypress-1');
-			var inputs = [input0, input1];
+            var priceRangeSlider = document.getElementById('priceRangeSlider');
+            var input0 = document.getElementById('input-with-keypress-0');
+            var input1 = document.getElementById('input-with-keypress-1');
+            var inputs = [input0, input1];
 
-			// noUiSlider - slider plugin
-			noUiSlider.create(priceRangeSlider, {
-			    start: [isoTest.carCostLow[cars], isoTest.carCostHigh[cars]],
-			    connect: true,
-			    step: 1,
-			    behaviour: 'tap-drag',
-			    tooltips: true,
-			    // wNumb - currency formatting plugin
-			    format: wNumb({
-			        decimals: 0,
-			        thousand: ',',
-			        prefix: '$',
-			    }),
-			    range: {
-			        'min': isoTest.carCostLow[cars],
-			        'max': isoTest.carCostHigh[cars]
-			    }
-			});
-
-
-			// Set price in data attribute for each car listing
-			var priceTotalFirst = document.querySelectorAll('.price-tile:nth-of-type(2) .price-tile__amount .unit');
-			for (var j = 0; j < priceTotalFirst.length; j++) {
-			  var total = priceTotalFirst[j].innerText;
-			  //console.log(total);
-			  priceTotalFirst[j].closest('.vehicle-select__main > .vehicle-list .vehicle-list__item').setAttribute('data-price-total', total);
-			}
-
-
+            
             // Update car list on slider change
             priceRangeSlider.noUiSlider.on('update', function (values, handle) {
                 inputs[handle].value = values[handle];
@@ -521,121 +553,131 @@
                     var distanceSquared = Math.pow(handleLowerX - handleUpperX, 2) + Math.pow(handleLowerY - handleUpperY, 2);
                     var distance = Math.sqrt(distanceSquared);
                     //console.log(distance);
-                    if (distance < 35) {
+                    
+
+                    if (distance > 45) {
+                        document.querySelector('.noUi-handle-lower .noUi-tooltip').style.left = '50%';
+                        document.querySelector('.noUi-handle-upper .noUi-tooltip').style.left = '50%';
+                    } else if (distance < 45 && distance > 20){
                         document.querySelector('.noUi-handle-lower .noUi-tooltip').style.left = 'calc('+distance+'% - 20%)';
                         document.querySelector('.noUi-handle-upper .noUi-tooltip').style.left = 'calc(100% - '+distance+'% + 20%)';
                     } else {
-                        document.querySelector('.noUi-handle-lower .noUi-tooltip').style.left = '50%';
-                        document.querySelector('.noUi-handle-upper .noUi-tooltip').style.left = '50%';
+                        document.querySelector('.noUi-handle-lower .noUi-tooltip').style.left = 'calc('+distance+'% - 50%)';
+                        document.querySelector('.noUi-handle-upper .noUi-tooltip').style.left = 'calc(100% - '+distance+'% + 50%)';
                     }
+                }
+            });
+        
+
+        },
+        eventTracking : function() {
+            var priceRangeSlider = document.getElementById('priceRangeSlider');
+            var input0 = document.getElementById('input-with-keypress-0');
+            var input1 = document.getElementById('input-with-keypress-1');
+            var inputs = [input0, input1];
+
+
+            // Listen to keydown events on the input field.
+            inputs.forEach(function (input, handle) {
+
+                input.addEventListener('change', function () {
+                    priceRangeSlider.noUiSlider.setHandle(handle, this.value);
+                    // Input tracking
+                    var linkName = 'Slider Input Updated';
+                    s.linkTrackVars = 'eVar20';
+                    s.eVar20 = linkName;
+                    s.tl(this, 'o', linkName);
+                });
+
+                input.addEventListener('keydown', function (e) {
+
+                    var values = priceRangeSlider.noUiSlider.get();
+                    var value = Number(values[handle]);
+                    // [[handle0_down, handle0_up], [handle1_down, handle1_up]]
+                    var steps = priceRangeSlider.noUiSlider.steps();
+                    // [down, up]
+                    var step = steps[handle];
+                    var position;
+                    // 13 is enter,
+                    // 38 is key up,
+                    // 40 is key down.
+                    switch (e.which) {
+
+                        case 13:
+                            priceRangeSlider.noUiSlider.setHandle(handle, this.value);
+                            break;
+
+                        case 38:
+                            // Get step to go increase slider value (up)
+                            position = step[1];
+                            // false = no step is set
+                            if (position === false) {
+                                position = 1;
+                            }
+                            // null = edge of slider
+                            if (position !== null) {
+                                priceRangeSlider.noUiSlider.setHandle(handle, value + position);
+                            }
+                            break;
+
+                        case 40:
+                            position = step[0];
+                            if (position === false) {
+                                position = 1;
+                            }
+                            if (position !== null) {
+                                priceRangeSlider.noUiSlider.setHandle(handle, value - position);
+                            }
+                            break;
+                    }
+                });
+            });
+
+
+            // Fire tag with slider values on load
+            var values = priceRangeSlider.noUiSlider.get(); 
+            isoTest.fireSliderTag('Price Slider Initial: ', values);
+
+
+            // Listen for click events 
+            document.addEventListener('click', function(event) {
+                // Fire tag with slider values on vehicle selection
+                if (event.target.matches('.vehicle-pricing__button--select')) {
+                    var values = priceRangeSlider.noUiSlider.get(); 
+                    isoTest.fireSliderTag('Price Slider Final: ', values);
+                }
+                if (event.target.closest('.noUi-handle')) {
+                    var linkName = 'Slider Handle Dragged';
+                    s.linkTrackVars = 'eVar20';
+                    s.eVar20 = linkName;
+                    s.tl(this, 'o', linkName);
+                }
+                // Listen for filters
+                if (event.target.closest('.checkbox__label-checkbox')) {
+                    isoTest.updateSlider(); 
+                }
+                // Clear filters
+                if (event.target.closest('.vehicle-filter__header-link')) {
+                    isoTest.updateSlider();
+                    priceRangeSlider.noUiSlider.set([0,999999999]);
                 }
             });
 
 
-			// Set currency symbol
-			var currency = store.getState().toJS()['app']['vehicles']['availableVehicles'][0]['charges']['PAYLATER']['total_price_view']['symbol'];
-			if (currency == "€") {
-				priceRangeSlider.noUiSlider.updateOptions({
-			       format: wNumb({
-			       		decimals: 0,
-			        	thousand: ',',
-				        prefix: '€',
-				    }), 
-			    });
-			}
-
-
-			// Listen for 'clear filters'
-			document.querySelector('.vehicle-filter__header-link').addEventListener('click', function (e) {
-				priceRangeSlider.noUiSlider.updateOptions({
-			        start: [isoTest.carCostLow[cars], isoTest.carCostHigh[cars]],
-			        range: {
-				        'min': isoTest.carCostLow[cars],
-				        'max': isoTest.carCostHigh[cars]
-				    }
-			    });
-			}); 
-
-
-			// Listen for slider drag
-			document.addEventListener('click', function(event) {
-				if (event.target.matches('.noUi-touch-area')) {
-      				var linkName = 'Slider Handle Dragged';
+            // Attaching touch events directly to elements for performance
+            var sliderHandles = document.querySelectorAll('.noUi-touch-area');
+            for (var i = 0; i < sliderHandles.length; i++) {
+                sliderHandles[i].addEventListener('touchend', function(event) {
+                    // Listen for slider drag
+                    var linkName = 'Slider Handle Dragged';
                     s.linkTrackVars = 'eVar20';
-      				s.eVar20 = linkName;
-      				s.tl(this, 'o', linkName);
-				}
-			});
+                    s.eVar20 = linkName;
+                    s.tl(this, 'o', linkName);
+                });    
+            } 
+  
 
-
-			// Listen to keydown events on the input field.
-			inputs.forEach(function (input, handle) {
-
-			    input.addEventListener('change', function () {
-			        priceRangeSlider.noUiSlider.setHandle(handle, this.value);
-			        // Input tracking
-			        var linkName = 'Slider Input Updated';
-			        s.linkTrackVars = 'eVar20';
-					s.eVar20 = linkName;
-					s.tl(this, 'o', linkName);
-			    });
-
-			    input.addEventListener('keydown', function (e) {
-
-			        var values = priceRangeSlider.noUiSlider.get();
-			        var value = Number(values[handle]);
-			        // [[handle0_down, handle0_up], [handle1_down, handle1_up]]
-			        var steps = priceRangeSlider.noUiSlider.steps();
-			        // [down, up]
-			        var step = steps[handle];
-			        var position;
-			        // 13 is enter,
-			        // 38 is key up,
-			        // 40 is key down.
-			        switch (e.which) {
-
-			            case 13:
-			                priceRangeSlider.noUiSlider.setHandle(handle, this.value);
-			                break;
-
-			            case 38:
-			                // Get step to go increase slider value (up)
-			                position = step[1];
-			                // false = no step is set
-			                if (position === false) {
-			                    position = 1;
-			                }
-			                // null = edge of slider
-			                if (position !== null) {
-			                    priceRangeSlider.noUiSlider.setHandle(handle, value + position);
-			                }
-			                break;
-
-			            case 40:
-			                position = step[0];
-			                if (position === false) {
-			                    position = 1;
-			                }
-			                if (position !== null) {
-			                    priceRangeSlider.noUiSlider.setHandle(handle, value - position);
-			                }
-			                break;
-			        }
-			    });
-			});
-
-     		// Fire tag with slider values on load
-     		var values = priceRangeSlider.noUiSlider.get(); 
-	      	isoTest.fireSliderTag('Price Slider Initial: ', values);
-	      	// Fire tag with slider values on vehicle selection
-	      	document.addEventListener('click', function (event) {
-	        	if (event.target.matches('.vehicle-pricing__button--select')) {
-	        		var values = priceRangeSlider.noUiSlider.get(); 
-	          		isoTest.fireSliderTag('Price Slider Final: ', values);
-	        	}
-	      	});
-
-		},
+        },
 	    fireSliderTag : function(title, value) {
 	        var linkName = title + value;
 			s.linkTrackVars = 'eVar89';
