@@ -1,9 +1,13 @@
 <style>
-@media (max-width: 799px) {
+.special-carousel-nav-container {
+	display: none;
+}
+
+@media only screen and (max-width: 799px) {
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
-	  border-bottom: none;
-	  box-shadow: 2px 2px 3px #dddddd;
-	  display: flex;
+		border-bottom: none;
+		box-shadow: 2px 2px 3px #dddddd;
+		display: flex;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .text-capsule-tile__image {
@@ -13,7 +17,7 @@
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper {
 		margin-left: 16px;
-	  text-align: left;
+		text-align: left;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__heading {
@@ -36,30 +40,31 @@
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-list {
 		height: 120px;
-	  position: relative;
+		position: relative;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item {
-    left: 0px;
-    height: 100%;
-    opacity: 0;
-    position: absolute;
-    top: 0px;
-    -webkit-transition: opacity 1s;
-    -moz-transition: opacity 1s;
-    -o-transition: opacity 1s;
-    transition: opacity 1s;
-    width: 100%;
-    z-index: 1;
+	    left: 0px;
+	    height: 100%;
+	    opacity: 0;
+	    position: absolute;
+	    top: 0px;
+	    -webkit-transition: opacity 1s;
+	    -moz-transition: opacity 1s;
+	    -o-transition: opacity 1s;
+	    transition: opacity 1s;
+	    width: 100%;
+	    z-index: 1;
 	}
 
 	.two-up-three-up.section.iso-offer-section .showing{
-    opacity: 1;
-    z-index: 2;
+	    opacity: 1;
+	    z-index: 2;
 	}
 
 	.special-carousel-nav-container {
 		background: #f3f3f3;
+		display: block;
 		height: 29px;
 	}
 
@@ -84,25 +89,25 @@
 	}
 }
 
-@media (max-width: 48.75rem) {
+@media only screen and (max-width: 48.75rem) {
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
 		padding: 20px 4% 10px 4%;
 	}
 }
 
-@media (max-width: 687px) { 
+@media only screen and (max-width: 687px) { 
 	.two-up-three-up.section.iso-offer-section .text-capsule-list {
 		height: 135px;
 	}
 }
 
-@media (max-width: 500px) {
+@media only screen and (max-width: 500px) {
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper {
 		margin-left: 14px;
 	}
 }
 
-@media (max-width: 395px) { 
+@media only screen and (max-width: 395px) { 
 	.two-up-three-up.section.iso-offer-section .text-capsule-list {
 		height: 156px;
 	}
@@ -117,13 +122,13 @@
 		test : 'Homepage 3-Up Tiles Mobile Layout',
 		creative : 'Challenger 1',
 		selector: '.two-up-three-up.section .text-capsule-list',
-		buttons: ' <div class="special-carousel-nav-container">\
-								<div class="special-carousel-nav">\
-							    <button class="special-carousel-nav-item active" id="special-tab-1"></button>\
-							    <button class="special-carousel-nav-item" id="special-tab-2"></button>\
-							    <button class="special-carousel-nav-item" id="special-tab-3""></button>\
-							  </div>\
-						  </div>',
+		buttons: '<div class="special-carousel-nav-container">\
+						<div class="special-carousel-nav">\
+					    	<button class="special-carousel-nav-item active" id="special-tab-1"></button>\
+					    	<button class="special-carousel-nav-item" id="special-tab-2"></button>\
+					    	<button class="special-carousel-nav-item" id="special-tab-3""></button>\
+					  	</div>\
+				  	</div>',
 		slideCarousel: '',
 		currentSlide: 0,
 		slides: '.two-up-three-up.section.iso-offer-section .text-capsule-list .text-capsule-item',
@@ -162,6 +167,8 @@
 			isoTest.addEvents();
 		},
 		updateLayout : function() {
+			isoTest.log('updateLayout()');
+
 			document.querySelectorAll('.two-up-three-up.section')[0].classList.add('iso-offer-section');
 
 			var sections = document.querySelectorAll('.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile');
@@ -179,6 +186,8 @@
 			document.querySelector('.iso-offer-section').insertAdjacentHTML('beforeend', isoTest.buttons);
 		},
 		newSlide : function() {
+			isoTest.log('newSlide()');
+
 			for(var i = 0; i < isoTest.slides.length; i++) {
 				if (i == isoTest.currentSlide) {
 					isoTest.slides[i].classList.add('showing');
@@ -196,6 +205,8 @@
 			}
 		},
 		updateCarousel : function() {
+			isoTest.log('updateCarousel()');
+
 			isoTest.slides[isoTest.currentSlide].className = 'text-capsule-item';
 			isoTest.tabs[isoTest.currentSlide].className = 'special-carousel-nav-item';
 			isoTest.currentSlide = (isoTest.currentSlide+1)%isoTest.slides.length;
@@ -203,6 +214,8 @@
 			isoTest.tabs[isoTest.currentSlide].className = 'special-carousel-nav-item active';
 		},
 		addEvents : function() {
+			isoTest.log('addEvents()');
+
 			for(var i = 0; i < isoTest.tabs.length; i++) {
 				isoTest.tabs[i].addEventListener('click', function(e){
 					window.clearInterval(isoTest.slideCarousel);
@@ -219,9 +232,34 @@
 					}
 
 					isoTest.newSlide();
-						isoTest.slideCarousel = window.setInterval(function(){isoTest.updateCarousel();},3000);
-		    }, false);
+					isoTest.slideCarousel = window.setInterval(function(){isoTest.updateCarousel();},3000);
+		   		}, false);
 			}
+
+			var tile1 = document.querySelectorAll('.two-up-three-up.section')[0].querySelectorAll('.text-capsule-item')[0];
+			var tile2 = document.querySelectorAll('.two-up-three-up.section')[0].querySelectorAll('.text-capsule-item')[1];
+			var tile3 = document.querySelectorAll('.two-up-three-up.section')[0].querySelectorAll('.text-capsule-item')[2];
+
+			tile1.addEventListener('click', function(event) {
+				isoTest.fireTag(this, "Tile One");
+			}, false);
+
+			tile2.addEventListener('click', function(event) {
+				isoTest.fireTag(this, "Tile Two");
+			}, false);
+
+			tile3.addEventListener('click', function(event) {
+				isoTest.fireTag(this, "Tile Three");
+			}, false);
+		},
+		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
+			
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){

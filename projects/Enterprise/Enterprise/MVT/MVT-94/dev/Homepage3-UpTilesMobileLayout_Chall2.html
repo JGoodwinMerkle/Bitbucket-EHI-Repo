@@ -3,18 +3,18 @@
 	.two-up-three-up.section.iso-offer-section .text-capsule-list {
 		background: white;
 		border-bottom: none;
-	  border-top: 1px solid #c3c3c3;
+		border-top: 1px solid #c3c3c3;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item {
 		border-bottom: 1px solid #c3c3c3;
-	  padding: 0;
+		padding: 0;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
-	  border: none;
-	  box-shadow: none;
-	  display: flex;
+		border: none;
+		box-shadow: none;
+		display: flex;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .text-capsule-tile__image {
@@ -25,7 +25,7 @@
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper {
 		margin-left: 16px;
-	  text-align: left;
+		text-align: left;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__heading {
@@ -103,6 +103,36 @@
 				sections[i].querySelector('.iso-wrapper').appendChild(header);
 				sections[i].querySelector('.iso-wrapper').appendChild(text);
 			}
+
+			isoTest.addEvents();
+		},
+		addEvents: function() {
+			isoTest.log('addEvents()');
+
+			var tile1 = document.querySelectorAll('.two-up-three-up.section')[0].querySelectorAll('.text-capsule-item')[0];
+			var tile2 = document.querySelectorAll('.two-up-three-up.section')[0].querySelectorAll('.text-capsule-item')[1];
+			var tile3 = document.querySelectorAll('.two-up-three-up.section')[0].querySelectorAll('.text-capsule-item')[2];
+
+			tile1.addEventListener('click', function(event) {
+				isoTest.fireTag(this, "Tile One");
+			}, false);
+
+			tile2.addEventListener('click', function(event) {
+				isoTest.fireTag(this, "Tile Two");
+			}, false);
+
+			tile3.addEventListener('click', function(event) {
+				isoTest.fireTag(this, "Tile Three");
+			}, false);
+		},
+		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
+
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
