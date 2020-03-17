@@ -1,0 +1,102 @@
+<style>
+	.vehicle-header__details.fixed {
+		background: #fff;
+    border-bottom: 3px solid #c3c3c3;
+		box-shadow: 0 1px 2px rgba(0,0,0,.12);
+    left: 0;
+    margin: 0;
+    padding: 13px 15px;
+		position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+	}
+	.vehicle-header__details.fixed .vehicle-header__result-total {
+		display:none;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Mobile Header Anchoring',
+		creative : 'Challenger 1',
+		selector: '.cars .vehicle-header__details',
+		header: '.cars .vehicle-header__title h1',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+			window.addEventListener('resize', isoTest.viewChange, false);
+			window.addEventListener('scroll', function(){
+				setTimeout(isoTest.viewChange, 500);
+			}, false);
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			var filters = document.querySelector(isoTest.selector);
+			if(!helpers.isVisible(isoTest.header) && helpers.isVisible('#reservationFlow') && document.body.clientWidth <= 1081){
+				filters.classList.add('fixed');
+			} else {
+				filters.classList.remove('fixed');
+			}
+
+			document.addEventListener('click',function(e){
+				if(e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]')){
+					var t = document.querySelector('#cars h1').getBoundingClientRect().top;
+					window.scrollTo(0,t);
+				}
+			})
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		isVisible: function(ele){
+			var obj = document.querySelector(ele);
+			var rect = obj.getBoundingClientRect();
+		  var elemTop = rect.top;
+		  var elemBottom = rect.bottom;
+		  var isVisible = (elemTop >= 0) || (elemBottom >= 0);
+		  return isVisible;
+		},
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
