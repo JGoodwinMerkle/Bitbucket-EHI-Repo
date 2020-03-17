@@ -69,7 +69,8 @@
 		test : 'Res Widget Copy Swap 2.0',
 		creative : 'Challenger 1',
 		selector: '#continueButton',
-		header: 'h2#branch-page-booking-header,h2.reservation-toggle-header,h1.reservation-toggle-header',
+		header: '.inner-container h2.reservation-toggle-header,.inner-container h1.reservation-toggle-header',
+		branchpage: '.booking-widget h2#branch-page-booking-header',
 		content: {
 			headline: 'Start A Reservation',
 			cta: 'Check Availability'
@@ -89,7 +90,8 @@
 
 		},
 		chall : function() {
-			document.querySelectorAll(isoTest.header)[0].innerText = isoTest.content.headline;
+			var header = enterprise.analytics.pageName == 'branchpage' ? 'branchpage' : 'header';
+			document.querySelectorAll(isoTest[header])[0].innerText = isoTest.content.headline;
 			document.querySelector(isoTest.selector).textContent = isoTest.content.cta;
 		},
 		log : function(obj){
