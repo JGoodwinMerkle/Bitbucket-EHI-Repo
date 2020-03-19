@@ -1,0 +1,115 @@
+<style>
+  #iso-banner {
+    background: #ededed;
+    border-bottom: 1px solid #c3c3c3;
+    padding: 20px;
+    position: relative;
+  }
+  #iso-banner > div {
+    color: #181918;
+    font-size: 15px;
+    text-align: center;
+  }
+  #iso-banner a {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+  #iso-banner strong {
+    font-weight: 700;
+  }
+  #iso-banner br {
+    display: none;
+  }
+  #iso-banner .iso-close {
+    background: none;
+    color: #000;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 14px;
+    padding: 8px 8px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+@media (max-width: 768px){
+  #iso-banner {
+    padding: 15px;
+  }
+}
+@media (max-width: 628px){
+  #iso-banner br {
+    display: block;
+  }
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Under Nav Promo Offer',
+		creative : 'Challenger 0',
+		selector: '.breadcrumb-band',
+    template: '<div id="iso-banner"><div><strong>Are you a college student?</strong> You can rent now. <br />Underage fee waived until 5/31/2020. <a href="/en/car-rental/deals/young-driver.html">Click Here</a>.</div><button class="iso-close">&times;</button></div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+      if(sessionStorage.getItem('hideBanner') !== 'true'){
+        helpers.elementLoaded(isoTest.selector, function() {
+  				isoTest.log('Test Ready!');
+    				isoTest.chall();
+  			});
+      }
+		},
+		chall : function() {
+      if(!document.querySelector('#iso-banner')){
+        document.querySelector(isoTest.selector).insertAdjacentHTML('afterend',isoTest.template);
+        document.querySelector('#iso-banner button.iso-close').addEventListener('click',function(){
+          var banner = document.querySelector('#iso-banner');
+          banner.parentNode.removeChild(banner);
+          sessionStorage.setItem('hideBanner',true);
+        });
+        document.querySelector('#iso-banner a').addEventListener('click',function(e){
+          isoTest.fireTag(e.target);
+        });
+      }
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
