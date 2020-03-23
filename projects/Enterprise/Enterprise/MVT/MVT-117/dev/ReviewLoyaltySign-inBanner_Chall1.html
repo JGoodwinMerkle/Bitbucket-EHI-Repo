@@ -1,8 +1,20 @@
 <style>
+.pre-expedited-banner.login-banner-desktop {
+	display: flex;
+}
+.pre-expedited-banner.login-banner-mobile {
+	display: none;
+}
 @media (max-width: 46.8em) {	
 	.pre-expedited-banner {
 		border-bottom-width: 1px !important;
 		margin-bottom: 2.5rem !important;
+	}
+	.pre-expedited-banner.login-banner-desktop {
+		display: none;
+	}
+	.pre-expedited-banner.login-banner-mobile {
+		display: flex;
 	}
 }
 </style>
@@ -46,8 +58,22 @@
 		},
 		chall : function() {
 
+			// Clone signin
 			var loginModule = document.querySelector('.pre-expedited-banner');
-			document.querySelector('.aside').insertAdjacentElement('afterbegin',loginModule);
+			var loginModuleMobile = loginModule.cloneNode(true);
+			loginModule.classList.add('login-banner-desktop');
+			loginModuleMobile.classList.add('login-banner-mobile');
+			document.querySelector('.aside').insertAdjacentElement('afterbegin',loginModuleMobile);
+
+			// Event listeners
+			window.addEventListener('click', function (event) {
+				if (event.target.closest('.login-banner-mobile button:first-of-type')) {
+					document.querySelector('.login-banner-desktop button:first-of-type').click();
+				}
+				if (event.target.closest('.login-banner-mobile button:last-of-type')) {
+					document.querySelector('.login-banner-desktop button:last-of-type').click();
+				}
+			}, false);
 
 		},
 		fireTag : function(element, value) {

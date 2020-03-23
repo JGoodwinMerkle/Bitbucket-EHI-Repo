@@ -1,4 +1,22 @@
 <style>
+@media (max-width: 46.8em) {	
+	.pre-expedited-banner {
+		border-bottom-width: 1px !important;
+	}
+	.pre-expedited-banner__description {
+		display: none;
+	}
+	.pre-expedited-banner button:last-of-type {
+		display: none;
+	}
+	.pre-expedited-banner .icon-eplus-logo-black {
+		height: 30px !important;
+		margin-bottom: 10px;
+	}
+	.pre-expedited-banner__content {
+		margin-left: 0 !important;
+	}
+}
 </style>
 <script>
 (function() {
@@ -8,7 +26,7 @@
 		portfolio : 'Enterprise',
 		test : 'Review Loyalty Sign-in Banner',
 		creative : 'Challenger 2',
-		selector: 'body',
+		selector: '.pre-expedited-banner',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -40,7 +58,17 @@
 		},
 		chall : function() {
 
-			// Your code goes here
+			// Styling
+			var loginModule = document.querySelector('.pre-expedited-banner');
+			document.querySelector('.pre-expedited-banner .pre-expedited-banner__title').innerText = 'Sign in and earn points on this trip!';
+			document.querySelector('.pre-expedited-banner button:first-of-type').innerText = 'LOYALTY MEMBER SIGN IN';
+
+			// Event listeners
+			window.addEventListener('click', function (event) {
+				if (event.target.closest('.login-banner-mobile button:first-of-type')) {
+					document.querySelector('.login-banner-desktop button:first-of-type').click();
+				}
+			}, false);
 
 		},
 		fireTag : function(element, value) {
@@ -71,18 +99,6 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
 	}
 
 	isoTest.init();
