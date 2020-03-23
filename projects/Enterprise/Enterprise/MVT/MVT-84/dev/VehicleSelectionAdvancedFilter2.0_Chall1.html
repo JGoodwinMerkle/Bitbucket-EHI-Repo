@@ -388,6 +388,7 @@
 		selector: '.vehicle-select__main > .vehicle-list .vehicle-list__item',
 		carCostLow: {},
 		carCostHigh: {},
+        carQty: 0,
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -522,9 +523,11 @@
             priceRangeSlider.noUiSlider.on('update', function (values, handle) {
                 inputs[handle].value = values[handle];
                 //console.log(values);
+                isoTest.carQty = 0;
 
                 var nodes = document.querySelectorAll('[data-price-total]');
                 for (var $el of nodes) {
+                    
                     // Convert strings to numbers and remove non-number characters
                     var priceTotal = ($el.getAttribute('data-price-total')).replace(/\,/g,'');
                     var lowValue = Number(values[0].replace(/[$€,]/g,''));
@@ -535,6 +538,8 @@
                     if (priceTotal >= lowValue && priceTotal <= highValue) {
                         //console.log('between values');
                         $el.classList.remove('hide-filtered');
+                        // Increment carQty
+                        isoTest.carQty++;
                     } else {
                         //console.log('outside values');
                         $el.classList.add('hide-filtered');
@@ -566,6 +571,7 @@
                         document.querySelector('.noUi-handle-upper .noUi-tooltip').style.left = 'calc(100% - '+distance+'% + 50%)';
                     }
                 }
+                document.querySelector('.vehicle-header__result-total').innerText = isoTest.carQty + ' Results';
             });
         
 
