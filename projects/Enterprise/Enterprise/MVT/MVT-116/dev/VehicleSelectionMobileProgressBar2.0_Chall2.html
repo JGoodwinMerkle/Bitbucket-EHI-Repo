@@ -42,11 +42,11 @@
 		creative : 'Challenger 2',
 		selector: '[data-stephash="dateTime"] .step-completed',
 		menuItems: {
-			dateTimePickup: ReservationStateTree.get()["view"]["pickup"]["date"]["_i"],
-			dateTimeDropoff: ReservationStateTree.get()["view"]["dropoff"]["date"]["_i"],
+			dateTimePickup: ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickupLocation','dateTime']),
+			dateTimeDropoff: ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','returnLocation','dateTime']),
 			location: (document.querySelector('[data-stephash="location"] .step__step-value') ? document.querySelector('[data-stephash="location"] .step__step-value').innerHTML : null),
-			locationPickup: (document.querySelector('[data-stephash="location/pickup"] .step__step-value') ? document.querySelector('[data-stephash="location/pickup"] .step__step-value').innerHTML : null),
-			locationDropoff: (document.querySelector('[data-stephash="location/dropoff"] .step__step-value') ? document.querySelector('[data-stephash="location/dropoff"] .step__step-value').innerHTML : null),
+			locationpickup: (document.querySelector('[data-stephash="location/pickup"] .step__step-value') ? document.querySelector('[data-stephash="location/pickup"] .step__step-value').innerHTML : null),
+			locationdropoff: (document.querySelector('[data-stephash="location/dropoff"] .step__step-value') ? document.querySelector('[data-stephash="location/dropoff"] .step__step-value').innerHTML : null),
 			cars: (document.querySelector('[data-stephash="cars"] .step__step-value') ? document.querySelector('[data-stephash="cars"] .step__step-value').innerHTML : null)
 		},
 		months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -64,18 +64,15 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});
-			
-			window.addEventListener('hashchange', isoTest.viewChange, false);
-		
+			isoTest.viewChange();
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);		
 		},
 		viewChange : function(){
 			if(/location|cars|extras/.test(location.hash)){
 				isoTest.log('VIEW CHANGE ----');
 				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.log('Test Ready!');
 					isoTest.chall();
 				});
 			}
@@ -83,15 +80,32 @@
 		chall : function() {
 			isoTest.log('chall');
 
+			document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerHTML = '<span class="iso-header"></span><i class="arrow down"></i>';
+
+			isoTest.updateDateTime();
+			isoTest.updateLocationRoundTrip();
+			isoTest.updateLocationOneWay("pickup");
+			isoTest.updateLocationOneWay("dropoff");
+			isoTest.updateCar();
+
+			isoTest.checkPageUpdate();
+
+			if (/extras/.test(location.hash)) {
+				isoTest.checkForCarUpgrade();
+			}
+		},
+		checkPageUpdate : function() {
+			isoTest.log('checkPageUpdate()');
+
 			isoTest.log(isoTest.menuItems);
 
 			var checkMenuItems = setInterval(function(){
 				var newMenuItems = {
-					dateTimePickup: ReservationStateTree.get()["view"]["pickup"]["date"]["_i"],
-					dateTimeDropoff: ReservationStateTree.get()["view"]["dropoff"]["date"]["_i"],
+					dateTimePickup: ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickupLocation','dateTime']),
+					dateTimeDropoff: ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','returnLocation','dateTime']),
 					location: (document.querySelector('[data-stephash="location"] .step__step-value') ? document.querySelector('[data-stephash="location"] .step__step-value').innerHTML : null),
-					locationPickup: (document.querySelector('[data-stephash="location/pickup"] .step__step-value') ? document.querySelector('[data-stephash="location/pickup"] .step__step-value').innerHTML : null),
-					locationDropoff: (document.querySelector('[data-stephash="location/dropoff"] .step__step-value') ? document.querySelector('[data-stephash="location/dropoff"] .step__step-value').innerHTML : null),
+					locationpickup: (document.querySelector('[data-stephash="location/pickup"] .step__step-value') ? document.querySelector('[data-stephash="location/pickup"] .step__step-value').innerHTML : null),
+					locationdropoff: (document.querySelector('[data-stephash="location/dropoff"] .step__step-value') ? document.querySelector('[data-stephash="location/dropoff"] .step__step-value').innerHTML : null),
 					cars: (document.querySelector('[data-stephash="cars"] .step__step-value') ? document.querySelector('[data-stephash="cars"] .step__step-value').innerHTML : null)
 				};
 
@@ -116,19 +130,19 @@
 					isoTest.updateLocationRoundTrip();
 				}
 
-				if (isoTest.menuItems["locationPickup"] != newMenuItems["locationPickup"]) {
-					isoTest.log("locationPickup not the same");
-					isoTest.log(newMenuItems["locationPickup"]);
-					isoTest.menuItems["locationPickup"] = newMenuItems["locationPickup"];
-					isoTest.updateLocationOneWayPickup();
+				if (isoTest.menuItems["locationpickup"] != newMenuItems["locationpickup"]) {
+					isoTest.log("locationpickup not the same");
+					isoTest.log(newMenuItems["locationpickup"]);
+					isoTest.menuItems["locationpickup"] = newMenuItems["locationpickup"];
+					isoTest.updateLocationOneWay("pickup");
 				}
 				
 
-				if (isoTest.menuItems["locationDropoff"] != newMenuItems["locationDropoff"]) {
-					isoTest.log("locationDropoff not the same");
-					isoTest.log(newMenuItems["locationDropoff"]);
-					isoTest.menuItems["locationDropoff"] = newMenuItems["locationDropoff"];
-					isoTest.updateLocationOneWayDropoff();
+				if (isoTest.menuItems["locationdropoff"] != newMenuItems["locationdropoff"]) {
+					isoTest.log("locationdropoff not the same");
+					isoTest.log(newMenuItems["locationdropoff"]);
+					isoTest.menuItems["locationdropoff"] = newMenuItems["locationdropoff"];
+					isoTest.updateLocationOneWay("dropoff");
 				}
 
 				if (isoTest.menuItems["cars"] != newMenuItems["cars"]) {
@@ -140,18 +154,7 @@
 			},100);
 
 			setTimeout(function(){ clearInterval(checkMenuItems) }, 10000);
-
-			document.querySelector('.reservation-steps-container .mobile-reservation-nav-slider').innerHTML = '<span class="iso-header"></span><i class="arrow down"></i>';
-
-			isoTest.updateDateTime();
-			isoTest.updateLocationRoundTrip();
-			isoTest.updateLocationOneWayPickup();
-			isoTest.updateLocationOneWayDropoff();
-			isoTest.updateCar();
-			if (/extras/.test(location.hash)) {
-				isoTest.checkForCarUpgrade();
-			}
-		},
+		},	
 		checkForCarUpgrade : function() {
 			isoTest.log("checkForCarUpgrade()");
 
@@ -203,9 +206,9 @@
 				isoTest.log(dropoffTime);
 
 				if (!dateTimeHeader) {
-					document.querySelector('.iso-header').insertAdjacentHTML('afterbegin', '<span class="iso-header-date"><span class="iso-pickup-datetime">' + pickupDate + ' @ ' + pickupTime + '</span>  - <span class="iso-dropoff-datetime">' + dropoffDate + ' @ ' + dropoffTime + '</span></span>');
+					document.querySelector('.iso-header').insertAdjacentHTML('afterbegin', '<span class="iso-header-date"><span class="iso-pickup-datetime">' + pickupDate + ' @ ' + pickupTime + '</span> - <span class="iso-dropoff-datetime">' + dropoffDate + ' @ ' + dropoffTime + '</span></span>');
 				} else {
-					dateTimeHeader.innerHTML = '<span class="iso-pickup-datetime">' + pickupDate + ' @ ' + pickupTime + '</span>  - <span class="iso-dropoff-datetime">' + dropoffDate + ' @ ' + dropoffTime + '</span>';
+					dateTimeHeader.innerHTML = '<span class="iso-pickup-datetime">' + pickupDate + ' @ ' + pickupTime + '</span> - <span class="iso-dropoff-datetime">' + dropoffDate + ' @ ' + dropoffTime + '</span>';
 				}
 			}
 		},
@@ -240,65 +243,38 @@
 				}
 			}
 		},
-		updateLocationOneWayPickup: function() {
-			isoTest.log('updateLocationOneWayPickup()');
+		updateLocationOneWay: function(step) {
+			isoTest.log('updateLocationOneWay()');
 
-			var locationPickupStep = document.querySelector('[data-stephash="location/pickup"] .step-completed');
-			var pickupLocation = '';
-			var locationHeaderPickup = document.querySelector('.iso-header-location.iso-location-pickup');
+			var locationStep = document.querySelector('[data-stephash="location/'+step+'"] .step-completed');
+			var location = '';
+			var locationHeader = document.querySelector('.iso-header-location.iso-location-'+step);
 
-			if (locationPickupStep != null) {
-				if ((isoTest.menuItems["locationPickup"] != "Select") && (isoTest.menuItems["locationPickup"] != "SELECT") && (isoTest.menuItems["locationPickup"] != null)) {
+			if (locationStep != null) {
+				if ((isoTest.menuItems["location"+step+""] != "Select") && (isoTest.menuItems["location"+step+""] != "SELECT") && (isoTest.menuItems["location"+step+""] != null)) {
 
-					pickupLocation = isoTest.menuItems["locationPickup"];
-					isoTest.log(pickupLocation);
+					location = isoTest.menuItems["location"+step+""];
+					isoTest.log(location);
 
-					if (!locationHeaderPickup) {
-						document.querySelector('.iso-header').insertAdjacentHTML('beforeend','<br class="iso-header-pickup-location-break"><span class="iso-header-location iso-location-pickup">' + pickupLocation + '</span>');
+					if (!locationHeader) {
+						if (document.querySelector('.iso-header-dropoff-location-break')) {
+							document.querySelector('.iso-header-dropoff-location-break').insertAdjacentHTML('beforebegin','<br class="iso-header-'+step+'-location-break"><span class="iso-header-location iso-location-'+step+'">' + location + '</span>');
+						} else {
+							document.querySelector('.iso-header').insertAdjacentHTML('beforeend','<br class="iso-header-'+step+'-location-break"><span class="iso-header-location iso-location-'+step+'">' + location + '</span>');
+						}
 					} else {
-						locationHeaderPickup.innerHTML = pickupLocation;
+						locationHeader.innerHTML = location;
 					}
 				} else {
-					if (locationHeaderPickup) {
-						locationHeaderPickup.remove();
-						document.querySelector('.iso-header-pickup-location-break').remove();
+					if (locationHeader) {
+						locationHeader.remove();
+						document.querySelector('.iso-header-'+step+'-location-break').remove();
 					}
 				}
 			} else {
-				if (locationHeaderPickup) {
-					locationHeaderPickup.remove();
-					document.querySelector('.iso-header-pickup-location-break').remove();
-				}
-			}
-		},
-		updateLocationOneWayDropoff: function() {
-			isoTest.log('updateLocationOneWayDropoff()');
-
-			var locationDropoffStep = document.querySelector('[data-stephash="location/dropoff"] .step-completed');
-			var dropoffLocation = '';
-			var locationHeaderDropoff = document.querySelector('.iso-header-location.iso-location-dropoff');
-
-			if (locationDropoffStep != null) {
-				if ((isoTest.menuItems["locationDropoff"] != "Select") && (isoTest.menuItems["locationDropoff"] != "SELECT") && (isoTest.menuItems["locationDropoff"] != null) && (isoTest.menuItems["locationDropoff"] != isoTest.menuItems["locationPickup"])) {
-
-					dropoffLocation = isoTest.menuItems["locationDropoff"];
-					isoTest.log(dropoffLocation);
-
-					if (!locationHeaderDropoff) {
-						document.querySelector('.iso-header').insertAdjacentHTML('beforeend','<br class="iso-header-dropoff-location-break"><span class="iso-header-location iso-location-dropoff">' + dropoffLocation + '</span>');
-					} else {
-						locationHeaderDropoff.innerHTML = dropoffLocation;
-					}
-				} else {
-					if (dropoffLocation) {
-						dropoffLocation.remove();
-						document.querySelector('.iso-header-dropoff-location-break').remove();
-					}
-				}
-			} else {
-				if (dropoffLocation) {
-					dropoffLocation.remove();
-					document.querySelector('.iso-header-dropoff-location-break').remove();
+				if (locationHeader) {
+					locationHeader.remove();
+					document.querySelector('.iso-header-'+step+'-location-break').remove();
 				}
 			}
 		},
