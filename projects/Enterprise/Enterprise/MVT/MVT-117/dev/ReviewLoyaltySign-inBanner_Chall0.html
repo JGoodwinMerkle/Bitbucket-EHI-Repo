@@ -8,7 +8,7 @@
 		portfolio : 'Enterprise',
 		test : 'Review Loyalty Sign-in Banner',
 		creative : 'Challenger 0',
-		selector: 'body',
+		selector: '.pre-expedited-banner',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -40,14 +40,24 @@
 		},
 		chall : function() {
 
-			// Your code goes here
+			// Event listeners
+			window.addEventListener('click', function (event) {
+				if (event.target.closest('.login-banner-mobile button:first-of-type')) {
+					document.querySelector('.login-banner-desktop button:first-of-type').click();
+					isoTest.fireTag(this,'Sign-in: Enterprise Plus');
+				}
+				if (event.target.closest('.login-banner-mobile button:last-of-type')) {
+					document.querySelector('.login-banner-desktop button:last-of-type').click();
+					isoTest.fireTag(this,'Sign-in: Emerald Club');
+				}
+			}, false);
 
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
 			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){

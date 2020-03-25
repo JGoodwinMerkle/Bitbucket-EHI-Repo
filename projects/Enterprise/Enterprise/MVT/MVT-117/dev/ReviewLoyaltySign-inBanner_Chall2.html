@@ -1,6 +1,7 @@
 <style>
 @media (max-width: 46.8em) {	
 	.pre-expedited-banner {
+		align-items: center; 
 		border-bottom-width: 1px !important;
 	}
 	.pre-expedited-banner__description {
@@ -10,8 +11,9 @@
 		display: none;
 	}
 	.pre-expedited-banner .icon-eplus-logo-black {
-		height: 30px !important;
-		margin-bottom: 10px;
+		height: 26px !important;
+		margin-bottom: 13px;
+		width: 29px !important;
 	}
 	.pre-expedited-banner__content {
 		margin-left: 0 !important;
@@ -62,6 +64,7 @@
 			var loginModule = document.querySelector('.pre-expedited-banner');
 			document.querySelector('.pre-expedited-banner .pre-expedited-banner__title').innerText = 'Sign in and earn points on this trip!';
 			document.querySelector('.pre-expedited-banner button:first-of-type').innerText = 'LOYALTY MEMBER SIGN IN';
+			document.querySelector('.pre-expedited-banner button:first-of-type').setAttribute('aria-label','sign into enterprise plus or emerald club');
 
 			// Event listeners
 			window.addEventListener('click', function (event) {
