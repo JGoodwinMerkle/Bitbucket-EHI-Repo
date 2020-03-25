@@ -168,7 +168,7 @@
 		portfolio : 'Enterprise.fr Enterprise.de Enterprise.ie Enterprise.es',
 		test : '(CONV) ENT 013 - Additional Driver Reassurance EU',
 		creative : 'Challenger 2',
-		selector: '#personal-information .field-container.requestPromotion',
+		selector: '#personal-information .field-container .request-consent-section',
 		content: {
 			en : {
 				header: "Let us know if you are thinking of adding an additional driver.",
@@ -273,7 +273,7 @@
 			});
 
 			if (!document.querySelector('.iso-container')) {
-				document.querySelector('#personal-information .field-container.requestPromotion').insertAdjacentHTML('beforebegin', banner);
+				document.querySelector('#personal-information .field-container .request-consent-section').insertAdjacentHTML('beforebegin', banner);
 				document.querySelector('#commit .iso-button-container').insertAdjacentHTML('afterbegin', tooltipContent);
 			}
 
