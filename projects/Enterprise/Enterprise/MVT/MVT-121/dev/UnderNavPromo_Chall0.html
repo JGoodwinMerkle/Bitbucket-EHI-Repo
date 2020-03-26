@@ -50,7 +50,7 @@
 		portfolio : 'Enterprise.com',
 		test : 'Under Nav Promo Offer',
 		creative : 'Challenger 0',
-		selector: '.breadcrumb-band',
+		selector: '.breadcrumb-band, #content-container',
     template: '<div id="iso-banner"><div><strong>Are you a college student?</strong> You can rent now. <br />Underage fee waived until 5/31/2020. <a href="/en/car-rental/deals/young-driver.html">Click Here</a>.</div><button class="iso-close">&times;</button></div>',
 		init : function() {
 
@@ -69,7 +69,8 @@
 		},
 		chall : function() {
       if(!document.querySelector('#iso-banner')){
-        document.querySelector(isoTest.selector).insertAdjacentHTML('afterend',isoTest.template);
+        var bannerSelector = document.querySelector('.breadcrumb-band') ? '.breadcrumb-band' : '#content-container';
+        document.querySelector(bannerSelector).insertAdjacentHTML('afterend',isoTest.template);
         document.querySelector('#iso-banner button.iso-close').addEventListener('click',function(){
           var banner = document.querySelector('#iso-banner');
           banner.parentNode.removeChild(banner);
