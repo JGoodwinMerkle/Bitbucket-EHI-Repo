@@ -8,14 +8,16 @@
 		border-bottom: none;
 		box-shadow: 2px 2px 3px #dddddd;
 		display: flex;
+		padding: 20px 40px 20px 40px;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .text-capsule-tile__image {
 		align-self: center;
-		margin-bottom: 15px;
+		margin-bottom: 0px;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper {
+		align-self: center;
 		margin-left: 16px;
 		text-align: left;
 	}
@@ -26,7 +28,7 @@
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__text {
-		margin-bottom: 10px;
+		margin-bottom: 0px;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__text p {
@@ -35,7 +37,8 @@
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
-		padding: 20px 40px 10px 40px;
+		display: flex;
+		padding: 20px 40px 20px 40px;
 	}
 
 	.two-up-three-up.section.iso-offer-section .text-capsule-list {
@@ -91,7 +94,7 @@
 
 @media only screen and (max-width: 48.75rem) {
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
-		padding: 20px 4% 10px 4%;
+		padding: 20px 4% 20px 4%;
 	}
 }
 
@@ -220,14 +223,17 @@
 				isoTest.tabs[i].addEventListener('click', function(e){
 					window.clearInterval(isoTest.slideCarousel);
 					if (e.target.id == 'special-tab-1') {
+						isoTest.fireTagTabs(this, "3-Up Nav Tab 1");
 						isoTest.currentSlide = 0;
 					}
 
 					if (e.target.id == 'special-tab-2') {
+						isoTest.fireTagTabs(this, "3-Up Nav Tab 2");
 						isoTest.currentSlide = 1;
 					}
 
 					if (e.target.id == 'special-tab-3') {
+						isoTest.fireTagTabs(this, "3-Up Nav Tab 3");
 						isoTest.currentSlide = 2;
 					}
 
@@ -258,6 +264,15 @@
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
 			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTagTabs : function(element, value) {
+			isoTest.log('fireTagTabs()');
+			
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
 			s.eVar20 = linkName;
 			s.tl(this, 'o', linkName);
 		},
