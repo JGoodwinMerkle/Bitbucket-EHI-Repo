@@ -688,6 +688,12 @@
 		viewChange : function(){
 			if(/location/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selectorLocations, function() {
+					if(/dropoff|pickup/.test(location.hash)){
+						if (document.querySelector('.iso-location-filters-modal.iso-modal') != null) {
+							window.clearInterval(isoTest.counter);
+							document.querySelector('.iso-location-filters-modal.iso-modal').remove();
+						}
+					}
 					isoTest.chall();
 				});
 			} else {
@@ -746,9 +752,10 @@
 
 			var sameLocation = ReservationStateTree.get()['model']['sameLocation'];
 			var header = document.querySelectorAll('.location-details .search-results-count span')[0];
+			var checkDropoffStep = document.querySelector('[data-stephash="location/dropoff"] .step-active');
 
 			if (sameLocation != true) {
-				if (document.querySelector('.reservation-step').getAttribute('id') === "location/dropoff") {
+				if ((document.querySelector('.reservation-step').getAttribute('id') === "location/dropoff") || checkDropoffStep) {
 					header.innerHTML = "CHOOSE A RETURN LOCATION";
 				} else {
 					header.innerHTML = "CHOOSE A PICK-UP LOCATION";
