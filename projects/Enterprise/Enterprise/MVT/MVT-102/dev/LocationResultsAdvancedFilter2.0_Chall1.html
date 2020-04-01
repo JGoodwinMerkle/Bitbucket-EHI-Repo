@@ -510,6 +510,8 @@
 			port_of_call : 'false',
 			rail : 'false'
 		},
+		sundayFilter : false,
+		afterHoursFilter : false,
 		counter : '',
 		sundaycounter : '',
 		locationsNumber : '',
@@ -686,7 +688,12 @@
 
 			var checkedLocations = document.querySelectorAll('.checkbox__label-checkbox');
 
-			if (document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0) {
+			var sundayFilter = document.querySelector('#location-search-sunday-open-filter:checked');
+			var afterHoursFilter = document.querySelector('#location-search-after-hours-return-filter:checked');
+
+			var filterLocationsTypeChecked = document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0;
+
+			if (filterLocationsTypeChecked) {
 				var checkedLength = document.querySelectorAll('.checkbox__label-checkbox.checked').length;
 
 				if (isoTest.filtersCheckedNumber != checkedLength) {
@@ -705,6 +712,8 @@
 						isoTest.updatePage(checkedLocationID,'checked');
 					}
 				}
+
+
 			} else {
 				if (isoTest.filtersCheckedNumber != 0) {
 					isoTest.filtersCheckedNumber = 0;
@@ -716,7 +725,37 @@
 					isoTest.checkedFilters[uncheckedboxLocationID] = 'false';
 					isoTest.updatePage(uncheckedboxLocationID,'checked');
 				}
+			}
 
+
+			if (sundayFilter) {
+				if (isoTest.sundayFilter != true) {
+					isoTest.sundayFilter = true;
+				}
+
+				isoTest.updatePageExtraFilters("sunday","checked");
+			} else {
+				if (isoTest.sundayFilter != false) {
+					isoTest.sundayFilter = false;
+					isoTest.updatePageExtraFilters("sunday","unchecked");
+				}
+			}
+
+			if (afterHoursFilter) {
+				if (isoTest.afterHoursFilter != true) {
+					isoTest.afterHoursFilter = true;
+				}
+
+				isoTest.updatePageExtraFilters("afterHours","checked");
+			} else {
+				if (isoTest.afterHoursFilter != false) {
+					isoTest.afterHoursFilter = false;
+					isoTest.updatePageExtraFilters("afterHours","unchecked");
+				}
+			}
+
+
+			if (!sundayFilter && !afterHoursFilter && !filterLocationsTypeChecked) {
 				window.clearInterval(isoTest.counter);
 			}
 
@@ -732,17 +771,18 @@
 			var hasLocations = document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0;
 			var isChecked = document.querySelector('#location-search-open-time-filter:checked');
 			var sundayIsChecked = document.querySelector('#location-search-sunday-open-filter:checked');
+			var afterHoursIsChecked = document.querySelector('#location-search-after-hours-return-filter:checked');
 			isoTest.log(filterHeader);
 			isoTest.log(vehicleTypeFilter);
 			isoTest.log(hasLocations);
 
 			if(!filterHeader.querySelector('.location-search-filter__clear-all')){
-				if(vehicleTypeFilter.innerText == 'All Vehicles' && (hasLocations || sundayIsChecked)){
+				if(vehicleTypeFilter.innerText == 'All Vehicles' && (hasLocations || sundayIsChecked || afterHoursIsChecked)){
 					filterHeader.insertAdjacentHTML('beforeend',isoTest.clearBtn);
 					document.querySelector('.location-search-filter__container .location-search-filter__container-content .iso-clear-btn').classList.remove('iso-hide');
 				}
 			} else {
-				if(vehicleTypeFilter.innerText == 'All Vehicles' && !hasLocations && !isChecked && !sundayIsChecked){
+				if(vehicleTypeFilter.innerText == 'All Vehicles' && !hasLocations && !isChecked && !sundayIsChecked && !afterHoursIsChecked){
 					var clearBtn = filterHeader.querySelector('.location-search-filter__clear-all');
 					filterHeader.removeChild(clearBtn);
 					document.querySelector('.location-search-filter__container .location-search-filter__container-content .iso-clear-btn').classList.add('iso-hide');
@@ -925,83 +965,111 @@
 			desktopFilterArrow.classList.add('icon-nav-carrot-down');
 			desktopFilterArrow.classList.remove('icon-nav-carrot-up-green');
 		},
-		updatePageSundayOpen : function(status) {
-			// isoTest.log("updatePageSundayOpen()");
+		updatePageExtraFilters : function(type,status) {
+			isoTest.log("updatePageExtraFilters()");
+
+			// var sundayFilter = document.querySelector('#location-search-sunday-open-filter:checked');
+			// var afterHoursFilter = document.querySelector('#location-search-after-hours-return-filter:checked');
+
+			var locationFilterTypesChecked = document.querySelectorAll('.checkbox__label-checkbox.checked').length == 0;
+
 
 			var solr = _analytics.solr;
+
 			solr.forEach(function(loc){
-			    // console.log('sundays::: ' + loc.openSundays)
-			    // console.log('id::: ' + loc.peopleSoftId)
-			    
-			    if(!loc.openSundays){
-			        document.querySelectorAll('.map-labels[class*="'+loc.peopleSoftId+'"]').forEach(function(lbl){
-			            var indx= helpers.getIndex(lbl);
-			            var lblParent = lbl.parentNode;
-			            var lblCount = lblParent.querySelectorAll('.map-labels').length;
+				var filterType;
+				var otherFilter;
+
+				if (type == "sunday") {
+					filterType = loc.openSundays;
+					otherFilter = document.querySelector('#location-search-after-hours-return-filter:checked');
+				} else {
+					filterType = loc.afterHoursDropoff;
+					otherFilter = document.querySelector('#location-search-sunday-open-filter:checked');
+				}
+
+				helpers.elementLoaded('div[class*="'+ loc.peopleSoftId +'"]', function() {
+				    document.querySelectorAll('div[class*="'+ loc.peopleSoftId +'"]').forEach(function(lbl){
+				    	var indx = helpers.getIndex(lbl);
+				        var lblParent = lbl.parentNode;
+			            var lblCount = _analytics.solr.length;
 			            var lblIcon = lblParent.childNodes[lblCount + indx];
-			            // console.log(indx)
-			            // console.log(lbl);
-			            // console.log(lblIcon);
+			            var lblIconImage = lblIcon.children[0];
 
-        				if (status === "checked") {
-							lbl.style.display = 'none';
-			            	lblIcon.style.display = 'none';
-						} else {
-							lbl.style.display = 'block';
-			            	lblIcon.style.display = 'block';
-						}
-
-			   //          var allLocations = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item');
-
-						// if (allLocations.length > 0) {
-						// 	for(var i = 0; i < allLocations.length; i++) {
-						// 		if (!allLocations[i].classList.contains('location-result-item--no-result')) {
-						// 			var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
-
-						// 			helpers.elementLoaded('div[class*="'+ locationID +'"]', function() {
-						// 				var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
-						// 				for(var x = 0; x < mapData.length; x++) {
-						// 					if (status == "checked") {
-						// 						mapData[x].style.display = "none";
-						// 					} else {
-						// 						mapData[x].style.display = "block";
-						// 					}
-						// 				}
-
-						// 				if (locationID == loc.peopleSoftId) {
-						// 					if (status === "checked") {
-						// 						allLocations[i].setAttribute('data-active', 'hide');
-						// 					} else {
-						// 						allLocations[i].setAttribute('data-active', 'active');
-						// 					}
-						// 				}
-						// 			});
-
-						// 		}
-						// 	}
-						// }
-			        });
-			    }   
+			            if (!filterType) {
+			            	if (status != "unchecked") {
+			            		document.getElementById(loc.peopleSoftId).closest('.location-result-item').classList.add(type);
+				            	document.getElementById(loc.peopleSoftId).closest('.location-result-item').setAttribute('data-active', 'hide');
+								lbl.style.display = 'none';
+				            	lblIcon.style.display = 'none';
+				            	if (lblIconImage) {
+				            		lblIconImage.style.display = 'none';
+				            	}
+				            } else {
+				            	// if ((type == "sunday" && isoTest.afterHoursFilter != true) || (type == "afterHours" && isoTest.sundayFilter != true)) {
+				            	// if (document.getElementById(loc.peopleSoftId).closest('.location-result-item').getAttribute("data-active")!="hide") {
+				            	document.getElementById(loc.peopleSoftId).closest('.location-result-item').classList.remove(type);
+				            	if (locationFilterTypesChecked || !otherFilter) {
+				            		document.getElementById(loc.peopleSoftId).closest('.location-result-item').setAttribute('data-active', 'active');
+					            	lbl.style.display = 'initial';
+					            	lblIcon.style.display = 'initial';
+					            	if (lblIconImage) {
+					            		lblIconImage.style.display = 'initial';
+					            	}
+				            	}
+					            	
+					            // }
+				            }
+				        }
+				    });
+				});
 			});
 
-			isoTest.updateClearBtn();
-			isoTest.updateOrder();
-			isoTest.updateFilterAmount();
+			// isoTest.updateClearBtn();
+			// isoTest.updateOrder();
+			// isoTest.updateFilterAmount();
 		},
 		addEvents : function() {
 			isoTest.log("addEvents()");
 
+			document.querySelector('#location-search-after-hours-return-filter').addEventListener('click', function(e){
+				if (document.querySelector('#location-search-after-hours-return-filter:checked')) {
+					isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
+					// isoTest.afterHoursFilter = true;
+				} else {
+					// isoTest.afterHoursFilter = false;				
+				}
+				
+			}, false);
+
 			document.querySelector('#location-search-sunday-open-filter').addEventListener('click', function(e){
-				isoTest.updatePageSundayOpen();
+
+				// var sundayFilter = document.querySelector('#location-search-sunday-open-filter:checked');
+				// var afterHoursFilter = document.querySelector('#location-search-after-hours-return-filter:checked');
+
+				// var filterLocationsTypeChecked = document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0;
+				// console.log("isoTest.counter");
+				// console.log(isoTest.counter == "");
+				// console.log("-------");
+
+				// if (!filterLocationsTypeChecked && !afterHoursFilter) {
+				// 	window.clearInterval(isoTest.counter);
+				// }
+
+				// isoTest.updatePageExtraFilters("sunday","unchecked");
 
 				if (document.querySelector('#location-search-sunday-open-filter:checked')) {
-					// isoTest.log('checked');
-					window.setInterval(function(){isoTest.updatePageSundayOpen("checked");},100);
+					isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
+					// isoTest.sundayFilter = true;
+					// isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
+					// isoTest.sundaycounter = window.setInterval(function(){isoTest.updatePageExtraFilters("sunday","checked");},100);
 				} else {
-					// isoTest.log('unchecked');
-					isoTest.updatePageSundayOpen("unchecked");
-					window.clearInterval(isoTest.sundaycounter);
+					// isoTest.sundayFilter = false;
+					// window.clearInterval(isoTest.sundaycounter);
+					// isoTest.updatePageExtraFilters("sunday","unchecked");
+					
 				}
+				// isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
 
 				// isoTest.updateFilterAmount();
 
@@ -1222,8 +1290,9 @@
 			var filterAmtLocations = document.querySelectorAll('.checkbox__label-checkbox.checked').length;
 			var filterAmtCheckbox = (document.querySelector('#location-search-open-time-filter:checked') ? 1 : 0);
 			var sundayIsChecked = (document.querySelector('#location-search-sunday-open-filter:checked')? 1 : 0);
+			var afterHoursIsChecked = (document.querySelector('#location-search-after-hours-return-filter:checked')? 1 : 0);
 
-			var filterAmt = filterAmtLocations + filterAmtVehicles + filterAmtCheckbox + sundayIsChecked;
+			var filterAmt = filterAmtLocations + filterAmtVehicles + filterAmtCheckbox + sundayIsChecked + afterHoursIsChecked;
 
 			if (filterAmt > 0) {
 				filterTextElDesktop.innerHTML = "Filter (" + filterAmt + ")";
@@ -1246,6 +1315,9 @@
 			}
 
 			document.querySelector('#location-search-sunday-open-filter').checked = false;
+			document.querySelector('#location-search-after-hours-return-filter').checked = false;
+
+		
 
 			var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
 			if (allchecked.length > 0) {
