@@ -267,6 +267,10 @@
 	display: inline-block;
 }
 
+.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label {
+	 margin-left: 24.75px;
+}
+
 .location-search-filter__container .location-search-filter__location-type-filter {
 	display: inline-block;
 	margin-left: 30px;
@@ -335,6 +339,39 @@
 	position: absolute;
 }
 
+@media (max-width: 1078px) and (min-width: 949px) {
+	.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label .form-checkbox__text.iso-second-filter,
+	.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label .form-checkbox__text.iso-third-filter {
+		position: relative;
+		top: 7px;
+	}
+
+	.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label .form-checkbox__text .iso-next-line {
+		display: block;
+		margin-top: -5px;
+	}
+}
+
+@media (max-width: 948px) and (min-width: 769px) {
+	.location-search-filter__container .location-search-filter__location-type-filter.location-type-filters-trigger {
+		margin-right: 40%;
+	}
+
+	.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label {
+		margin-top: 25px;
+	}
+
+	.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label.iso-first-filter-container {
+		margin-left: 0px;
+	}
+}
+
+@media (max-width: 860px) and (min-width: 769px) {
+	.location-search-filter__container .location-search-filter__location-type-filter.location-type-filters-trigger {
+		margin-right: 30%;
+	}
+}
+
 @media (max-width: 900px) and (min-width: 769px) {
 	.location-search-filter__container {
 		padding: 1.5625rem .625rem 1.25rem;
@@ -363,6 +400,14 @@
 	    margin-right: 6px;
 	    min-width: 95%;
 	}
+
+	.mobile-expanded .location-search-filter__container {
+		padding-bottom: 10px;
+	}
+
+	.location-search-filter__container .location-search-filter__container-content {
+		margin-bottom: 0;
+	}
 	
 	.location-search-filter__container .location-search-filter__container-content-header {
 		display: flex;
@@ -380,7 +425,7 @@
 
 	.location-search-filter__container .vehicle-filters-trigger.location-search-filter__vehicle-filter {
 		display: block;
-		margin: 0 0 1.5625rem;
+		margin: 0 0 14px;
 	}
 
 	.location-search-filter__container .location-type-filters-trigger.location-search-filter__location-type-filter {
@@ -392,6 +437,8 @@
 
 	.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label {
 		display: block;
+		margin-bottom: 12px;
+		margin-left: 0;
 	}
 }
 </style>
@@ -491,7 +538,7 @@
 							<p class='location-result-item__content-container-text'><span>Sorry, we couldn't find any locations matching your search criteria.  Please adjust filters.</span></p>\
 						</div>\
 					</li>",
-		additionalFilters : '<label class="location-search-filter__container-filter form-checkbox__label" tabindex="0" for="location-search-sunday-open-filter" role="checkbox">\
+		additionalFilters : '<label class="location-search-filter__container-filter form-checkbox__label iso-first-filter-container" tabindex="0" for="location-search-sunday-open-filter" role="checkbox">\
 								<input type="checkbox" tabindex="-1" name="location-search-sunday-open-filter" id="location-search-sunday-open-filter" class="form-checkbox__input" value="on">\
 								<span class="form-checkbox__box-ui"><i class="icon icon-check-green"></i></span>\
 								<span class="form-checkbox__text">Open Sunday</span>\
@@ -499,7 +546,7 @@
 							<label class="location-search-filter__container-filter form-checkbox__label" tabindex="0" for="location-search-after-hours-return-filter" role="checkbox">\
 								<input type="checkbox" tabindex="-1" name="location-search-after-hours-return-filter" id="location-search-after-hours-return-filter" class="form-checkbox__input" value="on">\
 								<span class="form-checkbox__box-ui"><i class="icon icon-check-green"></i></span>\
-								<span class="form-checkbox__text">After Hours return available</span>\
+								<span class="form-checkbox__text iso-second-filter">After Hours <span class="iso-next-line">return available</span></span>\
 							</label>',
 		clearBtn : '<button class="btn location-search-filter__clear-all btn-unstyled" tabindex="0" type="button" role="button">Clear All</button>',
 		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
@@ -546,6 +593,7 @@
 			} else {
 				if (document.querySelector('.iso-location-filters-modal.iso-modal') != null) {
 					window.clearInterval(isoTest.counter);
+					isoTest.counter = '';
 					document.querySelector('.iso-location-filters-modal.iso-modal').remove();
 				}
 			}
@@ -590,18 +638,6 @@
 			isoTest.log('checkForSearchByVehicleOnLoad()');
 
 			if (document.querySelector('.vehicle-filters-trigger__button').innerText != "All Vehicles") {
-				document.querySelector('.location-search-filter .location-search-filter__mobile-toggle-button').click();
-
-				var mobileFilterArrow = document.querySelector('.iso-filters-mobile-expand .icon.iso-filter-arrow');
-				var desktopFilter = document.querySelector('.location-search-filter__container');
-				var desktopFilterArrow = document.querySelector('.iso-filters-desktop-expand .icon.iso-filter-arrow');
-
-				mobileFilterArrow.classList.add('icon-nav-carrot-up-green');
-				mobileFilterArrow.classList.remove('icon-nav-carrot-down');
-				desktopFilter.classList.remove('iso-hide');
-				desktopFilterArrow.classList.add('icon-nav-carrot-up-green');
-				desktopFilterArrow.classList.remove('icon-nav-carrot-down');
-
 				document.querySelector('.location-search-filter__container .location-search-filter__container-content .iso-clear-btn').classList.remove('iso-hide');
 				document.querySelector('.gi .location-search-filter__container-content-text.desktop.iso-filter-shown-text').classList.remove('iso-hide');
 
@@ -646,6 +682,9 @@
 				vehicleTypeFilter.insertAdjacentHTML('afterend', isoTest.content);
 			}
 
+			document.querySelector('.location-search-filter__container-filter.form-checkbox__label .form-checkbox__text').classList.add('iso-third-filter');
+			document.querySelector('.location-search-filter__container-filter.form-checkbox__label .form-checkbox__text').innerHTML = 'Open during <span class="iso-next-line">my times</span>';
+
 			if (document.querySelector('#location-search-sunday-open-filter') == null) {
 				openCheckbox.insertAdjacentHTML('beforebegin', isoTest.additionalFilters);
 			}
@@ -687,10 +726,8 @@
 			isoTest.log("checkForFilters()");
 
 			var checkedLocations = document.querySelectorAll('.checkbox__label-checkbox');
-
 			var sundayFilter = document.querySelector('#location-search-sunday-open-filter:checked');
 			var afterHoursFilter = document.querySelector('#location-search-after-hours-return-filter:checked');
-
 			var filterLocationsTypeChecked = document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0;
 
 			if (filterLocationsTypeChecked) {
@@ -712,8 +749,6 @@
 						isoTest.updatePage(checkedLocationID,'checked');
 					}
 				}
-
-
 			} else {
 				if (isoTest.filtersCheckedNumber != 0) {
 					isoTest.filtersCheckedNumber = 0;
@@ -757,6 +792,7 @@
 
 			if (!sundayFilter && !afterHoursFilter && !filterLocationsTypeChecked) {
 				window.clearInterval(isoTest.counter);
+				isoTest.counter = '';
 			}
 
 			isoTest.updateClearBtn();
@@ -968,11 +1004,7 @@
 		updatePageExtraFilters : function(type,status) {
 			isoTest.log("updatePageExtraFilters()");
 
-			// var sundayFilter = document.querySelector('#location-search-sunday-open-filter:checked');
-			// var afterHoursFilter = document.querySelector('#location-search-after-hours-return-filter:checked');
-
 			var locationFilterTypesChecked = document.querySelectorAll('.checkbox__label-checkbox.checked').length == 0;
-
 
 			var solr = _analytics.solr;
 
@@ -1006,8 +1038,6 @@
 				            		lblIconImage.style.display = 'none';
 				            	}
 				            } else {
-				            	// if ((type == "sunday" && isoTest.afterHoursFilter != true) || (type == "afterHours" && isoTest.sundayFilter != true)) {
-				            	// if (document.getElementById(loc.peopleSoftId).closest('.location-result-item').getAttribute("data-active")!="hide") {
 				            	document.getElementById(loc.peopleSoftId).closest('.location-result-item').classList.remove(type);
 				            	if (locationFilterTypesChecked || !otherFilter) {
 				            		document.getElementById(loc.peopleSoftId).closest('.location-result-item').setAttribute('data-active', 'active');
@@ -1017,78 +1047,36 @@
 					            		lblIconImage.style.display = 'initial';
 					            	}
 				            	}
-					            	
-					            // }
 				            }
 				        }
 				    });
 				});
 			});
-
-			// isoTest.updateClearBtn();
-			// isoTest.updateOrder();
-			// isoTest.updateFilterAmount();
 		},
 		addEvents : function() {
 			isoTest.log("addEvents()");
 
 			document.querySelector('#location-search-after-hours-return-filter').addEventListener('click', function(e){
 				if (document.querySelector('#location-search-after-hours-return-filter:checked')) {
-					isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
-					// isoTest.afterHoursFilter = true;
+					isoTest.fireTag('#location-search-after-hours-return-filter','AfterHoursFilter:true');
+					if (isoTest.counter == "") {
+						isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
+					} 
 				} else {
-					// isoTest.afterHoursFilter = false;				
+					isoTest.fireTag('#location-search-after-hours-return-filter','AfterHoursFilter:false');
 				}
 				
 			}, false);
 
 			document.querySelector('#location-search-sunday-open-filter').addEventListener('click', function(e){
-
-				// var sundayFilter = document.querySelector('#location-search-sunday-open-filter:checked');
-				// var afterHoursFilter = document.querySelector('#location-search-after-hours-return-filter:checked');
-
-				// var filterLocationsTypeChecked = document.querySelectorAll('.checkbox__label-checkbox.checked').length > 0;
-				// console.log("isoTest.counter");
-				// console.log(isoTest.counter == "");
-				// console.log("-------");
-
-				// if (!filterLocationsTypeChecked && !afterHoursFilter) {
-				// 	window.clearInterval(isoTest.counter);
-				// }
-
-				// isoTest.updatePageExtraFilters("sunday","unchecked");
-
 				if (document.querySelector('#location-search-sunday-open-filter:checked')) {
-					isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
-					// isoTest.sundayFilter = true;
-					// isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
-					// isoTest.sundaycounter = window.setInterval(function(){isoTest.updatePageExtraFilters("sunday","checked");},100);
+					isoTest.fireTag('#location-search-sunday-open-filter','OpenSundayFilter:true');
+					if (isoTest.counter == "") {
+						isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
+					}
 				} else {
-					// isoTest.sundayFilter = false;
-					// window.clearInterval(isoTest.sundaycounter);
-					// isoTest.updatePageExtraFilters("sunday","unchecked");
-					
+					isoTest.fireTag('#location-search-sunday-open-filter','OpenSundayFilter:false');
 				}
-				// isoTest.counter = window.setInterval(function(){isoTest.checkForFilters();},100);
-
-				// isoTest.updateFilterAmount();
-
-				// var filterAmtVehicles = (document.querySelector('.vehicle-filters-trigger__button').innerText != "All Vehicles" ? 1 : 0);
-				// var filterAmtLocations = document.querySelectorAll('.checkbox__label-checkbox.checked').length;
-
-				// if (document.querySelector('#location-search-open-time-filter:checked')) {
-				// 	document.querySelector('.location-search-filter__container .location-search-filter__container-content .iso-clear-btn').classList.remove('iso-hide');
-				// } else {
-				// 	if ( filterAmtVehicles == 0 && filterAmtLocations == 0 ) {
-				// 		document.querySelector('.location-search-filter__container .location-search-filter__container-content .iso-clear-btn').classList.add('iso-hide');
-				// 	}
-				// }
-
-				// window.setTimeout(function(){
-				// 	isoTest.checkForFilters();
-				// 	isoTest.updateOrder();
-				// 	isoTest.updateFilteredNumber();
-				// }, 500);
 			}, false);
 
 			document.querySelector('.iso-filters-desktop-expand').addEventListener('click', function (e) {
@@ -1183,10 +1171,6 @@
 			document.querySelector('.resflow-location').addEventListener('click', function (event) {
 				// isoTest.log(event.target);
 
-				// if (event.target.classList.contains('modal-button')) {
-				// 	isoTest.updateFilteredNumber();
-				// }
-
 				if (event.target.classList.contains('modal-button') && !event.target.classList.contains('iso-modal-apply') && !event.target.classList.contains('iso-modal-cancel')) {
 					window.setTimeout(function(){
 						if (document.querySelector('.location-search-filter__container-content-header .location-search-filter__clear-all')) {
@@ -1213,6 +1197,7 @@
 
 				if (event.target.classList.contains('location-result-item__cta')) {
 					window.clearInterval(isoTest.counter);
+					isoTest.counter = '';
 					if (isoTest.filtersCheckedNumber != 0) {
 						isoTest.filtersCheckedNumber = 0;
 						document.querySelector('.location-type-filters-trigger__button').innerHTML = 'All Locations<i class="icon icon-nav-carrot-down"></i>';
@@ -1233,6 +1218,8 @@
 				}
 
 				if (event.target.classList.contains('location-search-filter__clear-all')) {
+					document.querySelector('#location-search-after-hours-return-filter').checked = false;
+					document.querySelector('#location-search-sunday-open-filter').checked = false;
 					var allcheckedBoxes = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
 					if (allcheckedBoxes.length > 0) {
 						for (var b = 0; b < allcheckedBoxes.length; b++) {
@@ -1267,15 +1254,10 @@
 			var filterElements = document.querySelectorAll('.iso-location-filters-modal.iso-modal .location-search-filters-modal__location-search-list .checkbox__label .location-type-checkbox');
 			
 			for(var i = 0; i < filterElements.length; i++) {
-				// isoTest.log("Filter Elements: " + filterElements[i]);
 				filterElements[i].addEventListener('click', function(e){
-					// isoTest.log('clicked checkbox');
-					// isoTest.log(e.target.parentNode.classList);
 					if (e.target.parentNode.classList.contains('checked')) {
-						// isoTest.log('checked');
 						e.target.parentNode.classList.remove('checked');
 					} else {
-						// isoTest.log('not checked');
 						e.target.parentNode.classList.add('checked');
 					}
 		    	}, false);
@@ -1301,13 +1283,12 @@
 				filterTextElDesktop.innerHTML = "Filter";
 				filterTextElMobile.innerHTML = "Filter";
 			}
-
-			// isoTest.updateFilteredNumber();
 		},
 		updateForNewLocation : function () {
 			isoTest.log("updateForNewLocation()");
 
 			window.clearInterval(isoTest.counter);
+			isoTest.counter = '';
 
 			if (isoTest.filtersCheckedNumber != 0) {
 				isoTest.filtersCheckedNumber = 0;
@@ -1316,8 +1297,6 @@
 
 			document.querySelector('#location-search-sunday-open-filter').checked = false;
 			document.querySelector('#location-search-after-hours-return-filter').checked = false;
-
-		
 
 			var allchecked = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
 			if (allchecked.length > 0) {
@@ -1389,6 +1368,7 @@
 			isoTest.log("modalOpen()");
 
 			window.clearInterval(isoTest.counter);
+			isoTest.counter = '';
 
 			document.querySelector('.iso-modal.iso-location-filters-modal').classList.add('active');
 			document.querySelector('html').classList.add('iso-modal-open');
@@ -1463,11 +1443,11 @@
 
 	var helpers = {
 		elementLoaded : function (ele, callback) {
-			// isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
 			window.clearTimeout(isoTest.eleTimer);
 			if (document.querySelectorAll(ele).length > 0) {
 				if (typeof callback === 'function') {
-					// isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
 					callback();
 				}
 	        } else {
