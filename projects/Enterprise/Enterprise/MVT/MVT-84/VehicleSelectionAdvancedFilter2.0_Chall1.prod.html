@@ -263,15 +263,15 @@
 
 
             var values = priceRangeSlider.noUiSlider.get(); 
-            isoTest.fireSliderTag('Price Slider Initial: ', values);
-
+            isoTest.fireSliderValues('Price Slider Initial: ', values);
+            
 
 
             document.addEventListener('click', function(event) {
 
                 if (event.target.matches('.vehicle-pricing__button--select')) {
                     var values = priceRangeSlider.noUiSlider.get(); 
-                    isoTest.fireSliderTag('Price Slider Final: ', values);
+                    isoTest.fireSliderValues('Price Slider Final: ', values);
                 }
                 if (event.target.closest('.noUi-handle')) {
                     var linkName = 'Slider Handle Dragged';
@@ -301,15 +301,14 @@
                     s.eVar20 = linkName;
                     s.tl(this, 'o', linkName);
                 });    
-            } 
-  
+            }   
 
         },
-	    fireSliderTag : function(title, value) {
-	        var linkName = title + value;
+	    fireSliderValues : function(title, value) {
+	        var sliderValues = title + value;
 			s.linkTrackVars = 'eVar89';
-			s.eVar89 = linkName;
-			s.tl(this, 'o', linkName);
+			s.eVar89 = sliderValues;
+			s.tl(this, 'o', '');
 	    },
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
