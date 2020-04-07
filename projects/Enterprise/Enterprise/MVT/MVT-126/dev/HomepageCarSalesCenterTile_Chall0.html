@@ -1,0 +1,63 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise.com',
+		portfolio : 'Enterprise',
+		test : 'Homepage Car Sales Center Tile',
+		creative : 'Challenger 0',
+		selector: '.threeup.section .gi .cta-text p',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			var carSalesTileText = document.querySelectorAll('.threeup.section .gi .cta-text p')[1];
+			var carSalesTileUrl = document.querySelectorAll('.threeup.section .gi .cta-text a.btn')[1];
+			carSalesTileText.innerHTML = "Now through April 30, 2020, the $700 Extended Family Benefit enjoyed by our employees' family members is available to everyone."
+			carSalesTileUrl.href = "https:/\/\www.enterprisecarsales.com/extended-family?cur=Home_Rental&mcid=enterprise:31712819"
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
