@@ -165,14 +165,21 @@
 				window.setTimeout(function(){
 					isoTest.log('Test Ready!');
 					if (typeof ReservationStateTree.data.session.reservationSession.reservationsInitiateRequest != "undefined") {
-						isoTest.log('Previous Reservation Info Found');
-	  					isoTest.chall();
+						if (typeof ReservationStateTree.data.session.reservationSession.reservationsInitiateRequest.pickupLocation.name != "undefined") {
+							if (sessionStorage.getItem("isoTestMVT120") === null) {
+								isoTest.log('Previous Reservation Info Found');
+		  						isoTest.chall();
+		  					}
+		  				}
 	  				}
 	  			}, 1200);
 			});
 			
 		},
 		chall : function() {
+
+			// Prevent same-session re-trigger
+			sessionStorage.setItem('isoTestMVT120', 'true');
 
 			// Set reservation info
 			var pickupLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickupLocation','name']);
@@ -237,12 +244,12 @@
 
 			// event tracking
 			window.addEventListener('click', function (event) {
-				if (event.target.matches('#iso-close-modal')) {
+				if (event.target.closest('#iso-close-modal')) {
 					isoTest.fireTag(this,'Modal Close');
 					isoTest.hideModal();
 				}
 				if (event.target.matches('.ima-btn-wrap .btn-cancel')) {
-					isoTest.fireTag(this,'Modal Close');
+					isoTest.fireTag(this,'Modal Discard');
 					isoTest.hideModal();
 				}
 				if (event.target.closest('.ima-btn-wrap .btn-primary')) {
