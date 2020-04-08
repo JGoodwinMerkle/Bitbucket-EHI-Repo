@@ -1,4 +1,7 @@
-<style>
+<style id="isoTestTempHide">
+	.ReactModalPortal {
+		display: none !important;
+	}
 </style>
 <script>
 (function() {
@@ -6,7 +9,7 @@
 	var isoTest = {
 		account : 'EHI',
 		portfolio : 'Enterprise',
-		test : 'Review Modal Pop-Up Suppression',
+		test : 'Enterprise: Review Pop-up Modal Suppression',
 		creative : 'Challenger 0',
 		selector: 'body',
 		init : function() {
@@ -32,7 +35,7 @@
 		
 		},
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
+			if(/commit/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -40,7 +43,45 @@
 		},
 		chall : function() {
 
-			// Your code goes here
+
+			window.setTimeout(function(){
+				document.querySelector('#isoTestTempHide').remove();
+			}, 3000);
+
+
+
+			var target = document.querySelector('body');
+
+			var observer = new MutationObserver(function(mutations) {
+			  
+				mutations.forEach(function(mutation) {
+					//console.log(mutation.type);
+					
+					if (mutation.type === 'childList') {
+			            //isoTest.log('A child node has been added or removed.');
+
+						// Look for modal
+						if (document.querySelector('.ReactModal__Content')) {
+							if (document.querySelector('.ReactModal__Content h2').textContent === 'Important Branch Information') {
+								isoTest.log('Branch Info Modal Fired & Closed');
+								document.querySelector('.ReactModal__Content .icon-close-x-white').click();
+							}
+						}
+			        }
+
+				});
+			});
+
+			var config = {
+				attributes: true,
+				childList: true,
+				characterData: true
+			};
+
+			observer.observe(target, config);
+
+
+
 
 		},
 		fireTag : function(element, value) {
@@ -55,7 +96,6 @@
 				console.log(obj);
 			}
 		}
-
 	}
 
 	var helpers = {
@@ -68,21 +108,9 @@
 					callback();
 				}
 	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 10);
 	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
 	}
 
 	isoTest.init();
