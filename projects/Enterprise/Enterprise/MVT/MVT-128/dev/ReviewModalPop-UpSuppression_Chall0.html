@@ -12,6 +12,7 @@
 		test : 'Enterprise: Review Pop-up Modal Suppression',
 		creative : 'Challenger 0',
 		selector: 'body',
+		groupNumber : ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']),
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -27,8 +28,10 @@
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
 			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
+				if (/41.*/.test(isoTest.groupNumber)) {
+					isoTest.log('Test Ready!');
+  					isoTest.chall();
+  				}
 			});
 			
 		window.addEventListener('hashchange', isoTest.viewChange, false);
@@ -37,11 +40,15 @@
 		viewChange : function(){
 			if(/commit/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
-					isoTest.chall();
+					if (/41.*/.test(isoTest.groupNumber)) {
+						isoTest.chall();
+					}
 				});
 			}
 		},
 		chall : function() {
+
+
 
 
 			window.setTimeout(function(){
