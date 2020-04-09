@@ -12,10 +12,11 @@
 		test : 'Enterprise: Review Pop-up Modal Suppression',
 		creative : 'Challenger 0',
 		selector: 'body',
-		groupNumber : ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']),
+		//reservationData: ReservationStateTree.get(['session','reservationSession']),
+		//groupNumber : ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']),
 		init : function() {
 
-			isoTest.debug = ${user.mvtDebug};
+			isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -27,11 +28,10 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
+
 			helpers.elementLoaded(isoTest.selector, function() {
-				if (/41.*/.test(isoTest.groupNumber)) {
-					isoTest.log('Test Ready!');
-  					isoTest.chall();
-  				}
+				isoTest.log('Test Ready!');
+				isoTest.chall();
 			});
 			
 		window.addEventListener('hashchange', isoTest.viewChange, false);
@@ -40,30 +40,43 @@
 		viewChange : function(){
 			if(/commit/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
-					if (/41.*/.test(isoTest.groupNumber)) {
-						isoTest.chall();
-					}
+					isoTest.chall();
 				});
 			}
 		},
 		chall : function() {
 
-
-
-
+			// Remove temporary hide
 			window.setTimeout(function(){
 				document.querySelector('#isoTestTempHide').remove();
-			}, 3000);
+			}, 2000);
+
+			// Wait for reservation data object to load
+			window.setTimeout(function(){
+				if (typeof ReservationStateTree.data.session.reservationSession != 'undefined') {
+					// Force close modal if group number is 41
+					if (/41.*/.test(ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']))) {
+						
+						// Close modal
+						if (document.querySelector('.ReactModal__Content h2').textContent === 'Important Branch Information') {
+							isoTest.log('Branch Info Modal Fired & Closed');
+							document.querySelector('.ReactModal__Content .icon-close-x-white').click();
+						}
+
+						// Listen for modal
+						isoTest.mutationObserver();
+
+	  				}
+	  			}
+  			}, 1800);
 
 
-
+		},
+		mutationObserver : function() {
 			var target = document.querySelector('body');
-
 			var observer = new MutationObserver(function(mutations) {
-			  
 				mutations.forEach(function(mutation) {
-					//console.log(mutation.type);
-					
+					//console.log(mutation.type);					
 					if (mutation.type === 'childList') {
 			            //isoTest.log('A child node has been added or removed.');
 
@@ -86,9 +99,6 @@
 			};
 
 			observer.observe(target, config);
-
-
-
 
 		},
 		fireTag : function(element, value) {
