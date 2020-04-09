@@ -1,0 +1,104 @@
+<style>
+.iso-usaa {
+	background-color: #f3f3f3;
+	border: 1px solid #c3c3c3;
+	color: #333333;
+	display: inline-block;
+	margin-bottom: 40px;
+	padding: 20px 40px;
+	text-align: center;
+	width: 100%;
+}
+.iso-usaa p {
+	font-size: 16px;
+}
+.iso-usaa a i {
+	display: inline-block;
+	margin-bottom: -3px;
+	margin-left: 5px;
+}
+.iso-logo {
+	margin-top: 0;
+}
+.iso-logo img {
+	max-height: 150px;
+	max-width: 220px;
+	width: 100%;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Res Confirmation Car Sales Message 2.0',
+		creative : 'Challenger 0',
+		selector: '.confirmed-page__right-column',
+		template: '<div class="iso-usaa section-content">\
+						<div class="iso-logo">\
+							<img src="https://www.enterprise.com/content/dam/ecom/hosted/11_CS_RGB_HOR.png" title="Enterprise Car Sales" alt="Enterprise Car Sales" />\
+						</div>\
+						<div class="content">\
+							<p>If you need us, Enterprise Car Sales is here to help with online shopping, vehicle delivery where available, enhanced cleaning measures and more. Terms apply.</p>\
+							<p><a href="https://www.enterprisecarsales.com/on-call-for-all?cur=Res_Page&mcid=enterprise:39122200" target="_blank">Learn more at EnterpriseCarSales.com <i class="icon icon-nav-external-link"></i></a></p>\
+						</div>\
+					</div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		},
+		viewChange : function(){
+			if(/confirmed/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log("chall()");
+			
+			document.querySelector(".confirmed-page__right-column .checklist-container").insertAdjacentHTML("beforebegin",isoTest.template);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
