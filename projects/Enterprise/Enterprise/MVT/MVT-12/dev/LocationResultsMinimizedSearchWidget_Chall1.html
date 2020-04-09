@@ -4,6 +4,40 @@
 	padding-top: 20px !important;
 }
 
+.reservation-flow .location-search {
+    position: relative;
+    overflow: visible;
+    padding-top: 10px;
+}
+
+.reservation-flow .location-search h1 {
+	font-size: 2rem;
+    padding-top: .625rem;
+    padding-left: 10px;
+    text-transform: uppercase;
+}
+
+.reservation-flow .location-search .gi {
+    padding-left: 10px;
+    padding-right: 0;
+}
+
+.reservation-flow .location-search .locationChicklet-active {
+	width: 100%;
+}
+
+.reservation-flow .location-search .locationChicklet-active .location-chicklet {
+	width: 100%;
+}
+
+.reservation-flow .location-search .locationChicklet-active .location-chicklet {
+	max-width: 100%;
+}
+
+.reservation-flow .location-search .location-chicklet {
+	border-bottom: 2px solid #c3c3c3;
+}
+
 .location-details .location-search .search-results-count small {
 	display: none;
 }
@@ -13,12 +47,7 @@
   	font-weight: 700;
 }
 
-.location-details .location-search .gi {
-	/*padding-bottom: 8px;*/
-	/*margin-bottom: .5em;*/
-}
-
-.resflow-location #content-container .iso-sticky-footer {
+#content-container .iso-sticky-footer {
 	background-color: rgba(242, 242, 242, 1);
 	bottom: 0;
 	-webkit-box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.247058823529412);
@@ -35,7 +64,7 @@
     z-index: 9999;
 }
 
-.resflow-location #content-container .iso-sticky-footer .iso-bold {
+#content-container .iso-sticky-footer .iso-bold {
 	font-weight: 700;
 }
 
@@ -472,7 +501,7 @@
 	    min-width: 95%;
 	}
 
-	.resflow-location #content-container .iso-sticky-footer {
+	#content-container .iso-sticky-footer {
 	    font-size: 14px;
 	    padding-bottom: 8px;
 	    padding-top: 8px;
@@ -705,15 +734,22 @@
 		},
 		chall : function() {
 			isoTest.log('chall()');
+			
+			if (document.querySelector('body').classList.contains('resflow-location/dropoff') && !document.querySelector('body').classList.contains('resflow-location')) {
+				document.querySelector('body').classList.add('resflow-location');
+			}
 
 			helpers.elementLoaded('.location-search-filter__mobile-header span', function() {
-				isoTest.addLocationFilter();
-				isoTest.addFilterModal();
-				isoTest.addLocationClearIcon();
-				isoTest.addLocationExpand();
-				isoTest.addAttributeToAllLocations();
-				isoTest.addEvents();
-				isoTest.checkForSearchByVehicleOnLoad();
+					isoTest.addLocationFilter();
+					isoTest.addFilterModal();
+					isoTest.addLocationClearIcon();
+					isoTest.addAttributeToAllLocations();
+				helpers.elementLoaded('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]', function() {
+					isoTest.addLocationExpand();
+					isoTest.updateLocationsNumber(); 
+					isoTest.addEvents();
+					isoTest.checkForSearchByVehicleOnLoad();
+				});	
 			});
 		},
 		addLocationExpand : function() {
@@ -762,8 +798,8 @@
 				}
 			}
 
-			if (!document.querySelector('.resflow-location #content-container .iso-sticky-footer')) {
-				document.querySelector('.resflow-location #content-container .footer').insertAdjacentHTML('afterend','<div class="iso-sticky-footer"><span class="iso-bold">Not seeing what you are looking for?</span> Try refining your search by ZIP Code or zooming in on the map.</div>');
+			if (!document.querySelector('#content-container .iso-sticky-footer')) {
+				document.querySelector('#content-container .footer').insertAdjacentHTML('afterend','<div class="iso-sticky-footer"><span class="iso-bold">Not seeing what you are looking for?</span> Try refining your search by ZIP Code or zooming in on the map.</div>');
 			}
 
 		},
@@ -844,6 +880,9 @@
 			for(var i = 0; i < allLocations.length; i++) {
 				allLocations[i].setAttribute('data-active', 'active');
 			}
+		},
+		updateLocationsNumber : function() {
+			isoTest.log('updateLocationsNumber()');
 
 			isoTest.locationsNumber = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]').length;
 
@@ -1363,12 +1402,15 @@
 				isoTest.updatePage(checkedLocationID,'checked');
 			}
 
-			isoTest.updateOrder();
-
 			var locationTypeFiltersTriggerBtn = document.querySelector('.location-search-filter__container .location-search-filter__location-type-filter .location-type-filters-trigger__button');
+
+			console.log(locationTypeFiltersTriggerBtn);
 
 			locationTypeFiltersTriggerBtn.disabled = true;
 			locationTypeFiltersTriggerBtn.classList.add('disabled');
+
+			console.log(document.querySelector('.iso-location-chicklet-clear'));
+			console.log(document.querySelector('.location-chicklet-clear'));
 
 			document.querySelector('.iso-location-chicklet-clear').remove();
 			document.querySelector('.location-chicklet-clear').click();
@@ -1377,6 +1419,7 @@
 				locationTypeFiltersTriggerBtn.disabled = false;
 				locationTypeFiltersTriggerBtn.classList.remove('disabled');
 				isoTest.addAttributeToAllLocations();
+				isoTest.updateOrder();
 				isoTest.addLocationClearIcon();
 			});
 
