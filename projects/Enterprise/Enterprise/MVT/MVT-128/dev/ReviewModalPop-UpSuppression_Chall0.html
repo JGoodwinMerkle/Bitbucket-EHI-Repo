@@ -1,8 +1,3 @@
-<style id="isoTestTempHide">
-	.ReactModalPortal {
-		display: none !important;
-	}
-</style>
 <script>
 (function() {
 	'use strict';
@@ -12,8 +7,6 @@
 		test : 'Enterprise: Review Pop-up Modal Suppression',
 		creative : 'Challenger 0',
 		selector: 'body',
-		//reservationData: ReservationStateTree.get(['session','reservationSession']),
-		//groupNumber : ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']),
 		init : function() {
 
 			isoTest.debug = true;
@@ -27,50 +20,51 @@
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+		
+			isoTest.viewChange();
 
-
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-				isoTest.chall();
-			});
-			
-		window.addEventListener('hashchange', isoTest.viewChange, false);
+			window.addEventListener('hashchange', isoTest.viewChange, false);
 		
 		},
 		viewChange : function(){
+
 			if(/commit/.test(location.hash)){
+				// Temp modal hide and removal
+				document.querySelector('head').insertAdjacentHTML('afterend', '<style id="isoTestTempHide">.ReactModalPortal {display: none !important;}</style>');
+				isoTest.removeModalHide();
+
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
 			}
 		},
+
 		chall : function() {
 
-			// Remove temporary hide
-			window.setTimeout(function(){
-				document.querySelector('#isoTestTempHide').remove();
-			}, 2000);
+			isoTest.dataObjectLoaded();
+			
+		},
+		dataObjectLoaded : function() {
+			var dataObjectLoaded = setInterval(function(){
+				isoTest.log('waiting for reservation data object...');
+				if (ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']) != null){
+					clearInterval(dataObjectLoaded);
+					isoTest.log('found reservation data object!');
 
-			// Wait for reservation data object to load
-			window.setTimeout(function(){
-				if (typeof ReservationStateTree.data.session.reservationSession != 'undefined') {
-					// Force close modal if group number is 41
 					if (/41.*/.test(ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']))) {
+						isoTest.log('dataObjectLoaded location 41 true');
 						
-						// Close modal
-						if (document.querySelector('.ReactModal__Content h2').textContent === 'Important Branch Information') {
-							isoTest.log('Branch Info Modal Fired & Closed');
-							document.querySelector('.ReactModal__Content .icon-close-x-white').click();
-						}
+						isoTest.closeBranchInfoModal();
 
 						// Listen for modal
 						isoTest.mutationObserver();
 
 	  				}
-	  			}
-  			}, 1800);
-
-
+				}
+				setTimeout(function(){
+					clearInterval(dataObjectLoaded);
+				}, 10000);
+			},1);
 		},
 		mutationObserver : function() {
 			var target = document.querySelector('body');
@@ -80,15 +74,9 @@
 					if (mutation.type === 'childList') {
 			            //isoTest.log('A child node has been added or removed.');
 
-						// Look for modal
-						if (document.querySelector('.ReactModal__Content')) {
-							if (document.querySelector('.ReactModal__Content h2').textContent === 'Important Branch Information') {
-								isoTest.log('Branch Info Modal Fired & Closed');
-								document.querySelector('.ReactModal__Content .icon-close-x-white').click();
-							}
-						}
+			            isoTest.closeBranchInfoModal();
+						
 			        }
-
 				});
 			});
 
@@ -100,6 +88,28 @@
 
 			observer.observe(target, config);
 
+			window.setTimeout(function(){
+				observer.disconnect();
+			}, 2000);
+
+
+		},
+		removeModalHide: function() {
+			// Remove temporary hide on all modals
+			window.setTimeout(function(){
+				if (document.querySelector('#isoTestTempHide')) {
+					document.querySelector('#isoTestTempHide').remove();
+					isoTest.log('modal hide removed');
+				}
+			}, 2000);
+		},
+		closeBranchInfoModal: function() {
+			if (document.querySelector('.ReactModal__Content')) {
+				if (document.querySelector('#modal-context').innerHTML.indexOf('Enterprise is temporarily consolidating its North American branches.') != -1) {
+					isoTest.log('Branch Info Modal Closed');
+					document.querySelector('.ReactModal__Content .icon-close-x-white').click();
+				}
+			}
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
