@@ -30,7 +30,7 @@
 
 			if(/commit/.test(location.hash)){
 				// Temp modal hide and removal
-				document.querySelector('head').insertAdjacentHTML('afterend', '<style id="isoTestTempHide">.ReactModalPortal {display: none !important;}</style>');
+				document.querySelector('body').insertAdjacentHTML('afterbegin', '<style id="isoTestTempHide">.ReactModalPortal {display: none !important;}</style>');
 				isoTest.removeModalHide();
 
 				helpers.elementLoaded(isoTest.selector, function() {
@@ -69,15 +69,15 @@
 		mutationObserver : function() {
 			var target = document.querySelector('body');
 			var observer = new MutationObserver(function(mutations) {
-				mutations.forEach(function(mutation) {
+				for(var mutation in mutations) {
 					//console.log(mutation.type);					
 					if (mutation.type === 'childList') {
-			            //isoTest.log('A child node has been added or removed.');
+			            isoTest.log('A child node has been added or removed.');
 
 			            isoTest.closeBranchInfoModal();
 						
 			        }
-				});
+			    } 
 			});
 
 			var config = {
@@ -98,7 +98,8 @@
 			// Remove temporary hide on all modals
 			window.setTimeout(function(){
 				if (document.querySelector('#isoTestTempHide')) {
-					document.querySelector('#isoTestTempHide').remove();
+					var tempModalHide = document.getElementById("isoTestTempHide");
+  					tempModalHide.parentNode.removeChild(tempModalHide);
 					isoTest.log('modal hide removed');
 				}
 			}, 2000);
@@ -123,7 +124,7 @@
 				console.log(obj);
 			}
 		}
-	}
+	};
 
 	var helpers = {
 		elementLoaded : function (ele, callback) {
@@ -135,10 +136,10 @@
 					callback();
 				}
 	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 10);
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
-		},
-	}
+		}
+	};
 
 	isoTest.init();
 })();
