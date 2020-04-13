@@ -6,7 +6,7 @@
 .vehicle-not-enough-points {
 	/*margin-top: 10px;*/
 }
-.vehicle-list {
+.vehicle-list.iso-featured {
 	display: flex;
 	flex-flow: wrap;
 }
@@ -27,6 +27,7 @@
 .iso-tag {
 	background: #0A643A;
 	color: #fff;
+	display: block;
 	font-size: 14px;
 	padding: 4px 8px 1px 8px;
 	width: calc(100% + 15px);
@@ -49,7 +50,7 @@
 .iso-preSelectedClass-filtered .vehicle-item.is-search-by-filter, .iso-preSelectedClass-filtered .vehicle-item.is-pre-selected {
     border-color: #169a5a;
 }
-.iso-preSelectedClass.iso-preselected-second {
+.iso-preSelectedClass.iso-preselected-second{
     border-bottom: .125rem solid #c3c3c3;
     margin-top: 7px;
 }
@@ -61,7 +62,7 @@
 		position: relative;
     width: auto;
 }
-.iso-preselected-second .iso-tag:after {
+.iso-preselected-second .iso-tag:after{
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 6px solid #0A643A;
@@ -72,7 +73,7 @@
     position: absolute;
     width: 0;
 }
-.iso-preSelectedClass.iso-preselected-second .vehicle-item {
+.iso-preSelectedClass.iso-preselected-second .vehicle-item{
     border: 0;
 }
 @media (max-width: 1081px){
@@ -145,6 +146,7 @@
 		audience: {
 			group: ['32','23','30','16']
 		},
+		featAvail: false,
 		init : function() {
 
 			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
@@ -199,15 +201,33 @@
 			isoTest.day = helpers.getQueryParam('dayOverride') ? helpers.getQueryParam('dayOverride') : new Date(ReservationStateTree.get(['session', 'reservationSession','pickup_time'])).getDay();
 			isoTest.vehicleClass = isoTest.featured[isoTest.day];
 			isoTest.onLoadpreSelected = document.querySelectorAll(isoTest.preSelected).length > 0;
-			isoTest.labelVehicle();
+			isoTest.checkSort();
 
 			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox,.vehicle-filter__header-link, .vehicle-redemption__options-cta, .iso-pay');
 			for(var i = 0; i < filterElements.length; i++) {
 		    filterElements[i].addEventListener('click', function(){
 					isoTest.log('Event: Filter Checkbox Click');
-					setTimeout(isoTest.labelVehicle,200);
+					setTimeout(isoTest.checkSort,200);
 		    }, false);
 			}
+			document.addEventListener('click',function(e){
+				if(e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') || e.target.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]')){
+					isoTest.checkSort();
+				}
+			});
+			document.querySelector('#vehicleSortBy').addEventListener('change',function(){
+				setTimeout(isoTest.checkSort,200);
+			},false);
+		},
+		checkSort: function(){
+			var sort = document.querySelector('#vehicleSortBy').value;
+			var list = document.querySelector('.vehicle-list');
+			if(sort == 'Recommended'){
+				list.classList.add('iso-featured');
+			} else {
+				list.classList.remove('iso-featured');
+			}
+			isoTest.labelVehicle();
 		},
 		labelVehicle: function(){
 			isoTest.log('labelVehicle()');
@@ -219,7 +239,7 @@
 				isoTest.lastPreselectedIndex = vehicleItems.indexOf(isoTest.lastPreselected.parentNode);
 			}
 			isoTest.findVehicle(isoTest.vehicleClass.car);
-			if(document.querySelectorAll('.iso-preSelectedClass').length == 0){
+			if(document.querySelectorAll('.iso-preSelectedClass').length == 0 && isoTest.altCar && !isoTest.featAvail){
 				isoTest.findVehicle(isoTest.altCar);
 			}
 			isoTest.reOrder();
@@ -233,6 +253,7 @@
 			        isoTest.log(carClass + ' :: ' + avail);
 			        if(carClass == featClass && (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE')){
 									isoTest.addPreselect(isoTest.vehicleItems[i]);
+									isoTest.featAvail = carClass == isoTest.altCar ? false : true;
 			        }
 			    }
 			}
@@ -246,13 +267,10 @@
 				vehicleItem.classList.add('iso-preselected-second');
 			}
 
-			var temp = document.createElement('template');
-			temp.innerHTML = helpers.supplant(isoTest.template, {
+			var tag = helpers.supplant(isoTest.template, {
 					'tag' : isoTest.onLoadpreSelected ? isoTest.vehicleClass.shortTag : isoTest.vehicleClass.tag
 			});
-			vehicleItem.appendChild(temp.content);
-			var tag = vehicleItem.querySelector('.iso-tag');
-			vehicleItem.insertBefore(tag, vehicleItem.firstChild);
+			vehicleItem.insertAdjacentHTML('afterbegin', tag);
 		},
 		reOrder: function(){
 			var o = 0;
