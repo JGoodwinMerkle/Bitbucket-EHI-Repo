@@ -715,18 +715,13 @@
 
 		},
 		viewChange : function(){
-			if(/location/.test(location.hash)){
+			if(location.hash === "#location"){
 				helpers.elementLoaded(isoTest.selectorLocations, function() {
-					if(/dropoff|pickup/.test(location.hash)){
-						if (document.querySelector('.iso-location-filters-modal.iso-modal') != null) {
-							window.clearInterval(isoTest.counter);
-							document.querySelector('.iso-location-filters-modal.iso-modal').remove();
-						}
-					}
 					isoTest.chall();
 				});
 			} else {
 				if (document.querySelector('.iso-location-filters-modal.iso-modal') != null) {
+					// console.log("CLEAR FOR NEW PAGE not location");
 					window.clearInterval(isoTest.counter);
 					document.querySelector('.iso-location-filters-modal.iso-modal').remove();
 				}
@@ -1404,13 +1399,8 @@
 
 			var locationTypeFiltersTriggerBtn = document.querySelector('.location-search-filter__container .location-search-filter__location-type-filter .location-type-filters-trigger__button');
 
-			console.log(locationTypeFiltersTriggerBtn);
-
 			locationTypeFiltersTriggerBtn.disabled = true;
 			locationTypeFiltersTriggerBtn.classList.add('disabled');
-
-			console.log(document.querySelector('.iso-location-chicklet-clear'));
-			console.log(document.querySelector('.location-chicklet-clear'));
 
 			document.querySelector('.iso-location-chicklet-clear').remove();
 			document.querySelector('.location-chicklet-clear').click();
