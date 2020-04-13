@@ -69,7 +69,8 @@
 		mutationObserver : function() {
 			var target = document.querySelector('body');
 			var observer = new MutationObserver(function(mutations) {
-				for(var mutation in mutations) {
+				for (var index = 0; index < mutations.length; index++) {
+    				var mutation = mutations[index];
 					//console.log(mutation.type);					
 					if (mutation.type === 'childList') {
 			            isoTest.log('A child node has been added or removed.');
@@ -90,6 +91,7 @@
 
 			window.setTimeout(function(){
 				observer.disconnect();
+				isoTest.log('mutation observer disconnected');
 			}, 2000);
 
 
