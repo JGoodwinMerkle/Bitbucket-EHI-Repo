@@ -1,45 +1,4 @@
 <style>
-@-webkit-keyframes pulse {
-    from {
-        -webkit-transform: scale(1);
-                transform: scale(1);
-    }
-
-    50% {
-        -webkit-transform: scale(1.25);
-                transform: scale(1.25);
-    }
-
-    to {
-        -webkit-transform: scale(1);
-                transform: scale(1);
-    }
-}
-
-@keyframes pulse {
-    from {
-        -webkit-transform: scale(1);
-                transform: scale(1);
-    }
-
-    50% {
-        -webkit-transform: scale(1.25);
-                transform: scale(1.25);
-    }
-
-    to {
-        -webkit-transform: scale(1);
-                transform: scale(1);
-    }
-}
-
-.pulse {
-    -webkit-animation: pulse 0.7s 1;
-            animation: pulse 0.7s 1;
-    -webkit-animation-name: pulse;
-            animation-name: pulse;
-}
-
 #expedited input[type='radio'] {
     -webkit-appearance: none;
        -moz-appearance: none;
@@ -586,29 +545,7 @@
             });
 
             // If user successfully proceeds to step 2 of expedited
-            function stepTwoSuccess() {
-                // Determine new vs loyalty profile, repeat at set interval
-                var timerId = setInterval(function() { 
-                    isoTest.log('tick');
-                    if(document.querySelector('#expedited-skip-link')) {
-                        expedited.classList.add('expedited-step-2');
-                        expedited.classList.remove('expedited-step-1');
-                        clearInterval(timerId);
-                        isoTest.log('stop new user');
-                    }
-                    if(document.querySelector('.expedited_verify-license-address')) {
-                        expedited.classList.add('expedited-step-2','expedited-returning');
-                        expedited.classList.remove('expedited-step-1');
-                        clearInterval(timerId);
-                        isoTest.log('stop loyalty user');
-                    }  
-                }, 500);
-                // Stop search after set time
-                setTimeout( function() { 
-                    clearInterval(timerId); 
-                    isoTest.log('stop backup'); 
-                }, 9000);
-            }
+            isoTest.stepTwoSuccess();
 
             // Expedited logic for jumping between steps
             expedited.addEventListener('click', function(event) {
@@ -629,10 +566,6 @@
                     if (document.querySelector('#expedited-skip-link')) {
                         document.getElementById('expedited-skip-link').click();
                     }
-                    document.getElementById('expedited-no').classList.add('pulse');
-                    setTimeout(function() {
-                        document.getElementById('expedited-no').classList.remove('pulse');
-                    }, 700);
                     expeditedForm.hidden = true;
                 }
             });
@@ -705,8 +638,35 @@
                 }   
             });
 		},
+		stepTwoSuccess : function() {
+			isoTest.log('fn:stepTwoSuccess');
+
+            // Determine new vs loyalty profile, repeat at set interval
+            var expedited = document.getElementById('expedited');
+
+            var timerId = setInterval(function() { 
+                isoTest.log('tick');
+                if(document.querySelector('#expedited-skip-link')) {
+                    expedited.classList.add('expedited-step-2');
+                    expedited.classList.remove('expedited-step-1');
+                    clearInterval(timerId);
+                    isoTest.log('stop new user');
+                }
+                if(document.querySelector('.expedited_verify-license-address')) {
+                    expedited.classList.add('expedited-step-2','expedited-returning');
+                    expedited.classList.remove('expedited-step-1');
+                    clearInterval(timerId);
+                    isoTest.log('stop loyalty user');
+                }  
+            }, 500);
+            // Stop search after set time
+            setTimeout( function() { 
+                clearInterval(timerId); 
+                isoTest.log('stop backup'); 
+            }, 9000);
+        },
 		updatePageForAuthenticatedVRI : function() {
-			isoTest.log('updatePageForAuthenticatedVRI');
+			isoTest.log('fn:updatePageForAuthenticatedVRI');
 			//check if VRI
 			if (document.querySelector('.payment-method-container')) {
 				if (document.querySelectorAll('#expedited .expedited-disclaimer').length > 0) {
