@@ -1,4 +1,38 @@
 <style>
+.reservation-flow .location-search {
+    position: relative;
+    overflow: visible;
+    padding-top: 10px;
+}
+
+.reservation-flow .location-search h1 {
+	font-size: 2rem;
+    padding-top: .625rem;
+    padding-left: 10px;
+    text-transform: uppercase;
+}
+
+.reservation-flow .location-search .gi {
+    padding-left: 10px;
+    padding-right: 0;
+}
+
+.reservation-flow .location-search .locationChicklet-active {
+	width: 100%;
+}
+
+.reservation-flow .location-search .locationChicklet-active .location-chicklet {
+	width: 100%;
+}
+
+.reservation-flow .location-search .locationChicklet-active .location-chicklet {
+	max-width: 100%;
+}
+
+.reservation-flow .location-search .location-chicklet {
+	border-bottom: 2px solid #c3c3c3;
+}
+
 .map-toggle .btn.btn-unstyled {
 	bottom: .5em;
 	font-size: 16px;
@@ -586,8 +620,13 @@
 
 		},
 		viewChange : function(){
-			if(/location/.test(location.hash)){
+			if(location.hash === "#location/pickup"){
 				helpers.elementLoaded(isoTest.selectorLocations, function() {
+					if (document.querySelector('.iso-location-filters-modal.iso-modal') != null) {
+						window.clearInterval(isoTest.counter);
+						isoTest.counter = '';
+						document.querySelector('.iso-location-filters-modal.iso-modal').remove();
+					}
 					isoTest.chall();
 				});
 			} else {
@@ -600,6 +639,10 @@
 		},
 		chall : function() {
 			isoTest.log('chall()');
+
+			if (document.querySelector('body').classList.contains('resflow-location/dropoff') && !document.querySelector('body').classList.contains('resflow-location')) {
+				document.querySelector('body').classList.add('resflow-location');
+			}
 
 			helpers.elementLoaded('.location-search-filter__mobile-header span', function() {
 				isoTest.addLocationFilter();
@@ -1026,24 +1069,31 @@
 				        var lblParent = lbl.parentNode;
 			            var lblCount = _analytics.solr.length;
 			            var lblIcon = lblParent.childNodes[lblCount + indx];
-			            var lblIconImage = lblIcon.children[0];
 
 			            if (!filterType) {
 			            	if (status != "unchecked") {
 			            		document.getElementById(loc.peopleSoftId).closest('.location-result-item').classList.add(type);
 				            	document.getElementById(loc.peopleSoftId).closest('.location-result-item').setAttribute('data-active', 'hide');
-								lbl.style.display = 'none';
-				            	lblIcon.style.display = 'none';
-				            	if (lblIconImage) {
+								if (lbl) {
+				            		lbl.style.display = 'none';
+				            	}
+								
+				            	if (lblIcon) {
+				            		lblIcon.style.display = 'none';
+				            		var lblIconImage = lblIcon.children[0];
 				            		lblIconImage.style.display = 'none';
 				            	}
 				            } else {
 				            	document.getElementById(loc.peopleSoftId).closest('.location-result-item').classList.remove(type);
 				            	if (locationFilterTypesChecked || !otherFilter) {
 				            		document.getElementById(loc.peopleSoftId).closest('.location-result-item').setAttribute('data-active', 'active');
-					            	lbl.style.display = 'initial';
-					            	lblIcon.style.display = 'initial';
-					            	if (lblIconImage) {
+					            	if (lbl) {
+					            		lbl.style.display = 'initial';
+				            		}
+					            	
+					            	if (lblIcon) {
+					            		lblIcon.style.display = 'initial';
+				            			var lblIconImage = lblIcon.children[0];
 					            		lblIconImage.style.display = 'initial';
 					            	}
 				            	}
@@ -1326,7 +1376,10 @@
 			locationTypeFiltersTriggerBtn.disabled = true;
 			locationTypeFiltersTriggerBtn.classList.add('disabled');
 
-			document.querySelector('.iso-location-chicklet-clear').remove();
+
+			if (document.querySelector('.iso-location-chicklet-clear')) {
+				document.querySelector('.iso-location-chicklet-clear').remove();
+			}
 			document.querySelector('.location-chicklet-clear').click();
 
 			helpers.elementLoaded('.search-results-wrapper .search-results ul .location-result-item.active .location-result-item__cta', function() {
