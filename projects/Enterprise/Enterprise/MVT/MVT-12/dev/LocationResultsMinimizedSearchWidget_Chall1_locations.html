@@ -1402,7 +1402,9 @@
 			locationTypeFiltersTriggerBtn.disabled = true;
 			locationTypeFiltersTriggerBtn.classList.add('disabled');
 
-			document.querySelector('.iso-location-chicklet-clear').remove();
+			if (document.querySelector('.iso-location-chicklet-clear')) {
+				document.querySelector('.iso-location-chicklet-clear').remove();
+			}
 			document.querySelector('.location-chicklet-clear').click();
 
 			helpers.elementLoaded('.search-results-wrapper .search-results ul .location-result-item.active .location-result-item__cta', function() {
