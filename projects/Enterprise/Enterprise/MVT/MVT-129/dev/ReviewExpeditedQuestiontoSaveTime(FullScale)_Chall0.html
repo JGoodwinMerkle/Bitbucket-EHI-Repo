@@ -546,12 +546,13 @@
 
             // If user successfully proceeds to step 2 of expedited
             isoTest.stepTwoSuccess();
+            
 
             // Expedited logic for jumping between steps
             expedited.addEventListener('click', function(event) {
                 // Proceeds to step 2
                 if (event.target.matches('button.btn.save')) {
-                    stepTwoSuccess();
+                    isoTest.stepTwoSuccess();
                 }
                 // Returns to step 1
                 if (event.target.matches('.license-value .edit')) {
