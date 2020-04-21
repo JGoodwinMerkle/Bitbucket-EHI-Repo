@@ -371,14 +371,27 @@
 		display: block;
         font-size: .875rem;
 	}
-	#input-with-keypress-0, #input-with-keypress-1,#input-with-keypress-m0, #input-with-keypress-m1 {
+    .prs-input-wrap .input-currency {
+        position: relative;
+    }
+    .prs-input-wrap .input-currency::before {
+        align-items: center;
+        content: '$';
+        display: flex;
+        position: absolute;
+        left: 7px;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+    #input-with-keypress-0, #input-with-keypress-1,#input-with-keypress-m0, #input-with-keypress-m1 {
         border: 2px solid #c3c3c3;
         border-radius: 0;
         color: #169a5a;
         display: inline-block;
         font-size: 16px;
         margin: 0;
-        padding: 4px 8px;
+        padding: 4px 8px 4px 16px;
         position: relative;
         width: 70px;
     }
@@ -467,7 +480,7 @@
         },
         addDesktopSlider : function() {
             if (!document.querySelector('#prsDesktop')) {
-                document.querySelector('.vehicle-filter__content > div:nth-child(2)').insertAdjacentHTML('beforebegin','<div class="vehicle-filter__filter prs-wrap"><span class="vehicle-filter__title">Total Price Range</span><div class="price-range-slider"><div id="prsDesktop"></div><div class="prs-input-wrap"><span>Min</span><input type="text" id="input-with-keypress-0" title="Enter Minimum Total Price"></div><div class="prs-input-divider"> &mdash; </div><div class="prs-input-wrap"><span>Max</span><input type="text" id="input-with-keypress-1" title="Enter Maximum Total Price"></div></div></div>');
+                document.querySelector('.vehicle-filter__content > div:nth-child(2)').insertAdjacentHTML('beforebegin','<div class="vehicle-filter__filter prs-wrap"><span class="vehicle-filter__title">Total Price Range</span><div class="price-range-slider"><div id="prsDesktop"></div><div class="prs-input-wrap"><span>Min</span><span class="input-currency"><input type="text" id="input-with-keypress-0" title="Enter Minimum Total Price"></span></div><div class="prs-input-divider"> &mdash; </div><div class="prs-input-wrap"><span>Max</span><span class="input-currency"><input type="text" id="input-with-keypress-1" title="Enter Maximum Total Price"></span></div></div></div>');
             }
         },
         setPriceRange : function() {
@@ -709,6 +722,9 @@
         setCurrency : function() {
             // Set currency symbol
             var currency = store.getState().toJS()['app']['vehicles']['availableVehicles'][0]['charges']['PAYLATER']['total_price_view']['symbol'];
+
+            document.querySelector('body').insertAdjacentElement('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
+            
             if (currency == "€") {
                 document.getElementById('prsDesktop').noUiSlider.updateOptions({
                    format: wNumb({
@@ -770,7 +786,7 @@
 
             // Insert new mobile slider
             var prsMobileWrap = document.querySelectorAll('.ReactModalPortal .vehicle-filter__header')[1];
-            prsMobileWrap.insertAdjacentHTML('afterend','<div class="vehicle-filter__filter prs-wrap"><span class="vehicle-filter__title">Total Price Range</span><div class="price-range-slider"><div id="prsMobile"></div><div class="prs-input-wrap"><span>Min</span><input type="text" id="input-with-keypress-m0" title="Enter Minimum Total Price"></div><div class="prs-input-divider"> &mdash; </div><div class="prs-input-wrap"><span>Max</span><input type="text" id="input-with-keypress-m1" title="Enter Maximum Total Price"></div></div></div>');
+            prsMobileWrap.insertAdjacentHTML('afterend','<div class="vehicle-filter__filter prs-wrap"><span class="vehicle-filter__title">Total Price Range</span><div class="price-range-slider"><div id="prsMobile"></div><div class="prs-input-wrap"><span>Min</span><span class="input-currency"><input type="text" id="input-with-keypress-m0" title="Enter Minimum Total Price"></span></div><div class="prs-input-divider"> &mdash; </div><div class="prs-input-wrap"><span>Max</span><span class="input-currency"><input type="text" id="input-with-keypress-m1" title="Enter Maximum Total Price"></span></div></div></div>');
             // Add clear button
             prsMobileWrap.insertAdjacentHTML('beforeend','<span class="vehicle-filter__header-cta"><span class="isoTest-clear-filter-m"><button class="vehicle-filter__header-link btn-anchor" tabindex="0" type="button" role="button" data-dtm-tracking="car_filters|clear_filters|select">Clear All</button></span></span>');
 

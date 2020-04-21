@@ -368,6 +368,19 @@
 		display: block;
         font-size: .875rem;
 	}
+    .prs-input-wrap .input-currency {
+        position: relative;
+    }
+    .prs-input-wrap .input-currency::before {
+        align-items: center;
+        content: '$';
+        display: flex;
+        position: absolute;
+        left: 7px;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+    }
 	#input-with-keypress-0, #input-with-keypress-1,#input-with-keypress-m0, #input-with-keypress-m1 {
 		border: 2px solid #c3c3c3;
 		border-radius: 0;
@@ -375,7 +388,7 @@
 		display: inline-block;
         font-size: 16px;
 	    margin: 0;
-	    padding: 4px 8px;
+	    padding: 4px 8px 4px 16px;
 	    position: relative;
 	    width: 70px;
 	}
@@ -425,8 +438,9 @@
         psCurrentMax: 0,
 		init : function() {
 
-			isoTest.debug = ${user.mvtDebug};
-			
+			//isoTest.debug = ${user.mvtDebug};
+			isoTest.debug = true;
+
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
@@ -464,7 +478,7 @@
 		},
         addDesktopSlider : function() {
             if (!document.querySelector('#prsDesktop')) {
-                document.querySelector('.vehicle-filter__content > div:nth-child(2)').insertAdjacentHTML('beforebegin','<div class="vehicle-filter__filter prs-wrap"><span class="vehicle-filter__title">Total Price Range</span><div class="price-range-slider"><div id="prsDesktop"></div><div class="prs-input-wrap"><span>Min</span><input type="text" id="input-with-keypress-0" title="Enter Minimum Total Price"></div><div class="prs-input-wrap"><span>Max</span><input type="text" id="input-with-keypress-1" title="Enter Maximum Total Price"></div></div></div>');
+                document.querySelector('.vehicle-filter__content > div:nth-child(2)').insertAdjacentHTML('beforebegin','<div class="vehicle-filter__filter prs-wrap"><span class="vehicle-filter__title">Total Price Range</span><div class="price-range-slider"><div id="prsDesktop"></div><div class="prs-input-wrap"><span>Min</span><span class="input-currency"><input type="text" id="input-with-keypress-0" title="Enter Minimum Total Price"></span></div><div class="prs-input-wrap"><span>Max</span><span class="input-currency"><input type="text" id="input-with-keypress-1" title="Enter Maximum Total Price"></span></div></div></div>');
             }
         },
         setPriceRange : function() {
@@ -559,7 +573,7 @@
             
             // Update car list on slider change
             prsDesktop.noUiSlider.on('update', function (values, handle) {
-                inputs[handle].value = values[handle];
+                inputs[handle].value = Number(values[handle].replace(/[$€,]/g,''));
                 //console.log(values);
                 isoTest.carQty = 0;
 
@@ -664,23 +678,24 @@
                 }
                 // Clear filters
                 if (event.target.closest('.isoTest-clear-filter')) {
-                    prsDesktop.noUiSlider.set([0,999999999]);
-                    isoTest.updateSlider();
+                    
                     document.querySelector('.isoTest-clear-filter').classList.remove('show');
                     if (document.querySelector('.vehicle-filter__header .vehicle-filter__header-cta')) {
                         document.querySelector('.vehicle-filter__header .btn').click();
                     }
+                    prsDesktop.noUiSlider.set([0,999999999]);
+                    isoTest.updateSlider();
                     setTimeout(function(){
                        isoTest.preventSliderHandleOverlap(); 
                     }, 300);
                 }
                 if (event.target.closest('.isoTest-clear-filter-m')) {
-                    prsMobile.noUiSlider.set([0,999999999]);
-                    isoTest.updateSlider();
                     document.querySelector('.isoTest-clear-filter-m').classList.remove('show');
                     if (document.querySelector('.ReactModalPortal .vehicle-filter__header .btn-secondary')) {
                         document.querySelector('.ReactModalPortal .vehicle-filter__header .btn-secondary').click();
                     }
+                    prsMobile.noUiSlider.set([0,999999999]);
+                    isoTest.updateSlider();
                     setTimeout(function(){
                        isoTest.preventSliderHandleOverlap(); 
                     }, 300);
@@ -707,6 +722,9 @@
             // Set currency symbol
             var currency = store.getState().toJS()['app']['vehicles']['availableVehicles'][0]['charges']['PAYLATER']['total_price_view']['symbol'];
             if (currency == "€") {
+
+                document.querySelector('body').insertAdjacentElement('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
+
                 document.getElementById('prsDesktop').noUiSlider.updateOptions({
                    format: wNumb({
                         decimals: 0,
@@ -767,7 +785,7 @@
 
             // Insert new mobile slider
             var prsMobileWrap = document.querySelectorAll('.ReactModalPortal .vehicle-filter__header')[1];
-            prsMobileWrap.insertAdjacentHTML('afterend','<div class="vehicle-filter__filter prs-wrap"><span class="vehicle-filter__title">Total Price Range</span><div class="price-range-slider"><div id="prsMobile"></div><div class="prs-input-wrap"><span>Min</span><input type="text" id="input-with-keypress-m0" title="Enter Minimum Total Price"></div><div class="prs-input-wrap"><span>Max</span><input type="text" id="input-with-keypress-m1" title="Enter Maximum Total Price"></div></div></div>');
+            prsMobileWrap.insertAdjacentHTML('afterend','<div class="vehicle-filter__filter prs-wrap"><span class="vehicle-filter__title">Total Price Range</span><div class="price-range-slider"><div id="prsMobile"></div><div class="prs-input-wrap"><span>Min</span><span class="input-currency"><input type="text" id="input-with-keypress-m0" title="Enter Minimum Total Price"></span></div><div class="prs-input-wrap"><span>Max</span><span class="input-currency"><input type="text" id="input-with-keypress-m1" title="Enter Maximum Total Price"></span></div></div></div>');
             // Add clear button
             prsMobileWrap.insertAdjacentHTML('beforeend','<span class="vehicle-filter__header-cta"><span class="isoTest-clear-filter-m"><button class="vehicle-filter__header-link btn-anchor" tabindex="0" type="button" role="button" data-dtm-tracking="car_filters|clear_filters|select">Clear All</button></span></span>');
 
@@ -803,7 +821,7 @@
 
             // Mobile slider functionality
             prsMobile.noUiSlider.on('update', function (values, handle) {
-                inputsM[handle].value = values[handle];
+                inputsM[handle].value = Number(values[handle].replace(/[$€,]/g,''));
                 // Keep sliders synced between mobile and dekstop
                 prsDesktop.noUiSlider.setHandle(handle, values[handle], true);
                 
@@ -811,10 +829,11 @@
 
             // Attach mobile slider events
             inputsM.forEach(function (input, handle) {
-
+                isoTest.log('mobile inputs event fired');
                 input.addEventListener('change', function () {
-                    prsMobile.noUiSlider.setHandle(handle, this.value);
+                    isoTest.log('mobile input changed');
                     isoTest.showClearFilter();
+                    prsMobile.noUiSlider.setHandle(handle, this.value);
                     // Input tracking
                     isoTest.fireTag(this,'Slider Input Updated');
                 });
@@ -871,7 +890,7 @@
             // calculate distance with Pythagorean Theorem (a^2 + b^2 = c^2)
             var distanceSquared = Math.pow(handleLowerX - handleUpperX, 2) + Math.pow(handleLowerY - handleUpperY, 2);
             var distance = Math.sqrt(distanceSquared);
-            isoTest.log('Distance: ' + distance);
+            //isoTest.log('Distance: ' + distance);
             
 
             if (distance > 45) {
