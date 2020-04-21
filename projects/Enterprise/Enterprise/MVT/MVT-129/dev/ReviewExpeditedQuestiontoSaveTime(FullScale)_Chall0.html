@@ -481,9 +481,9 @@
             var formContentWrap = document.createElement('div');
             formContentWrap.className = 'iso-expedited-header';
             formContentWrap.innerHTML = '<div class="error-container error-expedited-radio"><span class="error-prefix">ERROR:</span> Please make a selection.</div><h2 class="view-header"><span class="expedited-skip">Skip this section</span><span class="expedite-statc-text">Save Time At the Counter</span></h2><div class="expedited-disclaimer"><div class="iso-expedited"><div class="content"><p>Add more rental details and <strong>spend less time at the counter.</strong></p><ul><li>No payment is needed and you won\'t be charged right now.</li><li>You can still cancel at any time.</li><li>It should only take a couple of minutes.</li></ul></div><div class="icon"><img src="/content/dam/ecom/hosted/ico-clock.png"></div></div></div><form class="expedited-option"><p>Would you like to save time at the counter? *</p><span><input type="radio" name="group-1" value="yes" id="expedited-yes" class="expedited-radio" required><label for="expedited-yes">Yes, I\'d like to save time</label></span><span><input type="radio" name="group-1" value="no" id="expedited-no" class="expedited-radio"><label for="expedited-no">No, not today</label></span><input type="submit" value="" id="expedited-submit"></form><div class="expedited-no-note"><p>No problem. It will take a little longer to gather your information at the counter but we\'ll get you to your vehicle as quickly as we can.</p></div><div class="expedited-progress-bar"><div class="epb-step epb-step-1"><span>1</span><p>Lookup Your Details</p></div><div class="epb-arrow"><div class="arrow" aria-hidden="true">→</div></div><div class="epb-step epb-step-2"><span>2</span><p>Verify<span>/Complete</span> Your Details</p></div></div>';
-            expeditedForm.parentNode.insertBefore( formContentWrap, expeditedForm );
-
-            
+            if (document.querySelector('.iso-expedited-header') == null) {
+                expeditedForm.parentNode.insertBefore( formContentWrap, expeditedForm );
+            }
 
             // Add duplicate reserve button & hide real reserve button
             var realSubmit = document.querySelector('#reviewSubmit');
@@ -603,7 +603,7 @@
 
 						setTimeout(function(){
 							clearInterval(checkSignIn);
-						}, 10000);
+						}, 20000);
             		}
             	}
                 // Logic for submissions & partial completion submissions if user selects 'go back and complete'
@@ -638,6 +638,20 @@
                     document.querySelector('.personal-info-error-wrap').classList.remove('show');
                 }   
             });
+
+            //check if user signed-in on load
+            var checkSignInOnLoad = setInterval(function(){
+                var userLoggedInOnLoad = ReservationStateTree.get(["User","loggedIn"]);
+
+                if (userLoggedInOnLoad === true || userLoggedInOnLoad === "true") {
+                    clearInterval(checkSignInOnLoad);
+                    isoTest.updatePageForAuthenticatedVRI();
+                }
+            },100);
+
+            setTimeout(function(){
+                clearInterval(checkSignInOnLoad);
+            }, 5000);
 		},
 		stepTwoSuccess : function() {
 			isoTest.log('fn:stepTwoSuccess');
@@ -668,6 +682,10 @@
         },
 		updatePageForAuthenticatedVRI : function() {
 			isoTest.log('fn:updatePageForAuthenticatedVRI');
+
+            if (document.querySelector('#expedited')) {
+                document.querySelector('#expedited').style.display = "none";
+            }
 			//check if VRI
 			if (document.querySelector('.payment-method-container')) {
 				if (document.querySelectorAll('#expedited .expedited-disclaimer').length > 0) {
@@ -686,10 +704,29 @@
 					document.querySelector('#expedited .expedited-progress-bar').remove();
 				}
 
-				document.querySelector('#expedited .view-header').style.display = "block";
-				document.querySelector('#expedited .expedite-optional-text').style.display = "inline-block";
-				document.querySelector('#expedited .expedited-disclaimer').style.display = "block";
-				document.querySelector('#expedited .expedited-form > section > div:nth-child(2)').style.display = "block";
+                if (document.querySelector('#expedited')) {
+                    document.querySelector('#expedited').style.display = "block";
+                }
+
+                if (document.querySelector('#expedited .view-header')) {
+                    document.querySelector('#expedited .view-header').style.display = "block";
+                }
+
+                if (document.querySelector('#expedited .expedite-optional-text')) {
+                    document.querySelector('#expedited .expedite-optional-text').style.display = "inline-block";
+                }
+
+                if (document.querySelector('#expedited .expedited-disclaimer')) {
+                    document.querySelector('#expedited .expedited-disclaimer').style.display = "block";
+                }
+
+                if (document.querySelector('#expedited .expedited-form > section > div:nth-child(2)')) {
+                    document.querySelector('#expedited .expedited-form > section > div:nth-child(2)').style.display = "block";
+                }
+
+                if (document.querySelector('#expedited .expedited-form')) {
+                    document.querySelector('#expedited .expedited-form').style.display = "block";
+                }
 			}
 		},
 		validate : function(){
