@@ -147,7 +147,7 @@
             
 
             prsDesktop.noUiSlider.on('update', function (values, handle) {
-                inputs[handle].value = values[handle];
+                inputs[handle].value = Number(values[handle].replace(/[$€,]/g,''));
 
                 isoTest.carQty = 0;
 
@@ -252,23 +252,23 @@
                 }
 
                 if (event.target.closest('.isoTest-clear-filter')) {
-                    prsDesktop.noUiSlider.set([0,999999999]);
-                    isoTest.updateSlider();
                     document.querySelector('.isoTest-clear-filter').classList.remove('show');
                     if (document.querySelector('.vehicle-filter__header .vehicle-filter__header-cta')) {
                         document.querySelector('.vehicle-filter__header .btn').click();
                     }
+                    prsDesktop.noUiSlider.set([0,999999999]);
+                    isoTest.updateSlider();
                     setTimeout(function(){
                        isoTest.preventSliderHandleOverlap(); 
                     }, 300);
                 }
                 if (event.target.closest('.isoTest-clear-filter-m')) {
-                    prsMobile.noUiSlider.set([0,999999999]);
-                    isoTest.updateSlider();
                     document.querySelector('.isoTest-clear-filter-m').classList.remove('show');
                     if (document.querySelector('.ReactModalPortal .vehicle-filter__header .btn-secondary')) {
                         document.querySelector('.ReactModalPortal .vehicle-filter__header .btn-secondary').click();
                     }
+                    prsMobile.noUiSlider.set([0,999999999]);
+                    isoTest.updateSlider();
                     setTimeout(function(){
                        isoTest.preventSliderHandleOverlap(); 
                     }, 300);
@@ -294,10 +294,8 @@
         setCurrency : function() {
 
             var currency = store.getState().toJS()['app']['vehicles']['availableVehicles'][0]['charges']['PAYLATER']['total_price_view']['symbol'];
-
-            document.querySelector('body').insertAdjacentElement('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
-            
             if (currency == "€") {
+                document.querySelector('body').insertAdjacentHTML('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
                 document.getElementById('prsDesktop').noUiSlider.updateOptions({
                    format: wNumb({
                         decimals: 0,
@@ -394,18 +392,17 @@
 
 
             prsMobile.noUiSlider.on('update', function (values, handle) {
-                inputsM[handle].value = values[handle];
+                inputsM[handle].value = Number(values[handle].replace(/[$€,]/g,''));
 
                 prsDesktop.noUiSlider.setHandle(handle, values[handle], true);
-                
             });
 
 
             inputsM.forEach(function (input, handle) {
 
                 input.addEventListener('change', function () {
-                    prsMobile.noUiSlider.setHandle(handle, this.value);
                     isoTest.showClearFilter();
+                    prsMobile.noUiSlider.setHandle(handle, this.value);
 
                     isoTest.fireTag(this,'Slider Input Updated');
                 });
@@ -432,15 +429,12 @@
 
 
             if (document.querySelector('.ReactModal__Content--after-open.default-modal .modal-content .checkbox__label-checkbox.checked')) {
-
                 isoTest.showClearFilter();
             }
             if (isoTest.carCostLow != isoTest.psCurrentMin) {
-
                 isoTest.showClearFilter();
             }
             if (isoTest.carCostHigh != isoTest.psCurrentMax) {
-
                 isoTest.showClearFilter();
             }
 

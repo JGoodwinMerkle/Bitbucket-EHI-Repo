@@ -678,7 +678,6 @@
                 }
                 // Clear filters
                 if (event.target.closest('.isoTest-clear-filter')) {
-                    
                     document.querySelector('.isoTest-clear-filter').classList.remove('show');
                     if (document.querySelector('.vehicle-filter__header .vehicle-filter__header-cta')) {
                         document.querySelector('.vehicle-filter__header .btn').click();
@@ -722,9 +721,7 @@
             // Set currency symbol
             var currency = store.getState().toJS()['app']['vehicles']['availableVehicles'][0]['charges']['PAYLATER']['total_price_view']['symbol'];
             if (currency == "€") {
-
-                document.querySelector('body').insertAdjacentElement('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
-
+                document.querySelector('body').insertAdjacentHTML('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
                 document.getElementById('prsDesktop').noUiSlider.updateOptions({
                    format: wNumb({
                         decimals: 0,
@@ -824,14 +821,12 @@
                 inputsM[handle].value = Number(values[handle].replace(/[$€,]/g,''));
                 // Keep sliders synced between mobile and dekstop
                 prsDesktop.noUiSlider.setHandle(handle, values[handle], true);
-                
             });
 
             // Attach mobile slider events
             inputsM.forEach(function (input, handle) {
-                isoTest.log('mobile inputs event fired');
+
                 input.addEventListener('change', function () {
-                    isoTest.log('mobile input changed');
                     isoTest.showClearFilter();
                     prsMobile.noUiSlider.setHandle(handle, this.value);
                     // Input tracking
@@ -855,20 +850,17 @@
                 });
             });
 
-            //isoTest.log('carclostlow: ' + isoTest.carCostLow);
-            //isoTest.log('pscurrentmin: ' + isoTest.psCurrentMin);
+            // isoTest.log('carclostlow: ' + isoTest.carCostLow);
+            // isoTest.log('pscurrentmin: ' + isoTest.psCurrentMin);
 
             // Show clear if previously filtered
             if (document.querySelector('.ReactModal__Content--after-open.default-modal .modal-content .checkbox__label-checkbox.checked')) {
-                //isoTest.log('checkbox checked is true');
                 isoTest.showClearFilter();
             }
             if (isoTest.carCostLow != isoTest.psCurrentMin) {
-                //isoTest.log('cost low mismatch is true');
                 isoTest.showClearFilter();
             }
             if (isoTest.carCostHigh != isoTest.psCurrentMax) {
-                //isoTest.log('cost high mismatch is true');
                 isoTest.showClearFilter();
             }
 

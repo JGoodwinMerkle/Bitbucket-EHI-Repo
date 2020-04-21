@@ -575,7 +575,7 @@
             
             // Update car list on slider change
             prsDesktop.noUiSlider.on('update', function (values, handle) {
-                inputs[handle].value = values[handle];
+                inputs[handle].value = Number(values[handle].replace(/[$€,]/g,''));
                 //console.log(values);
                 isoTest.carQty = 0;
 
@@ -680,23 +680,23 @@
                 }
                 // Clear filters
                 if (event.target.closest('.isoTest-clear-filter')) {
-                    prsDesktop.noUiSlider.set([0,999999999]);
-                    isoTest.updateSlider();
                     document.querySelector('.isoTest-clear-filter').classList.remove('show');
                     if (document.querySelector('.vehicle-filter__header .vehicle-filter__header-cta')) {
                         document.querySelector('.vehicle-filter__header .btn').click();
                     }
+                    prsDesktop.noUiSlider.set([0,999999999]);
+                    isoTest.updateSlider();
                     setTimeout(function(){
                        isoTest.preventSliderHandleOverlap(); 
                     }, 300);
                 }
                 if (event.target.closest('.isoTest-clear-filter-m')) {
-                    prsMobile.noUiSlider.set([0,999999999]);
-                    isoTest.updateSlider();
                     document.querySelector('.isoTest-clear-filter-m').classList.remove('show');
                     if (document.querySelector('.ReactModalPortal .vehicle-filter__header .btn-secondary')) {
                         document.querySelector('.ReactModalPortal .vehicle-filter__header .btn-secondary').click();
                     }
+                    prsMobile.noUiSlider.set([0,999999999]);
+                    isoTest.updateSlider();
                     setTimeout(function(){
                        isoTest.preventSliderHandleOverlap(); 
                     }, 300);
@@ -722,10 +722,8 @@
         setCurrency : function() {
             // Set currency symbol
             var currency = store.getState().toJS()['app']['vehicles']['availableVehicles'][0]['charges']['PAYLATER']['total_price_view']['symbol'];
-
-            document.querySelector('body').insertAdjacentElement('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
-            
             if (currency == "€") {
+                document.querySelector('body').insertAdjacentHTML('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
                 document.getElementById('prsDesktop').noUiSlider.updateOptions({
                    format: wNumb({
                         decimals: 0,
@@ -822,18 +820,17 @@
 
             // Mobile slider functionality
             prsMobile.noUiSlider.on('update', function (values, handle) {
-                inputsM[handle].value = values[handle];
+                inputsM[handle].value = Number(values[handle].replace(/[$€,]/g,''));
                 // Keep sliders synced between mobile and dekstop
                 prsDesktop.noUiSlider.setHandle(handle, values[handle], true);
-                
             });
 
             // Attach mobile slider events
             inputsM.forEach(function (input, handle) {
 
                 input.addEventListener('change', function () {
-                    prsMobile.noUiSlider.setHandle(handle, this.value);
                     isoTest.showClearFilter();
+                    prsMobile.noUiSlider.setHandle(handle, this.value);
                     // Input tracking
                     isoTest.fireTag(this,'Slider Input Updated');
                 });
@@ -855,20 +852,17 @@
                 });
             });
 
-            isoTest.log('carclostlow: ' + isoTest.carCostLow);
-            isoTest.log('pscurrentmin: ' + isoTest.psCurrentMin);
+            // isoTest.log('carclostlow: ' + isoTest.carCostLow);
+            // isoTest.log('pscurrentmin: ' + isoTest.psCurrentMin);
 
             // Show clear if previously filtered
             if (document.querySelector('.ReactModal__Content--after-open.default-modal .modal-content .checkbox__label-checkbox.checked')) {
-                isoTest.log('checkbox checked is true');
                 isoTest.showClearFilter();
             }
             if (isoTest.carCostLow != isoTest.psCurrentMin) {
-                isoTest.log('cost low mismatch is true');
                 isoTest.showClearFilter();
             }
             if (isoTest.carCostHigh != isoTest.psCurrentMax) {
-                isoTest.log('cost high mismatch is true');
                 isoTest.showClearFilter();
             }
 
@@ -890,7 +884,7 @@
             // calculate distance with Pythagorean Theorem (a^2 + b^2 = c^2)
             var distanceSquared = Math.pow(handleLowerX - handleUpperX, 2) + Math.pow(handleLowerY - handleUpperY, 2);
             var distance = Math.sqrt(distanceSquared);
-            isoTest.log('Distance: ' + distance);
+            //isoTest.log('Distance: ' + distance);
             
 
             if (distance > 45) {

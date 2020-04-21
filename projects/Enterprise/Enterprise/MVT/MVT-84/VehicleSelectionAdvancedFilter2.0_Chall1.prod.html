@@ -253,7 +253,6 @@
                 }
 
                 if (event.target.closest('.isoTest-clear-filter')) {
-                    
                     document.querySelector('.isoTest-clear-filter').classList.remove('show');
                     if (document.querySelector('.vehicle-filter__header .vehicle-filter__header-cta')) {
                         document.querySelector('.vehicle-filter__header .btn').click();
@@ -297,9 +296,7 @@
 
             var currency = store.getState().toJS()['app']['vehicles']['availableVehicles'][0]['charges']['PAYLATER']['total_price_view']['symbol'];
             if (currency == "€") {
-
-                document.querySelector('body').insertAdjacentElement('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
-
+                document.querySelector('body').insertAdjacentHTML('afterbegin', '<style>.prs-input-wrap .input-currency::before {content: "€";}</style>');
                 document.getElementById('prsDesktop').noUiSlider.updateOptions({
                    format: wNumb({
                         decimals: 0,
@@ -399,14 +396,12 @@
                 inputsM[handle].value = Number(values[handle].replace(/[$€,]/g,''));
 
                 prsDesktop.noUiSlider.setHandle(handle, values[handle], true);
-                
             });
 
 
             inputsM.forEach(function (input, handle) {
 
                 input.addEventListener('change', function () {
-
                     isoTest.showClearFilter();
                     prsMobile.noUiSlider.setHandle(handle, this.value);
 
@@ -435,15 +430,12 @@
 
 
             if (document.querySelector('.ReactModal__Content--after-open.default-modal .modal-content .checkbox__label-checkbox.checked')) {
-
                 isoTest.showClearFilter();
             }
             if (isoTest.carCostLow != isoTest.psCurrentMin) {
-
                 isoTest.showClearFilter();
             }
             if (isoTest.carCostHigh != isoTest.psCurrentMax) {
-
                 isoTest.showClearFilter();
             }
 
