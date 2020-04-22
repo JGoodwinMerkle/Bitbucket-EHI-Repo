@@ -108,12 +108,18 @@
 		},
 		addDataSIPP : function() {
 			var allCarsDisplayed = _a["carClassesDisplayed"];
+
+			console.log("allCarsDisplayed");
+			console.log(allCarsDisplayed);
+
 			var vehicles = document.querySelectorAll('.carList li .car-class-twisty h2');
+
 			if (allCarsDisplayed != null) {
 				for (var i=0; i < vehicles.length; i++) {
-					var carName = vehicles[i].getAttribute('data-id');
+					var carNameVar = vehicles[i].getAttribute('data-id');
+					var carName = carNameVar.split('selectCar_headerTwisty_')[1];
 					for (var key in allCarsDisplayed) {
-						if( allCarsDisplayed[key]['name'] == carName ) {
+						if( allCarsDisplayed[key]['code'] == carName ) {
 							vehicles[i].closest('li').setAttribute('data-sipp', allCarsDisplayed[key]['code']);
 						}
 					}
