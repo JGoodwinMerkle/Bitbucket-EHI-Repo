@@ -278,14 +278,13 @@
 
 
 
-            var sliderHandles = document.querySelectorAll('.noUi-touch-area');
-            for (var i = 0; i < sliderHandles.length; i++) {
-                sliderHandles[i].addEventListener('touchend', function(event) {
-                    isoTest.showClearFilter();
+            document.addEventListener('touchend', function(event) {
+                if (event.target.closest('.noUi-touch-area')) {
 
+                    isoTest.showClearFilter();
                     isoTest.fireTag(this,'Slider Handle Dragged');
-                });    
-            }
+                }
+            });
 
 
             window.addEventListener('resize', isoTest.preventSliderHandleOverlap);  

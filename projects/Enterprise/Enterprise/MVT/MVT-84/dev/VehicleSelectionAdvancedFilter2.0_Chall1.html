@@ -703,15 +703,15 @@
             });
 
 
-            // Attaching touch events directly to elements for performance
-            var sliderHandles = document.querySelectorAll('.noUi-touch-area');
-            for (var i = 0; i < sliderHandles.length; i++) {
-                sliderHandles[i].addEventListener('touchend', function(event) {
+            // Touch events
+            document.addEventListener('touchend', function(event) {
+                if (event.target.closest('.noUi-touch-area')) {
+                    isoTest.log('price slider handle touched');
                     isoTest.showClearFilter();
-                    // Listen for slider drag
                     isoTest.fireTag(this,'Slider Handle Dragged');
-                });    
-            }
+                }
+            });
+
 
             // Prevent slider handle overlap on resize
             window.addEventListener('resize', isoTest.preventSliderHandleOverlap);  
