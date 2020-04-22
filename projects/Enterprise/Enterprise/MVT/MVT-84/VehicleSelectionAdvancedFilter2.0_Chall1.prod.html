@@ -279,15 +279,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
             document.addEventListener('touchend', function(event) {
                 if (event.target.closest('.noUi-touch-area')) {
 
@@ -539,7 +530,7 @@
 				}
 			} else {
 				isoTest.timer = window.setTimeout(function() {
-					isoTest.dependsLoaded(callback);
+					helpers.dependsLoaded(callback);
 				}, 100);
 			}
 		}
