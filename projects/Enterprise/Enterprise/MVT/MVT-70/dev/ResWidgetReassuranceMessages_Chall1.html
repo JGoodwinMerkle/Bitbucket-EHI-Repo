@@ -32,6 +32,23 @@
 		margin-top: 1em;
 		text-decoration: underline;
 	}
+	@media (min-width: 1200px) {
+		.res-widget-wrapping-div {
+			float: left;
+			width: 70%;
+		}
+		.res-widget-msg-wrap {
+		    float: left;
+		    width: 30%;
+		}
+		.res-widget-msg {
+			max-width: 375px;
+			padding: 0 40px;
+			border-top: none;
+			border-left: 2px solid #c3c3c3;
+		}
+	}
+	
 </style>
 <script>
 (function() {
@@ -64,15 +81,21 @@
 		},
 		chall : function() {
 
-			// Your code goes here
-			var resWidget = document.querySelector('#reservationWidget');
+			// Move header
+			var resWidgetWrap = document.querySelector('.reserve-widget-band').parentElement;
+			resWidgetWrap.classList.add('res-widget-wrapping-div');
+			resWidgetWrap.insertAdjacentElement('afterbegin', document.querySelector('section.band'));
+
+			// Insert message content
 			document.querySelector('#reservationWidget > div').classList.add('res-widget-wrap');
-			resWidget.insertAdjacentHTML('beforeend','<div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. Our Responsibility.</h2><p>We are committed to accommodate your transportation needs while protecting your safety and our communities.</p><ul>\
+			resWidgetWrap.insertAdjacentHTML('afterend','<div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. Our Responsibility.</h2><p>We are committed to accommodate your transportation needs while protecting your safety and our communities.</p><ul>\
 				<li>Enhanced cleaning procedures</li>\
 				<li>New curbside pickup option</li>\
 				<li>Free cancellation</li>\
 				<li>24-hour reservation services</li>\
 				</ul><a href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div>');
+
+			
 
 		},
 		fireTag : function(element, value) {
