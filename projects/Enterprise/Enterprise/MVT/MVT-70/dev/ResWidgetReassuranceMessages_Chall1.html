@@ -1,0 +1,122 @@
+<style>
+	.res-widget-msg-wrap {
+		
+	}
+	.res-widget-msg {
+		border-top: 2px solid #c3c3c3;
+	}
+	.res-widget-msg h2 {
+	    margin-top: 1.4em;
+	    margin-bottom: 0.5em;
+	    text-transform: uppercase;
+	}
+	.res-widget-msg ul {
+		margin-bottom: 25px;
+	}
+	.res-widget-msg li {
+		margin-bottom: 13px;
+		padding-left: 30px;
+		position: relative;
+	}
+	.res-widget-msg li::before {
+		background-image: url('/content/dam/ecom/hosted/ico_green_check.svg');
+		background-size: 22px;
+		background-repeat: no-repeat;
+		content: '';
+		left: 0;
+		height: 22px;
+		width: 22px;
+		position: absolute;
+	}
+	.res-widget-msg a {
+		margin-top: 1em;
+		text-decoration: underline;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Res Widget Reassurance Messages',
+		creative : 'Challenger 1',
+		selector: '#reservationWidget > div',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+
+			// Your code goes here
+			var resWidget = document.querySelector('#reservationWidget');
+			document.querySelector('#reservationWidget > div').classList.add('res-widget-wrap');
+			resWidget.insertAdjacentHTML('beforeend','<div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. Our Responsibility.</h2><p>We are committed to accommodate your transportation needs while protecting your safety and our communities.</p><ul>\
+				<li>Enhanced cleaning procedures</li>\
+				<li>New curbside pickup option</li>\
+				<li>Free cancellation</li>\
+				<li>24-hour reservation services</li>\
+				</ul><a href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div>');
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
