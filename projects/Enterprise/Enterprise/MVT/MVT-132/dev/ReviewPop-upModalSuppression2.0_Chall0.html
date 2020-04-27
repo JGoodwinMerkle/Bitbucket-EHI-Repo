@@ -50,15 +50,15 @@
 				if (ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','address','country_subdivision_code']) != null){
 					clearInterval(dataObjectLoaded);
 					isoTest.log('found reservation data object!');
-
-					if (/CA/.test(ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','address','country_subdivision_code']))) {
-						isoTest.log('Reservation in CA');
-	  				} else {
-	  					isoTest.log('Reservation outside CA');
-						isoTest.closeBranchInfoModal();
-						isoTest.mutationObserver();
-	  				}
-
+					if (/US/.test(ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','address','country_code']))) {
+						if (/CA/.test(ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','address','country_subdivision_code']))) {
+							isoTest.log('Reservation in CA');
+		  				} else {
+		  					isoTest.log('Reservation outside CA');
+							isoTest.closeBranchInfoModal();
+							isoTest.mutationObserver();
+		  				}
+		  			}
 				}
 				setTimeout(function(){
 					clearInterval(dataObjectLoaded);
