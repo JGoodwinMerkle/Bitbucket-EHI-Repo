@@ -1,11 +1,14 @@
 <style>
 	.res-widget-msg-wrap {
-		
+		margin-left: 1.875rem;
+    	margin-right: 1.875rem;
 	}
 	.res-widget-msg {
 		border-top: 2px solid #c3c3c3;
+		margin: 0 auto;
 	}
 	.res-widget-msg h2 {
+		color: #333;
 	    margin-top: 1.4em;
 	    margin-bottom: 0.5em;
 	    text-transform: uppercase;
@@ -32,20 +35,63 @@
 		margin-top: 1em;
 		text-decoration: underline;
 	}
-	@media (min-width: 1200px) {
+	.res-widget-msg h2 br {
+		display: none;
+	}
+	.branchpage .res-widget-msg-wrap {
+		padding: 0 5%;
+	}
+	@media (max-width: 490px) {
+		.res-widget-msg h2 br {
+			display: block;
+		}
+	}
+	@media (min-width: 769px) {
+		.res-widget-msg-wrap {
+			margin-left: 0;
+			margin-right: 0;
+		}
+	}
+	@media (min-width: 1400px) {
+		#start-reservation {
+			width: 70%;
+		}
+		#start-reservation .inner-container {
+			margin: 0;
+			padding: 0;
+		}
+		.branchpage .res-widget-msg-wrap {
+			padding: 0;
+		}
+		.branchpage .res-widget-msg {
+			margin: 70px auto 40px auto;
+		}
+		.featuredcitypage .res-widget-msg {
+			margin: 90px auto 40px auto;
+		}
+		.statepage .res-widget-msg.inner-container {
+			margin: 110px auto 40px auto;
+		}
+		.res-widget-section-wrap {
+			display: flex;
+			flex-wrap: nowrap;
+			margin: 0 auto;
+			max-width: 1400px;
+		}
 		.res-widget-wrapping-div {
-			float: left;
 			width: 70%;
 		}
 		.res-widget-msg-wrap {
-		    float: left;
 		    width: 30%;
 		}
 		.res-widget-msg {
-			max-width: 375px;
+			max-width: 400px;
 			padding: 0 40px;
 			border-top: none;
 			border-left: 2px solid #c3c3c3;
+		}
+		.res-widget-msg h2 br {
+			display: block;
 		}
 	}
 	
@@ -58,10 +104,10 @@
 		portfolio : 'Enterprise',
 		test : 'Res Widget Reassurance Messages',
 		creative : 'Challenger 1',
-		selector: '#reservationWidget > div',
+		selector: '#book',
 		init : function() {
 
-			isoTest.debug = ${user.mvtDebug};
+			isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -81,21 +127,42 @@
 		},
 		chall : function() {
 
-			// Move header
+			if (document.querySelector('#reservationWidget > div')){
+				isoTest.bookingVariantA();
+			} else if (document.querySelector('#start-reservation')){
+				isoTest.bookingVariantB();
+			}
+						
+		},
+		bookingVariantA : function(){
+			
+			// Move header into res widget
 			var resWidgetWrap = document.querySelector('.reserve-widget-band').parentElement;
 			resWidgetWrap.classList.add('res-widget-wrapping-div');
 			resWidgetWrap.insertAdjacentElement('afterbegin', document.querySelector('section.band'));
-
 			// Insert message content
 			document.querySelector('#reservationWidget > div').classList.add('res-widget-wrap');
-			resWidgetWrap.insertAdjacentHTML('afterend','<div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. Our Responsibility.</h2><p>We are committed to accommodate your transportation needs while protecting your safety and our communities.</p><ul>\
+			resWidgetWrap.insertAdjacentHTML('afterend','<section class="res-widget-section-wrap"><div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. <br>Our Responsibility.</h2><p>We are committed to accommodate your transportation needs while protecting your safety and our communities.</p><ul>\
+				<li>Enhanced cleaning procedures</li>\
+				<li>New curbside pickup option</li>\
+				<li>Free cancellation</li>\
+				<li>24-hour reservation services</li>\
+				</ul><a href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div></section>');
+			// Move res widget in wrapper
+			document.querySelector('.res-widget-section-wrap').insertAdjacentElement('afterbegin',resWidgetWrap);
+
+		},
+		bookingVariantB : function(){
+
+			var resWidget = document.querySelector('#start-reservation');
+			var resWidgetWrap = resWidget.parentElement;
+			resWidgetWrap.classList.add('res-widget-section-wrap');
+			resWidget.insertAdjacentHTML('afterend','<div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. <br>Our Responsibility.</h2><p>We are committed to accommodate your transportation needs while protecting your safety and our communities.</p><ul>\
 				<li>Enhanced cleaning procedures</li>\
 				<li>New curbside pickup option</li>\
 				<li>Free cancellation</li>\
 				<li>24-hour reservation services</li>\
 				</ul><a href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div>');
-
-			
 
 		},
 		fireTag : function(element, value) {
