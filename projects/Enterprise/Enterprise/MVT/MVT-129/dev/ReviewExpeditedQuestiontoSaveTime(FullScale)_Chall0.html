@@ -20,6 +20,15 @@
     width: 8px;
 }
 
+.iso-expedited-header .view-header {
+    position: relative;
+}
+
+.expedited-step-2 .iso-expedited-header .view-header .expedited-skip {
+    position: absolute;
+    right: 0;
+}
+
 #expedited input[type='radio']:checked:before {
     background: #169a5a;
 }
@@ -68,11 +77,16 @@
     position: relative;
 }
 
-.verification-page .submit.expedited-submit {
-    top: -40px;
+#commit .verification-page .submit.expedited-submit {
+    position: relative;
+    float: none;
+}
 
-    line-height: 26px;
-    position: absolute;
+@media (max-width: 768px) {
+    #commit .verification-page .submit.expedited-submit {
+        width: 100%;
+        margin: 0;
+    }
 }
 
 #reviewSubmit {
@@ -101,11 +115,11 @@
 	display: block;
 }
 
-.expedite-optional-text {
+#commit .expedite-optional-text {
     display: none;
 }
 
-.expedited-form > section > div:nth-child(2) {
+#commit .expedited-form > section > div:nth-child(2) {
     display: none;
 }
 
@@ -113,19 +127,19 @@
 	display: block;
 }
 
-.verification-page .review-section .section-content .expedited-form h2.view-header {
+#commit .verification-page .review-section .section-content .expedited-form h2.view-header {
 	display: none;
 }
 
-#expedited .expedited-form .expedited-disclaimer {
+#commit #expedited .expedited-form .section-content__disclaimer {
     display: none;
 }
 
-#expedited.expedited-step-1 .expedited-form .expedited-disclaimer {
+#expedited.expedited-step-1 .expedited-form .section-content__disclaimer {
     display: none;
 }
 
-#expedited.expedited-step-2 .expedited-form .expedited-disclaimer {
+#expedited.expedited-step-2 .expedited-form .section-content__disclaimer {
     display: block;
 }
 
@@ -176,7 +190,7 @@
     margin-bottom: 2em;
 }
 
-#expedited.chose-yes .expedited-form > section > div:nth-child(2) {
+#commit #expedited.chose-yes .expedited-form > section > div:nth-child(2) {
     display: block;
 }
 
@@ -279,6 +293,8 @@
 .epb-step p span {
     display: none;
 }
+
+
 @media (min-width: 749px) {
     .expedited-progress-bar::before,
     .expedited-progress-bar::after {
@@ -443,7 +459,7 @@
 		portfolio : 'Enterprise.com',
 		test : 'Review Expedited Question to Save Time (Full Scale)',
 		creative : 'Challenger 0',
-		selector: '#expedited .expedited-form .expedited-disclaimer',
+		selector: '#expedited .expedited-form .section-content__disclaimer',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -480,7 +496,7 @@
             var expeditedForm = document.querySelector('.expedited-form');
             var formContentWrap = document.createElement('div');
             formContentWrap.className = 'iso-expedited-header';
-            formContentWrap.innerHTML = '<div class="error-container error-expedited-radio"><span class="error-prefix">ERROR:</span> Please make a selection.</div><h2 class="view-header"><span class="expedited-skip">Skip this section</span><span class="expedite-statc-text">Save Time At the Counter</span></h2><div class="expedited-disclaimer"><div class="iso-expedited"><div class="content"><p>Add more rental details and <strong>spend less time at the counter.</strong></p><ul><li>No payment is needed and you won\'t be charged right now.</li><li>You can still cancel at any time.</li><li>It should only take a couple of minutes.</li></ul></div><div class="icon"><img src="/content/dam/ecom/hosted/ico-clock.png"></div></div></div><form class="expedited-option"><p>Would you like to save time at the counter? *</p><span><input type="radio" name="group-1" value="yes" id="expedited-yes" class="expedited-radio" required><label for="expedited-yes">Yes, I\'d like to save time</label></span><span><input type="radio" name="group-1" value="no" id="expedited-no" class="expedited-radio"><label for="expedited-no">No, not today</label></span><input type="submit" value="" id="expedited-submit"></form><div class="expedited-no-note"><p>No problem. It will take a little longer to gather your information at the counter but we\'ll get you to your vehicle as quickly as we can.</p></div><div class="expedited-progress-bar"><div class="epb-step epb-step-1"><span>1</span><p>Lookup Your Details</p></div><div class="epb-arrow"><div class="arrow" aria-hidden="true">→</div></div><div class="epb-step epb-step-2"><span>2</span><p>Verify<span>/Complete</span> Your Details</p></div></div>';
+            formContentWrap.innerHTML = '<div class="error-container error-expedited-radio"><span class="error-prefix">ERROR:</span> Please make a selection.</div><h2 class="view-header"><span class="expedite-statc-text">Save Time At the Counter</span><span class="expedited-skip">Skip this section</span></h2><div class="section-content__disclaimer"><div class="iso-expedited"><div class="content"><p>Add more rental details and <strong>spend less time at the counter.</strong></p><ul><li>No payment is needed and you won\'t be charged right now.</li><li>You can still cancel at any time.</li><li>It should only take a couple of minutes.</li></ul></div><div class="icon"><img src="/content/dam/ecom/hosted/ico-clock.png"></div></div></div><form class="expedited-option"><p>Would you like to save time at the counter? *</p><span><input type="radio" name="group-1" value="yes" id="expedited-yes" class="expedited-radio" required><label for="expedited-yes">Yes, I\'d like to save time</label></span><span><input type="radio" name="group-1" value="no" id="expedited-no" class="expedited-radio"><label for="expedited-no">No, not today</label></span><input type="submit" value="" id="expedited-submit"></form><div class="expedited-no-note"><p>No problem. It will take a little longer to gather your information at the counter but we\'ll get you to your vehicle as quickly as we can.</p></div><div class="expedited-progress-bar"><div class="epb-step epb-step-1"><span>1</span><p>Lookup Your Details</p></div><div class="epb-arrow"><div class="arrow" aria-hidden="true">→</div></div><div class="epb-step epb-step-2"><span>2</span><p>Verify<span>/Complete</span> Your Details</p></div></div>';
             if (document.querySelector('.iso-expedited-header') == null) {
                 expeditedForm.parentNode.insertBefore( formContentWrap, expeditedForm );
             }
@@ -623,8 +639,8 @@
                 }
                 // Validation logic for dupe button clicks
                 if (event.target.matches('.expedited-submit')) {
-                    event.preventDefault();
-                    isoTest.validate();
+                        event.preventDefault();
+                        isoTest.validate();
                 }
             });
 
@@ -688,8 +704,8 @@
             }
 			//check if VRI
 			if (document.querySelector('.payment-method-container')) {
-				if (document.querySelectorAll('#expedited .expedited-disclaimer').length > 0) {
-					document.querySelectorAll('#expedited .expedited-disclaimer')[0].remove();
+				if (document.querySelectorAll('#expedited .section-content__disclaimer').length > 0) {
+					document.querySelectorAll('#expedited .section-content__disclaimer')[0].remove();
 				}
 
 				if (document.querySelector('#expedited .iso-expedited-header')) {
@@ -700,9 +716,17 @@
 					document.querySelector('#expedited .expedited-option').remove();
 				}
 
+                if (document.querySelector('.expedited-submit')) {
+                    document.querySelector('.expedited-submit').remove();
+                }
+
 				if (document.querySelector('#expedited .expedited-progress-bar')) {
 					document.querySelector('#expedited .expedited-progress-bar').remove();
 				}
+
+                if (document.querySelector('#reviewSubmit')) {
+                    document.querySelector('#reviewSubmit').classList.remove('hide');
+                }
 
                 if (document.querySelector('#expedited')) {
                     document.querySelector('#expedited').style.display = "block";
@@ -716,8 +740,8 @@
                     document.querySelector('#expedited .expedite-optional-text').style.display = "inline-block";
                 }
 
-                if (document.querySelector('#expedited .expedited-disclaimer')) {
-                    document.querySelector('#expedited .expedited-disclaimer').style.display = "block";
+                if (document.querySelector('#expedited .section-content__disclaimer')) {
+                    document.querySelector('#expedited .section-content__disclaimer').style.display = "block";
                 }
 
                 if (document.querySelector('#expedited .expedited-form > section > div:nth-child(2)')) {
