@@ -764,9 +764,12 @@
 			if (!document.getElementById('expedited') || document.getElementById('expedited') == undefined ) {
 				// Submit form for logged-in loyalty user
 				document.getElementById('reviewSubmit').click();
+                document.querySelector('.expedited-submit').classList.add('hide');
+
 			} else if (expeditedChose && isoTest.isContactInfo) {
 				// Personal info filled & radio chosen
 				document.getElementById('reviewSubmit').click();
+                document.querySelector('.expedited-submit').classList.add('hide');
 			} else if (!isoTest.isContactInfo && expeditedChose == undefined) {
 				// Neither info complete
 				window.scrollTo(0, personalInfoSection.offsetTop);
