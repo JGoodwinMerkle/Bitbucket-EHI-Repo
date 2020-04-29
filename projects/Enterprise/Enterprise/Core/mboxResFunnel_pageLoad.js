@@ -309,23 +309,22 @@
 		},
 		init: function() {
 			isoHash.dependsLoaded(function() {
-				var hash = window.location.hash;
-				if (hash in isoHash.steps) {
-					var params = isoHash.steps[hash]["depends"]();
+				if (isoHash.hash in isoHash.steps) {
+					var params = isoHash.steps[isoHash.hash]["depends"]();
 					adobe.target.getOffer({
-						"mbox": isoHash.steps[hash].mboxName,
+						"mbox": isoHash.steps[isoHash.hash].mboxName,
 						"params": params,
 						"success": function(offers) {
 							adobe.target.applyOffer({
-								"mbox": isoHash.steps[hash].mboxName,
+								"mbox": isoHash.steps[isoHash.hash].mboxName,
 								"offer": offers
 							});
 							adobe.target.getOffer({
-								"mbox": isoHash.steps[hash].mboxName+"FS",
+								"mbox": isoHash.steps[isoHash.hash].mboxName+"FS",
 								"params": params,
 								"success": function(offers) {
 									adobe.target.applyOffer({
-										"mbox": isoHash.steps[hash].mboxName+"FS",
+										"mbox": isoHash.steps[isoHash.hash].mboxName+"FS",
 										"offer": offers
 									});
 								},
@@ -342,13 +341,14 @@
 			});
 		},
 		dependsLoaded: function(callback) {
-			var hash = window.location.hash;
-			if (hash in isoHash.steps) {
+			isoHash.hash = window.location.hash;
+			isoHash.hash = isoHash.hash.split('/')[0];
+			if (isoHash.hash in isoHash.steps) {
 				var mInt = setInterval(function(){
 					if (typeof window.adobe !== 'undefined' &&
 						typeof window.adobe.target !== 'undefined' &&
 						typeof window._satellite !== 'undefined' &&
-						isoHash.steps[hash]["depends"]() !== false) {
+						isoHash.steps[isoHash.hash]["depends"]() !== false) {
 							clearInterval(mInt);
 							_satellite.logger.debug('adobe + target + depends met');
 							if (typeof callback === 'function') {

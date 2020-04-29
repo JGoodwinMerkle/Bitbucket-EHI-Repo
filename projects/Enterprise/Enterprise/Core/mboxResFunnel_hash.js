@@ -305,24 +305,23 @@
 			}
 		},
 		init: function() {
-			var hash = window.location.hash;
 			isoHash.dependsLoaded(function() {
-				if (isoHash.mboxExists(hash) === false) {
-						var params = isoHash.steps[hash]["depends"]();
+				if (isoHash.mboxExists(isoHash.hash) === false) {
+						var params = isoHash.steps[isoHash.hash]["depends"]();
 						adobe.target.getOffer({
-							"mbox": isoHash.steps[hash].mboxName,
+							"mbox": isoHash.steps[isoHash.hash].mboxName,
 							"params": params,
 							"success": function(offers) {
 								adobe.target.applyOffer({
-									"mbox": isoHash.steps[hash].mboxName,
+									"mbox": isoHash.steps[isoHash.hash].mboxName,
 									"offer": offers
 								});
 								adobe.target.getOffer({
-									"mbox": isoHash.steps[hash].mboxName+"FS",
+									"mbox": isoHash.steps[isoHash.hash].mboxName+"FS",
 									"params": params,
 									"success": function(offers) {
 										adobe.target.applyOffer({
-											"mbox": isoHash.steps[hash].mboxName+"FS",
+											"mbox": isoHash.steps[isoHash.hash].mboxName+"FS",
 											"offer": offers
 										});
 									},
@@ -340,9 +339,9 @@
 		},
 		mboxExists: function(hash){
 			var exists = false;
-			if (hash in isoHash.steps) {
+			if (isoHash.hash in isoHash.steps) {
 				for (var i = 0; i < ttMbox.length; i++) {
-					if (ttMbox[i].MboxName === isoHash.steps[hash].mboxName) {
+					if (ttMbox[i].MboxName === isoHash.steps[isoHash.hash].mboxName) {
 						exists = true;
 					}
 				}
@@ -350,14 +349,15 @@
 			return exists;
 		},
 		dependsLoaded: function(callback) {
-			var hash = window.location.hash;
-			if (hash in isoHash.steps) {
+			isoHash.hash = window.location.hash;
+			isoHash.hash = isoHash.hash.split('/')[0];
+			if (isoHash.hash in isoHash.steps) {
 				var mInt = setInterval(function(){
 					if (typeof window.adobe !== 'undefined' &&
 						typeof window.adobe.target !== 'undefined' &&
 						typeof window.ttMbox !== 'undefined' &&
 						typeof window._satellite !== 'undefined' &&
-						isoHash.steps[hash]["depends"]() !== false) {
+						isoHash.steps[isoHash.hash]["depends"]() !== false) {
 							clearInterval(mInt);
 							_satellite.logger.debug('dependencies met')
 							if (typeof callback === 'function') {
