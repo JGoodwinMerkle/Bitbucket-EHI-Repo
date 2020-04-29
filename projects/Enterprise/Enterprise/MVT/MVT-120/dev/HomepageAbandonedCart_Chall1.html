@@ -61,11 +61,18 @@
 		text-align: right;
 	}
 	.ima-btn-wrap .btn {
+		margin-bottom: 10px;
 		margin-left: 20px;
 		min-width: 200px;
+		padding: 0.8em 1em;
 	}
-	.modal-container.active .modal-content .modal-body h2.ima-header {
+	.iso-modal-abandon h2.ima-header {
+		border-bottom: 3px solid #333;
+    	margin-bottom: 30px;
 		padding-bottom: 20px;
+	}
+	.iso-modal-abandon .modal-body {
+		padding: 20px;
 	}
 	@media (max-width: 674px) {
 		.ima-col-wrap {
@@ -92,10 +99,19 @@
 		    transform: rotate(90deg);
 		}
 	}
+	@media (max-width: 48em) {
+		.iso-modal-open .modal-container.active .modal-content {
+			margin-left: auto;
+			top: 6%;
+		}
+	}
 	@media (min-width: 48em) {
-		.iso-modal-abandon.modal-container.active .modal-content {
-			margin-left: -360px;
+		.iso-modal-abandon .modal-body {
+			padding: 50px;
+		}
+		.iso-modal-abandon .modal-content.ReactModal__Content--after-open {
 			width: 720px;
+			margin-left: auto;
 		}
 	}
 	@media (min-width: 675px) {
@@ -118,8 +134,8 @@
 		creative : 'Challenger 1',
 		selector: '#book',
 		loopCount: 0,
-		modal: '<div role="dialog" aria-modal="true" aria-labelledby="global-modal-title" class="iso-modal-abandon modal-container" aria-describedby="global-modal-content" tabindex="0">\
-					<div class="modal-content">\
+		modal: '<div role="dialog" aria-modal="true" aria-labelledby="global-modal-title" class="iso-modal-abandon ReactModal__Overlay ReactModal__Overlay--after-open modal-overlay" aria-describedby="global-modal-content" tabindex="0">\
+					<div class="modal-content ReactModal__Content ReactModal__Content--after-open default-modal">\
 						<div class="modal-header">\
 							<span id="global-modal-title">Welcome back</span>\
 							<button id="iso-close-modal" class="close-modal" aria-label="Close" tabindex="0"><i class="icon icon-close-x-white">X</i></button>\
@@ -136,8 +152,8 @@
 												<div class="ima-col-6 ima-return"><h5 class="ima-content-title">RETURN</h5><p class="ima-return-location">{returnlocation}</p><p class="ima-return-date">{returndate}</p><p class="ima-return-time">{returntime}</p></div>\
 											</div>\
 											<div class="ima-btn-wrap">\
-												<button class="btn btn-cancel">Discard</button>\
-												<a class="btn btn-primary" href="">Continue</a>\
+												<button class="btn btn-cancel" tabindex="0">Discard</button>\
+												<a class="btn btn-primary" href="#" tabindex="0">Continue</a>\
 											</div>\
 										</div>\
 									</div>\
@@ -163,26 +179,19 @@
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
 			helpers.elementLoaded(isoTest.selector, function() {
-				// window.setTimeout(function(){
-					isoTest.log('Test Ready!');
-					// if (typeof ReservationStateTree.data.session.reservationSession.reservationsInitiateRequest != "undefined") {
-					// 	if (typeof ReservationStateTree.data.session.reservationSession.reservationsInitiateRequest.pickupLocation.name != "undefined") {
-							isoTest.log('Previous Reservation Info Found');
-							if (sessionStorage.getItem("isoTestMVT120") === null) {
-		  						isoTest.chall();
-		  					} else {
-		  						isoTest.log(isoTest.test + ' - Already Fired This Session');
-		  					}
-		  			// 	}
-	  				// }
-	  			// }, 1200);
+				isoTest.log('Test Ready!');
+				if (sessionStorage.getItem("isoTestMVT120") === null) {
+					isoTest.chall();
+				} else {
+					isoTest.log(isoTest.test + ' - Already Fired This Session');
+				}
 			});
 			
 		},
 		chall : function() {
 
 			// Prevent same-session re-trigger
-			sessionStorage.setItem('isoTestMVT120', 'true');
+			//sessionStorage.setItem('isoTestMVT120', 'true');
 
 			// Set reservation info
 			var pickupLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickupLocation','name']);
@@ -228,10 +237,11 @@
 			// Inject modal
 			if(!document.querySelector('.iso-modal-abandon')){
 				document.querySelector('body').insertAdjacentHTML('beforeend', modal);
+				// Update deeplink URL
+				document.querySelector('.ima-btn-wrap .btn-primary').setAttribute('href', deeplinkURL);
+				// Add events
 				isoTest.bindModalEvents();
 			}
-			// Update deeplink URL
-			document.querySelector('.ima-btn-wrap .btn-primary').setAttribute('href', deeplinkURL);
 
 			// Open modal
 			isoTest.showModal();
@@ -284,6 +294,8 @@
 		hideModal : function () {
 			document.querySelector('html').classList.remove('iso-modal-open');
 			document.querySelector('.iso-modal-abandon').classList.remove('active');
+			document.querySelector('.iso-modal-abandon').classList.remove('ReactModal__Overlay--after-open');
+			document.querySelector('.iso-modal-abandon').remove();
 		},
 		keepFocus : function(context) {
 	      var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
