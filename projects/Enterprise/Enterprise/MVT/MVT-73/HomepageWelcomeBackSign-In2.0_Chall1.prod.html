@@ -1,0 +1,114 @@
+<style>.master-nav .sign-in .login-widget.active .utility-nav-label .icon.icon-utility-notch{opacity:1;top:120%;-webkit-transition:all .3s;-moz-transition:all .3s;transition:all .3s}.master-nav .sign-in .login-text{border:2px solid #fff}.welcome-back-banner{background:#f3f3f3;border-bottom:1px solid #c3c3c3;padding:1.47em .5em;text-align:center;width:100%}.welcome-back-banner p{margin:0}.welcome-back-banner a{font-weight:700;text-decoration:underline}.welcome-back-banner strong{font-weight:700}@media (max-width:39.8em){.master-nav .sign-in .login-widget div.utility-nav-label{padding:0 10px}}@media (max-width:885px){.master-nav .sign-in .login-widget div.utility-nav-label{line-height:60px;margin:0;padding:0 10px}.master-nav .sign-in span.login-text{margin:auto;padding:8px 10px}}@media (max-width:48em){.welcome-back-banner p{font-size:14px}}@media (max-width:945px){.utility-nav>li{margin-right:42px}.header-nav-item.sign-in{margin-right:5px}}</style><script>(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise.com',
+		test : 'Homepage Welcome Back Sign-In 2.0',
+		creative : 'Challenger 1',
+		selector: '.reservationWidget',
+		selector2: '.login-widget.active',
+		viewportWidth : '',
+		init : function() {
+
+			
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				
+			}
+
+			
+			
+			
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+
+			document.querySelector('.reservationWidget').insertAdjacentHTML('beforebegin','<div class="welcome-back-banner hide"><p><strong>Welcome back!</strong> <a href="#">Sign in</a> to earn points on your next rental and redeem points on qualifying rentals.</p></div>');
+
+			
+			if (window._analytics && window._analytics.renter && window._analytics.renter.authenticated) {
+				if (_analytics.renter.authenticated == false) {
+		        	document.querySelector('.welcome-back-banner').classList.remove('hide');
+		        }
+			} else {
+				var aInt = setInterval(function () {
+					if(window._analytics && window._analytics.renter && window._analytics.renter.authenticated){
+						clearInterval(aInt);
+						if (_analytics.renter.authenticated == false) {
+				        	document.querySelector('.welcome-back-banner').classList.remove('hide');
+				        }
+					}
+				}, 100);
+			}
+
+			
+			document.querySelector('.welcome-back-banner a').addEventListener('click', function (e) {
+				e.preventDefault();
+				document.querySelector('#signInJoinButton').click();
+					document.querySelector('.login-widget .utility-nav-label').focus();
+				isoTest.fireTag(this,'Banner Click');
+			});
+
+			
+			const targetNode = document.getElementById('login-container');
+			const config = { attributes: true, childList: true, subtree: true };
+			const callback = function(mutationsList, observer) {
+			    for(let mutation of mutationsList) {
+			
+			
+			
+			
+			
+			
+			        if (document.querySelector('.icon-white-person')) {
+			        	console.log('User Signed In');
+			        	document.querySelector('.welcome-back-banner').classList.add('hide');
+			        } else {
+			        	document.querySelector('.welcome-back-banner').classList.remove('hide');
+			        }
+			    }
+			};
+			const observer = new MutationObserver(callback);
+			observer.observe(targetNode, config);
+			
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();</script>
