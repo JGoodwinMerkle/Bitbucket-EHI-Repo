@@ -8,7 +8,9 @@
 		margin: 0 auto;
 	}
 	.res-widget-msg h2 {
+		font-size: 28px;
 		color: #333;
+		line-height: 32px;
 	    margin-top: 1.4em;
 	    margin-bottom: 0.5em;
 	    text-transform: uppercase;
@@ -17,21 +19,25 @@
 		margin-bottom: 25px;
 	}
 	.res-widget-msg li {
+		font-size: 17px;
+		font-weight: 400;
 		margin-bottom: 13px;
 		padding-left: 30px;
 		position: relative;
 	}
 	.res-widget-msg li::before {
 		background-image: url('/content/dam/ecom/hosted/ico_green_check.svg');
-		background-size: 22px;
+		background-size: 20px;
 		background-repeat: no-repeat;
 		content: '';
 		left: 0;
-		height: 22px;
-		width: 22px;
+		height: 18px;
+		width: 20px;
 		position: absolute;
 	}
 	.res-widget-msg a {
+		font-size: 17px;
+		font-weight: 400;
 		margin-top: 1em;
 		text-decoration: underline;
 	}
@@ -40,6 +46,12 @@
 	}
 	.branchpage .res-widget-msg-wrap {
 		padding: 0 5%;
+	}
+	@media (min-width: 66em) and (max-width: 1400px) {
+		.res-widget-section-wrap #start-reservation .inner-container {
+			width: 54em;
+			padding: 5% 0;
+		}
 	}
 	@media (max-width: 490px) {
 		.res-widget-msg h2 br {
@@ -52,7 +64,65 @@
 			margin-right: 0;
 		}
 	}
-	@media (min-width: 1400px) {
+	@media (max-width: 1279px) {
+		.statepage .res-widget-msg.inner-container {
+			margin-top: 0;
+		}
+	}
+	@media (min-width: 1280px) and (max-width: 1400px) {
+		.res-widget-section-wrap #start-reservation .inner-container {
+			padding: 5% 40px;
+		}
+		.res-widget-wrapping-div > section.band {
+			width: 800px;
+		}
+		#reservationWidget .inner-container {
+			width: 800px;
+		}
+		.booking-widget {
+			width: 800px;
+		}
+		.booking-widget, .store-finder-widget {
+		    margin: 16px auto;
+		}
+		.booking-widget .date-time-form {
+		    width: 100%;
+		    margin-bottom: 1em;
+		}
+		.booking-widget .date-time-selector, .store-finder-widget .date-time-selector {
+		    margin-top: 0;
+		}
+		.booking-widget .pickup.label-container, .booking-widget .dropoff.label-container, .store-finder-widget .pickup.label-container, .store-finder-widget .dropoff.label-container {
+		    width: 47%;
+		}
+		.booking-widget .pickup.label-container .time-label, .booking-widget .pickup.label-container .date-label, .booking-widget .dropoff.label-container .time-label, .booking-widget .dropoff.label-container .date-label, .store-finder-widget .pickup.label-container .time-label, .store-finder-widget .pickup.label-container .date-label, .store-finder-widget .dropoff.label-container .time-label, .store-finder-widget .dropoff.label-container .date-label {
+		    width: 50%;
+		}
+		.booking-widget .date-time-selector .arrow, .store-finder-widget .date-time-selector .arrow {
+		    width: 4%;
+		    margin-left: 1%;
+		    margin-right: 1%;
+		}
+		.booking-widget .date-time, .store-finder-widget .date-time {
+		    width: 100%;
+		}
+		.booking-widget .pickup-calendar, .booking-widget .dropoff-calendar, .store-finder-widget .pickup-calendar, .store-finder-widget .dropoff-calendar {
+		    width: 100%;
+		}
+		.booking-widget .age-input {
+		    float: none;
+		    margin-left: 0;
+		    width: 100%;
+		}
+
+		.booking-widget .custom-select #age, .store-finder-widget .custom-select #age {
+		    width: 100%;
+		}
+		.booking-widget .coupon-filters-wrapper .coupon-input {
+		    width: 100%;
+		}
+	}
+	@media (min-width: 1280px) {
 		#start-reservation {
 			width: 70%;
 		}
@@ -67,7 +137,7 @@
 			margin: 70px auto 40px auto;
 		}
 		.featuredcitypage .res-widget-msg {
-			margin: 90px auto 40px auto;
+			margin: 100px auto 40px auto;
 		}
 		.statepage .res-widget-msg.inner-container {
 			margin: 110px auto 40px auto;
@@ -126,13 +196,14 @@
 			
 		},
 		chall : function() {
-
-			if (document.querySelector('#reservationWidget > div')){
-				isoTest.bookingVariantA();
-			} else if (document.querySelector('#start-reservation')){
-				isoTest.bookingVariantB();
+			if(!document.querySelector('.res-widget-section-wrap')) {
+				if (document.querySelector('#reservationWidget > div')) {
+					isoTest.bookingVariantA();
+				} else if (document.querySelector('#start-reservation')) {
+					isoTest.bookingVariantB();
+				}
+				isoTest.addEvents();
 			}
-						
 		},
 		bookingVariantA : function(){
 			
@@ -147,7 +218,7 @@
 				<li>New curbside pickup option</li>\
 				<li>Free cancellation</li>\
 				<li>24-hour reservation services</li>\
-				</ul><a href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div></section>');
+				</ul><a class="iso-msg-link" href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div></section>');
 			// Move res widget in wrapper
 			document.querySelector('.res-widget-section-wrap').insertAdjacentElement('afterbegin',resWidgetWrap);
 
@@ -162,8 +233,16 @@
 				<li>New curbside pickup option</li>\
 				<li>Free cancellation</li>\
 				<li>24-hour reservation services</li>\
-				</ul><a href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div>');
+				</ul><a class="iso-msg-link" href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div>');
 
+		},
+		addEvents : function() {
+			// Event listeners
+			window.addEventListener('click', function (event) {
+				if (event.target.closest('.iso-msg-link')) {
+					isoTest.fireTag(this,'Learn more about these and other efforts');
+				}
+			}, false);
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
