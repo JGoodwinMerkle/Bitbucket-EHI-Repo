@@ -1,0 +1,148 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Enterprise: Review Pop-up Modal Suppression',
+		creative : 'Challenger 0',
+		selector: 'body',
+		init : function() {
+
+			isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+		
+			isoTest.viewChange();
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+
+			if(/commit/.test(location.hash)){
+				// Temp modal hide and removal
+				document.querySelector('body').insertAdjacentHTML('afterbegin', '<style id="isoTestTempHide">.ReactModalPortal {display: none !important;}</style>');
+				isoTest.removeModalHide();
+
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+
+		chall : function() {
+
+			isoTest.dataObjectLoaded();
+			
+		},
+		dataObjectLoaded : function() {
+			var dataObjectLoaded = setInterval(function(){
+				isoTest.log('waiting for reservation data object...');
+				if (ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']) != null){
+					clearInterval(dataObjectLoaded);
+					isoTest.log('found reservation data object!');
+
+					if (/41.*/.test(ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']))) {
+						isoTest.log('dataObjectLoaded location 41 true');
+						
+						isoTest.closeBranchInfoModal();
+
+						// Listen for modal
+						isoTest.mutationObserver();
+
+	  				}
+				}
+				setTimeout(function(){
+					clearInterval(dataObjectLoaded);
+				}, 10000);
+			},1);
+		},
+		mutationObserver : function() {
+			var target = document.querySelector('body');
+			var observer = new MutationObserver(function(mutations) {
+				for (var index = 0; index < mutations.length; index++) {
+    				var mutation = mutations[index];
+					//console.log(mutation.type);					
+					if (mutation.type === 'childList') {
+			            isoTest.log('A child node has been added or removed.');
+
+			            isoTest.closeBranchInfoModal();
+						
+			        }
+			    } 
+			});
+
+			var config = {
+				attributes: true,
+				childList: true,
+				characterData: true
+			};
+
+			observer.observe(target, config);
+
+			window.setTimeout(function(){
+				observer.disconnect();
+				isoTest.log('mutation observer disconnected');
+			}, 2000);
+
+
+		},
+		removeModalHide: function() {
+			// Remove temporary hide on all modals
+			window.setTimeout(function(){
+				if (document.querySelector('#isoTestTempHide')) {
+					var tempModalHide = document.getElementById("isoTestTempHide");
+  					tempModalHide.parentNode.removeChild(tempModalHide);
+					isoTest.log('modal hide removed');
+				}
+			}, 2000);
+		},
+		closeBranchInfoModal: function() {
+			if (document.querySelector('.ReactModal__Content')) {
+				if (document.querySelector('#modal-context').innerHTML.indexOf('Enterprise is temporarily consolidating its North American branches.') != -1) {
+					isoTest.log('Branch Info Modal Closed');
+					document.querySelector('.ReactModal__Content .icon-close-x-white').click();
+				}
+			}
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
