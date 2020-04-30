@@ -1,0 +1,158 @@
+<style>
+	.return-link .icon.icon-remove {
+		background-image: url('/content/dam/ecom/hosted/ico_minus_green.svg');
+	}
+	.same-location-info {
+		display: none !important;
+	}
+	.return-link {
+		display: block;
+		font-weight: bold;
+		padding: 10px 10px 10px 4px;
+		position: relative;
+		top: 0;
+	}
+	.return-link .icon {
+		float: left;
+	    margin-right: 8px;
+	    margin-top: 1px;
+	}
+	.booking-widget .location-search .location-btn {
+		float: none;
+	}
+	#location-text-box-dropoff {
+		display: inline-block;
+	}
+	.tooltip-info {
+		margin-left: 5px;
+	}
+	@media (min-width: 46.8em) {
+		.return-link {
+			position: absolute;
+		    right: 10px;
+		    top: 32px;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise.com',
+		test : 'One-Way Selector 2.0',
+		creative : 'Challenger 1',
+		selector: '.drop-off-input-margin',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+  				isoTest.listeners();
+			});
+			
+		},
+		chall : function() {
+
+			// Your code goes here
+			document.querySelector('.pick-up-location .location-btn').insertAdjacentHTML('afterend','<a href class="return-link different-return-link"><i aria-hidden="true" role="presentation" class="icon icon-add"></i> Different Return</a><a href class="return-link same-return-link hide"><i aria-hidden="true" role="presentation" class="icon icon-remove"></i> Same Return</a>');
+			
+			var returnTooltip = document.querySelector('.same-location-info .tooltip-info');
+			document.querySelector('#location-text-box-dropoff').insertAdjacentElement('afterend', returnTooltip);
+
+			isoTest.interval(function() {
+				if (!document.querySelector('.drop-off-input-margin.is-hidden')) {
+					document.querySelector('.same-return-link').classList.remove('hide');
+					document.querySelector('.different-return-link').classList.add('hide');
+				}
+			}, 100, 30);
+
+		},
+		interval : function(func, wait, times){
+		    var interv = function(w, t){
+		        return function(){
+		            if(typeof t === "undefined" || t-- > 0){
+		                setTimeout(interv, w);
+		                try{
+		                    func.call(null);
+		                }
+		                catch(e){
+		                    t = 0;
+		                    throw e.toString();
+		                }
+		            }
+		        };
+		    }(wait, times);
+
+		    setTimeout(interv, wait);
+		},
+		listeners : function() {
+			document.addEventListener('click', function (event) {
+				if (event.target.matches('#viewModifyCancelBookingWidget')) {
+					if (document.querySelector('#book')) {
+						helpers.elementLoaded(isoTest.selector, function() {
+							isoTest.log('Test Changes Rerun!');
+			  				isoTest.chall();
+						});
+					}
+				}
+				if (event.target.closest('.different-return-link')) {
+					event.preventDefault();
+					document.querySelector('.same-location-info input').click();
+					document.querySelector('.same-return-link').classList.remove('hide');
+					document.querySelector('.different-return-link').classList.add('hide');
+					isoTest.fireTag(this,'Different Return');
+				}
+				if (event.target.closest('.same-return-link')) {
+					event.preventDefault();
+					document.querySelector('.same-location-info input').click();
+					document.querySelector('.same-return-link').classList.add('hide');
+					document.querySelector('.different-return-link').classList.remove('hide');
+					isoTest.fireTag(this,'Same Return');
+				}
+			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>
