@@ -620,7 +620,7 @@
 
 		},
 		viewChange : function(){
-			if(location.hash === "#location/pickup"){
+			if(/location/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selectorLocations, function() {
 					if (document.querySelector('.iso-location-filters-modal.iso-modal') != null) {
 						window.clearInterval(isoTest.counter);
@@ -640,8 +640,10 @@
 		chall : function() {
 			isoTest.log('chall()');
 
-			if (document.querySelector('body').classList.contains('resflow-location/dropoff') && !document.querySelector('body').classList.contains('resflow-location')) {
-				document.querySelector('body').classList.add('resflow-location');
+			if (document.querySelector('body').classList.contains('resflow-location/dropoff') || document.querySelector('body').classList.contains('resflow-location/pickup')) {
+				if (!document.querySelector('body').classList.contains('resflow-location')) {
+					document.querySelector('body').classList.add('resflow-location');
+				}
 			}
 
 			helpers.elementLoaded('.location-search-filter__mobile-header span', function() {
@@ -1074,7 +1076,7 @@
 			            	if (status != "unchecked") {
 			            		document.getElementById(loc.peopleSoftId).closest('.location-result-item').classList.add(type);
 				            	document.getElementById(loc.peopleSoftId).closest('.location-result-item').setAttribute('data-active', 'hide');
-								if (lbl) {
+				            	if (lbl) {
 				            		lbl.style.display = 'none';
 				            	}
 								
@@ -1087,7 +1089,7 @@
 				            	document.getElementById(loc.peopleSoftId).closest('.location-result-item').classList.remove(type);
 				            	if (locationFilterTypesChecked || !otherFilter) {
 				            		document.getElementById(loc.peopleSoftId).closest('.location-result-item').setAttribute('data-active', 'active');
-					            	if (lbl) {
+				            		if (lbl) {
 					            		lbl.style.display = 'initial';
 				            		}
 					            	
@@ -1270,6 +1272,9 @@
 				if (event.target.classList.contains('location-search-filter__clear-all')) {
 					document.querySelector('#location-search-after-hours-return-filter').checked = false;
 					document.querySelector('#location-search-sunday-open-filter').checked = false;
+					if (document.querySelector('#location-search-open-time-filter').checked == true) {
+						document.querySelector('#location-search-open-time-filter').click();
+					}
 					var allcheckedBoxes = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
 					if (allcheckedBoxes.length > 0) {
 						for (var b = 0; b < allcheckedBoxes.length; b++) {
@@ -1376,11 +1381,13 @@
 			locationTypeFiltersTriggerBtn.disabled = true;
 			locationTypeFiltersTriggerBtn.classList.add('disabled');
 
-
 			if (document.querySelector('.iso-location-chicklet-clear')) {
 				document.querySelector('.iso-location-chicklet-clear').remove();
 			}
-			document.querySelector('.location-chicklet-clear').click();
+
+			if (document.querySelector('.location-chicklet-clear')) {
+				document.querySelector('.location-chicklet-clear').click();
+			}
 
 			helpers.elementLoaded('.search-results-wrapper .search-results ul .location-result-item.active .location-result-item__cta', function() {
 				locationTypeFiltersTriggerBtn.disabled = false;
@@ -1388,7 +1395,6 @@
 				isoTest.addAttributeToAllLocations();
 				isoTest.addLocationClearIcon();
 			});
-
 
 			if (document.querySelector('#location-search-open-time-filter:checked')) {
 				document.querySelector('.iso-filters-desktop-expand .iso-filter-text').innerHTML = "Filter (1)";
