@@ -1,0 +1,154 @@
+<style>
+i.icon.iso-icon-shield {
+    float: left;
+}
+.iso-icon-shield svg {
+	height: 20px;
+}
+.iso-main-wrap {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;	
+	width: auto;  
+}
+.iso-scarcity {
+	background-color: #f3f3f3;
+	border: 1px solid #c3c3c3;
+	font-size: 14px;
+	padding: 14px 31px;
+}
+.iso-scarcity .content {
+	display: inline-block;
+	margin-left: 10px;
+	width: calc(100% - 30px);
+}
+.iso-scarcity .content small {
+	font-size: 11px;
+}
+.iso-icon .icon-alert-caution {
+	float: left;
+}
+.vehicle-header .iso-scarcity {
+	display: flex;
+	margin: 0.6rem 0;
+}
+.iso-main-wrap .iso-scarcity {
+	display: none;
+}
+@media (max-width: 46.8em) {
+	.iso-scarcity {
+		padding: 14px 20px;
+	}
+}
+@media (min-width: 1136px) {
+	.iso-main-wrap {
+		width: 776px;
+	}
+	.iso-scarcity {
+		margin: 0;
+		margin-bottom: 1.5625rem;
+	}
+	.vehicle-header .iso-scarcity {
+		display: none;
+	}
+	.iso-main-wrap .iso-scarcity {
+		display: inline-block;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Vehicle Selection Flexibility Message',
+		creative : 'Challenger 0',
+		selector: '.vehicle-select__main',
+		template:  '<div class="iso-scarcity">\
+						<div class="iso-icon"><i class="icon iso-icon-shield"><svg viewBox="0 0 12.83 15.67"><g id="Camada_2" data-name="Camada 2"><g id="Layer_1" data-name="Layer 1"><path class="cls-1" d="M11.93,2.92c-.81-.06-3.55-.44-4.81-2.56A.73.73,0,0,0,6.3,0a.72.72,0,0,0-.54.7V12.39H7.07V2.33a8.17,8.17,0,0,0,4.44,1.86c-.11,1.88-.77,8.13-4.84,10.12a.55.55,0,0,1-.5,0C2.06,12.22,1.42,6,1.32,4.13A8.21,8.21,0,0,0,4,3.08V1.45A6.58,6.58,0,0,1,.81,2.9a1,1,0,0,0-.81,1c.06,1.49.58,9,5.58,11.56a2,2,0,0,0,.85.2,1.75,1.75,0,0,0,.81-.19c4.87-2.38,5.51-9.43,5.59-11.54a1,1,0,0,0-.9-1"/></g></g></svg></i></div>\
+						<div class="content">Book with confidence, no amendment or cancellation fees on rental pick ups before the 1<sup>st</sup> Sept 2020.</div>\
+					</div>',
+		init : function() {
+
+			isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			helpers.wrap(document.querySelector(isoTest.selector));
+			document.querySelector(isoTest.selector).parentNode.classList.add('iso-main-wrap');
+
+			if(!document.querySelector('.iso-scarcity')){
+				//Desktop
+				document.querySelector(isoTest.selector).insertAdjacentHTML('beforebegin',isoTest.template);
+				//Mobile
+				helpers.elementLoaded('.vehicle-header__result-total', function() {
+					isoTest.log('vehicle results mobile found');
+					document.querySelector('.vehicle-header__result-total').insertAdjacentHTML('afterend',isoTest.template);
+				});
+			}
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    wrap : function (toWrap, wrapper) {
+		    wrapper = wrapper || document.createElement('div');
+		    toWrap.parentNode.appendChild(wrapper);
+		    return wrapper.appendChild(toWrap);
+		},
+	}
+
+	isoTest.init();
+})();
+</script>
