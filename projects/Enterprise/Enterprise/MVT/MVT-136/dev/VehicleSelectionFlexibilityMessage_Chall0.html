@@ -67,8 +67,13 @@ ul.vehicle-list {
 		selector: '.vehicle-select__main',
 		template:  '<div class="iso-scarcity">\
 						<div class="iso-icon"><i class="icon iso-icon-shield"><svg viewBox="0 0 12.83 15.67"><g id="Camada_2" data-name="Camada 2"><g id="Layer_1" data-name="Layer 1"><path class="cls-1" d="M11.93,2.92c-.81-.06-3.55-.44-4.81-2.56A.73.73,0,0,0,6.3,0a.72.72,0,0,0-.54.7V12.39H7.07V2.33a8.17,8.17,0,0,0,4.44,1.86c-.11,1.88-.77,8.13-4.84,10.12a.55.55,0,0,1-.5,0C2.06,12.22,1.42,6,1.32,4.13A8.21,8.21,0,0,0,4,3.08V1.45A6.58,6.58,0,0,1,.81,2.9a1,1,0,0,0-.81,1c.06,1.49.58,9,5.58,11.56a2,2,0,0,0,.85.2,1.75,1.75,0,0,0,.81-.19c4.87-2.38,5.51-9.43,5.59-11.54a1,1,0,0,0-.9-1"/></g></g></svg></i></div>\
-						<div class="content">Book with confidence, no amendment or cancellation fees on rental pick ups before the 1<sup>st</sup> Sept 2020.</div>\
+						<div class="content">{message}</div>\
 					</div>',
+		message: '',
+		en: 'Book with confidence, no amendment or cancellation fees on rental pick ups before the 1<sup>st</sup> Sept 2020.',
+		es: 'Reserve con tranquilidad, sin cargos por modificación o cancelación en recogidas de vehículos de alquiler antes del 1 de septiembre de 2020.',
+		de: 'Buchen Sie mit Zuversicht, ohne Änderungs- oder Stornierungsgebühren bei Mietwagenabholungen vor dem 1. September 2020.',
+		fr: 'Réservez en toute confiance, aucun frais de modification ou d’annulation sur vos locations de véhicules jusqu’au 1er septembre 2020.',
 		init : function() {
 
 			isoTest.debug = true;
@@ -100,16 +105,34 @@ ul.vehicle-list {
 		},
 		chall : function() {
 
-			//helpers.wrap(document.querySelector(isoTest.selector));
-			//document.querySelector(isoTest.selector).parentNode.classList.add('iso-main-wrap');
+			// Set language
+			if (window.location.href.indexOf("/en/") != -1) {
+				isoTest.message = isoTest.en;
+			}
+			if (window.location.href.indexOf("/es/") != -1) {
+				isoTest.message = isoTest.es;
+			}
+			if (window.location.href.indexOf("/de/") != -1) {
+				isoTest.message = isoTest.de;
+			}
+			if (window.location.href.indexOf("/fr/") != -1) {
+				isoTest.message = isoTest.fr;
+			}
 
+			// Replace language
+			var msgContent = helpers.supplant(isoTest.template, {
+				'message' : isoTest.message,
+			});
+			
+			// Insert message
 			if(!document.querySelector('.iso-scarcity')){
 				//Desktop
-				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',isoTest.template);
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', msgContent);
+
 				//Mobile
 				helpers.elementLoaded('.vehicle-header__result-total', function() {
 					isoTest.log('vehicle results mobile found');
-					document.querySelector('.vehicle-header__result-total').insertAdjacentHTML('afterend',isoTest.template);
+					document.querySelector('.vehicle-header__result-total').insertAdjacentHTML('afterend', msgContent);
 				});
 			}
 
@@ -141,6 +164,18 @@ ul.vehicle-list {
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
+		},
+		supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
 		},
 	    wrap : function (toWrap, wrapper) {
 		    wrapper = wrapper || document.createElement('div');
