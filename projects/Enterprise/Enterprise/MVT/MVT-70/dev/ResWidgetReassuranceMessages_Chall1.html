@@ -213,12 +213,11 @@
 			resWidgetWrap.insertAdjacentElement('afterbegin', document.querySelector('section.band'));
 			// Insert message content
 			document.querySelector('#reservationWidget > div').classList.add('res-widget-wrap');
-			resWidgetWrap.insertAdjacentHTML('afterend','<section class="res-widget-section-wrap"><div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. <br>Our Responsibility.</h2><p>We are committed to accommodate your transportation needs while protecting your safety and our communities.</p><ul>\
-				<li>Enhanced cleaning procedures</li>\
-				<li>New curbside pickup option</li>\
-				<li>Free cancellation</li>\
-				<li>24-hour reservation services</li>\
-				</ul><a class="iso-msg-link" href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div></section>');
+			resWidgetWrap.insertAdjacentHTML('afterend','<section class="res-widget-section-wrap"><div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. <br>Our Responsibility.</h2><p>When you\'re ready to travel, we want you to feel confident and safe. With the Complete Clean Pledge we are committed to maintaining the highest standards of cleanliness.</p><ul>\
+				<li>Sanitize with a disinfectant between every rental</li>\
+				<li>Extra attention to 20-plus high touch areas in vehicles</li>\
+				<li>Frequent hand-washing and social distancing at branch locations</li>\
+				</ul><a class="iso-msg-link" href="/en/car-rental/on-call-for-all.html">Learn more about Complete Clean Pledge</a></div></div></section>');
 			// Move res widget in wrapper
 			document.querySelector('.res-widget-section-wrap').insertAdjacentElement('afterbegin',resWidgetWrap);
 
@@ -228,12 +227,11 @@
 			var resWidget = document.querySelector('#start-reservation');
 			var resWidgetWrap = resWidget.parentElement;
 			resWidgetWrap.classList.add('res-widget-section-wrap');
-			resWidget.insertAdjacentHTML('afterend','<div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. <br>Our Responsibility.</h2><p>We are committed to accommodate your transportation needs while protecting your safety and our communities.</p><ul>\
-				<li>Enhanced cleaning procedures</li>\
-				<li>New curbside pickup option</li>\
-				<li>Free cancellation</li>\
-				<li>24-hour reservation services</li>\
-				</ul><a class="iso-msg-link" href="/en/car-rental/on-call-for-all.html">Learn more about these and other efforts</a></div></div>');
+			resWidget.insertAdjacentHTML('afterend','<div class="res-widget-msg-wrap"><div class="res-widget-msg inner-container"><h2>Our Response. <br>Our Responsibility.</h2><p>When you\'re ready to travel, we want you to feel confident and safe. With the Complete Clean Pledge we are committed to maintaining the highest standards of cleanliness.</p><ul>\
+				<li>Sanitize with a disinfectant between every rental</li>\
+				<li>Extra attention to 20-plus high touch areas in vehicles</li>\
+				<li>Frequent hand-washing and social distancing at branch locations</li>\
+				</ul><a class="iso-msg-link" href="/en/car-rental/on-call-for-all.html">Learn more about Complete Clean Pledge</a></div></div>');
 
 		},
 		addEvents : function() {
@@ -272,18 +270,6 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
 	}
 
 	isoTest.init();
