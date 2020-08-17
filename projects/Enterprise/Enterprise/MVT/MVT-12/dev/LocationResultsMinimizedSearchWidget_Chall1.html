@@ -47,7 +47,7 @@
   	font-weight: 700;
 }
 
-#content-container .iso-sticky-footer {
+/*#content-container .iso-sticky-footer {
 	background-color: rgba(242, 242, 242, 1);
 	bottom: 0;
 	-webkit-box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.247058823529412);
@@ -62,11 +62,11 @@
     position: sticky;
     width: 100%;
     z-index: 9999;
-}
+}*/
 
-#content-container .iso-sticky-footer .iso-bold {
+/*#content-container .iso-sticky-footer .iso-bold {
 	font-weight: 700;
-}
+}*/
 
 .location-details .location-search .gi .location-input-container {
 	display: none;
@@ -398,9 +398,8 @@
 	margin-left: 0px;
 }
 
-.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label,
-.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label #location-search-open-time-filter,
-.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label .form-checkbox__text {
+.location-search-filter__container .location-search-filter__container-filter.form-checkbox,
+.location-search-filter__container .location-search-filter__container-filter.form-checkbox .form-checkbox__label {
 	display: inline-block;
 }
 
@@ -453,11 +452,11 @@
 	display: none;
 }
 
-.search-results-wrapper .search-results ul .location-result-item.active[data-active="active"] {
-	display: block;
+.search-results-wrapper .search-results .location-items .location-item[data-active="active"] {
+	display: flex;
 }
 
-.search-results-wrapper .search-results ul .location-result-item[data-active="hide"] {
+.search-results-wrapper .search-results .location-items .location-item[data-active="hide"] {
 	display: none;
 }
 
@@ -483,7 +482,7 @@
 		margin-left: 20px;
 	}
 
-	.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label {
+	.location-search-filter__container .location-search-filter__container-filter.form-checkbox {
 		margin-left: 1.5rem;
 	}
 }
@@ -496,16 +495,17 @@
 	}
 
 	.reservation-step .search-results-wrapper .search-results { 
+		background: #FFFFFF;
 		margin-left: 6px;
 	    margin-right: 6px;
 	    min-width: 95%;
 	}
 
-	#content-container .iso-sticky-footer {
+	/*#content-container .iso-sticky-footer {
 	    font-size: 14px;
 	    padding-bottom: 8px;
 	    padding-top: 8px;
-	}
+	}*/
 
 	.iso-search-widget .iso-results-num-desktop,
 	.map-toggle .iso-results-num-desktop-expand {
@@ -579,7 +579,7 @@
     	min-width: 12.5rem;
 	}
 
-	.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label {
+	.location-search-filter__container .location-search-filter__container-filter.form-checkbox {
 		display: block;
 	}
 }
@@ -594,7 +594,7 @@
 		creative : 'Challenger 1',
 		selector : '.location-search-filter__container .location-search-filter__container-content',
 		mapSelector : 'ENT-mappin-single-number-enterprise@2x',
-		selectorLocations : '.search-results-wrapper .search-results ul .location-result-item.active',
+		selectorLocations : '.search-results-wrapper .search-results .location-items .location-item',
 		mapChangeSelector : '[aria-live=off]',
 		content : '<div class="location-type-filters-trigger location-search-filter__location-type-filter">\
 						<label class="location-type-filters-trigger__label" for="location-type-filters-trigger">\
@@ -675,11 +675,9 @@
 						</div>\
 					</div>\
 				</div>',
-		noMatches : "<li class='location-result-item location-result-item--no-result active location-result-item--filter-applied iso-no-active-items' data-active='inactive'>\
-						<div class='location-result-item__content-container'>\
-							<p class='location-result-item__content-container-text'><span>Sorry, we couldn't find any locations matching your search criteria.  Please adjust filters.</span></p>\
-						</div>\
-					</li>",
+		noMatches : "<div class='location-item location-item--no-results location-item--filter-applied iso-no-active-items' data-active='inactive'>\
+						<p class='location-item__warning-text'><span>Sorry, we couldn't find any locations matching your search criteria.  Please adjust filters.</span></p>\
+					</div>",
 		clearBtn : '<button class="btn location-search-filter__clear-all btn-unstyled" tabindex="0" type="button" role="button">Clear All</button>',
 		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
 		checkedFilters : {
@@ -744,7 +742,7 @@
 					isoTest.addFilterModal();
 					isoTest.addLocationClearIcon();
 					isoTest.addAttributeToAllLocations();
-				helpers.elementLoaded('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]', function() {
+				helpers.elementLoaded('.search-results-wrapper .search-results .location-items .location-item', function() {
 					isoTest.addLocationExpand();
 					isoTest.updateLocationsNumber(); 
 					isoTest.addEvents();
@@ -798,9 +796,9 @@
 				}
 			}
 
-			if (!document.querySelector('#content-container .iso-sticky-footer')) {
-				document.querySelector('#content-container .footer').insertAdjacentHTML('afterend','<div class="iso-sticky-footer"><span class="iso-bold">Not seeing what you are looking for?</span> Try refining your search by ZIP Code or zooming in on the map.</div>');
-			}
+			// if (!document.querySelector('#content-container .iso-sticky-footer')) {
+			// 	document.querySelector('#content-container .footer').insertAdjacentHTML('afterend','<div class="iso-sticky-footer"><span class="iso-bold">Not seeing what you are looking for?</span> Try refining your search by ZIP Code or zooming in on the map.</div>');
+			// }
 
 		},
 		checkForSearchByVehicleOnLoad : function() {
@@ -832,12 +830,12 @@
 			isoTest.log('checkResultsUpdateForSearchByVehicle()');
 
 			var checkResultsChange = setInterval(function(){
-				var locationsNumberCheck = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]').length;
+				var locationsNumberCheck = document.querySelectorAll('.search-results-wrapper .search-results .location-items .location-item').length;
 
 				if (locationsNumberCheck != isoTest.locationsNumber) {
 					clearInterval(checkResultsChange);
 
-					isoTest.locationsNumber = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]').length;
+					isoTest.locationsNumber = document.querySelectorAll('.search-results-wrapper .search-results .location-items .location-item').length;
 					document.querySelector('.iso-results-num').innerHTML = isoTest.locationsNumber + " RESULTS";
 					document.querySelector('.iso-results-num-desktop').innerHTML = isoTest.locationsNumber + " RESULTS: ";
 					document.querySelector('.iso-results-num-desktop-expand').innerHTML = isoTest.locationsNumber + " RESULTS";
@@ -855,7 +853,7 @@
 
 			var vehicleTypeFilter = document.querySelector('.location-search-filter__container .location-search-filter__vehicle-filter');
 
-			var openCheckbox = document.querySelector('.location-search-filter__container .location-search-filter__container-filter.form-checkbox__label');
+			var openCheckbox = document.querySelector('.location-search-filter__container .location-search-filter__container-filter.form-checkbox');
 
 			vehicleFilterHeader.after(vehicleTypeFilter);
 
@@ -875,7 +873,7 @@
 		addAttributeToAllLocations : function() {
 			isoTest.log('addAttributeToAllLocations()');
 			
-			var allLocations = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item.active');
+			var allLocations = document.querySelectorAll('.search-results-wrapper .search-results .location-items .location-item');
 
 			for(var i = 0; i < allLocations.length; i++) {
 				allLocations[i].setAttribute('data-active', 'active');
@@ -884,7 +882,7 @@
 		updateLocationsNumber : function() {
 			isoTest.log('updateLocationsNumber()');
 
-			isoTest.locationsNumber = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]').length;
+			isoTest.locationsNumber = document.querySelectorAll('.search-results-wrapper .search-results .location-items .location-item[data-active="active"]').length;
 
 			if (document.querySelector('.iso-results-num') == null) {
 				document.querySelector('.location-search-filter__mobile-header span').insertAdjacentHTML('beforebegin','<span class="iso-results-num">'+isoTest.locationsNumber+' RESULTS</span>');
@@ -962,6 +960,7 @@
 				if(vehicleTypeFilter.innerText == 'All Vehicles' && hasLocations){
 					filterHeader.insertAdjacentHTML('beforeend',isoTest.clearBtn);
 					document.querySelector('.location-search-filter__container .location-search-filter__container-content .iso-clear-btn').classList.remove('iso-hide');
+
 				}
 			} else {
 				if(vehicleTypeFilter.innerText == 'All Vehicles' && !hasLocations && !isChecked){
@@ -974,7 +973,7 @@
 		updatePage : function(image, status) {
 			isoTest.log("updatePage()");
 
-			var allLocations = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item');
+			var allLocations = document.querySelectorAll('.search-results-wrapper .search-results .location-items .location-item');
 
 			if (allLocations.length > 0) {
 				var search;
@@ -986,18 +985,18 @@
 
 				for(var i = 0; i < allLocations.length; i++) {
 					if (image == "city") {
-						search = !allLocations[i].querySelector('.location-name i.icon');
+						search = !allLocations[i].querySelector('.location-item__name i.icon');
 					} else {
 						search = allLocations[i].querySelector('[class*="'+ image +'"]');
 					}
 
-					if (search && !allLocations[i].classList.contains('location-result-item--no-result')) {
+					if (search && !allLocations[i].classList.contains('location-item--no-results')) {
 						if (status == "unchecked") {
 							allLocations[i].setAttribute('data-active', 'hide');
 						} else {
 							allLocations[i].setAttribute('data-active', 'active');
 						}
-						var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
+						var locationID = allLocations[i].querySelector('.location-item__cta.btn').id;
 
 						helpers.elementLoaded('div[class*="'+ locationID +'"]', function() {
 							var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
@@ -1029,8 +1028,8 @@
 		updateOrder : function() {
 			isoTest.log('updateOrder()');
 
-			var allLocations = document.querySelectorAll('.search-results-wrapper .search-results ul .location-result-item[data-active="active"]');
-			var noResults = document.querySelectorAll('.location-result-item--no-result');
+			var allLocations = document.querySelectorAll('.search-results-wrapper .search-results .location-items .location-item[data-active="active"]');
+			var noResults = document.querySelectorAll('.location-item--no-results');
 
 			if (allLocations.length > 0) {
 				if (document.querySelector('.iso-no-active-items')) {
@@ -1038,9 +1037,9 @@
 				}
 
 				for(var i = 0; i < allLocations.length; i++) {
-					allLocations[i].querySelector('.location-index').innerHTML = i + 1;
+					allLocations[i].querySelector('.location-item__count').innerHTML = i + 1;
 
-					var locationID = allLocations[i].querySelector('.location-result-item__cta.btn').id;
+					var locationID = allLocations[i].querySelector('.location-item__cta.btn').id;
 					var mapData = document.querySelectorAll('div[class*="'+ locationID +'"]');
 
 					for(var a = 0; a < mapData.length; a++) {
@@ -1058,9 +1057,9 @@
 					isoTest.updateFilteredNumber();
 				}
 
-				if (document.querySelector('.search-results-wrapper .search-results ul')) {
+				if (document.querySelector('.search-results-wrapper .search-results .location-items')) {
 					if (noResults.length == 0) {
-						document.querySelector('.search-results-wrapper .search-results ul').insertAdjacentHTML('afterbegin', isoTest.noMatches);
+						document.querySelector('.search-results-wrapper .search-results .location-items').insertAdjacentHTML('afterbegin', isoTest.noMatches);
 					}
 
 					if (noResults.length > 1) {
@@ -1225,6 +1224,8 @@
 				document.querySelector('.gi .location-search-filter__container-content-text.desktop.iso-filter-shown-text').classList.add('iso-hide');
 				document.querySelector('.iso-filters-desktop-expand .iso-filter-text').innerHTML = "Filter";
 				document.querySelector('.iso-filters-mobile-expand .iso-filter-text').innerHTML = "Filter";
+
+				//document.querySelector('#location-search-open-time-filter').click();
 			}, false);
 
 			document.querySelector('#location-search-open-time-filter').addEventListener('click', function(e){
@@ -1280,7 +1281,7 @@
 					isoTest.updateForNewLocation();
 				}
 
-				if (event.target.classList.contains('location-result-item__cta')) {
+				if (event.target.classList.contains('location-item__cta')) {
 					window.clearInterval(isoTest.counter);
 					if (isoTest.filtersCheckedNumber != 0) {
 						isoTest.filtersCheckedNumber = 0;
@@ -1302,9 +1303,9 @@
 				}
 
 				if (event.target.classList.contains('location-search-filter__clear-all')) {
-					// if (document.querySelector('#location-search-open-time-filter').checked == true) {
-					// 	document.querySelector('#location-search-open-time-filter').click();
-					// }
+					if (document.querySelector('#location-search-open-time-filter').checked == true) {
+						document.querySelector('#location-search-open-time-filter').click();
+					}
 					var allcheckedBoxes = document.querySelectorAll('.iso-location-filters-modal.iso-modal .checkbox__label-checkbox.checked');
 					if (allcheckedBoxes.length > 0) {
 						for (var b = 0; b < allcheckedBoxes.length; b++) {
@@ -1418,7 +1419,7 @@
 				document.querySelector('.location-chicklet-clear').click();
 			}
 
-			helpers.elementLoaded('.search-results-wrapper .search-results ul .location-result-item.active .location-result-item__cta', function() {
+			helpers.elementLoaded('.search-results-wrapper .search-results .location-items .location-item .location-item__cta', function() {
 				locationTypeFiltersTriggerBtn.disabled = false;
 				locationTypeFiltersTriggerBtn.classList.remove('disabled');
 				isoTest.addAttributeToAllLocations();
@@ -1431,11 +1432,13 @@
 				document.querySelector('.iso-filters-desktop-expand .iso-filter-text').innerHTML = "Filter (1)";
 				document.querySelector('.iso-filters-mobile-expand .iso-filter-text').innerHTML = "Filter (1)";
 				document.querySelector('.gi .location-search-filter__container-content-text.desktop.iso-filter-shown-text').classList.add('iso-hide');
+				// document.querySelector('#location-search-open-time-filter').click();
 			} else {
 				document.querySelector('.location-search-filter__container .location-search-filter__container-content .iso-clear-btn').classList.add('iso-hide');
 				document.querySelector('.gi .location-search-filter__container-content-text.desktop.iso-filter-shown-text').classList.add('iso-hide');
 				document.querySelector('.iso-filters-desktop-expand .iso-filter-text').innerHTML = "Filter";
 				document.querySelector('.iso-filters-mobile-expand .iso-filter-text').innerHTML = "Filter";
+				// document.querySelector('#location-search-open-time-filter').click();
 			}
 		},
 		updateFilterCaptionText : function() {
@@ -1534,11 +1537,11 @@
 
 	var helpers = {
 		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			// isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
 			window.clearTimeout(isoTest.eleTimer);
 			if (document.querySelectorAll(ele).length > 0) {
 				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					// isoTest.log('elementLoaded::  ' + ele + ' - Found!');
 					callback();
 				}
 	        } else {
