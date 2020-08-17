@@ -22,7 +22,7 @@ module.exports = function(grunt) {
     },
     strip_code: {
       options: {
-        patterns: [/ *isoTest\.log\([\w\S ]+\);?/g,/ *\/\/([\w\S ]+)?/g,/ *isoTest.debug = ([\w\S ]+)?;/g]
+        patterns: [/ *isoTest\.log\([\w\S ]+\);?/g,/ *isoTest.debug = ([\w\S ]+)?;/g]
       },
       your_target: {
           files:[{}]
