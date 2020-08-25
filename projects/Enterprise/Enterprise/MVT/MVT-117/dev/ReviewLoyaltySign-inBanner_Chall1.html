@@ -1,9 +1,21 @@
-<style>
+<style> 
 .pre-expedited-banner.login-banner-desktop {
 	display: flex;
 }
 .pre-expedited-banner.login-banner-mobile {
 	display: none;
+}
+.verification-page .aside .review-section {
+	margin: 0;
+	width: 100%;
+}
+.verification-page .aside .review-section #personal-information {
+	padding: 20px;
+}
+.verification-page .aside #personal-information.section-content .view-header {
+	border-bottom: .1875rem solid #181918;
+	margin-bottom: 25px;
+	padding: 0;
 }
 @media (max-width: 46.8em) {	
 	.pre-expedited-banner {
@@ -15,6 +27,13 @@
 	}
 	.pre-expedited-banner.login-banner-mobile {
 		display: flex;
+	}
+}
+@media (min-width: 46.8em) {
+	#commit .verification-page > .aside, #commit .verification-page > .review-section {
+		display: block;
+	    margin: 40px auto 0;
+	    width: 90%;
 	}
 }
 </style>
@@ -76,6 +95,38 @@
 					isoTest.fireTag(this,'Sign-in: Emerald Club');
 				}
 			}, false);
+
+			// Listen for signin (login module removed) and move contact module
+			var mutationCounter = 0;
+			var targetNode = document.querySelector('#commit');
+			var config = { attributes: true, childList: true, subtree: true };
+			var callback = function(mutationsList, observer) {
+			    for(var i=0; i<mutationsList.length; i++) {
+			    	var mutation = mutationsList[i];
+			        if (mutation.type === 'childList') {
+			            //console.log('A child node has been added or removed.');
+			            if (!document.querySelector('.login-banner-desktop')) {
+			            	//console.log('Signin module removed.');
+			            	if (mutationCounter < 1) {
+			            		mutationCounter ++;
+			            		document.querySelector('.login-banner-mobile').remove();
+
+			            		document.querySelector('.aside').insertAdjacentHTML('afterbegin','<div class="review-section"></div>');
+				            	var contactInfo = document.querySelector('#personal-information');
+				            	document.querySelector('.review-section').insertAdjacentElement('afterbegin',contactInfo);
+
+				            	observer.disconnect();
+
+			            	} 
+			            }
+			        }
+			    }
+			};
+			// Create an observer instance linked to the callback function
+			var observer = new MutationObserver(callback);
+			// Start observing the target node for configured mutations
+			observer.observe(targetNode, config);
+
 
 		},
 		fireTag : function(element, value) {
