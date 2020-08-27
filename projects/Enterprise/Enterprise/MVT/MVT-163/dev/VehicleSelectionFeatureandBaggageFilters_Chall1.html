@@ -1,0 +1,361 @@
+<style>
+.iso-mileage-filter .vehicle-filter__filter-list {
+	width: 100%;
+}
+
+.vehicle-list__item.iso-mileage-hidden {
+	display: none;
+}
+
+.vehicle-filter__amount-selected {
+	display: none;
+}
+
+#vehicle-filter-cta-expand .vehicle-filter__amount-selected {
+	display: none;
+}
+
+.iso-vehicle-filter__amount-selected {
+	font-size: 15px;
+	margin-left: 5px;
+	vertical-align: baseline;
+	font-weight: 400;
+	font-style: normal;
+	top: -1px;
+	position: relative;
+	line-height: 1;
+}
+
+.iso-mobile-vehicle-filter__amount-selected {
+	font-weight: 600;
+    font-style: normal;
+    font-size: .875rem;
+	margin-left: 5px;
+    vertical-align: baseline;
+    top: -1px;
+    position: relative;
+    line-height: 1;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Selection Feature and Baggage Filters',
+		creative : 'Challenger 1',
+		selector: '.vehicle-list',
+		selector2: '.vehicle-filter__header',
+		content: '<div class="vehicle-filter__filter iso-feature-filter">\
+					<div class="vehicle-filter__filter-header">\
+						<span class="vehicle-filter__title">Features</span>\
+					</div>\
+					<div class="vehicle-filter__list-content">\
+						<ul class="vehicle-filter__filter-list">\
+							<li class="vehicle-filter__filter-list-item iso-feature-filter-bluetooth hide">\
+								<label class="checkbox__label" tabindex="0" id="checkbox_bluetooth-label">\
+									<span class="checkbox__label-checkbox" >\
+										<input type="checkbox" name="bluetooth" value="Bluetooth" id="checkbox_bluetooth">\
+										<i class="icon icon-check-green"></i>\
+									</span>\
+									<span class="checkbox__text">Bluetooth</span>\
+								</label>\
+							</li>\
+							<li class="vehicle-filter__filter-list-item iso-feature-filter-sunroof hide">\
+								<label class="checkbox__label" tabindex="0" id="checkbox_sunroof-label">\
+									<span class="checkbox__label-checkbox" >\
+										<input type="checkbox" name="sunroof" value="Electric Sunroof" id="checkbox_sunroof">\
+										<i class="icon icon-check-green"></i>\
+									</span>\
+									<span class="checkbox__text">Electric Sunroof</span>\
+								</label>\
+							</li>\
+							<li class="vehicle-filter__filter-list-item iso-feature-filter-leather hide">\
+								<label class="checkbox__label" tabindex="0" id="checkbox_leather-label">\
+									<span class="checkbox__label-checkbox" >\
+										<input type="checkbox" name="leather" value="Leather Interior" id="checkbox_leather">\
+										<i class="icon icon-check-green"></i>\
+									</span>\
+									<span class="checkbox__text">Leather Interior</span>\
+								</label>\
+							</li>\
+						</ul>\
+					</div>\
+				</div>',
+		mileageObject: {},
+		featureObject: {},
+		leatherObject: {},
+		sunroofObject: {},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log("chall()");
+			document.querySelector('.vehicle-filter__header').insertAdjacentHTML('afterend', isoTest.content);
+
+			isoTest.findMileage();
+			helpers.elementLoaded(isoTest.selector2, function() {
+				isoTest.addEvents();
+			});
+		},
+		findMileage : function() {
+			isoTest.log("findMileage()");
+			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
+			for(var i = 0; i < vehicleItems.length; i++) {
+				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
+				var carClass = dataInfo[1];
+				var avail = dataInfo[2];
+				if (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE') {
+					isoTest.checkMileage(carClass, function(mileage){
+						console.log(mileage);
+					});
+				}
+			}
+		},
+		checkMileage : function(carCode, callback) {
+			isoTest.log("checkMileage()");
+			var url = enterprise.services.path + '/reservations/carClassDetails?carClassCode=';
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    	if (this.readyState == 4 && this.status == 200) {
+		       		var carDetails = JSON.parse(xhttp.responseText);
+		        	var hasUnlimited;
+		        	var hasBluetooth;
+		        	var hasLeather;
+		        	var hasSunroof;
+		        	console.log(carDetails);
+			        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.mileage_info && typeof carDetails.car_class_details.mileage_info.unlimited_mileage === "boolean") {
+		        		hasUnlimited = carDetails.car_class_details.mileage_info.unlimited_mileage;
+		        		isoTest.mileageObject[carCode] = hasUnlimited;
+		       			callback(hasUnlimited);
+			        }
+			        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.features && carDetails.car_class_details.features[181] == 'Bluetooth') {
+		        		hasBluetooth = carDetails.car_class_details.features[181];
+		        		isoTest.featureObject[carCode] = hasBluetooth;
+		       			callback(hasBluetooth);
+		       			if (document.querySelector('.iso-feature-filter-bluetooth.hide')) {
+		       			    document.querySelector('.iso-feature-filter-bluetooth.hide').classList.remove('hide');
+		       			}
+			        }
+			        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.features && carDetails.car_class_details.features[16] == 'Electric Sunroof') {
+		        		hasSunroof = carDetails.car_class_details.features[16];
+		        		isoTest.sunroofObject[carCode] = hasSunroof;
+		       			callback(hasSunroof);
+		       			if (document.querySelector('.iso-feature-filter-sunroof.hide')) {
+		       			    document.querySelector('.iso-feature-filter-sunroof.hide').classList.remove('hide');
+		       			}
+			        }
+			        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.features && carDetails.car_class_details.features[4] == 'Leather Interior') {
+		        		hasLeather = carDetails.car_class_details.features[4];
+		        		isoTest.leatherObject[carCode] = hasLeather;
+		       			callback(hasLeather);
+		       			if (document.querySelector('.iso-feature-filter-leather.hide')) {
+		       			    document.querySelector('.iso-feature-filter-leather.hide').classList.remove('hide');
+		       			}
+			        }
+			    }
+			};
+			url = url + carCode;
+			xhttp.open("POST", url, true);
+			xhttp.withCredentials = true;
+			xhttp.send();
+		},
+		checkForFilters : function() {
+			isoTest.log("checkForFilters()");
+			var bluetooth = document.querySelector('#checkbox_bluetooth-label .checkbox__label-checkbox.checked');
+			var leather = document.querySelector('#checkbox_leather-label .checkbox__label-checkbox.checked');
+			var sunroof = document.querySelector('#checkbox_sunroof-label .checkbox__label-checkbox.checked');
+
+			var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
+
+			if ((bluetooth && leather && sunroof) || (!bluetooth && !leather && !sunroof)) {
+				if (vehicleItemsHidden.length > 0) {
+					for(var i = 0; i < vehicleItemsHidden.length; i++) {
+						vehicleItemsHidden[i].classList.remove('iso-mileage-hidden');
+					}
+				} 
+				isoTest.checkEmptyList();
+				document.querySelector('.unavailable-vehicles').style.display = "block";
+			}
+			if (bluetooth) {
+				var status;
+				bluetooth ? status = 'Bluetooth' : status = null;
+				isoTest.updateItems(status);
+
+				document.querySelector('.unavailable-vehicles').style.display = "none";
+				isoTest.checkEmptyList();
+			} if (leather) {
+				var status;
+				leather ? status = 'Leather Interior' : status = null;
+				isoTest.updateItems(status);
+
+				document.querySelector('.unavailable-vehicles').style.display = "none";
+				isoTest.checkEmptyList();
+			} if (sunroof) {
+				var status;
+				sunroof ? status = 'Electric Sunroof' : status = null;
+				isoTest.updateItems(status);
+
+				document.querySelector('.unavailable-vehicles').style.display = "none";
+				isoTest.checkEmptyList();
+			}
+		},
+		checkEmptyList : function() {
+			isoTest.log("checkEmptyList()");
+			var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
+			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
+			var amount;
+
+			if (vehicleItems.length == vehicleItemsHidden.length) {
+				document.querySelector('.vehicle-list__empty-message').style.display = "block";
+			} else {
+				document.querySelector('.vehicle-list__empty-message').style.display = "none";
+			}
+
+			if (vehicleItemsHidden.length > 0) {
+				amount = vehicleItems.length - vehicleItemsHidden.length;
+			} else {
+				amount = vehicleItems.length;
+			}
+
+			if (document.querySelector('.vehicle-header__title .vehicle-header__result-total')) {
+				document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = amount + ' Results';
+			}
+
+
+			isoTest.checkFilterCount();
+		},
+		checkFilterCount : function() {
+			isoTest.log("checkFilterCount()");
+
+			var filterCount = document.querySelectorAll('.vehicle-filter__filter .checkbox__label .checkbox__label-checkbox.checked').length;
+
+			var elemFilterAmount = document.querySelector('.iso-vehicle-filter__amount-selected');
+			//var elemFilterAmountMobile = document.querySelector('.iso-mobile-vehicle-filter__amount-selected');
+
+			if (!elemFilterAmount) {
+				document.querySelector('.vehicle-filter__header-title').insertAdjacentHTML("beforeend", '<span class="iso-vehicle-filter__amount-selected">('+ filterCount +')</span>');
+			} else {
+				if (filterCount > 0) {
+					elemFilterAmount.innerHTML = '(' + filterCount + ')';
+				} else {
+					elemFilterAmount.parentNode.removeChild(elemFilterAmount);
+				}
+			}
+
+			// if (!elemFilterAmountMobile) {
+			// 	document.querySelector('#vehicle-filter-cta-expand').insertAdjacentHTML("beforeend", '<span class="iso-mobile-vehicle-filter__amount-selected">('+ filterCount +')</span>');
+			// } else {
+			// 	if (filterCount > 0) {
+			// 		elemFilterAmountMobile.innerHTML = '(' + filterCount + ')';
+			// 	} else {
+			// 		elemFilterAmountMobile.parentNode.removeChild(elemFilterAmountMobile);
+			// 	}
+			// }
+		},
+		updateItems : function(status) {
+			isoTest.log("updateItems()");
+			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
+
+			for(var i = 0; i < vehicleItems.length; i++) {
+				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
+				var carClass = dataInfo[1];
+				
+				if ((isoTest.featureObject[carClass] == status) || (isoTest.leatherObject[carClass] == status) || (isoTest.sunroofObject[carClass] == status)) {
+					vehicleItems[i].classList.remove('iso-mileage-hidden');
+				} else {
+					vehicleItems[i].classList.add('iso-mileage-hidden');
+				}
+			}
+		},
+		addEvents : function() {
+			isoTest.log("addEvents()");
+			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox input');
+			for(var i = 0; i < filterElements.length; i++) {
+				filterElements[i].addEventListener('click', function(event){
+					if ((event.target.id == 'checkbox_bluetooth') || (event.target.id == 'checkbox_leather') || (event.target.id == 'checkbox_sunroof')) {
+						if (event.target.parentNode.classList.contains("checked")) {
+							event.target.parentNode.classList.remove('checked');
+						} else {
+							event.target.parentNode.classList.add('checked');
+
+							if (event.target.id == 'checkbox_bluetooth') {
+								isoTest.fireTag('#checkbox_unlimited', "RW:CarClass:Filter:Unlimited");
+							} else {
+								isoTest.fireTag('#checkbox_limited', "RW:CarClass:Filter:Limited");
+							}
+						}
+					}
+					
+					setTimeout(function(){isoTest.checkForFilters() }, 100);
+					console.log(JSON.stringify(isoTest.featureObject));
+				}, false);
+			}
+
+			// document.querySelector('.vehicle-filter__header-cta').addEventListener('click', function(event){
+			// 	document.querySelector('#checkbox_unlimited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+			// 	document.querySelector('#checkbox_limited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+
+			// 	setTimeout(function(){isoTest.checkForFilters() }, 100);
+			// }, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
