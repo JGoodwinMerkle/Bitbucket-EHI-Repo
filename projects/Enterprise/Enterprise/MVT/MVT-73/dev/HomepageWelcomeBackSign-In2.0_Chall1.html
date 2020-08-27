@@ -91,14 +91,14 @@
 
 			document.querySelector('.reservationWidget').insertAdjacentHTML('beforebegin','<div class="welcome-back-banner hide"><p><strong>Welcome back!</strong> <a href="#">Sign in</a> to earn points on your next rental and redeem points on qualifying rentals.</p></div>');
 
-			// Hide banner if signed in
-			if (window._analytics && window._analytics.renter && window._analytics.renter.authenticated) {
+			// Show banner if not signed in
+			if (window._analytics && window._analytics.renter) {
 				if (_analytics.renter.authenticated == false) {
 		        	document.querySelector('.welcome-back-banner').classList.remove('hide');
 		        }
 			} else {
 				var aInt = setInterval(function () {
-					if(window._analytics && window._analytics.renter && window._analytics.renter.authenticated){
+					if(window._analytics && window._analytics.renter){
 						clearInterval(aInt);
 						if (_analytics.renter.authenticated == false) {
 				        	document.querySelector('.welcome-back-banner').classList.remove('hide');
@@ -116,16 +116,11 @@
 			});
 
 			// Listen for signin
-			const targetNode = document.getElementById('login-container');
-			const config = { attributes: true, childList: true, subtree: true };
-			const callback = function(mutationsList, observer) {
-			    for(let mutation of mutationsList) {
-			        // if (mutation.type === 'childList') {
-			        //     console.log('A child node has been added or removed.');
-			        // }
-			        // else if (mutation.type === 'attributes') {
-			        //     console.log('The ' + mutation.attributeName + ' attribute was modified.');
-			        // }
+			var targetNode = document.getElementById('login-container');
+			var config = { attributes: true, childList: true, subtree: true };
+			var callback = function(mutationsList, observer) {
+			    for(var i=0; i<mutationsList.length; i++) {
+			    	var mutation = mutationsList[i];
 			        if (document.querySelector('.icon-white-person')) {
 			        	console.log('User Signed In');
 			        	document.querySelector('.welcome-back-banner').classList.add('hide');
@@ -134,7 +129,7 @@
 			        }
 			    }
 			};
-			const observer = new MutationObserver(callback);
+			var observer = new MutationObserver(callback);
 			observer.observe(targetNode, config);
 			
 
