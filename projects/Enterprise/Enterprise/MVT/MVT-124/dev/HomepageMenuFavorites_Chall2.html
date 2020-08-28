@@ -145,28 +145,30 @@
 		},
 		chall : function() {
 			isoTest.log('test homepage menu fav start');
-			document.querySelector('.reservationWidget .inner-container').insertAdjacentHTML('afterend',isoTest.content);
+			if (!document.querySelector('.iso-menu-fav-container')) {
+				document.querySelector('.reservationWidget .inner-container').insertAdjacentHTML('afterend',isoTest.content);
 
-			var tile1 = document.querySelector('.iso-vehicles-tile');
-			var tile2 = document.querySelector('.iso-location-tile');
-			var tile3 = document.querySelector('.iso-deals-tile');
-			var tile4 = document.querySelector('.iso-contact-tile');
+				var tile1 = document.querySelector('.iso-vehicles-tile');
+				var tile2 = document.querySelector('.iso-location-tile');
+				var tile3 = document.querySelector('.iso-deals-tile');
+				var tile4 = document.querySelector('.iso-contact-tile');
 
-			tile1.addEventListener('click', function(event) {
-				isoTest.fireTag(this, "All Vehicles");
-			}, false);
+				tile1.addEventListener('click', function(event) {
+					isoTest.fireTag(this, "All Vehicles");
+				}, false);
 
-			tile2.addEventListener('click', function(event) {
-				isoTest.fireTag(this, "Location Finder");
-			}, false);
+				tile2.addEventListener('click', function(event) {
+					isoTest.fireTag(this, "Location Finder");
+				}, false);
 
-			tile3.addEventListener('click', function(event) {
-				isoTest.fireTag(this, "Deals & Promotions");
-			}, false);
+				tile3.addEventListener('click', function(event) {
+					isoTest.fireTag(this, "Deals & Promotions");
+				}, false);
 
-			tile4.addEventListener('click', function(event) {
-				isoTest.fireTag(this, "Contact Us");
-			}, false);
+				tile4.addEventListener('click', function(event) {
+					isoTest.fireTag(this, "Contact Us");
+				}, false);
+			}
 
 		},
 		fireTag : function(element, value) {
