@@ -196,7 +196,10 @@
 
 			document.addEventListener('click',function(e){
 				if(e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') || e.target.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]')){
-					isoTest.checkSort();
+					isoTest.log('Filter cleared or submitted');
+					if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
+						isoTest.checkSort();
+					}
 				}
 			});
 			document.querySelector('#vehicleSortBy').addEventListener('change',function(){
