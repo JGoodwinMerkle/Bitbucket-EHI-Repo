@@ -8,6 +8,9 @@
 	.iso-reward-notice p {
 		line-height: 1.4;
 	}
+	.iso-reward-notice strong {
+		font-weight: bold;
+	}
 </style>
 <script>
 (function() {
@@ -43,11 +46,13 @@
 		},
 		chall : function() {
 
-			document.querySelector('.homepage__rental-credits .reward-progress-info').insertAdjacentHTML('afterend','<div class="iso-reward-notice"><p class="reward-progress-info__text"><strong>Limited Time</strong> – Redeem your free days at participating Enterprise Rent-A-Car locations.&nbsp; <a href="https://www.nationalcar.com/en/car-rental/specials/redeem-at-enterprise.html" class="link link--caret iso-reward-notice-link">SEE HOW</a></p></div>');
+			if (!document.querySelector('.iso-reward-notice')) {
+				document.querySelector('.homepage__rental-credits .reward-progress-info').insertAdjacentHTML('afterend','<div class="iso-reward-notice"><p class="reward-progress-info__text"><strong>Limited Time</strong> – Redeem your free days at participating Enterprise Rent-A-Car locations.&nbsp; <a href="https://www.nationalcar.com/en/car-rental/specials/redeem-at-enterprise.html" class="link link--caret iso-reward-notice-link">SEE HOW</a></p></div>');
 
-			document.querySelector('.iso-reward-notice-link').addEventListener('click',function(e){
-	          isoTest.fireTag(e.target);
-	        });
+				document.querySelector('.iso-reward-notice-link').addEventListener('click',function(e){
+		          isoTest.fireTag(e.target);
+		        });
+			}
 
 		},
 		fireTag : function(element, value) {
