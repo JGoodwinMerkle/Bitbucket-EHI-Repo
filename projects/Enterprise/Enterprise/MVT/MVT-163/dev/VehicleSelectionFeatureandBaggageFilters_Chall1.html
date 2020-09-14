@@ -3,7 +3,9 @@
 	width: 100%;
 }
 
-.vehicle-list__item.iso-mileage-hidden {
+.vehicle-list__item.iso-mileage-hidden,
+.vehicle-list__item.iso-baggage-hidden,
+.vehicle-list__item.iso-features-hidden {
 	display: none;
 }
 
@@ -17,24 +19,63 @@
 
 .iso-vehicle-filter__amount-selected {
 	font-size: 15px;
-	margin-left: 5px;
-	vertical-align: baseline;
-	font-weight: 400;
 	font-style: normal;
-	top: -1px;
-	position: relative;
+	font-weight: 400;
 	line-height: 1;
+	margin-left: 5px;
+	position: relative;
+	top: -1px;
+	vertical-align: baseline;
 }
 
 .iso-mobile-vehicle-filter__amount-selected {
-	font-weight: 600;
-    font-style: normal;
     font-size: .875rem;
-	margin-left: 5px;
-    vertical-align: baseline;
-    top: -1px;
-    position: relative;
+    font-style: normal;
+    font-weight: 600;
     line-height: 1;
+	margin-left: 5px;
+    position: relative;
+    top: -1px;
+    vertical-align: baseline;
+}
+
+.iso-desktop-clear-all {
+	position: absolute;
+    right: 1.0625rem;
+    top: 18px;
+}
+
+.vehicle-filter--alternative .vehicle-filter__header {
+	position: relative;
+}
+
+.iso-mobile-clear-all {
+	position: absolute;
+    right: 1.25rem;
+}
+
+.iso-mileage-filter .checkbox__text,
+.iso-features-filter .checkbox__text {
+	text-transform: capitalize;
+}
+
+@media (max-width: 70.9375em) {
+	.vehicle-header__details {
+		position: relative;
+	}
+	.vehicle-header__details .btn.vehicle-header__filter {
+		opacity: 0;
+		position: absolute;
+		right: 0;
+    	z-index: 999;
+	}
+
+	.vehicle-header__details .btn.vehicle-header__filter.iso-mobile-filter-btn {
+		opacity: 1;
+		position: initial;
+	    right: auto;
+	    z-index: 99;
+	}
 }
 </style>
 <script>
@@ -46,47 +87,39 @@
 		test : 'Vehicle Selection Feature and Baggage Filters',
 		creative : 'Challenger 1',
 		selector: '.vehicle-list',
-		selector2: '.vehicle-filter__header',
-		content: '<div class="vehicle-filter__filter iso-feature-filter">\
-					<div class="vehicle-filter__filter-header">\
-						<span class="vehicle-filter__title">Features</span>\
-					</div>\
-					<div class="vehicle-filter__list-content">\
-						<ul class="vehicle-filter__filter-list">\
-							<li class="vehicle-filter__filter-list-item iso-feature-filter-bluetooth hide">\
-								<label class="checkbox__label" tabindex="0" id="checkbox_bluetooth-label">\
-									<span class="checkbox__label-checkbox" >\
-										<input type="checkbox" name="bluetooth" value="Bluetooth" id="checkbox_bluetooth">\
-										<i class="icon icon-check-green"></i>\
-									</span>\
-									<span class="checkbox__text">Bluetooth</span>\
-								</label>\
-							</li>\
-							<li class="vehicle-filter__filter-list-item iso-feature-filter-sunroof hide">\
-								<label class="checkbox__label" tabindex="0" id="checkbox_sunroof-label">\
-									<span class="checkbox__label-checkbox" >\
-										<input type="checkbox" name="sunroof" value="Electric Sunroof" id="checkbox_sunroof">\
-										<i class="icon icon-check-green"></i>\
-									</span>\
-									<span class="checkbox__text">Electric Sunroof</span>\
-								</label>\
-							</li>\
-							<li class="vehicle-filter__filter-list-item iso-feature-filter-leather hide">\
-								<label class="checkbox__label" tabindex="0" id="checkbox_leather-label">\
-									<span class="checkbox__label-checkbox" >\
-										<input type="checkbox" name="leather" value="Leather Interior" id="checkbox_leather">\
-										<i class="icon icon-check-green"></i>\
-									</span>\
-									<span class="checkbox__text">Leather Interior</span>\
-								</label>\
-							</li>\
-						</ul>\
-					</div>\
-				</div>',
-		mileageObject: {},
-		featureObject: {},
-		leatherObject: {},
-		sunroofObject: {},
+		content: '<div class="vehicle-filter__filter iso-{type}-filter">\
+						<div class="vehicle-filter__filter-header">\
+							<span class="vehicle-filter__title">{title}</span>\
+							<span class="vehicle-filter__price-indicator">Total from</span>\
+						</div>\
+						<div class="vehicle-filter__list-content">\
+							<ul class="vehicle-filter__filter-list">\
+							</ul>\
+						</div>\
+					</div>',
+		contentExtrasEach: '<li class="vehicle-filter__filter-list-item">\
+							<label class="checkbox__label_{type} checkbox__label" tabindex="0" id="checkbox_{num}_{type}-label{mobile}">\
+								<span class="checkbox__label-checkbox checkbox__label-checkbox_{type}" >\
+									<input class="checkbox_{type} checkbox_{type}_{num}" type="checkbox" name="number_of_{type}" value="{num}" id="checkbox_{type}_{num}{mobile}">\
+									<i class="icon icon-check-green"></i>\
+								</span>\
+								<span class="checkbox__text">{num}</span>\
+							</label>\
+							<span class="vehicle-filter__price-indicator iso-{num}-{type}-price{mobile}">{price}</span>\
+						</li>',
+		filterTitles: ['Mileage', 'Number of Bags', 'Popular Features'],
+		filterTypes: ['mileage', 'baggage', 'features'],
+		featureTypes: ['bluetooth','cruise control','electric sunroof','leather interior'],
+		allCarFiltering: {},
+		allFilterCosts: {
+			"baggage": {},
+			"mileage": {
+				"unlimited": Number.POSITIVE_INFINITY,
+				"limited": Number.POSITIVE_INFINITY
+			},
+			"features": {}
+		},
+		restricted : 0,
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -106,7 +139,7 @@
   				isoTest.chall();
 			});
 			
-		window.addEventListener('hashchange', isoTest.viewChange, false);
+			window.addEventListener('hashchange', isoTest.viewChange, false);
 		
 		},
 		viewChange : function(){
@@ -118,25 +151,147 @@
 		},
 		chall : function() {
 			isoTest.log("chall()");
-			document.querySelector('.vehicle-filter__header').insertAdjacentHTML('afterend', isoTest.content);
+			for(var i = 0; i < isoTest.filterTitles.length; i++) {
+				var contentFilter = helpers.supplant(isoTest.content, {
+		        	'title' : isoTest.filterTitles[i],
+		        	'type' : isoTest.filterTypes[i]
+		     	});
+		     	document.querySelector('.vehicle-filter__content').insertAdjacentHTML('beforeend', contentFilter);
+			}
+			isoTest.addExtraFilters();
+
+			document.querySelector('.vehicle-header__details .btn.vehicle-header__filter').insertAdjacentHTML("afterend",'<button class="iso-mobile-filter-btn btn vehicle-header__filter btn-anchor btn--outline" tabindex="0" type="button" role="button"><i class="icon icon-filter"></i>Sort &amp; Filter </button>');
 
 			isoTest.findMileage();
-			helpers.elementLoaded(isoTest.selector2, function() {
-				isoTest.addEvents();
+		},
+		addExtraFilters : function() {
+			isoTest.log("addExtraFilters()");
+			if (store.getState().toJS()['app']['vehicles']['availableVehicles'] != null){
+				var availableVehicles = store.getState().toJS()['app']['vehicles']['availableVehicles'];
+				var paymentType = store.getState().toJS()['app']['vehicles']['payType'];
+				
+				for(var i = 0; i < availableVehicles.length; i++) {
+					var carCode = availableVehicles[i]['code'];
+					var baggage = availableVehicles[i]['luggageCapacity'];
+					var features = availableVehicles[i]['features'];
+					var status = availableVehicles[i]['status'];
+					var priceTotal;
+					var itemFeatures = {
+						"bluetooth": false,
+						"cruise control": false,
+						"electric sunroof": false,
+						"leather interior": false
+					}
+
+					if (status == "RESTRICTED_AT_RETAIL_RATE") {
+						isoTest.restricted += 1;
+					}
+
+					isoTest.allCarFiltering[carCode] = {};
+
+					for(var f = 0; f < features.length; f++) {
+						for(var t = 0; t < isoTest.featureTypes.length; t++) {
+							if (typeof features[f]["value"] == "string") {
+								if (features[f]["value"].toLowerCase() === isoTest.featureTypes[t]){
+									var featureName = isoTest.featureTypes[t];
+									itemFeatures[featureName] = true;
+
+									if (isoTest.allFilterCosts["features"][featureName] == undefined) {
+										isoTest.allFilterCosts["features"][featureName] = Number.POSITIVE_INFINITY;
+									}
+
+									if (availableVehicles[i]['charges'][paymentType] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view'] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'] != undefined) {
+										priceTotal = availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'];
+										if (priceTotal < isoTest.allFilterCosts["features"][featureName]) {
+											isoTest.allFilterCosts["features"][featureName] = Math.round(priceTotal);
+										}
+									}
+								}
+							}
+						}
+					}
+
+					for(var y = 0; y < isoTest.featureTypes.length; y++) {
+						var feature = isoTest.featureTypes[y];
+						isoTest.allCarFiltering[carCode][feature] = itemFeatures[feature];
+					}
+
+					isoTest.allCarFiltering[carCode]["baggage"] = baggage;
+					if (isoTest.allFilterCosts["baggage"][baggage] == undefined) {
+						isoTest.allFilterCosts["baggage"][baggage] = Number.POSITIVE_INFINITY;
+					}
+				
+
+					if (availableVehicles[i]['charges'][paymentType] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view'] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'] != undefined) {
+						priceTotal = availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'];
+						if (priceTotal < isoTest.allFilterCosts['baggage'][baggage]) {
+							isoTest.allFilterCosts['baggage'][baggage] = Math.round(priceTotal);
+						}
+					}
+				}
+
+				Object.keys(isoTest.allFilterCosts['baggage']).forEach(function(key) {
+					if (isoTest.allFilterCosts['baggage'][key] == Number.POSITIVE_INFINITY) {
+				    	isoTest.allFilterCosts['baggage'][key] = "--";
+				  	}
+				});
+				
+				isoTest.updateFilterSection('.vehicle-filter__content .iso-baggage-filter',isoTest.allFilterCosts["baggage"],'baggage','desktop');
+				isoTest.updateFilterSection('.vehicle-filter__content .iso-features-filter',isoTest.allFilterCosts["features"],'features','desktop');
+			}
+		},
+		updateFilterSection : function(selector,filterCostObject,filterType,device) {
+			isoTest.log("updateFilterSection(): " + filterType);
+
+			Object.keys(filterCostObject).sort().forEach(function(key) {
+				var priceSymbol = ReservationStateTree.get(['session','reservationSession','defaultTopNavAmount','symbol']);
+				var price;
+				var mobile = '-mobile';
+
+				if (device != "mobile") {
+					mobile = '';
+				}
+
+				if (filterCostObject[key] != "--") {
+					price = priceSymbol + filterCostObject[key];
+				} else {
+					price = filterCostObject[key];
+				}
+
+			  	var filterContent = helpers.supplant(isoTest.contentExtrasEach, {
+		        	'num' : key,
+		        	'price' : price,
+		        	'type' : filterType,
+		        	'mobile' : mobile
+		     	});
+			  	document.querySelector(selector).insertAdjacentHTML('beforeend', filterContent);
 			});
 		},
 		findMileage : function() {
 			isoTest.log("findMileage()");
 			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
-			for(var i = 0; i < vehicleItems.length; i++) {
+			var totalCars = vehicleItems.length;
+			var carsAvailTotal = totalCars - isoTest.restricted;
+	
+			for(var i = 0; i < totalCars; i++) {
 				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
 				var carClass = dataInfo[1];
 				var avail = dataInfo[2];
+				var numCars = 0;
+
 				if (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE') {
 					isoTest.checkMileage(carClass, function(mileage){
-						console.log(mileage);
+						numCars += 1;
+
+						if (numCars == carsAvailTotal) {
+							if (isoTest.allFilterCosts["mileage"]["unlimited"] == "Infinity") isoTest.allFilterCosts["mileage"]["unlimited"] = "--";
+							if (isoTest.allFilterCosts["mileage"]["limited"] == "Infinity") isoTest.allFilterCosts["mileage"]["limited"] = "--";
+							
+							isoTest.updateFilterSection('.vehicle-filter__content .iso-mileage-filter',isoTest.allFilterCosts["mileage"],'mileage','desktop');
+							isoTest.addEvents();
+						}
 					});
-				}
+				} 
 			}
 		},
 		checkMileage : function(carCode, callback) {
@@ -144,41 +299,28 @@
 			var url = enterprise.services.path + '/reservations/carClassDetails?carClassCode=';
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
-		    	if (this.readyState == 4 && this.status == 200) {
-		       		var carDetails = JSON.parse(xhttp.responseText);
-		        	var hasUnlimited;
-		        	var hasBluetooth;
-		        	var hasLeather;
-		        	var hasSunroof;
-		        	console.log(carDetails);
+			    if (this.readyState == 4 && this.status == 200) {
+			        var carDetails = JSON.parse(xhttp.responseText);
+			        var hasUnlimited;
+
 			        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.mileage_info && typeof carDetails.car_class_details.mileage_info.unlimited_mileage === "boolean") {
 		        		hasUnlimited = carDetails.car_class_details.mileage_info.unlimited_mileage;
-		        		isoTest.mileageObject[carCode] = hasUnlimited;
+		        		isoTest.allCarFiltering[carCode]["unlimited"] = hasUnlimited;
+
+		        		if (carDetails && carDetails.car_class_details && carDetails.car_class_details.vehicle_rates && carDetails.car_class_details.vehicle_rates.PAYLATER && carDetails.car_class_details.vehicle_rates.PAYLATER.price_summary && carDetails.car_class_details.vehicle_rates.PAYLATER.price_summary.estimated_total_view && carDetails.car_class_details.vehicle_rates.PAYLATER.price_summary.estimated_total_view.amount) {
+		        			var priceTotal = carDetails.car_class_details.vehicle_rates.PAYLATER.price_summary.estimated_total_view.amount;
+
+		        			if (hasUnlimited == true) {
+								if (priceTotal < isoTest.allFilterCosts["mileage"]["unlimited"]) {
+									isoTest.allFilterCosts["mileage"]["unlimited"] = Math.round(priceTotal);
+								}
+		        			} else {
+								if (priceTotal < isoTest.allFilterCosts["mileage"]["limited"]) {
+									isoTest.allFilterCosts["mileage"]["limited"] = Math.round(priceTotal);
+								}
+		        			}
+		        		}
 		       			callback(hasUnlimited);
-			        }
-			        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.features && carDetails.car_class_details.features[181] == 'Bluetooth') {
-		        		hasBluetooth = carDetails.car_class_details.features[181];
-		        		isoTest.featureObject[carCode] = hasBluetooth;
-		       			callback(hasBluetooth);
-		       			if (document.querySelector('.iso-feature-filter-bluetooth.hide')) {
-		       			    document.querySelector('.iso-feature-filter-bluetooth.hide').classList.remove('hide');
-		       			}
-			        }
-			        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.features && carDetails.car_class_details.features[16] == 'Electric Sunroof') {
-		        		hasSunroof = carDetails.car_class_details.features[16];
-		        		isoTest.sunroofObject[carCode] = hasSunroof;
-		       			callback(hasSunroof);
-		       			if (document.querySelector('.iso-feature-filter-sunroof.hide')) {
-		       			    document.querySelector('.iso-feature-filter-sunroof.hide').classList.remove('hide');
-		       			}
-			        }
-			        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.features && carDetails.car_class_details.features[4] == 'Leather Interior') {
-		        		hasLeather = carDetails.car_class_details.features[4];
-		        		isoTest.leatherObject[carCode] = hasLeather;
-		       			callback(hasLeather);
-		       			if (document.querySelector('.iso-feature-filter-leather.hide')) {
-		       			    document.querySelector('.iso-feature-filter-leather.hide').classList.remove('hide');
-		       			}
 			        }
 			    }
 			};
@@ -189,79 +331,171 @@
 		},
 		checkForFilters : function() {
 			isoTest.log("checkForFilters()");
-			var bluetooth = document.querySelector('#checkbox_bluetooth-label .checkbox__label-checkbox.checked');
-			var leather = document.querySelector('#checkbox_leather-label .checkbox__label-checkbox.checked');
-			var sunroof = document.querySelector('#checkbox_sunroof-label .checkbox__label-checkbox.checked');
 
-			var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
+			for(var t = 0; t < isoTest.filterTypes.length; t++) {
+				var type = isoTest.filterTypes[t];
+				var filter = document.querySelectorAll('.checkbox__label-checkbox_'+type);
+				var filterChecked = document.querySelectorAll('.checkbox__label-checkbox_'+type+'.checked');
+				var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-'+type+'-hidden');
 
-			if ((bluetooth && leather && sunroof) || (!bluetooth && !leather && !sunroof)) {
-				if (vehicleItemsHidden.length > 0) {
-					for(var i = 0; i < vehicleItemsHidden.length; i++) {
-						vehicleItemsHidden[i].classList.remove('iso-mileage-hidden');
+				if (filterChecked.length == 0 || filter.length == filterChecked.length) {
+					if (vehicleItemsHidden.length > 0) {
+						for(var i = 0; i < vehicleItemsHidden.length; i++) {
+							vehicleItemsHidden[i].classList.remove('iso-'+type+'-hidden');
+						}
+					} 
+
+					document.querySelector('.unavailable-vehicles').style.display = "block";
+				} else {
+					if (filterChecked.length > 0) {
+						var checkedValues;
+						if (type != 'mileage') {
+							checkedValues = [];
+						}
+						for(var f = 0; f < filterChecked.length; f++) {
+							if (type == "mileage") {
+								var val = filterChecked[f].querySelector('input').value;
+								val == "unlimited" ? checkedValues = true : checkedValues = false;
+							} else if (type == "baggage") {
+								checkedValues.push(parseInt(filterChecked[f].querySelector('input').value)); 
+							} else {
+								checkedValues.push(filterChecked[f].querySelector('input').value);
+							}
+						}
+						isoTest.updateItemsAll(checkedValues,type);
+					} 
+				}
+			}
+			isoTest.checkForAllFilters();
+		},
+		checkForAllFilters : function() {
+			isoTest.log("checkForAllFilters()");
+			var mileage = document.querySelectorAll('.checkbox__label-checkbox_mileage');
+			var mileageChecked = document.querySelectorAll('.checkbox__label-checkbox_mileage.checked');
+			var baggage = document.querySelectorAll('.checkbox__label-checkbox_baggage');
+			var baggageChecked = document.querySelectorAll('.checkbox__label-checkbox_baggage.checked');
+			var features = document.querySelectorAll('.checkbox__label-checkbox_features');
+			var featuresChecked = document.querySelectorAll('.checkbox__label-checkbox_features.checked');
+			var allUnchecked = (mileageChecked.length == 0) && (baggageChecked.length == 0) && (featuresChecked.length == 0);
+			var allChecked = (mileage.length == mileageChecked.length) && (baggage.length == baggageChecked.length) && (features.length == featuresChecked.length);
+			var allVehicles = document.querySelectorAll('.vehicle-list__item');
+
+			if (allUnchecked || allChecked) {
+				if (allVehicles.length > 0) {
+					for(var i = 0; i < allVehicles.length; i++) {
+						allVehicles[i].classList.remove('iso-mileage-hidden');
+						allVehicles[i].classList.remove('iso-baggage-hidden');
+						allVehicles[i].classList.remove('iso-features-hidden');
 					}
-				} 
+				}
+
 				isoTest.checkEmptyList();
 				document.querySelector('.unavailable-vehicles').style.display = "block";
-			}
-			if (bluetooth) {
-				var status;
-				bluetooth ? status = 'Bluetooth' : status = null;
-				isoTest.updateItems(status);
-
-				document.querySelector('.unavailable-vehicles').style.display = "none";
-				isoTest.checkEmptyList();
-			} if (leather) {
-				var status;
-				leather ? status = 'Leather Interior' : status = null;
-				isoTest.updateItems(status);
-
-				document.querySelector('.unavailable-vehicles').style.display = "none";
-				isoTest.checkEmptyList();
-			} if (sunroof) {
-				var status;
-				sunroof ? status = 'Electric Sunroof' : status = null;
-				isoTest.updateItems(status);
-
-				document.querySelector('.unavailable-vehicles').style.display = "none";
+			} else {
 				isoTest.checkEmptyList();
 			}
 		},
+		updateItemsAll : function(values,type) {
+			isoTest.log("updateItemsAll()");
+			var vehicleItems = document.querySelectorAll('.vehicle-list__item');
+
+			if (vehicleItems.length > 0) {
+				for(var i = 0; i < vehicleItems.length; i++) {
+					var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
+					var carClass = dataInfo[1];
+					var checkStatus;
+
+					if (type == "mileage") {
+						checkStatus = isoTest.allCarFiltering[carClass]["unlimited"] == values;
+					}
+
+					if (type == "baggage") {
+						checkStatus = values.includes(isoTest.allCarFiltering[carClass]["baggage"]);
+					}
+					
+					if (type == "features") {
+						var feature1 = values.includes(isoTest.featureTypes[0]) && (isoTest.allCarFiltering[carClass][isoTest.featureTypes[0]] == true);
+						var feature2 = values.includes(isoTest.featureTypes[1]) && (isoTest.allCarFiltering[carClass][isoTest.featureTypes[1]] == true);
+						var feature3 = values.includes(isoTest.featureTypes[2]) && (isoTest.allCarFiltering[carClass][isoTest.featureTypes[2]] == true);
+						var feature4 = values.includes(isoTest.featureTypes[3]) && (isoTest.allCarFiltering[carClass][isoTest.featureTypes[3]] == true);
+
+						checkStatus = feature1 || feature2 || feature3 || feature4;
+					}
+
+					if (checkStatus) {
+						vehicleItems[i].classList.remove('iso-'+type+'-hidden');
+					} else {
+						vehicleItems[i].classList.add('iso-'+type+'-hidden');
+					}
+				}
+			}			
+		},
 		checkEmptyList : function() {
 			isoTest.log("checkEmptyList()");
-			var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
-			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
-			var amount;
+			var vehicleItemsList = document.querySelectorAll('.vehicle-list');
+			var vehicleItems;
+			if (vehicleItemsList.length > 0) {
+				var vehicleItems = vehicleItemsList[0].querySelectorAll('.vehicle-list__item');
+				var vehicleItemsHiddenMileage = vehicleItemsList[0].querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
+				var vehicleItemsHiddenBaggage = vehicleItemsList[0].querySelectorAll('.vehicle-list__item.iso-baggage-hidden');
+				var vehicleItemsHiddenFeatures= vehicleItemsList[0].querySelectorAll('.vehicle-list__item.iso-features-hidden');
+				var amount;
 
-			if (vehicleItems.length == vehicleItemsHidden.length) {
-				document.querySelector('.vehicle-list__empty-message').style.display = "block";
-			} else {
-				document.querySelector('.vehicle-list__empty-message').style.display = "none";
-			}
+				if ((vehicleItems.length == vehicleItemsHiddenMileage.length) || (vehicleItems.length == vehicleItemsHiddenBaggage.length) || (vehicleItems.length == vehicleItemsHiddenFeatures.length)) {
+					document.querySelector('.vehicle-list__empty-message').style.display = "block";
+				} else {
+					document.querySelector('.vehicle-list__empty-message').style.display = "none";
+				}
 
-			if (vehicleItemsHidden.length > 0) {
-				amount = vehicleItems.length - vehicleItemsHidden.length;
-			} else {
-				amount = vehicleItems.length;
-			}
+				var count = 0;
+				for(var i = 0; i < vehicleItems.length; i++) {
+					if (!vehicleItems[i].classList.value.includes('hidden')) {
+						count += 1;
+					}
+				}
+				amount = count;
 
-			if (document.querySelector('.vehicle-header__title .vehicle-header__result-total')) {
-				document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = amount + ' Results';
-			}
+				if (document.querySelector('.vehicle-header__title .vehicle-header__result-total')) {
+					document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = amount + ' Results';
+				}
 
+				if (document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button')) {
+					document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button').innerHTML = amount + ' results';
+				}
 
-			isoTest.checkFilterCount();
+				var unavialableList = document.querySelectorAll('.unavailable-vehicles .vehicle-list__item');
+
+				if (unavialableList.length > 0) {
+					var unavailCount = 0;
+					for(var i = 0; i < unavialableList.length; i++) {
+						if (!unavialableList[i].classList.value.includes('hidden')) {
+							unavailCount += 1;
+						}
+					}
+
+					var unavail = unavailCount;
+					if (unavail > 0) {
+						document.querySelector('.unavailable-vehicles .btn.unavailable-vehicles__button').innerHTML = '<i class="icon icon-nav-carrot-down"></i>Show Unavailable Vehicles ('+unavail+')';
+					} else {
+						document.querySelector('.unavailable-vehicles').style.display = "none";
+					}
+				} else {
+					document.querySelector('.unavailable-vehicles').style.display = "none";
+				}
+
+				isoTest.checkFilterCount();
+			}						
 		},
 		checkFilterCount : function() {
 			isoTest.log("checkFilterCount()");
 
-			var filterCount = document.querySelectorAll('.vehicle-filter__filter .checkbox__label .checkbox__label-checkbox.checked').length;
-
+			var filterCount = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label .checkbox__label-checkbox.checked').length;
 			var elemFilterAmount = document.querySelector('.iso-vehicle-filter__amount-selected');
-			//var elemFilterAmountMobile = document.querySelector('.iso-mobile-vehicle-filter__amount-selected');
 
 			if (!elemFilterAmount) {
-				document.querySelector('.vehicle-filter__header-title').insertAdjacentHTML("beforeend", '<span class="iso-vehicle-filter__amount-selected">('+ filterCount +')</span>');
+				if (document.querySelectorAll('.vehicle-filter__header-title').length > 0) {
+					document.querySelectorAll('.vehicle-filter__header-title')[0].insertAdjacentHTML("beforeend", '<span class="iso-vehicle-filter__amount-selected">('+ filterCount +')</span>');
+				}				
 			} else {
 				if (filterCount > 0) {
 					elemFilterAmount.innerHTML = '(' + filterCount + ')';
@@ -270,63 +504,126 @@
 				}
 			}
 
-			// if (!elemFilterAmountMobile) {
-			// 	document.querySelector('#vehicle-filter-cta-expand').insertAdjacentHTML("beforeend", '<span class="iso-mobile-vehicle-filter__amount-selected">('+ filterCount +')</span>');
-			// } else {
-			// 	if (filterCount > 0) {
-			// 		elemFilterAmountMobile.innerHTML = '(' + filterCount + ')';
-			// 	} else {
-			// 		elemFilterAmountMobile.parentNode.removeChild(elemFilterAmountMobile);
-			// 	}
-			// }
-		},
-		updateItems : function(status) {
-			isoTest.log("updateItems()");
-			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
-
-			for(var i = 0; i < vehicleItems.length; i++) {
-				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
-				var carClass = dataInfo[1];
-				
-				if ((isoTest.featureObject[carClass] == status) || (isoTest.leatherObject[carClass] == status) || (isoTest.sunroofObject[carClass] == status)) {
-					vehicleItems[i].classList.remove('iso-mileage-hidden');
+			if (filterCount > 0) {
+				if (!document.querySelector('.vehicle-select__aside .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-anchor')) {
+					document.querySelector('.vehicle-select__aside .vehicle-filter__header').insertAdjacentHTML("beforeend", '<span class="vehicle-filter__header-cta iso-desktop-clear-all"><button class="btn vehicle-filter__header-link btn-anchor" tabindex="0" type="button" role="button" data-dtm-tracking="car_filters|clear_filters|select">Clear All</button></span>');
 				} else {
-					vehicleItems[i].classList.add('iso-mileage-hidden');
+					if (document.querySelectorAll('.vehicle-select__aside .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-anchor').length > 1) {
+						document.querySelector('.iso-desktop-clear-all').remove();
+					}
 				}
-			}
+
+				if (!document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-secondary') && document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header')) {
+					document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header')[1].insertAdjacentHTML("beforeend", '<span class="vehicle-filter__header-cta iso-mobile-clear-all"><button class="btn vehicle-filter__header-link btn-secondary" tabindex="0" type="button" role="button" data-dtm-tracking="cars|filter_modal|clear">Clear All</button></span>');
+				} else {
+					if (document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-secondary').length > 1) {
+						document.querySelector('.iso-mobile-clear-all').remove();
+					}
+				}
+				document.querySelector('.iso-mobile-filter-btn').innerHTML = '<i class="icon icon-filter"></i>Sort &amp; Filter (' + filterCount +')';
+			} else {
+				document.querySelector('.iso-mobile-filter-btn').innerHTML = '<i class="icon icon-filter"></i>Sort &amp; Filter';
+			}			
 		},
 		addEvents : function() {
 			isoTest.log("addEvents()");
-			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox input');
-			for(var i = 0; i < filterElements.length; i++) {
-				filterElements[i].addEventListener('click', function(event){
-					if ((event.target.id == 'checkbox_bluetooth') || (event.target.id == 'checkbox_leather') || (event.target.id == 'checkbox_sunroof')) {
-						if (event.target.parentNode.classList.contains("checked")) {
-							event.target.parentNode.classList.remove('checked');
-						} else {
-							event.target.parentNode.classList.add('checked');
-
-							if (event.target.id == 'checkbox_bluetooth') {
-								isoTest.fireTag('#checkbox_unlimited', "RW:CarClass:Filter:Unlimited");
+			var filterElements = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label-checkbox input');
+			for(var e = 0; e < filterElements.length; e++) {
+				filterElements[e].addEventListener('click', function(event){
+					for(var k = 0; k < isoTest.filterTypes.length; k++) {
+						var filterNameDesktop = isoTest.filterTypes[k];
+						if (event.target.id.includes(filterNameDesktop)) {
+							if (event.target.parentNode.classList.contains("checked")) {
+								event.target.parentNode.classList.remove('checked');
 							} else {
-								isoTest.fireTag('#checkbox_limited', "RW:CarClass:Filter:Limited");
+								event.target.parentNode.classList.add('checked');
+								var category = filterNameDesktop[0].toUpperCase() + filterNameDesktop.slice(1);
+
+								isoTest.fireTag(event.target.id, "RW:CarClass:Filter:"+category+":"+event.target.value);
 							}
-						}
-					}
-					
+						}	
+					}				
 					setTimeout(function(){isoTest.checkForFilters() }, 100);
-					console.log(JSON.stringify(isoTest.featureObject));
 				}, false);
 			}
 
-			// document.querySelector('.vehicle-filter__header-cta').addEventListener('click', function(event){
-			// 	document.querySelector('#checkbox_unlimited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
-			// 	document.querySelector('#checkbox_limited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+			document.addEventListener("click", function(event){
+				if ((event.target.classList.contains('vehicle-filter__header-link') && event.target.classList.contains('btn-anchor')) || (event.target.classList.contains('vehicle-filter__header-link') && event.target.classList.contains('btn-secondary'))) {
 
-			// 	setTimeout(function(){isoTest.checkForFilters() }, 100);
-			// }, false);
+					if (document.querySelector('.iso-desktop-clear-all')) document.querySelector('.iso-desktop-clear-all').remove();
+					if (document.querySelector('.iso-mobile-clear-all')) document.querySelector('.iso-mobile-clear-all').remove();
+
+					for(var f = 0; f < isoTest.filterTypes.length; f++) {
+						var checked = document.querySelectorAll('.checkbox__label-checkbox_'+isoTest.filterTypes[f]+'.checked');
+						if (checked.length > 0) {
+							for(var c = 0; c < checked.length; c++) {
+								checked[c].classList.remove('checked');
+							}
+						}
+					}
+						
+					setTimeout(function(){isoTest.checkForFilters() }, 100);
+				}
+			}, false);
+
+			document.querySelector('button.vehicle-header__filter').addEventListener('click', function(event){
+				helpers.elementLoaded('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header', function() {
+					for(var a = 0; a < isoTest.filterTitles.length; a++) {
+						var contentFilter = helpers.supplant(isoTest.content, {
+				        	'title' : isoTest.filterTitles[a],
+				        	'type' : isoTest.filterTypes[a]
+				     	});
+				     	document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__content')[1].insertAdjacentHTML('beforeend', contentFilter);
+					}
+
+					for(var t = 0; t < isoTest.filterTypes.length; t++) {
+						var filter = isoTest.filterTypes[t];
+						isoTest.updateFilterSection('.ReactModal__Content .vehicle-filter--alternative .iso-'+filter+'-filter',isoTest.allFilterCosts[filter],filter,'mobile');
+						var filterDesktop = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label-checkbox_'+filter);
+						var filterMobile = document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter .checkbox__label-checkbox_'+filter);
+						if (filterDesktop.length > 0) {
+							for(var d = 0; d < filterDesktop.length; d++) {
+								if (filterDesktop[d].classList.contains('checked')) {
+									filterMobile[d].classList.add('checked');
+								}
+							}
+						}
+					}
+
+					isoTest.checkEmptyList();
+
+					var filterElementsMobile = document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter .checkbox__label-checkbox input');
+					for(var i = 0; i < filterElementsMobile.length; i++) {
+						filterElementsMobile[i].addEventListener('click', function(event){
+							for(var b = 0; b < isoTest.filterTypes.length; b++) {
+								var filterName = isoTest.filterTypes[b];
+								if (event.target.id.includes(filterName)) {
+									if (event.target.parentNode.classList.contains("checked")) {
+										event.target.parentNode.classList.remove('checked');
+										
+										var val = event.target.value;
+										document.querySelector('.vehicle-select__aside .iso-'+filterName+'-filter.vehicle-filter__filter .checkbox__label-checkbox input[value="'+val+'"]').parentNode.classList.remove('checked');
+
+									} else {
+										event.target.parentNode.classList.add('checked');
+					
+										var category = filterName[0].toUpperCase() + filterName.slice(1);
+										var val = event.target.value;
+
+										document.querySelector('.vehicle-select__aside .iso-'+filterName+'-filter.vehicle-filter__filter .checkbox__label-checkbox input[value="'+val+'"]').parentNode.classList.add('checked');
+
+										isoTest.fireTag(event.target.id, "RW:CarClass:Filter:"+category+":"+val);
+									}
+								}	
+							}						
+							setTimeout(function(){isoTest.checkForFilters() }, 100);
+						}, false);
+					}
+				});				
+			}, false);
 		},
 		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
 			s.linkTrackVars = 'eVar20';
@@ -337,8 +634,24 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if (typeof store !== 'undefined' && typeof store.getState === 'function' && typeof store.getState().toJS === 'function') {
+				if (typeof callback === "function") {
+					
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
 		}
-
 	}
 
 	var helpers = {
@@ -353,9 +666,23 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
+		},
+		supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
 		}
 	}
 
-	isoTest.init();
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
 })();
 </script>

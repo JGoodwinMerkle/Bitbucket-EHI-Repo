@@ -16,25 +16,59 @@
 }
 
 .iso-vehicle-filter__amount-selected {
-  font-size: 15px;
-  margin-left: 5px;
-  vertical-align: baseline;
-  font-weight: 400;
-  font-style: normal;
-  top: -1px;
-  position: relative;
-  line-height: 1;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1;
+	margin-left: 5px;
+	position: relative;
+	top: -1px;
+	vertical-align: baseline;
 }
 
 .iso-mobile-vehicle-filter__amount-selected {
-	font-weight: 600;
-    font-style: normal;
     font-size: .875rem;
-	    margin-left: 5px;
-    vertical-align: baseline;
-    top: -1px;
-    position: relative;
+    font-style: normal;
+    font-weight: 600;
     line-height: 1;
+	margin-left: 5px;
+    position: relative;
+    top: -1px;
+    vertical-align: baseline;
+}
+
+.iso-desktop-clear-all {
+	position: absolute;
+    right: 1.0625rem;
+    top: 18px;
+}
+
+.vehicle-filter--alternative .vehicle-filter__header {
+	position: relative;
+}
+
+.iso-mobile-clear-all {
+	position: absolute;
+    right: 1.25rem;
+}
+
+@media (max-width: 70.9375em) {
+	.vehicle-header__details {
+		position: relative;
+	}
+	.vehicle-header__details .btn.vehicle-header__filter {
+		opacity: 0;
+		position: absolute;
+		right: 0;
+    	z-index: 999;
+	}
+
+	.vehicle-header__details .btn.vehicle-header__filter.iso-mobile-filter-btn {
+		opacity: 1;
+		position: initial;
+	    right: auto;
+	    z-index: 99;
+	}
 }
 </style>
 <script>
@@ -62,7 +96,7 @@
 									</span>\
 									<span class="checkbox__text">Unlimited Mileage</span>\
 								</label>\
-								<span class="vehicle-filter__price-indicator"></span>\
+								<span class="vehicle-filter__price-indicator iso-unlimited-mileage-price"></span>\
 							</li>\
 							<li class="vehicle-filter__filter-list-item">\
 								<label class="checkbox__label" tabindex="0" id="checkbox_limited_mileage-label">\
@@ -72,12 +106,46 @@
 									</span>\
 									<span class="checkbox__text">Limited Mileage</span>\
 								</label>\
-								<span class="vehicle-filter__price-indicator"></span>\
+								<span class="vehicle-filter__price-indicator iso-limited-mileage-price"></span>\
+							</li>\
+						</ul>\
+					</div>\
+				</div>',
+		contentMobile: '<div class="vehicle-filter__filter iso-mileage-filter">\
+					<div class="vehicle-filter__filter-header">\
+						<span class="vehicle-filter__title">Mileage</span>\
+						<span class="vehicle-filter__price-indicator">Total from</span>\
+					</div>\
+					<div class="vehicle-filter__list-content">\
+						<ul class="vehicle-filter__filter-list">\
+							<li class="vehicle-filter__filter-list-item">\
+								<label class="checkbox__label" tabindex="0" id="checkbox_unlimited_mileage-label-mobile">\
+									<span class="checkbox__label-checkbox" >\
+										<input type="checkbox" name="mileage_type" value="Unlimited Mileage" id="checkbox_unlimited-mobile">\
+										<i class="icon icon-check-green"></i>\
+									</span>\
+									<span class="checkbox__text">Unlimited Mileage</span>\
+								</label>\
+								<span class="vehicle-filter__price-indicator iso-unlimited-mileage-price-mobile"></span>\
+							</li>\
+							<li class="vehicle-filter__filter-list-item">\
+								<label class="checkbox__label" tabindex="0" id="checkbox_limited_mileage-label-mobile">\
+									<span class="checkbox__label-checkbox" >\
+										<input type="checkbox" name="mileage_type" value="Limited Mileage" id="checkbox_limited-mobile">\
+										<i class="icon icon-check-green"></i>\
+									</span>\
+									<span class="checkbox__text">Limited Mileage</span>\
+								</label>\
+								<span class="vehicle-filter__price-indicator iso-limited-mileage-price-mobile"></span>\
 							</li>\
 						</ul>\
 					</div>\
 				</div>',
 		mileageObject: {},
+		mileageCostObject: {
+			"unlimited": Number.POSITIVE_INFINITY,
+			"limited": Number.POSITIVE_INFINITY
+		},
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -97,7 +165,7 @@
   				isoTest.chall();
 			});
 			
-		window.addEventListener('hashchange', isoTest.viewChange, false);
+			window.addEventListener('hashchange', isoTest.viewChange, false);
 		
 		},
 		viewChange : function(){
@@ -109,25 +177,64 @@
 		},
 		chall : function() {
 			isoTest.log("chall()");
-			document.querySelector('.vehicle-filter__header').insertAdjacentHTML('afterend', isoTest.content);
+			document.querySelector('.vehicle-filter__content').insertAdjacentHTML('beforeend', isoTest.content);
+			document.querySelector('.vehicle-header__details .btn.vehicle-header__filter').insertAdjacentHTML("afterend",'<button class="iso-mobile-filter-btn btn vehicle-header__filter btn-anchor btn--outline" tabindex="0" type="button" role="button"><i class="icon icon-filter"></i>Sort &amp; Filter </button>');
 
 			isoTest.findMileage();
 			helpers.elementLoaded(isoTest.selector2, function() {
 				isoTest.addEvents();
 			});
 		},
+		updateTotals : function() {
+			isoTest.log("updateTotals()");
+			var priceSymbol = ReservationStateTree.get(['session','reservationSession','defaultTopNavAmount','symbol']);
+			var filterPriceUnlimited = isoTest.mileageCostObject["unlimited"];
+			var filterPriceLimited = isoTest.mileageCostObject["limited"];
+
+			var unlimitedDesktop = document.querySelector('.iso-unlimited-mileage-price');
+			var limitedDesktop = document.querySelector('.iso-limited-mileage-price');
+			var unlimitedMobile = document.querySelector('.iso-unlimited-mileage-price-mobile');
+			var limitedMobile = document.querySelector('.iso-limited-mileage-price-mobile');
+			
+			if (filterPriceUnlimited != "--") {
+				unlimitedDesktop.innerHTML = priceSymbol + filterPriceUnlimited;
+				if (unlimitedMobile !== null) unlimitedMobile.innerHTML = priceSymbol + filterPriceUnlimited;
+			} else {
+				unlimitedDesktop.innerHTML = filterPriceUnlimited;
+				if (unlimitedMobile !== null) unlimitedMobile.innerHTML = filterPriceUnlimited;
+			}
+
+			if (filterPriceLimited != "--") {
+				limitedDesktop.innerHTML = priceSymbol + filterPriceLimited;
+				if (limitedMobile !== null) limitedMobile.innerHTML = priceSymbol + filterPriceLimited;
+			} else {
+				limitedDesktop.innerHTML = filterPriceLimited;
+				if (limitedMobile !== null) limitedMobile.innerHTML = filterPriceLimited;
+			}
+		},
 		findMileage : function() {
 			isoTest.log("findMileage()");
 			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
-			for(var i = 0; i < vehicleItems.length; i++) {
+			var totalCars = vehicleItems.length;
+			
+			for(var i = 0; i < totalCars; i++) {
 				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
 				var carClass = dataInfo[1];
 				var avail = dataInfo[2];
+				var numCars = 0;
+
 				if (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE') {
 					isoTest.checkMileage(carClass, function(mileage){
-						//isoTest.log(mileage);
+						numCars += 1;
+
+						if (numCars == totalCars) {
+							if (isoTest.mileageCostObject["unlimited"] == "Infinity") isoTest.mileageCostObject["unlimited"] = "--";
+							if (isoTest.mileageCostObject["limited"] == "Infinity") isoTest.mileageCostObject["limited"] = "--";
+
+							isoTest.updateTotals();
+						}
 					});
-				}
+				} 
 			}
 		},
 		checkMileage : function(carCode, callback) {
@@ -138,12 +245,24 @@
 			    if (this.readyState == 4 && this.status == 200) {
 			        var carDetails = JSON.parse(xhttp.responseText);
 			        var hasUnlimited;
-			        console.log('car details');
-			        console.log(carDetails);
+
 			        if (carDetails && carDetails.car_class_details && carDetails.car_class_details.mileage_info && typeof carDetails.car_class_details.mileage_info.unlimited_mileage === "boolean") {
 		        		hasUnlimited = carDetails.car_class_details.mileage_info.unlimited_mileage;
 		        		isoTest.mileageObject[carCode] = hasUnlimited;
-		       		
+
+		        		if (carDetails && carDetails.car_class_details && carDetails.car_class_details.vehicle_rates && carDetails.car_class_details.vehicle_rates.PAYLATER && carDetails.car_class_details.vehicle_rates.PAYLATER.price_summary && carDetails.car_class_details.vehicle_rates.PAYLATER.price_summary.estimated_total_view && carDetails.car_class_details.vehicle_rates.PAYLATER.price_summary.estimated_total_view.amount) {
+		        			var priceTotal = carDetails.car_class_details.vehicle_rates.PAYLATER.price_summary.estimated_total_view.amount;
+
+		        			if (hasUnlimited == true) {
+								if (priceTotal < isoTest.mileageCostObject["unlimited"]) {
+									isoTest.mileageCostObject["unlimited"] = Math.round(priceTotal);
+								}
+		        			} else {
+		        				if (priceTotal < isoTest.mileageCostObject["limited"]) {
+									isoTest.mileageCostObject["limited"] = Math.round(priceTotal);
+								}
+		        			}
+		        		}
 		       			callback(hasUnlimited);
 			        }
 			    }
@@ -166,6 +285,7 @@
 						vehicleItemsHidden[i].classList.remove('iso-mileage-hidden');
 					}
 				} 
+
 				isoTest.checkEmptyList();
 				document.querySelector('.unavailable-vehicles').style.display = "block";
 			} else {
@@ -175,46 +295,51 @@
 					isoTest.updateItems(status);
 
 					document.querySelector('.unavailable-vehicles').style.display = "none";
-
-					isoTest.checkEmptyList();
 				}
+				isoTest.checkEmptyList();
 			}
 		},
 		checkEmptyList : function() {
 			isoTest.log("checkEmptyList()");
 			var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-mileage-hidden');
-			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
-			var amount;
+			var vehicleItemsList = document.querySelectorAll('.vehicle-list');
+			var vehicleItems;
+			if (vehicleItemsList.length > 0) {
+				var vehicleItems = vehicleItemsList[0].querySelectorAll('.vehicle-list__item');
+				var amount;
 
-			if (vehicleItems.length == vehicleItemsHidden.length) {
-				document.querySelector('.vehicle-list__empty-message').style.display = "block";
-			} else {
-				document.querySelector('.vehicle-list__empty-message').style.display = "none";
-			}
+				if (vehicleItems.length == vehicleItemsHidden.length) {
+					document.querySelector('.vehicle-list__empty-message').style.display = "block";
+				} else {
+					document.querySelector('.vehicle-list__empty-message').style.display = "none";
+				}
 
-			if (vehicleItemsHidden.length > 0) {
-				amount = vehicleItems.length - vehicleItemsHidden.length;
-			} else {
-				amount = vehicleItems.length;
-			}
+				if (vehicleItemsHidden.length > 0) {
+					amount = vehicleItems.length - vehicleItemsHidden.length;
+				} else {
+					amount = vehicleItems.length;
+				}
 
-			if (document.querySelector('.vehicle-header__title .vehicle-header__result-total')) {
-				document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = amount + ' Results';
-			}
+				if (document.querySelector('.vehicle-header__title .vehicle-header__result-total')) {
+					document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = amount + ' Results';
+				}
 
-
-			isoTest.checkFilterCount();
+				if (document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button')) {
+					document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button').innerHTML = amount + ' results';
+				}
+				isoTest.checkFilterCount();
+			}						
 		},
 		checkFilterCount : function() {
 			isoTest.log("checkFilterCount()");
 
-			var filterCount = document.querySelectorAll('.vehicle-filter__filter .checkbox__label .checkbox__label-checkbox.checked').length;
-
+			var filterCount = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label .checkbox__label-checkbox.checked').length;
 			var elemFilterAmount = document.querySelector('.iso-vehicle-filter__amount-selected');
-			//var elemFilterAmountMobile = document.querySelector('.iso-mobile-vehicle-filter__amount-selected');
 
 			if (!elemFilterAmount) {
-				document.querySelector('.vehicle-filter__header-title').insertAdjacentHTML("beforeend", '<span class="iso-vehicle-filter__amount-selected">('+ filterCount +')</span>');
+				if (document.querySelectorAll('.vehicle-filter__header-title').length > 0) {
+					document.querySelectorAll('.vehicle-filter__header-title')[0].insertAdjacentHTML("beforeend", '<span class="iso-vehicle-filter__amount-selected">('+ filterCount +')</span>');
+				}				
 			} else {
 				if (filterCount > 0) {
 					elemFilterAmount.innerHTML = '(' + filterCount + ')';
@@ -223,34 +348,49 @@
 				}
 			}
 
-			// if (!elemFilterAmountMobile) {
-			// 	document.querySelector('#vehicle-filter-cta-expand').insertAdjacentHTML("beforeend", '<span class="iso-mobile-vehicle-filter__amount-selected">('+ filterCount +')</span>');
-			// } else {
-			// 	if (filterCount > 0) {
-			// 		elemFilterAmountMobile.innerHTML = '(' + filterCount + ')';
-			// 	} else {
-			// 		elemFilterAmountMobile.parentNode.removeChild(elemFilterAmountMobile);
-			// 	}
-			// }
+			if (filterCount > 0) {
+				if (!document.querySelector('.vehicle-select__aside .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-anchor')) {
+					document.querySelector('.vehicle-select__aside .vehicle-filter__header').insertAdjacentHTML("beforeend", '<span class="vehicle-filter__header-cta iso-desktop-clear-all"><button class="btn vehicle-filter__header-link btn-anchor" tabindex="0" type="button" role="button" data-dtm-tracking="car_filters|clear_filters|select">Clear All</button></span>');
+				} else {
+					if (document.querySelectorAll('.vehicle-select__aside .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-anchor').length > 1) {
+						document.querySelector('.iso-desktop-clear-all').remove();
+					}
+				}
+
+				if (!document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-secondary') && document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header')) {
+					document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header')[1].insertAdjacentHTML("beforeend", '<span class="vehicle-filter__header-cta iso-mobile-clear-all"><button class="btn vehicle-filter__header-link btn-secondary" tabindex="0" type="button" role="button" data-dtm-tracking="cars|filter_modal|clear">Clear All</button></span>');
+				} else {
+					if (document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-secondary').length > 1) {
+						document.querySelector('.iso-mobile-clear-all').remove();
+					}
+				}
+				document.querySelector('.iso-mobile-filter-btn').innerHTML = '<i class="icon icon-filter"></i>Sort &amp; Filter (' + filterCount +')';
+			} else {
+				document.querySelector('.iso-mobile-filter-btn').innerHTML = '<i class="icon icon-filter"></i>Sort &amp; Filter';
+			}			
 		},
 		updateItems : function(status) {
 			isoTest.log("updateItems()");
-			var vehicleItems = document.querySelectorAll('.vehicle-list')[0].querySelectorAll('.vehicle-list__item');
+			var vehicleItemsList = document.querySelectorAll('.vehicle-list');
+			var vehicleItems;
+			if (vehicleItemsList.length > 0) {
+				var vehicleItems = vehicleItemsList[0].querySelectorAll('.vehicle-list__item');
 
-			for(var i = 0; i < vehicleItems.length; i++) {
-				var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
-				var carClass = dataInfo[1];
-				
-				if (isoTest.mileageObject[carClass] == status) {
-					vehicleItems[i].classList.remove('iso-mileage-hidden');
-				} else {
-					vehicleItems[i].classList.add('iso-mileage-hidden');
+				for(var i = 0; i < vehicleItems.length; i++) {
+					var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
+					var carClass = dataInfo[1];
+					
+					if (isoTest.mileageObject[carClass] == status) {
+						vehicleItems[i].classList.remove('iso-mileage-hidden');
+					} else {
+						vehicleItems[i].classList.add('iso-mileage-hidden');
+					}
 				}
-			}
+			}			
 		},
 		addEvents : function() {
 			isoTest.log("addEvents()");
-			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox input');
+			var filterElements = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label-checkbox input');
 			for(var i = 0; i < filterElements.length; i++) {
 				filterElements[i].addEventListener('click', function(event){
 					if ((event.target.id == 'checkbox_unlimited') || (event.target.id == 'checkbox_limited')) {
@@ -265,20 +405,80 @@
 								isoTest.fireTag('#checkbox_limited', "RW:CarClass:Filter:Limited");
 							}
 						}
-					}
-					
+					}					
 					setTimeout(function(){isoTest.checkForFilters() }, 100);
 				}, false);
 			}
 
-			// document.querySelector('.vehicle-filter__header-cta').addEventListener('click', function(event){
-			// 	document.querySelector('#checkbox_unlimited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
-			// 	document.querySelector('#checkbox_limited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+			document.addEventListener("click", function(event){
+				if ((event.target.classList.contains('vehicle-filter__header-link') && event.target.classList.contains('btn-anchor')) || (event.target.classList.contains('vehicle-filter__header-link') && event.target.classList.contains('btn-secondary'))) {
+					if (document.querySelector('.iso-desktop-clear-all')) document.querySelector('.iso-desktop-clear-all').remove();
+					if (document.querySelector('.iso-mobile-clear-all')) document.querySelector('.iso-mobile-clear-all').remove();
+					document.querySelector('.vehicle-select__aside .vehicle-filter__filter #checkbox_unlimited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+					document.querySelector('.vehicle-select__aside .vehicle-filter__filter #checkbox_limited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+					if (document.querySelector('.ReactModal__Content .vehicle-filter--alternative')){
+						document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter #checkbox_unlimited_mileage-label-mobile .checkbox__label-checkbox').classList.remove('checked');
+						document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter #checkbox_limited_mileage-label-mobile .checkbox__label-checkbox').classList.remove('checked');
+					}
+					setTimeout(function(){isoTest.checkForFilters() }, 100);
+				}
+			}, false);
 
-			// 	setTimeout(function(){isoTest.checkForFilters() }, 100);
-			// }, false);
+			document.querySelector('button.vehicle-header__filter').addEventListener('click', function(event){
+				helpers.elementLoaded('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header', function() {
+					document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__content')[1].insertAdjacentHTML('beforeend', isoTest.contentMobile);
+					isoTest.updateTotals();
+					isoTest.checkEmptyList();
+
+					if (document.querySelector('.vehicle-select__aside .vehicle-filter__filter #checkbox_unlimited_mileage-label .checkbox__label-checkbox').classList.contains('checked')) {
+						document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter #checkbox_unlimited_mileage-label-mobile .checkbox__label-checkbox').classList.add('checked');
+					}
+
+					if (document.querySelector('.vehicle-select__aside .vehicle-filter__filter #checkbox_limited_mileage-label .checkbox__label-checkbox').classList.contains('checked')) {
+						document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter.iso-mileage-filter #checkbox_limited_mileage-label-mobile .checkbox__label-checkbox').classList.add('checked');
+					}
+
+					var filterElementsMobile = document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter .checkbox__label-checkbox input');
+					for(var i = 0; i < filterElementsMobile.length; i++) {
+						filterElementsMobile[i].addEventListener('click', function(event){
+							if ((event.target.id == 'checkbox_unlimited-mobile') || (event.target.id == 'checkbox_limited-mobile')) {
+								if (event.target.parentNode.classList.contains("checked")) {
+									event.target.parentNode.classList.remove('checked');
+
+									if (event.target.id == 'checkbox_unlimited-mobile') {
+										document.querySelector('.vehicle-select__aside .vehicle-filter__filter #checkbox_unlimited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+									}
+
+									if (event.target.id == 'checkbox_limited-mobile') {
+										document.querySelector('.vehicle-select__aside .vehicle-filter__filter #checkbox_limited_mileage-label .checkbox__label-checkbox').classList.remove('checked');
+									}
+	
+								} else {
+									event.target.parentNode.classList.add('checked');
+
+									if (event.target.id == 'checkbox_unlimited-mobile') {
+										document.querySelector('.vehicle-select__aside .vehicle-filter__filter #checkbox_unlimited_mileage-label .checkbox__label-checkbox').classList.add('checked')
+									}
+
+									if (event.target.id == 'checkbox_limited-mobile') {
+										document.querySelector('.vehicle-select__aside .vehicle-filter__filter #checkbox_limited_mileage-label .checkbox__label-checkbox').classList.add('checked')
+									}
+
+									if (event.target.id == 'checkbox_unlimited-mobile') {
+										isoTest.fireTag('#checkbox_unlimited', "RW:CarClass:Filter:Unlimited");
+									} else {
+										isoTest.fireTag('#checkbox_limited', "RW:CarClass:Filter:Limited");
+									}
+								}
+							}							
+							setTimeout(function(){isoTest.checkForFilters() }, 100);
+						}, false);
+					}
+				});				
+			}, false);
 		},
 		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
 			s.linkTrackVars = 'eVar20';
@@ -290,7 +490,6 @@
 				console.log(obj);
 			}
 		}
-
 	}
 
 	var helpers = {
