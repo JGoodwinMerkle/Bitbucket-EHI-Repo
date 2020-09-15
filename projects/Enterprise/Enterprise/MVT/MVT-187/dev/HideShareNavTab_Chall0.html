@@ -1,0 +1,120 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Hide Share Nav Tab',
+		creative : 'Challenger 0',
+		selector: 'body',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			isoTest.log('chall()');
+
+			if (document.querySelector('.master-nav #primary-nav #navContentShare')) {
+				isoTest.addEventsNav();
+			}
+
+			if (document.querySelector('#footer-nav .footermenu')) {
+				isoTest.addEventsFooter();
+			}
+		},
+		addEventsNav : function() {
+			isoTest.log('addEventsNav()');
+			if (document.querySelectorAll('#navContentShare .sub-menu a').length > 0) {
+				document.querySelectorAll('#navContentShare .sub-menu a')[0].addEventListener("click", function(event){
+					isoTest.fireTag('#navContentShare .sub-menu a', "Header.Share.About Enterprise CarShare");
+				}, false);
+
+				document.querySelectorAll('#navContentShare .sub-menu a')[1].addEventListener("click", function(event){
+					isoTest.fireTag('#navContentShare .sub-menu a', "Header.Share.Start Car Sharing");
+				}, false);
+
+				document.querySelectorAll('#navContentShare .sub-menu a')[2].addEventListener("click", function(event){
+					isoTest.fireTag('#navContentShare .sub-menu a', "Header.Share.About Commute with Enterprise");
+				}, false);
+
+				document.querySelectorAll('#navContentShare .sub-menu a')[3].addEventListener("click", function(event){
+					isoTest.fireTag('#navContentShare .sub-menu a', "Header.Share.Upgrade Your Commute");
+				}, false);
+			}
+		},
+		addEventsFooter : function() {
+			isoTest.log('addEventsFooter()');
+			if (document.querySelectorAll('#SHARE-list .footer__list--item a').length > 0) {
+				document.querySelectorAll('#SHARE-list .footer__list--item a')[0].addEventListener("click", function(event){
+					isoTest.fireTag('.footer__list--item a', "Footer.Share.Enterprise CarShare");
+				}, false);
+
+				document.querySelectorAll('#SHARE-list .footer__list--item a')[1].addEventListener("click", function(event){
+					isoTest.fireTag('.footer__list--item a', "Footer.Share.Commute with Enterprise");
+				}, false);
+			}
+
+			if (document.querySelectorAll('#BUSINESSES-list .footer__list--item a').length > 0) {
+				document.querySelectorAll('#BUSINESSES-list .footer__list--item a')[6].addEventListener("click", function(event){
+					isoTest.fireTag('.footer__list--item a', "Footer.Business.Enterprise CarShare");
+				}, false);
+
+				document.querySelectorAll('#BUSINESSES-list .footer__list--item a')[7].addEventListener("click", function(event){
+					isoTest.fireTag('.footer__list--item a', "Footer.Business.Commute with Enterprise");
+				}, false);
+			}
+		},
+		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
+			
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+			s.eVar89 = '';
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

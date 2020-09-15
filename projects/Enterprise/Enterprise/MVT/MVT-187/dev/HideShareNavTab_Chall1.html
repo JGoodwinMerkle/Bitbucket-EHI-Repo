@@ -1,0 +1,119 @@
+<style>
+.master-nav .nav-container .primary-item .megamenu-share {
+	display: none;
+}
+
+.primary-nav.active-cols-6>li {
+	width: 20% !important;
+}
+
+@media (max-width: 885px) {
+	.primary-nav.active-cols-6>li {
+		width: 100% !important;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Hide Share Nav Tab',
+		creative : 'Challenger 1',
+		selector: '.footermenu',
+		content: '<li class="footer__list--item"><i class="icon icon-nav-carrot-white footer-sub-menu-icon"></i><a href="https://www.enterprise.com/en/carshare.html?icid=footer.share.carshare-_-carshare-_-ENUS.NULL">About Enterprise CarShare</a></li>\
+				<li class="footer__list--item"><i class="icon icon-nav-carrot-white footer-sub-menu-icon"></i><a target="_blank" href="https://www.enterprisecarshare.com/us/en/home.html?cm_mmc=EnterpriseWebsite-_-Footer-_-share.carshare-_-ENUS">Start CarSharing <i class="icon icon-nav-external-link-white footer__list--external-icon"></i></a></li>\
+				<li class="footer__list--item"><i class="icon icon-nav-carrot-white footer-sub-menu-icon"></i><a href="https://www.enterprise.com/en/commute.html?icid=footer.share.rideshare-_-rideshare-_-ENUS.NULL">About Commute with Enterprise</a></li>\
+				<li class="footer__list--item"><i class="icon icon-nav-carrot-white footer-sub-menu-icon"></i><a target="_blank" href="https://www.commutewithenterprise.com/en/commuters.html?cm_mmc=EnterpriseWebsite-_-Footer-_-share.rideshare-_-ENUS">Upgrade Your Commute <i class="icon icon-nav-external-link-white footer__list--external-icon"></i></a></li>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			isoTest.log('chall()');
+			if (document.querySelector('#SHARE-list')) {
+				document.querySelector('#SHARE-list').innerHTML = isoTest.content;
+				isoTest.addEvents();
+			}
+		},
+		addEvents : function() {
+			isoTest.log('addEvents()');
+
+			var footerShareElements = document.querySelectorAll('#footer-nav .footermenu .footer__list .footer__list--item a');
+			for(var i = 0; i < footerShareElements.length; i++) {
+				if ((footerShareElements[i].innerText == "Enterprise CarShare ") || (footerShareElements[i].innerText == "Commute with Enterprise ") || (footerShareElements[i].innerText == "About Enterprise CarShare") || (footerShareElements[i].innerText == "Start CarSharing ") || (footerShareElements[i].innerText == "About Commute with Enterprise") || (footerShareElements[i].innerText == "Upgrade Your Commute ")) {
+
+					footerShareElements[i].addEventListener("click", function(event){
+						var val;
+						var type;
+						if (event.target.parentNode.parentNode.id == "SHARE-list") {
+							type = "Share";
+						} else {
+							type = "Business";
+						}
+
+						if (event.target.classList.contains('icon')) {
+							val = event.target.parentNode.innerText
+						} else {
+							val = event.target.innerText;
+						}
+
+						isoTest.fireTag('.footer__list--item a', "Footer."+type+"."+ val);
+					}, false);
+
+				}
+			}
+		},
+		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
+			
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+			s.eVar89 = '';
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
