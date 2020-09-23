@@ -25,11 +25,27 @@
 	}
 	#iso-redeem-modal-container .btn {
 		display: inline-block;
-	    padding: 0.875rem 2rem;
+		font-size: 16px;
+	    font-weight: 600;
+	    padding: 1rem 2rem;
 	    width: auto;
 	}
 	.iso-hidden-modal, .iso-hide {
 		display: none;
+	}
+	@media screen and (max-width: 40em) {
+		#iso-redeem-modal-container .modal__overlay--lightbox.modal__overlay {
+		    top: 12%;
+		    right: 5%;
+		    bottom: auto;
+		    left: 5%;
+		    min-height: 360px;
+		}
+	}
+	@media screen and (max-width: 370px) {
+		#iso-redeem-modal-container .modal__overlay--lightbox.modal__overlay {
+			bottom: 30%;
+		}
 	}
 	@media screen and (min-width: 40.0625em) {
 		#iso-redeem-modal-container .ReactModal__Content {
@@ -81,8 +97,17 @@
 				isoTest.log('Test Ready!');
   				var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
 				if (daysEarned > 0) {
-  					isoTest.chall();
+					if (sessionStorage.getItem('isoMVT184') === null) {
+	  					isoTest.chall();
+	  					helpers.sCodeLoaded(function() {
+			  				isoTest.fireTagV89();
+						});
+	  				}
 				}
+			});
+
+			helpers.sCodeLoaded(function() {
+  				isoTest.fireTagV90();
 			});
 			
 		},
@@ -108,7 +133,11 @@
 			}
 
 			isoTest.addEvents();
+			isoTest.sessionStorage();
 
+		},
+		sessionStorage : function() {
+			sessionStorage.setItem('isoMVT184', true);
 		},
 		addEvents : function() {
 			
@@ -119,7 +148,7 @@
 					document.querySelector('body').classList.remove('ReactModal__Body--open');
 				}
 				if (event.target.matches('#iso-redeem-modal-container .btn')) {
-					isoTest.fireTag();
+					isoTest.fireTag(this,'Learn More');
 				}
 			});
 
@@ -150,6 +179,25 @@
 			s.eVar20 = linkName;
 			s.tl(this, 'o', linkName);
 		},
+		fireTagV89 : function(element, value) {
+			var linkName = isoTest.test + ' :: 1+ Days Accrued';
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTagV90: function() {
+			if (s !== undefined && typeof s === 'object') {
+				isoTest.log('s code exists');
+				s.eVar90 = '';
+				s.events = '';
+				s.linkTrackVars = "eVar90";
+				s.eVar90 = isoTest.test + " :: " + isoTest.creative;
+				s.tl( true, "o", s.eVar90 );
+				s.eVar90 = '';
+			} else {
+				isoTest.log('s code not found');
+			}
+		},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
@@ -170,6 +218,16 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
+		},
+		sCodeLoaded : function (callback) {
+			isoTest.log('sCodeLoaded:: s - Checking...');
+			var sCodeCheck = setInterval(function(){
+				if (window.s !== undefined ){
+					isoTest.log('sCodeLoaded:: s - Found!');
+					clearInterval(sCodeCheck);
+					callback();
+				}
+			},100);
 		},
 	}
 
