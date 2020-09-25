@@ -76,38 +76,39 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
+			helpers.sCodeLoaded(function() {
+  				isoTest.fireTagV90();
+			});
+
 			helpers.elementLoaded(isoTest.selector, function() {
 				isoTest.log('Test Ready!');
   				var daysEarned = document.querySelector('.rental-credits-card__count__number').textContent;
 				if (daysEarned > 0) {
   					isoTest.chall();
-  					helpers.sCodeLoaded(function() {
-		  				isoTest.fireTagV89();
-					});
 				}
-			});
-
-			helpers.sCodeLoaded(function() {
-  				isoTest.fireTagV90();
 			});
 			
 		},
 		chall : function() {
 
-			document.querySelector('.hero__content').insertAdjacentHTML('afterbegin','<div class="zl-section__content">\
+			if (!document.querySelector('.iso-redeem-banner')) {
+				document.querySelector('.hero__content').insertAdjacentHTML('afterbegin','<div class="zl-section__content">\
 				<div class="iso-redeem-banner"><div class="iso-redeem-col-left"><span class="iso-redeem-banner-header iso-redeem-day iso-hide">YOU HAVE A FREE DAY!</span><span class="iso-redeem-banner-header iso-redeem-days iso-hide">YOU HAVE <span class="iso-redeem-qty">X</span> FREE DAYS!</span><br><span class="iso-redeem-banner-body">To redeem now, select an amount under REWARD DAYS in the reservation form.</span></div><div class="iso-redeem-col-right"><a class="btn btn--opaque" href="https://www.nationalcar.com/en/emerald-club/redeem-free-days.html">LEARN MORE</a></div></div>\
 				</div>');
-			var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
-			document.querySelector('.iso-redeem-qty').innerText = daysEarned;
+				var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
+				document.querySelector('.iso-redeem-qty').innerText = daysEarned;
 
-			if (daysEarned == 1) {
-				document.querySelector('.iso-redeem-day').classList.remove('iso-hide');
-			}
-			if (daysEarned > 1) {
-				document.querySelector('.iso-redeem-days').classList.remove('iso-hide');
+				if (daysEarned == 1) {
+					document.querySelector('.iso-redeem-day').classList.remove('iso-hide');
+				}
+				if (daysEarned > 1) {
+					document.querySelector('.iso-redeem-days').classList.remove('iso-hide');
+				}
+
+				isoTest.fireTagV89();
+				isoTest.addEvents();
 			}
 
-			isoTest.addEvents();
 		},
 		addEvents : function() {
 			document.addEventListener('click', function (event) {

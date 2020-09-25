@@ -93,21 +93,18 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
+			helpers.sCodeLoaded(function() {
+  				isoTest.fireTagV90();
+			});
+
 			helpers.elementLoaded(isoTest.selector, function() {
 				isoTest.log('Test Ready!');
   				var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
 				if (daysEarned > 0) {
 					if (sessionStorage.getItem('isoMVT184') === null) {
 	  					isoTest.chall();
-	  					helpers.sCodeLoaded(function() {
-			  				isoTest.fireTagV89();
-						});
 	  				}
 				}
-			});
-
-			helpers.sCodeLoaded(function() {
-  				isoTest.fireTagV90();
 			});
 			
 		},
@@ -132,6 +129,7 @@
 				document.querySelector('.iso-redeem-days').classList.remove('iso-hide');
 			}
 
+			isoTest.fireTagV89();
 			isoTest.addEvents();
 			isoTest.sessionStorage();
 
