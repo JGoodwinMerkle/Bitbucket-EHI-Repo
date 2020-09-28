@@ -1,0 +1,249 @@
+<style>
+	.iso-countdown {
+		background-color: #fff;
+		border: 1px solid #c3c3c3;
+		font-size: 14px;
+		margin-bottom: 1.5625rem;
+		padding: 14px 31px;
+	}
+
+
+	.iso-countdown .content {
+		display: inline;
+		margin-left: 10px;
+		width: calc(100% - 50px);
+	}
+
+	.iso-icon-timer {
+		/*background-image: url(/content/dam/ecom/hosted/ico-clock.png);*/
+		/*background-size: auto 100%;*/
+		/*float: left;*/
+		display: inline-block;
+	}
+
+	#countdown {
+	  position: relative;
+	  margin: auto;
+	  /*margin-top: 100px;*/
+	  height: 40px;
+	  width: 40px;
+	  text-align: center;
+	}
+
+	#countdown-number {
+	  color: #169a5a;
+	  display: inline-block;
+	  line-height: 40px;
+	}
+
+	svg {
+	  position: absolute;
+	  top: 0;
+	  right: 0;
+	  width: 40px;
+	  height: 40px;
+	  transform: rotateY(-180deg) rotateZ(-90deg);
+	}
+
+	svg circle {
+	  stroke-dasharray: 113px;
+	  stroke-dashoffset: 0px;
+	  stroke-linecap: round;
+	  stroke-width: 2px;
+	  stroke: #169a5a;
+	  fill: none;
+	  animation: countdown 1200s linear infinite forwards;
+	}
+
+	@keyframes countdown {
+	  from {
+	    stroke-dashoffset: 0;
+	  }
+	  to {
+	    stroke-dashoffset: 113px;
+	  }
+	}
+
+
+	@media (max-width: 46.8em) {
+		.iso-countdown {
+			padding: 14px 20px;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Review Count Down',
+		creative : 'Challenger 1',
+		selector: '#commit .aside',
+		template : '<div class="iso-countdown">\
+									<div class="iso-icon-timer">\
+										<div id="countdown">\
+  											<div id="countdown-number">20:00</div>\
+  											<svg>\
+    											<circle r="18" cx="20" cy="20"></circle>\
+  											</svg>\
+										</div>\
+									</div>\
+									<div class="content">Lock in your rate now before this session expires</div>\
+								</div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			// var searchTime = isoTest.searchTimeFix(ReservationStateTree.get(['session', 'reservationSession','creationTime']).split('T')[0]);
+			// var pickupTime = new Date(ReservationStateTree.get(['session', 'reservationSession','pickup_time']).split('T')[0]);
+			// var leadtime = isoTest.getLeadtime(pickupTime, searchTime);
+
+			// if (leadtime == 4 || leadtime == 5) {
+				// isoTest.challScarcityCountdown(leadtime);
+			// } 
+
+			// if (leadtime <= 3) {
+				isoTest.challScarcityLock();
+			// }
+
+
+		},
+		challScarcityLock : function () {
+			if(!document.querySelector('.iso-countdown-lock')){
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',isoTest.template);
+			}
+
+			// var countdownNumberEl = document.getElementById('countdown-number');
+			// var countdown = 10;
+
+			// countdownNumberEl.textContent = countdown;
+
+			// setInterval(function() {
+			//   countdown = --countdown <= 0 ? 10 : countdown;
+
+			//   countdownNumberEl.textContent = countdown;
+			// }, 1000);
+
+			function startTimer(duration, display) {
+			    var timer = duration, minutes, seconds;
+			    setInterval(function () {
+			        minutes = parseInt(timer / 60, 10)
+			        seconds = parseInt(timer % 60, 10);
+
+			        minutes = minutes < 10 ? "0" + minutes : minutes;
+			        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+			        display.textContent = minutes + ":" + seconds;
+
+			        if (--timer < 0) {
+			            timer = duration;
+			        }
+			    }, 1000);
+			}
+
+			// window.onload = function () {
+			    var twentyMinutes = 60 * 20,
+			        display = document.querySelector('#countdown-number');
+			    startTimer(twentyMinutes, display);
+			// };
+
+
+		},
+		challScarcityCountdown : function (leadtime) {
+			// var d = leadtime == 1 ? 'day' : 'days';
+
+			// var scarcity = helpers.supplant(isoTest.template, {
+			// 	'number' : leadtime,
+			// 	'days' : d
+			// });
+
+			// if(!document.querySelector('.iso-scarcity')){
+			// 	document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',scarcity);
+			// }
+		},
+		searchTimeFix: function(t){
+		    // var st = new Date(t);
+		    // var os = st.getTimezoneOffset() * 60000;
+		    // return new Date(st - os);
+		},
+		getLeadtime: function(pt, st){
+		  //  var lt = ((pt - st)/86400000);
+		  //  lt = Math.floor(lt);
+
+			 // if(pt.toDateString()!=st.toDateString() && lt == 0) {
+		  //      lt +=1;
+		  //  }
+		  //  return lt;
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
