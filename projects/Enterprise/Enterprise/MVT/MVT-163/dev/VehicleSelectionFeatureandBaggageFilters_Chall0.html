@@ -91,20 +91,20 @@
 							<li class="vehicle-filter__filter-list-item">\
 								<label class="checkbox__label" tabindex="0" id="checkbox_unlimited_mileage-label">\
 									<span class="checkbox__label-checkbox" >\
-										<input type="checkbox" name="mileage_type" value="Unlimited Mileage" id="checkbox_unlimited">\
+										<input type="checkbox" name="mileage_type" value="Unlimited" id="checkbox_unlimited">\
 										<i class="icon icon-check-green"></i>\
 									</span>\
-									<span class="checkbox__text">Unlimited Mileage</span>\
+									<span class="checkbox__text">Unlimited</span>\
 								</label>\
 								<span class="vehicle-filter__price-indicator iso-unlimited-mileage-price"></span>\
 							</li>\
 							<li class="vehicle-filter__filter-list-item">\
 								<label class="checkbox__label" tabindex="0" id="checkbox_limited_mileage-label">\
 									<span class="checkbox__label-checkbox" >\
-										<input type="checkbox" name="mileage_type" value="Limited Mileage" id="checkbox_limited">\
+										<input type="checkbox" name="mileage_type" value="Limited" id="checkbox_limited">\
 										<i class="icon icon-check-green"></i>\
 									</span>\
-									<span class="checkbox__text">Limited Mileage</span>\
+									<span class="checkbox__text">Limited</span>\
 								</label>\
 								<span class="vehicle-filter__price-indicator iso-limited-mileage-price"></span>\
 							</li>\
@@ -121,20 +121,20 @@
 							<li class="vehicle-filter__filter-list-item">\
 								<label class="checkbox__label" tabindex="0" id="checkbox_unlimited_mileage-label-mobile">\
 									<span class="checkbox__label-checkbox" >\
-										<input type="checkbox" name="mileage_type" value="Unlimited Mileage" id="checkbox_unlimited-mobile">\
+										<input type="checkbox" name="mileage_type" value="Unlimited" id="checkbox_unlimited-mobile">\
 										<i class="icon icon-check-green"></i>\
 									</span>\
-									<span class="checkbox__text">Unlimited Mileage</span>\
+									<span class="checkbox__text">Unlimited</span>\
 								</label>\
 								<span class="vehicle-filter__price-indicator iso-unlimited-mileage-price-mobile"></span>\
 							</li>\
 							<li class="vehicle-filter__filter-list-item">\
 								<label class="checkbox__label" tabindex="0" id="checkbox_limited_mileage-label-mobile">\
 									<span class="checkbox__label-checkbox" >\
-										<input type="checkbox" name="mileage_type" value="Limited Mileage" id="checkbox_limited-mobile">\
+										<input type="checkbox" name="mileage_type" value="Limited" id="checkbox_limited-mobile">\
 										<i class="icon icon-check-green"></i>\
 									</span>\
-									<span class="checkbox__text">Limited Mileage</span>\
+									<span class="checkbox__text">Limited</span>\
 								</label>\
 								<span class="vehicle-filter__price-indicator iso-limited-mileage-price-mobile"></span>\
 							</li>\
@@ -255,11 +255,11 @@
 
 		        			if (hasUnlimited == true) {
 								if (priceTotal < isoTest.mileageCostObject["unlimited"]) {
-									isoTest.mileageCostObject["unlimited"] = Math.round(priceTotal);
+									isoTest.mileageCostObject["unlimited"] = Math.ceil(priceTotal);
 								}
 		        			} else {
 		        				if (priceTotal < isoTest.mileageCostObject["limited"]) {
-									isoTest.mileageCostObject["limited"] = Math.round(priceTotal);
+									isoTest.mileageCostObject["limited"] = Math.ceil(priceTotal);
 								}
 		        			}
 		        		}
