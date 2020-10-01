@@ -9,9 +9,9 @@
 		text-align: center;
 	}
 	#iso-redeem-modal-container .modal__body {
-		max-width: 480px;
+		max-width: 425px;
     	margin: 0 auto;
-    	padding: 3em;
+    	padding: 2.8em;
 	}
 	#iso-redeem-modal-container h3 {
 		font-size: 1.8em;
@@ -33,18 +33,30 @@
 	.iso-hidden-modal, .iso-hide {
 		display: none;
 	}
-	@media screen and (max-width: 40em) {
-		#iso-redeem-modal-container .modal__overlay--lightbox.modal__overlay {
-		    top: 12%;
-		    right: 5%;
+	#iso-redeem-modal-container .modal__overlay.ReactModal__Overlay--after-open:not(.ReactModal__Overlay--before-close), #iso-redeem-modal-container .modal__overlay.ReactModal__Overlay--after-open:not(.ReactModal__Overlay--before-close):before {
+		background-color: rgba(35,31,32,0.3);
+	}
+	#iso-redeem-modal-container .modal__overlay {
+    	transition: background-color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    	-webkit-transition: background-color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+	}
+	@media screen and (max-width: 40.0625em) {
+		#iso-redeem-modal-container .ReactModal__Content {
+		    top: 10vh;
 		    bottom: auto;
-		    left: 5%;
-		    min-height: 360px;
+		    margin: 0 auto;
+		    max-height: 41vh;
+		    max-width: 85%;
 		}
 	}
-	@media screen and (max-width: 370px) {
-		#iso-redeem-modal-container .modal__overlay--lightbox.modal__overlay {
-			bottom: 30%;
+	@media screen and (max-width: 400px) {
+		#iso-redeem-modal-container .ReactModal__Content {
+			max-height: 50vh;
+		}
+	}
+	@media screen and (max-width: 305px) {
+		#iso-redeem-modal-container .ReactModal__Content {
+			max-height: 65vh;
 		}
 	}
 	@media screen and (min-width: 40.0625em) {
@@ -101,7 +113,8 @@
 				isoTest.log('Test Ready!');
   				var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
 				if (daysEarned > 0) {
-					if (sessionStorage.getItem('isoMVT184') === null) {
+					var myCookie = helpers.getCookie('isoMVT184');
+    				if (myCookie == null) {
 	  					isoTest.chall();
 	  				}
 				}
@@ -128,15 +141,16 @@
 			if (daysEarned > 1) {
 				document.querySelector('.iso-redeem-days').classList.remove('iso-hide');
 			}
-
-			isoTest.fireTagV89();
+			helpers.sCodeLoaded(function() {
+				isoTest.fireTagV89();
+			});
 			isoTest.sessionStorage();
 			isoTest.addEvents();
 			isoTest.modalFocus();
 
 		},
 		sessionStorage : function() {
-			sessionStorage.setItem('isoMVT184', true);
+			document.cookie = 'isoMVT184=true; max-age=86400; samesite=strict; path=/';
 		},
 		addEvents : function() {
 			
@@ -260,6 +274,26 @@
 				}
 			},100);
 		},
+		getCookie : function(name) {
+		    var dc = document.cookie;
+		    var prefix = name + "=";
+		    var begin = dc.indexOf("; " + prefix);
+		    if (begin == -1) {
+		        begin = dc.indexOf(prefix);
+		        if (begin != 0) return null;
+		    }
+		    else
+		    {
+		        begin += 2;
+		        var end = document.cookie.indexOf(";", begin);
+		        if (end == -1) {
+		        end = dc.length;
+		        }
+		    }
+		    // because unescape has been deprecated, replaced with decodeURI
+		    //return unescape(dc.substring(begin + prefix.length, end));
+		    return decodeURI(dc.substring(begin + prefix.length, end));
+		}, 
 	};
 
 	isoTest.init();
