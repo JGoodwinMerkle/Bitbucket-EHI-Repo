@@ -141,6 +141,16 @@
 		viewChange : function(){
 			if(/cars/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.log('viewChange()');
+					isoTest.allCarFiltering = {};
+					isoTest.allFilterCosts["baggage"] = {};
+					isoTest.allFilterCosts["features"] = {};
+					if (document.querySelector('.iso-baggage-filter')) {
+						document.querySelector('.iso-baggage-filter').remove();
+					}
+					if (document.querySelector('.iso-features-filter')) {
+						document.querySelector('.iso-features-filter').remove();
+					}
 					isoTest.chall();
 				});
 			}
@@ -229,6 +239,12 @@
 				Object.keys(isoTest.allFilterCosts['baggage']).forEach(function(key) {
 					if (isoTest.allFilterCosts['baggage'][key] == Number.POSITIVE_INFINITY) {
 				    	isoTest.allFilterCosts['baggage'][key] = "--";
+				  	}
+				});
+
+				Object.keys(isoTest.allFilterCosts['features']).forEach(function(key) {
+					if (isoTest.allFilterCosts['features'][key] == Number.POSITIVE_INFINITY) {
+				    	isoTest.allFilterCosts['features'][key] = "--";
 				  	}
 				});
 				
