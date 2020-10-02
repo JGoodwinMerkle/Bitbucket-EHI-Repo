@@ -59,6 +59,14 @@
 	text-transform: capitalize;
 }
 
+.iso-price.iso-hide {
+	display: none;
+}
+
+.iso-points.iso-hide {
+	display: none;
+}
+
 @media (max-width: 70.9375em) {
 	.vehicle-header__details {
 		position: relative;
@@ -90,7 +98,8 @@
 		content: '<div class="vehicle-filter__filter iso-{type}-filter">\
 						<div class="vehicle-filter__filter-header">\
 							<span class="vehicle-filter__title">{title}</span>\
-							<span class="vehicle-filter__price-indicator">Total from</span>\
+							<span class="vehicle-filter__price-indicator iso-price-indicator iso-price">Total from</span>\
+							<span class="vehicle-filter__price-indicator iso-price-indicator iso-points iso-hide">Points from</span>\
 						</div>\
 						<div class="vehicle-filter__list-content">\
 							<ul class="vehicle-filter__filter-list">\
@@ -105,17 +114,24 @@
 								</span>\
 								<span class="checkbox__text">{num}</span>\
 							</label>\
-							<span class="vehicle-filter__price-indicator iso-{num}-{type}-price{mobile}">{price}</span>\
+							<span class="vehicle-filter__price-indicator iso-price-indicator iso-{num}-{type}-price{mobile} iso-price">{price}</span>\
+							<span class="vehicle-filter__price-indicator iso-price-indicator iso-{num}-{type}-points{mobile} iso-points iso-hide">{points}</span>\
 						</li>',
 		filterTitles: ['Number of Bags', 'Popular Features'],
 		filterTypes: ['baggage', 'features'],
 		featureTypes: ['bluetooth','cruise control','electric sunroof','leather interior'],
 		allCarFiltering: {},
+		allCarFilteringPoints: {},
 		allFilterCosts: {
 			"baggage": {},
 			"features": {}
 		},
-		restricted : 0,
+		allFilterPoints: {
+			"baggage": {},
+			"features": {}
+		},
+		restricted: 0,
+		loggedIn: (ReservationStateTree.get(['User','loggedIn']) === true) ? true : false,
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -143,8 +159,12 @@
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.log('viewChange()');
 					isoTest.allCarFiltering = {};
+					isoTest.allCarFilteringPoints = {};
 					isoTest.allFilterCosts["baggage"] = {};
 					isoTest.allFilterCosts["features"] = {};
+					isoTest.allFilterPoints["baggage"] = {};
+					isoTest.allFilterPoints["features"] = {};
+					isoTest.restricted = 0;
 					if (document.querySelector('.iso-baggage-filter')) {
 						document.querySelector('.iso-baggage-filter').remove();
 					}
@@ -182,6 +202,7 @@
 					var features = availableVehicles[i]['features'];
 					var status = availableVehicles[i]['status'];
 					var priceTotal;
+					var pointsTotal;
 					var itemFeatures = {
 						"bluetooth": false,
 						"cruise control": false,
@@ -195,6 +216,8 @@
 
 					isoTest.allCarFiltering[carCode] = {};
 
+					if (isoTest.loggedIn) isoTest.allCarFilteringPoints[carCode] = {};
+
 					for(var f = 0; f < features.length; f++) {
 						for(var t = 0; t < isoTest.featureTypes.length; t++) {
 							if (typeof features[f]["value"] == "string") {
@@ -204,12 +227,22 @@
 
 									if (isoTest.allFilterCosts["features"][featureName] == undefined) {
 										isoTest.allFilterCosts["features"][featureName] = Number.POSITIVE_INFINITY;
+										if (isoTest.loggedIn) isoTest.allFilterPoints["features"][featureName] = Number.POSITIVE_INFINITY;
 									}
 
 									if (availableVehicles[i]['charges'][paymentType] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view'] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'] != undefined) {
 										priceTotal = availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'];
 										if (priceTotal < isoTest.allFilterCosts["features"][featureName]) {
 											isoTest.allFilterCosts["features"][featureName] = Math.ceil(priceTotal);
+										}
+									}
+
+									if (isoTest.loggedIn) {
+										if (availableVehicles[i]['charges']["REDEMPTION"] != undefined && availableVehicles[i]['charges']["REDEMPTION"]['total_price_view'] != undefined && availableVehicles[i]['charges']["REDEMPTION"]['total_price_view']['amount'] != undefined) {
+											pointsTotal = parseInt(availableVehicles[i]['charges']["REDEMPTION"]['total_price_view']['amount']);
+											if (pointsTotal < isoTest.allFilterPoints["features"][featureName]) {
+												isoTest.allFilterPoints["features"][featureName] = pointsTotal;
+											}
 										}
 									}
 								}
@@ -220,19 +253,30 @@
 					for(var y = 0; y < isoTest.featureTypes.length; y++) {
 						var feature = isoTest.featureTypes[y];
 						isoTest.allCarFiltering[carCode][feature] = itemFeatures[feature];
+						if (isoTest.loggedIn) isoTest.allCarFilteringPoints[carCode][feature] = itemFeatures[feature];
 					}
 
 					isoTest.allCarFiltering[carCode]["baggage"] = baggage;
 					if (isoTest.allFilterCosts["baggage"][baggage] == undefined) {
 						isoTest.allFilterCosts["baggage"][baggage] = Number.POSITIVE_INFINITY;
+						if (isoTest.loggedIn) isoTest.allFilterPoints["baggage"][baggage] = Number.POSITIVE_INFINITY;
 					}
-				
 
 					if (availableVehicles[i]['charges'][paymentType] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view'] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'] != undefined) {
 						priceTotal = availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'];
 						if (priceTotal < isoTest.allFilterCosts['baggage'][baggage]) {
 							isoTest.allFilterCosts['baggage'][baggage] = Math.ceil(priceTotal);
 						}
+					}
+
+					if (isoTest.loggedIn) {
+						if (availableVehicles[i]['charges']["REDEMPTION"] != undefined && availableVehicles[i]['charges']["REDEMPTION"]['total_price_view'] != undefined && availableVehicles[i]['charges']["REDEMPTION"]['total_price_view']['amount'] != undefined) {
+							pointsTotal = parseInt(availableVehicles[i]['charges']["REDEMPTION"]['total_price_view']['amount']);
+							if (pointsTotal < isoTest.allFilterPoints['baggage'][baggage]) {
+								isoTest.allFilterPoints['baggage'][baggage] = pointsTotal;
+							}
+						}
+
 					}
 				}
 
@@ -247,18 +291,33 @@
 				    	isoTest.allFilterCosts['features'][key] = "--";
 				  	}
 				});
+
+				if (isoTest.loggedIn) {
+					Object.keys(isoTest.allFilterPoints['baggage']).forEach(function(key) {
+						if (isoTest.allFilterPoints['baggage'][key] == Number.POSITIVE_INFINITY) {
+					    	isoTest.allFilterPoints['baggage'][key] = "--";
+					  	}
+					});
+
+					Object.keys(isoTest.allFilterPoints['features']).forEach(function(key) {
+						if (isoTest.allFilterPoints['features'][key] == Number.POSITIVE_INFINITY) {
+					    	isoTest.allFilterPoints['features'][key] = "--";
+					  	} 
+					});
+				}
 				
-				isoTest.updateFilterSection('.vehicle-filter__content .iso-baggage-filter',isoTest.allFilterCosts["baggage"],'baggage','desktop');
-				isoTest.updateFilterSection('.vehicle-filter__content .iso-features-filter',isoTest.allFilterCosts["features"],'features','desktop');
+				isoTest.updateFilterSection('.vehicle-filter__content .iso-baggage-filter',isoTest.allFilterCosts["baggage"],'baggage','desktop',isoTest.allFilterPoints["baggage"]);
+				isoTest.updateFilterSection('.vehicle-filter__content .iso-features-filter',isoTest.allFilterCosts["features"],'features','desktop',isoTest.allFilterPoints["features"]);
 			}
 		},
-		updateFilterSection : function(selector,filterCostObject,filterType,device) {
+		updateFilterSection : function(selector,filterCostObject,filterType,device,filterPointsObject) {
 			isoTest.log("updateFilterSection(): " + filterType);
 
 			Object.keys(filterCostObject).sort().forEach(function(key) {
 				var priceSymbol = ReservationStateTree.get(['session','reservationSession','defaultTopNavAmount','symbol']);
 				var price;
 				var mobile = '-mobile';
+				var points;
 
 				if (device != "mobile") {
 					mobile = '';
@@ -270,11 +329,22 @@
 					price = filterCostObject[key];
 				}
 
+				if (isoTest.loggedIn) {
+					if (filterPointsObject[key] != "--") {
+						points = filterPointsObject[key].toLocaleString() + " Pts";
+					} else {
+						points = filterPointsObject[key];
+					}
+				} else {
+					points = '';
+				}
+
 			  	var filterContent = helpers.supplant(isoTest.contentExtrasEach, {
 		        	'num' : key,
 		        	'price' : price,
 		        	'type' : filterType,
-		        	'mobile' : mobile
+		        	'mobile' : mobile,
+		        	'points' : points
 		     	});
 
 		     	document.querySelector(selector).insertAdjacentHTML('beforeend', filterContent);
@@ -481,6 +551,28 @@
 				document.querySelector('.iso-mobile-filter-btn').innerHTML = '<i class="icon icon-filter"></i>Sort &amp; Filter';
 			}			
 		},
+		checkRedemptionType : function() {
+			isoTest.log("checkRedemptionType()");
+
+			var allRedemptionTypes = document.querySelectorAll('.iso-price-indicator');
+			var pointsActive = document.querySelector(".vehicle-select__aside .vehicle-redemption--aside .vehicle-redemption__options-cta[data-dtm-tracking*='redeem_points']").parentNode.classList.contains('vehicle-redemption__options-item--active') ? true : false;
+			for(var p = 0; p < allRedemptionTypes.length; p++) {
+				if(pointsActive) {
+					if (allRedemptionTypes[p].classList.contains("iso-points")) {
+						allRedemptionTypes[p].classList.remove("iso-hide");
+					} else {
+						allRedemptionTypes[p].classList.add("iso-hide");
+					}
+					
+				} else {
+					if (allRedemptionTypes[p].classList.contains("iso-points")) {
+						allRedemptionTypes[p].classList.add("iso-hide");
+					} else {
+						allRedemptionTypes[p].classList.remove("iso-hide");
+					}
+				}
+			}
+		},
 		addEvents : function() {
 			isoTest.log("addEvents()");
 			var filterElements = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label-checkbox input');
@@ -520,6 +612,12 @@
 						
 					setTimeout(function(){isoTest.checkForFilters() }, 100);
 				}
+
+				if (isoTest.loggedIn) {
+					if (event.target.classList.contains('vehicle-redemption__options-cta')) {
+						isoTest.checkRedemptionType();
+					}
+				}
 			}, false);
 
 			document.querySelector('button.vehicle-header__filter').addEventListener('click', function(event){
@@ -534,7 +632,8 @@
 
 					for(var t = 0; t < isoTest.filterTypes.length; t++) {
 						var filter = isoTest.filterTypes[t];
-						isoTest.updateFilterSection('.ReactModal__Content .vehicle-filter--alternative .iso-'+filter+'-filter',isoTest.allFilterCosts[filter],filter,'mobile');
+						isoTest.updateFilterSection('.ReactModal__Content .vehicle-filter--alternative .iso-'+filter+'-filter',isoTest.allFilterCosts[filter],filter,'mobile',isoTest.allFilterPoints[filter]);
+						if (isoTest.loggedIn) isoTest.checkRedemptionType();
 						var filterDesktop = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label-checkbox_'+filter);
 						var filterMobile = document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter .checkbox__label-checkbox_'+filter);
 						if (filterDesktop.length > 0) {
