@@ -194,7 +194,7 @@
 			isoTest.log("addExtraFilters()");
 			if (store.getState().toJS()['app']['vehicles']['availableVehicles'] != null){
 				var availableVehicles = store.getState().toJS()['app']['vehicles']['availableVehicles'];
-				var paymentType = store.getState().toJS()['app']['vehicles']['payType'];
+				var paymentType = 'PAYLATER';
 				
 				for(var i = 0; i < availableVehicles.length; i++) {
 					var carCode = availableVehicles[i]['code'];
@@ -349,6 +349,8 @@
 
 		     	document.querySelector(selector).insertAdjacentHTML('beforeend', filterContent);
 			});
+
+			if (isoTest.loggedIn) isoTest.checkRedemptionType();
 		},
 		checkForFilters : function() {
 			isoTest.log("checkForFilters()");
@@ -526,6 +528,7 @@
 				if (filterCount > 0) {
 					elemFilterAmount.innerHTML = '(' + filterCount + ')';
 				} else {
+					elemFilterAmount.innerHTML = '';
 					elemFilterAmount.parentNode.removeChild(elemFilterAmount);
 				}
 			}
@@ -534,7 +537,7 @@
 				if (!document.querySelector('.vehicle-select__aside .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-anchor')) {
 					document.querySelector('.vehicle-select__aside .vehicle-filter__header').insertAdjacentHTML("beforeend", '<span class="vehicle-filter__header-cta iso-desktop-clear-all"><button class="btn vehicle-filter__header-link btn-anchor" tabindex="0" type="button" role="button" data-dtm-tracking="car_filters|clear_filters|select">Clear All</button></span>');
 				} else {
-					if (document.querySelectorAll('.vehicle-select__aside .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-anchor').length > 1) {
+					if (document.querySelector('.iso-desktop-clear-all')) {
 						document.querySelector('.iso-desktop-clear-all').remove();
 					}
 				}
@@ -542,12 +545,15 @@
 				if (!document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-secondary') && document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header')) {
 					document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header')[1].insertAdjacentHTML("beforeend", '<span class="vehicle-filter__header-cta iso-mobile-clear-all"><button class="btn vehicle-filter__header-link btn-secondary" tabindex="0" type="button" role="button" data-dtm-tracking="cars|filter_modal|clear">Clear All</button></span>');
 				} else {
-					if (document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-secondary').length > 1) {
+					if (document.querySelector('.iso-desktop-clear-all')) {
 						document.querySelector('.iso-mobile-clear-all').remove();
 					}
 				}
 				document.querySelector('.iso-mobile-filter-btn').innerHTML = '<i class="icon icon-filter"></i>Sort &amp; Filter (' + filterCount +')';
 			} else {
+				if (document.querySelector('.iso-desktop-clear-all')) {
+					document.querySelector('.iso-desktop-clear-all').remove();
+				}
 				document.querySelector('.iso-mobile-filter-btn').innerHTML = '<i class="icon icon-filter"></i>Sort &amp; Filter';
 			}			
 		},
@@ -633,7 +639,6 @@
 					for(var t = 0; t < isoTest.filterTypes.length; t++) {
 						var filter = isoTest.filterTypes[t];
 						isoTest.updateFilterSection('.ReactModal__Content .vehicle-filter--alternative .iso-'+filter+'-filter',isoTest.allFilterCosts[filter],filter,'mobile',isoTest.allFilterPoints[filter]);
-						if (isoTest.loggedIn) isoTest.checkRedemptionType();
 						var filterDesktop = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label-checkbox_'+filter);
 						var filterMobile = document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter .checkbox__label-checkbox_'+filter);
 						if (filterDesktop.length > 0) {
