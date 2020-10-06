@@ -3,6 +3,8 @@
 		background: #231f20;
 		color: #fff;
 		padding: 25px;
+		position: relative;
+		z-index: 2;
 	}
 	.iso-redeem-col-left {
 		margin-bottom: 16px;
@@ -95,9 +97,7 @@
 		chall : function() {
 
 			if (!document.querySelector('.iso-redeem-banner')) {
-				document.querySelector('.hero__content').insertAdjacentHTML('afterbegin','<div class="zl-section__content">\
-				<div class="iso-redeem-banner"><div class="iso-redeem-col-left"><span class="iso-redeem-banner-header iso-redeem-day iso-hide">YOU HAVE A FREE DAY!</span><span class="iso-redeem-banner-header iso-redeem-days iso-hide">YOU HAVE <span class="iso-redeem-qty">X</span> FREE DAYS!</span><br><span class="iso-redeem-banner-body">To redeem now, select an amount under REWARD DAYS in the reservation form.</span></div><div class="iso-redeem-col-right"><a class="btn btn--opaque" href="https://www.nationalcar.com/en/emerald-club/redeem-free-days.html">LEARN MORE</a></div></div>\
-				</div>');
+				document.querySelector('.hero__content').insertAdjacentHTML('afterbegin','<div class="zl-section__xlarge-max-width"><div class="zl-section__content"><div class="iso-redeem-banner"><div class="iso-redeem-col-left"><span class="iso-redeem-banner-header iso-redeem-day iso-hide">YOU HAVE A FREE DAY!</span><span class="iso-redeem-banner-header iso-redeem-days iso-hide">YOU HAVE <span class="iso-redeem-qty">X</span> FREE DAYS!</span><br><span class="iso-redeem-banner-body">To redeem now, select an amount under REWARD DAYS in the reservation form.</span></div><div class="iso-redeem-col-right"><a class="btn btn--opaque" href="https://www.nationalcar.com/en/emerald-club/redeem-free-days.html">LEARN MORE</a></div></div></div></div>');
 				var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
 				document.querySelector('.iso-redeem-qty').innerText = daysEarned;
 
