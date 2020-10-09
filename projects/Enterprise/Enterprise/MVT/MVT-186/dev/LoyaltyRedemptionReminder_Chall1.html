@@ -65,22 +65,16 @@
 }
 
 .iso-redeem-signin-message .iso-redeem-banner-text {
-	line-height: 12px;
 	position: relative;
     top: -1px;
 }
 
-.iso-redeem-signin-message .iso-disclaimer {
-	font-size: 10px;
-}
-
-.iso-redeem-signin-message .iso-redeem-banner-text sup {
-	font-size: 9px;
-}
-
-.iso-redeem-signin-message .iso-disclaimer sup {
-	position: relative;
-    top: 2px;
+.iso-learn-link {
+	color: #169a5a;
+	display: inline-block !important;
+	line-height: 12px !important;
+	padding: 0 !important;
+	text-decoration: underline;
 }
 
 @media (max-width: 48em){
@@ -117,7 +111,7 @@
 		test : 'Loyalty Redemption Reminder',
 		creative : 'Challenger 1',
 		selector: '.login-widget .utility-nav-label',
-		selectorAccount: '#account .account-header',
+		selectorAccount: '#account .account-header .account-header__user-name',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -146,27 +140,35 @@
 			isoTest.log('chall()');
 			
 			if (window.location.pathname.includes('/account.html')) {
-				isoTest.accountBannerUpdate();
+				helpers.elementLoaded(isoTest.selectorAccount, function() {
+					isoTest.accountBannerUpdate();
+				});
 			}
 
+			isoTest.signInWidgetUpdate();
 			isoTest.addEvents();
 		},
 		accountBannerUpdate : function() {
 			isoTest.log('accountBannerUpdate()');
 
-			helpers.elementLoaded(isoTest.selectorAccount, function() {
+			var checkPoints = window.setInterval(function () {
 				if (ReservationStateTree.get(['User','profile','basicProfile','loyaltyData','points_to_date']) !== undefined) {
+					clearInterval(checkPoints);
 					var pointsEarned = ReservationStateTree.get(['User','profile','basicProfile','loyaltyData','points_to_date']);
 					if (pointsEarned > 999) {
 						if (document.querySelector('#account .account-header')) {
 							if (!document.querySelector('#account .iso-redeem-banner-container')) {
-								document.querySelector('#account .account-header').insertAdjacentHTML('afterend','<div class="iso-redeem-banner-container"><div class="iso-redeem-banner"><div class="iso-plus-icon"><img class="plus-icon" src="/etc/designs/ecom/dist/img/plus.gif" alt=""></div><div class="iso-redeem-banner-body"><span class="iso-redeem-banner-header">REDEEM POINTS!</span><span class="iso-redeem-banner-text">You have <span class="iso-redeem-qty iso-bold">X</span> <span class="iso-bold">Enterprise Plus Points</span> to use on your next rental. Start your reservation now, and select PAY IN POINTS before you choose a vehicle class.</span></div></div></div>');
+								document.querySelector('#account .account-header').insertAdjacentHTML('afterend','<div class="iso-redeem-banner-container"><div class="iso-redeem-banner"><div class="iso-plus-icon"><img class="plus-icon" src="/etc/designs/ecom/dist/img/plus.gif" alt=""></div><div class="iso-redeem-banner-body"><span class="iso-redeem-banner-header">REDEEM POINTS!</span><span class="iso-redeem-banner-text">You have <span class="iso-redeem-qty iso-bold">X</span> <span class="iso-bold">Enterprise Plus Points</span> to use on your next rental. Start your reservation now, and select PAY IN POINTS before you choose a vehicle class. <a href="/en/loyalty/redeem-points.html" class="iso-learn-link">Learn how</a></span></div></div></div>');
 							}
 							document.querySelector('.iso-redeem-qty').innerText = pointsEarned;
 						}
 					}
 				}
-			});
+			}, 10);
+
+			setTimeout(function(){
+				clearInterval(checkPoints);
+			}, 5000);
 		},
 		signInWidgetUpdate : function() {
 			isoTest.log('signInWidgetUpdate()');
@@ -176,7 +178,7 @@
 					var pointsEarned = ReservationStateTree.get()['User']['profile']['basicProfile']['loyaltyData']['points_to_date'];
 					if (pointsEarned > 999) {
 						if (!document.querySelector('.iso-redeem-signin-message')) {
-							document.querySelector('.authenticated.utility-nav-content .logged-in .points-container').insertAdjacentHTML('beforebegin','<div class="iso-redeem-signin-message"><div class="iso-plus-icon"><img class="plus-icon" src="/etc/designs/ecom/dist/img/plus.gif" alt=""></div><div class="iso-redeem-banner-body"><span class="iso-redeem-banner-header">REDEEM POINTS!</span><span class="iso-redeem-banner-text">You may have enough for a free day.<sup>&Dagger;</sup></span><div class="iso-disclaimer"><sup>&Dagger;</sup>Free day covers base rate (Time & Mileage) only.</div></div></div>');
+							document.querySelector('.authenticated.utility-nav-content .logged-in .points-container').insertAdjacentHTML('beforebegin','<div class="iso-redeem-signin-message"><div class="iso-plus-icon"><img class="plus-icon" src="/etc/designs/ecom/dist/img/plus.gif" alt=""></div><div class="iso-redeem-banner-body"><span class="iso-redeem-banner-header">REDEEM POINTS!</span><span class="iso-redeem-banner-text">You may have enough for a free day. <a href="/en/loyalty/redeem-points.html" class="iso-learn-link">Learn how</a></span></div></div>');
 						}
 					}
 				}
@@ -185,7 +187,81 @@
 		addEvents : function() {
 			isoTest.log('addEvents()');
 
+			document.addEventListener("keydown", function (event) {
+				var keyCode = (event.keyCode ? event.keyCode : event.which);
+
+        		if (keyCode == '13') {
+        			if ((event.target.matches('.btn') && event.target.innerText == "Sign In") || (event.target.matches('#utility-eplus-email') || event.target.matches('#utility-eplus-password') || event.target.matches('#username') || event.target.matches('#password'))) {
+						if (window.location.pathname.includes('/account.html')) {
+							helpers.elementLoaded(isoTest.selectorAccount, function() {
+								isoTest.accountBannerUpdate();
+								isoTest.signInWidgetUpdate();
+							});
+						} else {
+							helpers.elementLoaded('.authenticated.utility-nav-content', function() {
+								isoTest.signInWidgetUpdate();
+							});
+						}
+					}
+
+					if (event.target.matches('.btn.modal-button') && event.target.innerText == "Sign Out") {
+						if (document.querySelector('.iso-redeem-signin-message')) {
+							document.querySelector('.iso-redeem-signin-message').remove();
+						}
+
+						if (document.querySelector('.iso-redeem-banner-container')) {
+							document.querySelector('.iso-redeem-banner-container').remove();
+						}
+					}
+
+					if (event.target.matches('.btn.modal-button.modal-cancel') && event.target.innerText == "No, Cancel") {
+						helpers.elementLoaded('.authenticated.utility-nav-content', function() {
+							isoTest.signInWidgetUpdate();
+						});
+					}
+
+					if (event.target.matches('.login-widget .utility-nav-label') || event.target.matches('.login-widget .utility-nav-label .label')  || event.target.matches('.login-widget .utility-nav-label strong') || event.target.matches('.login-widget .utility-nav-label i')) {
+						if (document.querySelector('#login-container .login-widget.active')) {
+							isoTest.signInWidgetUpdate();
+						}
+					}
+        		}
+			}, false);
+
 			document.addEventListener('click', function (event) {
+				if (event.target.matches('.iso-learn-link')){
+					isoTest.fireTag('.iso-learn-link', 'Learn How');
+				}
+
+				if (event.target.matches('.btn') && event.target.innerText == "Sign In") {
+					if (window.location.pathname.includes('/account.html')) {
+						helpers.elementLoaded(isoTest.selectorAccount, function() {
+							isoTest.accountBannerUpdate();
+							isoTest.signInWidgetUpdate();
+						});
+					} else {
+						helpers.elementLoaded('.authenticated.utility-nav-content', function() {
+							isoTest.signInWidgetUpdate();
+						});
+					}
+				}
+
+				if (event.target.matches('.btn.modal-button') && event.target.innerText == "Sign Out") {
+					if (document.querySelector('.iso-redeem-signin-message')) {
+						document.querySelector('.iso-redeem-signin-message').remove();
+					}
+
+					if (document.querySelector('.iso-redeem-banner-container')) {
+						document.querySelector('.iso-redeem-banner-container').remove();
+					}
+				}
+
+				if (event.target.matches('.btn.modal-button.modal-cancel') && event.target.innerText == "No, Cancel") {
+					helpers.elementLoaded('.authenticated.utility-nav-content', function() {
+						isoTest.signInWidgetUpdate();
+					});
+				}
+
 				if (event.target.matches('.login-widget .utility-nav-label') || event.target.matches('.login-widget .utility-nav-label .label')  || event.target.matches('.login-widget .utility-nav-label strong') || event.target.matches('.login-widget .utility-nav-label i')) {
 					if (document.querySelector('#login-container .login-widget.active')) {
 						isoTest.signInWidgetUpdate();
@@ -208,12 +284,20 @@
 				isoTest.log('s code not found');
 			}
 		},
+		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
+
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
 		}
-
 	}
 
 	var helpers = {
