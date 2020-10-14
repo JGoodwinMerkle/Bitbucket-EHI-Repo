@@ -116,8 +116,14 @@
 		
 		},
 		viewChange : function(){
+			window.clearInterval(isoTest.countdown);
+			isoTest.countdown = '';
+
 			if(/commit/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
+					if (document.querySelector('.iso-circle')) {
+						document.querySelector('.iso-circle').classList.remove('iso-run-animation');
+					}
 					isoTest.chall();
 				});
 			}
@@ -164,6 +170,7 @@
 							if (event.target.parentNode.parentNode.parentNode.parentNode.querySelector('#global-modal-title')) {
 								if (event.target.parentNode.parentNode.parentNode.parentNode.querySelector('#global-modal-title').innerText == "SESSION TIMEOUT") {
 									window.clearInterval(isoTest.countdown);
+									isoTest.countdown = '';
 									document.querySelector('.iso-circle').classList.remove('iso-run-animation');
 									document.querySelector('#iso-countdown-number').textContent = '20:00';
 									setTimeout(function(){
