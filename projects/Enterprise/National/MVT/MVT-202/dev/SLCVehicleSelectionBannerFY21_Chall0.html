@@ -1,0 +1,139 @@
+<style>
+	#iso-saltlakecity-modal .modal__btn-close {
+		cursor: pointer;
+	}
+	#iso-saltlakecity-modal .iso-bold {
+		font-weight: 600;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'National.com National.ca',
+		portfolio : 'Enterprise',
+		test : 'SLC Vehicle Selection Banner FY21',
+		creative : 'Challenger 0',
+		selector: 'body',
+		modalCheck: '.ReactModalPortal',
+		modalhtml :'<div id="iso-saltlakecity-modal" class="ReactModal__Overlay ReactModal__Overlay--after-open modal__overlay modal__overlay--lightbox" aria-modal="true"><div class="ReactModal__Content ReactModal__Content--after-open modal__content modal__content--lightbox zl-section--bgcolor-light" tabindex="-1" role="alertdialog" aria-label="Looking for an SUV?"><div class="modal__flex"><div class="modal__header"><h3>Looking for an SUV?</h3><button id="iso-close" type="button" class="modal__btn-close icon icon--close" aria-label="Close the modal"><span class="icon__text">Close the modal</span></button></div><div class="modal__body"><p>If you need to ensure you receive an SUV, please book the applicable car class below rather than choosing a Midsize vehicle.</span></p></div></div></div></div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.modalCheck, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/car_select/.test(location.hash)){
+				helpers.elementLoaded(isoTest.modalCheck, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			if (sessionStorage.getItem('nationalSUVMessageSeen') === null) {
+				isoTest.triggerModal();
+			}
+		},
+		triggerModal : function() {
+			isoTest.cookieModal();
+
+			var modalContainer = document.getElementsByClassName("ReactModalPortal")[1];
+			var newEl = document.createElement('div');
+			newEl.innerHTML += isoTest.modalhtml;
+			modalContainer.appendChild(newEl);
+
+			document.getElementById("iso-close").focus();
+			
+			document.addEventListener('click', function (event) {
+				if (event.target.matches('#iso-saltlakecity-modal .modal__btn-close')) {
+					modalContainer.removeChild(newEl);
+				}
+
+				if (event.target.matches('#iso-saltlakecity-modal.ReactModal__Overlay')) {
+					modalContainer.removeChild(newEl);
+				}
+			}, false);
+
+			document.onkeydown = function(evt) {
+		    evt = evt || window.event;
+				if (evt.keyCode == 27 || evt.key == "Esc" || evt.key == "Escape") {
+					if (document.getElementById("iso-saltlakecity-modal") != null) {
+						modalContainer.removeChild(newEl);
+					}
+				}
+			};
+
+			document.onkeypress = function(e) {
+		    	var keycode = (e.keyCode ? e.keyCode : e.which);
+	    		if (keycode == '13') {
+	    			if (e.target.matches('#iso-saltlakecity-modal .modal__btn-close')) {
+			        	modalContainer.removeChild(newEl);
+			      }
+			    }
+			};
+		},
+		cookieModal : function() {
+			// sessionStorage.setItem('nationalSUVMessageSeen','true');
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
