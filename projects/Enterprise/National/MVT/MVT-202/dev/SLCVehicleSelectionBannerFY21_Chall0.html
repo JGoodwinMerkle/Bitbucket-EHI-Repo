@@ -5,6 +5,10 @@
 	#iso-saltlakecity-modal .iso-bold {
 		font-weight: 600;
 	}
+	.iso-modal-open {
+		height: 100%;
+		overflow: hidden;
+	}
 </style>
 <script>
 (function() {
@@ -17,6 +21,7 @@
 		selector: 'body',
 		modalCheck: '.ReactModalPortal',
 		modalhtml :'<div id="iso-saltlakecity-modal" class="ReactModal__Overlay ReactModal__Overlay--after-open modal__overlay modal__overlay--lightbox" aria-modal="true"><div class="ReactModal__Content ReactModal__Content--after-open modal__content modal__content--lightbox zl-section--bgcolor-light" tabindex="-1" role="alertdialog" aria-label="Looking for an SUV?"><div class="modal__flex"><div class="modal__header"><h3>Looking for an SUV?</h3><button id="iso-close" type="button" class="modal__btn-close icon icon--close" aria-label="Close the modal"><span class="icon__text">Close the modal</span></button></div><div class="modal__body"><p>If you need to ensure you receive an SUV, please book the applicable car class below rather than choosing a Midsize vehicle.</span></p></div></div></div></div>',
+		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -47,11 +52,14 @@
 			}
 		},
 		chall : function() {
+			isoTest.log("chall()");
 			if (sessionStorage.getItem('nationalSUVMessageSeen') === null) {
 				isoTest.triggerModal();
 			}
 		},
 		triggerModal : function() {
+			isoTest.log("triggerModal()");
+
 			isoTest.cookieModal();
 
 			var modalContainer = document.getElementsByClassName("ReactModalPortal")[1];
@@ -59,46 +67,71 @@
 			newEl.innerHTML += isoTest.modalhtml;
 			modalContainer.appendChild(newEl);
 
-			document.getElementById("iso-close").focus();
+			document.querySelector('html').classList.add('iso-modal-open');
+			document.querySelector('body').classList.add('ReactModal__Body--open');
 			
 			document.addEventListener('click', function (event) {
-				if (event.target.matches('#iso-saltlakecity-modal .modal__btn-close')) {
+				if (event.target.matches('#iso-saltlakecity-modal .modal__btn-close') || event.target.matches('#iso-saltlakecity-modal.ReactModal__Overlay')) {
 					modalContainer.removeChild(newEl);
-				}
-
-				if (event.target.matches('#iso-saltlakecity-modal.ReactModal__Overlay')) {
-					modalContainer.removeChild(newEl);
+					document.querySelector('html').classList.remove('iso-modal-open');
+					document.querySelector('body').classList.remove('ReactModal__Body--open');
 				}
 			}, false);
 
-			document.onkeydown = function(evt) {
-		    evt = evt || window.event;
+			document.addEventListener('keydown', function (evt) {
+		    	evt = evt || window.event;
 				if (evt.keyCode == 27 || evt.key == "Esc" || evt.key == "Escape") {
 					if (document.getElementById("iso-saltlakecity-modal") != null) {
 						modalContainer.removeChild(newEl);
+						document.querySelector('html').classList.remove('iso-modal-open');
+						document.querySelector('body').classList.remove('ReactModal__Body--open');
 					}
 				}
-			};
+			}, false);
 
-			document.onkeypress = function(e) {
+			document.addEventListener('keypress', function (e) {
 		    	var keycode = (e.keyCode ? e.keyCode : e.which);
 	    		if (keycode == '13') {
 	    			if (e.target.matches('#iso-saltlakecity-modal .modal__btn-close')) {
-			        	modalContainer.removeChild(newEl);
+	    				e.target.click();
 			      }
 			    }
-			};
+			}, false);
+
+			var modal = document.querySelector('#iso-saltlakecity-modal');
+			isoTest.keepFocus(modal);
+			document.querySelector("#iso-close").focus();
 		},
 		cookieModal : function() {
-			// sessionStorage.setItem('nationalSUVMessageSeen','true');
+			isoTest.log("cookieModal()");
+
+			sessionStorage.setItem('nationalSUVMessageSeen','true');
 		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
-		},
+		keepFocus : function(context) {
+    		isoTest.log("keepFocus()");
+
+      		var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+         		firstTabbableElement = allTabbableElements[0],
+          		lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+      		var keyListener = function(e) {
+    			var keyCode = e.which || e.keyCode;
+
+    			e.preventDefault = e.preventDefault || function () {
+    				e.returnValue = false;
+    			};
+    			if (keyCode === 9) {
+          			if (e.target === lastTabbableElement && !e.shiftKey) {
+    					e.preventDefault();
+    					firstTabbableElement.focus();
+          			} else if (e.target === firstTabbableElement && e.shiftKey) {
+    					e.preventDefault();
+    					lastTabbableElement.focus();
+    				}
+    			}
+    		};
+    		context.addEventListener('keydown', keyListener, false);
+    	},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
@@ -119,18 +152,6 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
 		}
 	}
 
