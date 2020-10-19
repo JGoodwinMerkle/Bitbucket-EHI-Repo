@@ -1,5 +1,3 @@
-<style>
-</style>
 <script>
 (function() {
 	'use strict';
@@ -8,7 +6,7 @@
 		portfolio : 'National',
 		test : 'Member Redemption Reminder',
 		creative : 'Challenger 0',
-		selector: 'body',
+		selector: '.rental-credits-card__count__number',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -26,7 +24,23 @@
 			helpers.sCodeLoaded(function() {
   				isoTest.fireTagV90();
 			});
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
+				if (daysEarned > 0) {
+					helpers.sCodeLoaded(function() {
+						isoTest.fireTagV89();
+					});
+				}
+			});
 			
+		},
+		fireTagV89 : function(element, value) {
+			var linkName = isoTest.test + ' :: 1+ Days Accrued';
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		fireTagV90: function() {
 			if (s !== undefined && typeof s === 'object') {
@@ -47,9 +61,21 @@
 			}
 		}
 
-	}
+	};
 
 	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
 	    sCodeLoaded : function (callback) {
 			isoTest.log('sCodeLoaded:: s - Checking...');
 			var sCodeCheck = setInterval(function(){
@@ -60,7 +86,7 @@
 				}
 			},100);
 		},
-	}
+	};
 
 	isoTest.init();
 })();
