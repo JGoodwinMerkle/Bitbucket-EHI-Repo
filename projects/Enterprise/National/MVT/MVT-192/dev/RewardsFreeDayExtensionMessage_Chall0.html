@@ -1,0 +1,134 @@
+<style>
+.iso-free-day-caption {
+	color: #231f20;
+	font-size: 12px;
+	font-weight: normal;
+	letter-spacing: 0.8px;
+	margin-bottom: 11px;
+	margin-top: 14px;
+}
+.iso-free-day-caption .iso-bold {
+	font-weight: 800;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'National.com/.ca/.co.uk/.ie/.de/.es/.fr',
+		test : 'Rewards Free Day Extension Message',
+		creative : 'Challenger 0',
+		selectorHeader: '.rewards-user-data h2',
+		selector: '.profile-rewards-rental-tier__progress',
+		content: {
+			com_en : {
+				text: "<span class='iso-bold'>GREAT NEWS!</span> We are extending the expiration date of Emerald Club program free days to <span class='iso-bold'>12/31/2021</span>."
+			},
+			com_es : {
+				text: "<span class='iso-bold'>¡BUENAS NOTICIAS!</span> Extendimos la fecha de vencimiento de los días gratis para el programa de Emerald Club hasta el <span class='iso-bold'>31 de diciembre del 2021</span>."
+			},
+			com_pt : {
+				text: "<span class='iso-bold'>BOAS NOTÍCIAS!</span> Vamos estender a data de expiração dos dias gratuitos do programa Emerald Club para <span class='iso-bold'>31/12/2021</span>."
+			},
+			ca_en : {
+				text: "<span class='iso-bold'>GREAT NEWS!</span> We are extending the expiration date of Emerald Club program free days to <span class='iso-bold'>12/31/2021</span>."
+			},
+			ca_fr : {
+				text: "<span class='iso-bold'>EXCELLENTE NOUVELLE!</span> Nous reportons au <span class='iso-bold'>31 décembre 2021</span> l’expiration des journées gratuites obtenues dans le cadre du programme Emerald Club."
+			},
+			uk_en : {
+				text: "<span class='iso-bold'>GREAT NEWS!</span> We are extending the expiry date of Emerald Club programme free days to <span class='iso-bold'>31/12/2021</span>."
+			},
+			ie_en : {
+				text: "<span class='iso-bold'>GREAT NEWS!</span> We are extending the expiry date of Emerald Club programme free days to <span class='iso-bold'>31/12/2021</span>."
+			},
+			de_de : {
+				text: "<span class='iso-bold'>TOLLE NEUIGKEITEN!</span> Wir verlängern die Einlösefrist für kostenfreie Miettage im Rahmen des Emerald Club-Programms bis zum <span class='iso-bold'>31.12.2021</span>."
+			},
+			de_en : {
+				text: "<span class='iso-bold'>GREAT NEWS!</span> We are extending the expiry date of Emerald Club programme free days to <span class='iso-bold'>31/12/2021</span>."
+			},
+			es_es : {
+				text: "<span class='iso-bold'>¡BUENAS NOTICIAS!</span> Hemos ampliado la fecha de caducidad de los días gratuitos del programa Emerald Club hasta el <span class='iso-bold'>31/12/2021</span>."
+			},
+			es_en : {
+				text: "<span class='iso-bold'>GREAT NEWS!</span> We are extending the expiry date of Emerald Club programme free days to <span class='iso-bold'>31/12/2021</span>."
+			},
+			fr_fr : {
+				text: "<span class='iso-bold'>BONNE NOUVELLE!</span> Nous prolongeons la date d'expiration des jours gratuits du programme Emerald Club au <span class='iso-bold'>31/12/2021</span>."
+			},
+			fr_en : {
+				text: "<span class='iso-bold'>GREAT NEWS!</span> We are extending the expiry date of Emerald Club programme free days to <span class='iso-bold'>31/12/2021</span>."
+			}
+		},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+				if (document.querySelector('.profile-rewards-rental-tier__progress__learn-to-earn')) {
+					isoTest.log('Free Days Value less than 1')
+				} else {
+					helpers.elementLoaded(isoTest.selectorHeader, function() {
+						isoTest.chall();
+					});
+				}
+			});
+			
+		},
+		chall : function() {
+			isoTest.log('chall()');
+
+			isoTest.setLanguage();
+			isoTest.addCaption();
+		},
+		addCaption : function() {
+			isoTest.log('addCaption()');
+
+			var captionContent = isoTest.content[isoTest.contentLang].text;
+			document.querySelector(isoTest.selectorHeader).insertAdjacentHTML('afterend', '<div class="iso-free-day-caption">'+captionContent+'</div>');
+		},
+		setLanguage : function() {
+			isoTest.log('setLanguage()');
+
+	    	isoTest.lang = location.pathname.split('/')[1];
+			isoTest.domain = location.hostname.split('.').reverse()[0];
+			isoTest.contentLang = isoTest.domain+'_'+isoTest.lang;
+	  	},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
