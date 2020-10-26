@@ -76,29 +76,48 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-				if (document.querySelector('.profile-rewards-rental-tier__progress__learn-to-earn')) {
-					isoTest.log('Free Days Value less than 1')
-				} else {
-					helpers.elementLoaded(isoTest.selectorHeader, function() {
-						isoTest.chall();
-					});
-				}
-			});
+			if (window.location.hash == "#/rewards") {
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.log('Test Ready!');
+					isoTest.chall();
+				});
+			}
 			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		},
+		viewChange : function(){
+			isoTest.log('viewChange()');
+			if(/rewards/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.log('Test Ready!');
+					isoTest.chall();
+				});
+			}
 		},
 		chall : function() {
-			isoTest.log('chall()');
+			if (document.querySelector('.profile-rewards-rental-tier__progress__learn-to-earn')) {
+				isoTest.log('Free Days Value less than 1')
+			} else {
+				isoTest.log('chall()');
 
-			isoTest.setLanguage();
-			isoTest.addCaption();
+				helpers.elementLoaded(isoTest.selectorHeader, function() {
+					isoTest.setLanguage();
+					isoTest.addCaptionUpdateDate();
+				});
+			}
 		},
-		addCaption : function() {
-			isoTest.log('addCaption()');
+		addCaptionUpdateDate : function() {
+			isoTest.log('addCaptionUpdateDate()');
 
 			var captionContent = isoTest.content[isoTest.contentLang].text;
-			document.querySelector(isoTest.selectorHeader).insertAdjacentHTML('afterend', '<div class="iso-free-day-caption">'+captionContent+'</div>');
+			if (!document.querySelector('.iso-free-day-caption')) {
+				document.querySelector(isoTest.selectorHeader).insertAdjacentHTML('afterend', '<div class="iso-free-day-caption">'+captionContent+'</div>');
+			}
+
+			var expireDate = document.querySelector('.rewards-user-data__content-date p').innerText;
+			var newExpireDate = expireDate.replace('2020','2021')
+
+			document.querySelector('.rewards-user-data__content-date p').innerHTML=newExpireDate;
 		},
 		setLanguage : function() {
 			isoTest.log('setLanguage()');
