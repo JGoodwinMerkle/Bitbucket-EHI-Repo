@@ -16,6 +16,10 @@
 		margin-bottom: 0px;
 	}
 
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .text-capsule-tile__image.iso-deals-image {
+		height: 42px;
+	}
+
 	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper {
 		align-self: center;
 		margin-left: 16px;
@@ -180,10 +184,23 @@
 				var wrapper = "<div class='iso-wrapper'></div>";
 				var header = sections[i].querySelector('.text-capsule-tile__heading');
 				var text = sections[i].querySelector('.text-capsule-tile__text');
+				var textInner = sections[i].querySelector('.text-capsule-tile__text p');
+				var textGrab = textInner.innerText;
+				var image = sections[i].querySelector('.text-capsule-tile__image');
 
 				header.insertAdjacentHTML('beforebegin',wrapper);
 				sections[i].querySelector('.iso-wrapper').appendChild(header);
 				sections[i].querySelector('.iso-wrapper').appendChild(text);
+				//remove extra line below text
+				textInner.innerHTML = textGrab;
+
+				if (image.src.includes('loyalty')) {
+					image.src = "/content/dam/enterprise/icons/promo-icons/loyalty.png.wrend.480.270.png"
+				}
+
+				if (image.src.includes('deal')) {
+					image.classList.add('iso-deals-image');
+				}
 			}
 
 			document.querySelector('.iso-offer-section').insertAdjacentHTML('beforeend', isoTest.buttons);

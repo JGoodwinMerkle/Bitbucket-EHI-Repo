@@ -98,10 +98,14 @@
 				var wrapper = "<div class='iso-wrapper'></div>";
 				var header = sections[i].querySelector('.text-capsule-tile__heading');
 				var text = sections[i].querySelector('.text-capsule-tile__text');
+				var textInner = sections[i].querySelector('.text-capsule-tile__text p');
+				var textGrab = textInner.innerText;
 
 				header.insertAdjacentHTML('beforebegin',wrapper);
 				sections[i].querySelector('.iso-wrapper').appendChild(header);
 				sections[i].querySelector('.iso-wrapper').appendChild(text);
+				//remove extra line below text
+				textInner.innerHTML = textGrab;
 			}
 
 			isoTest.addEvents();
