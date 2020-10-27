@@ -89,7 +89,8 @@
 			var loginModuleMobile = loginModule.cloneNode(true);
 			loginModule.classList.add('login-banner-desktop');
 			loginModuleMobile.classList.add('login-banner-mobile');
-			document.querySelector('.aside').insertAdjacentElement('afterbegin',loginModuleMobile);
+	
+			document.querySelectorAll('.sidebar-box')[0].insertAdjacentElement('beforebegin',loginModuleMobile);
 
 			// Styling
 			document.querySelector('.pre-expedited-banner .pre-expedited-banner__title').innerText = 'Are you a loyalty member?';
