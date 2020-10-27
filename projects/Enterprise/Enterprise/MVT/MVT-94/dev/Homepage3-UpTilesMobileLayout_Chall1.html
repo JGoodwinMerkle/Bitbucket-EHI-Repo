@@ -104,7 +104,7 @@
 
 @media only screen and (max-width: 687px) { 
 	.two-up-three-up.section.iso-offer-section .text-capsule-list {
-		height: 135px;
+		height: 145px;
 	}
 }
 
@@ -114,9 +114,15 @@
 	}
 }
 
-@media only screen and (max-width: 395px) { 
+@media only screen and (max-width: 447px) { 
 	.two-up-three-up.section.iso-offer-section .text-capsule-list {
-		height: 156px;
+		height: 160px;
+	}
+}
+
+@media only screen and (max-width: 358px) { 
+	.two-up-three-up.section.iso-offer-section .text-capsule-list {
+		height: 180px;
 	}
 }
 </style>
@@ -185,7 +191,7 @@
 				var header = sections[i].querySelector('.text-capsule-tile__heading');
 				var text = sections[i].querySelector('.text-capsule-tile__text');
 				var textInner = sections[i].querySelector('.text-capsule-tile__text p');
-				var textGrab = textInner.innerText;
+				var textGrab = textInner.innerHTML.replace(/&nbsp;/gi,'')
 				var image = sections[i].querySelector('.text-capsule-tile__image');
 
 				header.insertAdjacentHTML('beforebegin',wrapper);

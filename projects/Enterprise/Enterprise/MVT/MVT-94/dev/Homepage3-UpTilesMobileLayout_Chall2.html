@@ -99,7 +99,7 @@
 				var header = sections[i].querySelector('.text-capsule-tile__heading');
 				var text = sections[i].querySelector('.text-capsule-tile__text');
 				var textInner = sections[i].querySelector('.text-capsule-tile__text p');
-				var textGrab = textInner.innerText;
+				var textGrab = textInner.innerHTML.replace(/&nbsp;/gi,'')
 
 				header.insertAdjacentHTML('beforebegin',wrapper);
 				sections[i].querySelector('.iso-wrapper').appendChild(header);
