@@ -123,8 +123,8 @@
 			            			document.querySelector('.login-banner-mobile').remove();
 			            		}
 
-			            		if (document.querySelector('.aside')) {
-			            			document.querySelector('.aside').insertAdjacentHTML('afterbegin','<div class="review-section"></div>');
+			            		if (document.querySelector('.sidebar-box')) {
+			            			document.querySelectorAll('.sidebar-box')[0].insertAdjacentHTML('beforebegin','<div class="review-section"></div>');
 			            		}
 
 				            	if (document.querySelector('.review-section')) {
