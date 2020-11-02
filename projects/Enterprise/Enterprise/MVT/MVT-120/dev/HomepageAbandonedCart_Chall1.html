@@ -344,7 +344,7 @@
 			window.clearTimeout(isoTest.timer);
 			//Check for reservation info in data object specified number of times
 			if (helpers.dependsLoadedCount < 50) {
-				if (typeof ReservationStateTree.data.session.reservationSession.reservationsInitiateRequest !== 'undefined' && typeof ReservationStateTree.data.session.reservationSession.reservationsInitiateRequest.pickupLocation.name !== 'undefined') {
+				if (typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest']) !== 'undefined' && typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest','pickupLocation','name']) !== 'undefined') {
 					if (typeof callback === "function") {
 						//console.log("MVT-120 - Previous reservation found");
 						callback();
