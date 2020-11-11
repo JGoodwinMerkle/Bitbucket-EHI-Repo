@@ -85,6 +85,9 @@
 	margin-right: 5px;
 	vertical-align: sub;
 }
+.iso-nav-fav li:first-of-type svg {
+	vertical-align: middle;
+}
 @media (max-width: 885px) {
 	.iso-nav-fav {
 		display: block;
@@ -193,6 +196,37 @@
 		test : 'Mobile Menu Favorites',
 		creative : 'Challenger 1',
 		selector: '#mobile-nav',
+		content: {
+			en : {
+				select: "Select",
+				link1Text: "VIEW ALL VEHICLES",
+				link1URL: "https://www.enterprise.com/en/car-rental/vehicles/us.html",
+				link2Text: "DEALS & PROMOTIONS",
+				link2URL: "https://www.enterprise.com/en/car-rental/deals.html",
+				link3Text: "FIND A LOCATION",
+				link3URL: "https://www.enterprise.com/en/car-rental/locations.html",
+				link4Text: "CONTACT US",
+				link4URL: "https://www.enterprise.com/en/help/contact.html",
+			},
+			es : {
+				select: "Seleccionar",
+				link1Text: "VEHICULOS",
+				link1URL: "https://www.enterprise.com/es/alquiler-de-autos/vehiculos/us.html",
+				link2Text: "OFERTAS",
+				link2URL: "https://www.enterprise.com/es/alquiler-de-autos/ofertas.html",
+				link3Text: "BUSCAR UNA OFICINA",
+				link3URL: "https://www.enterprise.com/es/alquiler-de-autos/oficinas.html",
+				link4Text: "CONTACTO",
+				link4URL: "https://www.enterprise.com/es/ayuda/contacto.html",
+			}
+		},
+		selectText: '{selecttext}',
+		favLinks: '<ul class="iso-nav-fav">\
+				<li><a href="{link1URL}"><span><svg xmlns="http://www.w3.org/2000/svg" width="32" height="12"><path d="M23.155 6.897c1.629 0 2.88 1.354 2.632 2.928-.207 1.315-1.476 2.284-2.843 2.165a2.559 2.559 0 01-1.929-1.129l.857-.533c.26.391.676.638 1.164.68.828.073 1.618-.53 1.744-1.332.153-.968-.61-1.794-1.625-1.794-.826 0-1.386.355-1.573 1.033a1.485 1.485 0 01-1.44 1.077h-7.92v-.985h7.92c.212 0 .4-.14.456-.345.314-1.142 1.297-1.765 2.557-1.765zM12.505 0l2.654.001c2.657 0 3.915.327 5.368 1.29l2.712 1.797c.336.222.722.364 1.155.419l4.459.802.068.017c2.01.651 2.86 1.337 2.973 2.79L32 8.52v.38c0 .502-.42.908-.938.908h-4.106v-.985h4.026v-.267l-.104-1.369c-.073-.944-.61-1.383-2.247-1.917l-4.395-.791a3.661 3.661 0 01-1.573-.58l-2.711-1.797C18.68 1.261 17.622.987 15.158.987L12.505.985c-1.733 0-3.453.344-4.502.873L5.663 3.04a8.438 8.438 0 01-3.317.884h-.198c-.624 0-1.13.489-1.13 1.092v2.62c0 .133.08.253.206.308l.981.426c.686.299 1.388.459 2.064.46h1.427c.212 0 .4-.14.456-.345.314-1.142 1.297-1.765 2.556-1.765 1.63 0 2.882 1.354 2.633 2.928-.207 1.315-1.477 2.285-2.842 2.165a2.562 2.562 0 01-1.93-1.128l.856-.534c.262.391.677.638 1.165.68.828.073 1.618-.53 1.744-1.332.153-.968-.61-1.794-1.626-1.794-.825 0-1.386.355-1.572 1.033a1.485 1.485 0 01-1.44 1.078H4.267c-.827-.002-1.668-.194-2.48-.547l-.98-.427A1.319 1.319 0 010 7.636v-2.62C0 3.87.961 2.94 2.148 2.94l.167.001a7.378 7.378 0 002.877-.774L7.532.985C8.739.375 10.619 0 12.506 0zm2.773 1.97v.97c0 .461.387.836.864.836h4.568l1.307.986h-5.875c-1.039 0-1.883-.817-1.883-1.821v-.97h1.019z" fill="#FFF" fill-rule="evenodd"/></svg></span>{link1Text}</a></li>\
+				<li><a href="{link2URL}"><span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><defs><filter id="a"><feColorMatrix in="SourceGraphic" values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"/></filter></defs><g filter="url(#a)" fill="none" fill-rule="evenodd"><path fill="#181918" d="M17.764 2.874l-1.312 1.312a2.507 2.507 0 01-.32 3.156c-.978.98-2.566.98-3.545 0a2.506 2.506 0 011.605-4.275l.067 1.001a1.506 1.506 0 101.165 2.565 1.506 1.506 0 000-2.128.5.5 0 010-.709l1.985-1.986a.504.504 0 01.71 0l1.595 1.596c.094.094.147.22.147.352l.025 5.436a.503.503 0 01-.147.357L9.467 19.824a.602.602 0 01-.851 0l-8.44-8.44a.6.6 0 010-.85L10.45.26a.498.498 0 01.343-.147L15.881 0l.022 1.003-4.887.11-9.847 9.846 7.872 7.872 9.841-9.841-.023-5.02-1.095-1.096z"/></g></svg></span>{link2Text}</a></li>\
+				<li><a href="{link3URL}"><span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M10 .08c5.09 0 8.27 5.51 5.726 9.917l-5.725 9.916-.433-.75-5.293-9.166C1.731 5.589 4.912.08 10.001.08zm0 1c-4.318 0-7.018 4.676-4.859 8.417l4.86 8.416 4.86-8.416C17.02 5.756 14.32 1.08 10 1.08zm.001 2.821a2.886 2.886 0 110 5.772 2.886 2.886 0 010-5.772zm0 1a1.886 1.886 0 100 3.772 1.886 1.886 0 000-3.772z" fill="#FFF" fill-rule="evenodd"/></svg></span>{link3Text}</a></li>\
+				<li><a href="{link4URL}"><span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><defs><filter id="a"><feColorMatrix in="SourceGraphic" values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"/></filter></defs><g filter="url(#a)" fill="none" fill-rule="evenodd"><g transform="translate(1.667 1.667)"><path fill="#181918" d="M8.05 10.693a2.283 2.283 0 01.033-.94c.076-.28.18-.537.314-.773.133-.236.286-.456.46-.66.173-.204.335-.407.486-.607.151-.2.278-.402.38-.606.103-.205.154-.427.154-.667 0-.356-.11-.66-.327-.913-.218-.254-.54-.38-.967-.38-.293 0-.57.069-.833.206a2.358 2.358 0 00-.7.567l-.627-.573c.285-.32.616-.585.994-.794.377-.209.81-.313 1.3-.313.675 0 1.215.189 1.62.567.404.377.606.9.606 1.566 0 .294-.053.56-.16.8a3.63 3.63 0 01-.393.68c-.156.214-.32.425-.493.634a7.148 7.148 0 00-.48.646c-.147.223-.26.46-.34.714-.08.253-.103.535-.067.846h-.96zm.507 2.8a.745.745 0 01-.56-.233.817.817 0 01-.227-.593c0-.258.076-.465.227-.62a.746.746 0 01.56-.234.77.77 0 01.566.234c.156.155.234.362.234.62 0 .24-.078.437-.234.593a.767.767 0 01-.566.233z"/><circle cx="8.75" cy="8.75" r="8.25" stroke="#181918"/></g></g></svg></span>{link4Text}</a></li>\
+				</ul>',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -215,27 +249,36 @@
 		},
 		chall : function() {
 
+			// New menu style
 			var hamburger = document.querySelector('#mobile-toggle');
-
-			// Your code goes here
 			hamburger.classList.add('hamburger','hamburger--slider');
 			hamburger.innerHTML = '<span class="hamburger-box"><span class="hamburger-inner"></span></span>';
-			
 			hamburger.addEventListener('click', function() {
 			    hamburger.classList.toggle('is-active');
 			});
 
-			document.querySelector('#currencySelector-mobile .title').innerHTML = 'Select';
-			document.querySelector('#languageSelector-mobile .title').innerHTML = 'Select';
+			// Multilingual language/currency
+			var lang = location.pathname.split('/')[1];
+			var selectionText = helpers.supplant(isoTest.selectText, {
+	          'selecttext' : isoTest.content[lang].select
+	     	});
+			document.querySelector('#currencySelector-mobile .title').innerHTML = selectionText;
+			document.querySelector('#languageSelector-mobile .title').innerHTML = selectionText;
 
-			document.querySelector('#primary-nav ul.mobile-utility').insertAdjacentHTML('afterend','<ul class="iso-nav-fav">\
-				<li><a href="https://www.enterprise.com/en/car-rental/vehicles/us.html"><span><svg xmlns="http://www.w3.org/2000/svg" width="32" height="12"><path d="M23.155 6.897c1.629 0 2.88 1.354 2.632 2.928-.207 1.315-1.476 2.284-2.843 2.165a2.559 2.559 0 01-1.929-1.129l.857-.533c.26.391.676.638 1.164.68.828.073 1.618-.53 1.744-1.332.153-.968-.61-1.794-1.625-1.794-.826 0-1.386.355-1.573 1.033a1.485 1.485 0 01-1.44 1.077h-7.92v-.985h7.92c.212 0 .4-.14.456-.345.314-1.142 1.297-1.765 2.557-1.765zM12.505 0l2.654.001c2.657 0 3.915.327 5.368 1.29l2.712 1.797c.336.222.722.364 1.155.419l4.459.802.068.017c2.01.651 2.86 1.337 2.973 2.79L32 8.52v.38c0 .502-.42.908-.938.908h-4.106v-.985h4.026v-.267l-.104-1.369c-.073-.944-.61-1.383-2.247-1.917l-4.395-.791a3.661 3.661 0 01-1.573-.58l-2.711-1.797C18.68 1.261 17.622.987 15.158.987L12.505.985c-1.733 0-3.453.344-4.502.873L5.663 3.04a8.438 8.438 0 01-3.317.884h-.198c-.624 0-1.13.489-1.13 1.092v2.62c0 .133.08.253.206.308l.981.426c.686.299 1.388.459 2.064.46h1.427c.212 0 .4-.14.456-.345.314-1.142 1.297-1.765 2.556-1.765 1.63 0 2.882 1.354 2.633 2.928-.207 1.315-1.477 2.285-2.842 2.165a2.562 2.562 0 01-1.93-1.128l.856-.534c.262.391.677.638 1.165.68.828.073 1.618-.53 1.744-1.332.153-.968-.61-1.794-1.626-1.794-.825 0-1.386.355-1.572 1.033a1.485 1.485 0 01-1.44 1.078H4.267c-.827-.002-1.668-.194-2.48-.547l-.98-.427A1.319 1.319 0 010 7.636v-2.62C0 3.87.961 2.94 2.148 2.94l.167.001a7.378 7.378 0 002.877-.774L7.532.985C8.739.375 10.619 0 12.506 0zm2.773 1.97v.97c0 .461.387.836.864.836h4.568l1.307.986h-5.875c-1.039 0-1.883-.817-1.883-1.821v-.97h1.019z" fill="#FFF" fill-rule="evenodd"/></svg></span>VIEW ALL VEHICLES</a></li>\
-				<li><a href="https://www.enterprise.com/en/car-rental/deals.html"><span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><defs><filter id="a"><feColorMatrix in="SourceGraphic" values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"/></filter></defs><g filter="url(#a)" fill="none" fill-rule="evenodd"><path fill="#181918" d="M17.764 2.874l-1.312 1.312a2.507 2.507 0 01-.32 3.156c-.978.98-2.566.98-3.545 0a2.506 2.506 0 011.605-4.275l.067 1.001a1.506 1.506 0 101.165 2.565 1.506 1.506 0 000-2.128.5.5 0 010-.709l1.985-1.986a.504.504 0 01.71 0l1.595 1.596c.094.094.147.22.147.352l.025 5.436a.503.503 0 01-.147.357L9.467 19.824a.602.602 0 01-.851 0l-8.44-8.44a.6.6 0 010-.85L10.45.26a.498.498 0 01.343-.147L15.881 0l.022 1.003-4.887.11-9.847 9.846 7.872 7.872 9.841-9.841-.023-5.02-1.095-1.096z"/></g></svg></span>DEALS & PROMOTIONS</a></li>\
-				<li><a href="https://www.enterprise.com/en/car-rental/locations.html"><span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M10 .08c5.09 0 8.27 5.51 5.726 9.917l-5.725 9.916-.433-.75-5.293-9.166C1.731 5.589 4.912.08 10.001.08zm0 1c-4.318 0-7.018 4.676-4.859 8.417l4.86 8.416 4.86-8.416C17.02 5.756 14.32 1.08 10 1.08zm.001 2.821a2.886 2.886 0 110 5.772 2.886 2.886 0 010-5.772zm0 1a1.886 1.886 0 100 3.772 1.886 1.886 0 000-3.772z" fill="#FFF" fill-rule="evenodd"/></svg></span>FIND A LOCATION</a></li>\
-				<li><a href="https://www.enterprise.com/en/help/contact.html"><span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><defs><filter id="a"><feColorMatrix in="SourceGraphic" values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"/></filter></defs><g filter="url(#a)" fill="none" fill-rule="evenodd"><g transform="translate(1.667 1.667)"><path fill="#181918" d="M8.05 10.693a2.283 2.283 0 01.033-.94c.076-.28.18-.537.314-.773.133-.236.286-.456.46-.66.173-.204.335-.407.486-.607.151-.2.278-.402.38-.606.103-.205.154-.427.154-.667 0-.356-.11-.66-.327-.913-.218-.254-.54-.38-.967-.38-.293 0-.57.069-.833.206a2.358 2.358 0 00-.7.567l-.627-.573c.285-.32.616-.585.994-.794.377-.209.81-.313 1.3-.313.675 0 1.215.189 1.62.567.404.377.606.9.606 1.566 0 .294-.053.56-.16.8a3.63 3.63 0 01-.393.68c-.156.214-.32.425-.493.634a7.148 7.148 0 00-.48.646c-.147.223-.26.46-.34.714-.08.253-.103.535-.067.846h-.96zm.507 2.8a.745.745 0 01-.56-.233.817.817 0 01-.227-.593c0-.258.076-.465.227-.62a.746.746 0 01.56-.234.77.77 0 01.566.234c.156.155.234.362.234.62 0 .24-.078.437-.234.593a.767.767 0 01-.566.233z"/><circle cx="8.75" cy="8.75" r="8.25" stroke="#181918"/></g></g></svg></span>CONTACT US</a></li>\
-				</ul>');
+			// Multilingual links
+			var favLinks = helpers.supplant(isoTest.favLinks, {
+	          'link1Text' : isoTest.content[lang].link1Text,
+	          'link1URL' : isoTest.content[lang].link1URL,
+	          'link2Text' : isoTest.content[lang].link2Text,
+	          'link2URL' : isoTest.content[lang].link2URL,
+	          'link3Text' : isoTest.content[lang].link3Text,
+	          'link3URL' : isoTest.content[lang].link3URL,
+	          'link4Text' : isoTest.content[lang].link4Text,
+	          'link4URL' : isoTest.content[lang].link4URL,
+	     	});
+			document.querySelector('#primary-nav ul.mobile-utility').insertAdjacentHTML('afterend',favLinks);
 
-			isoTest.addEvents();  
+			isoTest.addEvents();   
 
 		},
 		addEvents : function() {
@@ -247,9 +290,19 @@
 				if (event.target.closest('.mobile-utility > .language')) {
 					isoTest.fireTag('Language Select');
 				}
-				if (event.target.closest('.iso-nav-fav a')) {
-					isoTest.fireTag(event.target.innerText);
+				if (event.target.closest('.iso-nav-fav li:nth-of-type(1)')) {
+					isoTest.fireTag('View All Vehicles');
 				}
+				if (event.target.closest('.iso-nav-fav li:nth-of-type(2)')) {
+					isoTest.fireTag('Deals & Promotions');
+				}
+				if (event.target.closest('.iso-nav-fav li:nth-of-type(3)')) {
+					isoTest.fireTag('Find A Location');
+				}
+				if (event.target.closest('.iso-nav-fav li:nth-of-type(4)')) {
+					isoTest.fireTag('Contact Us');
+				}
+
 
 			}, false);
 		},
@@ -280,6 +333,18 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
+		supplant : function(str, o) {
+				return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
 	};
 
 	isoTest.init();
