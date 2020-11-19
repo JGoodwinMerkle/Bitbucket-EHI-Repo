@@ -1,0 +1,80 @@
+<style>
+.promotion-detail-content .g-2up .interrupter-band-text .iso-bold {
+	font-weight: 700;
+}
+
+.promotion-detail-content .g-2up .interrupter-band-text blockquote {
+	color: #181918;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Free Single Upgrade Persado Exploration',
+		creative : 'Challenger 3',
+		selector: '.promotion-detail-content .g-2up .interrupter-band-text',
+		updatedHeadline: "FREE SINGLE UPGRADE",
+		updatedSubhead: "Claim from 11/2/2020 - 4/30/2021",
+		updatedBody: "<p>*Available on Intermediate and Standard car classes only.</p><p>*Select the lower car class online and receive your Free Single Upgrade upon vehicle pickup if available.</p><p><BLOCKQUOTE><i>For example, select the Intermediate and receive a Standard at pickup or select the Standard and receive a Full-Size at pickup.</i></BLOCKQUOTE></p><p>*1-day minimum rental required and a 27-day maximum applies.</p><p class='iso-bold'>Enter a few details in the form below to get started!</p>",
+		updatedImage: "/content/dam/ecom/hosted/father_son.jpg",
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			isoTest.log('chall()');
+
+			var images = document.querySelectorAll('.promotion-detail-content .g-2up .gi.image-block .img-container img[src="/content/dam/ecom/utopian-travel-articles/road-trip/road-trip-essentials.jpg"]');
+
+			document.querySelector('.promotion-detail-content .g-2up h1.headline').innerHTML = isoTest.updatedHeadline;
+			document.querySelector('.promotion-detail-content .g-2up h2.subhead').innerHTML = isoTest.updatedSubhead;
+			document.querySelectorAll('.promotion-detail-content .g-2up .interrupter-band-text')[0].innerHTML = isoTest.updatedBody;
+			for (i = 0; i < images.length; i++) {
+				images[i].src = isoTest.updatedImage;
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
