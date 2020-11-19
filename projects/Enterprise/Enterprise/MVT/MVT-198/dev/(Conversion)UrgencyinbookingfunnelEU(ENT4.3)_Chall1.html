@@ -1,9 +1,9 @@
 <style>
-i.icon.iso-icon-shield {
+i.icon.icon-clock {
+	background-position: center;
     float: left;
-}
-.iso-icon-shield svg {
-	height: 20px;
+    height: 38.66px;
+    width: 26px;
 }
 .iso-scarcity {
 	background-color: #f3f3f3;
@@ -11,9 +11,12 @@ i.icon.iso-icon-shield {
 	font-size: 14px;
 	padding: 12px;
 }
+.iso-scarcity .iso-icon{
+	margin-left: 15px;
+}
 .iso-scarcity .content {
 	display: inline-block;
-	margin-left: 8px;
+	margin-left: 25px;
 }
 .iso-scarcity .content small {
 	font-size: 11px;
@@ -66,6 +69,18 @@ ul.vehicle-list {
 		display: flex;
 	}
 }
+@media (max-width: 586px) {
+	i.icon.icon-clock {
+		background-position: center 3px;
+	    width: 20px;
+	}
+	.iso-scarcity .iso-icon {
+		margin-left: 0px;
+	}
+	.iso-scarcity .content {
+		margin-left: 10px;
+	}
+}
 </style>
 <script>
 (function() {
@@ -77,7 +92,7 @@ ul.vehicle-list {
 		creative : 'Challenger 1',
 		selector: '.vehicle-select__main',
 		template:  '<div class="iso-scarcity">\
-						<div class="iso-icon"><i class="icon iso-icon-shield"><svg viewBox="0 0 12.83 15.67"><g id="Camada_2" data-name="Camada 2"><g id="Layer_1" data-name="Layer 1"><path class="cls-1" d="M11.93,2.92c-.81-.06-3.55-.44-4.81-2.56A.73.73,0,0,0,6.3,0a.72.72,0,0,0-.54.7V12.39H7.07V2.33a8.17,8.17,0,0,0,4.44,1.86c-.11,1.88-.77,8.13-4.84,10.12a.55.55,0,0,1-.5,0C2.06,12.22,1.42,6,1.32,4.13A8.21,8.21,0,0,0,4,3.08V1.45A6.58,6.58,0,0,1,.81,2.9a1,1,0,0,0-.81,1c.06,1.49.58,9,5.58,11.56a2,2,0,0,0,.85.2,1.75,1.75,0,0,0,.81-.19c4.87-2.38,5.51-9.43,5.59-11.54a1,1,0,0,0-.9-1"/></g></g></svg></i></div>\
+						<div class="iso-icon"><i class="icon iso-icon-shield icon-clock"></i></div>\
 						<div class="content"><span class="iso-bold">{boldText} </span>{subText}</div>\
 					</div>',
 		content: {
