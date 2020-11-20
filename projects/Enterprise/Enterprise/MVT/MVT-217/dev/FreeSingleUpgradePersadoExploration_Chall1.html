@@ -1,7 +1,4 @@
 <style>
-.promotion-detail-content .g-2up .gi.image-block .img-container img[src*="/content/dam/ecom/utopian-travel-articles/road-trip/road-trip-essentials.jpg"] {
-	display: none;
-}
 </style>
 <script>
 (function() {
@@ -40,14 +37,9 @@
 		chall : function() {
 			isoTest.log('chall()');
 
-			var images = document.querySelectorAll('.promotion-detail-content .g-2up .gi.image-block .img-container img[src="/content/dam/ecom/utopian-travel-articles/road-trip/road-trip-essentials.jpg"]');
-
 			document.querySelector('.promotion-detail-content .g-2up h1.headline').innerHTML = isoTest.updatedHeadline;
 			document.querySelector('.promotion-detail-content .g-2up h2.subhead').innerHTML = isoTest.updatedSubhead;
 			document.querySelectorAll('.promotion-detail-content .g-2up .interrupter-band-text')[0].innerHTML = isoTest.updatedBody;
-			for (i = 0; i < images.length; i++) {
-				images[i].src = isoTest.updatedImage;
-			}
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
