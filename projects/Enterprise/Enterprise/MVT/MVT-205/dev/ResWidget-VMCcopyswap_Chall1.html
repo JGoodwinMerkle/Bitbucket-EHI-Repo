@@ -64,8 +64,11 @@
 
 			document.querySelector('#viewModifyCancelBookingWidget').addEventListener('click',function(e){
 				if (document.querySelector('#existing')) {
+					console.log("click1");
 					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Manage Your Reservation";
 				} else {
+					// isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:VMC Engage');
+					isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:Manage Your Reservation');
 					document.querySelector('#reservationWidget .reservation-toggle-header').style.display = 'none';
 					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Reserve A Vehicle";
 					helpers.elementLoaded('#existing', function() {
@@ -75,6 +78,13 @@
 					});
 				}
 			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){

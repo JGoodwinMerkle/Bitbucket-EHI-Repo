@@ -62,6 +62,8 @@
 				if (document.querySelector('#existing')) {
 					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Look Up A Reservation";
 				} else {
+					// isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:VMC Engage');
+					isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:Look Up A Reservation');
 					document.querySelector('#reservationWidget .reservation-toggle-header').style.display = 'none';
 					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Reserve A Vehicle";
 					helpers.elementLoaded('#existing', function() {
@@ -71,6 +73,13 @@
 					});
 				}
 			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
