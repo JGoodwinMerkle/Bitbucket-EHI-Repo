@@ -1,4 +1,7 @@
 <style>
+#reservationWidget .inner-container .options .text {
+	color: #656565;
+}
 </style>
 <script>
 (function() {
@@ -8,7 +11,7 @@
 		portfolio : 'Enterprise.com',
 		test : 'Res Widget - VMC copy swap',
 		creative : 'Challenger 0',
-		selector: 'body',
+		selector: '#viewModifyCancelBookingWidget',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -30,16 +33,19 @@
 			
 		},
 		chall : function() {
-
-			// Your code goes here
-
+			document.querySelector('#viewModifyCancelBookingWidget').addEventListener('click',function(e){
+				isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:'+this.innerText);
+			}, false);
 		},
 		fireTag : function(element, value) {
+			s.events='';
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
 			s.tl(this, 'o', linkName);
+			s.eVar20 = '';
+			s.eVar89 = '';
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
@@ -61,18 +67,6 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
 		}
 	}
 

@@ -11,6 +11,10 @@
 	margin-right: 8px;
 }
 
+#reservationWidget .inner-container .options .text {
+	color: #656565;
+}
+
 @media (min-width: 769px){
 	#reservationWidget div.options .text {
 		margin: 16px 0 0 !important;
@@ -74,11 +78,11 @@
 
 			document.querySelector('#viewModifyCancelBookingWidget').addEventListener('click',function(e){
 				if (document.querySelector('#existing')) {
-					console.log("click1");
 					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Manage Your Reservation";
+					isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:Reserve A Vehicle');
 				} else {
-					// isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:VMC Engage');
-					isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:Manage Your Reservation');
+					isoTest.extraFireTag('#viewModifyCancelBookingWidget', 'Home:Manage Your Reservation');
+
 					document.querySelector('#reservationWidget .reservation-toggle-header').style.display = 'none';
 					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Reserve A Vehicle";
 					helpers.elementLoaded('#existing', function() {
@@ -90,11 +94,25 @@
 			}, false);
 		},
 		fireTag : function(element, value) {
+			s.events='';
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
 			s.tl(this, 'o', linkName);
+			s.eVar89 = '';
+		},
+		extraFireTag : function(element, value) {
+			s.events='';
+			var linkName = 'Home:VMC Engage';
+			var newLinkName = value;
+				newLinkName = isoTest.test ? isoTest.test + ' : ' + newLinkName : newLinkName;
+			s.linkTrackVars = 'eVar20,eVar89';
+			s.eVar20 = linkName;
+			s.eVar89 = newLinkName;
+			s.tl(this, 'o', linkName, newLinkName);
+			s.eVar20 = '';
+			s.eVar89 = '';
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
