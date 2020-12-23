@@ -28,17 +28,8 @@ i.icon.iso-icon-shield {
 	display: flex;
 	margin: 0.6rem 0;
 }
-.vehicle-header__details-group {
-	width: 100%;
-}
 .vehicle-select__main .iso-scarcity {
 	display: none;
-}
-main.vehicle-select__main {
-	border-top: none;
-}
-ul.vehicle-list {
-	border-top: 3px solid black;
 }
 @media (min-width: 1136px) {
 	.iso-main-wrap {
@@ -130,9 +121,9 @@ ul.vehicle-list {
 				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', msgContent);
 
 				//Mobile
-				helpers.elementLoaded('.vehicle-header__result-total', function() {
+				helpers.elementLoaded('.vehicle-header__details', function() {
 					isoTest.log('vehicle results mobile found');
-					document.querySelector('.vehicle-header__result-total').insertAdjacentHTML('afterend', msgContent);
+					document.querySelector('.vehicle-header__details').insertAdjacentHTML('beforebegin', msgContent);
 				});
 			}
 
@@ -150,7 +141,7 @@ ul.vehicle-list {
 			}
 		}
 
-	}
+	};
 
 	var helpers = {
 		elementLoaded : function (ele, callback) {
@@ -182,7 +173,7 @@ ul.vehicle-list {
 		    toWrap.parentNode.appendChild(wrapper);
 		    return wrapper.appendChild(toWrap);
 		},
-	}
+	};
 
 	isoTest.init();
 })();
