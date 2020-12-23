@@ -28,25 +28,8 @@ i.icon.iso-icon-shield {
 	display: flex;
 	margin: 0.6rem 0;
 }
-.vehicle-header__details-group {
-	width: 100%;
-}
 .vehicle-select__main .iso-scarcity {
 	display: none;
-}
-main.vehicle-select__main {
-	border-top: none;
-}
-ul.vehicle-list {
-	border-top: 3px solid black;
-}
-@media (min-width: 310px) and (max-width: 1136px) {
-	.vehicle-header__details-group {
-		margin-bottom: 0 !important;
-	}
-	.vehicle-header__filter {
-		margin-top: -18px;
-	}
 }
 @media (min-width: 1136px) {
 	.iso-main-wrap {
@@ -114,9 +97,9 @@ ul.vehicle-list {
 				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', isoTest.template);
 
 				//Mobile
-				helpers.elementLoaded('.vehicle-header__result-total', function() {
+				helpers.elementLoaded('.vehicle-header__details', function() {
 					isoTest.log('vehicle results mobile found');
-					document.querySelector('.vehicle-header__result-total').insertAdjacentHTML('afterend', isoTest.template);
+					document.querySelector('.vehicle-header__details').insertAdjacentHTML('beforebegin', isoTest.template);
 				});
 			}
 		},
