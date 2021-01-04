@@ -1,0 +1,213 @@
+<style>
+i.icon.icon-clock {
+	background-position: center;
+    float: left;
+    height: 38.66px;
+    width: 26px;
+}
+.iso-scarcity {
+	background-color: #f3f3f3;
+	border: 1px solid #c3c3c3;
+	font-size: 14px;
+	padding: 12px;
+}
+.iso-scarcity .iso-icon{
+	margin-left: 15px;
+}
+.iso-scarcity .content {
+	display: inline-block;
+	margin-left: 25px;
+}
+.iso-scarcity .content small {
+	font-size: 11px;
+}
+.iso-scarcity .content .iso-bold {
+	font-weight:600;
+}
+.iso-scarcity sup {
+	line-height: 1;
+}
+.iso-icon .icon-alert-caution {
+	float: left;
+}
+.vehicle-header .iso-scarcity {
+	display: flex;
+	margin: 0.6rem 0;
+}
+.vehicle-header__details-group {
+	width: 100%;
+}
+.vehicle-select__main .iso-scarcity {
+	display: none;
+}
+main.vehicle-select__main {
+	border-top: none;
+}
+ul.vehicle-list {
+	border-top: 3px solid black;
+}
+@media (min-width: 310px) and (max-width: 1136px) {
+	.vehicle-header__details-group {
+		margin-bottom: 0 !important;
+	}
+	.vehicle-header__filter {
+		margin-top: -18px;
+	}
+}
+@media (min-width: 1136px) {
+	.iso-main-wrap {
+		width: 776px;
+	}
+	.iso-scarcity {
+		margin: 0;
+		margin-bottom: 14px;
+	}
+	.vehicle-header .iso-scarcity {
+		display: none;
+	}
+	.vehicle-select__main .iso-scarcity {
+		display: flex;
+	}
+}
+@media (max-width: 586px) {
+	i.icon.icon-clock {
+		background-position: center 3px;
+	    width: 20px;
+	}
+	.iso-scarcity .iso-icon {
+		margin-left: 0px;
+	}
+	.iso-scarcity .content {
+		margin-left: 10px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.de/.fr/.es/.ie',
+		test : '(Conversion) Urgency in booking funnel EU (ENT 4.3)',
+		creative : 'Challenger 1',
+		selector: '.vehicle-select__main',
+		template:  '<div class="iso-scarcity">\
+						<div class="iso-icon"><i class="icon iso-icon-shield icon-clock"></i></div>\
+						<div class="content"><span class="iso-bold">{boldText} </span>{subText}</div>\
+					</div>',
+		content: {
+			en: {
+				boldText: 'Prices are likely to change - book now to secure this price.',
+				subText:'<br>Enjoy no amendment or cancellation fees on rental pick ups before Jan 1<sup>st</sup> 2021.'
+			},
+			fr: {
+				boldText: 'Les prix sont susceptibles de changer - réservez dès maintenant pour obtenir ce tarif. Profitez !',
+				subText:'<br>Aucun frais de modification ni d’ annulation pour toute location jusqu’au 1er janvier 2021.'
+			},
+			de: {
+				boldText: 'Unsere Preise werden sich voraussichtlich ändern - buchen Sie jetzt, um diesen Preis zu sichern.',
+				subText:'<br>Genießen Sie keine Änderungs- oder Stornierungsgebühren bei Abholungen vor dem 1. Januar 2021.'
+			},
+			es: {
+				boldText: 'Los precios pueden cambiar; reserve ahora para asegurar este precio',
+				subText:'y no pague tarifas de modificación o cancelación en las recogidas de alquiler antes del 1 de enero de 2021'
+			}
+		},
+		lang: '',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log('chall()');
+
+			isoTest.setLanguage();
+			isoTest.addBanner();
+		},
+		addBanner : function() {
+			isoTest.log('addBanner()');
+
+			if(!document.querySelector('.iso-scarcity')){
+				//Desktop
+				var message = helpers.supplant(isoTest.template, {
+					'boldText' : isoTest.content[isoTest.lang].boldText,
+					'subText' : isoTest.content[isoTest.lang].subText
+				});
+
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', message);
+
+				//Mobile
+				helpers.elementLoaded('.vehicle-header__result-total', function() {
+					isoTest.log('vehicle results mobile found');
+					document.querySelector('.vehicle-header__result-total').insertAdjacentHTML('afterend', message);
+				});
+			}
+		},
+		setLanguage : function() {
+			isoTest.log('setLanguage()');
+
+			isoTest.lang = location.pathname.split('/')[1];
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
