@@ -27,7 +27,7 @@
 	}
 	#cars .vehicle-list__item {
 	    background: #fff;
-	    border-bottom: 3px solid #c3c3c3;
+	    border-bottom: 2px solid #c3c3c3;
 	    margin: 0 auto;
 	    margin-top: 8px;
 	    max-width: 400px;
@@ -46,6 +46,12 @@
 		color: #656565;
 		line-height: 1.6;
 	}
+	#cars .vehicle-item__attribute-item .icon.icon-specs-passenger-gray {
+		background-position: center;
+		background-size: contain;
+		height: 13px;
+    	width: 13px;
+	}
 	#cars .vehicle-item__details {
 		float: left;
 		width: 40%;
@@ -54,7 +60,7 @@
 		color: #fff;
 		display: flex;
 		font-size: 0;
-	    padding: 16px 0;
+	    padding: 12px 0 20px 0;
 	    padding-left: .9375rem;
 	    margin: 0;
 	    width: 100%;
@@ -93,13 +99,10 @@
 	    margin: 0;
 	    margin-top: -35px;
 	    min-height: 56px;
-	    padding-right: 24px;
 	    width: 60%;
 	}
-	/*#cars .vehicle-pricing__base-header {
-		border-bottom: none;
-	}*/
 	#cars .vehicle-pricing__currency-tiles {
+		padding-right: 24px;
 		pointer-events: none;
 		position: relative;
     	z-index: 1;
@@ -145,8 +148,10 @@
 		position: absolute;
 		right: 32px;
 		bottom: 2px;
+		max-width: 28%;
 	}
 	#cars .vehicle-pricing__special-rate .icon {
+		filter: invert(57%) sepia(84%) saturate(6247%) hue-rotate(135deg) brightness(96%) contrast(83%);
 		width: 14px;
     	height: 14px;
 	}
@@ -175,26 +180,35 @@
 	    font-weight: 400;
 	    margin-bottom: 0;
 	    text-transform: none;
-	    margin-right: -24px;
     	width: auto;
 	}
 	#cars .is-selected .vehicle-item__pricing {
 		margin-right: 0 !important;
 	}
 	#cars .vehicle-item__truck-badge {
-		width: 132px;
+		margin-bottom: 5px;
+		width: 120px;
 	}
 	#cars .vehicle-item.is-pre-selected, #cars .vehicle-item.is-preferred, #cars .vehicle-item.is-search-by-filter, #cars .vehicle-item.is-selected {
 		margin-bottom: 0;
 	}
+	.reservationWidget__editor-friendly {
+		min-height: 0;
+	}
 	/* Sold Out */
+	#cars .is-restricted .vehicle-item__image, 
+	#cars .is-sold-out .vehicle-item__image {
+		opacity: 1;
+	}
 	#cars .vehicle-item.is-sold-out .no-rates-tile:not(.net-rate), #cars .vehicle-item.is-restricted .no-rates-tile:not(.net-rate) {
 		border-top: none;
 		color: #393a3b;
 	    font-size: 15px;
-	    padding: 0px 5px 9px 5px;
-	    margin-top: -5px;
 	    line-height: 1;
+	    margin-top: -5px;
+	    margin-right: 24px;    
+	    padding: 0 6%;
+    
 	}
 	#cars .vehicle-item.is-sold-out .vehicle-pricing__button--alternative, #cars .vehicle-item.is-restricted .vehicle-pricing__button--alternative {
 		border-right: 24px solid #169a5a;
