@@ -1,4 +1,4 @@
-<style>
+<style>	
 @media (max-width: 40.8125em) {
 	body.resflow-cars {
 		min-width: 320px;
@@ -87,6 +87,7 @@
     	left: 19px;
 	}
 	#cars .vehicle-item__summary {
+		margin-bottom: 6px;
 		max-width: 50%;
 	}
 	#cars .vehicle-item__image {
@@ -146,12 +147,15 @@
     	font-weight: normal;
     	pointer-events: none;
 		position: absolute;
-		right: 32px;
-		bottom: 2px;
-		max-width: 28%;
+		bottom: 3px;
+		/*width: calc(60% - 24px);*/
+	    right: 24px;
+	    padding: 0 13px 0 0;
+	   	text-align: right;
 	}
 	#cars .vehicle-pricing__special-rate .icon {
 		filter: invert(57%) sepia(84%) saturate(6247%) hue-rotate(135deg) brightness(96%) contrast(83%);
+		margin-right: 2px;
 		width: 14px;
     	height: 14px;
 	}
@@ -192,8 +196,11 @@
 	#cars .vehicle-item.is-pre-selected, #cars .vehicle-item.is-preferred, #cars .vehicle-item.is-search-by-filter, #cars .vehicle-item.is-selected {
 		margin-bottom: 0;
 	}
-	.reservationWidget__editor-friendly {
+	.resflow-cars .reservationWidget__editor-friendly {
 		min-height: 0;
+	}
+	#cars [data-dtm-tracking*="|CCAR|"] .vehicle-item__image {
+		top: -18px;
 	}
 	/* Sold Out */
 	#cars .is-restricted .vehicle-item__image, 
@@ -221,8 +228,8 @@
 	    width: 60%;
 	    line-height: 1;
 	    display: flex;
-	    align-items: flex-end;
-	    justify-content: center;
+	   	align-items: center;
+    	flex-direction: column-reverse;
     	letter-spacing: initial;
     	padding-bottom: 15px;
 	}
@@ -253,6 +260,31 @@
 	/* Selected Vehicle */
 	#cars .vehicle-item__flag {
 		right: 21px;
+	}
+}
+@media (max-width: 400px) {
+	#cars .price-tile__amount .unit {
+		letter-spacing: -1px;
+	}
+	#cars .vehicle-pricing__special-rate {
+		padding: 0 4px 0 0;
+	}
+	#cars .vehicle-item__details {
+		width: 30%;
+	}
+	#cars .vehicle-item__pricing {
+		width: 70%;
+	}
+	#cars .vehicle-item.is-sold-out .vehicle-pricing__button--alternative, #cars .vehicle-item.is-restricted .vehicle-pricing__button--alternative {
+		width: 70%;
+	}	
+}
+@media (max-width: 370px) {
+	#cars .vehicle-item__summary {
+		max-width: 45%;
+	}
+	#cars .vehicle-item__image {
+		right: 30px;
 	}
 }
 </style>

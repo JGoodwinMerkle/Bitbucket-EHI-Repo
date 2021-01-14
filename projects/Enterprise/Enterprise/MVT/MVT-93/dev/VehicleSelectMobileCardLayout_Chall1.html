@@ -78,6 +78,10 @@
      	top: -3px;
      	left: 19px;
 	}
+	#cars .vehicle-item__summary {
+		margin-bottom: 6px;
+		max-width: 50%;
+	}
 	#cars .vehicle-item__image {
 		top: -10px;
     	width: 120px;
@@ -144,6 +148,7 @@
 		right: 8px;
 		bottom: 0;
     	margin-bottom: 62px;
+    	text-align: right;
 	}
 	#cars .vehicle-pricing__special-rate .icon {
 		filter: invert(57%) sepia(84%) saturate(6247%) hue-rotate(135deg) brightness(96%) contrast(83%);
@@ -186,8 +191,11 @@
 	#cars .vehicle-item.is-pre-selected, #cars .vehicle-item.is-preferred, #cars .vehicle-item.is-search-by-filter, #cars .vehicle-item.is-selected {
 		margin-bottom: 0;
 	}
-	.reservationWidget__editor-friendly {
+	.resflow-cars .reservationWidget__editor-friendly {
 		min-height: 0;
+	}
+	#cars [data-dtm-tracking*="|CCAR|"] .vehicle-item__image {
+		top: -18px;
 	}
 	/* Sold Out */
 	#cars .is-restricted .vehicle-item__image, 
@@ -227,6 +235,11 @@
 		margin-left: 10px;
 	    height: 14px;
 	    width: 14px;
+	}
+}
+@media (max-width: 400px) {
+	#cars .price-tile__amount .unit {
+		letter-spacing: -1px;
 	}
 }
 </style>
