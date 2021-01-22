@@ -1,0 +1,116 @@
+<style>
+@media (min-width: 66em) {
+	#reservationWidget .options.right {
+		float: left;
+		line-height: 1.8;
+    	margin-left: 12px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Res Widget - VMC Copy Swap 2.0',
+		creative : 'Challenger 2',
+		selector: '#viewModifyCancelBookingWidget',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+
+			if (document.querySelectorAll('.footermenu #RESERVATIONS-list .footer__list--item a').length > 0) {
+				document.querySelector("a[href='/en/reserve/view-modify-cancel.html?icid=footer.reservations-_-modify-_-ENUS.NULL']").innerHTML  = "View/Modify/Cancel Reservation";
+			}
+
+			if (document.querySelectorAll('.master-nav #primary-nav #navContentRent .sub-menu a').length > 0) {
+				document.querySelector("a[href='/en/reserve/view-modify-cancel.html?icid=header.rent.reservations-_-modify-_-ENUS.NULL']").innerHTML  = "View/Modify/Cancel Reservation";
+			}
+
+			if (document.querySelector('#reservationWidget')) {
+				if (document.querySelector('#book')) {
+					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "VIEW / MODIFY / CANCEL RESERVATION";
+				}
+			}
+
+			isoTest.addEvents();
+		},
+		addEvents : function() {
+			isoTest.log('addEvents()');
+
+			document.querySelector('#viewModifyCancelBookingWidget').addEventListener('click',function(e){
+				if (document.querySelector('#existing')) {
+					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "VIEW / MODIFY / CANCEL RESERVATION";
+					isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:Reserve A Vehicle');
+				} else {
+					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Reserve A Vehicle";
+					isoTest.extraFireTag('#viewModifyCancelBookingWidget', 'Home:Manage Your Reservation');
+				}
+			}, false);
+		},
+		fireTag : function(element, value) {
+			s.events='';
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+			s.eVar89 = '';
+		},
+		extraFireTag : function(element, value) {
+			s.events='';
+			var linkName = 'Home:VMC Engage';
+			var newLinkName = value;
+				newLinkName = isoTest.test ? isoTest.test + ' : ' + newLinkName : newLinkName;
+			s.linkTrackVars = 'eVar20,eVar89';
+			s.eVar20 = linkName;
+			s.eVar89 = newLinkName;
+			s.tl(this, 'o', linkName, newLinkName);
+			s.eVar20 = '';
+			s.eVar89 = '';
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
