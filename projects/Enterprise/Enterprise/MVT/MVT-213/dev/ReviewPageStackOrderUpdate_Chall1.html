@@ -1,0 +1,180 @@
+<style>
+#commit .verification-page .section-content.personal-information {
+	padding: 40px;
+    margin: 0 0 40px;
+    border: 1px solid #c3c3c3;
+    position: relative;
+}
+#commit .verification-page .section-content .view-header {
+	font-weight: 600;
+    font-style: normal;
+    font-size: 1.625rem;
+    line-height: 1;
+    display: flex;
+    color: #181918;
+    border-bottom: .1875rem solid #181918;
+    border-top: 0;
+    padding: 0;
+    text-transform: capitalize;
+    align-items: baseline;
+  	margin-bottom: 25px;
+}
+#commit .verification-page .section-content .view-header__title {
+	font-weight: 600;
+    font-style: normal;
+    font-size: 1.625rem;
+    line-height: 1;
+}
+#commit .verification-page .section-content .personal-entry-form label {
+	font-weight: 600;
+    font-style: normal;
+}
+@media (max-width: 46.8em){
+	#commit .verification-page .section-content {
+	  	padding: 1.25rem;
+	}
+	#commit .verification-page .section-content.personal-information {
+	    margin-top: 1.875rem;
+	    padding: 1.25rem;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com/Enterprise.ca',
+		test : 'Review Page Stack Order Update',
+		creative : 'Challenger 1',
+		selector : '.personal-information',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.resizeLogic();
+		},
+      	resizeLogic : function() {
+            // Create a condition that targets viewports at least 749px wide
+            var mediaQuery = window.matchMedia('(min-width: 749px)');
+            function handleTabletChange(e) {
+              	if (e.matches) {
+                	isoTest.log('MQ > 749px');
+                	isoTest.desktopLogic();
+              	} else {
+                	isoTest.log('MQ < 749px');
+                	// Ensure travel purpose block is NOT present
+                	if (!document.querySelector('.option-block.travel-purpose')) {
+                		isoTest.mobileLogic();
+                	}
+              	}
+            }
+            // Register event listener
+            mediaQuery.addListener(handleTabletChange);
+            // Initial check
+            handleTabletChange(mediaQuery);
+        },
+      	mobileLogic : function() {
+        	var content = document.querySelectorAll('.personal-information.section-content');
+			var rentalDetails = document.querySelectorAll('.sidebar-box')[0];
+			var contactDetails = document.querySelector('#personal-information');
+
+			if (content.length > 1) {
+				var message = document.querySelectorAll('.personal-information.section-content')[0];
+				rentalDetails.insertAdjacentElement('beforebegin',message);
+				rentalDetails.insertAdjacentElement('beforebegin',contactDetails);
+			} else {
+				rentalDetails.insertAdjacentElement('beforebegin',contactDetails);
+			}
+          
+          	var sectionContents = document.querySelectorAll('.review-section [class="section-content"]');
+            if (sectionContents.length > 0) {
+              	for (var i = 0; i < sectionContents.length; i++) {
+                	var section = sectionContents[i];
+                	rentalDetails.insertAdjacentElement('beforebegin',section);
+              	}
+            }
+            // Hide 'skip' tab navigation
+            if (document.querySelector('.verification-header-skip--mobile')) {
+            	document.querySelector('.verification-header-skip--mobile').firstChild.setAttribute('tabindex',-1);
+            }
+        },
+      	desktopLogic : function() {
+        	var content = document.querySelectorAll('.personal-information.section-content');
+			var mainFirstModule = document.querySelector('.review-section > div:not(.pre-expedited-banner)');
+			var contactDetails = document.querySelector('#personal-information');
+
+			if (content.length > 1) {
+				var message = document.querySelectorAll('.personal-information.section-content')[0];
+				mainFirstModule.insertAdjacentElement('beforebegin',message);
+				mainFirstModule.insertAdjacentElement('beforebegin',contactDetails);
+			} else {
+				mainFirstModule.insertAdjacentElement('beforebegin',contactDetails);
+			}
+
+			var sectionContents = document.querySelectorAll('[class="section-content"]');
+            if (sectionContents.length > 0) {
+              	for (var i = 0; i < sectionContents.length; i++) {
+                	var section = sectionContents[i];
+                	mainFirstModule.insertAdjacentElement('beforebegin',section);
+              	}
+            }
+        },
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
