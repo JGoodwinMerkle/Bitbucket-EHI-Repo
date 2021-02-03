@@ -106,6 +106,37 @@
 		test : 'Add Extras Equipment Short Descriptions',
 		creative : 'Challenger 1',
 		selector: '.extras-section',
+		extrasList : {
+			"Sirius XM": {
+				selector: 'sirius',
+				content: 'Listen to anything you want, everywhere you drive.'
+			},
+			"Greenhouse Gas Emissions Offset": {
+				selector: 'ghg',
+				content: 'Join your fellow customers in helping to save the environment!'
+			},
+			"Ski Rack": {
+				selector: 'ski',
+				content: 'Bring your skis with you securely on our ski rack.'
+			},
+			"GPS": {
+				selector: 'gps',
+				content: 'Find your destination easier with this GPS device.'
+			},
+			"Child Safety Seat": {
+				selector: 'childss',
+				content: 'Travel with your child safely and securely.'
+			},
+			"Baby Safety Seat": {
+				selector: 'babyss',
+				content: 'Travel with your baby safely and securely.'
+			},
+			"Booster Seat": {
+				selector: 'booster',
+				content: 'Travel with your child safely and securely.'
+			},
+			
+		},
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -136,64 +167,21 @@
 			}
 		},
 		chall : function() {
-			// SIRIUS XM
-			var sirius = "//strong[text()='Sirius XM®']";
-			var matchEle1 = document.evaluate(sirius, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-			if (matchEle1 !== null ) {
-				matchEle1.parentNode.parentNode.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-desktop iso-xtra-sirius"><span class="iso-icon"></span> <span class="iso-icon-text">Listen to anything you want, everywhere you drive.</span></div>');
 
-				document.querySelector('.iso-xtra-sirius').nextSibling.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-mobile iso-xtra-sirius"><span class="iso-icon"></span> <span class="iso-icon-text">Listen to anything you want, everywhere you drive.</span></div>');
+			var extras = document.querySelectorAll('.extras-row.equipment .extras-row__name');
+			for ( var i = 0; i < extras.length; i++) {
+				var text = extras[i].innerText;
+				Object.keys(isoTest.extrasList).forEach(function(key) {
+					if (text.includes(key)){
+						var selectorVal = isoTest.extrasList[key]['selector'];
+						var contentVal = isoTest.extrasList[key]['content'];
+						if (!extras[i].parentNode.parentNode.parentNode.querySelector('.iso-xtra-mobile')) {
+							extras[i].parentNode.parentNode.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-desktop iso-xtra-'+selectorVal+'"><span class="iso-icon"></span> <span class="iso-icon-text">'+contentVal+'</span></div>');
+							document.querySelector('.iso-xtra-'+selectorVal+'').nextSibling.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-mobile iso-xtra-'+selectorVal+'"><span class="iso-icon"></span> <span class="iso-icon-text">'+contentVal+'</span></div>');
+						}
+					}
+				});
 			}
-			// GHG OFFSET
-			var ghg = "//strong[text()='Greenhouse Gas Emissions Offset']";
-			var matchEle2 = document.evaluate(ghg, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-			if (matchEle2 !== null ) {
-				matchEle2.parentNode.parentNode.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-desktop iso-xtra-ghg"><span class="iso-icon"></span> <span class="iso-icon-text">Join your fellow customers in helping to save the environment!</span></div>');
-
-				document.querySelector('.iso-xtra-ghg').nextSibling.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-mobile iso-xtra-ghg"><span class="iso-icon"></span> <span class="iso-icon-text">Join your fellow customers in helping to save the environment!</span></div>');
-			}
-			// SKI
-			var ski = "//strong[text()='Ski Rack']";
-			var matchEle3 = document.evaluate(ski, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-			if (matchEle3 !== null ) {
-				matchEle3.parentNode.parentNode.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-desktop iso-xtra-ski"><span class="iso-icon"></span> <span class="iso-icon-text">Bring your skis with you securely on our ski rack.</span></div>');
-
-				document.querySelector('.iso-xtra-ski').nextSibling.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-mobile iso-xtra-ski"><span class="iso-icon"></span> <span class="iso-icon-text">Bring your skis with you securely on our ski rack.</span></div>');
-			}
-			// GPS
-			var gps = "//strong[text()='GPS']";
-			var matchEle4 = document.evaluate(gps, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-			if (matchEle4 !== null ) {
-				matchEle4.parentNode.parentNode.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-desktop iso-xtra-gps"><span class="iso-icon"></span> <span class="iso-icon-text">Find your destination easier with this GPS device.</span></div>');
-
-				document.querySelector('.iso-xtra-gps').nextSibling.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-mobile iso-xtra-gps"><span class="iso-icon"></span> <span class="iso-icon-text">Find your destination easier with this GPS device.</span></div>');
-			}
-			// CHILD SAFETY SEAT
-			var childsafety = "//strong[text()='Child Safety Seat']";
-			var matchEle5 = document.evaluate(childsafety, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-			if (matchEle5 !== null ) {
-				matchEle5.parentNode.parentNode.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-desktop iso-xtra-childss"><span class="iso-icon"></span> <span class="iso-icon-text">Travel with your child safely and securely.</span></div>');
-
-				document.querySelector('.iso-xtra-childss').nextSibling.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-mobile iso-xtra-childss"><span class="iso-icon"></span> <span class="iso-icon-text">Travel with your child safely and securely.</span></div>');
-			}
-			// BABY SAFETY SEAT
-			var babysafety = "//strong[text()='Baby Safety Seat']";
-			var matchEle6 = document.evaluate(babysafety, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-			if (matchEle6 !== null ) {
-				matchEle6.parentNode.parentNode.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-desktop iso-xtra-babyss"><span class="iso-icon"></span> <span class="iso-icon-text">Travel with your baby safely and securely.</span></div>');
-
-				document.querySelector('.iso-xtra-babysss').nextSibling.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-mobile iso-xtra-babyss"><span class="iso-icon"></span> <span class="iso-icon-text">Travel with your baby safely and securely.</span></div>');
-			}
-			// BOOSTER SEAT
-			var booster = "//strong[text()='Booster Seat']";
-			var matchEle7 = document.evaluate(booster, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-			if (matchEle7 !== null ) {
-				matchEle7.parentNode.parentNode.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-desktop iso-xtra-booster"><span class="iso-icon"></span> <span class="iso-icon-text">Travel with your child safely and securely.</span></div>');
-
-				document.querySelector('.iso-xtra-baooster').nextSibling.insertAdjacentHTML('afterend','<div class="iso-xtra-msg iso-xtra-mobile iso-xtra-booster"><span class="iso-icon"></span> <span class="iso-icon-text">Travel with your child safely and securely.</span></div>');
-			}
-
-			
 
 		},
 		
