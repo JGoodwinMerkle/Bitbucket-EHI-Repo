@@ -8,7 +8,38 @@
 		portfolio : 'Enterprise.com',
 		test : 'Res Flow Header Copy Swap',
 		creative : 'Challenger 1',
-		selector: 'body',
+		selector: '.reservation-step',
+		locationSelector: '.location-header__title',
+		pageInfo: {
+			"#location" : {
+				selector: '#location .location-header__title',
+				content: 'LOCATION PLACEHOLDER TEXT'
+			},
+			"#location/pickup" : {
+				selector: '[id*="location/pickup"] .location-header__title',
+				content: 'PICK-UP PLACEHOLDER TEXT'
+			},
+			"#location/dropoff" : {
+				selector: '[id*="location/dropoff"] .location-header__title',
+				content: 'DROP-OFF PLACEHOLDER TEXT'
+			},
+			"#cars" : {
+				selector: '#cars .vehicle-header__sub-title',
+				content: 'CARS PLACEHOLDER TEXT'
+			},
+			"#extras" : {
+				selector: '#extras .extras-header__title',
+				content: 'EXTRAS PLACEHOLDER TEXT'
+			},
+			"#commit" : {
+				selector: '#commit .verification-title .alpha',
+				content: 'REVIEW PLACEHOLDER TEXT'
+			},
+			"#confirmed" : {
+				selector: '#confirmed .resflow__header-info-title',
+				content: 'CONFIRM PLACEHOLDER TEXT'
+			}
+		},
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -32,16 +63,21 @@
 		
 		},
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
+			isoTest.log('viewChange()');
+			if(/location|cars|extras|commit|confirmed/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
 			}
 		},
 		chall : function() {
+			isoTest.log('chall()');
 
-			// Your code goes here
+			isoTest.locationHash = isoTest.pageInfo[location.hash];
 
+			helpers.elementLoaded(isoTest.locationHash.selector, function() {
+				document.querySelectorAll(isoTest.locationHash.selector)[0].innerText = isoTest.locationHash.content;
+			});
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
