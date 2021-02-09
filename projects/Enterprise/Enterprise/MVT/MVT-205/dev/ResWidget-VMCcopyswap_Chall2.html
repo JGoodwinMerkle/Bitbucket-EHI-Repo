@@ -1,0 +1,137 @@
+<style>
+#reservationWidget .options.right {
+	float: none;
+}
+
+#reservationWidget .reservation-toggle-header {
+	margin-right: 8px;
+}
+
+#reservationWidget .inner-container .options .text {
+	color: #656565;
+}
+
+@media (min-width: 769px){
+	#reservationWidget div.options .text {
+		margin: 16px 0 0 !important;
+	}
+
+	#reservationWidget .inner-container div.options.right {
+		width: 100%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Res Widget - VMC copy swap',
+		creative : 'Challenger 2',
+		selector: '#viewModifyCancelBookingWidget',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			isoTest.log('chall()');
+
+			if (document.querySelectorAll('.footermenu #RESERVATIONS-list .footer__list--item a').length > 0) {
+				document.querySelector("a[href='/en/reserve/view-modify-cancel.html?icid=footer.reservations-_-modify-_-ENUS.NULL']").innerHTML  = "Look Up A Reservation";
+			}
+
+			if (document.querySelectorAll('.master-nav #primary-nav #navContentRent .sub-menu a').length > 0) {
+				document.querySelector("a[href='/en/reserve/view-modify-cancel.html?icid=header.rent.reservations-_-modify-_-ENUS.NULL']").innerHTML  = "Look Up A Reservation";
+			}
+
+			if (document.querySelector('#reservationWidget')) {
+				if (document.querySelector('#book')) {
+					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Look Up A Reservation";
+				}
+			}
+
+			isoTest.addEvents();
+		},
+		addEvents : function() {
+			isoTest.log('addEvents()');
+
+			document.querySelector('#viewModifyCancelBookingWidget').addEventListener('click',function(e){
+				if (document.querySelector('#existing')) {
+					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Look Up A Reservation";
+					isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:Reserve A Vehicle');
+				} else {
+					isoTest.extraFireTag('#viewModifyCancelBookingWidget', 'Home:Look Up A Reservation');
+					document.querySelector('#reservationWidget .reservation-toggle-header').style.display = 'none';
+					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Reserve A Vehicle";
+					helpers.elementLoaded('#existing', function() {
+						document.querySelector('#reservationWidget .reservation-toggle-header').innerHTML = "Look Up A Reservation";
+						document.querySelector('#reservationWidget .reservation-toggle-header').style.display = 'block';
+						document.querySelector('#existing .form-section-header__title').innerHTML = "View, Modify or Cancel";
+					});
+				}
+			}, false);
+		},
+		fireTag : function(element, value) {
+			s.events='';
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+			s.eVar89 = '';
+		},
+		extraFireTag : function(element, value) {
+			s.events='';
+			var linkName = 'Home:VMC Engage';
+			var newLinkName = value;
+				newLinkName = isoTest.test ? isoTest.test + ' : ' + newLinkName : newLinkName;
+			s.linkTrackVars = 'eVar20,eVar89';
+			s.eVar20 = linkName;
+			s.eVar89 = newLinkName;
+			s.tl(this, 'o', linkName, newLinkName);
+			s.eVar20 = '';
+			s.eVar89 = '';
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
