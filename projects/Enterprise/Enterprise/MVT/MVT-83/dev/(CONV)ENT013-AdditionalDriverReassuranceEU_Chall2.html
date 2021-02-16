@@ -1,0 +1,398 @@
+<style>
+#commit .iso-container {
+	border-bottom: solid 1px #C3C3C3;
+	color: #333333;
+	margin-bottom: 24px;
+	margin-top: 5px;
+	padding-bottom: 11px; 
+}
+
+#commit .iso-container .iso-banner-text-container .iso-header {
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 18px;
+}
+
+#commit .iso-container .iso-banner-text-container .iso-subtext {
+	font-size: 12px;
+	line-height: 16px;
+	margin-bottom: 16px;
+	margin-top: 5px;
+}
+
+#commit .iso-container .iso-banner-text-container .iso-bold {
+	font-weight: 700;
+}
+
+#commit .iso-container .iso-banner-text-container .iso-list {
+	font-size: 14px;
+	line-height: 18px;
+}
+
+#commit .iso-driverTooltip {
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+}
+
+#commit .iso-driverTooltip .iso-tooltip-container {
+	display: block;
+	position: absolute;
+  	visibility: hidden;
+  	width: 100%;
+}
+
+#commit .iso-driverTooltip .iso-tooltip-container.active {
+	visibility: visible;
+}
+
+#commit .iso-driverTooltip .iso-btn-tooltip {
+	background: transparent;
+	color: #333333;
+	cursor: pointer;
+	font-size: 12px;
+	font-weight: 300;
+	letter-spacing: normal;
+	margin: 0;
+	padding: 0;
+	text-decoration: underline;
+	text-transform: initial;
+}
+
+#commit .iso-driverTooltip .iso-tooltip-info__arrow {
+	border-left: 10px solid transparent;
+  	border-right: 10px solid transparent;
+  	border-top: 11px solid #707070;
+  	display: block;
+	height: 0;
+	left: 42%;
+	margin:	0;
+	position: absolute;
+	top: 2px;
+	transform: rotate(-180deg);
+	width: 0;
+	z-index: 2;
+}
+
+#commit .iso-driverTooltip .tooltip-info__content {
+	background-color: #707070;
+	display: block;
+	font-size: 12px;
+	line-height: 16px;
+	min-height: 114px;
+	padding: 10px 27px 10px 10px;
+	position: relative;
+	right: 0;
+	text-align: left;
+	top: 9px;
+	transform: none;
+	visibility: hidden;
+	width: 227px;
+}
+
+#commit .iso-driverTooltip .iso-tooltip-container.active .tooltip-info__content {
+	visibility: visible;
+}
+
+#commit .iso-driverTooltip .tooltip-info__close,
+#commit .iso-driverTooltip .tooltip-info__close .icon.icon-close-white {
+	height: 12px;
+	width: 12px;
+}
+
+#commit .iso-driverTooltip .tooltip-info__cta {
+	font-weight: normal;
+}
+
+#commit .iso-driverTooltip .tooltip-info__cta.tooltip-info__icon-button {
+	position: relative;
+	top: 14px;
+}
+
+#commit .iso-container input[type='radio'] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background: #ffffff;
+	border: 1px solid #a3a4a5;
+	border-radius: 100%;
+	height: 1.25rem;
+	margin-right: 10px;
+	padding: 0;
+	position: relative;
+	width: 1.25rem;
+}
+
+#commit .iso-container input[type='radio']:before {
+	border-radius: 100%;
+	content: '';
+	display: block;
+}
+
+#commit .iso-container input[type='radio']:checked:before {
+	background: #169a5a;
+	height: .75rem;
+	left: 50%;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%); 
+	width: .75rem;
+}
+
+#commit .iso-container input[type='radio']:checked {
+	border: 2px solid #169a5a;
+}
+
+#commit .additional-driver label {
+	display: inline;
+	font-weight: 300;
+	left: 30px;
+	padding: 0;
+	position: absolute;
+	top: 1px;
+}
+
+#commit .additional-driver span {
+	display: block;
+	height: 20px;
+	margin-bottom: 13px;
+	position: relative;
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.fr Enterprise.de Enterprise.ie Enterprise.es',
+		test : '(CONV) ENT 013 - Additional Driver Reassurance EU',
+		creative : 'Challenger 2',
+		selector: '#personal-information .field-container .request-consent-section',
+		content: {
+			en : {
+				header: "Let us know if you are thinking of adding an additional driver.",
+				subtext: "(You will be able to <span class='iso-bold'>add an additional driver</span> in branch. Don’t worry if you’re not sure yet – just bring the <div class='iso-button-container iso-driverTooltip'></div> and let us know on the day!)",
+				tooltip: "All drivers must be present and provide a full valid driving license,. If the driving license is written in a language and characters different to those of the country of rental, an International Driving Permit is also required. Please note Additional drivers must meet all renter requirements.  A daily surcharge will apply.",
+				buttontext: "required documents",
+				yes: "Yes",
+				no: "No",
+				notsure: "Not Sure"
+			},
+			es : {
+				header: "Háganos saber si está pensando añadir un conductor extra.",
+				subtext: "(Podrá <span class='iso-bold'>añadir un conductor</span> extra en la sucursal. No se preocupe si no está seguro todavía - solo traiga <div class='iso-button-container iso-driverTooltip'></div> y háganoslo saber en el día!)",
+				tooltip: "Todos los conductores deberán estar presentes y poseer un carnet de conducir vigente . Si el idioma del carnet así como el alfabeto utilizado en el mismo fuera diferente al del país donde se alquila el coche, será necesaria la presentación de un carnet internacional expedido por las autoridades competentes. Por favor, téngase en cuenta que los conductores adicionales también deberán cumplir con todos los requisitos anteriormente descriptos para el alquiler del coche. Se les aplicará una tarifa extra diaria.",
+				buttontext: "los documentos necesarios",
+				yes: "Sí",
+				no: "No",
+				notsure: "No estoy seguro/a"
+			},
+			fr : {
+				header: "Aurez-vous besoin d'ajouter un conducteur supplémentaire?",
+				subtext: "(Vous pourrez <span class='iso-bold'>ajouter un conducteur supplémentaire</span> en agence. Aucun problème si vous ne le savez pas encore, pensez juste à apporter <div class='iso-button-container iso-driverTooltip'></div> et mentionnez-le le jour de votre départ!)",
+				tooltip: "Tous les conducteurs devront se présenter munis d’un permis de conduire en cours de validité. Si le permis de conduire est écrit dans une langue aux caractères différents de celui du pays de location, un permis international sera également demandé. Les conducteurs additionels seront soumis aux mêmes conditions de location que le conducteur principal. Des frais journaliers seront appliqués.",
+				buttontext: "les documents nécessaires",
+				yes: "Oui",
+				no: "Non",
+				notsure: "Pas Sûr"
+			},
+			de : {
+				header: "Lassen Sie uns wissen, wenn Sie zusätzliche Fahrer anmelden möchten.",
+				subtext: "(Sie können die <span class='iso-bold'>Zusatzfahrer-Option</span> direkt in der Filiale buchen. Lassen Sie es uns einfach vor Ort am Tag der Anmietung wissen und bringen Sie die für Zusatzfahrer <div class='iso-button-container iso-driverTooltip'></div> mit!)",
+				tooltip: "Alle Fahrer müssen anwesend sein und einen gültigen Führerschein vorlegen. Wenn sich die Sprache des Führerscheins und dessen Alphabet von denen des Mietlandes unterscheiden, ist zusätzlich ein internationaler Führerschein erforderlich. Bitte beachten Sie, dass zusätzliche Fahrer alle Mietbedingungen erfüllen müssen. Ein täglicher Zuschlag wird verrechnet.",
+				buttontext: "benötigten Dokumente",
+				yes: "Ja",
+				no: "Nein",
+				notsure: "Nicht Sicher"
+			}
+		},
+		template: "<div class='iso-container'>\
+						<div class='iso-banner-text-container'>\
+							<div class='iso-header'>{header}</div>\
+							<div class='iso-subtext'>{subtext}</div>\
+							<fieldset class='additional-driver'>\
+								<span><input type='radio' name='group-additional' value='{yes}' id='additional-yes' class='additional-radio' required><label for='additional-yes'>{yes}</label></span>\
+								<span><input type='radio' name='group-additional' value='{no}' id='additional-no' class='additional-radio'><label for='additional-no'>{no}</label></span>\
+								<span><input type='radio' name='group-additional' value='{notsure}' id='additional-notsure' class='additional-radio'><label for='additional-notsure'>{notsure}</label></span>\
+							</fieldset>\
+						</div>\
+					</div>",
+		tooltip: "<button class='iso-btn-tooltip' role='button' aria-label='{buttontext}'>{buttontext}</button>\
+					<div class='iso-tooltip-container'>\
+						<span class='iso-tooltip-info__arrow'></span>\
+						<span class='tooltip-info__content' aria-describedby='tooltip_driver_reassurance' role='tooltip'>\
+								<button type='button' class='tooltip-info__close' aria-label='Close'><i class='icon icon-close-white'></i></button>\
+								<span class='tooltip-info__description' id='tooltip_driver_reassurance'>{tooltip}</span>\
+						</span>\
+					</div>",
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log("chall()");
+			var lang = enterprise.language;
+
+			var tooltipContent = helpers.supplant(isoTest.tooltip,{
+				'tooltip' : isoTest.content[lang].tooltip,
+				'buttontext' : isoTest.content[lang].buttontext
+			});
+
+			var banner = helpers.supplant(isoTest.template,{
+				'header' : isoTest.content[lang].header,
+				'subtext' : isoTest.content[lang].subtext,
+				'yes' : isoTest.content[lang].yes,
+				'no' : isoTest.content[lang].no,
+				'notsure' : isoTest.content[lang].notsure
+			});
+
+			if (!document.querySelector('.iso-container')) {
+				document.querySelector('#personal-information .field-container .request-consent-section').insertAdjacentHTML('beforebegin', banner);
+				document.querySelector('#commit .iso-button-container').insertAdjacentHTML('afterbegin', tooltipContent);
+			}
+
+			isoTest.addEvents();
+			isoTest.checkTooltipPosition();
+
+			window.addEventListener('resize', function(event){
+				isoTest.log('window resized');
+				isoTest.checkTooltipPosition();
+
+			});
+		},
+		toggleTooltip : function() {
+			isoTest.log("toggleTooltip()");
+			var tooltip = document.querySelector('.iso-driverTooltip .iso-tooltip-container');
+
+			if(tooltip.classList.contains('active')){
+				tooltip.classList.remove('active');
+
+				document.querySelector('.iso-btn-tooltip').focus();
+			} else {
+				isoTest.fireTag('.iso-btn-tooltip', 'Required Documents');
+				tooltip.classList.add('active');
+
+				tooltip.querySelector('.tooltip-info__close').focus();
+			}
+		},
+		addEvents : function() {
+			isoTest.log("addEvents()");
+
+			document.querySelector('.iso-driverTooltip .iso-btn-tooltip').addEventListener('click', function(e) {
+				e.preventDefault();
+				isoTest.toggleTooltip();
+			}, false);
+
+			document.querySelector('.iso-driverTooltip .tooltip-info__close').addEventListener('click', isoTest.toggleTooltip);
+
+			document.querySelector('#additional-yes').addEventListener('click', function(e) {
+				isoTest.fireTag('#additional-yes', 'Yes Radio Button');
+			}, false);
+
+			document.querySelector('#additional-no').addEventListener('click', function(e) {
+				isoTest.fireTag('#additional-no', 'No Radio Button');
+			}, false);
+
+			document.querySelector('#additional-notsure').addEventListener('click', function(e) {
+				isoTest.fireTag('#additional-notsure', 'Not Sure Radio Button');
+			}, false);
+		},
+		checkTooltipPosition : function() {
+			isoTest.log("checkTooltipPosition()");
+
+			var tooltip = document.querySelector('#commit .iso-driverTooltip .tooltip-info__content');
+			tooltip.style.left = '0';
+
+			var tooltip_rect = tooltip.getBoundingClientRect();
+			var container_rect = document.querySelector('#personal-information').getBoundingClientRect();
+			var windowSize = window.innerWidth;
+			var windowPadding = (windowSize * .05);
+
+			if (windowSize >= 1057) {
+				windowPadding = (windowSize * .07);
+			} 
+
+			if ((tooltip_rect.right > container_rect.right) || (tooltip_rect.left < container_rect.left)) {
+				if (tooltip_rect.right > container_rect.right) {
+					var tooltipRight = (tooltip_rect.right - windowSize) + (windowPadding + 10);
+					tooltip.style.left = '-' + tooltipRight + 'px';
+				} else {
+					if (tooltip_rect.left < container_rect.left) {
+						var tooltipLeft = (windowSize * .15)/2;
+						tooltip.style.left = tooltipLeft + 'px';
+					} 
+				}
+			} 
+		},
+		fireTag : function(element, value) {
+			isoTest.log("fireTag()");
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
