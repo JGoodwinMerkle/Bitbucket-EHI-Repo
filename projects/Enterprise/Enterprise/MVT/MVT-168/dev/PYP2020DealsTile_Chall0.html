@@ -1,0 +1,78 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'PYP 2020 Deals Tile',
+		creative : 'Challenger 0',
+		selector: '.two-up-three-up.section .text-capsule-list .text-capsule-item .text-capsule-tile',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			var tileHeader = document.querySelectorAll('.two-up-three-up.section .text-capsule-list .text-capsule-item .text-capsule-tile .text-capsule-tile__heading')[0];
+			var tileText = document.querySelectorAll('.two-up-three-up.section .text-capsule-list .text-capsule-item .text-capsule-tile .text-capsule-tile__text p')[0];
+			var tileLink = document.querySelectorAll('.two-up-three-up.section .text-capsule-list .text-capsule-item a')[0];
+			var url = 'https://plusyourpoints.enterprise.com/authenticate?langPref=en_us&TLGVC=E21A&TLG_CID=50607&icid=deals-_-3uptile-_-loyalty.register-_-usen.50607';
+
+			tileHeader.innerHTML = "Plus Your Points Promotion";
+			tileText.innerHTML = "Enterprise Plus members earn double points on qualifying rentals now through January 31, 2021 when they register. Terms apply.";
+			tileLink.setAttribute('href', url);
+
+			tileLink.addEventListener('click', function(event){
+				isoTest.fireTag('a','PYP Auth Register');
+			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
