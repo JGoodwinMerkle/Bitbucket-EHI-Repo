@@ -1,4 +1,7 @@
 <style>
+.en_us #viewModifyCancelBookingWidget:not(.vmc)::after {
+	content: ' RESERVATION';
+}	
 @media (min-width: 66em) {
 	#reservationWidget .options.right {
 		float: left;
@@ -48,7 +51,9 @@
 
 			if (document.querySelector('#reservationWidget')) {
 				if (document.querySelector('#book')) {
-					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "VIEW / MODIFY / CANCEL RESERVATION";
+					document.querySelector('#viewModifyCancelBookingWidget').classList.remove('vmc');
+				} else {
+					document.querySelector('#viewModifyCancelBookingWidget').classList.add('vmc');
 				}
 			}
 
@@ -56,16 +61,9 @@
 		},
 		addEvents : function() {
 			isoTest.log('addEvents()');
-
 			document.querySelector('#viewModifyCancelBookingWidget').addEventListener('click',function(e){
-				if (document.querySelector('#existing')) {
-					isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:'+this.innerText);
-					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "VIEW / MODIFY / CANCEL RESERVATION";
-				} else {
-					isoTest.extraFireTag('#viewModifyCancelBookingWidget', 'Home:'+this.innerText);
-					document.querySelector('#viewModifyCancelBookingWidget').innerHTML = "Reserve A Vehicle";
-					
-				}
+				isoTest.fireTag('#viewModifyCancelBookingWidget', 'Home:'+this.innerText);
+				document.querySelector('#viewModifyCancelBookingWidget').classList.toggle('vmc');
 			}, false);
 		},
 		fireTag : function(element, value) {
@@ -75,17 +73,6 @@
 			s.linkTrackVars = 'eVar89';
 			s.eVar89 = linkName;
 			s.tl(this, 'o', linkName);
-			s.eVar89 = '';
-		},
-		extraFireTag : function(element, value) {
-			s.events='';
-			var linkName = value ? value : element.innerText;
-			var newLinkName = value;
-				newLinkName = isoTest.test ? isoTest.test + ' : ' + newLinkName : newLinkName;
-			s.linkTrackVars = 'eVar20,eVar89';
-			s.eVar20 = linkName;
-			s.eVar89 = newLinkName;
-			s.tl(this, 'o', linkName, newLinkName);
 			s.eVar20 = '';
 			s.eVar89 = '';
 		},
