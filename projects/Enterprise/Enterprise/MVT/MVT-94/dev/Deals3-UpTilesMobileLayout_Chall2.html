@@ -1,0 +1,166 @@
+<style>
+@media (max-width: 799px) {
+	.two-up-three-up.section.iso-offer-section .text-capsule-list {
+		background: white;
+		border-bottom: none;
+		border-top: 1px solid #c3c3c3;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item {
+		border-bottom: 1px solid #c3c3c3;
+		padding: 0;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
+		border: none;
+		box-shadow: none;
+		display: flex;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .text-capsule-tile__image {
+		align-self: center;
+		height: 38px;
+		margin-bottom: 15px;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper {
+		margin-left: 16px;
+		text-align: left;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__heading {
+		font-size: 18px;
+		margin-bottom: 8px;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__text {
+		margin-bottom: 15px;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper .text-capsule-tile__text p {
+		font-size: 16px;
+	}
+
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
+		padding: 20px 40px 10px 40px;
+	}
+}
+
+@media (max-width: 48.75rem) {
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile {
+		padding: 20px 4% 10px 4%;
+	}
+}
+
+@media (max-width: 500px) {
+	.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile .iso-wrapper {
+		margin-left: 14px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com Enterprise.ca',
+		test : 'Deals 3-Up Tiles Mobile Layout',
+		creative : 'Challenger 2',
+		selector: '.two-up-three-up.section .text-capsule-list',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			isoTest.log('chall()');
+
+			document.querySelectorAll('.two-up-three-up.section')[0].classList.add('iso-offer-section');
+
+			var sections = document.querySelectorAll('.two-up-three-up.section.iso-offer-section .text-capsule-item .text-capsule-tile');
+
+			for(var i = 0; i < sections.length; i++) {
+				var wrapper = "<div class='iso-wrapper'></div>";
+				var header = sections[i].querySelector('.text-capsule-tile__heading');
+				var text = sections[i].querySelector('.text-capsule-tile__text');
+				var textInner = sections[i].querySelector('.text-capsule-tile__text p');
+				var textGrab = textInner.innerHTML.replace(/&nbsp;/gi,'')
+
+				header.insertAdjacentHTML('beforebegin',wrapper);
+				sections[i].querySelector('.iso-wrapper').appendChild(header);
+				sections[i].querySelector('.iso-wrapper').appendChild(text);
+				//remove extra line below text
+				textInner.innerHTML = textGrab;
+			}
+
+			isoTest.addEvents();
+		},
+		addEvents: function() {
+			isoTest.log('addEvents()');
+
+			var tile1 = document.querySelectorAll('.two-up-three-up.section')[0].querySelectorAll('.text-capsule-item')[0];
+			var tile2 = document.querySelectorAll('.two-up-three-up.section')[0].querySelectorAll('.text-capsule-item')[1];
+			var tile3 = document.querySelectorAll('.two-up-three-up.section')[0].querySelectorAll('.text-capsule-item')[2];
+
+			tile1.addEventListener('click', function(event) {
+				isoTest.fireTag(this, "Tile One");
+			}, false);
+
+			tile2.addEventListener('click', function(event) {
+				isoTest.fireTag(this, "Tile Two");
+			}, false);
+
+			tile3.addEventListener('click', function(event) {
+				isoTest.fireTag(this, "Tile Three");
+			}, false);
+		},
+		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
+
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
