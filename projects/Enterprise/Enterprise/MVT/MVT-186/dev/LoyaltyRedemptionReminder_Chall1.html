@@ -1,0 +1,330 @@
+<style>
+.iso-redeem-banner-container {
+	padding: 0rem 5% 2.5rem;
+}
+
+.iso-redeem-banner-container .iso-redeem-banner {
+	background-color: #181918;
+	background-image: url(data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2226%22%20height%3D%2238%22%20viewBox%3D%220%200%2026%2038%22%3E%3Cpath%20fill%3D%22%23181918%22%20d%3D%22M0%200h26v38H0z%22%2F%3E%3Cg%20fill%3D%22%231C1D1C%22%3E%3Cpath%20d%3D%22M15.6%209.4h-5v7.1H3.5v5h7.1v7.1h5v-7.1h7.1v-5h-7.1M2.5%202.5h7V0H0v9.5h2.5M23.5%202.5v7H26V0h-9.5v2.5M2.5%2035.5v-7H0V38h9.5v-2.5M23.5%2035.5h-7V38H26v-9.5h-2.5%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+	background-position: 0 0;
+	background-size: auto;
+	color: #fff;
+	display: inline-flex;
+	padding: 15px 15px;
+}
+
+.iso-redeem-banner-container .iso-plus-icon .plus-icon {
+	width: 24px;
+    max-width: none;
+}
+
+.iso-redeem-banner-container .iso-redeem-banner-body {
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.iso-redeem-banner-container .iso-redeem-banner-header {
+	color: #169a5a;
+	font-size: 22px;
+	font-weight: 600;
+	margin-right: 10px;
+}
+
+.iso-redeem-banner-container .iso-redeem-banner-text {
+	position: relative;
+    top: -2px;
+}
+
+.iso-redeem-banner-container .iso-bold {
+	font-weight: 600;
+}
+
+.iso-redeem-signin-message {
+	display: inline-flex;
+	padding: 1.25rem 1.25rem 0;
+}
+
+.iso-redeem-signin-message .iso-plus-icon .plus-icon {
+	width: 20px;
+    max-width: none;
+}
+
+.iso-redeem-signin-message .iso-redeem-banner-body {
+	font-size: 14px;
+	line-height: 22px;
+	margin-left: 10px;
+	position: relative;
+	top: -4px;
+}
+
+.iso-redeem-signin-message .iso-redeem-banner-header {
+	color: #169a5a;
+	font-size: 18px;
+	font-weight: 600;
+	margin-right: 10px;
+}
+
+.iso-redeem-signin-message .iso-redeem-banner-text {
+	position: relative;
+    top: -1px;
+}
+
+.iso-learn-link {
+	color: #169a5a;
+	display: inline-block !important;
+	line-height: 12px !important;
+	padding: 0 !important;
+	text-decoration: underline;
+}
+
+@media (max-width: 48em){
+	.iso-redeem-banner-container .iso-redeem-banner-container {
+		padding-bottom: 1.75rem;
+    	padding-top: .5rem;
+	}
+
+	.iso-redeem-banner-container .iso-redeem-banner-body {
+		font-size: .875rem;
+	}
+
+	.iso-redeem-banner-container .iso-redeem-banner-header {
+		font-size: 1.25rem;
+	}
+}
+
+@media (max-width: 44.6875em){
+	.iso-redeem-signin-message .iso-redeem-banner-body {
+		top: -2px;
+	}
+
+	.iso-redeem-signin-message .iso-redeem-banner-header {
+		font-size: 20px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Loyalty Redemption Reminder',
+		creative : 'Challenger 1',
+		selector: '.login-widget .utility-nav-label',
+		selectorAccount: '#account .account-header .account-header__user-name',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.sCodeLoaded( function() {
+				isoTest.log('S Code Loaded!');
+				isoTest.updateEVars();
+			});
+			
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+	  			isoTest.chall();
+			});
+		},
+		chall : function() {
+			isoTest.log('chall()');
+			
+			if (window.location.pathname.includes('/account.html')) {
+				helpers.elementLoaded(isoTest.selectorAccount, function() {
+					isoTest.accountBannerUpdate();
+				});
+			}
+
+			isoTest.signInWidgetUpdate();
+			isoTest.addEvents();
+		},
+		accountBannerUpdate : function() {
+			isoTest.log('accountBannerUpdate()');
+
+			var checkPoints = window.setInterval(function () {
+				if (ReservationStateTree.get(['User','profile','basicProfile','loyaltyData','points_to_date']) !== undefined) {
+					clearInterval(checkPoints);
+					var pointsEarned = ReservationStateTree.get(['User','profile','basicProfile','loyaltyData','points_to_date']);
+					if (pointsEarned > 999) {
+						if (document.querySelector('#account .account-header')) {
+							if (!document.querySelector('#account .iso-redeem-banner-container')) {
+								document.querySelector('#account .account-header').insertAdjacentHTML('afterend','<div class="iso-redeem-banner-container"><div class="iso-redeem-banner"><div class="iso-plus-icon"><img class="plus-icon" src="/etc/designs/ecom/dist/img/plus.gif" alt=""></div><div class="iso-redeem-banner-body"><span class="iso-redeem-banner-header">REDEEM POINTS!</span><span class="iso-redeem-banner-text">You have <span class="iso-redeem-qty iso-bold">X</span> <span class="iso-bold">Enterprise Plus Points</span> to use on your next rental. Start your reservation now, and select PAY IN POINTS before you choose a vehicle class. <a href="/en/loyalty/redeem-points.html" class="iso-learn-link">Learn how</a></span></div></div></div>');
+							}
+							document.querySelector('.iso-redeem-qty').innerText = pointsEarned;
+						}
+					}
+				}
+			}, 10);
+
+			setTimeout(function(){
+				clearInterval(checkPoints);
+			}, 5000);
+		},
+		signInWidgetUpdate : function() {
+			isoTest.log('signInWidgetUpdate()');
+
+			if (document.querySelector('.authenticated.utility-nav-content')) {
+				if (ReservationStateTree.get(['User','profile','basicProfile','loyaltyData','points_to_date']) !== undefined) {
+					var pointsEarned = ReservationStateTree.get()['User']['profile']['basicProfile']['loyaltyData']['points_to_date'];
+					if (pointsEarned > 999) {
+						if (!document.querySelector('.iso-redeem-signin-message')) {
+							document.querySelector('.authenticated.utility-nav-content .logged-in .points-container').insertAdjacentHTML('beforebegin','<div class="iso-redeem-signin-message"><div class="iso-plus-icon"><img class="plus-icon" src="/etc/designs/ecom/dist/img/plus.gif" alt=""></div><div class="iso-redeem-banner-body"><span class="iso-redeem-banner-header">REDEEM POINTS!</span><span class="iso-redeem-banner-text">You may have enough for a free day. <a href="/en/loyalty/redeem-points.html" class="iso-learn-link">Learn how</a></span></div></div>');
+						}
+					}
+				}
+			}
+		},
+		addEvents : function() {
+			isoTest.log('addEvents()');
+
+			document.addEventListener("keydown", function (event) {
+				var keyCode = (event.keyCode ? event.keyCode : event.which);
+
+        		if (keyCode == '13') {
+        			if ((event.target.matches('.btn') && event.target.innerText == "Sign In") || (event.target.matches('#utility-eplus-email') || event.target.matches('#utility-eplus-password') || event.target.matches('#username') || event.target.matches('#password'))) {
+						if (window.location.pathname.includes('/account.html')) {
+							helpers.elementLoaded(isoTest.selectorAccount, function() {
+								isoTest.accountBannerUpdate();
+								isoTest.signInWidgetUpdate();
+							});
+						} else {
+							helpers.elementLoaded('.authenticated.utility-nav-content', function() {
+								isoTest.signInWidgetUpdate();
+							});
+						}
+					}
+
+					if (event.target.matches('.btn.modal-button') && event.target.innerText == "Sign Out") {
+						if (document.querySelector('.iso-redeem-signin-message')) {
+							document.querySelector('.iso-redeem-signin-message').remove();
+						}
+
+						if (document.querySelector('.iso-redeem-banner-container')) {
+							document.querySelector('.iso-redeem-banner-container').remove();
+						}
+					}
+
+					if (event.target.matches('.btn.modal-button.modal-cancel') && event.target.innerText == "No, Cancel") {
+						helpers.elementLoaded('.authenticated.utility-nav-content', function() {
+							isoTest.signInWidgetUpdate();
+						});
+					}
+
+					if (event.target.matches('.login-widget .utility-nav-label') || event.target.matches('.login-widget .utility-nav-label .label')  || event.target.matches('.login-widget .utility-nav-label strong') || event.target.matches('.login-widget .utility-nav-label i')) {
+						if (document.querySelector('#login-container .login-widget.active')) {
+							isoTest.signInWidgetUpdate();
+						}
+					}
+        		}
+			}, false);
+
+			document.addEventListener('click', function (event) {
+				if (event.target.matches('.iso-learn-link')){
+					isoTest.fireTag('.iso-learn-link', 'Learn How');
+				}
+
+				if (event.target.matches('.btn') && event.target.innerText == "Sign In") {
+					if (window.location.pathname.includes('/account.html')) {
+						helpers.elementLoaded(isoTest.selectorAccount, function() {
+							isoTest.accountBannerUpdate();
+							isoTest.signInWidgetUpdate();
+						});
+					} else {
+						helpers.elementLoaded('.authenticated.utility-nav-content', function() {
+							isoTest.signInWidgetUpdate();
+						});
+					}
+				}
+
+				if (event.target.matches('.btn.modal-button') && event.target.innerText == "Sign Out") {
+					if (document.querySelector('.iso-redeem-signin-message')) {
+						document.querySelector('.iso-redeem-signin-message').remove();
+					}
+
+					if (document.querySelector('.iso-redeem-banner-container')) {
+						document.querySelector('.iso-redeem-banner-container').remove();
+					}
+				}
+
+				if (event.target.matches('.btn.modal-button.modal-cancel') && event.target.innerText == "No, Cancel") {
+					helpers.elementLoaded('.authenticated.utility-nav-content', function() {
+						isoTest.signInWidgetUpdate();
+					});
+				}
+
+				if (event.target.matches('.login-widget .utility-nav-label') || event.target.matches('.login-widget .utility-nav-label .label')  || event.target.matches('.login-widget .utility-nav-label strong') || event.target.matches('.login-widget .utility-nav-label i')) {
+					if (document.querySelector('#login-container .login-widget.active')) {
+						isoTest.signInWidgetUpdate();
+					}
+				}
+			}, false);
+		},
+		updateEVars: function() {
+			isoTest.log('updateEVars()');
+
+			if (s !== undefined && typeof s === 'object') {
+				isoTest.log('s code exists');
+				s.eVar90 = '';
+				s.events = '';
+				s.linkTrackVars = "eVar90";
+				s.eVar90 = isoTest.test + "::" + isoTest.creative;
+				s.tl( true, "o", s.eVar90 );
+				s.eVar90 = '';
+			} else {
+				isoTest.log('s code not found');
+			}
+		},
+		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
+
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		sCodeLoaded : function (callback) {
+			isoTest.log('sCodeLoaded::  - Checking...');
+			var sCodeCheck = setInterval(function(){
+				if (window.s !== undefined ){
+					isoTest.log('sCodeLoaded::  ' + s + ' - Found!');
+					clearInterval(sCodeCheck);
+					callback();
+				}
+			},100);
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
