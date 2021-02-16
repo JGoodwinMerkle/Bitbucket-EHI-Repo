@@ -1,0 +1,145 @@
+<style>
+.iso-scarcity {
+	background-color: #fff;
+	border: 1px solid #c3c3c3;
+	font-size: 14px;
+	margin-bottom: 1.5625rem;
+	padding: 14px 31px;
+}
+.iso-scarcity .content {
+	display: inline-block;
+	margin-left: 10px;
+	width: calc(100% - 30px);
+}
+.iso-scarcity .content small {
+	font-size: 11px;
+}
+.iso-icon .icon-alert-caution {
+	float: left;
+}
+.iso-scarcity strong {
+	font-weight: 700;
+}
+@media (max-width: 46.8em) {
+	.iso-scarcity {
+		padding: 14px 20px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Review Scarcity Message (Full Scale)',
+		creative : 'Challenger 0',
+		selector: '#commit .aside',
+		template : '<div class="iso-scarcity">\
+									<div class="iso-icon"><i class="icon icon-alert-caution"></i></div>\
+									<div class="content">We\'re experiencing <strong>high demand</strong> at {location} for {month}. Book now.</div>\
+								</div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			var pickupTime = ReservationStateTree.get(['session','reservationSession','pickup_time']);
+			var pickupTimeDate = new Date(pickupTime);
+
+			if(helpers.dateCheck("2020-03-01","2020/03/31",pickupTime)) {
+			    isoTest.log("Between date range");
+			    
+			    var scarcity = helpers.supplant(isoTest.template, {
+					'location' : ReservationStateTree.get(['session','reservationSession','pickup_location','name']),
+					'month' : helpers.getFullMonth(ReservationStateTree.get(['session','reservationSession','pickup_time']))
+				});
+				if(!document.querySelector('.iso-scarcity')){
+					document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',scarcity);
+				}
+
+			} else {
+			    isoTest.log("Outside date range");
+			}
+
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	  supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		},
+		dateCheck : function(from,to,check) {
+
+		    var fDate,lDate,cDate;
+		    fDate = Date.parse(from);
+		    lDate = Date.parse(to);
+		    cDate = Date.parse(check);
+
+		    if((cDate <= lDate && cDate >= fDate)) {
+		        return true;
+		    }
+		    return false;
+		},
+		months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+		getFullMonth: function(strDate){
+			var d = new Date(strDate);
+			return helpers.months[d.getMonth()];
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
