@@ -1,0 +1,216 @@
+<style>
+.vehicle-select__main {
+	border-top: none !important;
+}
+
+.iso-free-banner {
+	border-bottom: 3px solid black;
+	display: block;
+  padding: 0px 15px 30px 15px;
+  width: 100%;
+}
+
+.iso-free-text {
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 19px;
+	padding: 15px 15px 16px 152px;
+	text-align: left;
+  width: 100%;
+}
+
+
+.iso-dark {
+	background-color: #393A3B;
+	color: #FFFFFF;
+}
+
+.iso-light {
+	background-color: #F3F3F3;
+	color: #181918;
+	font-weight: 500;
+}
+
+.iso-dark.iso-free-text .iso-list {
+	padding-top: 10px;
+}
+
+.iso-light.iso-free-text .iso-list {
+	font-weight: 500;
+}
+
+.iso-free-text .iso-list .icon {
+	display: inline-block;
+	margin-right: 9px;
+	vertical-align: middle;
+}
+
+.iso-free-text .iso-list .icon.iso-check-icon {
+	background-image: url('https:/\/\www.enterprise.co.uk/content/dam/eu-cro/eucro-hp-benefits-icon-tick.png');
+}
+
+.iso-free-text .iso-bold {
+	font-weight: 700;
+}
+
+@media (min-width: 71em) {
+	.iso-free-text {
+	  padding: 15px 15px 16px 215px;
+	}
+}
+
+
+@media (min-width: 67.625em) {
+	.iso-free-banner {
+	  padding: 0px 0px 30px 0px;
+	}
+}
+
+@media (max-width: 70.9375em) {
+	.iso-free-text {
+	  padding: 15px 15px 16px 165px;
+	}
+}
+
+@media (max-width: 67.5625em) {
+	.iso-free-text {
+	  padding: 15px 15px 16px 150px;
+	}
+
+	.iso-free-text-container {
+		margin-left: .46875rem;
+	}
+}
+
+@media (max-width: 47.9375em) {
+	.iso-free-text {
+	  padding: 15px 15px 16px 115px;
+	}
+
+	.iso-free-banner {
+	  padding: 0px 0px 24px 0px;
+	}
+
+	.iso-light.iso-free-text {
+		padding-bottom: 10px;
+		padding-top: 10px;
+	}
+
+	.iso-free-text .iso-list {
+		font-size: 13px;
+		line-height: 17px;
+	}
+
+	.iso-dark.iso-free-text .iso-list {
+		padding-top: 8px;
+	}
+}
+
+@media (max-width: 40.8125em) {
+	.iso-free-text {
+	  padding: 15px 15px 16px 0px;
+	}
+
+	.iso-free-text-container {
+		margin-left: .9375rem;
+	}
+}
+
+@media (max-width: 351px) {
+	.iso-free-text.iso-light {
+		height: 55px;
+	}
+
+	.iso-free-text.iso-light .iso-list {
+		position: relative;
+	}
+
+	.iso-free-text.iso-light .iso-list .iso-list-text {
+		position: absolute;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.co.uk',
+		test : '(CONV) ENT 007 - Communicate Free Items Early UK',
+		creative : 'Challenger 1',
+		selector : '.vehicle-select__main',
+		freeMessage : "<div class='iso-free-banner cf'>\
+										<div class='iso-free-text iso-dark'>\
+											<div class='iso-free-text-container'>\
+												<div class='iso-bold'>All of these rentals include</div>\
+												<div class='iso-list'><i class='icon iso-check-icon'></i><span class='iso-list-text'>Free, unlimited mileage</span></div>\
+												<div class='iso-list'><i class='icon iso-check-icon'></i><span class='iso-list-text'>Damage waiver to reduce your excess</span></div>\
+											</div>\
+										</div>\
+										<div class='iso-free-text iso-light'>\
+											<div class='iso-free-text-container'>\
+												<div class='iso-list'><i class='icon icon-star-black'></i><span class='iso-list-text'>You can reduce the excess even more on the next step</span></div>\
+											</div>\
+										</div>\
+									</div>",
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log('chall()');
+			
+			if(!document.querySelector('.iso-free-banner')){
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',isoTest.freeMessage);
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
