@@ -1,0 +1,748 @@
+<style>
+.iso-mileage-filter .vehicle-filter__filter-list {
+	width: 100%;
+}
+
+.vehicle-list__item.iso-mileage-hidden,
+.vehicle-list__item.iso-baggage-hidden,
+.vehicle-list__item.iso-features-hidden {
+	display: none;
+}
+
+.vehicle-filter__amount-selected {
+	display: none;
+}
+
+#vehicle-filter-cta-expand .vehicle-filter__amount-selected {
+	display: none;
+}
+
+.iso-vehicle-filter__amount-selected {
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1;
+	margin-left: 5px;
+	position: relative;
+	top: -1px;
+	vertical-align: baseline;
+}
+
+.iso-mobile-vehicle-filter__amount-selected {
+    font-size: .875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1;
+	margin-left: 5px;
+    position: relative;
+    top: -1px;
+    vertical-align: baseline;
+}
+
+.iso-desktop-clear-all {
+	position: absolute;
+    right: 1.0625rem;
+    top: 18px;
+}
+
+.vehicle-filter--alternative .vehicle-filter__header {
+	position: relative;
+}
+
+.iso-mobile-clear-all {
+	position: absolute;
+    right: 1.25rem;
+}
+
+.iso-mileage-filter .checkbox__text,
+.iso-features-filter .checkbox__text {
+	text-transform: capitalize;
+}
+
+.iso-price.iso-hide {
+	display: none;
+}
+
+.iso-points.iso-hide {
+	display: none;
+}
+
+@media (max-width: 70.9375em) {
+	.vehicle-header__details {
+		position: relative;
+	}
+	.vehicle-header__details .btn.vehicle-header__filter {
+		opacity: 0;
+		position: absolute;
+		right: 0;
+    	z-index: 999;
+	}
+
+	.vehicle-header__details .btn.vehicle-header__filter.iso-mobile-filter-btn {
+		opacity: 1;
+		position: initial;
+	    right: auto;
+	    z-index: 99;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Vehicle Selection Feature and Baggage Filters',
+		creative : 'Challenger 1',
+		selector: '.vehicle-list',
+		content: '<div class="vehicle-filter__filter iso-{type}-filter">\
+						<div class="vehicle-filter__filter-header">\
+							<span class="vehicle-filter__title">{title}</span>\
+							<span class="vehicle-filter__price-indicator iso-price-indicator iso-price">Total from</span>\
+							<span class="vehicle-filter__price-indicator iso-price-indicator iso-points iso-hide">Points from</span>\
+						</div>\
+						<div class="vehicle-filter__list-content">\
+							<ul class="vehicle-filter__filter-list">\
+							</ul>\
+						</div>\
+					</div>',
+		contentExtrasEach: '<li class="vehicle-filter__filter-list-item">\
+							<label class="checkbox__label_{type} checkbox__label" tabindex="0" id="checkbox_{num}_{type}-label{mobile}">\
+								<span class="checkbox__label-checkbox checkbox__label-checkbox_{type}" >\
+									<input class="checkbox_{type} checkbox_{type}_{num}" type="checkbox" name="number_of_{type}" value="{num}" id="checkbox_{type}_{num}{mobile}">\
+									<i class="icon icon-check-green"></i>\
+								</span>\
+								<span class="checkbox__text">{num}</span>\
+							</label>\
+							<span class="vehicle-filter__price-indicator iso-price-indicator iso-{num}-{type}-price{mobile} iso-price">{price}</span>\
+							<span class="vehicle-filter__price-indicator iso-price-indicator iso-{num}-{type}-points{mobile} iso-points iso-hide">{points}</span>\
+						</li>',
+		filterTitles: ['Number of Bags', 'Popular Features'],
+		filterTypes: ['baggage', 'features'],
+		featureTypes: ['bluetooth','cruise control','electric sunroof','leather interior'],
+		allCarFiltering: {},
+		allCarFilteringPoints: {},
+		allFilterCosts: {
+			"baggage": {},
+			"features": {}
+		},
+		allFilterPoints: {
+			"baggage": {},
+			"features": {}
+		},
+		restricted: 0,
+		loggedIn: (ReservationStateTree.get(['User','loggedIn']) === true) ? true : false,
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.log('viewChange()');
+					isoTest.allCarFiltering = {};
+					isoTest.allCarFilteringPoints = {};
+					isoTest.allFilterCosts["baggage"] = {};
+					isoTest.allFilterCosts["features"] = {};
+					isoTest.allFilterPoints["baggage"] = {};
+					isoTest.allFilterPoints["features"] = {};
+					isoTest.restricted = 0;
+					if (document.querySelector('.iso-baggage-filter')) {
+						document.querySelector('.iso-baggage-filter').remove();
+					}
+					if (document.querySelector('.iso-features-filter')) {
+						document.querySelector('.iso-features-filter').remove();
+					}
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log("chall()");
+			for(var i = 0; i < isoTest.filterTitles.length; i++) {
+				var contentFilter = helpers.supplant(isoTest.content, {
+		        	'title' : isoTest.filterTitles[i],
+		        	'type' : isoTest.filterTypes[i]
+		     	});
+		     	document.querySelector('.vehicle-filter__content').insertAdjacentHTML('beforeend', contentFilter);
+			}
+			isoTest.addExtraFilters();
+
+			document.querySelector('.vehicle-header__details .btn.vehicle-header__filter').insertAdjacentHTML("afterend",'<button class="iso-mobile-filter-btn btn vehicle-header__filter btn-anchor btn--outline" tabindex="0" type="button" role="button"><i class="icon icon-filter"></i>Sort &amp; Filter </button>');
+
+			isoTest.addEvents();
+		},
+		addExtraFilters : function() {
+			isoTest.log("addExtraFilters()");
+			if (store.getState().toJS()['app']['vehicles']['availableVehicles'] != null){
+				var availableVehicles = store.getState().toJS()['app']['vehicles']['availableVehicles'];
+				var paymentType = 'PAYLATER';
+				
+				for(var i = 0; i < availableVehicles.length; i++) {
+					var carCode = availableVehicles[i]['code'];
+					var baggage = availableVehicles[i]['luggageCapacity'];
+					var features = availableVehicles[i]['features'];
+					var status = availableVehicles[i]['status'];
+					var priceTotal;
+					var pointsTotal;
+					var itemFeatures = {
+						"bluetooth": false,
+						"cruise control": false,
+						"electric sunroof": false,
+						"leather interior": false
+					}
+
+					if (status == "RESTRICTED_AT_RETAIL_RATE") {
+						isoTest.restricted += 1;
+					}
+
+					isoTest.allCarFiltering[carCode] = {};
+
+					if (isoTest.loggedIn) isoTest.allCarFilteringPoints[carCode] = {};
+
+					for(var f = 0; f < features.length; f++) {
+						for(var t = 0; t < isoTest.featureTypes.length; t++) {
+							if (typeof features[f]["value"] == "string") {
+								if (features[f]["value"].toLowerCase() === isoTest.featureTypes[t]){
+									var featureName = isoTest.featureTypes[t];
+									itemFeatures[featureName] = true;
+
+									if (isoTest.allFilterCosts["features"][featureName] == undefined) {
+										isoTest.allFilterCosts["features"][featureName] = Number.POSITIVE_INFINITY;
+										if (isoTest.loggedIn) isoTest.allFilterPoints["features"][featureName] = Number.POSITIVE_INFINITY;
+									}
+
+									if (availableVehicles[i]['charges'][paymentType] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view'] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'] != undefined) {
+										priceTotal = availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'];
+										if (priceTotal < isoTest.allFilterCosts["features"][featureName]) {
+											isoTest.allFilterCosts["features"][featureName] = Math.ceil(priceTotal);
+										}
+									}
+
+									if (isoTest.loggedIn) {
+										if (availableVehicles[i]['charges']["REDEMPTION"] != undefined && availableVehicles[i]['charges']["REDEMPTION"]['total_price_view'] != undefined && availableVehicles[i]['charges']["REDEMPTION"]['total_price_view']['amount'] != undefined) {
+											pointsTotal = parseInt(availableVehicles[i]['charges']["REDEMPTION"]['total_price_view']['amount']);
+											if (pointsTotal < isoTest.allFilterPoints["features"][featureName]) {
+												isoTest.allFilterPoints["features"][featureName] = pointsTotal;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+
+					for(var y = 0; y < isoTest.featureTypes.length; y++) {
+						var feature = isoTest.featureTypes[y];
+						isoTest.allCarFiltering[carCode][feature] = itemFeatures[feature];
+						if (isoTest.loggedIn) isoTest.allCarFilteringPoints[carCode][feature] = itemFeatures[feature];
+					}
+
+					isoTest.allCarFiltering[carCode]["baggage"] = baggage;
+					if (isoTest.allFilterCosts["baggage"][baggage] == undefined) {
+						isoTest.allFilterCosts["baggage"][baggage] = Number.POSITIVE_INFINITY;
+						if (isoTest.loggedIn) isoTest.allFilterPoints["baggage"][baggage] = Number.POSITIVE_INFINITY;
+					}
+
+					if (availableVehicles[i]['charges'][paymentType] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view'] != undefined && availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'] != undefined) {
+						priceTotal = availableVehicles[i]['charges'][paymentType]['total_price_view']['amount'];
+						if (priceTotal < isoTest.allFilterCosts['baggage'][baggage]) {
+							isoTest.allFilterCosts['baggage'][baggage] = Math.ceil(priceTotal);
+						}
+					}
+
+					if (isoTest.loggedIn) {
+						if (availableVehicles[i]['charges']["REDEMPTION"] != undefined && availableVehicles[i]['charges']["REDEMPTION"]['total_price_view'] != undefined && availableVehicles[i]['charges']["REDEMPTION"]['total_price_view']['amount'] != undefined) {
+							pointsTotal = parseInt(availableVehicles[i]['charges']["REDEMPTION"]['total_price_view']['amount']);
+							if (pointsTotal < isoTest.allFilterPoints['baggage'][baggage]) {
+								isoTest.allFilterPoints['baggage'][baggage] = pointsTotal;
+							}
+						}
+
+					}
+				}
+
+				Object.keys(isoTest.allFilterCosts['baggage']).forEach(function(key) {
+					if (isoTest.allFilterCosts['baggage'][key] == Number.POSITIVE_INFINITY) {
+				    	isoTest.allFilterCosts['baggage'][key] = "--";
+				  	}
+				});
+
+				Object.keys(isoTest.allFilterCosts['features']).forEach(function(key) {
+					if (isoTest.allFilterCosts['features'][key] == Number.POSITIVE_INFINITY) {
+				    	isoTest.allFilterCosts['features'][key] = "--";
+				  	}
+				});
+
+				if (isoTest.loggedIn) {
+					Object.keys(isoTest.allFilterPoints['baggage']).forEach(function(key) {
+						if (isoTest.allFilterPoints['baggage'][key] == Number.POSITIVE_INFINITY) {
+					    	isoTest.allFilterPoints['baggage'][key] = "--";
+					  	}
+					});
+
+					Object.keys(isoTest.allFilterPoints['features']).forEach(function(key) {
+						if (isoTest.allFilterPoints['features'][key] == Number.POSITIVE_INFINITY) {
+					    	isoTest.allFilterPoints['features'][key] = "--";
+					  	} 
+					});
+				}
+				
+				isoTest.updateFilterSection('.vehicle-filter__content .iso-baggage-filter',isoTest.allFilterCosts["baggage"],'baggage','desktop',isoTest.allFilterPoints["baggage"]);
+				isoTest.updateFilterSection('.vehicle-filter__content .iso-features-filter',isoTest.allFilterCosts["features"],'features','desktop',isoTest.allFilterPoints["features"]);
+			}
+		},
+		updateFilterSection : function(selector,filterCostObject,filterType,device,filterPointsObject) {
+			isoTest.log("updateFilterSection(): " + filterType);
+
+			Object.keys(filterCostObject).sort().forEach(function(key) {
+				var priceSymbol = ReservationStateTree.get(['session','reservationSession','defaultTopNavAmount','symbol']);
+				var price;
+				var mobile = '-mobile';
+				var points;
+
+				if (device != "mobile") {
+					mobile = '';
+				}
+
+				if (filterCostObject[key] != "--") {
+					price = priceSymbol + filterCostObject[key];
+				} else {
+					price = filterCostObject[key];
+				}
+
+				if (isoTest.loggedIn) {
+					if (filterPointsObject[key] != "--") {
+						points = filterPointsObject[key].toLocaleString() + " Pts";
+					} else {
+						points = filterPointsObject[key];
+					}
+				} else {
+					points = '';
+				}
+
+			  	var filterContent = helpers.supplant(isoTest.contentExtrasEach, {
+		        	'num' : key,
+		        	'price' : price,
+		        	'type' : filterType,
+		        	'mobile' : mobile,
+		        	'points' : points
+		     	});
+
+		     	document.querySelector(selector).insertAdjacentHTML('beforeend', filterContent);
+			});
+
+			if (isoTest.loggedIn) isoTest.checkRedemptionType();
+		},
+		checkForFilters : function() {
+			isoTest.log("checkForFilters()");
+
+			for(var t = 0; t < isoTest.filterTypes.length; t++) {
+				var type = isoTest.filterTypes[t];
+				var filter = document.querySelectorAll('.checkbox__label-checkbox_'+type);
+				var filterChecked = document.querySelectorAll('.checkbox__label-checkbox_'+type+'.checked');
+				var vehicleItemsHidden = document.querySelectorAll('.vehicle-list__item.iso-'+type+'-hidden');
+
+				if (filterChecked.length == 0 || filter.length == filterChecked.length) {
+					if (vehicleItemsHidden.length > 0) {
+						for(var i = 0; i < vehicleItemsHidden.length; i++) {
+							vehicleItemsHidden[i].classList.remove('iso-'+type+'-hidden');
+						}
+					} 
+
+					document.querySelector('.unavailable-vehicles').style.display = "block";
+				} else {
+					if (filterChecked.length > 0) {
+						var checkedValues = [];
+						for(var f = 0; f < filterChecked.length; f++) {
+							if (type == "baggage") {
+								checkedValues.push(parseInt(filterChecked[f].querySelector('input').value)); 
+							} else {
+								checkedValues.push(filterChecked[f].querySelector('input').value);
+							}
+						}
+						isoTest.updateItemsAll(checkedValues,type);
+					} 
+				}
+			}
+			isoTest.checkForAllFilters();
+		},
+		checkForAllFilters : function() {
+			isoTest.log("checkForAllFilters()");
+
+			var baggage = document.querySelectorAll('.checkbox__label-checkbox_baggage');
+			var baggageChecked = document.querySelectorAll('.checkbox__label-checkbox_baggage.checked');
+			var features = document.querySelectorAll('.checkbox__label-checkbox_features');
+			var featuresChecked = document.querySelectorAll('.checkbox__label-checkbox_features.checked');
+			var allUnchecked = (baggageChecked.length == 0) && (featuresChecked.length == 0);
+			var allChecked = (baggage.length == baggageChecked.length) && (features.length == featuresChecked.length);
+			var allVehicles = document.querySelectorAll('.vehicle-list__item');
+
+			if (allUnchecked || allChecked) {
+				if (allVehicles.length > 0) {
+					for(var i = 0; i < allVehicles.length; i++) {
+						allVehicles[i].classList.remove('iso-baggage-hidden');
+						allVehicles[i].classList.remove('iso-features-hidden');
+					}
+				}
+
+				isoTest.checkEmptyList();
+				document.querySelector('.unavailable-vehicles').style.display = "block";
+			} else {
+				isoTest.checkEmptyList();
+			}
+		},
+		updateItemsAll : function(values,type) {
+			isoTest.log("updateItemsAll()");
+			var vehicleItems = document.querySelectorAll('.vehicle-list__item');
+
+			if (vehicleItems.length > 0) {
+				for(var i = 0; i < vehicleItems.length; i++) {
+					var dataInfo = vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
+					var carClass = dataInfo[1];
+					var checkStatus;
+
+					if (type == "baggage") {
+						checkStatus = values.includes(isoTest.allCarFiltering[carClass]["baggage"]);
+					}
+					
+					if (type == "features") {
+						var feature1 = values.includes(isoTest.featureTypes[0]) && (isoTest.allCarFiltering[carClass][isoTest.featureTypes[0]] == true);
+						var feature2 = values.includes(isoTest.featureTypes[1]) && (isoTest.allCarFiltering[carClass][isoTest.featureTypes[1]] == true);
+						var feature3 = values.includes(isoTest.featureTypes[2]) && (isoTest.allCarFiltering[carClass][isoTest.featureTypes[2]] == true);
+						var feature4 = values.includes(isoTest.featureTypes[3]) && (isoTest.allCarFiltering[carClass][isoTest.featureTypes[3]] == true);
+
+						checkStatus = feature1 || feature2 || feature3 || feature4;
+					}
+
+					if (checkStatus) {
+						vehicleItems[i].classList.remove('iso-'+type+'-hidden');
+					} else {
+						vehicleItems[i].classList.add('iso-'+type+'-hidden');
+					}
+				}
+			}			
+		},
+		checkEmptyList : function() {
+			isoTest.log("checkEmptyList()");
+			var vehicleItemsList = document.querySelectorAll('.vehicle-list');
+			var vehicleItems;
+			if (vehicleItemsList.length > 0) {
+				var vehicleItems = vehicleItemsList[0].querySelectorAll('.vehicle-list__item');
+				var vehicleItemsHiddenBaggage = vehicleItemsList[0].querySelectorAll('.vehicle-list__item.iso-baggage-hidden');
+				var vehicleItemsHiddenFeatures= vehicleItemsList[0].querySelectorAll('.vehicle-list__item.iso-features-hidden');
+				var amount;
+
+				if ((vehicleItems.length == vehicleItemsHiddenBaggage.length) || (vehicleItems.length == vehicleItemsHiddenFeatures.length)) {
+					document.querySelector('.vehicle-list__empty-message').style.display = "block";
+				} else {
+					document.querySelector('.vehicle-list__empty-message').style.display = "none";
+				}
+
+				var count = 0;
+				for(var i = 0; i < vehicleItems.length; i++) {
+					if (!vehicleItems[i].classList.value.includes('hidden')) {
+						count += 1;
+					}
+				}
+				amount = count;
+
+				if (document.querySelector('.vehicle-header__title .vehicle-header__result-total')) {
+					if (amount == 0) {
+						document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = '';
+					} else {
+						document.querySelector('.vehicle-header__title .vehicle-header__result-total').innerHTML = amount + ' Results';
+					}
+				}
+
+				if (document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button')) {
+					if (amount == 0) {
+						document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button').classList.add('disabled');
+						document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button').disabled = true;
+						document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button').innerHTML = amount + ' results';
+					} else {
+						document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button').classList.remove('disabled');
+						document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button').disabled = false;
+						document.querySelector('.ReactModal__Content .modal-button-bar .btn.modal-button.single-button').innerHTML = amount + ' results';
+					}
+				}
+
+				var unavialableList = document.querySelectorAll('.unavailable-vehicles .vehicle-list__item');
+
+				if (unavialableList.length > 0) {
+					var unavailCount = 0;
+					for(var i = 0; i < unavialableList.length; i++) {
+						if (!unavialableList[i].classList.value.includes('hidden')) {
+							unavailCount += 1;
+						}
+					}
+
+					var unavail = unavailCount;
+					if (unavail > 0) {
+						document.querySelector('.unavailable-vehicles .btn.unavailable-vehicles__button').innerHTML = '<i class="icon icon-nav-carrot-down"></i>Show Unavailable Vehicles ('+unavail+')';
+					} else {
+						if (vehicleItems.length && (amount == 0)) {
+							document.querySelector('.vehicle-list__empty-message').style.display = "block";
+						}
+						document.querySelector('.unavailable-vehicles').style.display = "none";
+					}
+				} else {
+					if (vehicleItems.length && (amount == 0)) {
+						document.querySelector('.vehicle-list__empty-message').style.display = "block";
+					}
+					document.querySelector('.unavailable-vehicles').style.display = "none";
+				}
+
+				isoTest.checkFilterCount();
+			}						
+		},
+		checkFilterCount : function() {
+			isoTest.log("checkFilterCount()");
+
+			var filterCount = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label .checkbox__label-checkbox.checked').length;
+			var elemFilterAmount = document.querySelector('.iso-vehicle-filter__amount-selected');
+
+			if (!elemFilterAmount) {
+				if (document.querySelectorAll('.vehicle-filter__header-title').length > 0) {
+					document.querySelectorAll('.vehicle-filter__header-title')[0].insertAdjacentHTML("beforeend", '<span class="iso-vehicle-filter__amount-selected">('+ filterCount +')</span>');
+				}				
+			} else {
+				if (filterCount > 0) {
+					elemFilterAmount.innerHTML = '(' + filterCount + ')';
+				} else {
+					elemFilterAmount.innerHTML = '';
+					elemFilterAmount.parentNode.removeChild(elemFilterAmount);
+				}
+			}
+
+			if (filterCount > 0) {
+				if (!document.querySelector('.vehicle-select__aside .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-anchor')) {
+					document.querySelector('.vehicle-select__aside .vehicle-filter__header').insertAdjacentHTML("beforeend", '<span class="vehicle-filter__header-cta iso-desktop-clear-all"><button class="btn vehicle-filter__header-link btn-anchor" tabindex="0" type="button" role="button" data-dtm-tracking="car_filters|clear_filters|select">Clear All</button></span>');
+				} else {
+					if (document.querySelector('.iso-desktop-clear-all')) {
+						document.querySelector('.iso-desktop-clear-all').remove();
+					}
+				}
+
+				if (!document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header .vehicle-filter__header-cta .vehicle-filter__header-link.btn-secondary') && document.querySelector('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header')) {
+					document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header')[1].insertAdjacentHTML("beforeend", '<span class="vehicle-filter__header-cta iso-mobile-clear-all"><button class="btn vehicle-filter__header-link btn-secondary" tabindex="0" type="button" role="button" data-dtm-tracking="cars|filter_modal|clear">Clear All</button></span>');
+				} else {
+					if (document.querySelector('.iso-desktop-clear-all')) {
+						document.querySelector('.iso-mobile-clear-all').remove();
+					}
+				}
+				document.querySelector('.iso-mobile-filter-btn').innerHTML = '<i class="icon icon-filter"></i>Sort &amp; Filter (' + filterCount +')';
+			} else {
+				if (document.querySelector('.iso-desktop-clear-all')) {
+					document.querySelector('.iso-desktop-clear-all').remove();
+				}
+				document.querySelector('.iso-mobile-filter-btn').innerHTML = '<i class="icon icon-filter"></i>Sort &amp; Filter';
+			}			
+		},
+		checkRedemptionType : function() {
+			isoTest.log("checkRedemptionType()");
+
+			var allRedemptionTypes = document.querySelectorAll('.iso-price-indicator');
+			var pointsActive = document.querySelector(".vehicle-select__aside .vehicle-redemption--aside .vehicle-redemption__options-cta[data-dtm-tracking*='redeem_points']").parentNode.classList.contains('vehicle-redemption__options-item--active') ? true : false;
+			for(var p = 0; p < allRedemptionTypes.length; p++) {
+				if(pointsActive) {
+					if (allRedemptionTypes[p].classList.contains("iso-points")) {
+						allRedemptionTypes[p].classList.remove("iso-hide");
+					} else {
+						allRedemptionTypes[p].classList.add("iso-hide");
+					}
+					
+				} else {
+					if (allRedemptionTypes[p].classList.contains("iso-points")) {
+						allRedemptionTypes[p].classList.add("iso-hide");
+					} else {
+						allRedemptionTypes[p].classList.remove("iso-hide");
+					}
+				}
+			}
+		},
+		addEvents : function() {
+			isoTest.log("addEvents()");
+			var filterElements = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label-checkbox input');
+			for(var e = 0; e < filterElements.length; e++) {
+				filterElements[e].addEventListener('click', function(event){
+					for(var k = 0; k < isoTest.filterTypes.length; k++) {
+						var filterNameDesktop = isoTest.filterTypes[k];
+						if (event.target.id.includes(filterNameDesktop)) {
+							if (event.target.parentNode.classList.contains("checked")) {
+								event.target.parentNode.classList.remove('checked');
+							} else {
+								event.target.parentNode.classList.add('checked');
+								var category = filterNameDesktop[0].toUpperCase() + filterNameDesktop.slice(1);
+
+								isoTest.fireTag(event.target.id, "RW:CarClass:Filter:"+category+":"+event.target.value);
+							}
+						}	
+					}				
+					setTimeout(function(){isoTest.checkForFilters() }, 100);
+				}, false);
+			}
+
+			document.addEventListener("click", function(event){
+				if ((event.target.classList.contains('vehicle-filter__header-link') && event.target.classList.contains('btn-anchor')) || (event.target.classList.contains('vehicle-filter__header-link') && event.target.classList.contains('btn-secondary'))) {
+
+					if (document.querySelector('.iso-desktop-clear-all')) document.querySelector('.iso-desktop-clear-all').remove();
+					if (document.querySelector('.iso-mobile-clear-all')) document.querySelector('.iso-mobile-clear-all').remove();
+
+					for(var f = 0; f < isoTest.filterTypes.length; f++) {
+						var checked = document.querySelectorAll('.checkbox__label-checkbox_'+isoTest.filterTypes[f]+'.checked');
+						if (checked.length > 0) {
+							for(var c = 0; c < checked.length; c++) {
+								checked[c].classList.remove('checked');
+							}
+						}
+					}
+						
+					setTimeout(function(){isoTest.checkForFilters() }, 100);
+				}
+
+				if (isoTest.loggedIn) {
+					if (event.target.classList.contains('vehicle-redemption__options-cta')) {
+						isoTest.checkRedemptionType();
+					}
+				}
+			}, false);
+
+			document.querySelector('button.vehicle-header__filter').addEventListener('click', function(event){
+				helpers.elementLoaded('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__header', function() {
+					for(var a = 0; a < isoTest.filterTitles.length; a++) {
+						var contentFilter = helpers.supplant(isoTest.content, {
+				        	'title' : isoTest.filterTitles[a],
+				        	'type' : isoTest.filterTypes[a]
+				     	});
+				     	document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__content')[1].insertAdjacentHTML('beforeend', contentFilter);
+					}
+
+					for(var t = 0; t < isoTest.filterTypes.length; t++) {
+						var filter = isoTest.filterTypes[t];
+						isoTest.updateFilterSection('.ReactModal__Content .vehicle-filter--alternative .iso-'+filter+'-filter',isoTest.allFilterCosts[filter],filter,'mobile',isoTest.allFilterPoints[filter]);
+						var filterDesktop = document.querySelectorAll('.vehicle-select__aside .vehicle-filter__filter .checkbox__label-checkbox_'+filter);
+						var filterMobile = document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter .checkbox__label-checkbox_'+filter);
+						if (filterDesktop.length > 0) {
+							for(var d = 0; d < filterDesktop.length; d++) {
+								if (filterDesktop[d].classList.contains('checked')) {
+									filterMobile[d].classList.add('checked');
+								}
+							}
+						}
+					}
+
+					isoTest.checkEmptyList();
+
+					var filterElementsMobile = document.querySelectorAll('.ReactModal__Content .vehicle-filter--alternative .vehicle-filter__filter .checkbox__label-checkbox input');
+					for(var i = 0; i < filterElementsMobile.length; i++) {
+						filterElementsMobile[i].addEventListener('click', function(event){
+							for(var b = 0; b < isoTest.filterTypes.length; b++) {
+								var filterName = isoTest.filterTypes[b];
+								if (event.target.id.includes(filterName)) {
+									if (event.target.parentNode.classList.contains("checked")) {
+										event.target.parentNode.classList.remove('checked');
+										
+										var val = event.target.value;
+										document.querySelector('.vehicle-select__aside .iso-'+filterName+'-filter.vehicle-filter__filter .checkbox__label-checkbox input[value="'+val+'"]').parentNode.classList.remove('checked');
+
+									} else {
+										event.target.parentNode.classList.add('checked');
+					
+										var category = filterName[0].toUpperCase() + filterName.slice(1);
+										var val = event.target.value;
+
+										document.querySelector('.vehicle-select__aside .iso-'+filterName+'-filter.vehicle-filter__filter .checkbox__label-checkbox input[value="'+val+'"]').parentNode.classList.add('checked');
+
+										isoTest.fireTag(event.target.id, "RW:CarClass:Filter:"+category+":"+val);
+									}
+								}	
+							}						
+							setTimeout(function(){isoTest.checkForFilters() }, 100);
+						}, false);
+					}
+				});				
+			}, false);
+		},
+		fireTag : function(element, value) {
+			isoTest.log('fireTag()');
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		},
+		dependsLoaded : function (callback) { 
+			isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Start...");
+			window.clearTimeout(isoTest.timer);
+			//Check for jQuery and _a object
+			if (typeof store !== 'undefined' && typeof store.getState === 'function' && typeof store.getState().toJS === 'function') {
+				if (typeof callback === "function") {
+					
+					isoTest.log(isoTest.test + " - " + isoTest.creative + " - dependsLoaded - Ready!");
+					
+					callback();
+				}
+			} else {
+				isoTest.timer = window.setTimeout(function() {
+					isoTest.dependsLoaded(callback);
+				}, 100);
+			}
+		}
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.dependsLoaded(function(){ 
+		isoTest.init();
+	});
+})();
+</script>
