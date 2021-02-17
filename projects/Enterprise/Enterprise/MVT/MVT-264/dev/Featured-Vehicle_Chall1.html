@@ -85,7 +85,7 @@
 		debug : false,
 		account : 'Enterprise',
 		portfolio : 'Enterprise.com',
-		test : 'Featured Vehile 3.0',
+		test : 'Featured Vehile 2.0',
 		creative : 'Challenger 1',
 		filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
 		vehicleItem: '.vehicle-list__item',
@@ -93,55 +93,49 @@
 		template: '<div class="iso-tag">{tag}</div>',
 		featured: {
 			0: {
-				car: 'LYMR',
-				tag: 'Try Something New',
+				car: 'WCAE',
+				tag: '<strong>Try Something New!</strong>',
 				shortTag: 'Try Something New'
 			},
 			1: {
-				car: 'LYMR',
-				tag: 'Try Something New',
+				car: 'WCAE',
+				tag: '<strong>Try Something New!</strong>',
 				shortTag: 'Try Something New'
 			},
 			2: {
-				car: 'LYMR',
-				tag: 'Try Something New',
+				car: 'WCAE',
+				tag: '<strong>Try Something New!</strong>',
 				shortTag: 'Try Something New'
 			},
 			3: {
-				car: 'LYMR',
-				tag: 'Try Something New',
+				car: 'WCAE',
+				tag: '<strong>Try Something New!</strong>',
 				shortTag: 'Try Something New'
 			},
 			4: {
-				car: 'LYMR',
-				tag: 'Try Something New',
+				car: 'WCAE',
+				tag: '<strong>Try Something New!</strong>',
 				shortTag: 'Try Something New'
 			},
 			5: {
-				car: 'LYMR',
-				tag: 'Try Something New',
+				car: 'WCAE',
+				tag: '<strong>Try Something New!</strong>',
 				shortTag: 'Try Something New'
 			},
 			6: {
-				car: 'LYMR',
-				tag: 'Try Something New',
+				car: 'WCAE',
+				tag: '<strong>Try Something New!</strong>',
 				shortTag: 'Try Something New'
 			}
 		},
-		altCar: 'SFAR',
-		featAvail: false,
+		altCar: 'IFAR',
 		audience: {
-			group: ['32']
+			group: ['32','23','30','16']
 		},
+		featAvail: false,
 		init : function() {
 
 			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
-
-			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-				//_satellite.track('target_variables');
-			}
 
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
@@ -198,12 +192,12 @@
 			// Filters and sort
 			var filterElements = document.querySelectorAll('.vehicle-filter__filter .form-checkbox,.vehicle-filter__header-link, .vehicle-redemption__options-cta, .iso-pay');
 			for(var i = 0; i < filterElements.length; i++) {
-		    	filterElements[i].addEventListener('click', function(){
-					isoTest.log('Event: Filter Checkbox Click');
-					setTimeout(isoTest.checkSort,200);
-		    	}, false);
+			    filterElements[i].addEventListener('click', function(){
+						isoTest.log('Event: Filter Checkbox Click');
+						setTimeout(isoTest.checkSort,200);
+			    }, false);
 			}
-
+			
 			document.addEventListener('click',function(e){
 				if(e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') || e.target.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]')){
 					if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){

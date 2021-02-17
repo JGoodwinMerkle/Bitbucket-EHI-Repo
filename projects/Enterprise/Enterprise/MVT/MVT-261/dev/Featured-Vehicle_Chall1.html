@@ -93,55 +93,46 @@
 		template: '<div class="iso-tag">{tag}</div>',
 		featured: {
 			0: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag : 'Most Versatile'
 			},
 			1: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag : 'Most Versatile'
 			},
 			2: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag : 'Most Versatile'
 			},
 			3: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag : 'Most Versatile'
 			},
 			4: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag : 'Most Versatile'
 			},
 			5: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag : 'Most Versatile'
 			},
 			6: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag : 'Most Versatile'
 			}
 		},
-		altCar: 'SFAR',
+		altCar: '',
 		featAvail: false,
-		audience: {
-			group: ['32']
-		},
 		init : function() {
 
 			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
-
-			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-				//_satellite.track('target_variables');
-			}
 
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
@@ -156,7 +147,6 @@
 
 			window.addEventListener('hashchange', isoTest.hashHandler, false);
 			window.addEventListener('ttFeatVehicle', isoTest.labelVehicle, false);
-
 		},
 		hashHandler : function(){
 			if(/cars/.test(location.hash)){
@@ -169,24 +159,10 @@
 		},
 		chall : function(){
 			isoTest.log('chall()');
-			isoTest.branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']);
-			var groupNumber = ReservationStateTree.get(['session', 'reservationSession','pickupLocationWithDetail','location_id']).slice(0,2);
-			var isGroup = isoTest.checkGroup(groupNumber);
-			isoTest.log('isGroup:: ' + isGroup);
-
-			if(isGroup){
+			var isBranchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']) == 'airport';
+			if(!isBranchType){
 				isoTest.runTest();
 			}
-		},
-		checkGroup: function(groupNumber){
-			isoTest.log('checkGroup()');
-			var checksOut = false;
-			isoTest.audience.group.forEach(function(g){
-				if(groupNumber.substring(0,g.length) == g){
-					checksOut = true;
-				}
-			});
-			return checksOut;
 		},
 		runTest : function() {
 			isoTest.log('runTest()');
@@ -293,6 +269,7 @@
 					}
 				}
 			}
+
 			var e = new Event('ttFeatOrder');
 			window.dispatchEvent(e);
 		},
@@ -304,9 +281,9 @@
 					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
 					callback();
 				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
-	        }
+		    } else {
+		        isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+		    }
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
@@ -326,7 +303,7 @@
 	      	}
 	    },
 	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
+				return str.replace(/{([^{}]*)}/g, function(a, b) {
 		        var p = b.split(/\./),
 		            c = o;
 		        for (var i = 0; i < p.length; i++) {

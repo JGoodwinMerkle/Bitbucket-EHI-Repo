@@ -3,9 +3,6 @@
 	margin-right: -15px;
 	margin-top: -3px;
 }
-.vehicle-not-enough-points {
-	/*margin-top: 10px;*/
-}
 .vehicle-list.iso-featured {
 	display: flex;
 	flex-flow: wrap;
@@ -14,13 +11,7 @@
 	order: 0;
 	width: 100%;
 }
-.vehicle-list__item.iso-preSelectedClass {
-	border: 0;
-	margin-top: -3px;
-	/*order: -1;*/
-}
 .vehicle-list__item.iso-preSelectedClass .vehicle-item {
-	border: 3px solid #0A643A;
 	padding-right: 15px;
 	margin-right: -15px;
 }
@@ -50,31 +41,28 @@
 .iso-preSelectedClass-filtered .vehicle-item.is-search-by-filter, .iso-preSelectedClass-filtered .vehicle-item.is-pre-selected {
     border-color: #169a5a;
 }
-.iso-preSelectedClass.iso-preselected-second{
+.iso-preSelectedClass {
     border-bottom: .125rem solid #c3c3c3;
     margin-top: 7px;
 }
-.iso-preselected-second .iso-tag {
-		display:inline;
-		font-size: 12px;
-		font-weight: 600;
-		padding: 4px 15px;
-		position: relative;
+.iso-tag {
+	display:inline;
+	font-size: 12px;
+	font-weight: 600;
+	padding: 4px 15px;
+	position: relative;
     width: auto;
 }
-.iso-preselected-second .iso-tag:after{
+.iso-tag:after{
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 6px solid #0A643A;
     bottom: -6px;
-		content: " ";
+	content: " ";
     height: 0;
     left: 20px;
     position: absolute;
     width: 0;
-}
-.iso-preSelectedClass.iso-preselected-second .vehicle-item{
-    border: 0;
 }
 @media (max-width: 1081px){
 	.vehicle-enough-points.cf, .vehicle-not-enough-points {
@@ -85,10 +73,8 @@
 		margin-right: 0;
 	}
 	.iso-tag {
-		width: 100%;
-	}
-	.iso-preselected-second .iso-tag{
 		margin-left: 5px;
+		width: 100%;
 	}
 }
 </style>
@@ -99,7 +85,7 @@
 		debug : false,
 		account : 'Enterprise',
 		portfolio : 'Enterprise.com',
-		test : 'Featured Vehile 2.0: List D',
+		test : 'Featured Vehile 3.0: List D',
 		creative : 'Challenger 1',
 		filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
 		vehicleItem: '.vehicle-list__item',
@@ -108,37 +94,37 @@
 		featured: {
 			0: {
 				car: 'SFAR',
-				tag: '<strong>Best Choice!</strong> Plenty of room for 5 passengers and their luggage.',
+				tag: 'Most Versatile',
 				shortTag: 'Most Versatile'
 			},
 			1: {
-				car: 'PPAR',
-				tag: '<strong>Best Choice!</strong> Space and durability for hauling items that won’t fit in your own car.',
-				shortTag: 'Best for Hauling'
+				car: 'SFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			2: {
-				car: 'PPAR',
-				tag: '<strong>Best Choice!</strong> Space and durability for hauling items that won’t fit in your own car.',
-				shortTag: 'Best for Hauling'
+				car: 'SFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			3: {
-				car: 'PPAR',
-				tag: '<strong>Best Choice!</strong> Space and durability for hauling items that won’t fit in your own car.',
-				shortTag: 'Best for Hauling'
+				car: 'SFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			4: {
 				car: 'SFAR',
-				tag: '<strong>Best Choice!</strong> Plenty of room for 5 passengers and their luggage.',
+				tag: 'Most Versatile',
 				shortTag: 'Most Versatile'
 			},
 			5: {
 				car: 'SFAR',
-				tag: '<strong>Best Choice!</strong> Plenty of room for 5 passengers and their luggage.',
+				tag: 'Most Versatile',
 				shortTag: 'Most Versatile'
 			},
 			6: {
 				car: 'SFAR',
-				tag: '<strong>Best Choice!</strong> Plenty of room for 5 passengers and their luggage.',
+				tag: 'Most Versatile',
 				shortTag: 'Most Versatile'
 			}
 		},
@@ -210,17 +196,20 @@
 			isoTest.onLoadpreSelected = document.querySelectorAll(isoTest.preSelected).length > 0;
 			isoTest.checkSort();
 
-			var filterElements = document.querySelectorAll('.vehicle-filter__filter .checkbox__label-checkbox,.vehicle-filter__header-link, .vehicle-redemption__options-cta, .iso-pay');
+			// Filters and sort
+			var filterElements = document.querySelectorAll('.vehicle-filter__filter .form-checkbox,.vehicle-filter__header-link, .vehicle-redemption__options-cta, .iso-pay');
 			for(var i = 0; i < filterElements.length; i++) {
 		    	filterElements[i].addEventListener('click', function(){
 					isoTest.log('Event: Filter Checkbox Click');
 					setTimeout(isoTest.checkSort,200);
-		    }, false);
+		    	}, false);
 			}
 
 			document.addEventListener('click',function(e){
 				if(e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') || e.target.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]')){
-					isoTest.checkSort();
+					if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
+						isoTest.checkSort();
+					}
 				}
 			});
 			document.querySelector('#vehicleSortBy').addEventListener('change',function(){
@@ -261,8 +250,8 @@
 			        var avail = dataInfo[2];
 			        isoTest.log(carClass + ' :: ' + avail);
 			        if(carClass == featClass && (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE')){
-									isoTest.addPreselect(isoTest.vehicleItems[i]);
-									isoTest.featAvail = carClass == isoTest.altCar ? false : true;
+						isoTest.addPreselect(isoTest.vehicleItems[i]);
+						isoTest.featAvail = carClass == isoTest.altCar ? false : true;
 			        }
 			    }
 			}
@@ -277,7 +266,7 @@
 			}
 
 			var tag = helpers.supplant(isoTest.template, {
-					'tag' : isoTest.onLoadpreSelected ? isoTest.vehicleClass.shortTag : isoTest.vehicleClass.tag
+				'tag' : isoTest.onLoadpreSelected ? isoTest.vehicleClass.shortTag : isoTest.vehicleClass.tag
 			});
 			vehicleItem.insertAdjacentHTML('afterbegin', tag);
 		},
@@ -329,14 +318,14 @@
 	};
 	var helpers = {
 		getQueryParam: function(variable) {
-	      var query = window.location.search.substring(1);
-	      var vars = query.split('&');
-	      for (var i = 0; i < vars.length; i++) {
-	        var pair = vars[i].split('=');
-	        if (decodeURIComponent(pair[0]) == variable) {
-	        	return decodeURIComponent(pair[1]);
-	        }
-	      }
+	      	var query = window.location.search.substring(1);
+	      	var vars = query.split('&');
+	      	for (var i = 0; i < vars.length; i++) {
+	        	var pair = vars[i].split('=');
+	        	if (decodeURIComponent(pair[0]) == variable) {
+	        		return decodeURIComponent(pair[1]);
+	        	}
+	      	}
 	    },
 	    supplant : function(str, o) {
 			return str.replace(/{([^{}]*)}/g, function(a, b) {

@@ -85,7 +85,7 @@
 		debug : false,
 		account : 'Enterprise',
 		portfolio : 'Enterprise.com',
-		test : 'Featured Vehile 3.0',
+		test : 'Featured Vehile 3.0 List A',
 		creative : 'Challenger 1',
 		filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
 		vehicleItem: '.vehicle-list__item',
@@ -93,55 +93,50 @@
 		template: '<div class="iso-tag">{tag}</div>',
 		featured: {
 			0: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			1: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'MVAR',
+				tag: 'Best for Vacation',
+				shortTag: 'Best for Vacation'
 			},
 			2: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'MVAR',
+				tag: 'Best for Vacation',
+				shortTag: 'Best for Vacation'
 			},
 			3: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'MVAR',
+				tag: 'Best for Vacation',
+				shortTag: 'Best for Vacation'
 			},
 			4: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			5: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			6: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'IFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			}
 		},
-		altCar: 'SFAR',
+		altCar: '',
 		featAvail: false,
 		audience: {
-			group: ['32']
+			branch: 'airport',
+			peopleSoftId: ['1018611','1018634','1018633','1018684','1018938','1018702','1018707','1022485','1018734','1018719','1018724','1019004','1018965','1019022','1019017','1019013','1020545','1019012','1031731','1019000','1030357','1029768','1041342','1029776','1029852','1022345','1019050','1019044','1040363','1022355','1020546','1031297','1019074','1019082','1019079','1019071','1019077','1029971','1018991','1018987','1029898','1029897','1029895','1019061','1019065','1021811','1019067','1019056','1018608','1019011','1018948']
 		},
 		init : function() {
 
 			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
-
-			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-				//_satellite.track('target_variables');
-			}
 
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
@@ -170,13 +165,19 @@
 		chall : function(){
 			isoTest.log('chall()');
 			isoTest.branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']);
-			var groupNumber = ReservationStateTree.get(['session', 'reservationSession','pickupLocationWithDetail','location_id']).slice(0,2);
-			var isGroup = isoTest.checkGroup(groupNumber);
-			isoTest.log('isGroup:: ' + isGroup);
+			var isBranchType = isoTest.branchType == isoTest.audience.branch;
+			var peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','id']);
+			var isPeopleSoftId = isoTest.checkId(peopleSoftId);
 
-			if(isGroup){
+			isoTest.log('isPeopleSoftId:: ' + isPeopleSoftId);
+
+			if(isPeopleSoftId && isBranchType){
 				isoTest.runTest();
 			}
+		},
+		checkId: function (peopleSoftId) {
+			isoTest.log('fn:checkId()');
+			return isoTest.audience.peopleSoftId.indexOf(peopleSoftId) > -1;
 		},
 		checkGroup: function(groupNumber){
 			isoTest.log('checkGroup()');
@@ -241,6 +242,7 @@
 			isoTest.reOrder();
 		},
 		findVehicle: function(featClass){
+			isoTest.log('findVehicle()');
 			for(var i = 0; i < isoTest.vehicleItems.length; i++) {
 			    if (!isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass') && isoTest.vehicleItems[i].classList.contains('vehicle-list__item')) {
 			        var dataInfo = isoTest.vehicleItems[i].getAttribute('data-dtm-tracking').split('|');

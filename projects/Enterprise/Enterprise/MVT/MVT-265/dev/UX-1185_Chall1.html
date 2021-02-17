@@ -84,8 +84,8 @@
 	var isoTest = {
 		debug : false,
 		account : 'Enterprise',
-		portfolio : 'Enterprise.com',
-		test : 'Featured Vehile 3.0',
+		portfolio : 'Enterprise.com Enterprise.ca',
+		test : 'Featured Vehicle APAC (Full Scale)',
 		creative : 'Challenger 1',
 		filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
 		vehicleItem: '.vehicle-list__item',
@@ -93,55 +93,46 @@
 		template: '<div class="iso-tag">{tag}</div>',
 		featured: {
 			0: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'CFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			1: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'CFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			2: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'CFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			3: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'CFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			4: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'CFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			5: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'CFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			},
 			6: {
-				car: 'LYMR',
-				tag: 'Try Something New',
-				shortTag: 'Try Something New'
+				car: 'CFAR',
+				tag: 'Most Versatile',
+				shortTag: 'Most Versatile'
 			}
 		},
-		altCar: 'SFAR',
+		altCar: '',
 		featAvail: false,
-		audience: {
-			group: ['32']
-		},
 		init : function() {
 
 			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
-
-			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-				//_satellite.track('target_variables');
-			}
 
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
@@ -169,24 +160,8 @@
 		},
 		chall : function(){
 			isoTest.log('chall()');
-			isoTest.branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']);
-			var groupNumber = ReservationStateTree.get(['session', 'reservationSession','pickupLocationWithDetail','location_id']).slice(0,2);
-			var isGroup = isoTest.checkGroup(groupNumber);
-			isoTest.log('isGroup:: ' + isGroup);
 
-			if(isGroup){
-				isoTest.runTest();
-			}
-		},
-		checkGroup: function(groupNumber){
-			isoTest.log('checkGroup()');
-			var checksOut = false;
-			isoTest.audience.group.forEach(function(g){
-				if(groupNumber.substring(0,g.length) == g){
-					checksOut = true;
-				}
-			});
-			return checksOut;
+			isoTest.runTest();
 		},
 		runTest : function() {
 			isoTest.log('runTest()');
@@ -241,6 +216,7 @@
 			isoTest.reOrder();
 		},
 		findVehicle: function(featClass){
+			isoTest.log('findVehicle()');
 			for(var i = 0; i < isoTest.vehicleItems.length; i++) {
 			    if (!isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass') && isoTest.vehicleItems[i].classList.contains('vehicle-list__item')) {
 			        var dataInfo = isoTest.vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
