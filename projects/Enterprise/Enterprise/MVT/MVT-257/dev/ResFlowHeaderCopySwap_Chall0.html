@@ -1,0 +1,125 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Res Flow Header Copy Swap',
+		creative : 'Challenger 0',
+		selector: '.reservation-step',
+		pageInfo: {
+			"#location" : {
+				selector: '#location .location-header__title',
+				content: 'LOCATION PLACEHOLDER TEXT'
+			},
+			"#location/pickup" : {
+				selector: '[id*="location/pickup"] .location-header__title',
+				content: 'PICK-UP PLACEHOLDER TEXT'
+			},
+			"#location/dropoff" : {
+				selector: '[id*="location/dropoff"] .location-header__title',
+				content: 'DROP-OFF PLACEHOLDER TEXT'
+			},
+			"#cars" : {
+				selector: '#cars .vehicle-header__sub-title',
+				content: 'CARS PLACEHOLDER TEXT'
+			},
+			"#extras" : {
+				selector: '#extras .extras-header__title',
+				content: 'EXTRAS PLACEHOLDER TEXT'
+			},
+			"#commit" : {
+				selector: '#commit .verification-title .alpha',
+				content: 'REVIEW PLACEHOLDER TEXT'
+			},
+			"#confirmed" : {
+				selector: '#confirmed .resflow__header-info-title',
+				content: 'CONFIRM PLACEHOLDER TEXT'
+			}
+		},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			isoTest.log('viewChange()');
+			if(/location|cars|extras|commit|confirmed/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log('chall()');
+
+			// isoTest.locationHash = isoTest.pageInfo[location.hash];
+
+			// helpers.elementLoaded(isoTest.locationHash.selector, function() {
+			// 	document.querySelectorAll(isoTest.locationHash.selector)[0].innerText = isoTest.locationHash.content;
+			// });
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
