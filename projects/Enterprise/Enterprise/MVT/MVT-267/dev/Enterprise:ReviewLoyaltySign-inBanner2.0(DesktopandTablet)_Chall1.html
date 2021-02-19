@@ -11,6 +11,10 @@
         margin-left: 15px;
     }
 
+    #commit .review-section .pre-expedited-banner__content {
+    	margin-left: 0px;
+    }
+
     #commit .review-section button.pre-expedited-banner__button {
         width: 150px;
         height: 43px;
@@ -29,6 +33,10 @@
 @media (min-width: 749px) and (max-width: 886px) {
     #commit .review-section button.pre-expedited-banner__button.btn.btn-secondary{
     	display: none;
+    }
+
+    #commit .review-section .pre-expedited-banner__content {
+    	margin-left: 0px;
     }
 }
 </style>
@@ -71,10 +79,10 @@
 			}
 		},
 		chall : function() {
-			if(window.innerWidth > 748){
+			// if(window.innerWidth > 748){
                 document.querySelector('.review-section button.pre-expedited-banner__button.btn').textContent = "Sign In";
                 document.querySelector('.review-section button.pre-expedited-banner__button.btn').setAttribute('aria-label', 'sign into enterprise plus or emerald club');
-            }   
+            // }   
 
             document.querySelector('.review-section button.pre-expedited-banner__button.btn').addEventListener('click', function(e){
                 isoTest.fireTag(e.target, 'Sign In')
