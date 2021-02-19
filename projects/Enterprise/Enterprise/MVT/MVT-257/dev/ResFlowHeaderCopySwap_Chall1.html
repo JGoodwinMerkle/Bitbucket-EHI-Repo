@@ -9,35 +9,18 @@
 		test : 'Res Flow Header Copy Swap',
 		creative : 'Challenger 1',
 		selector: '.reservation-step',
-		locationSelector: '.location-header__title',
 		pageInfo: {
-			"#location" : {
-				selector: '#location .location-header__title',
-				content: 'LOCATION PLACEHOLDER TEXT'
-			},
-			"#location/pickup" : {
-				selector: '[id*="location/pickup"] .location-header__title',
-				content: 'PICK-UP PLACEHOLDER TEXT'
-			},
-			"#location/dropoff" : {
-				selector: '[id*="location/dropoff"] .location-header__title',
-				content: 'DROP-OFF PLACEHOLDER TEXT'
-			},
 			"#cars" : {
 				selector: '#cars .vehicle-header__sub-title',
-				content: 'CARS PLACEHOLDER TEXT'
+				content: 'Select Your Vehicle Class'
 			},
 			"#extras" : {
 				selector: '#extras .extras-header__title',
-				content: 'EXTRAS PLACEHOLDER TEXT'
+				content: 'Customize Your Rental'
 			},
 			"#commit" : {
 				selector: '#commit .verification-title .alpha',
-				content: 'REVIEW PLACEHOLDER TEXT'
-			},
-			"#confirmed" : {
-				selector: '#confirmed .resflow__header-info-title',
-				content: 'CONFIRM PLACEHOLDER TEXT'
+				content: 'Confirm & Reserve'
 			}
 		},
 		init : function() {
@@ -64,7 +47,7 @@
 		},
 		viewChange : function(){
 			isoTest.log('viewChange()');
-			if(/location|cars|extras|commit|confirmed/.test(location.hash)){
+			if(/cars|extras|commit/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -78,13 +61,6 @@
 			helpers.elementLoaded(isoTest.locationHash.selector, function() {
 				document.querySelectorAll(isoTest.locationHash.selector)[0].innerText = isoTest.locationHash.content;
 			});
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
@@ -106,18 +82,6 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
 		}
 	}
 
