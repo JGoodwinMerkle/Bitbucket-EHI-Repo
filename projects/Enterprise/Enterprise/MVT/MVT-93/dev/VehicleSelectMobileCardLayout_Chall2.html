@@ -1,0 +1,303 @@
+<style>	
+@media (max-width: 40.8125em) {
+	body.resflow-cars {
+		min-width: 320px;
+	}
+	#cars .vehicle-list {
+		padding-bottom: 8px;
+	}
+	#cars .vehicle-list__item.iso-preSelectedClass {
+		margin-top: 8px !important;
+	}
+	#cars .vehicle-select__main {
+		background: #e3e3e3;
+		padding: 0 8px;
+	}
+	#cars .vehicle-item__main-content {
+		position: relative;
+		display: block;
+	}
+	#cars .vehicle-item {
+		padding: 12px 0 0 0;
+	}
+	#cars .vehicle-item::after {
+	  content: "";
+	  clear: both;
+	  display: table;
+	}
+	#cars .vehicle-list__item {
+	    background: #fff;
+	    border-bottom: 2px solid #c3c3c3;
+	    margin: 0 auto;
+	    margin-top: 8px;
+	    max-width: 400px;
+	}
+	#cars .vehicle-item__models {
+		color: #393a3b;
+		font-size: 14px;
+    	margin-bottom: 8px;
+    	max-width: 200px;
+	}
+	#cars .vehicle-item__attributes {
+		display: flex;
+    	flex-direction: column;
+	}
+	#cars .vehicle-item__attribute-item {
+		color: #656565;
+		line-height: 1.6;
+	}
+	#cars .vehicle-item__attribute-item .icon.icon-specs-passenger-gray {
+		background-position: center;
+		background-size: contain;
+		height: 13px;
+    	width: 13px;
+	}
+	#cars .vehicle-item__details {
+		float: left;
+		width: 40%;
+	}
+	#cars .vehicle-item__toggle-details-button {
+		color: #fff;
+		display: flex;
+		font-size: 0;
+	    padding: 12px 0 20px 0;
+	    padding-left: .9375rem;
+	    margin: 0;
+	    width: 100%;
+	}
+	#cars .vehicle-item__toggle-details-button:hover .icon::before, #cars .vehicle-item__toggle-details-button:focus .icon::before {
+		text-decoration: underline;
+	}
+	#cars .vehicle-item__toggle-details-button .icon {
+		position: relative;
+		color: #169a5a;
+		width: 11px;
+     	height: 11px;
+     	margin-right: 8px;
+	}
+	#cars .vehicle-item__toggle-details-button .icon::before {
+		background: #fff;
+		content: 'Details';
+		font-size: 14px;
+		font-style: normal;
+		font-weight: normal;
+		position: absolute;
+		text-transform: initial;
+		top: -3px;
+    	left: 19px;
+	}
+	#cars .vehicle-item__summary {
+		margin-bottom: 6px;
+		max-width: 50%;
+	}
+	#cars .vehicle-item__image {
+		top: -10px;
+		right: 40px;
+    	width: 120px;
+	}
+	#cars .vehicle-item__pricing {
+		float: right;
+	    margin: 0;
+	    margin-right: 0 !important;
+	    margin-top: -35px;
+	    min-height: 56px;
+	    width: 60%;
+	}
+	#cars .vehicle-pricing__currency-tiles {
+		padding-right: 24px;
+		pointer-events: none;
+		position: relative;
+    	z-index: 1;
+	}
+	#cars .vehicle-pricing__button--select {
+		background: transparent;
+		border-right: 24px solid #169a5a;
+		color: #fff;
+		font-size: 0;
+	    position: absolute;
+	    top: -12px;
+	    bottom: -53px;
+	    right: 0;
+	    width: 40%;
+	}
+	#cars .vehicle-pricing__button--select::after {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='50.093' width='53.333'%3E%3Cdefs%3E%3CclipPath id='a' clipPathUnits='userSpaceOnUse'%3E%3Cpath d='M0 0h400v375.652H0V0z'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23a)' transform='matrix(.13333 0 0 -.13333 0 50.093)'%3E%3Cpath xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' d='M385.004 172.965H15c-8.285 0-15 6.711-15 15 0 8.285 6.715 15 15 15h333.793l-147.09 147.082c-5.859 5.855-5.859 15.359 0 21.211 5.859 5.859 15.352 5.859 21.211 0L395.609 198.57a14.997 14.997 0 00-10.605-25.605M212.309 0a14.956 14.956 0 00-10.606 4.395c-5.859 5.859-5.859 15.351 0 21.21L302.66 126.552c5.86 5.859 15.352 5.859 21.211 0 5.859-5.86 5.859-15.352 0-21.211L222.914 4.395A14.949 14.949 0 00212.309 0'/%3E%3C/g%3E%3C/svg%3E");
+		background-position: center;
+    	background-repeat: no-repeat;
+    	background-size: 14px auto;
+		content: '';
+		margin-right: -19px;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 14px;
+	}
+	#cars .vehicle-pricing__button::selection {
+		background: none;
+	}
+	#cars .vehicle-pricing__button:hover, #cars .vehicle-pricing__button:focus {
+    	color: #fff;
+	}
+	#cars .vehicle-details {
+		overflow: auto;
+		width: 100%;
+	}
+	#cars .vehicle-pricing__not-eligible {
+		font-size: 12px;
+		font-weight: normal;
+		pointer-events: none;
+		position: absolute;
+	    bottom: 11px;
+	    right: 35px;
+	    width: 140px;
+	    line-height: 1;
+	    text-transform: none;
+	    text-align: right;
+	}
+	#cars .vehicle-pricing__special-rate {
+		font-size: 11px;
+    	font-weight: normal;
+    	pointer-events: none;
+		position: absolute;
+		bottom: 3px;
+		/*width: calc(60% - 24px);*/
+	    right: 24px;
+	    padding: 0 13px 0 0;
+	   	text-align: right;
+	}
+	#cars .vehicle-pricing__special-rate .icon {
+		filter: invert(57%) sepia(84%) saturate(6247%) hue-rotate(135deg) brightness(96%) contrast(83%);
+		margin-right: 2px;
+		width: 14px;
+    	height: 14px;
+	}
+	#cars .price-tile {
+		pointer-events: none;
+		text-align: center;
+		z-index: 1;
+	}
+	#cars .price-tile+.price-tile {
+	    border-left: 1px solid #333;
+	}
+	#cars .price-tile__amount {
+		margin-bottom: 0;
+	}
+	#cars .price-tile__label {
+		display: inline-block;
+		line-height: 1;
+	}
+	#cars .price-tile__formatted-price {
+		display: inline-block;
+		margin-right: 5px;
+	}
+	#cars .vehicle-pricing__button--no-action {
+		color: #fff !important;
+	    font-size: 12px;
+	    font-weight: 400;
+	    margin-bottom: 0;
+	    text-transform: none;
+    	width: auto;
+	}
+	#cars .is-selected .vehicle-item__pricing {
+		margin-right: 0 !important;
+	}
+	#cars .vehicle-item__truck-badge {
+		margin-bottom: 5px;
+		width: 120px;
+	}
+	#cars .vehicle-item.is-pre-selected, #cars .vehicle-item.is-preferred, #cars .vehicle-item.is-search-by-filter, #cars .vehicle-item.is-selected {
+		margin-bottom: 0;
+	}
+	.resflow-cars .reservationWidget__editor-friendly {
+		min-height: 0;
+	}
+	#cars [data-dtm-tracking*="|CCAR|"] .vehicle-item__image {
+		top: -18px;
+	}
+	/* Sold Out */
+	#cars .is-restricted .vehicle-item__image, 
+	#cars .is-sold-out .vehicle-item__image {
+		opacity: 1;
+	}
+	#cars .vehicle-item.is-sold-out .no-rates-tile:not(.net-rate), #cars .vehicle-item.is-restricted .no-rates-tile:not(.net-rate) {
+		border-top: none;
+		color: #393a3b;
+	    font-size: 15px;
+	    line-height: 1;
+	    margin-top: -5px;
+	    margin-right: 24px;    
+	    padding: 0 6%;
+    
+	}
+	#cars .vehicle-item.is-sold-out .vehicle-pricing__button--alternative, #cars .vehicle-item.is-restricted .vehicle-pricing__button--alternative {
+		border-right: 24px solid #169a5a;
+	    color: #333;
+	    position: absolute;
+	    top: -12px;
+	    bottom: -46px;
+	    right: 0;
+	    background: transparent;
+	    width: 60%;
+	    line-height: 1;
+	    display: flex;
+	   	align-items: center;
+    	flex-direction: column-reverse;
+    	letter-spacing: initial;
+    	padding-bottom: 15px;
+	}
+	#cars .vehicle-pricing__button--alternative::after {
+	    background-position: center;
+	    background-repeat: no-repeat;
+	    background-size: 14px auto;
+	    content: '';
+	    margin-right: -19px;
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    bottom: 0;
+	    width: 14px;
+	}
+	#cars a.vehicle-pricing__button--alternative::after {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFF'%3E%3Cg%3E%3Cg%3E%3Cpath d='M9.522.956c1.86 0 3.483 1.266 3.934 3.071l.014.083.04.403c.08.8-.441 1.536-1.22 1.728l-.494.121c-.683.167-1.376-.137-1.766-.73-.307-.469-.83-.755-1.397-.755H5.347c-.766 0-1.434.522-1.62 1.266l-1.228 4.91c-.104.418.213.824.644.824h7.695c.432 0 .748-.405.644-.824l-.78-3.118 1.132-.283.78 3.118c.288 1.155-.585 2.274-1.776 2.274H3.143c-1.19 0-2.064-1.12-1.776-2.274l1.228-4.91c.316-1.263 1.45-2.15 2.752-2.15h3.286c.962 0 1.851.487 2.373 1.281.128.195.328.283.511.238l.493-.121c.217-.054.362-.258.34-.48l-.036-.357c-.335-1.265-1.48-2.149-2.792-2.149H4.46c-1.287 0-2.471.987-2.803 2.313L.525 4.152C.983 2.321 2.622.955 4.46.955h5.062zM6.99 6.043c1.29 0 2.334 1.045 2.334 2.333 0 1.289-1.045 2.334-2.334 2.334-1.288 0-2.333-1.045-2.333-2.334 0-1.288 1.045-2.333 2.333-2.333zm0 1.167c-.644 0-1.166.522-1.166 1.166 0 .645.522 1.167 1.166 1.167.645 0 1.167-.522 1.167-1.167 0-.644-.522-1.166-1.167-1.166z' transform='translate(-346 -362) translate(10 281) translate(336 81)'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+	}
+	#cars a.vehicle-pricing__button--alternative[target="_blank"] { 
+		font-size: 0; 
+	}
+	#cars a.vehicle-pricing__button--alternative[target="_blank"]::after {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MC40NDkiIGhlaWdodD0iNDAuMDE4Ij48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMzUuMzUgMzMuMDRhNC4xOSA0LjE5IDAgMDEtNC4xODYgNC4xODdINi45NzdhNC4xOTEgNC4xOTEgMCAwMS00LjE4Ni00LjE4N1Y4Ljg1M2MwLTIuMzEgMS44OC00LjE4NyA0LjE4Ny00LjE4N2gxMy4xMnYtMi43OUg2Ljk3N0MzLjEzIDEuODc1IDAgNS4wMDUgMCA4Ljg1MlYzMy4wNGMwIDMuODQ4IDMuMTMgNi45NzggNi45NzcgNi45NzhoMjQuMTg3YzMuODQ3IDAgNi45NzctMy4xMyA2Ljk3Ny02Ljk3OFYxOS43MjJoLTIuNzlWMzMuMDR6Ii8+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTI3LjE0OCAwdjIuNzloOC4wNDVMMTguNDc4IDE5LjUwOGwxLjk3MyAxLjk3M0wzNy42NiA0LjI3M3Y3LjYwNGgyLjc5VjAiLz48L3N2Zz4=);
+	}
+	#cars button.vehicle-pricing__button--alternative::after {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFF'%3E%3Cg%3E%3Cg%3E%3Cpath d='M1.406.774l2.359.895-.414 1.09-2.184-.828v8.849c0 .04.024.075.062.089l3.393 1.286c.127.048.267.049.394.002l3.478-1.291c.037-.014.062-.05.062-.09V2.693h1.166v8.083c0 .528-.328 1-.823 1.183L5.422 13.25c-.392.146-.822.144-1.214-.004L.816 11.96C.325 11.775 0 11.305 0 10.78V1.747C0 1.02.725.518 1.406.774zM9.792.696l3.393 1.285c.49.186.816.656.816 1.18v9.034c0 .726-.725 1.228-1.428.964l-2.392-1.016.456-1.074 2.197.933v-8.84c0-.04-.024-.075-.062-.09L9.379 1.788c-.128-.049-.267-.05-.394-.002l-3.478 1.29c-.037.015-.062.05-.062.09v8.084H4.278V3.165c0-.528.329-1 .823-1.183L8.58.692C8.97.545 9.4.547 9.792.695z' transform='translate(-346 -548) translate(10 467) translate(336 81)'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+	}
+	/* Selected Vehicle */
+	#cars .vehicle-item__flag {
+		right: 21px;
+	}
+}
+@media (max-width: 400px) {
+	#cars .price-tile__amount .unit {
+		letter-spacing: -1px;
+	}
+	#cars .vehicle-pricing__special-rate {
+		padding: 0 4px 0 0;
+	}
+	#cars .vehicle-item__details {
+		width: 30%;
+	}
+	#cars .vehicle-item__pricing {
+		width: 70%;
+	}
+	#cars .vehicle-item.is-sold-out .vehicle-pricing__button--alternative, #cars .vehicle-item.is-restricted .vehicle-pricing__button--alternative {
+		width: 70%;
+	}	
+}
+@media (max-width: 370px) {
+	#cars .vehicle-item__summary {
+		max-width: 45%;
+	}
+	#cars .vehicle-item__image {
+		right: 30px;
+	}
+}
+</style>
