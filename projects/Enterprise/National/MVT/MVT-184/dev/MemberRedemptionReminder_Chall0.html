@@ -1,0 +1,93 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'National',
+		test : 'Member Redemption Reminder',
+		creative : 'Challenger 0',
+		selector: '.rental-credits-card__count__number',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.sCodeLoaded(function() {
+  				isoTest.fireTagV90();
+			});
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
+				if (daysEarned > 0) {
+					helpers.sCodeLoaded(function() {
+						isoTest.fireTagV89();
+					});
+				}
+			});
+			
+		},
+		fireTagV89 : function(element, value) {
+			var linkName = isoTest.test + ' :: 1+ Days Accrued';
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTagV90: function() {
+			if (s !== undefined && typeof s === 'object') {
+				isoTest.log('s code exists');
+				s.eVar90 = '';
+				s.events = '';
+				s.linkTrackVars = "eVar90";
+				s.eVar90 = isoTest.test + " :: " + isoTest.creative;
+				s.tl( true, "o", s.eVar90 );
+				s.eVar90 = '';
+			} else {
+				isoTest.log('s code not found');
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    sCodeLoaded : function (callback) {
+			isoTest.log('sCodeLoaded:: s - Checking...');
+			var sCodeCheck = setInterval(function(){
+				if (window.s !== undefined ){
+					isoTest.log('sCodeLoaded:: s - Found!');
+					clearInterval(sCodeCheck);
+					callback();
+				}
+			},100);
+		},
+	};
+
+	isoTest.init();
+})();
+</script>

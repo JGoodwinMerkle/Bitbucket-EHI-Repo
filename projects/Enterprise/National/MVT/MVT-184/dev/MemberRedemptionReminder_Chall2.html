@@ -1,0 +1,184 @@
+<style>
+	.iso-redeem-banner {
+		background: #231f20;
+		color: #fff;
+		padding: 25px;
+		position: relative;
+		z-index: 2;
+	}
+	.iso-redeem-col-left {
+		margin-bottom: 16px;
+	}
+	.iso-redeem-col-right {
+		text-align: right;
+	}
+	.iso-redeem-banner-header {
+		color: #b3d78b;
+		display: inline-block;
+		font-size: 20px;
+		font-weight: 700;
+		margin-right: 10px;
+		margin-bottom: 12px;
+	}
+	.iso-redeem-banner .btn--opaque {
+		border: 0.0625rem solid #fff;
+		color: #b3d78b;
+		display: inline-block;
+		font-weight: 600;
+		padding: 0.8rem 1.3rem;
+		width: auto;
+	}
+	.iso-redeem-banner-body {
+		display: inline-block;
+		font-size: 14px;
+		line-height: 1.4;
+		margin-right: 10px;
+	}
+	.iso-hide {
+		display: none;
+	}
+	@media (min-width: 555px) {
+		.iso-redeem-banner {
+			display: flex;
+			flex-direction: row;
+			padding: 16px 20px;
+		}
+		.iso-redeem-col-left {
+			flex: 68%;
+			flex-direction: column;
+			margin-bottom: 0;
+		}
+		.iso-redeem-col-right {
+			align-self: center;
+			flex: 32%;
+			padding-left: 10px;
+		}
+		.iso-redeem-banner-header {
+			margin-bottom: 3px;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'National',
+		test : 'Member Redemption Reminder',
+		creative : 'Challenger 2',
+		selector: '.rental-credits-card__count__number',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.sCodeLoaded(function() {
+  				isoTest.fireTagV90();
+			});
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				var daysEarned = document.querySelector('.rental-credits-card__count__number').textContent;
+				if (daysEarned > 0) {
+  					isoTest.chall();
+				}
+			});
+			
+		},
+		chall : function() {
+
+			if (!document.querySelector('.iso-redeem-banner')) {
+				document.querySelector('.hero__content').insertAdjacentHTML('afterbegin','<div class="zl-section__xlarge-max-width"><div class="zl-section__content"><div class="iso-redeem-banner"><div class="iso-redeem-col-left"><span class="iso-redeem-banner-header iso-redeem-day iso-hide">YOU HAVE A FREE DAY!</span><span class="iso-redeem-banner-header iso-redeem-days iso-hide">YOU HAVE <span class="iso-redeem-qty">X</span> FREE DAYS!</span><br><span class="iso-redeem-banner-body">To redeem now, select an amount under REWARD DAYS in the reservation form.</span></div><div class="iso-redeem-col-right"><a class="btn btn--opaque" href="https://www.nationalcar.com/en/emerald-club/redeem-free-days.html">LEARN MORE</a></div></div></div></div>');
+				var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
+				document.querySelector('.iso-redeem-qty').innerText = daysEarned;
+
+				if (daysEarned == 1) {
+					document.querySelector('.iso-redeem-day').classList.remove('iso-hide');
+				}
+				if (daysEarned > 1) {
+					document.querySelector('.iso-redeem-days').classList.remove('iso-hide');
+				}
+
+				isoTest.fireTagV89();
+				isoTest.addEvents();
+			}
+
+		},
+		addEvents : function() {
+			document.addEventListener('click', function (event) {
+				if (event.target.matches('.iso-redeem-banner .btn')) {
+					isoTest.fireTag(this,'Learn More');
+				}
+			});
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTagV89 : function(element, value) {
+			var linkName = isoTest.test + ' :: 1+ Days Accrued';
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTagV90: function() {
+			if (s !== undefined && typeof s === 'object') {
+				isoTest.log('s code exists');
+				s.eVar90 = '';
+				s.events = '';
+				s.linkTrackVars = "eVar90";
+				s.eVar90 = isoTest.test + " :: " + isoTest.creative;
+				s.tl( true, "o", s.eVar90 );
+				s.eVar90 = '';
+			} else {
+				isoTest.log('s code not found');
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    sCodeLoaded : function (callback) {
+			isoTest.log('sCodeLoaded:: s - Checking...');
+			var sCodeCheck = setInterval(function(){
+				if (window.s !== undefined ){
+					isoTest.log('sCodeLoaded:: s - Found!');
+					clearInterval(sCodeCheck);
+					callback();
+				}
+			},100);
+		},
+	}
+
+	isoTest.init();
+})();
+</script>

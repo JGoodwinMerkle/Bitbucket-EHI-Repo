@@ -1,0 +1,301 @@
+<style>
+	.iso-redeem-close {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 1em;
+	}
+	#iso-redeem-modal-container {
+		text-align: center;
+	}
+	#iso-redeem-modal-container .modal__body {
+		max-width: 425px;
+    	margin: 0 auto;
+    	padding: 2.8em;
+	}
+	#iso-redeem-modal-container h3 {
+		font-size: 1.8em;
+		font-weight: 700;
+		margin-bottom: 0.8em;
+	}
+	#iso-redeem-modal-container h3 span {
+		color: #00703c;
+		font-family: "Playfair Display", Arial, Helvetica, sans-serif;
+		font-size: 40px;
+	}
+	#iso-redeem-modal-container .btn {
+		display: inline-block;
+		font-size: 16px;
+	    font-weight: 600;
+	    padding: 1rem 2rem;
+	    width: auto;
+	}
+	.iso-hidden-modal, .iso-hide {
+		display: none;
+	}
+	#iso-redeem-modal-container .modal__overlay.ReactModal__Overlay--after-open:not(.ReactModal__Overlay--before-close), #iso-redeem-modal-container .modal__overlay.ReactModal__Overlay--after-open:not(.ReactModal__Overlay--before-close):before {
+		background-color: rgba(35,31,32,0.3);
+	}
+	#iso-redeem-modal-container .modal__overlay {
+    	transition: background-color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    	-webkit-transition: background-color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+	}
+	@media screen and (max-width: 40.0625em) {
+		#iso-redeem-modal-container .ReactModal__Content {
+		    top: 10vh;
+		    bottom: auto;
+		    margin: 0 auto;
+		    max-height: 41vh;
+		    max-width: 85%;
+		}
+	}
+	@media screen and (max-width: 400px) {
+		#iso-redeem-modal-container .ReactModal__Content {
+			max-height: 50vh;
+		}
+	}
+	@media screen and (max-width: 305px) {
+		#iso-redeem-modal-container .ReactModal__Content {
+			max-height: 65vh;
+		}
+	}
+	@media screen and (min-width: 40.0625em) {
+		#iso-redeem-modal-container .ReactModal__Content {
+			width: 32rem;
+			margin-left: -16rem;
+		}
+	}
+	
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'National',
+		test : 'Member Redemption Reminder',
+		creative : 'Challenger 1',
+		selector: '.rental-credits-card__count__number',
+		modal: '<div class="ReactModal__Overlay ReactModal__Overlay--after-open modal__overlay modal__overlay--lightbox" aria-modal="true">\
+					<div class="ReactModal__Content ReactModal__Content--after-open modal__content modal__content--lightbox zl-section--bgcolor-light " tabindex="-1" role="alertdialog" aria-label="redeem points modal">\
+						<div class="modal__flex">\
+							<button type="button" class="modal__btn-close icon icon--close iso-redeem-close" aria-label="Close the modal">\
+								<span class="icon__text">Close the modal</span>\
+							</button>\
+							<div class="modal__body" tabindex="-1">\
+								<h3 class="iso-hide iso-redeem-day">YOU HAVE A <br><span>free day!</span></h3>\
+								<h3 class="iso-hide iso-redeem-days">YOU HAVE <br><span class="iso-redeem-qty">X</span> <span>free days!</span></h3>\
+								<p>To redeem now, select an amount under <strong>REWARD DAYS</strong> in the reservation form.</p>\
+								<a class="btn" href="https://www.nationalcar.com/en/emerald-club/redeem-free-days.html">LEARN MORE</a>\
+							</div>\
+						</div>\
+					</div>\
+				</div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.sCodeLoaded(function() {
+  				isoTest.fireTagV90();
+			});
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
+				if (daysEarned > 0) {
+					var myCookie = helpers.getCookie('isoMVT184');
+    				if (myCookie == null) {
+	  					isoTest.chall();
+	  				}
+				}
+			});
+			
+		},
+		chall : function() {
+
+			var redeemModalContainer = document.createElement('div');
+			redeemModalContainer.classList.add('iso-ReactModalPortal','iso-visible-modal');
+			redeemModalContainer.setAttribute("id", "iso-redeem-modal-container");
+			redeemModalContainer.innerHTML = isoTest.modal;
+
+			document.querySelector('body').appendChild(redeemModalContainer);
+			document.querySelector('body').classList.add('ReactModal__Body--open');
+			document.querySelector('#iso-redeem-modal-container .modal__btn-close').focus();
+
+			var daysEarned = parseInt(document.querySelector('.rental-credits-card__count__number').textContent,10);
+			document.querySelector('.iso-redeem-qty').innerText = daysEarned;
+
+			if (daysEarned == 1) {
+				document.querySelector('.iso-redeem-day').classList.remove('iso-hide');
+			}
+			if (daysEarned > 1) {
+				document.querySelector('.iso-redeem-days').classList.remove('iso-hide');
+			}
+			helpers.sCodeLoaded(function() {
+				isoTest.fireTagV89();
+			});
+			isoTest.sessionStorage();
+			isoTest.addEvents();
+			isoTest.modalFocus();
+
+		},
+		sessionStorage : function() {
+			document.cookie = 'isoMVT184=true; max-age=86400; samesite=strict; path=/';
+		},
+		addEvents : function() {
+			
+			document.addEventListener('click', function (event) {
+				if (event.target.matches('#iso-redeem-modal-container .ReactModal__Overlay') || event.target.matches('#iso-redeem-modal-container .modal__btn-close')) {
+					document.querySelector('#iso-redeem-modal-container').classList.remove("iso-visible-modal");
+					document.querySelector('#iso-redeem-modal-container').classList.add("iso-hidden-modal");
+					document.querySelector('body').classList.remove('ReactModal__Body--open');
+				}
+				if (event.target.matches('#iso-redeem-modal-container .btn')) {
+					isoTest.fireTag(this,'Learn More');
+				}
+			});
+
+			document.addEventListener('keypress', function (event) {
+			    var keycode = (event.keyCode ? event.keyCode : event.which);
+	    		if (keycode == '13') {
+	    			if (event.target.matches('.modal__btn-close')) {
+	    				event.target.click();
+					}
+			    }
+		    }, false);
+
+		    document.addEventListener('keydown', function (event) {
+		    	if (event.keyCode == 27 || event.key == "Esc" || event.key == "Escape") {
+ 					if (document.querySelector('#iso-redeem-modal-container.iso-visible-modal')) {
+ 						document.querySelector('#iso-redeem-modal-container').classList.remove("iso-visible-modal");
+						document.querySelector('#iso-redeem-modal-container').classList.add("iso-hidden-modal");
+						document.querySelector('body').classList.remove('ReactModal__Body--open');
+ 					} 
+		   		}
+	    	}, false);
+
+		},
+		modalFocus : function() {
+			// add all the elements inside modal which you want to make focusable
+			var focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+			var modal = document.querySelector('#iso-redeem-modal-container'); // select the modal by it's id
+
+			var firstFocusableElement = modal.querySelectorAll(focusableElements)[0]; // get first element to be focused inside modal
+			var focusableContent = modal.querySelectorAll(focusableElements);
+			var lastFocusableElement = focusableContent[focusableContent.length - 1]; // get last element to be focused inside modal
+
+
+			document.addEventListener('keydown', function(e) {
+			  var isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+
+			  if (!isTabPressed) {
+			    return;
+			  }
+
+			  if (e.shiftKey) { // if shift key pressed for shift + tab combination
+			    if (document.activeElement === firstFocusableElement) {
+			      lastFocusableElement.focus(); // add focus for the last focusable element
+			      e.preventDefault();
+			    }
+			  } else { // if tab key is pressed
+			    if (document.activeElement === lastFocusableElement) { // if focused has reached to last focusable element then focus first focusable element after pressing tab
+			      firstFocusableElement.focus(); // add focus for the first focusable element
+			      e.preventDefault();
+			    }
+			  }
+			});
+
+			firstFocusableElement.focus();
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTagV89 : function(element, value) {
+			var linkName = isoTest.test + ' :: 1+ Days Accrued';
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTagV90: function() {
+			if (s !== undefined && typeof s === 'object') {
+				isoTest.log('s code exists');
+				s.eVar90 = '';
+				s.events = '';
+				s.linkTrackVars = "eVar90";
+				s.eVar90 = isoTest.test + " :: " + isoTest.creative;
+				s.tl( true, "o", s.eVar90 );
+				s.eVar90 = '';
+			} else {
+				isoTest.log('s code not found');
+			}
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		sCodeLoaded : function (callback) {
+			isoTest.log('sCodeLoaded:: s - Checking...');
+			var sCodeCheck = setInterval(function(){
+				if (window.s !== undefined ){
+					isoTest.log('sCodeLoaded:: s - Found!');
+					clearInterval(sCodeCheck);
+					callback();
+				}
+			},100);
+		},
+		getCookie : function(name) {
+		    var dc = document.cookie;
+		    var prefix = name + "=";
+		    var begin = dc.indexOf("; " + prefix);
+		    if (begin == -1) {
+		        begin = dc.indexOf(prefix);
+		        if (begin != 0) return null;
+		    }
+		    else
+		    {
+		        begin += 2;
+		        var end = document.cookie.indexOf(";", begin);
+		        if (end == -1) {
+		        end = dc.length;
+		        }
+		    }
+		    // because unescape has been deprecated, replaced with decodeURI
+		    //return unescape(dc.substring(begin + prefix.length, end));
+		    return decodeURI(dc.substring(begin + prefix.length, end));
+		}, 
+	};
+
+	isoTest.init();
+})();
+</script>
