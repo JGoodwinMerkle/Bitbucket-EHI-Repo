@@ -67,7 +67,6 @@ satelliteFn="
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
-				//_satellite.track('target_variables');
 			}
 "
 accountLog="isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);"
@@ -148,7 +147,7 @@ cat <<EOT >> ${folderName}/dev/${titleConcat}_${challName}.html
 	'use strict';
 	var isoTest = {$accountInfo
 		creative : '${creativeName}',
-		selector: 'body',
+		selector : 'body',
 		init : function() {
 
 			isoTest.debug = \${user.mvtDebug};
@@ -180,8 +179,7 @@ cat <<EOT >> ${folderName}/dev/${titleConcat}_${challName}.html
 				console.log(obj);
 			}
 		}
-
-	}
+	};
 
 	var helpers = {
 		elementLoaded : function (ele, callback) {
@@ -201,14 +199,14 @@ cat <<EOT >> ${folderName}/dev/${titleConcat}_${challName}.html
 		        var p = b.split(/\./),
 		            c = o;
 		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
+		          	if (c[p[i]] == null)
+		            	return a;
+		          	c = c[p[i]];
 		        }
 				return typeof c === 'string' || typeof c === 'number' ? c : a;
 			});
 		}
-	}
+	};
 
 	$init
 })();
