@@ -1,0 +1,178 @@
+<style> 
+.pre-expedited-banner.login-banner-desktop {
+	display: flex;
+}
+.pre-expedited-banner.login-banner-mobile {
+	display: none;
+}
+.verification-page .aside .review-section {
+	margin: 0;
+	width: 100%;
+}
+.verification-page .aside .review-section #personal-information {
+	padding: 20px;
+}
+.verification-page .aside #personal-information.section-content .view-header {
+	border-bottom: .1875rem solid #181918;
+	margin-bottom: 25px;
+	padding: 0;
+}
+@media (max-width: 46.8em) {
+	.pre-expedited-banner.login-banner-desktop {
+		display: none;
+	}
+	.pre-expedited-banner.login-banner-mobile {
+		display: flex;
+	}
+	.pre-expedited-banner {
+		align-items: center; 
+		border-bottom-width: 1px !important;
+		margin-bottom: 2.5rem !important;
+	}
+	.pre-expedited-banner__description {
+		display: none;
+	}
+	.pre-expedited-banner button:last-of-type {
+		display: none;
+	}
+	.pre-expedited-banner .icon-eplus-logo-black {
+		height: 26px !important;
+		margin-bottom: 13px;
+		width: 29px !important;
+	}
+	.pre-expedited-banner__content {
+		margin-left: 0 !important;
+	}
+}
+@media (min-width: 46.8em) {
+	#commit .verification-page > .aside, #commit .verification-page > .review-section {
+		display: block;
+	    margin: 40px auto 0;
+	    width: 90%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Review Loyalty Sign-in Banner',
+		creative : 'Challenger 3',
+		selector: '.pre-expedited-banner',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			
+			// Clone signin
+			var loginModule = document.querySelector('.pre-expedited-banner');
+			var loginModuleMobile = loginModule.cloneNode(true);
+			loginModule.classList.add('login-banner-desktop');
+			loginModuleMobile.classList.add('login-banner-mobile');
+			document.querySelector('.aside').insertAdjacentElement('afterbegin',loginModuleMobile);
+
+			// Styling
+			document.querySelector('.pre-expedited-banner .pre-expedited-banner__title').innerText = 'Sign in and earn points on this trip!';
+			document.querySelector('.pre-expedited-banner button:first-of-type').innerText = 'LOYALTY MEMBER SIGN IN';
+			document.querySelector('.pre-expedited-banner button:first-of-type').setAttribute('aria-label','sign into enterprise plus or emerald club');
+
+			// Event listeners
+			window.addEventListener('click', function (event) {
+				if (event.target.closest('.login-banner-mobile button:first-of-type')) {
+					document.querySelector('.login-banner-desktop button:first-of-type').click();
+				}
+			}, false);
+
+			// Listen for signin (login module removed) and move contact module
+			var mutationCounter = 0;
+			var targetNode = document.querySelector('#commit');
+			var config = { attributes: true, childList: true, subtree: true };
+			var callback = function(mutationsList, observer) {
+			    for(var i=0; i<mutationsList.length; i++) {
+			    	var mutation = mutationsList[i];
+			        if (mutation.type === 'childList') {
+			            //console.log('A child node has been added or removed.');
+			            if (!document.querySelector('.login-banner-desktop')) {
+			            	//console.log('Signin module removed.');
+			            	if (mutationCounter < 1) {
+			            		mutationCounter ++;
+			            		document.querySelector('.login-banner-mobile').remove();
+
+			            		document.querySelector('.aside').insertAdjacentHTML('afterbegin','<div class="review-section"></div>');
+				            	var contactInfo = document.querySelector('#personal-information');
+				            	document.querySelector('.review-section').insertAdjacentElement('afterbegin',contactInfo);
+
+				            	observer.disconnect();
+
+			            	} 
+			            }
+			        }
+			    }
+			};
+			// Create an observer instance linked to the callback function
+			var observer = new MutationObserver(callback);
+			// Start observing the target node for configured mutations
+			observer.observe(targetNode, config);
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>

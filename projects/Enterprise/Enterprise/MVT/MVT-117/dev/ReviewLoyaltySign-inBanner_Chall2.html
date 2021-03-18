@@ -1,0 +1,102 @@
+<style> 
+@media (max-width: 46.8em) {	
+	.pre-expedited-banner {
+		align-items: center; 
+		border-bottom-width: 1px !important;
+	}
+	.pre-expedited-banner__description {
+		display: none;
+	}
+	.pre-expedited-banner button:last-of-type {
+		display: none;
+	}
+	.pre-expedited-banner .icon-eplus-logo-black {
+		height: 26px !important;
+		margin-bottom: 13px;
+		width: 29px !important;
+	}
+	.pre-expedited-banner__content {
+		margin-left: 0 !important;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Review Loyalty Sign-in Banner',
+		creative : 'Challenger 2',
+		selector: '.pre-expedited-banner',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			// Styling
+			var loginModule = document.querySelector('.pre-expedited-banner');
+			document.querySelector('.pre-expedited-banner .pre-expedited-banner__title').innerText = 'Sign in and earn points on this trip!';
+			document.querySelector('.pre-expedited-banner button:first-of-type').innerText = 'LOYALTY MEMBER SIGN IN';
+			document.querySelector('.pre-expedited-banner button:first-of-type').setAttribute('aria-label','sign into enterprise plus or emerald club');
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>
