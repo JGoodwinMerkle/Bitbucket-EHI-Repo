@@ -8,7 +8,9 @@ footer .drivealliance .base.g {
 	color: #169a5a;
 }
 .ifr-utility.utility-nav fieldset {
-	padding-top: 1.6rem;
+	margin: 0;
+	min-height: 198px;
+	padding-top: 1.4rem;
 	transition: none;
 }
 .ifr-utility.utility-nav > li {
@@ -18,11 +20,30 @@ footer .drivealliance .base.g {
 .ifr-utility.utility-nav > li .utility-nav-label {
 	font-weight: 600;
 }
+.ifr-utility.utility-nav > li .utility-nav-label:hover {
+	text-decoration: none;
+}
+.ifr-utility.utility-nav .utility-nav-button {
+	position: relative;
+}
+.ifr-utility.utility-nav .utility-nav-button[aria-expanded="true"]::after {
+	content: '';
+	border-bottom: 2px solid;
+	position: absolute;
+	right: 29px;
+	bottom: 0;
+	left: 9px;
+}
+.ifr-utility.utility-nav .language .utility-nav-button[aria-expanded="true"]::after {
+	right: 9px;
+	left: 38px;
+}
 .ifr-utility.utility-nav > li .field-container {
-	line-height: 2.5;
+	line-height: 2.7;
+	padding: 0 25px;
 }
 .ifr-utility.utility-nav > li .field-container h4 {
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.8rem;
 }
 .ifr-utility.utility-nav > li .field-container li {
 	display: block;
@@ -34,9 +55,6 @@ footer .drivealliance .base.g {
 	top: auto;
 	bottom: 70px;
 }
-.ifr-utility.utility-nav > li .utility-nav-content * {
-	transition: none;
-}
 .ifr-utility.utility-nav > li #currencySelector-desktop {
 	right: -80px;
 }
@@ -44,20 +62,30 @@ footer .drivealliance .base.g {
 	right: -40px;
 }
 .ifr-utility.utility-nav > li ul {
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.8rem;
 	padding: 0;
 }
-.ifr-utility.utility-nav .utility-nav-content > .icon.icon-utility-notch {
+.ifr-utility.utility-nav .icon.icon-utility-notch {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%23181918' d='M0 0h40L20 20'/%3E%3C/svg%3E");
+	display: inline;
     top: auto;
     bottom: -14px;
     left: 50%;
     transition: none;
 }
+.ifr-utility.utility-nav li:not(.active) .icon.icon-utility-notch {
+	display: none;
+}
 .ifr-utility.utility-nav .icon-globe-white {
 	filter: brightness(0)invert(35%) sepia(48%) saturate(4695%) hue-rotate(137deg) brightness(98%) contrast(83%);
 	width: 22px;
 	height: 24px;
+}
+.ifr-utility.utility-nav > li .field-container.language-select {
+	text-transform: uppercase;
+}
+.ifr-utility.utility-nav > li .field-container.language-select .selected {
+	color: #169a5a;
 }
 @media (max-width: 400px) {
 	.ifr-utility.utility-nav > li {
@@ -84,6 +112,7 @@ footer .drivealliance .base.g {
 @media (min-width: 46.8em) {
 	.iso-footer-right {
 		float: right;
+		margin-top: 2rem;
 		width: 50%;
 	}
 	.ifr-utility {
@@ -155,11 +184,13 @@ footer .drivealliance .base.g {
 			// Add utility module to footer
 			document.querySelector('.footer .gi.left').insertAdjacentHTML('beforebegin','<div class="iso-footer-right"><div class="ifr-utility utility-nav"></div></div>');
 			if (document.querySelector(isoTest.selectorLanguage)) {
-				var languageClone = document.querySelector(isoTest.selectorLanguage).cloneNode(true);
-				var currencyClone = document.querySelector(isoTest.selectorCurrency).cloneNode(true);
-				// Add cloned utility nav items to footer
-				document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',languageClone);
-				document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',currencyClone);
+				setTimeout(function(){
+					var languageClone = document.querySelector(isoTest.selectorLanguage).cloneNode(true);
+					var currencyClone = document.querySelector(isoTest.selectorCurrency).cloneNode(true);
+					// Add cloned utility nav items to footer
+					document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',languageClone);
+					document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',currencyClone);
+				}, 3000);
 			}
 			
 			// Mobile nav
@@ -170,22 +201,6 @@ footer .drivealliance .base.g {
 		},
 		events : function() {
 			document.addEventListener('click', function (event) {
-				// Lang-Currency Show-Hide Logic
-				if (!event.target.classList.contains('ifr-utility > li')) {
-					if (document.querySelector('.ifr-utility .language').classList.contains('visible')) {
-						document.querySelector('.ifr-utility .language').classList.remove('visible','active');
-					}
-					if (document.querySelector('.ifr-utility .currency').classList.contains('visible')) {
-						document.querySelector('.ifr-utility .currency').classList.remove('visible','active');
-					}
-				}
-				if (event.target.closest('.ifr-utility .language')) {
-					document.querySelector('.ifr-utility .language').classList.add('visible','active');
-				}
-				if (event.target.closest('.ifr-utility .currency')) {
-					document.querySelector('.ifr-utility .currency').classList.add('visible','active');
-				}
-				// Tags
 				if (event.target.closest('.utility-nav .language button')) {
 					isoTest.fireTag('', 'Language Open');
 				}
@@ -227,7 +242,6 @@ footer .drivealliance .base.g {
 				console.log(obj);
 			}
 		}
-
 	};
 
 	var helpers = {
@@ -243,18 +257,6 @@ footer .drivealliance .base.g {
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
 	};
 
 	isoTest.init();
