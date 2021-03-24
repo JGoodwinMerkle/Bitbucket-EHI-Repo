@@ -1,5 +1,8 @@
 <style>
 /* Lang-Currency in footer */
+.ifr-utility .utility-nav-button {
+	pointer-events: none;
+}
 footer .drivealliance .base.g {
 	overflow: initial;
 }
@@ -14,6 +17,8 @@ footer .drivealliance .base.g {
 	transition: none;
 }
 .ifr-utility.utility-nav > li {
+	height: auto;
+    line-height: inherit;
 	margin-right: 0;
 	margin-left: 1rem;
 }
@@ -23,20 +28,20 @@ footer .drivealliance .base.g {
 .ifr-utility.utility-nav > li .utility-nav-label:hover {
 	text-decoration: none;
 }
-.ifr-utility.utility-nav .utility-nav-button {
+.ifr-utility.utility-nav button {
 	position: relative;
 }
-.ifr-utility.utility-nav .utility-nav-button[aria-expanded="true"]::after {
+.ifr-utility.utility-nav button[aria-expanded="true"]::after {
 	content: '';
 	border-bottom: 2px solid;
 	position: absolute;
 	right: 29px;
-	bottom: 0;
-	left: 9px;
+	bottom: 0px;
+	left: 8px;
 }
-.ifr-utility.utility-nav .language .utility-nav-button[aria-expanded="true"]::after {
+.ifr-utility.utility-nav .language button[aria-expanded="true"]::after {
 	right: 9px;
-	left: 38px;
+	left: 33px;
 }
 .ifr-utility.utility-nav > li .field-container {
 	line-height: 2.7;
@@ -53,7 +58,8 @@ footer .drivealliance .base.g {
 	text-align: left;
 	transition: none;
 	top: auto;
-	bottom: 70px;
+	bottom: 90px;
+	height: 139px;
 }
 .ifr-utility.utility-nav > li #currencySelector-desktop {
 	right: -80px;
@@ -69,17 +75,21 @@ footer .drivealliance .base.g {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%23181918' d='M0 0h40L20 20'/%3E%3C/svg%3E");
 	display: inline;
     top: auto;
-    bottom: -14px;
+    bottom: -70px;
     left: 50%;
     transition: none;
 }
 .ifr-utility.utility-nav li:not(.active) .icon.icon-utility-notch {
 	display: none;
 }
+.ifr-utility.utility-nav button .icon.icon-nav-carrot-white {
+	display: none;
+}
 .ifr-utility.utility-nav .icon-globe-white {
 	filter: brightness(0)invert(35%) sepia(48%) saturate(4695%) hue-rotate(137deg) brightness(98%) contrast(83%);
-	width: 22px;
-	height: 24px;
+	width: 18px;
+    height: 18px;
+    top: 1px;
 }
 .ifr-utility.utility-nav > li .field-container.language-select {
 	text-transform: uppercase;
@@ -87,9 +97,14 @@ footer .drivealliance .base.g {
 .ifr-utility.utility-nav > li .field-container.language-select .selected {
 	color: #169a5a;
 }
+body.reservationpage .iso-footer-right {
+	display: none;
+}
 @media (max-width: 400px) {
 	.ifr-utility.utility-nav > li {
 		display: block;
+		margin-top: 0.6rem;
+    	margin-bottom: 0.6rem;
 		margin-left: 0;
 	}
 	.ifr-utility.utility-nav > li #currencySelector-desktop, .ifr-utility.utility-nav > li #languageSelector-desktop {
@@ -102,6 +117,8 @@ footer .drivealliance .base.g {
 		display: none;
 	}	
 	.iso-footer-right {
+		margin-top: 1.5rem;
+		margin-bottom: 1.5rem;
 		text-align: center;
 	}
 	footer .left ul.social-links li {
@@ -112,7 +129,7 @@ footer .drivealliance .base.g {
 @media (min-width: 46.8em) {
 	.iso-footer-right {
 		float: right;
-		margin-top: 2rem;
+		margin-top: 3.5rem;
 		width: 50%;
 	}
 	.ifr-utility {
@@ -161,7 +178,6 @@ footer .drivealliance .base.g {
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
-				//_satellite.track('target_variables');
 			}
 
 			isoTest.log('Test Running...');
@@ -176,21 +192,29 @@ footer .drivealliance .base.g {
 		},
 		chall : function() {
 
-			// Event tracking
-			isoTest.events();
-
 			// Add clearfix to footer
 			document.querySelector('footer .drivealliance .base.g').classList.add('cf');
 			// Add utility module to footer
 			document.querySelector('.footer .gi.left').insertAdjacentHTML('beforebegin','<div class="iso-footer-right"><div class="ifr-utility utility-nav"></div></div>');
 			if (document.querySelector(isoTest.selectorLanguage)) {
-				setTimeout(function(){
-					var languageClone = document.querySelector(isoTest.selectorLanguage).cloneNode(true);
-					var currencyClone = document.querySelector(isoTest.selectorCurrency).cloneNode(true);
-					// Add cloned utility nav items to footer
-					document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',languageClone);
-					document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',currencyClone);
-				}, 3000);
+				var languageClone = document.querySelector(isoTest.selectorLanguage).cloneNode(true);
+				var currencyClone = document.querySelector(isoTest.selectorCurrency).cloneNode(true);
+				// Add cloned utility nav items to footer
+				document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',languageClone);
+				document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',currencyClone);
+
+				var footerUtilButtons = document.querySelectorAll('.ifr-utility button');
+				footerUtilButtons.forEach(function(i) {
+					i.setAttribute('disabled','');
+				});
+				var footerUtilLi = document.querySelectorAll('.ifr-utility > li');
+				footerUtilLi.forEach(function(j) {
+					j.setAttribute('tabindex','0');
+				});
+				var footerUtilInputs = document.querySelectorAll('.ifr-utility .field-container input');
+				footerUtilInputs.forEach(function(k) {
+					k.setAttribute('tabindex','-1');
+				});
 			}
 			
 			// Mobile nav
@@ -198,14 +222,36 @@ footer .drivealliance .base.g {
 				document.querySelector('.mobile-utility.header-nav-item .store-finder-item').insertAdjacentElement('afterend',document.querySelector('.mobile-utility.header-nav-item .career-section'));
 			}
 
+			// Event tracking
+			isoTest.events();
+
 		},
 		events : function() {
+			// Click events
 			document.addEventListener('click', function (event) {
-				if (event.target.closest('.utility-nav .language button')) {
-					isoTest.fireTag('', 'Language Open');
-				}
-				if (event.target.closest('.utility-nav .currency button')) {
+				if (event.target.closest('.ifr-utility .currency')) {
+					if (!document.querySelector('.ifr-utility .currency').classList.contains('visible')||!document.querySelector('.ifr-utility .currency').classList.contains('active')){
+						document.querySelector('.ifr-utility .currency').classList.add('visible');
+						document.querySelector('.ifr-utility .currency').classList.add('active');
+						document.querySelector('.ifr-utility .currency button').setAttribute('aria-expanded', 'true');
+					} else {
+						document.querySelector('.ifr-utility .currency').classList.remove('visible');
+						document.querySelector('.ifr-utility .currency').classList.remove('active');
+						document.querySelector('.ifr-utility .currency button').setAttribute('aria-expanded', 'false');
+					}
 					isoTest.fireTag('', 'Currency Open');
+				}
+				if (event.target.closest('.ifr-utility .language')) {
+					if (!document.querySelector('.ifr-utility .language').classList.contains('visible')||!document.querySelector('.ifr-utility .language').classList.contains('active')){
+						document.querySelector('.ifr-utility .language').classList.add('visible');
+						document.querySelector('.ifr-utility .language').classList.add('active');
+						document.querySelector('.ifr-utility .language button').setAttribute('aria-expanded', 'true');
+					} else {
+						document.querySelector('.ifr-utility .language').classList.remove('visible');
+						document.querySelector('.ifr-utility .language').classList.remove('active');
+						document.querySelector('.ifr-utility .language button').setAttribute('aria-expanded', 'false');
+					}
+					isoTest.fireTag('', 'Language Open');
 				}
 				if (event.target.closest('.utility-nav .help button')) {
 					isoTest.fireTag('', 'Help Open');
@@ -229,6 +275,17 @@ footer .drivealliance .base.g {
 					isoTest.fireTag('', 'Spanish Selected');
 				}
 			}, false);
+			// Keyboard events
+			document.querySelector('.ifr-utility .currency').addEventListener('keydown', function(event) {
+				if (event.keyCode === 32 || event.keyCode === 13) {
+					document.querySelector('.ifr-utility .currency').click();
+				}
+			});
+			document.querySelector('.ifr-utility .language').addEventListener('keydown', function(event) {
+				if (event.keyCode === 32 || event.keyCode === 13) {
+					document.querySelector('.ifr-utility .language').click();
+				}
+			});
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
