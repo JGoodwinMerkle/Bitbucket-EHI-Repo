@@ -166,7 +166,7 @@ body.reservationpage .iso-footer-right {
 	var isoTest = {
 		account : 'EHI',
 		portfolio : 'Enterprise',
-		test : 'Global header redesign',
+		test : 'Global Header Redesign',
 		creative : 'Challenger 2',
 		selector: 'footer',
 		selectorLanguage: '#utility-nav > .utility-nav > .language',
@@ -234,24 +234,24 @@ body.reservationpage .iso-footer-right {
 						document.querySelector('.ifr-utility .currency').classList.add('visible');
 						document.querySelector('.ifr-utility .currency').classList.add('active');
 						document.querySelector('.ifr-utility .currency button').setAttribute('aria-expanded', 'true');
+						isoTest.fireTag('', 'Currency Open');
 					} else {
 						document.querySelector('.ifr-utility .currency').classList.remove('visible');
 						document.querySelector('.ifr-utility .currency').classList.remove('active');
 						document.querySelector('.ifr-utility .currency button').setAttribute('aria-expanded', 'false');
 					}
-					isoTest.fireTag('', 'Currency Open');
 				}
 				if (event.target.closest('.ifr-utility .language')) {
 					if (!document.querySelector('.ifr-utility .language').classList.contains('visible')||!document.querySelector('.ifr-utility .language').classList.contains('active')){
 						document.querySelector('.ifr-utility .language').classList.add('visible');
 						document.querySelector('.ifr-utility .language').classList.add('active');
 						document.querySelector('.ifr-utility .language button').setAttribute('aria-expanded', 'true');
+						isoTest.fireTag('', 'Language Open');
 					} else {
 						document.querySelector('.ifr-utility .language').classList.remove('visible');
 						document.querySelector('.ifr-utility .language').classList.remove('active');
 						document.querySelector('.ifr-utility .language button').setAttribute('aria-expanded', 'false');
 					}
-					isoTest.fireTag('', 'Language Open');
 				}
 				if (event.target.closest('.utility-nav .help button')) {
 					isoTest.fireTag('', 'Help Open');

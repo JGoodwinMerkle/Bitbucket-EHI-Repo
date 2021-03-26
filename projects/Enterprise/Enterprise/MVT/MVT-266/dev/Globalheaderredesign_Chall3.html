@@ -1,4 +1,84 @@
 <style>
+.mobile-nav .primary-nav-toggle:focus, #mobile-toggle:focus {
+	outline-style: auto;
+}	
+#primary-nav .mobile-utility .utility-nav-content .title {
+	border-bottom: 1px solid #fff;
+	margin-bottom: 8px;
+}
+#primary-nav .mobile-utility .active .utility-nav-content {
+	border-top: none;
+	margin-top: 0;
+}
+#primary-nav .mobile-utility .utility-nav-content fieldset {
+	background: #0e0e0e;
+    padding: 0 15px;
+}
+.mobile-utility>li .field-container:last-child {
+	padding: 0;
+}
+#primary-nav .mobile-utility>li.language {
+	border: none;
+	margin-left: 30px;
+	margin-bottom: 0.3rem;
+	order: 1;
+	min-width: 155px;
+}
+#primary-nav .mobile-utility>li.currency {
+	border: none;
+	margin-left: 30px;
+	margin-bottom: 0.3rem;
+	order: 2;
+}
+#primary-nav .mobile-utility>li.store-finder-item {
+ 	display: none;
+}
+#primary-nav .mobile-utility>li.currency .icon-nav-carrot-white {
+	right: -5px;
+}
+.mobile-utility .utility-nav-label .icon-globe-white {
+	filter: brightness(0.375) sepia(1) hue-rotate(100deg) saturate(3);
+}
+#primary-nav .mobile-utility .utility-nav-button .icon-nav-carrot-white {
+	pointer-events: none;
+}
+#primary-nav .mobile-utility:first-of-type .utility-nav-label {
+	border-bottom: 1px solid;
+    padding-bottom: 3px;
+}
+.mobile-utility>li .utility-nav-label:hover {
+	opacity: 0.8;
+	text-decoration: none;
+}
+#primary-nav .mobile-utility .utility-nav-label[data-symbol]:before {
+	border: 1px solid #169a5a;
+	color: #169a5a;
+	width: 16px;
+    height: 16px;
+    line-height: 16px;
+    vertical-align: text-top;
+    margin-top: 2px;
+}
+@media (max-width: 885px) {
+	#primary-nav .mobile-utility:first-of-type {
+		display: flex;
+		justify-content: flex-end;
+		padding-top: 0px;
+	}
+}
+@media (max-width: 355px) {
+	#primary-nav .mobile-utility:first-of-type {
+		display: block;
+		margin: 10px 0 20px 0;
+	}
+	#primary-nav .mobile-utility>li.language, #primary-nav .mobile-utility>li.currency {
+		margin-left: 5px;
+    	padding: 0 5px;
+	}
+	#primary-nav .mobile-utility>li.currency .icon-nav-carrot-white {
+	    right: -8px;
+	}
+}
 </style>
 <script>
 (function() {
@@ -7,8 +87,10 @@
 		account : 'EHI',
 		portfolio : 'Enterprise',
 		test : 'Global Header Redesign',
-		creative : 'Challenger 0',
+		creative : 'Challenger 3',
 		selector: 'footer',
+		selectorLanguage: '#utility-nav > .utility-nav > .language',
+		selectorCurrency: '#utility-nav > .utility-nav > .currency',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -16,7 +98,6 @@
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
-				//_satellite.track('target_variables');
 			}
 
 			isoTest.log('Test Running...');
@@ -30,17 +111,19 @@
 			
 		},
 		chall : function() {
+
 			// Event tracking
 			isoTest.events();
+
 		},
 		events : function() {
 			// Click events
 			document.addEventListener('click', function (event) {
-				if (event.target.closest('.utility-nav .language button')) {
-					isoTest.fireTag('', 'Language Open');
-				}
 				if (event.target.closest('.utility-nav .currency button')) {
 					isoTest.fireTag('', 'Currency Open');
+				}
+				if (event.target.closest('.utility-nav .language button')) {
+					isoTest.fireTag('', 'Language Open');
 				}
 				if (event.target.closest('.utility-nav .help button')) {
 					isoTest.fireTag('', 'Help Open');
