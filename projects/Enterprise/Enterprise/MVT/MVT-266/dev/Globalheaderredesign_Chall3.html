@@ -1,4 +1,146 @@
 <style>
+/* Desktop lang/currency styles */ 
+#utility-nav .help, #utility-nav .language, #utility-nav .currency {
+	display: none;
+}
+.ifr-utility .utility-nav-button {
+	pointer-events: none;
+}
+footer .drivealliance .base.g {
+	overflow: initial;
+}
+.ifr-utility button, .ifr-utility input[type=submit] {
+	background: #fff;
+	color: #169a5a;
+}
+.ifr-utility.utility-nav fieldset {
+	margin: 0;
+	min-height: 198px;
+	padding-top: 1.4rem;
+	transition: none;
+}
+.ifr-utility.utility-nav > li {
+	height: auto;
+    line-height: inherit;
+	margin-right: 0;
+	margin-left: 1rem;
+}
+.ifr-utility.utility-nav > li .utility-nav-label {
+	font-weight: 600;
+}
+.ifr-utility.utility-nav > li .utility-nav-label:hover {
+	text-decoration: none;
+}
+.ifr-utility.utility-nav button {
+	position: relative;
+}
+.ifr-utility.utility-nav button[aria-expanded="true"]::after {
+	content: '';
+	border-bottom: 2px solid;
+	position: absolute;
+	right: 29px;
+	bottom: 0px;
+	left: 8px;
+}
+.ifr-utility.utility-nav .language button[aria-expanded="true"]::after {
+	right: 9px;
+	left: 33px;
+}
+.ifr-utility.utility-nav > li .field-container {
+	line-height: 2.7;
+	padding: 0 25px;
+}
+.ifr-utility.utility-nav > li .field-container h4 {
+	margin-bottom: 0.8rem;
+}
+.ifr-utility.utility-nav > li .field-container li {
+	display: block;
+}
+.ifr-utility.utility-nav > li .utility-nav-content {
+	overflow: visible;
+	text-align: left;
+	transition: none;
+	top: auto;
+	bottom: 90px;
+	height: 139px;
+}
+.ifr-utility.utility-nav > li #currencySelector-desktop {
+	right: -80px;
+}
+.ifr-utility.utility-nav > li #languageSelector-desktop {
+	right: -40px;
+}
+.ifr-utility.utility-nav > li ul {
+	margin-bottom: 0.8rem;
+	padding: 0;
+}
+.ifr-utility.utility-nav .icon.icon-utility-notch {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%23181918' d='M0 0h40L20 20'/%3E%3C/svg%3E");
+	display: inline;
+    top: auto;
+    bottom: -70px;
+    left: 50%;
+    transition: none;
+}
+.ifr-utility.utility-nav li:not(.active) .icon.icon-utility-notch {
+	display: none;
+}
+.ifr-utility.utility-nav button .icon.icon-nav-carrot-white {
+	display: none;
+}
+.ifr-utility.utility-nav .icon-globe-white {
+	filter: brightness(0)invert(35%) sepia(48%) saturate(4695%) hue-rotate(137deg) brightness(98%) contrast(83%);
+	width: 18px;
+    height: 18px;
+    top: 1px;
+}
+.ifr-utility.utility-nav > li .field-container.language-select {
+	text-transform: uppercase;
+}
+.ifr-utility.utility-nav > li .field-container.language-select .selected {
+	color: #169a5a;
+}
+body.reservationpage .iso-footer-right {
+	display: none;
+}
+@media (max-width: 400px) {
+	.ifr-utility.utility-nav > li {
+		display: block;
+		margin-top: 0.6rem;
+    	margin-bottom: 0.6rem;
+		margin-left: 0;
+	}
+	.ifr-utility.utility-nav > li #currencySelector-desktop, .ifr-utility.utility-nav > li #languageSelector-desktop {
+		left: 0;
+		right: 0;
+	}
+}
+@media (max-width: 46.8em) {
+	.iso-footer-right {
+		display: none;
+		margin-top: 1.5rem;
+		text-align: center;
+	}
+	footer .left ul.social-links li {
+		margin: 0 0.7rem 0 0.7rem;
+	}
+}
+@media (min-width: 46.8em) {
+	.iso-footer-right {
+		float: right;
+		margin-top: 3.5rem;
+		width: 50%;
+	}
+	.ifr-utility {
+		float: right;
+	}
+}
+@media (max-width: 1200px) and (min-width: 886px) {
+	.utility-nav>li .careerlink {
+		display: block;
+	}
+} 
+/* Mobile lang/currency styles */	
 .mobile-nav .primary-nav-toggle:focus, #mobile-toggle:focus {
 	outline-style: auto;
 }	
@@ -19,19 +161,23 @@
 }
 #primary-nav .mobile-utility>li.language {
 	border: none;
-	margin-left: 30px;
-	margin-bottom: 0.3rem;
+	margin-left: 0px;
+	margin-top: 0.4rem;
+	margin-bottom: 0.5rem;
 	order: 1;
 	min-width: 155px;
 }
 #primary-nav .mobile-utility>li.currency {
 	border: none;
 	margin-left: 30px;
-	margin-bottom: 0.3rem;
+	margin-top: 0.4rem;
+	margin-bottom: 0.5rem;
 	order: 2;
 }
 #primary-nav .mobile-utility>li.store-finder-item {
- 	display: none;
+	margin-bottom: 0;
+	order: 2;
+ 	width: 100%;
 }
 #primary-nav .mobile-utility>li.currency .icon-nav-carrot-white {
 	right: -5px;
@@ -65,6 +211,7 @@
 @media (max-width: 885px) {
 	#primary-nav .mobile-utility:first-of-type {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: flex-end;
 		padding-top: 0px;
 	}
@@ -72,11 +219,14 @@
 @media (max-width: 355px) {
 	#primary-nav .mobile-utility:first-of-type {
 		display: block;
-		margin: 10px 0 20px 0;
+		margin: 10px 0 10px 0;
 	}
 	#primary-nav .mobile-utility>li.language, #primary-nav .mobile-utility>li.currency {
 		margin-left: 5px;
     	padding: 0 5px;
+	}
+	#primary-nav .mobile-utility>li.store-finder-item {
+		margin-top: 1.3rem;
 	}
 	#primary-nav .mobile-utility>li.currency .icon-nav-carrot-white {
 	    right: -8px;
@@ -91,9 +241,12 @@
 		portfolio : 'Enterprise',
 		test : 'Global Header Redesign',
 		creative : 'Challenger 3',
-		selector: 'footer',
-		selectorLanguage: '#languageSelector-mobile .title',
-		selectorCurrency: '#currencySelector-mobile .title',
+		selector: 'body',
+		selectorFooter: 'footer',
+		selectorLangTitle: '#languageSelector-mobile .title',
+		selectorCurrTitle: '#currencySelector-mobile .title',
+		selectorLanguage: '#utility-nav > .utility-nav > .language',
+		selectorCurrency: '#utility-nav > .utility-nav > .currency',
 		content: {
 			en : {
 				select: "Select",
@@ -129,37 +282,127 @@
 			var selectionText = helpers.supplant(isoTest.selectText, {
 	          'selecttext' : isoTest.content[lang].select
 	     	});
-	     	if (document.querySelector(isoTest.selectorCurrency) && document.querySelector(isoTest.selectorLanguage)) {
-	     		document.querySelector(isoTest.selectorCurrency).innerHTML = selectionText;
-				document.querySelector(isoTest.selectorLanguage).innerHTML = selectionText;
+	     	if (document.querySelector(isoTest.selectorCurrTitle) && document.querySelector(isoTest.selectorLangTitle)) {
+	     		document.querySelector(isoTest.selectorCurrTitle).innerHTML = selectionText;
+				document.querySelector(isoTest.selectorLangTitle).innerHTML = selectionText;
 	     	}
+
+	     	helpers.elementLoaded(isoTest.selectorFooter, function() {
+		     	// Add clearfix to footer
+				document.querySelector('footer .drivealliance .base.g').classList.add('cf');
+				// Add utility module to footer
+				document.querySelector('.footer .gi.left').insertAdjacentHTML('beforebegin','<div class="iso-footer-right"><div class="ifr-utility utility-nav"></div></div>');
+				if (document.querySelector(isoTest.selectorLanguage)) {
+					var languageClone = document.querySelector(isoTest.selectorLanguage).cloneNode(true);
+					var currencyClone = document.querySelector(isoTest.selectorCurrency).cloneNode(true);
+					// Add cloned utility nav items to footer
+					document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',languageClone);
+					document.querySelector('.ifr-utility').insertAdjacentElement('afterbegin',currencyClone);
+
+					var footerUtilButtons = document.querySelectorAll('.ifr-utility button');
+					footerUtilButtons.forEach(function(i) {
+						i.setAttribute('disabled','');
+					});
+					var footerUtilLi = document.querySelectorAll('.ifr-utility > li');
+					footerUtilLi.forEach(function(j) {
+						j.setAttribute('tabindex','0');
+					});
+					var footerUtilInputs = document.querySelectorAll('.ifr-utility .field-container input');
+					footerUtilInputs.forEach(function(k) {
+						k.setAttribute('tabindex','-1');
+					});
+				}
+			});
 			
 			// Event tracking
 			isoTest.events();
 
 		},
 		events : function() {
+			var lang = document.querySelector('.ifr-utility .language');
+			var curr = document.querySelector('.ifr-utility .currency');
+			var langButton = document.querySelector('.ifr-utility .language button');
+			var currButton = document.querySelector('.ifr-utility .currency button');
+			
 			// Click events
 			document.addEventListener('click', function (event) {
-				if (event.target.closest('.utility-nav .currency button')) {
-					isoTest.fireTag('', 'Currency Open');
+				if (event.target.closest('.ifr-utility .currency')) {
+					// Close alternative dropdown if open
+					if (lang.classList.contains('visible')) {
+						lang.classList.remove('visible');
+						lang.classList.remove('active');
+						langButton.setAttribute('aria-expanded', 'false');
+					}
+					if (!curr.classList.contains('visible')||!curr.classList.contains('active')){
+						curr.classList.add('visible');
+						curr.classList.add('active');
+						currButton.setAttribute('aria-expanded', 'true');
+						setTimeout(function(){
+							if (curr.classList.contains('visible')) {
+								isoTest.fireTag('', 'Currency Open');
+							}
+						}, 500);
+					} else {
+						curr.classList.remove('visible');
+						curr.classList.remove('active');
+						currButton.setAttribute('aria-expanded', 'false');
+					}
 				}
-				if (event.target.closest('.utility-nav .language button')) {
-					isoTest.fireTag('', 'Language Open');
+				if (event.target.closest('.ifr-utility .language')) {
+					// Close alternative dropdown if open
+					if (curr.classList.contains('visible')) {
+						curr.classList.remove('visible');
+						curr.classList.remove('active');
+						currButton.setAttribute('aria-expanded', 'false');
+					}
+					if (!lang.classList.contains('visible')||!lang.classList.contains('active')){
+						lang.classList.add('visible');
+						lang.classList.add('active');
+						langButton.setAttribute('aria-expanded', 'true');
+						isoTest.fireTag('', 'Language Open');
+					} else {
+						lang.classList.remove('visible');
+						lang.classList.remove('active');
+						langButton.setAttribute('aria-expanded', 'false');
+					}
 				}
-				if (event.target.closest('.utility-nav .help button')) {
-					isoTest.fireTag('', 'Help Open');
+				if (event.target.closest('.mobile-utility .currency button')) {
+					setTimeout(function(){
+						if (event.target.closest('.mobile-utility .currency.active')) {
+							event.target.closest('.mobile-utility .currency.active').classList.add('visible');
+							isoTest.fireTag('', 'Currency Open');
+						}
+					}, 500);
 				}
-				if (event.target.closest('.utility-nav .career-link')) {
+				if (event.target.closest('.mobile-utility .language button')) {
+					setTimeout(function(){
+						if (event.target.closest('.mobile-utility .language.visible')) {
+							isoTest.fireTag('', 'Language Open');
+						}
+					}, 500);
+				}
+				if (event.target.closest('.header-nav-item .help button')) {
+					setTimeout(function(){
+						if (event.target.closest('.header-nav-item .help.visible')) {
+							isoTest.fireTag('', 'Help Open');
+						}
+					}, 500);
+				}
+				if (event.target.closest('.header-nav-item .careerlink')) {
 					isoTest.fireTag('', 'Covid-19 Update Selected');
 				}
-				if (event.target.closest('[for*="usd"]')) {
+				if (event.target.closest('.currency-button[for*="-mobile"]')) {
+					setTimeout(function(){
+						document.querySelector('#mobile-toggle').focus();
+					}, 0);
+				}
+				if (event.target.closest('[for*="usd-"]')) {
 					isoTest.fireTag('', 'USD Selected');
 				}
-				if (event.target.closest('[for*="cad"]')) {
+				if (event.target.closest('[for*="cad-"]')) {
 					isoTest.fireTag('', 'CAD Selected');
 				}
-				if (event.target.closest('[for*="eur"]')) {
+				if (event.target.closest('[for*="eur-"]')) {
 					isoTest.fireTag('', 'EUR Selected');
 				}
 				if (event.target.closest('.country-language-href[href="/en/home.html"]')) {
@@ -169,6 +412,17 @@
 					isoTest.fireTag('', 'Spanish Selected');
 				}
 			}, false);
+			// Keyboard events
+			document.querySelector('.ifr-utility .currency').addEventListener('keydown', function(event) {
+				if (event.keyCode === 32 || event.keyCode === 13) {
+					document.querySelector('.ifr-utility .currency').click();
+				}
+			});
+			document.querySelector('.ifr-utility .language').addEventListener('keydown', function(event) {
+				if (event.keyCode === 32 || event.keyCode === 13) {
+					document.querySelector('.ifr-utility .language').click();
+				}
+			});
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;

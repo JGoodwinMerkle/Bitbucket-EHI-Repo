@@ -8,7 +8,7 @@
 		portfolio : 'Enterprise',
 		test : 'Global Header Redesign',
 		creative : 'Challenger 0',
-		selector: 'footer',
+		selector: 'body',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -36,25 +36,43 @@
 		events : function() {
 			// Click events
 			document.addEventListener('click', function (event) {
-				if (event.target.closest('.utility-nav .language button')) {
-					isoTest.fireTag('', 'Language Open');
+				if (event.target.closest('.header-nav-item .currency button')) {
+					setTimeout(function(){
+						if (event.target.closest('.header-nav-item .currency.active')) {
+							event.target.closest('.header-nav-item .currency.active').classList.add('visible');
+							isoTest.fireTag('', 'Currency Open');
+						}
+					}, 500);
 				}
-				if (event.target.closest('.utility-nav .currency button')) {
-					isoTest.fireTag('', 'Currency Open');
+				if (event.target.closest('.header-nav-item .language button')) {
+					setTimeout(function(){
+						if (event.target.closest('.header-nav-item .language.visible')) {
+							isoTest.fireTag('', 'Language Open');
+						}
+					}, 500);
 				}
-				if (event.target.closest('.utility-nav .help button')) {
-					isoTest.fireTag('', 'Help Open');
+				if (event.target.closest('.header-nav-item .help button')) {
+					setTimeout(function(){
+						if (event.target.closest('.header-nav-item .help.visible')) {
+							isoTest.fireTag('', 'Help Open');
+						}
+					}, 500);
 				}
-				if (event.target.closest('.utility-nav .career-link')) {
+				if (event.target.closest('.header-nav-item .careerlink')) {
 					isoTest.fireTag('', 'Covid-19 Update Selected');
 				}
-				if (event.target.closest('[for*="usd"]')) {
+				if (event.target.closest('.currency-button[for*="-mobile"]')) {
+					setTimeout(function(){
+						document.querySelector('#mobile-toggle').focus();
+					}, 0);
+				}
+				if (event.target.closest('[for*="usd-"]')) {
 					isoTest.fireTag('', 'USD Selected');
 				}
-				if (event.target.closest('[for*="cad"]')) {
+				if (event.target.closest('[for*="cad-"]')) {
 					isoTest.fireTag('', 'CAD Selected');
 				}
-				if (event.target.closest('[for*="eur"]')) {
+				if (event.target.closest('[for*="eur-"]')) {
 					isoTest.fireTag('', 'EUR Selected');
 				}
 				if (event.target.closest('.country-language-href[href="/en/home.html"]')) {
