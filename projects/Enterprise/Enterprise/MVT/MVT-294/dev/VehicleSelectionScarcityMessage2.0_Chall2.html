@@ -1,0 +1,135 @@
+<style>
+.iso-warning {
+	background-color: #f3f3f3;
+	border: 1px solid #c3c3c3;
+	font-size: 14px;
+	padding: 12px;
+}
+.iso-warning .iso-warning-text {
+	display: inline-block;
+	margin-left: 8px;
+}
+.vehicle-header .iso-warning {
+	display: flex;
+	margin: 0.6rem 0;
+}
+.vehicle-select__main .iso-warning {
+	display: none;
+}
+.iso-icon .iso-icon-checkmark {
+	border: 2px solid #181918;
+	border-radius: 50%;
+	display: inline-block;
+	float: left;
+	font-size: 0.7rem;
+	height: 20px;
+	width: 20px;
+	position: relative;
+	text-align: center;
+}
+.iso-icon .iso-icon-checkmark:before, .iso-icon .iso-icon-checkmark:after  {
+	content: '';
+	display: block;
+	width: 5px;
+	height: 10px;
+	border: solid #181918;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+	position: absolute;
+	top: -1px;
+	left: 6px;
+}
+.iso-icon .iso-icon-checkmark:before {
+	border: solid #fff;
+	border-width: 0 2px 2px 0;
+	left: 8px;
+	top: 0;
+}
+@media (min-width: 1136px) {
+	.iso-main-wrap {
+		width: 776px;
+	}
+	.iso-warning {
+		margin: 0;
+		margin-bottom: 14px;
+	}
+	.vehicle-header .iso-warning {
+		display: none;
+	}
+	.vehicle-select__main .iso-warning {
+		display: flex;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Vehicle Selection Scarcity Message 2.0',
+		creative : 'Challenger 2',
+		selector: '.vehicle-select__main',
+		warningMessage : '<div class="iso-warning"><div class="iso-icon"><i class="icon iso-icon-checkmark"></i></div><div class="iso-warning-text">Enjoy free cancellations! Reserve your vehicle today.</div></div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			if(!document.querySelector('.iso-warning')){
+				//Desktop
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', isoTest.warningMessage);
+				//Mobile
+				helpers.elementLoaded('.vehicle-header__details', function() {
+					document.querySelector('.vehicle-header__details').insertAdjacentHTML('beforebegin', isoTest.warningMessage);
+				});
+			}
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
