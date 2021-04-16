@@ -89,6 +89,15 @@
   				isoTest.chall();
 			});
 			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
 		},
 		chall : function() {
 			if(!document.querySelector('.iso-warning')){
