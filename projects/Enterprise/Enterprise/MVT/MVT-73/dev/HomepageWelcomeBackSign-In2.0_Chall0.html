@@ -7,9 +7,9 @@
 		transition: all .3s;
 	}
 
-	#login-container .login-widget.active #enterprise-login .login-field-container {
+	/*#login-container .login-widget.active #enterprise-login .login-field-container {
 		visibility: hidden;
-	}
+	}*/
 
 	#login-container .login-widget .utility-nav-content fieldset .field-container.right-container {
 		height: 33.5125rem;
@@ -41,11 +41,11 @@
 		margin-right: 10px;
 		margin-top: 10px;
 		padding: 10px;
-    position: absolute;
-    right: 0;
+	    position: absolute;
+	    right: 0;
 	}
 
-	#login-container #enterprise-login .login-field-container h4 {
+	#login-container #enterprise-login .login-field-container.iso-active h4 {
 		line-height: 1.05em;
 		margin-left: 0px;
 		margin-top: .5rem;
@@ -54,8 +54,8 @@
 	#login-container #enterprise-login .login-field-container #iso-signin-text {
 		font-size: 1.1rem;
 		margin-bottom: 0px;
-    margin-left: 0px;
-    margin-top: 2em;
+	    margin-left: 0px;
+	    margin-top: 2em;
 	}
 
 	#login-container #enterprise-login .brand-login-title #iso-welcome-text {
@@ -70,7 +70,7 @@
 		padding-top: 7px !important;
 	}
 
-	#login-container #enterprise-login .icon.icon-eplus-logo {
+	#login-container #enterprise-login .iso-active .icon.icon-eplus-logo {
 		height: 42px;
 		left: 0px;
 		margin-top: 3px;
@@ -95,7 +95,7 @@
 		#login-container .login-widget.active .enterprise-plus.active.text-btn {
 			background: #222324;
 			border-bottom: 1px solid #393A3B;
-    	border-top: 1px solid #393A3B;
+    		border-top: 1px solid #393A3B;
 		}
 
 		.reservationWidget.section.signinOpen {
@@ -117,20 +117,18 @@
 		showWidget : sessionStorage.getItem("isoWidgetSeen"),
 		init : function() {
 
-			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
+			isoTest.debug = ${user.mvtDebug};
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
-				//_satellite.track('target_variables');
 			}
 		
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-
-			isoTest.elementLoaded(isoTest.widget, function() {
+			helpers.elementLoaded(isoTest.widget, function() {
 				var checkForModal = setInterval( function() {
 					if (document.querySelector('body.ReactModal__Body--open') == null) {
 						clearInterval(checkForModal);
@@ -142,6 +140,8 @@
 				}, 100);
 			});
 
+			isoTest.addEvents();
+
 		},
 		chall : function() {
 			isoTest.log('fn:Chall');
@@ -151,24 +151,37 @@
 					document.querySelector('#login-container #signInJoinButton').click();
 					sessionStorage.setItem("isoWidgetSeen", "true");
 					isoTest.updateWidget(); 
-					isoTest.addEvents();
 					document.querySelector('.login-widget.active .iso-close-modal').focus();
 				} else {
 					sessionStorage.setItem("isoWidgetSeen", "true");
-					isoTest.addEvents();
 				}
 			} else {
 				if (document.getElementById('signInJoinButton')) {
 					isoTest.updateButton(); 
 					isoTest.updateWidget(); 
-					isoTest.addEvents();
 				}
 			}
+
+			// Listen for sign-in modal creation
+			var observer = new MutationObserver(function(mutations) {
+			  	mutations.forEach(function(mutation) {
+			    	console.log(mutation.type);
+			    	if (document.querySelector('#signin-content')) {
+			    		isoTest.updateButton(); 
+						isoTest.updateWidget();
+			    	}
+			  	});
+			});
+			var config = {
+			    childList: true,
+			};
+			observer.observe(document.querySelector(isoTest.widget), config);
+			
 		},
 		updateWidget : function() {
-			isoTest.elementLoaded(isoTest.enterpriseWidget, function() {
+			helpers.elementLoaded(isoTest.enterpriseWidget, function() {
 				document.querySelector('#login-container .login-widget.active #enterprise-login .login-field-container').classList.add('iso-active');
-				isoTest.elementLoaded('.iso-active', function() {
+				helpers.elementLoaded('.iso-active', function() {
 					document.querySelector('#login-container .login-widget.active #enterprise-login .iso-active .brand-login-title').innerHTML = '<p id="iso-welcome-text"></p><div id="iso-signin-text"></div>';
 					document.querySelector('#login-container .login-widget.active #enterprise-login').insertAdjacentHTML("afterbegin", '<button class="close-modal iso-close-modal" aria-label="Close"><i class="icon icon-close-x-white"></i></button>');
 
@@ -188,7 +201,7 @@
 			});
 		},
 		updateButton : function() {
-			isoTest.elementLoaded('#login-container .login-widget .login-text', function() {
+			helpers.elementLoaded('#login-container .login-widget .login-text', function() {
 				document.querySelector('#login-container #signInJoinButton').innerHTML = enterprise.i18nReservation.expiredlogin_0007;
 				document.querySelector('#login-container .login-widget .login-text').style.visibility = "visible";
 			});
@@ -219,11 +232,11 @@
 		},
 		addEvents : function() {
 			window.addEventListener("resize", function(){
-		  	if(window.innerWidth < 716){
-		      if (!document.querySelector('#login-container .login-widget.active')) {
+			  	if(window.innerWidth < 716) {
+			    	if (!document.querySelector('#login-container .login-widget.active')) {
 						document.querySelector('.reservationWidget.section').classList.remove("signinOpen");
 					}
-		   	}
+			   	}
 			});
 
 			document.addEventListener("keydown", function (event) {
@@ -236,24 +249,24 @@
  					if (document.querySelector('.login-widget.active') && document.querySelector('.icon.icon-white-person') && document.querySelector('.authenticated')) {
  						document.querySelector('.login-widget .utility-nav-label').focus();
  					}
-		    }
+			    }
 
-		    var keycode = (event.keyCode ? event.keyCode : event.which);
-    		if (keycode == '13') {
-    			if ( event.target.matches('.login-widget.active .enterprise-login.active #utility-eplus-email') || event.target.matches('.login-widget.active .enterprise-login.active #utility-eplus-password') || event.target.matches('.login-widget.active .enterprise-login.active .btn')) {
-						isoTest.trackClicks(isoTest.test + ' : Sign In');
+			    var keycode = (event.keyCode ? event.keyCode : event.which);
+	    		if (keycode == '13') {
+	    			if ( event.target.matches('.login-widget.active .enterprise-login.active #utility-eplus-email') || event.target.matches('.login-widget.active .enterprise-login.active #utility-eplus-password') || event.target.matches('.login-widget.active .enterprise-login.active .btn')) {
+						//isoTest.trackClicks(isoTest.test + ' : Sign In');
 						isoTest.afterSignIn();
-		      }
+			      	}
 
-		      if ( event.target.matches('.login-widget.active .iso-close-modal')) {
+			      	if ( event.target.matches('.login-widget.active .iso-close-modal')) {
 						document.querySelector('#login-container .login-widget').classList.remove("active");
 						document.querySelector('#signInJoinButton').click();
-		      }
+			      	}
 
-		      if ( event.target.matches('#signInJoinButton')  || event.target.matches('.login-widget .utility-nav-label') || event.target.matches('.login-widget .utility-nav-label .login-text')) {
+			      	if ( event.target.matches('#signInJoinButton')  || event.target.matches('.login-widget .utility-nav-label') || event.target.matches('.login-widget .utility-nav-label .login-text')) {
 						isoTest.updateWidget();
-		      }
-		    }
+			      	}
+			    }
 			}, false);
 
 			document.addEventListener('click', function (event) {
@@ -271,16 +284,24 @@
 					}, 300);
 				}
 
-				if (event.target.matches('.login-widget.active .enterprise-login.active .btn')) {
-					isoTest.trackClicks(isoTest.test + ' : Sign In');
-				}
+				// if (event.target.matches('.login-widget.active .enterprise-login.active .btn')) {
+				// 	isoTest.trackClicks(isoTest.test + ' : Sign In');
+				// }
 
 				if (event.target.matches('.logout-modal .btn.modal-button')) {
 					if (!event.target.classList.contains('modal-cancel')) {
-						isoTest.elementLoaded(isoTest.widget, function() {
+						helpers.elementLoaded(isoTest.widget, function() {
 			  			isoTest.updateWidget(); 
 						});
 					}
+				}
+
+				if (event.target.closest('[data-dtm-tracking="button|top_nav|signin_join"]')) {
+					setTimeout(function() { 
+						if (document.querySelector('.login-widget.active')) {
+							isoTest.fireTag89('','Header Sign-In Expanded');
+						}
+					}, 500);
 				}
 			}, false);
 		},
@@ -289,6 +310,20 @@
 			s.eVar20 = linkName; 
 			s.tl(this, 'o', linkName); 
 		},
+		fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+	var helpers = {
 		elementLoaded : function (ele, callback) {
 			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
 			window.clearTimeout(isoTest.eleTimer);
@@ -298,29 +333,10 @@
 					callback();
 				}
 	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-		
-		log : function(obj){
-			if(isoTest.debug === true){
-				console.log(obj);
-			}
-		}
-		
-	}
-	var helpers = {
-		getQueryParam: function(variable) {
-	      var query = window.location.search.substring(1);
-	      var vars = query.split('&');
-	      for (var i = 0; i < vars.length; i++) {
-	        var pair = vars[i].split('=');
-	        if (decodeURIComponent(pair[0]) == variable) {
-	        	return decodeURIComponent(pair[1]);
-	        }
-	      }
-	    }
-	}
+	};
 
 	isoTest.init();
 })();

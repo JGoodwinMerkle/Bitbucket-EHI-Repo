@@ -157,8 +157,13 @@
 				if (event.target.closest('.welcome-back-modal a')) {
 					document.querySelector('.welcome-back-modal').classList.add('hide');
 				}
-				if (event.target.matches('#signInJoinButton')) {
+				if (event.target.closest('[data-dtm-tracking="button|top_nav|signin_join"]')) {
 					document.querySelector('.welcome-back-modal').classList.add('hide');
+					setTimeout(function() { 
+						if (document.querySelector('.login-widget.active')) {
+							isoTest.fireTag89('','Header Sign-In Expanded');
+						}
+					}, 500);
 				}
 			}, false);
 
@@ -176,13 +181,19 @@
 			};
 
 		},
+		fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
 		}
-
-	}
+	};
 
 	var helpers = {
 		elementLoaded : function (ele, callback) {
@@ -197,7 +208,7 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	}
+	};
 
 	isoTest.init();
 })();

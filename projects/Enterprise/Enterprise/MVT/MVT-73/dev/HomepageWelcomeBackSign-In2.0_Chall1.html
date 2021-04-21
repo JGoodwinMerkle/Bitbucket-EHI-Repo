@@ -35,7 +35,7 @@
 		viewportWidth : '',
 		init : function() {
 
-			//isoTest.debug = ${user.mvtDebug};
+			isoTest.debug = ${user.mvtDebug};
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -77,9 +77,18 @@
 			document.querySelector('.welcome-back-banner a').addEventListener('click', function (e) {
 				e.preventDefault();
 				document.querySelector('#signInJoinButton').click();
-					document.querySelector('.login-widget .utility-nav-label').focus();
-				isoTest.fireTag(this,'Banner Click');
+				document.querySelector('.login-widget .utility-nav-label').focus();
+				//isoTest.fireTag(this,'Banner Click');
 			});
+			document.addEventListener('click', function (event) {
+				if (event.target.closest('[data-dtm-tracking="button|top_nav|signin_join"]')) {
+					setTimeout(function() { 
+						if (document.querySelector('.login-widget.active')) {
+							isoTest.fireTag89('','Header Sign-In Expanded');
+						}
+					}, 500);
+				}
+			}, false);
 
 			// Listen for signin
 			var targetNode = document.getElementById('login-container');
@@ -107,13 +116,19 @@
 			s.eVar20 = linkName;
 			s.tl(this, 'o', linkName);
 		},
+		fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
 		}
-
-	}
+	};
 
 	var helpers = {
 		elementLoaded : function (ele, callback) {
@@ -128,7 +143,7 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	}
+	};
 
 	isoTest.init();
 })();
