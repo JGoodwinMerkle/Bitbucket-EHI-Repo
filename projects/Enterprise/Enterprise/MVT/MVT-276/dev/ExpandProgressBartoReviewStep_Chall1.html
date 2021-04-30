@@ -1,0 +1,243 @@
+<style>
+.resflow-commit .reservation-steps-container.collapsed {
+	display: block;
+}
+@media screen and (min-width: 46.8em) {
+	.reservation-steps .step__col-4 {
+		width: 20%;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Expand Progress Bar to Review Step',
+		creative : 'Challenger 1',
+		selector : '.reservation-steps',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+			
+		},
+		viewChange : function(){
+			if(/(location|cars|extras|commit)/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+			if (/commit/.test(location.hash)) {
+				isoTest.pageReview();
+			} else if (/extras/.test(location.hash)) {
+				isoTest.pageExtras();
+			} else {
+				isoTest.pageCarsAndEarlier();
+			}
+		},
+		chall : function() {
+
+			isoTest.addReviewStepM();
+			isoTest.addReviewStepD();
+			isoTest.mutationObserver();
+			isoTest.eventListeners();
+
+			if (/commit/.test(location.hash)) {
+				isoTest.pageReview();
+			} else if (/extras/.test(location.hash)) {
+				isoTest.pageExtras();
+			} else {
+				isoTest.pageCarsAndEarlier();
+			}
+
+		},
+		addReviewStepD : function() {
+			if (!document.querySelector('.step-commit')) {
+				document.querySelector('.reservation-steps > li:last-of-type').insertAdjacentHTML('afterend','<li class="step step__col-4 step-commit" data-stephash="commit"><button class="btn step__item disabled btn-unstyled btn--outline" disabled="" type="button" role="link" aria-disabled="true" tabindex="-1"><div class="step__step-title"><span class="step__step-index"><span></span></span>REVIEW</div><div class="step__step-value">Current Step</div><div class="step__step-mobile-modify">Edit</div></button><div class="step__arrow"></div></li>');
+			}
+
+			// Add step number
+			var stepNumber = document.querySelector('[data-stephash="extras"] .step__step-index span').innerText;
+			document.querySelector('.step-commit .step__step-index span').innerText = parseInt(stepNumber) + 1;
+
+		},
+		addReviewStepM : function() {
+			if (!document.querySelector('.step-commit-mobile')) {
+				document.querySelector('.mobile-reservation-nav__step-preview-list > div:last-of-type').setAttribute('id','step-extras-mobile');
+				document.querySelector('.mobile-reservation-nav__step-preview-list > div:last-of-type').insertAdjacentHTML('afterend','<div class="mobile-reservation-nav__step-arrow icon icon-arrow"></div><div class="step-commit-mobile mobile-reservation-nav__step-preview mobile-reservation-nav__step-preview--to-do"><span class="step__step-index"><span></span></span></div>');
+
+			}
+			// Add step number
+			var stepNumber = document.querySelector('[data-stephash="extras"] .step__step-index span').innerText;
+			document.querySelector('.step-commit-mobile .step__step-index span').innerText = parseInt(stepNumber) + 1;
+		},
+		mutationObserver : function() {
+			var observer = new MutationObserver(function(mutations) {
+			  	mutations.forEach(function(mutation) {
+			    	if (mutation.attributeName == 'class') {
+                        if (mutation.target.classList.contains('resflow-commit')) {
+                        	isoTest.pageReview();
+                        } else if (mutation.target.classList.contains('resflow-extras')) {
+                        	isoTest.pageExtras();
+                        } else {
+                        	isoTest.pageCarsAndEarlier();
+                        }
+                    }
+			  	});
+			});
+			observer.observe(document.querySelector('body'), { attributes: true, });
+		},
+		pageReview : function() {
+			// D: Progress bar logic
+			var reviewBtn = document.querySelector('.step-commit > button');
+			reviewBtn.classList.add('step-active');
+			var extrasBtn = document.querySelector('[data-dtm-tracking="progress bar|extras|modify"]');
+			extrasBtn.classList.add('step-completed');
+			extrasBtn.classList.remove('disabled');
+			
+			helpers.tagLoaded(function() {
+				var extrasAdded = ReservationStateTree.get(['session','reservationSession','manuallySelectedExtras']);
+				if (extrasAdded === true) {
+					var allH3 = document.querySelectorAll('h3');
+					for(var i=0; i<allH3.length;i++){
+						if(allH3[i].textContent === 'Extras'){
+							var numberAdded = allH3[i].parentNode.parentNode.querySelectorAll('.sidebar-box__list-item-label').length;
+							document.querySelector('[data-stephash="extras"] .step__step-value').innerText = numberAdded + ' Added';
+						}
+					}
+				} else {
+					document.querySelector('[data-stephash="extras"] .step__step-value').innerText = 'None';
+				}	
+			});
+
+			// M: Progress bar logic
+			var extrasBtnMobile = document.querySelector('#step-extras-mobile');
+			extrasBtnMobile.classList.add('step-completed');
+			extrasBtnMobile.classList.remove('step-active');
+			extrasBtnMobile.classList.remove('mobile-reservation-nav__step-preview--to-do');
+			extrasBtnMobile.classList.remove('mobile-reservation-nav__step-preview--active');
+
+			var reviewBtnMobile = document.querySelector('.step-commit-mobile');
+			reviewBtnMobile.classList.add('step-active');
+			reviewBtnMobile.classList.remove('mobile-reservation-nav__step-preview--to-do');
+			
+		},
+		pageExtras : function() {
+			// D: Progress bar logic
+			var reviewBtn = document.querySelector('.step-commit > button');
+			reviewBtn.classList.remove('step-active');
+			var extrasBtn = document.querySelector('[data-dtm-tracking="progress bar|extras|modify"]');
+			extrasBtn.classList.remove('step-completed');
+			extrasBtn.classList.remove('disabled');
+			extrasBtn.setAttribute('tabindex','0');
+			extrasBtn.removeAttribute('disabled','');
+			extrasBtn.removeAttribute('aria-disabled','true');
+
+			// M: Progress bar logic
+			var extrasBtnMobile = document.querySelector('#step-extras-mobile');
+			extrasBtnMobile.classList.remove('step-completed');
+			extrasBtnMobile.classList.add('step-active');
+			extrasBtnMobile.classList.add('mobile-reservation-nav__step-preview--active');
+
+			var reviewBtnMobile = document.querySelector('.step-commit-mobile');
+			reviewBtnMobile.classList.remove('step-active');
+			reviewBtnMobile.classList.add('mobile-reservation-nav__step-preview--to-do');
+
+		},
+		pageCarsAndEarlier : function() {
+			// D: Progress bar logic
+			var reviewBtn = document.querySelector('.step-commit > button');
+			reviewBtn.classList.remove('step-active');
+			var extrasBtn = document.querySelector('[data-dtm-tracking="progress bar|extras|modify"]');
+			extrasBtn.classList.remove('step-completed');
+			extrasBtn.classList.remove('disabled');
+			extrasBtn.setAttribute('tabindex','0');
+			extrasBtn.removeAttribute('disabled','');
+			extrasBtn.removeAttribute('aria-disabled','true');
+
+			// M: Progress bar logic
+			var extrasBtnMobile = document.querySelector('#step-extras-mobile');
+			extrasBtnMobile.classList.add('mobile-reservation-nav__step-preview--to-do');
+			extrasBtnMobile.classList.remove('step-completed');
+			extrasBtnMobile.classList.remove('step-active');
+			extrasBtnMobile.classList.remove('mobile-reservation-nav__step-preview--active');
+
+			var reviewBtnMobile = document.querySelector('.step-commit-mobile');
+			reviewBtnMobile.classList.remove('step-active');
+			reviewBtnMobile.classList.add('mobile-reservation-nav__step-preview--to-do');
+		},
+		eventListeners : function () {
+			document.addEventListener('click', function (event) {
+				if (event.target.closest('[data-stephash="extras"]')) {
+					window.location.href = '/en/reserve.html#extras';
+				}
+				if ( event.target.closest('.mobile-reservation-nav') && !event.target.closest('.mobile-reservation-nav-slider') ) {
+					document.querySelector('.mobile-reservation-nav-slider').click();
+				}
+				if (event.target.closest('[data-dtm-tracking="progress bar|extras|modify"]')) {
+					isoTest.fireTag('','Extras Modify');
+				}
+			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		tagLoaded : function (callback) {
+			isoTest.log('tagLoaded:: rst - Checking...');
+			window.clearTimeout(isoTest.tagTimer);
+			if (ReservationStateTree.get(['session'])) {
+				if (typeof callback === 'function') {
+					isoTest.log('tagLoaded:: rst - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.tagTimer = window.setTimeout(function(){helpers.tagLoaded(callback);}, 100);
+	        }
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
