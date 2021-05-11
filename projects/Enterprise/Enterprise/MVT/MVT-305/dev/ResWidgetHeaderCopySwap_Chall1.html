@@ -1,0 +1,95 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Res Widget Header Copy Swap',
+		creative : 'Challenger 1',
+		selectorHome : '#reservationWidget h2',
+		selectorBranch : '#branch-page-booking-header',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			if (window.location.href.indexOf('/home.html') > -1) {
+				helpers.elementLoaded(isoTest.selectorHome, function() {
+					isoTest.log('Test Ready!');
+	  				isoTest.textSwapHome();
+					isoTest.mutationObserver();
+				});
+			} else if (window.location.href.indexOf('/car-rental/locations/') > -1) {
+				helpers.elementLoaded(isoTest.selectorBranch, function() {
+					isoTest.log('Test Ready!');
+	  				isoTest.textSwapBranch();
+				});
+			}
+			
+		},
+		mutationObserver : function() {
+			var observer = new MutationObserver(function(mutations) {
+				mutations.forEach(function(mutation) {
+					isoTest.textSwapHome();
+			  	});
+			});
+
+			var config = {
+			  	attributes: true, childList: true, subtree: true, characterData: true, characterDataOldValue: true
+			};
+
+			observer.observe(document.querySelector(isoTest.selectorHome), config);
+		},
+		textSwapHome : function() {
+			if (document.querySelector('#reservationWidget h2').textContent == 'Reserve A Vehicle') {
+				document.querySelector('#reservationWidget h2').textContent = 'CHECK PRICES & AVAILABILITY';
+				document.querySelector('.reservation-toggle__button').textContent = 'VIEW / MODIFY / CANCEL';
+			} else if (document.querySelector('#reservationWidget h2').textContent == 'VIEW / MODIFY / CANCEL') {
+				document.querySelector('.reservation-toggle__button').textContent = 'CHECK PRICES & AVAILABILITY';
+			}
+		},
+		textSwapBranch : function() {
+			if (document.querySelector('#branch-page-booking-header')) {
+				document.querySelector('#branch-page-booking-header').textContent = 'CHECK PRICES & AVAILABILITY';
+			}
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
