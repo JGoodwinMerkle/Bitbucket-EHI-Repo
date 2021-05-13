@@ -14,6 +14,8 @@
 .mobile-reservation-nav__step-preview-title {
 	text-align: center;
 	white-space: nowrap;
+	overflow: hidden;
+    text-overflow: ellipsis;
 }
 .step .step__arrow {
 	background-size: 20px auto;
@@ -82,6 +84,11 @@
 	}
 	.step:last-of-type .step__arrow {
 		background-size: 15px auto;
+	}
+}
+@media (max-width: 66em) and (min-width: 46.8em) {
+	.step__step-value {
+	    font-size: .7em;
 	}
 }
 </style>
@@ -259,7 +266,7 @@
 
 			// M: Progress bar logic
 			var extrasBtnMobile = document.querySelector('#step-extras-mobile');
-			extrasBtnMobile.classList.add('mobile-reservation-nav__step-preview--to-do');
+			//extrasBtnMobile.classList.add('mobile-reservation-nav__step-preview--to-do');
 			//extrasBtnMobile.classList.remove('step-completed');
 			extrasBtnMobile.classList.remove('step-active');
 			extrasBtnMobile.classList.remove('mobile-reservation-nav__step-preview--active');
