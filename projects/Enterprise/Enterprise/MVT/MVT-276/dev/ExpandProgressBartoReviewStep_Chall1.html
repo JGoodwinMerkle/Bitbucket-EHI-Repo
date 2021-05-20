@@ -8,11 +8,8 @@
 .step-commit-mobile.step-active .mobile-reservation-nav__step-preview-title {
 	display: block;
 }
-.mobile-reservation-nav__step-preview-title {
+.mobile-reservation-nav__step-preview--active {
 	text-align: center;
-	white-space: nowrap;
-	overflow: hidden;
-    text-overflow: ellipsis;
 }
 .step .step__arrow {
 	background-size: 20px auto;
@@ -41,6 +38,14 @@
 	background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' height='50.093' width='53.333'%3E%3Cdefs%3E%3CclipPath id='a' clipPathUnits='userSpaceOnUse'%3E%3Cpath d='M0 0h400v375.652H0V0z'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23a)' transform='matrix(.13333 0 0 -.13333 0 50.093)'%3E%3Cpath d='M385.004 172.965H15c-8.285 0-15 6.711-15 15 0 8.285 6.715 15 15 15h333.793l-147.09 147.082c-5.859 5.855-5.859 15.359 0 21.211 5.859 5.859 15.352 5.859 21.211 0L395.609 198.57a14.997 14.997 0 00-10.605-25.605M212.309 0a14.956 14.956 0 00-10.606 4.395c-5.859 5.859-5.859 15.351 0 21.21L302.66 126.552c5.86 5.859 15.352 5.859 21.211 0 5.859-5.86 5.859-15.352 0-21.211L222.914 4.395A14.949 14.949 0 00212.309 0'/%3E%3C/g%3E%3C/svg%3E");
 	background-size: cover;
 }
+@media (max-width: 360px) {
+	.mobile-reservation-nav__step-preview--active .mobile-reservation-nav__step-preview-title {
+		display: none !important;
+	}
+	.mobile-reservation-nav__step-preview--active .step__step-index {
+		margin-right: 0;
+	}
+}
 @media screen and (min-width: 46.8em) {
 	#navigationSection {
 		flex-direction: row;
@@ -56,6 +61,7 @@
 	}
 	[data-stephash="commit"] .step-active .step__step-value {
 		line-height: 1rem;
+		overflow: visible;
 	}
 }
 @media (max-width: 66em) {
@@ -81,6 +87,7 @@
 		test : 'Expand Progress Bar to Review Step',
 		creative : 'Challenger 1',
 		selector : '.reservation-steps > li[data-stephash="extras"]',
+		listenerAdded : false,
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -238,16 +245,19 @@
 			var reviewBtn = document.querySelector('.step-commit > button');
 			reviewBtn.classList.remove('step-active');
 			var extrasBtn = document.querySelector('[data-dtm-tracking="progress bar|extras|modify"]');
-			//extrasBtn.classList.remove('step-completed');
+			extrasBtn.classList.remove('step-completed');
 			extrasBtn.classList.remove('disabled');
 			extrasBtn.setAttribute('tabindex','0');
 			extrasBtn.removeAttribute('disabled','');
 			extrasBtn.removeAttribute('aria-disabled','true');
+			if (!/cars/.test(location.hash)) {
+				document.querySelector('[data-stephash="extras"] .step__step-value').innerText = 'Select';
+			}
 
 			// M: Progress bar logic
 			var extrasBtnMobile = document.querySelector('#step-extras-mobile');
-			//extrasBtnMobile.classList.add('mobile-reservation-nav__step-preview--to-do');
-			//extrasBtnMobile.classList.remove('step-completed');
+			extrasBtnMobile.classList.add('mobile-reservation-nav__step-preview--to-do');
+			extrasBtnMobile.classList.remove('step-completed');
 			extrasBtnMobile.classList.remove('step-active');
 			extrasBtnMobile.classList.remove('mobile-reservation-nav__step-preview--active');
 
@@ -257,17 +267,20 @@
 			reviewBtnMobile.classList.remove('mobile-reservation-nav__step-preview--active');
 		},
 		eventListeners : function () {
-			document.addEventListener('click', function (event) {
-				if (event.target.closest('[data-stephash="extras"]')) {
-					window.location.href = '/en/reserve.html#extras';
-				}
-				if ( event.target.closest('.mobile-reservation-nav') && !event.target.closest('.mobile-reservation-nav-slider') ) {
-					document.querySelector('.mobile-reservation-nav-slider').click();
-				}
-				if (event.target.closest('[data-dtm-tracking="progress bar|extras|modify"]')) {
-					isoTest.fireTag('','Extras Modify');
-				}
-			}, false);
+			if (isoTest.listenerAdded === false) {
+				isoTest.listenerAdded = true;
+				document.addEventListener('click', function (event) {
+					if (event.target.closest('[data-stephash="extras"]')) {
+						window.location.href = '/en/reserve.html#extras';
+					}
+					if (event.target.closest('.mobile-reservation-nav') && !event.target.closest('.mobile-reservation-nav-slider') ) {
+						document.querySelector('.mobile-reservation-nav-slider').click();
+					}
+					if (event.target.closest('[data-dtm-tracking="progress bar|extras|modify"]')) {
+						isoTest.fireTag('','Extras Modify');
+					}
+				}, false);
+			}
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
