@@ -55,7 +55,7 @@
 		flex-grow: 1;
 		font-size: 0;
 	}
-	@media (min-width: 960px) {
+	@media (min-width: 1110px) {
 		.cyb-benefits {
 			display: flex;
 		}
@@ -100,8 +100,17 @@
 		},
 		chall : function() {
 
-			document.querySelector(isoTest.selector).insertAdjacentHTML('beforebegin','<ul class="cyb-benefits"><li><span></span>Free Cancellation</li><li><span></span>Pay at Pick-Up</li><li><span></span>Unlimited Mileage</li></ul>');
 			document.querySelector('.submit-container .reserve-summary').insertAdjacentHTML('afterbegin','<div class="cyb-text">You will be charged the following amount: </div>');
+			document.querySelector(isoTest.selector).insertAdjacentHTML('beforebegin','<ul class="cyb-benefits"><li><span></span>Free Cancellation</li><li><span></span>Pay at Pick-Up</li></ul>');
+
+			document.querySelectorAll('.sidebar-box__list-item-label').forEach(function(number) {
+			    if (number.innerHTML.indexOf('Unlimited Mileage') != -1) {
+			    	document.querySelector('.cyb-benefits').insertAdjacentHTML('beforeend','<li><span></span>Unlimited Mileage</li>');
+			    }
+			    if (number.innerHTML.indexOf('Miles') != -1) {
+			    	document.querySelector('.cyb-benefits').insertAdjacentHTML('beforeend','<li><span></span>Superior Customer Service</li>');
+			    }
+			});
 
 		},
 		log : function(obj){
