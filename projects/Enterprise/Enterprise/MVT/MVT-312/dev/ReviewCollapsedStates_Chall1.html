@@ -1,0 +1,209 @@
+<style>
+.iso-expand {
+	display: none;
+}
+@media (max-width: 48em) {
+	.iso-accordion-collapsed .layout-stack {
+		height: 0;
+		overflow: hidden;
+	}
+	.iso-expand {
+		cursor: pointer;
+		display: block;
+		font-weight: bold;
+		margin-top: 15px;
+	}
+	.iso-expand::before {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDIwIDE1Ij48cGF0aCBmaWxsPSIjMTg5QTVBIiBkPSJNMTkuNjk3IDEwLjczNmwtMS45MiAyLjMwNEwxMCA2LjhsLTcuNTgzIDYuMDk2LTEuOTItMi4zNTJMMTAgMi45Nmw5LjY5NyA3Ljc3NiIvPjwvc3ZnPg==);
+		background-position: left center;
+		background-repeat: no-repeat;
+		content: '';
+		padding-left: 25px;
+	}
+	.iso-accordion-collapsed .iso-expand::before {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDIwIDE1Ij48cGF0aCBmaWxsPSIjMTg5QTVBIiBkPSJNLjQ5NyA1LjI2NGwxLjkyLTIuMzA0IDcuNzc2IDYuMjQgNy41ODMtNi4wOTYgMS45MiAyLjM1Mi05LjUwMyA3LjU4NEwuNDk3IDUuMjY0Ii8+PC9zdmc+);
+	}
+	.flight-information .flight-disclaimer {
+		margin-bottom: 0;
+	}
+	.flight-information .iso-expand {
+		border-bottom: 1px solid #c3c3c3;
+		margin-top: 20px;
+		margin-bottom: 20px;
+		padding-bottom: 15px;
+	}
+	.flight-information.iso-accordion-collapsed .iso-expand {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+	.flight-information .multi-terminal + .layout-stack label[for="airlineCode"] .ehi-input__label-content:after {
+		content: " *";
+	}	
+	.aside--mobile .iso-accordion-collapsed .policies__list {
+		max-height: 113px;
+	    overflow: hidden;
+	    position: relative;
+	    margin-left: 0;
+	    padding-left: 20px;
+	}
+	.aside--mobile .iso-accordion-collapsed .policies__list::after {
+	    background: linear-gradient(0deg, rgb(243 243 243) 0%, rgba(255,255,255,0) 100%);
+	    bottom: 0;
+	    content: '';
+	    height: 50px;
+	    pointer-events: none;
+	    position: absolute;
+	    width: 100%;
+	}
+	.aside--mobile .iso-expand .iso-less{
+		display: inline;
+	}
+	.aside--mobile .iso-expand .iso-more {
+		display: none;
+	}
+	.aside--mobile .iso-accordion-collapsed .iso-expand .iso-more {
+		display: inline;
+	}
+	.aside--mobile .iso-accordion-collapsed .iso-expand .iso-less {
+		display: none;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Review Collapsed States',
+		creative : 'Challenger 1',
+		selector : '.flight-information',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			// Flight Accordion
+			// Remove Optional Text
+			document.querySelector('.field-container-input-flightNumber .ehi-input__label-content').textContent = 'Flight Number';
+			// Flight Info NOT Required
+			if (document.querySelector('.flight-information') && !document.querySelector('.multi-terminal')) {
+				document.querySelector('.flight-information').classList.add('iso-accordion-collapsed');
+				document.querySelector('.flight-information .layout-stack').insertAdjacentHTML('beforebegin','<a class="iso-expand">ADD FLIGHT INFORMATION</a>');
+			}
+
+			// Policy Accordion
+			// Sort Alphabetical
+			isoTest.alphabetizeList(document.querySelector('.aside--mobile #rentalFacts .policies__list'));
+			// Prioritize Top 4
+			var mobilePL = document.querySelector('.aside--mobile .policies__list');
+			document.querySelector('.aside--mobile .policies').classList.add('iso-accordion-collapsed');
+			document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
+				function(currentValue, currentIndex, listObj) {
+					//console.log(currentValue + ', ' + currentIndex + ', ' + this);
+					if (currentValue.innerHTML.indexOf('Forms of Payment') !== -1) {
+						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+					}
+					if (currentValue.innerHTML.indexOf('Driver\'s License Information') !== -1) {
+						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+					}
+					if (currentValue.innerHTML.indexOf('Renter Requirements ') !== -1) {
+						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+					}
+					if (currentValue.innerHTML.indexOf('Rental Contract Additional Terms and Conditions') !== -1) {
+						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+					}
+				}
+			);
+			// Add Accordion Link
+			mobilePL.insertAdjacentHTML('afterend','<a class="iso-expand">Show <span class="iso-more">More</span><span class="iso-less">Less</span></a>');
+
+			// Event Listener
+			isoTest.addEvents();
+
+		},
+		alphabetizeList : function(ul) {
+			Array.from(ul.getElementsByTagName("LI")).sort(function (a, b) {
+				return a.textContent.localeCompare(b.textContent);
+			}).forEach(function (li) {
+				return ul.appendChild(li);
+			});
+		},
+		addEvents : function() {
+			document.querySelector('#commit .review-section').addEventListener('click', function (event) {
+				// Flight Details
+				if (event.target.matches('.flight-information .iso-expand')) {
+					event.preventDefault();
+					document.querySelector('.flight-information').classList.toggle('iso-accordion-collapsed');
+					if (document.querySelector('.flight-information').classList.contains('iso-accordion-collapsed')) {
+						isoTest.fireTag('','Flight Details: Collapse');
+					} else {
+						isoTest.fireTag('','Flight Details: Expand');
+					}
+				}
+				// Rental Policies
+				if (event.target.closest('.policies .iso-expand')) {
+					event.preventDefault();
+					document.querySelector('.aside--mobile .policies').classList.toggle('iso-accordion-collapsed');
+					isoTest.fireTag('','Rental Policies: Show More');
+				}
+			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
