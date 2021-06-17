@@ -68,6 +68,11 @@
 		display: none;
 	}
 }
+@media (max-width: 420px) {
+	.aside--mobile .iso-accordion-collapsed .policies__list {
+		max-height: 135px;
+	}
+}
 </style>
 <script>
 (function() {
@@ -123,23 +128,36 @@
 			// Prioritize Top 4
 			var mobilePL = document.querySelector('.aside--mobile .policies__list');
 			document.querySelector('.aside--mobile .policies').classList.add('iso-accordion-collapsed');
+			
 			document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
-				function(currentValue, currentIndex, listObj) {
-					//console.log(currentValue + ', ' + currentIndex + ', ' + this);
+				function(currentValue) {
 					if (currentValue.innerHTML.indexOf('Forms of Payment') !== -1) {
 						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
 					}
+				}
+			);
+			document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
+				function(currentValue) {
 					if (currentValue.innerHTML.indexOf('Driver\'s License Information') !== -1) {
 						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
 					}
-					if (currentValue.innerHTML.indexOf('Renter Requirements ') !== -1) {
+				}
+			);
+			document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
+				function(currentValue) {
+					if (currentValue.innerHTML.indexOf('Renter Requirements') !== -1) {
 						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
 					}
+				}
+			);
+			document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
+				function(currentValue) {
 					if (currentValue.innerHTML.indexOf('Rental Contract Additional Terms and Conditions') !== -1) {
 						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
 					}
 				}
 			);
+
 			// Add Accordion Link
 			mobilePL.insertAdjacentHTML('afterend','<a class="iso-expand">Show <span class="iso-more">More</span><span class="iso-less">Less</span></a>');
 
@@ -170,7 +188,11 @@
 				if (event.target.closest('.policies .iso-expand')) {
 					event.preventDefault();
 					document.querySelector('.aside--mobile .policies').classList.toggle('iso-accordion-collapsed');
-					isoTest.fireTag('','Rental Policies: Show More');
+					if (document.querySelector('.aside--mobile .policies').classList.contains('iso-accordion-collapsed')) {
+						isoTest.fireTag('','Rental Policies: Show Less');
+					} else {
+						isoTest.fireTag('','Rental Policies: Show More');
+					}
 				}
 			}, false);
 		},
