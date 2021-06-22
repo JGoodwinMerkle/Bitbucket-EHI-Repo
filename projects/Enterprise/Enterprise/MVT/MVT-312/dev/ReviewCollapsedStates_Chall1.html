@@ -67,6 +67,22 @@
 	.aside--mobile .iso-accordion-collapsed .iso-expand .iso-less {
 		display: none;
 	}
+	.aside--mobile .policies__list {
+		display: flex;
+    	flex-direction: column;
+	}
+	.iso-order-1 {
+		order: -3;
+	}
+	.iso-order-2 {
+		order: -2;
+	}
+	.iso-order-3 {
+		order: -1;
+	}
+	.iso-order-4 {
+		order: 0;
+	}
 }
 @media (max-width: 420px) {
 	.aside--mobile .iso-accordion-collapsed .policies__list {
@@ -83,6 +99,7 @@
 		test : 'Review Collapsed States',
 		creative : 'Challenger 1',
 		selector : '.flight-information',
+		selectorPolicies : '.aside--mobile .policies__list',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -123,43 +140,48 @@
 			}
 
 			// Policy Accordion
-			// Sort Alphabetical
-			isoTest.alphabetizeList(document.querySelector('.aside--mobile #rentalFacts .policies__list'));
-			// Prioritize Top 4
-			var mobilePL = document.querySelector('.aside--mobile .policies__list');
-			document.querySelector('.aside--mobile .policies').classList.add('iso-accordion-collapsed');
-			
-			document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
-				function(currentValue) {
-					if (currentValue.innerHTML.indexOf('Forms of Payment') !== -1) {
-						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+			helpers.elementLoaded(isoTest.selectorPolicies, function() {
+				// Sort Alphabetical
+				isoTest.alphabetizeList(document.querySelector('.aside--mobile #rentalFacts .policies__list'));
+				// Prioritize Top 4
+				var mobilePL = document.querySelector('.aside--mobile .policies__list');
+				document.querySelector('.aside--mobile .policies').classList.add('iso-accordion-collapsed');
+				
+				document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
+					function(currentValue) {
+						if (currentValue.innerHTML.indexOf('Forms of Payment') !== -1) {
+							currentValue.parentNode.classList.add('iso-order-4');
+							mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+						}
 					}
-				}
-			);
-			document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
-				function(currentValue) {
-					if (currentValue.innerHTML.indexOf('Driver\'s License Information') !== -1) {
-						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+				);
+				document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
+					function(currentValue) {
+						if (currentValue.innerHTML.indexOf('Driver\'s License Information') !== -1) {
+							currentValue.parentNode.classList.add('iso-order-3');
+							mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+						}
 					}
-				}
-			);
-			document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
-				function(currentValue) {
-					if (currentValue.innerHTML.indexOf('Renter Requirements') !== -1) {
-						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+				);
+				document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
+					function(currentValue) {
+						if (currentValue.innerHTML.indexOf('Renter Requirements') !== -1) {
+							currentValue.parentNode.classList.add('iso-order-2');
+							mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+						}
 					}
-				}
-			);
-			document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
-				function(currentValue) {
-					if (currentValue.innerHTML.indexOf('Rental Contract Additional Terms and Conditions') !== -1) {
-						mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+				);
+				document.querySelectorAll('.aside--mobile .policies__list-item-btn').forEach(
+					function(currentValue) {
+						if (currentValue.innerHTML.indexOf('Rental Contract Additional Terms and Conditions') !== -1) {
+							currentValue.parentNode.classList.add('iso-order-1');
+							mobilePL.insertAdjacentElement('afterbegin',currentValue.parentNode);
+						}
 					}
-				}
-			);
-
-			// Add Accordion Link
-			mobilePL.insertAdjacentHTML('afterend','<a class="iso-expand">Show <span class="iso-more">More</span><span class="iso-less">Less</span></a>');
+				);
+				// Add Accordion Link
+				mobilePL.insertAdjacentHTML('afterend','<a class="iso-expand">Show <span class="iso-more">More</span><span class="iso-less">Less</span></a>');
+			});
 
 			// Event Listener
 			isoTest.addEvents();
