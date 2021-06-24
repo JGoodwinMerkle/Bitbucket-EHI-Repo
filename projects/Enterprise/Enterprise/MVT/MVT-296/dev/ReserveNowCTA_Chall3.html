@@ -145,14 +145,17 @@
 			document.querySelector('.submit-container .reserve-summary').insertAdjacentHTML('afterbegin','<div class="cyb-text">You will be charged the following amount: </div>');
 			document.querySelector(isoTest.selector).insertAdjacentHTML('beforebegin','<ul class="cyb-benefits"><li><span></span>Free Cancellation</li><li><span></span>Pay at Pick-Up</li></ul>');
 
-			document.querySelectorAll('.sidebar-box__list-item-label').forEach(function(number) {
-			    if (number.innerHTML.indexOf('Unlimited Mileage') != -1) {
+			var sblil = document.querySelectorAll('.sidebar-box__list-item-label');
+			for (var i = 0; i < sblil.length; ++i) {
+			    if (sblil[i].innerHTML.indexOf('Unlimited Mileage') != -1) {
 			    	document.querySelector('.cyb-benefits').insertAdjacentHTML('beforeend','<li><span></span>Unlimited Mileage</li>');
+			    	break;
 			    }
-			    if (number.innerHTML.indexOf('Miles') != -1) {
+			    if (sblil[i].innerHTML.indexOf('Miles') != -1) {
 			    	document.querySelector('.cyb-benefits').insertAdjacentHTML('beforeend','<li><span></span>Superior Customer Service</li>');
+			    	break;
 			    }
-			});
+			}
 
 			document.querySelector('#reviewSubmit').addEventListener('mouseenter', isoTest.btnHover);
 			document.querySelector('#reviewSubmit').addEventListener('mouseleave', isoTest.btnHoverLeave);
