@@ -101,8 +101,7 @@
 		portfolio : 'Enterprise',
 		test : 'Review Collapsed States',
 		creative : 'Challenger 1',
-		selector : '.flight-information',
-		selectorPolicies : '.aside--mobile .policies__list',
+		selector : '.aside--mobile .policies__list',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -135,7 +134,9 @@
 
 			// Flight Accordion
 			// Remove Optional Text
-			document.querySelector('.field-container-input-flightNumber .ehi-input__label-content').textContent = 'Flight Number';
+			if (document.querySelector('.field-container-input-flightNumber .ehi-input__label-content')) {
+				document.querySelector('.field-container-input-flightNumber .ehi-input__label-content').textContent = 'Flight Number';
+			}
 			// Flight Info NOT Required
 			if (document.querySelector('.flight-information') && !document.querySelector('.multi-terminal')) {
 				document.querySelector('.flight-information').classList.add('iso-accordion-collapsed');
@@ -143,7 +144,7 @@
 			}
 
 			// Policy Accordion
-			helpers.elementLoaded(isoTest.selectorPolicies, function() {
+			helpers.elementLoaded(isoTest.selector, function() {
 				// Sort Alphabetical
 				isoTest.alphabetizeList(document.querySelector('.aside--mobile #rentalFacts .policies__list'));
 				// Prioritize Top 4
@@ -187,7 +188,7 @@
 
 		},
 		alphabetizeList : function(ul) {
-			Array.from(ul.getElementsByTagName("LI")).sort(function (a, b) {
+			Array.from(ul.getElementsByTagName('LI')).sort(function (a, b) {
 				return a.textContent.localeCompare(b.textContent);
 			}).forEach(function (li) {
 				return ul.appendChild(li);
