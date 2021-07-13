@@ -1,0 +1,192 @@
+<style>
+	.iso-discount-notice {
+		align-items: center;
+		background-color: #fff;
+		border: 1px solid #c3c3c3;
+		display: inline-flex;
+		margin-bottom: 40px;
+		padding: 16px;
+		width: 100%;
+	}
+
+	.iso-discount-notice .iso-content {
+		color: #181918;
+		font-size: 16px;
+		font-weight: 600;
+		line-height: 18px;
+    	margin-left: 16px;
+		margin-top: 2px;
+	}
+
+	.iso-discount-notice svg {
+		min-width: 32px;
+	}
+
+	.iso-discount-pill {
+		background: #169a5a;
+		border-radius: 20px;
+		color:  #fff;
+		content: 'SAVING 5%';
+		display: inline-block;
+		font-size: 12px;
+		font-weight: 500;
+		padding: 4px 6px;
+	}
+
+	.iso-discount-table .sidebar-box__list-item-label {
+		width: auto;
+	}
+
+	.iso-discount-table .sidebar-box__list-item-info {
+		white-space: nowrap;
+		width: auto;
+	}
+
+	@media (max-width: 46.8em) {
+		.iso-discount-notice {
+			margin-bottom: 21px;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Review Nudging Authenticated Users',
+		creative : 'Challenger 2',
+		selector : '#commit .aside',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			// Confirm presence of discount
+			var discountM = isoTest.querySelectorIncludesText('.aside--mobile .sidebar-box__list-item-label','ENTERPRISE PLUS');
+			var discountD = isoTest.querySelectorIncludesText('.aside .sidebar-box__list-item-label','ENTERPRISE PLUS');
+			if (discountM) {
+				isoTest.log('Discount Found!');
+				
+				// Grab discount percent
+				var discountPercent = discountM.textContent.substring(
+				    discountM.textContent.lastIndexOf("(") + 1, 
+				    discountM.textContent.lastIndexOf(".")
+				);
+
+				// Mobile
+				discountM.parentNode.classList.add('iso-discount-table');
+				// Remove percentage text
+				var discountMTruncated = discountM.textContent.replace( /\(.*?\)/,'' );
+				discountM.textContent = discountMTruncated;
+				// Add discount pill with dynamic discount
+				discountM.insertAdjacentHTML('beforeend','<span class="iso-discount-pill">SAVE ' + discountPercent +'%</span>');
+				
+				// Desktop
+				discountD.parentNode.classList.add('iso-discount-table');
+				// Remove percentage text
+				var discountDTruncated = discountD.textContent.replace( /\(.*?\)/,'' );
+				discountD.textContent = discountDTruncated;
+				// Add discount pill with dynamic discount
+				discountD.insertAdjacentHTML('beforeend','<span class="iso-discount-pill">SAVE ' + discountPercent +'%</span>');
+				
+				// Insert discount banner
+				if(!document.querySelector('.iso-discount-notice')){
+					document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin','<div class="iso-discount-notice"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M26.0891 8.4128H21.3344L21.7148 8.0672C22.5516 7.2992 23.0461 6.3392 23.0461 5.3408C23.0461 3.4592 21.5246 2 19.6227 2C17.911 2 16.6178 3.0752 15.7809 5.1488L15.5527 5.5712L15.3625 5.1488C14.5257 3.0752 13.1944 2 11.5207 2C9.58077 2 8.0973 3.4592 8.0973 5.3408C8.0973 6.3392 8.55375 7.2992 9.42862 8.0672L9.809 8.4128H5.05428C3.91315 8.4128 3.00024 9.3344 3.00024 10.4864V14.2496C3.00024 15.3248 3.79904 16.1696 4.82606 16.2848H4.97821H6.42364H7.45066H14.868V28.0352H7.03224C6.6899 28.0352 6.3856 27.728 6.3856 27.3824V20.9312H4.97821V27.4208C4.97821 28.5728 5.89111 29.4944 7.03224 29.4944H24.0351C25.1762 29.4944 26.0891 28.5728 26.0891 27.4208V20.9312H24.6818V27.4208C24.6818 27.7664 24.3775 28.0736 24.0351 28.0736H16.2754V16.3232H24.6818H26.0891H26.2413C27.3064 16.208 28.0671 15.3248 28.0671 14.288V10.5248C28.1052 9.3344 27.1922 8.4128 26.0891 8.4128ZM9.5047 5.3408C9.5047 4.4192 10.2655 3.4208 11.5207 3.4208C13.6508 3.4208 14.4496 6.3776 14.7159 8.144L14.7539 8.3744H14.5257C12.5097 8.2592 11.3305 7.7216 10.7219 7.2992C9.92311 6.7616 9.5047 6.0704 9.5047 5.3408ZM14.868 14.9024H5.05428C4.71194 14.9024 4.40764 14.5952 4.40764 14.2496V10.4864C4.40764 10.1408 4.71194 9.8336 5.05428 9.8336H14.868V14.9024ZM16.3895 8.144C16.6558 6.3776 17.4546 3.4208 19.5847 3.4208C20.8399 3.4208 21.6007 4.3808 21.6007 5.3408C21.6007 6.0704 21.1823 6.7616 20.3835 7.2992C19.7749 7.7216 18.5957 8.2208 16.5797 8.3744H16.3515L16.3895 8.144ZM26.6978 14.2496C26.6978 14.5952 26.3935 14.9024 26.0511 14.9024H16.2754V9.8336H26.0891C26.4315 9.8336 26.7358 10.1408 26.7358 10.4864V14.2496H26.6978Z" fill="#181918"/></svg><div class="iso-content">You save '+discountPercent+'% on this reservation!</div></div>');
+				}
+
+				// Fire tag
+				isoTest.fireTag90('','Audience Qualified');
+
+				// Shift placement on resize
+				isoTest.resizeLogic();
+
+			}
+
+		},
+		querySelectorIncludesText : function (selector, text) {
+		  	return Array.from(document.querySelectorAll(selector)).find(function (el) {
+				return el.textContent.includes(text);
+			});
+		},
+		resizeLogic : function() {
+			var countDown = document.querySelector('.iso-discount-notice');
+			var reviewSection = document.querySelector('.review-section');
+			var asideSection = document.querySelector('.aside');
+			var mQ = window.matchMedia('(max-width: 748px)');
+			
+			// Relocate countdown module depending on screen width
+			function handleTabletChange(e) {
+				if (e.matches) {
+					isoTest.log('mQ: W < 748px');
+					reviewSection.insertAdjacentElement('afterbegin',countDown);
+				} else {
+					isoTest.log('mQ: W > 748px');
+					asideSection.insertAdjacentElement('afterbegin',countDown);
+				}
+			}
+
+			// Register event listener
+			mQ.addListener(handleTabletChange);
+
+			// Initial check
+			handleTabletChange(mQ);
+		},
+		fireTag90 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar90';
+			s.eVar90 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
