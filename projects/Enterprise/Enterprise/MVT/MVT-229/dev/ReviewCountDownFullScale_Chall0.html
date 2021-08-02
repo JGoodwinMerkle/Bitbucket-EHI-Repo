@@ -141,6 +141,9 @@
 			}
 
 			isoTest.addEvents();
+
+			isoTest.resizeLogic();
+
 		},
 		startTimer : function() {
 			isoTest.log('startTimer()');
@@ -148,7 +151,7 @@
 			var timer = duration, minutes, seconds;
 
 		    isoTest.countdown = window.setInterval(function () {
-		        minutes = parseInt(timer / 60, 10)
+		        minutes = parseInt(timer / 60, 10);
 		        seconds = parseInt(timer % 60, 10);
 
 		        minutes = minutes < 10 ? "0" + minutes : minutes;
@@ -185,13 +188,36 @@
 					
 			}, false);
 		},
+		resizeLogic : function() {
+			var countDown = document.querySelector('.iso-countdown-container');
+			var reviewSection = document.querySelector('.review-section');
+			var asideSection = document.querySelector('.aside');
+			var mQ = window.matchMedia('(max-width: 748px)');
+			
+			// Relocate countdown module depending on screen width
+			function handleTabletChange(e) {
+				if (e.matches) {
+					isoTest.log('mQ: W < 748px');
+					reviewSection.insertAdjacentElement('afterbegin',countDown);
+				} else {
+					isoTest.log('mQ: W > 748px');
+					asideSection.insertAdjacentElement('afterbegin',countDown);
+				}
+			}
+
+			// Register event listener
+			mQ.addListener(handleTabletChange);
+
+			// Initial check
+			handleTabletChange(mQ);
+		},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
 		}
 
-	}
+	};
 
 	var helpers = {
 		elementLoaded : function (ele, callback) {
@@ -206,7 +232,7 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		}
-	}
+	};
 
 	isoTest.init();
 })();
