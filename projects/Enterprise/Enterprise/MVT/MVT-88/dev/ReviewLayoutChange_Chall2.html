@@ -95,24 +95,16 @@
 					document.querySelector(isoTest.aside).insertAdjacentHTML('afterbegin',isoTest.loyalty.outerHTML);
 					isoTest.bindEvents();
 				}
-				if(!document.querySelector(isoTest.aside + ' ' + isoTest.selector)){
-						document.querySelector(isoTest.aside + ' > .pre-expedited-banner').insertAdjacentElement('afterend',isoTest.personalInfo);
-				}
+				document.querySelector(isoTest.aside + ' > .pre-expedited-banner').insertAdjacentElement('afterend',isoTest.personalInfo);
 			} else {
-				if(!document.querySelector(isoTest.aside + ' ' + isoTest.selector)){
-					document.querySelector(isoTest.aside).insertAdjacentElement('afterbegin',isoTest.personalInfo);
-				}
+				document.querySelector(isoTest.aside).insertAdjacentElement('afterbegin',isoTest.personalInfo);
 			}
 		},
 		desktopView : function(){
 			if(document.querySelector(isoTest.reviewSection + ' > .pre-expedited-banner')){
-				if(!document.querySelector(isoTest.reviewSection + ' ' + isoTest.selector)){
-					document.querySelector(isoTest.reviewSection + ' > .pre-expedited-banner').insertAdjacentElement('afterend',isoTest.personalInfo);
-				}
+				document.querySelector(isoTest.reviewSection + ' > .pre-expedited-banner').insertAdjacentElement('afterend',isoTest.personalInfo);
 			} else {
-				if(!document.querySelector(isoTest.reviewSection + ' ' + isoTest.selector)){
-					document.querySelector(isoTest.reviewSection).insertAdjacentElement('afterbegin',isoTest.personalInfo);
-				}
+				document.querySelector(isoTest.reviewSection).insertAdjacentElement('afterbegin',isoTest.personalInfo);
 			}
 		},
 		bindEvents : function(){
