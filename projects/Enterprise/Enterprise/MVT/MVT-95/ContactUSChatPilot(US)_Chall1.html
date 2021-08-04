@@ -1,0 +1,164 @@
+<style>
+	.iso-chat-btn.contact-band-link {
+		font-weight: 700;
+		font-style: normal;
+		display: inline-block;
+		padding: 0.5em 1em;
+		border: 0;
+		margin: 0;
+		min-height: auto;
+		background: #fff;
+		color: #169a5a;
+		line-height: inherit;
+		letter-spacing: .0675rem;
+		font-size: .875rem;
+		text-align: center;
+		text-transform: uppercase;
+		cursor: pointer;
+		transition: all 250ms ease-in-out;
+		border: 2px solid;
+	}
+  .two-up-three-up li {
+    cursor: pointer;
+  }
+  .iso-icon {
+    height: 35px;
+    margin-bottom: 15px;
+  }
+</style>
+<!--<script src="https://home-e31.niceincontact.com/inContact/ChatClient/js/embed.min.js"></script>-->
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Contact Us Chat Pilot (UK)',
+		creative : 'Challenger 1',
+		selector: '#chat-div-wrap',
+		lastBtn: '.contact-band-links a[href*=ehcustomersupport]',
+		//chatBtn: '<a href="https://home-e31.niceincontact.com/incontact/chatclient/chatclient.aspx?poc=fd23c6f3-46ac-42be-97d0-3486c6248367&bu=4597946" class="contact-band-link" target="_blank">Chat With Us</a>',
+		chatBtn: '<a onclick="{popupWindow}" class="contact-band-link iso-chat-btn">Chat With Us</a>',
+    popup: 'window.open(\'https://home-c29.incontact.com/incontact/chatclient/chatclient.aspx?poc=7626e04f-4c82-4d48-9b1d-dc747ea3c175&bu=4597143\',\'popupWindow\',\'width=400,height=750\')',
+    firstTile: '.two-up-three-up li:first-child',
+    thirdTile: '.two-up-three-up li:last-child',
+    content: {
+      icon: '/content/dam/ecom/hosted/chat-bubble.png',
+      title: 'Live Chat',
+      content: 'Need help now? Connect with a live agent for support. <img src="/content/dam/dps/leaving-website_green16.png" alt="">'
+    },
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			//helpers.dependsLoaded(isoTest.loadChat);
+			helpers.elementLoaded(isoTest.lastBtn, isoTest.addBtns);
+		},
+		addBtns: function(){
+      var btn = helpers.supplant(isoTest.chatBtn, { 'popupWindow' : isoTest.popup });
+			document.querySelector(isoTest.lastBtn).insertAdjacentHTML('afterend', btn);
+
+      var thirdTile = document.querySelector(isoTest.thirdTile);
+      thirdTile.querySelector('a').removeAttribute('href');
+      thirdTile.querySelector('a').setAttribute('onclick', isoTest.popup);
+      thirdTile.querySelector('.text-capsule-tile__image').src = isoTest.content.icon;
+      thirdTile.querySelector('.text-capsule-tile__image').classList.add('iso-icon');
+      thirdTile.querySelector('.text-capsule-tile__heading').innerText = isoTest.content.title;
+      thirdTile.querySelector('.text-capsule-tile__text p').innerHTML = isoTest.content.content;
+
+      document.querySelector(isoTest.firstTile).insertAdjacentElement('afterend', thirdTile);
+
+			//tagging
+			document.querySelector('.iso-chat-btn').addEventListener('click',function(){
+				isoTest.fireTag('.iso-chat-btn','Chat With Us');
+			});
+      thirdTile.querySelector('a').addEventListener('click', function(){
+        isoTest.fireTag(isoTest.thirdTile + ' a','Live Chat');
+      });
+		},
+		loadChat: function(){
+			icPatronChat.init({serverHost:'https://home-c29.incontact.com',bus_no:4597143,poc:'7626e04f-4c82-4d48-9b1d-dc747ea3c175',params:['FirstName','Last Name','first.last@company.com','555-555-5555']});
+
+			helpers.elementLoaded(isoTest.selector, function() {
+  			isoTest.chall();
+			});
+		},
+		chall : function() {
+			var chatbox = document.querySelector(isoTest.selector);
+			var observer = new MutationObserver(function(mutations) {
+				mutations.forEach(function(mutation) {
+					if (mutation.type == 'attributes' && mutation.attributeName == 'style') {
+						var btn = document.querySelector('#icChatButton');
+						var ln = chatbox.style.width == '0px' ? 'Chat Closed' : 'Chat Open';
+						if(btn.width == 0){
+							ln = 'Pop-up Open';
+						}
+						isoTest.fireTag(chatbox,ln);
+					}
+				});
+			});
+			observer.observe(chatbox, {
+			  attributes: true
+			});
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+			linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+    supplant : function(str, o) {
+      return str.replace(/{([^{}]*)}/g, function(a, b) {
+            var p = b.split(/\./),
+                c = o;
+            for (var i = 0; i < p.length; i++) {
+              if (c[p[i]] == null)
+                return a;
+              c = c[p[i]];
+            }
+        return typeof c === 'string' || typeof c === 'number' ? c : a;
+      });
+    },
+		dependsLoaded : function(callback){
+			var dInt = setInterval(function(){
+				if(typeof icPatronChat == 'object'){
+					clearInterval(dInt);
+					callback();
+				}
+			}, 100);
+
+			setTimeout(function(){
+				clearInterval(dInt);
+			},10000);
+		}
+	}
+
+	isoTest.init();
+
+})();
+</script>
