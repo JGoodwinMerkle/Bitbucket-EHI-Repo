@@ -53,18 +53,11 @@
 		},
 		chall : function() {
 			var filters = document.querySelector(isoTest.selector);
-			if(!helpers.isVisible(isoTest.header) && helpers.isVisible('#reservationFlow') && document.body.clientWidth <= 1081){
+			if(!helpers.isVisible(isoTest.header) && document.body.clientWidth <= 1081){
 				filters.classList.add('fixed');
 			} else {
 				filters.classList.remove('fixed');
 			}
-
-			document.addEventListener('click',function(e){
-				if(e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]')){
-					var t = document.querySelector('#cars h1').getBoundingClientRect().top;
-					window.scrollTo(0,t);
-				}
-			})
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
