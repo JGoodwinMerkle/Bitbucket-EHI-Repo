@@ -1,0 +1,126 @@
+<style>
+	.unavailable-vehicles__wrapper button.vehicle-pricing__button--alternative {
+		color: #656565;
+		font-size: 0;
+	}
+	.unavailable-vehicles__wrapper button.vehicle-pricing__button--alternative::before {
+		color: #ffffff;
+		content: 'CHECK NEARBY LOCATIONS';
+		display: block;
+		font-size: 14px;
+	}
+	.unavailable-vehicles__button {
+		font-size: 0;
+		line-height: 1rem;
+    	padding-top: 6px;
+	}
+	.unavailable-vehicles__button .icon {
+		background-image:  none;
+		font-size: 15px;
+		font-style: normal;
+		margin-top: -6px;
+		margin-left: 5px;
+	}
+	.unavailable-vehicles__button:not(.is-expanded)::before {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDIwIDE1Ij48cGF0aCBmaWxsPSIjMTg5QTVBIiBkPSJNLjQ5NyA1LjI2NGwxLjkyLTIuMzA0IDcuNzc2IDYuMjQgNy41ODMtNi4wOTYgMS45MiAyLjM1Mi05LjUwMyA3LjU4NEwuNDk3IDUuMjY0Ii8+PC9zdmc+);
+	    background-position: left center;
+	    background-repeat: no-repeat;
+	    content: 'Explore Alternative Possibilities';
+		font-size: 15px;
+		padding-left: 25px;
+	}
+	.unavailable-vehicles__button.is-expanded::before {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDIwIDE1Ij48cGF0aCBmaWxsPSIjMTg5QTVBIiBkPSJNMTkuNjk3IDEwLjczNmwtMS45MiAyLjMwNEwxMCA2LjhsLTcuNTgzIDYuMDk2LTEuOTItMi4zNTJMMTAgMi45Nmw5LjY5NyA3Ljc3NiIvPjwvc3ZnPg==);
+	    background-position: left center;
+	    background-repeat: no-repeat;
+		content: 'Hide Alternative Possibilities';
+		font-size: 15px;
+		padding-left: 25px;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Show Unavailable Vehicles Dropdown 2.0',
+		creative : 'Challenger 2',
+		selector : '.unavailable-vehicles__button',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			// Update unavailable number
+			var str = document.querySelector('.unavailable-vehicles__button').innerText;
+			var newValue = str.split('(').pop().split(')')[0];
+			document.querySelector('.unavailable-vehicles__button .icon').innerText = '(' + newValue + ')';
+
+			// Keep updating unavailable number
+			var observer = new MutationObserver(function(mutations) {
+				mutations.forEach(function(mutation) {
+					if (mutation.type === 'characterData') {
+						console.log(mutation);
+						var str = mutation.target.nodeValue;
+						var newValue = str.split('(').pop().split(')')[0];
+						document.querySelector('.unavailable-vehicles__button .icon').innerText = '(' + newValue + ')';
+					}
+				});    
+			});
+			var observerConfig = {
+				attributes: true, childList: true, characterData: true, characterDataOldValue: true, subtree: true,
+			};
+			observer.observe(document.querySelector(isoTest.selector), observerConfig);
+
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
