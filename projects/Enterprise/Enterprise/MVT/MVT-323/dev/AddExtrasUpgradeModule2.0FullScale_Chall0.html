@@ -1,0 +1,107 @@
+<style>
+	#extras .upgrade-banner__title {
+		color: #656565;
+    	font-size: 1rem;
+    	font-weight: 300;
+	}
+	#extras .upgrade-banner__title::before {
+		color: #333;
+		content: 'You\'re eligible to upgrade! ';
+		display: block;
+		font-weight: 600;
+    	font-style: normal;
+    	font-size: 1.3125rem;
+    	margin-bottom: 5px;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Add Extras Upgrade Module 2.0 Full Scale',
+		creative : 'Challenger 0',
+		selector : '.upgrade-banner__title',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+
+			// Listen for upgrade banner
+			helpers.waitForElement(isoTest.selector).then(function () {
+				isoTest.log('Test Ready!');
+				isoTest.chall();
+			});	
+		},
+		viewChange : function(){
+			if(/extras/.test(location.hash)){
+				helpers.waitForElement(isoTest.selector).then(function () {
+					isoTest.log('Test Ready!');
+					isoTest.chall();
+				});	
+			}
+		},
+		chall : function() {
+
+			// Add letter 'a' to banner text
+			var upgradeText = document.querySelector('.upgrade-banner__title');
+			var str = upgradeText.innerText;
+			var textToInsert = 'a ';
+			var position = 15;
+			var output = [str.slice(0, position), textToInsert, str.slice(position)].join('');
+			document.querySelectorAll('.upgrade-banner__title').forEach(function (value) {
+			    value.innerText = output;
+			});	
+
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		waitForElement : function (selector, timeout) {
+		    var timeoutOption = timeout || 5000; // 5s
+		    var loopTime = 100;
+		    var tryCount = 0;
+		    var limitCount = timeoutOption / loopTime;
+		    var limitCountOption = (limitCount < 1) ? 1 : limitCount;
+
+		    function tryCheck(resolve, reject) {
+		        if (tryCount < limitCountOption) {
+		        	isoTest.log('waitForElement try count: ' + tryCount);
+		            var element = document.querySelector(selector);
+		            if (element != null) {
+		                return resolve(element);
+		            }
+		            setTimeout(function () {
+		                tryCheck(resolve, reject);
+		            }, loopTime);
+		        } else {
+		            reject(new Error('No element found matching the selector: ' + selector));
+		        }
+		        tryCount++;
+		    }
+
+		    return new Promise(function (resolve, reject) {
+		        tryCheck(resolve, reject);
+		    });
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
