@@ -1,0 +1,248 @@
+<style>
+.iso-modal-open {
+	height: 100%;
+	overflow: hidden;
+}
+.iso-modal.iso-modal-points {
+	display: none;
+	text-align: center;
+}
+.iso-modal.iso-modal-points.active {
+	display: block;
+}
+.iso-modal.iso-modal-points .ReactModal__Content--after-open.fixed-scroll-modal {
+	min-width: auto;
+	max-width: 565px;
+}
+.iso-modal-points .modal-header {
+	text-align: left;
+}
+.imp-header {
+	font-size: 2.4rem;
+    font-weight: 500;
+    margin-bottom: 0;
+	text-transform: uppercase;
+}
+.imp-subheader {
+	color: #169a5a;
+	font-size: 1.7rem;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+@media (max-width: 39.8em) {
+	.iso-modal.iso-modal-points .ReactModal__Content--after-open.fixed-scroll-modal .modal-content {
+		padding: 1.5625rem 1.9375rem;
+	}
+}
+@media (min-width: 480px) and (max-width: 636px) {
+	.iso-modal.iso-modal-points .ReactModal__Content--after-open.fixed-scroll-modal {
+		width: 80%;
+	}
+}
+@media (min-width: 637px) {
+	.iso-modal.iso-modal-points .ReactModal__Content--after-open.fixed-scroll-modal {
+		min-width: 565px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Loyalty Redemption Reminder 2.0',
+		creative : 'Challenger 2',
+		selector : '#cars',
+		modal : '<div class="iso-modal iso-modal-points">\
+					<div class="ReactModal__Overlay ReactModal__Overlay--after-open modal-overlay fixed-overlay" aria-modal="true">\
+						<div class="ReactModal__Content ReactModal__Content--after-open default-modal fixed-scroll-modal" tabindex="-1" role="dialog" aria-describedby="modal-context">\
+							<div class="modal-inner">\
+								<div class="modal-header">Enterprise Plus®\
+									<button class="close-modal" aria-label="Close" role="button" type="button"><i class="icon icon-close-x-white" aria-hidden="true">X</i></button>\
+								</div>\
+								<div class="modal-content cf">\
+								<p class="imp-header">Good News!</p>\
+								<p class="imp-subheader">You have <span class="imp-pts"></span> points to redeem.</p>\
+								<p class="imp-body">Select PAY IN POINTS to use your member rewards now.</p>\
+								</div>\
+						  </div>\
+						</div>\
+					</div>\
+				</div>',
+		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.viewChange();
+				helpers.tagLoaded(function() {
+					isoTest.fireTag90('','Experience Fired');
+				});
+			});
+
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+			
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.pointsCheck();
+		},
+		pointsCheck : function() {
+			var checkPoints = window.setInterval(function () {
+				if (ReservationStateTree.get(['User','profile','basicProfile','loyaltyData','points_to_date']) !== undefined) {
+					clearInterval(checkPoints);
+					var pointsEarned = ReservationStateTree.get(['User','profile','basicProfile','loyaltyData','points_to_date']);
+					if (pointsEarned > 999) {
+						if (sessionStorage.getItem('isoModalPointsSeen') !== 'true') {
+							isoTest.insertModal();
+							document.querySelector('.imp-pts').innerText = helpers.numberWithCommas(pointsEarned);
+							isoTest.modalOpen();
+							isoTest.fireTag89('','Experience Displayed');
+						}
+					}
+				}
+			}, 10);
+
+			setTimeout(function(){
+				clearInterval(checkPoints);
+			}, 5000);
+		},
+		insertModal : function() {
+			document.querySelector('#cars').insertAdjacentHTML('afterend', isoTest.modal);
+			isoTest.addEvents();
+		},
+		addEvents : function() {
+			document.querySelector('.iso-modal.iso-modal-points .close-modal').addEventListener('click', function (e) {
+				isoTest.destroyModal();
+			}, false);
+
+			document.addEventListener('keydown', function (e) {
+				var keyCode = (e.keyCode ? e.keyCode : e.which);
+
+		        if (keyCode == '27') {
+		        	if (document.querySelector('html').classList.contains('iso-modal-open')) {
+		            	isoTest.destroyModal();
+		        	}
+		        }
+			}, false);
+		},
+		modalOpen : function() {
+			isoTest.log("modalOpen()");
+
+			document.querySelector('.iso-modal.iso-modal-points').classList.add('active');
+			document.querySelector('html').classList.add('iso-modal-open');
+
+			sessionStorage.setItem('isoModalPointsSeen', true);
+
+      		var modalFocus = document.querySelector('.iso-modal.iso-modal-points');
+      		isoTest.keepFocus(modalFocus);
+
+      		window.setTimeout(function() { 
+      			modalFocus.querySelector('.close-modal').focus(); 
+      		}, 100);
+		},
+		destroyModal : function() {
+			isoTest.log("destroyModal()");
+
+      		document.querySelector('html').classList.remove('iso-modal-open');
+      		var elModal = document.querySelector('.iso-modal.iso-modal-points');
+			elModal.classList.remove('active');
+    	},
+    	keepFocus : function(context) {
+    		isoTest.log("keepFocus()");
+
+	    	var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+	        	firstTabbableElement = allTabbableElements[0],
+	          	lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+	      	var keyListener = function(e) {
+	    		var keyCode = e.which || e.keyCode;
+
+	    		e.preventDefault = e.preventDefault || function () {
+	    			e.returnValue = false;
+	    		};
+
+	    		if (keyCode === 9) {
+	          		if (e.target === lastTabbableElement && !e.shiftKey) {
+	    				e.preventDefault();
+	    				firstTabbableElement.focus();
+	          		} else if (e.target === firstTabbableElement && e.shiftKey) {
+	    				e.preventDefault();
+	    				lastTabbableElement.focus();
+	    			}
+	    		}
+	    	};
+	    	context.addEventListener('keydown', keyListener, false);
+	    },
+		fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTag90 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar90';
+			s.eVar90 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		tagLoaded : function (callback) {
+			isoTest.log('tagLoaded:: s - Checking...');
+			window.clearTimeout(isoTest.tagTimer);
+			if (window.s && typeof window.s !== undefined) {
+				if (typeof callback === 'function') {
+					isoTest.log('tagLoaded:: s - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.tagTimer = window.setTimeout(function(){helpers.tagLoaded(callback);}, 100);
+	        }
+		},
+		numberWithCommas : function (x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
