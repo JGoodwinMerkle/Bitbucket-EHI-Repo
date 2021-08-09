@@ -1,0 +1,306 @@
+<style>
+	.iso-countdown-container {
+		align-items: center;
+		background-color: #fff;
+		border: 1px solid #e6e6e6;
+		display: inline-flex;
+		margin-bottom: 40px;
+		padding: 16px 21px;
+		width: 100%;
+	}
+
+	.iso-countdown-container .iso-content {
+		color: #181918;
+		font-size: 15px;
+		line-height: 21px;
+		margin-left: 20px;
+		margin-top: 2px;
+	}
+
+	.iso-countdown-container #iso-countdown {
+		display: flex;
+		height: 60px;
+		justify-content: center;
+		position: relative;
+		width: 60px;
+	}
+
+	.iso-countdown-container #iso-countdown-number {
+		color: #181918;
+		font-size: 15px;
+		font-weight: bold;
+		left: -2.5px;
+		margin: auto;
+		position: relative;
+		top: 2px;
+	}
+
+	.iso-countdown-container svg {
+		height: 64px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		transform: rotateY(-180deg) rotateZ(-90deg);
+		width: 64px;
+	}
+
+	.iso-countdown-container svg circle {
+		fill: none;
+		stroke: #169a5a;
+		stroke-linecap: round;
+		stroke-width: 3px;
+	}
+
+	.iso-countdown-container .iso-run-animation {
+		animation: countdown 1200s linear infinite forwards;
+		stroke-dasharray: 169px;
+		stroke-dashoffset: 0px;
+	}
+
+	@keyframes countdown {
+		from {
+			stroke-dashoffset: 0;
+		}
+		to {
+			stroke-dashoffset: 169px;
+		}
+	}
+
+	@media (max-width: 46.8em) {
+		.iso-countdown-container {
+			margin-bottom: 21px;
+		}
+	}
+
+	/* Button */
+	.iso-reserve-top {
+		float: right;
+	}
+
+	.verification-header button {
+		background: #169a5a;
+    	color: #fff;
+    	cursor: pointer;
+    	display: none;
+    	float: right;
+    	font-size: 14px;
+    	font-weight: 700;
+    	letter-spacing: .0674999938rem;
+    	padding: .5em 36px;
+    	text-align: center;
+	    text-transform: uppercase;
+	    transition: all .25s ease-in-out;
+	}
+
+	.verification-header button:hover, .verification-header button:focus {
+	    background-color: #15804d;
+	}
+
+	@media (min-width: 46.8em) {
+		.verification-header button {
+			display: inline-block;
+		}
+
+		#commit .verification-title {
+			display: inline-block;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Review Nudging Authenticated Users',
+		creative : 'Challenger 1',
+		selector : '#commit .aside',
+		countdown : '',
+		template : '<div class="iso-countdown-container">\
+						<div class="iso-icon-timer">\
+							<div id="iso-countdown">\
+								<div id="iso-countdown-number" role="timer" aria-live="polite" aria-atomic="true">20:00</div>\
+								<svg>\
+									<circle class="iso-circle iso-run-animation" r="27" cx="32" cy="32"></circle>\
+								</svg>\
+							</div>\
+						</div>\
+						<div class="iso-content">Lock in your rate now before this session expires</div>\
+					</div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			window.clearInterval(isoTest.countdown);
+			isoTest.countdown = '';
+
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					if (document.querySelector('.iso-circle')) {
+						document.querySelector('.iso-circle').classList.remove('iso-run-animation');
+					}
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			if(!document.querySelector('.iso-countdown-container')){
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',isoTest.template);
+			} else {
+				document.querySelector('#iso-countdown-number').textContent = '20:00';
+			}
+
+			if (document.querySelector('#iso-countdown-number')) {
+				isoTest.startTimer();
+			}
+
+			isoTest.addEvents();
+
+			isoTest.fireTag90('','Audience Qualified');
+
+			isoTest.resizeLogic();
+
+			isoTest.reserveBtnTop();
+
+		},
+		startTimer : function() {
+			isoTest.log('startTimer()');
+			var duration = 60 * 19.99;
+			var timer = duration, minutes, seconds;
+
+		    isoTest.countdown = window.setInterval(function () {
+		        minutes = parseInt(timer / 60, 10);
+		        seconds = parseInt(timer % 60, 10);
+
+		        minutes = minutes < 10 ? "0" + minutes : minutes;
+		        seconds = seconds < 10 ? "0" + seconds : seconds;
+		        document.querySelector('#iso-countdown-number').textContent = minutes + ":" + seconds;
+
+		        if (--timer < 0) {
+		            timer = duration;
+		        }
+		    }, 1000);
+		},
+		addEvents : function() {
+			isoTest.log('addEvents()');
+			document.addEventListener("click", function(event){
+				if (event.target.classList.contains('btn') && event.target.classList.contains('modal-button')) {
+					if (event.target.innerText == "CONTINUE WORKING") {
+						if (event.target.parentNode.parentNode.parentNode.parentNode) {
+							if (event.target.parentNode.parentNode.parentNode.parentNode.querySelector('#global-modal-title')) {
+								if (event.target.parentNode.parentNode.parentNode.parentNode.querySelector('#global-modal-title').innerText == "SESSION TIMEOUT") {
+									window.clearInterval(isoTest.countdown);
+									isoTest.countdown = '';
+									document.querySelector('.iso-circle').classList.remove('iso-run-animation');
+									document.querySelector('#iso-countdown-number').textContent = '20:00';
+									setTimeout(function(){
+										document.querySelector('.iso-circle').classList.add('iso-run-animation');
+										isoTest.startTimer();
+									}, 500);
+									
+								}
+							}
+						}
+					}	
+				}
+					
+			}, false);
+		},
+		resizeLogic : function() {
+			var countDown = document.querySelector('.iso-countdown-container');
+			var reviewSection = document.querySelector('.review-section');
+			var asideSection = document.querySelector('.aside');
+			var mQ = window.matchMedia('(max-width: 748px)');
+			
+			// Relocate countdown module depending on screen width
+			function handleTabletChange(e) {
+				if (e.matches) {
+					isoTest.log('mQ: W < 748px');
+					reviewSection.insertAdjacentElement('afterbegin',countDown);
+				} else {
+					isoTest.log('mQ: W > 748px');
+					asideSection.insertAdjacentElement('afterbegin',countDown);
+				}
+			}
+
+			// Register event listener
+			mQ.addListener(handleTabletChange);
+
+			// Initial check
+			handleTabletChange(mQ);
+		},
+		reserveBtnTop : function() {
+			document.querySelector('.verification-header').insertAdjacentHTML('beforeend','<div class="iso-reserve-top"><button>RESERVE NOW</button></div>');
+			document.querySelector('.verification-header button').addEventListener('click', function(event) {
+				isoTest.fireTag89('','Top Reserve Click');
+				document.querySelector('#reviewSubmit').click();
+				document.querySelector('.iso-reserve-top').insertAdjacentHTML('afterbegin','<div class="loading"></div>');
+				setTimeout(function(){
+					if (document.querySelector('#errorList')) {
+	                    if (document.querySelector('.iso-reserve-top .loading')) {
+	                    	document.querySelector('.iso-reserve-top .loading').remove();
+	                    }
+	                }
+	            }, 500);
+			});
+		},
+		fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTag90 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar90';
+			s.eVar90 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
