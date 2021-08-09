@@ -37,6 +37,78 @@
 					}
 				}
 			},
+			"#location/pickup": {
+				"mboxName": "ResFunnelLocationPickup",
+				"depends": function() {
+					if (typeof window.ReservationStateTree !== 'undefined' &&
+						typeof window.ReservationStateTree.data !== 'undefined' &&
+						typeof window.ReservationStateTree.data.model !== 'undefined' &&
+						typeof window.ReservationStateTree.data.session.reservationSession !== 'undefined' &&
+						typeof window.ReservationStateTree.data.session.reservationSession.corporate !== 'undefined' &&
+						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined') {
+						//Boolean - corporate traffic;
+						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
+						//Boolean - Authenticated traffic checks if profile is present
+						var authTraffic = ReservationStateTree.get(['session','reservationSession','profileResponse']) ? true : false;
+						//String - Gets any coupon or other CID, returns null if none is added;
+						var cid = ReservationStateTree.get(['model','coupon']);
+						//String - Gets contract type, returns empty value if no contract exists. This is not checked in the if statement because the contract object does not exist if the cid value is empty
+						var cidType = ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) ? ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) : '';
+						//String - Gets 3-letter currency code selected by the user
+						var currency = ReservationStateTree.get(['session','reservationSession','view_currency_code']);
+						//String - Gets lytics audiences and creates a comma delimited string
+						var lioSegments = _satellite.getVar('en_lytics_segments');
+
+						return {
+							'step': 'location',
+							'corpTraffic': corpTraffic,
+							'authTraffic': authTraffic,
+							'cid': cid,
+							'cdp' : lioSegments,
+							'cidType' : cidType,
+							'currency' : currency
+						};
+					} else {
+						return false;
+					}
+				}
+			},
+			"#location/dropoff": {
+				"mboxName": "ResFunnelLocationDropoff",
+				"depends": function() {
+					if (typeof window.ReservationStateTree !== 'undefined' &&
+						typeof window.ReservationStateTree.data !== 'undefined' &&
+						typeof window.ReservationStateTree.data.model !== 'undefined' &&
+						typeof window.ReservationStateTree.data.session.reservationSession !== 'undefined' &&
+						typeof window.ReservationStateTree.data.session.reservationSession.corporate !== 'undefined' &&
+						typeof window.ReservationStateTree.data.session.reservationSession.view_currency_code !== 'undefined') {
+						//Boolean - corporate traffic;
+						var corpTraffic = ReservationStateTree.get(['session', 'reservationSession', 'corporate']);
+						//Boolean - Authenticated traffic checks if profile is present
+						var authTraffic = ReservationStateTree.get(['session','reservationSession','profileResponse']) ? true : false;
+						//String - Gets any coupon or other CID, returns null if none is added;
+						var cid = ReservationStateTree.get(['model','coupon']);
+						//String - Gets contract type, returns empty value if no contract exists. This is not checked in the if statement because the contract object does not exist if the cid value is empty
+						var cidType = ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) ? ReservationStateTree.get(['session', 'reservationSession','contract_details','contract_type']) : '';
+						//String - Gets 3-letter currency code selected by the user
+						var currency = ReservationStateTree.get(['session','reservationSession','view_currency_code']);
+						//String - Gets lytics audiences and creates a comma delimited string
+						var lioSegments = _satellite.getVar('en_lytics_segments');
+
+						return {
+							'step': 'location',
+							'corpTraffic': corpTraffic,
+							'authTraffic': authTraffic,
+							'cid': cid,
+							'cdp' : lioSegments,
+							'cidType' : cidType,
+							'currency' : currency
+						};
+					} else {
+						return false;
+					}
+				}
+			},
 			"#cars": {
 				"mboxName": "ResFunnelCars",
 				"depends": function() {
