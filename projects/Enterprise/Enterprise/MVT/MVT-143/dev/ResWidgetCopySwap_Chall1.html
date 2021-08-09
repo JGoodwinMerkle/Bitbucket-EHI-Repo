@@ -1,0 +1,60 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.com',
+		test : 'Res Widget Copy Swap 2.0',
+		creative : 'Challenger 1',
+		selector: '#continueButton',
+		header: '.inner-container h2.reservation-toggle-header,.inner-container h1.reservation-toggle-header',
+		branchpage: '.booking-widget h2#branch-page-booking-header',
+		content: {
+			headline: 'Reserve a Vehicle',
+			cta: 'Continue'
+		},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+		},
+		chall : function() {
+			var header = enterprise.analytics.pageName == 'branchpage' ? 'branchpage' : 'header';
+			document.querySelectorAll(isoTest[header])[0].innerText = isoTest.content.headline;
+			document.querySelector(isoTest.selector).textContent = isoTest.content.cta;
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>
