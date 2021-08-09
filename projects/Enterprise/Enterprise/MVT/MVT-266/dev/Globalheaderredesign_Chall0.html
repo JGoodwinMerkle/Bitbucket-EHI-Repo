@@ -1,0 +1,117 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Global Header Redesign',
+		creative : 'Challenger 0',
+		selector: 'body',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			// Event tracking
+			isoTest.events();
+		},
+		events : function() {
+			// Click events
+			document.addEventListener('click', function (event) {
+				if (event.target.closest('.header-nav-item .currency button')) {
+					setTimeout(function(){
+						if (event.target.closest('.header-nav-item .currency.active')) {
+							event.target.closest('.header-nav-item .currency.active').classList.add('visible');
+							isoTest.fireTag('', 'Currency Open');
+						}
+					}, 500);
+				}
+				if (event.target.closest('.header-nav-item .language button')) {
+					setTimeout(function(){
+						if (event.target.closest('.header-nav-item .language.visible')) {
+							isoTest.fireTag('', 'Language Open');
+						}
+					}, 500);
+				}
+				if (event.target.closest('.header-nav-item .help button')) {
+					setTimeout(function(){
+						if (event.target.closest('.header-nav-item .help.visible')) {
+							isoTest.fireTag('', 'Help Open');
+						}
+					}, 500);
+				}
+				if (event.target.closest('.header-nav-item .careerlink')) {
+					isoTest.fireTag('', 'Covid-19 Update Selected');
+				}
+				if (event.target.closest('.currency-button[for*="-mobile"]')) {
+					setTimeout(function(){
+						document.querySelector('#mobile-toggle').focus();
+					}, 0);
+				}
+				if (event.target.closest('[for*="usd-"]')) {
+					isoTest.fireTag('', 'USD Selected');
+				}
+				if (event.target.closest('[for*="cad-"]')) {
+					isoTest.fireTag('', 'CAD Selected');
+				}
+				if (event.target.closest('[for*="eur-"]')) {
+					isoTest.fireTag('', 'EUR Selected');
+				}
+				if (event.target.closest('.country-language-href[href="/en/home.html"]')) {
+					isoTest.fireTag('', 'English Selected');
+				}
+				if (event.target.closest('.country-language-href[href="/es/home.html"]')) {
+					isoTest.fireTag('', 'Spanish Selected');
+				}
+			}, false);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
