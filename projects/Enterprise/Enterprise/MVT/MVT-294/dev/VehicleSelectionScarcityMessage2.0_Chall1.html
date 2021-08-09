@@ -1,0 +1,154 @@
+<style>
+.iso-warning-img {
+	display: inline-block;
+	float: left;
+	height: 18px;
+	margin-top: 1px;
+	width: auto;
+}
+.iso-warning {
+	background-color: #f3f3f3;
+	border: 1px solid #c3c3c3;
+	font-size: 14px;
+	padding: 12px;
+}
+.iso-warning .iso-warning-text {
+	display: inline-block;
+	margin-left: 8px;
+}
+.vehicle-header .iso-warning {
+	display: flex;
+	margin: 0.6rem 0;
+}
+.vehicle-select__main .iso-warning {
+	display: none;
+}
+@media (min-width: 1136px) {
+	.vehicle-list {
+		border-top: 3px solid #000;
+	}
+	.vehicle-select__main {
+		border-top: none;
+	}
+	.iso-main-wrap {
+		width: 776px;
+	}
+	.iso-warning {
+		margin: 0;
+		margin-bottom: 8px;
+	}
+	.vehicle-header .iso-warning {
+		display: none;
+	}
+	.vehicle-select__main .iso-warning {
+		display: flex;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Vehicle Selection Scarcity Message 2.0',
+		creative : 'Challenger 1',
+		selector: '.vehicle-select__main',
+		warningMessage : "<div class='iso-warning'><img class='iso-warning-img' alt='Warning Icon' src='https:&#47;&#47;www.enterprise.com&#47;content&#47;dam&#47;ecom&#47;hosted/warning_grey.svg'><div class='iso-warning-text'>We're experiencing <b>high demand</b> at <span class='iso-branch-name'>{branch}</span> for <span class='iso-reservation-month'>{month}</span>. Book soon.</div></div>",
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			var checkTree = setInterval( function() {
+
+				var branchName = ReservationStateTree.get(['session', 'reservationSession','pickup_location','name']);
+				var resDate = new Date(ReservationStateTree.get(['session', 'reservationSession','pickup_time']));
+				var resMonth = resDate.toLocaleString('default', { month: 'long' });
+
+		        if (branchName != null) {
+		        	clearInterval(checkTree);
+		        	var resInfo = helpers.supplant(isoTest.warningMessage, {
+		        		'branch' : branchName,
+						'month' : resMonth
+					});
+					if(!document.querySelector('.iso-warning')){
+			        	//Desktop
+						document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',resInfo);
+						//Mobile
+						helpers.elementLoaded('.vehicle-header__details', function() {
+							document.querySelector('.vehicle-header__details').insertAdjacentHTML('beforebegin',resInfo);
+						});
+					}
+		        }
+		    }, 100);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          	if (c[p[i]] == null)
+		            	return a;
+		          	c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
