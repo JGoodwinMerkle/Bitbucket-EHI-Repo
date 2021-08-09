@@ -1,0 +1,155 @@
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise',
+		test : 'PYP 2020 Homepage',
+		creative : 'Challenger 0',
+		selector: '.custom-banner--enterprise-plus',
+		content: {
+			en_us: {
+				content: 'Plus Your Points promotion is back! Enterprise Plus members earn double points on qualifying rentals now through January 31, 2021 when they register. Terms apply.',
+				cta: 'REGISTER | VIEW DASHBOARD',
+				url: 'https://plusyourpoints.enterprise.com/authenticate?langPref=en_us&TLGVC=E21A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-usen.50602'
+			},
+			es_us: {
+				content: '¡La promoción Plus Your Points está de vuelta! Los miembros Enterprise Plus ganan el doble de puntos en los alquileres que califiquen desde hoy hasta el 31 de enero del 2021 cuando se registren. Se aplican términos.',
+				cta: 'REGÍSTRESE | VER PANEL DE CONTROL',
+				url: 'https://plusyourpoints.enterprise.com/authenticate?langPref=es_pr&TLGVC=E21A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-pres.50602'
+			},
+			en_ca: {
+				content: 'Plus Your Points promotion is back! Enterprise Plus members earn double points on qualifying rentals now through January 31, 2021 when they register. Terms apply.',
+				cta: 'REGISTER | VIEW DASHBOARD',
+				url: 'https://plusyourpoints.enterprise.com/authenticate?langPref=en_ca&TLGVC=E21A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-caen.50602'
+			},
+			fr_ca: {
+				content: 'Retour de la promotion Plus Your Points! Les membres d’Enterprise Plus obtiennent le double des points sur les locations admissibles dès maintenant jusqu’au 31 janvier 2021 lorsqu’ils s’inscrivent. Des conditions s’appliquent.',
+				cta: 'INSCRIPTION | AFFICHER LE TABLEAU DE BORD',
+				url: 'https://plusyourpoints.enterprise.com/authenticate?langPref=fr_ca&TLGVC=E21A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-cafr.50602'
+			},
+			en_gb: {
+				content: 'Plus Your Points promotion is back! Enterprise Plus members earn double points on qualifying rentals from now until 31st January 2021 when they register. Terms apply.',
+				cta: 'REGISTER | VIEW DASHBOARD',
+				url: 'https://plusyourpoints.enterprise.com/authenticate?langPref=en_gb&TLGVC=E21A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-gben.50602'
+			},
+			en_ie: {
+				content: 'Plus Your Points promotion is back! Enterprise Plus members earn double points on qualifying rentals from now until 31st January 2021 when they register. Terms apply.',
+				cta: 'REGISTER | VIEW DASHBOARD',
+				url: 'https://plusyourpoints.enterprise.com/authenticate?langPref=en_ie&TLGVC=E21A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-ieen.50602'
+			},
+			fr_fr: {
+				content: 'La promotion Plus Your Points est de retour ! Les membres Enterprise Plus gagnent le double de points sur les locations éligibles jusqu’au 31 janvier 2021 s’ils s’inscrivent. Conditions applicables.',
+				cta: 'INSCRIPTION | AFFICHER LE TABLEAU DE BORD',
+				url: 'https://plusyourpoints.enterprise.com/authenticate?langPref=fr_fr&TLGVC=E21A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-frfr.50602'
+			},
+			de_de: {
+				content: 'Die Plus Your Points-Aktion ist zurück! Nach ihrer Registrierung erhalten Enterprise Plus-Mitglieder ab sofort bis zum 31. Januar 2021 doppelte Punkte für qualifizierende Anmietungen. Es gelten die Allgemeinen Geschäftsbedingungen.',
+				cta: 'REGISTRIEREN | DASHBOARD ANSEHEN',
+				url: 'https://plusyourpoints.enterprise.com/authenticate?langPref=de_de&TLGVC=E21A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-dede.50602'
+			},
+			es_es: {
+				content: ' ¡Vuelve la promoción Plus Your Points! Se verán recompensados con el doble de puntos en alquileres puntuables desde ahora hasta el 31 de enero de 2021 al registrarse como socios de Enterprise Plus.  Se aplican los términos y condiciones.',
+				cta: 'REGISTRARSE | VER PANEL',
+				url: 'https://plusyourpoints.enterprise.com/authenticate?langPref=es_es&TLGVC=E21A&TLG_CID=50602&icid=home-_-banner-_-loyalty.register-_-eses.50602'
+			}
+		},
+		lang: enterprise.i18nlocale,
+		currentContent: {
+			content: '',
+			cta: '',
+			url: ''
+		},
+		bannerSelectors: {
+			content: '.custom-banner--enterprise-plus .custom-banner__content p',
+			cta: '.custom-banner--enterprise-plus a.custom-banner__cta'
+		},
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+			isoTest.log('userNo :: ' + ${user.twentygroups});
+
+			isoTest.setLanguange();
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+
+			//document.querySelector('html').addEventListener('analytics',isoTest.revertContent,true);
+		},
+		chall : function() {
+			isoTest.saveContent();
+			isoTest.updateContent(isoTest.content[isoTest.lang]);
+
+			document.querySelector(isoTest.bannerSelectors.cta).addEventListener('click',function(){
+				isoTest.fireTag(this,'PYP Join/Register');
+			});
+		},
+		updateContent: function(content){
+			document.querySelector(isoTest.bannerSelectors.content).innerHTML = content.content;
+			document.querySelector(isoTest.bannerSelectors.cta).innerHTML = content.cta;
+			document.querySelector(isoTest.bannerSelectors.cta).setAttribute('href',content.url);
+		},
+		saveContent: function() {
+			isoTest.currentContent.content = document.querySelector(isoTest.bannerSelectors.content).innerHTML;
+			isoTest.currentContent.cta = document.querySelector(isoTest.bannerSelectors.cta).innerHTML;
+			isoTest.currentContent.url = document.querySelector(isoTest.bannerSelectors.cta).getAttribute('href');
+		},
+		revertContent: function(){
+			if(!ReservationStateTree.get(['session','reservationSession','profileResponse'])){
+				isoTest.updateContent(isoTest.currentContent);
+			}
+		},
+		setLanguange: function(){ //.ie shows as gb in locale
+			isoTest.lang = location.hostname.indexOf('.ie') > 0 ? 'en_ie' : enterprise.i18nlocale;
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
