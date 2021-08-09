@@ -1,0 +1,90 @@
+<style>
+	.upgrade-banner__title {
+		color: #656565;
+    	font-size: 1rem;
+    	font-weight: 300;
+	}
+	.upgrade-banner__title::before {
+		color: #333;
+		content: 'Join your fellow customers! ';
+		display: block;
+		font-weight: 600;
+    	font-style: normal;
+    	font-size: 1.3125rem;
+    	margin-bottom: 5px;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Add Extras Upgrade Module 2.0',
+		creative : 'Challenger 1',
+		selector : '.upgrade-banner__title',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/extras/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			var upgradeText = document.querySelector('.upgrade-banner__title');
+			var str = upgradeText.innerText;
+			var textToInsert = 'a ';
+			var position = 15;
+			var output = [str.slice(0, position), textToInsert, str.slice(position)].join('');
+			document.querySelectorAll('.upgrade-banner__title').forEach(function (value) {
+			    value.innerText = output;
+			});	
+
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
