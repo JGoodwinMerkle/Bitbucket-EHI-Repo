@@ -1,0 +1,366 @@
+<style>
+	.aside .line-item__no-cap, .aside .line-item__last {
+		display: none;
+	}
+	.iso-price-toggle {
+		border-top: 1px solid #c3c3c3;
+		cursor: pointer;
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.875rem;
+		padding-top: 1.3125rem;
+		padding-bottom: 1.3125rem;
+		position: relative;
+	}
+	.iso-price-toggle[aria-expanded="true"] .iso-price-details-link::after {
+		transform: rotate(180deg);
+	}
+	.iso-price-toggle[aria-expanded="true"] {
+		border-bottom: 0;
+	}
+	.iso-price-toggle[aria-expanded="false"] {
+		border-bottom: 1px solid #c3c3c3;
+		margin-bottom: 2.5625rem;
+	}
+	.iso-price-toggle[aria-expanded="true"] .ipt-view, .iso-price-toggle[aria-expanded="false"] .ipt-hide {
+		display: none;
+	}
+	.iso-price-toggle[aria-expanded="true"] .ipt-hide, .iso-price-toggle[aria-expanded="false"] .ipt-view {
+		display: inline;
+	}
+	.sidebar-box__footer .price-details__total {
+		margin-top: 0;
+		margin-bottom: 1.3125rem;
+		width: 100%;
+	}
+	.aside {
+		position: relative;
+	}
+	.aside::after {
+		content: '';
+		border-top: 1px solid #c3c3c3;
+		position: absolute;
+		top: 100px;
+		right: 0;
+		left: 0;
+	}
+	.aside .price-details__vehicle-image {
+		display: block;
+    	margin-top: -10px;
+    	margin-bottom: -15px;
+		width: 100%;
+		z-index: 1;
+	}
+	.aside .price-details__vehicle-image:not(.iso-vehicle-desktop), .aside .price-details__vehicle-banner:not(.iso-vehicle-banner-desktop) {
+		display: none;
+	}
+	.iso-vehicle-desktop .price-details__vehicle-image-src {
+		display: block;
+		margin: 0 auto;
+		max-width: 185px;
+    	width: 100%;
+	}
+	#iso-rental-details {
+		margin-bottom: 0;
+		border-bottom: none;
+	}
+	.iso-vehicle-banner-desktop .price-details__vehicle-banner-arrow {
+		right: 50%;
+	}
+	.iso-extras-copy .sidebar-box__list-item-info {
+		visibility: hidden;
+	}
+	h2.price-details__vehicle-title {
+		font-size: .9375rem;
+		font-weight: 200;
+		line-height: auto;
+		margin-bottom: .1875rem;
+	}
+	.iso-price-toggle {
+		background: #f3f3f3;
+		border: 1px solid #c3c3c3;
+		border-top: 2px solid #c3c3c3;
+    	padding: 0 31px;
+	}
+	.iso-price-toggle * {
+		pointer-events: none;
+	}
+	.iso-price-toggle .price-details__total {
+		border-top: 0;
+	}
+	.iso-price-toggle .price-details__total-custom-rate {
+		float: right;
+		margin-top: 0;
+	}
+	.iso-price-toggle .price-details__total-custom-rate .icon, #iso-price-details .price-details__total-custom-rate .icon  {
+		margin-top: 0;
+		margin-right: 5px;
+		margin-left: 5px;
+	}
+	.iso-price-toggle .price-details__total-redemption {
+		display: none;
+	}
+	.iso-price-details-link {
+		background: none;
+		color: #169a5a;
+		font-size: .875rem;
+		font-weight: 700;
+		letter-spacing: initial;
+		padding: 0;
+		position: relative;
+	}
+	.iso-price-details-link::after {
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2053.333332%2028%22%20height%3D%2228%22%20width%3D%2253.333%22%3E%3Cpath%20d%3D%22M0%206.4L5.333%200l21.6%2017.333L48%20.4l5.333%206.533L26.933%2028%200%206.4%22%20fill%3D%22%23169a5a%22%2F%3E%3C%2Fsvg%3E");
+		background-size: 100%;
+		background-repeat: no-repeat;
+		background-position: center;
+		content: '';
+		height: 17px;
+		width: 13px;
+		right: 0;
+		position: absolute;
+	}
+	#iso-price-details {
+		background: rgba(228, 228, 228, 1);
+	}
+	#iso-price-details .price-details__total-info * {
+		font-size: .875rem;
+		font-weight: 700;
+		line-height: auto;
+		top: 0;
+    	vertical-align: top;
+	}
+	#iso-price-details .price-details__total-info {
+		line-height: inherit;
+	}
+	.price-details__vehicle-image .sidebar-box__list-action-link {
+		display: none;
+	}
+	@media (min-width: 301px) and (max-width: 46.8em) {
+		.aside::after {
+			top: 90px;
+			display: none;
+		}
+		.iso-vehicle-desktop, .iso-vehicle-banner-desktop {
+			display: none !important;
+		}
+		.price-details__vehicle-image .sidebar-box__list-action-link {
+			display: block;
+			text-align: right;
+		}
+		#iso-rental-details .price-details__vehicle-info a {
+			display: none;
+		}
+		.aside .price-details__vehicle-image {
+			display: block;
+			margin-top: 0;
+			margin-bottom: 0;
+			top: 0;
+		}
+		.aside .price-details__vehicle-image:not(.iso-vehicle-desktop), .aside .price-details__vehicle-banner:not(.iso-vehicle-desktop) {
+			display: block;
+		}
+	}
+	@media (max-width: 61.25em) {
+		.iso-vehicle-banner-desktop .price-details__vehicle-banner-arrow {
+			right: 0;
+		}
+	}
+	@media (max-width: 280px) {
+		.iso-price-details-link {
+			display: inline-block;
+			margin-top: .5rem;
+		}
+		.iso-vehicle-banner-desktop .price-details__vehicle-banner-arrow {
+			right: 50%;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Review Condensed Left Panel',
+		creative : 'Challenger 2',
+		selector: '.price-details__total',
+		init : function() {
+
+			isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			document.querySelectorAll('.aside > .sidebar-box')[0].id = 'iso-rental-details';
+			document.querySelectorAll('.aside > .sidebar-box')[1].id = 'iso-price-details';
+
+			// Move vehicles up and clone vehicle image
+			document.querySelector('#iso-rental-details .sidebar-box__header').insertAdjacentElement('afterend', document.querySelector('.price-details__vehicle'));
+			document.querySelector('.price-details__vehicle-info').insertAdjacentHTML('afterbegin','<li class="sidebar-box__list-item sidebar-box__list-item--header"><h3 class="sidebar-box__list-title">Vehicle</h3><div class="sidebar-box__list-action"><a class="sidebar-box__list-action-link" href="#cars" data-dtm-tracking="vehicle_details|car_class|modify">Modify</a></div></li>');
+			document.querySelector('.price-details__vehicle-image').insertAdjacentHTML('afterbegin','<a class="sidebar-box__list-action-link" href="#cars" data-dtm-tracking="vehicle_details|car_class|modify">Modify</a>');
+			var vehicleClone = document.querySelector('.aside .price-details__vehicle-image').cloneNode(true);
+			vehicleClone.classList.add('iso-vehicle-desktop');
+			document.querySelector('.aside .price-details__vehicle').insertAdjacentElement('beforebegin', vehicleClone);
+			
+			// Move optional extras
+			if (document.querySelector('.price-details__vehicle-banner')) {
+				var vehicleBannerClone = document.querySelector('.price-details__vehicle-banner').cloneNode(true);
+				vehicleBannerClone.classList.add('iso-vehicle-banner-desktop');
+				document.querySelector('.iso-vehicle-desktop').insertAdjacentElement('afterend', vehicleBannerClone);
+				document.querySelector('.iso-vehicle-banner-desktop button').removeAttribute('data-dtm-tracking');
+			}
+
+			// Add toggle trigger
+			var priceDetailsContents = document.querySelector('#iso-price-details');
+			priceDetailsContents.setAttribute('hidden','');
+
+			// Add toggle content
+			var estimateTotal = document.querySelector('#iso-price-details .sidebar-box__footer').cloneNode(true);
+			document.querySelector('.aside .sidebar-box').insertAdjacentElement('afterend', estimateTotal);
+			estimateTotal.classList.add('iso-price-toggle');
+			estimateTotal.setAttribute('data-disclosure','');
+			estimateTotal.setAttribute('aria-expanded','false');
+			estimateTotal.setAttribute('aria-controls','iso-price-details');
+			document.querySelector('.iso-price-toggle .price-details__total').insertAdjacentHTML('beforeend','<button class="iso-price-details-link"><span class="ipt-view">VIEW</span><span class="ipt-hide">HIDE</span> PRICE DETAILS&nbsp;&emsp;</button>');
+
+			// Duplicate extras
+			var extrasCopy = document.querySelector('#iso-price-details ul:nth-of-type(2)').cloneNode(true);
+			extrasCopy.classList.add('iso-extras-copy');
+			document.querySelector('.aside .sidebar-box ul:last-of-type').insertAdjacentElement('afterend', extrasCopy);
+
+			// Hide duplicate extras modify links
+			document.querySelectorAll('#iso-price-details .sidebar-box__list-action-link').forEach( function(link) {
+				if ((link.textContent) == 'Modify') {
+					link.style.display = 'none';
+				}
+				if ((link.textContent) == 'Add') {
+					//link.parentNode.innerHTML = '<div>--</div>';
+					link.style.display = 'none';
+					var dupeExtrasAdd = link.parentNode.parentNode.nextSibling;
+					dupeExtrasAdd.classList.add('sidebar-box__list-item--header');
+					dupeExtrasAdd.querySelector('.sidebar-box__list-item-info').textContent = '--';
+				}
+			});
+
+			isoTest.events();
+
+		},
+		events : function() {
+			document.querySelector('.iso-price-toggle').addEventListener('click', function (event) {
+				if (event.target.closest('.iso-price-toggle')) {
+					// Toggle visibility
+					if (document.querySelector('.iso-price-toggle[aria-expanded="true"]')) {
+						document.querySelector('.iso-price-toggle').setAttribute('aria-expanded', false);
+						document.querySelector('#iso-price-details').setAttribute('hidden', '');
+						isoTest.fireTag(this,'View Price Details - Close');
+					} else {
+						document.querySelector('.iso-price-toggle').setAttribute('aria-expanded', true);
+						document.querySelector('#iso-price-details').removeAttribute('hidden');
+						isoTest.fireTag(this,'View Price Details - Open');
+					}
+				}
+			});
+			
+			document.addEventListener('click', function (event) {
+				if (event.target.matches('.iso-vehicle-banner-desktop button')) {
+					//Simulate click on real button
+					document.querySelector('.price-details__vehicle-banner:not(.iso-vehicle-banner-desktop) button[data-dtm-tracking="vehicle_details|car_class|upgrade"]').click();
+					//Remove desktop upgrade panel
+					if (document.querySelector('.iso-vehicle-banner-desktop')) {
+						document.querySelector('.iso-vehicle-banner-desktop').parentNode.removeChild(document.querySelector('.iso-vehicle-banner-desktop'));
+					}
+					setTimeout(function(){
+						//Update image
+						var newImg = document.querySelector('.price-details__vehicle-image:not(.iso-vehicle-desktop) img').cloneNode();
+						document.querySelector('.iso-vehicle-desktop img').replaceWith(newImg);
+					}, 1000);
+				}
+				if (event.target.matches('button[data-dtm-tracking="vehicle_details|car_class|upgrade"]')) {
+					setTimeout(function(){
+						//Remove desktop upgrade panel
+						if (document.querySelector('.iso-vehicle-banner-desktop')) {
+							document.querySelector('.iso-vehicle-banner-desktop').parentNode.removeChild(document.querySelector('.iso-vehicle-banner-desktop'));
+						}
+						//Update image
+						var newImg = document.querySelector('.price-details__vehicle-image:not(.iso-vehicle-desktop) img').cloneNode();
+						document.querySelector('.iso-vehicle-desktop img').replaceWith(newImg);
+					}, 1000);
+				}
+			});
+
+			var targetNode = document.querySelector('#iso-price-details .price-details__total-info');
+			var observerOptions = {
+				characterData: true, childList: true, subtree: true
+			};
+			var observer = new MutationObserver(callback);
+			function callback (mutations) {
+				for (var index = 0; index < mutations.length; index++) {
+                    var mutation = mutations[index];
+				    if (mutation.type === 'characterData') {
+				    	isoTest.log('characterData changed');
+				    	var newPrice = document.querySelector('#iso-price-details .price-details__total-info').cloneNode(true);
+						document.querySelector('.iso-price-toggle .price-details__total-info').replaceWith(newPrice);
+				    }
+				}
+			}
+			observer.observe(targetNode, observerOptions);
+	
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	}
+
+	isoTest.init();
+})();
+</script>

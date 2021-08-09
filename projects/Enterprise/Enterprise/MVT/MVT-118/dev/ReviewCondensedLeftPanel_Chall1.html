@@ -1,0 +1,263 @@
+<style>
+	.iso-taxes-original {
+		display: none !important;
+	}
+	.line-item__no-cap, .line-item__last, #iso-taxes-fees .sidebar-box__list-item--header {
+		display: none;
+	}
+	.iso-tax-toggle {
+		border-top: 1px solid #c3c3c3;
+		border-bottom: 1px solid #c3c3c3;
+		cursor: pointer;
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.875rem;
+		margin: 0 31px;
+		padding-top: 1.3125rem;
+		padding-right: 0 !important;
+		padding-bottom: 1.3125rem;
+		padding-left: 0 !important;
+		position: relative;
+	}
+	.iso-tax-toggle[aria-expanded="true"] {
+		border-bottom: 0;
+	}
+	.iso-tax-toggle[aria-expanded="true"] .iso-tax-header::after {
+		transform: rotate(-90deg);
+	}
+	.sidebar-box__footer .price-details__total {
+		border-top: 0;
+		margin-top: 0;
+	}
+	#iso-taxes-fees {
+		background-color: rgb(228, 228, 228);
+		padding-top: 1rem;
+   		padding-bottom: 1rem;
+	}
+	.iso-tax-header {
+		background: none;
+		color: #169a5a;
+		font-size: .875rem;
+		font-style: normal;
+		font-weight: 700;
+		letter-spacing: normal;
+		padding: 0;
+		padding-right: 20px;
+		position: relative;
+		text-align: left;
+		text-transform: uppercase;    
+	}
+	.iso-tax-header:hover {
+		color: #006639;
+	}
+	.iso-tax-header::after {
+		content: '';
+		position: absolute;
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii04MDMgMjk3IDQwIDQwIj48cGF0aCBmaWxsPSIjMTY5YTVhIiBkPSJNLTc4Ny43IDMzN2wtNC44LTQgMTMtMTYuMi0xMi43LTE1LjggNC45LTQgMTUuOCAxOS44Ii8+PC9zdmc+);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 100%;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		height: 17px;
+		width: 15px;
+		transform: rotate(90deg);
+	}
+	.iso-tax-total {
+		font-size: .9375rem;
+		text-align: right;
+	}
+	.iso-tax-subtotal {
+		border-top: 1px solid #c3c3c3;
+		margin-top: 1rem;
+    	padding-top: 1rem;
+	}
+	.iso-aside-module-price.sidebar-box {
+		padding: 41px 0px 18px 0px;
+	}
+	.iso-aside-module-price > * {
+		padding-right: 31px;
+		padding-left: 31px;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Review Condensed Left Panel',
+		creative : 'Challenger 1',
+		selector: '.price-details__total',
+		init : function() {
+
+			isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			var taxModule = helpers.contains('h3','Taxes & Fees')[0].parentNode.parentNode;
+			var taxModuleClone = taxModule.cloneNode(true);
+			taxModule.insertAdjacentElement('afterend',taxModuleClone);
+			taxModule.classList.add('iso-taxes-original');
+
+			taxModuleClone.id = 'iso-taxes-fees';
+			taxModuleClone.setAttribute('hidden','');
+
+			taxModuleClone.insertAdjacentHTML('beforebegin','<div class="iso-tax-toggle" data-disclosure aria-expanded="false" aria-controls="iso-taxes-fees"><button class="iso-tax-header">Taxes & Fees</button><div class="iso-tax-total"></div></div>');
+			
+			document.querySelector('#iso-taxes-fees').insertAdjacentHTML('beforeend','<li class="sidebar-box__list-item sidebar-box__list-item--table iso-tax-subtotal"><span class="sidebar-box__list-item-label">Total taxes & fees</span><span class="sidebar-box__list-item-info"></span></li>');
+			//document.querySelector('#iso-taxes-fees').insertAdjacentElement('beforeend',document.querySelector('.iso-taxes-original .sidebar-box__list-action'));
+			var learnMore = document.querySelector('.iso-taxes-original > .sidebar-box__list-item--header .sidebar-box__list-action').cloneNode(true);
+			learnMore.classList.add('iso-learn-more');
+			document.querySelector('#iso-taxes-fees').insertAdjacentElement('beforeend',learnMore);
+
+			//Padding
+			document.querySelector('.price-details__vehicle').parentNode.parentNode.classList.add('iso-aside-module-price');
+			
+			isoTest.dataObjectLoaded();
+
+			isoTest.events();
+
+		},
+		dataObjectLoaded : function() {
+			var dataObjectLoaded = setInterval(function(){
+				isoTest.log('waiting for reservation data object...');
+				if (ReservationStateTree.get(['session','reservationSession','selectedCarClassDetails','vehicle_rates','PAYLATER','price_summary','estimated_total_taxes_and_fees_view','format']) != null){
+					clearInterval(dataObjectLoaded);
+					isoTest.log('found reservation data object!');
+
+					var isoTaxTotal = ReservationStateTree.data.session.reservationSession.selectedCarClassDetails.vehicle_rates.PAYLATER.price_summary.estimated_total_taxes_and_fees_view.format;
+					document.querySelector('.iso-tax-total').innerText = isoTaxTotal;
+					document.querySelector('.iso-tax-subtotal .sidebar-box__list-item-info').innerText = isoTaxTotal;
+				}
+				setTimeout(function(){
+					clearInterval(dataObjectLoaded);
+				}, 10000);
+			},10);
+		},
+		events : function() {
+			document.querySelector('.iso-tax-toggle').addEventListener('click', function (event) {
+				if (event.target.closest('.iso-tax-toggle')) {
+					// Toggle visibility
+					if (document.querySelector('.iso-tax-toggle[aria-expanded="true"]')) {
+						document.querySelector('.iso-tax-toggle').setAttribute('aria-expanded', false);
+						document.querySelector('#iso-taxes-fees').setAttribute('hidden', '');
+						isoTest.fireTag(this,'View Price Details - Close');
+					} else {
+						document.querySelector('.iso-tax-toggle').setAttribute('aria-expanded', true);
+						document.querySelector('#iso-taxes-fees').removeAttribute('hidden');
+						isoTest.fireTag(this,'View Price Details - Open');
+					}
+				}
+			});
+
+			document.addEventListener('click', function (event) {
+				if (event.target.closest('.iso-learn-more')) {
+					event.preventDefault();
+					document.querySelector('.iso-taxes-original > .sidebar-box__list-item--header .sidebar-box__list-action a').click();
+				}
+			});
+
+			var targetNode = document.querySelector('.price-details__total-info');
+			var observerOptions = {
+				characterData: true, childList: true, subtree: true
+			};
+			var observer = new MutationObserver(callback);
+			function callback (mutations) {
+				for (var index = 0; index < mutations.length; index++) {
+                    var mutation = mutations[index];
+				    if (mutation.type === 'characterData') {
+				    	isoTest.log('characterData changed');
+
+						// Copy updated tax info from hidden original
+						var newTaxes = document.querySelector('.iso-taxes-original').cloneNode(true);
+						newTaxes.classList.remove('iso-taxes-original');
+						var newSubtotal = document.querySelector('.iso-tax-subtotal').cloneNode(true);
+						var newLearnMore = document.querySelector('#iso-taxes-fees > .sidebar-box__list-action').cloneNode(true);
+						document.querySelector('#iso-taxes-fees').replaceWith(newTaxes);
+						newTaxes.id = 'iso-taxes-fees';
+						if (document.querySelector('.iso-tax-toggle[aria-expanded="false"]')) {
+							document.querySelector('#iso-taxes-fees').setAttribute('hidden','');
+						}
+						newTaxes.insertAdjacentElement('beforeend',newSubtotal);
+						newTaxes.insertAdjacentElement('beforeend',newLearnMore);
+						// Update totals
+						var isoTaxTotal = ReservationStateTree.data.session.reservationSession.selectedCarClassDetails.vehicle_rates.PAYLATER.price_summary.estimated_total_taxes_and_fees_view.format;
+						document.querySelector('.iso-tax-total').innerText = isoTaxTotal;
+						document.querySelector('.iso-tax-subtotal .sidebar-box__list-item-info').innerText = isoTaxTotal;
+
+				    }
+				}
+			}
+			observer.observe(targetNode, observerOptions);
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    wrap : function (toWrap, wrapper) {
+		    wrapper = wrapper || document.createElement('div');
+		    toWrap.parentNode.appendChild(wrapper);
+		    return wrapper.appendChild(toWrap);
+		},
+		contains : function(selector, text) {
+		  var elements = document.querySelectorAll(selector);
+		  return [].filter.call(elements, function(element){
+		    return RegExp(text).test(element.textContent);
+		  });
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
