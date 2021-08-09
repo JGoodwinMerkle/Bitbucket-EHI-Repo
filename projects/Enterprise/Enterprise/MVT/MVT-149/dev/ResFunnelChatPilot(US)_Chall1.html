@@ -1,0 +1,126 @@
+<style>
+	div.button-iframe-wrap {
+		border-radius: 24px;
+		cursor: pointer;
+		position: fixed;
+	    right: 24px;
+	    bottom: 40px;
+	    height: 48px;
+	    width: 147px;
+	}
+	div.button-iframe-wrap:focus {
+		box-shadow: 0 0 3px #000;
+	}
+	#icChatButton {
+		pointer-events: none;
+	}
+	.text-capsule-item svg {
+    	height: 50px;
+    	margin-bottom: 10px;
+    	padding: 14px;
+	}
+</style>
+<script src="https://home-c29.incontact.com/inContact/ChatClient/js/embed.min.js"></script>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Res Funnel Chat Pilot (US)',
+		creative : 'Challenger 1',
+		selector: '#chat-div-wrap',
+		init : function() {
+
+			//isoTest.debug = ${user.mvtDebug};
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.dependsLoaded(isoTest.loadChat);
+		},
+		loadChat: function(){
+			icPatronChat.init({serverHost:'https://home-c29.incontact.com',bus_no:4597143,poc:'8d7d7634-d9de-49ba-94d3-88c3f1df1911',params:['FirstName','Last Name','first.last@company.com',555-555-5555]});
+			
+			helpers.elementLoaded(isoTest.selector, function() {
+  				isoTest.chall();
+			});
+		},
+		chall : function() {
+			isoTest.events();
+			isoTest.accessibility();
+		},
+		accessibility : function() {
+			document.querySelector('#content-container').insertAdjacentElement('afterend',document.querySelector('.ie-div-position-customer-chat'));
+			document.querySelector('#icChat').tabIndex = -1;
+			document.querySelector('.button-iframe-wrap').tabIndex = 0;
+			document.querySelector('#icChatButton').tabIndex = -1;
+		},
+		popupPatronChat : function() {
+	    	var url = "https://home-c29.incontact.com/incontact/chatclient/chatclient.aspx?poc=8d7d7634-d9de-49ba-94d3-88c3f1df1911&bu=4597143&P1=First Name&P2=Last Name&P3=first.last@company.com&P4=555-555-5555";
+	   		window.open(url, 'icPatronChatWin', 'location=no,height=820,menubar=no,status-no,width=400', true);
+	  	},
+		events: function() {
+			document.querySelector('.button-iframe-wrap').addEventListener('click', function (event) {
+				// var matches = event.target.matches ? event.target.matches('.button-iframe-wrap') : event.target.msMatchesSelector('.button-iframe-wrap');
+				// if (matches) {
+					isoTest.popupPatronChat();
+					isoTest.fireTag(this,'Live Chat');
+				// }
+			});
+			document.querySelector('.button-iframe-wrap').addEventListener('keypress', function (event) {
+				//var matches = event.target.matches ? event.target.matches('.button-iframe-wrap') : event.target.msMatchesSelector('.button-iframe-wrap');
+			    if (event.key === 'Enter') {
+			    	//if (matches) {
+			    		isoTest.popupPatronChat();
+			    		isoTest.fireTag(this,'Live Chat');
+			    	//}
+			    }
+			});
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+			linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoaded : function(callback){
+			var dInt = setInterval(function(){
+				if(typeof icPatronChat == 'object'){
+					clearInterval(dInt);
+					callback();
+				}
+			}, 100);
+
+			setTimeout(function(){
+				clearInterval(dInt);
+			},10000);
+		}
+	};
+
+	isoTest.init();
+
+})();
+</script>
