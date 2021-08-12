@@ -4,10 +4,10 @@
   var isoTest = {
     account: "Enterprise",
     portfolio: "EHI",
-    test : 'Res Widget Background Full Scale',
+    test: "Res Background Image",
     creative: "Challenger 1",
     selector: ".booking-widget-hero .img-container img[src]",
-    debug: false,
+    debug: true,
     init: function () {
       isoTest.debug = ${user.mvtDebug};
       if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
@@ -20,7 +20,7 @@
 
       isoTest.chall();
     },
-    defaultRegion: 'WEST',
+    defaultRegion: 'NORT EAST',
     cycle: -1,
     regionBasedStates: {
       'NORT EAST': ['PA', 'NY', 'ME', 'VT', 'NH', 'MA', 'RI', 'CT', 'NJ', 'DE', 'MD'],
@@ -32,57 +32,57 @@
       'NORT EAST': [
         {
           cityName: 'city_hero_brooklyn',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/east_1.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/east_1.png'
         },
         {
           cityName: 'new_hampshire-6',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/east_2.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/east_4%403x.png'
         },
         {
           cityName: 'times-square-new-york',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/east_3.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/east_3.png'
         }
       ],
       'WEST': [
         {
           cityName: 'Maui-0147',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/west_1.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/west_1.png'
         },
         {
           cityName: 'road-trip-Bierstadt-lake-featured-image',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/west_2.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/west_2.png'
         },
         {
           cityName: 'us-sanfrancisco',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/west_3.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/west_3.png'
         }
       ],
       'SOUTH': [
         {
           cityName: 'us-ftlauderdale',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/south_1.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/south_1.png'
         },
         {
           cityName: 'explore-beyond-orlando-clearwater',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/south_2.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/south_2.png'
         },
         {
           cityName: 'us-atlanta',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/south_3.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/south_3.png'
         }
       ],
       'MIDWEST': [
         {
           cityName: 'montana_ski_areas_19',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/midwest_1.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_4%403x.png'
         },
         {
           cityName: 'explore-beyond-chicago-skyline',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/midwest_2.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_2.png'
         },
         {
           cityName: 'drives-utah-byway-12-kodachromebasinx',
-          imageLink: 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/midwest_3.png'
+          imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_3.png'
         }
       ]
     },
@@ -90,7 +90,7 @@
       var keys = Object.keys(isoTest.regionBasedStates);
       for(var i = 0; i < keys.length; i++) {
         if(isoTest.regionBasedStates[keys[i]].indexOf(stateCode) != -1) {
-          return keys[i]; // RETURN USER'S STATE REGION
+          return keys[i]; // RETURN USER'S STATE REGION i.e MIDWEST
         }
       }
       return '';
@@ -121,7 +121,7 @@
       var regionData = JSON.parse(window.localStorage.getItem('iso_region'));
       if(regionData != null) {
         if(region == regionData.curr.split('_')[0]) {
-          window.localStorage.setItem('iso_region', JSON.stringify(isoTest.getRegionObject('curr', region, regionData.cycle)));
+          window.localStorage.setItem('iso_region', JSON.stringify(isoTest.getRegionObject('curr', region, regionData.curr.split('_')[1])));
         } else {
           window.localStorage.setItem('iso_region', JSON.stringify(isoTest.getRegionObject('next', region, index)));
         }
@@ -151,18 +151,25 @@
       var observer = new MutationObserver(callback);
       observer.observe(targetNode, config);
     },
+    changeImageAttribute: function(region, index) {
+      document.querySelector('.booking-widget-hero .img-container img').setAttribute('src', isoTest.locationBasedImages[region][index].imageLink);
+      document.querySelector('.booking-widget-hero .img-container img').setAttribute('data-original', isoTest.locationBasedImages[region][index].imageLink);
+      document.querySelector('.booking-widget-hero .img-container img').setAttribute('alt', isoTest.locationBasedImages[region][index].cityName);
+    },
     changeImageHandler: function(region, index) {
-      console.log(isoTest.locationBasedImages[region][index])
+      isoTest.log(isoTest.locationBasedImages[region][index])
       // CHANGE IMAGE
       helpers.elementLoaded(isoTest.selector, function () {
-        document.querySelector('.booking-widget-hero .img-container img').setAttribute('src', isoTest.locationBasedImages[region][index].imageLink);
+        isoTest.changeImageAttribute(region, index);
         // IF IMAGE CHANGE 
         isoTest.heroImageChangeListener(function() {
-          document.querySelector('.booking-widget-hero .img-container img').setAttribute('src', isoTest.locationBasedImages[region][index].imageLink);          
+          isoTest.changeImageAttribute(region, index);      
         });
       });
       // FIRE TAG 
-      // isoTest.fireTag('', isoTest.locationBasedImages[region][index].cityName);
+      var cityNameTracking = isoTest.locationBasedImages[region][index].cityName;
+      isoTest.log('cityNameTracking ' + cityNameTracking);
+      // isoTest.fireTag('', cityNameTracking);
       this.setUsersSession(true);
     },
     resetCycleHandler: function(region, round) {
@@ -230,12 +237,12 @@
         }
       }, 50);
     },
-    fireTag: function (element, value) {
-      var linkName = value ? value : element.innerText;
-      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
-      s.linkTrackVars = "eVar20";
-      s.eVar20 = linkName;
-      s.tl(this, "o", linkName);
+    fireTag: function(element, value) {
+        var linkName = value ? value : element.innerText;
+        linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+        s.linkTrackVars = 'eVar20';
+        s.eVar20 = linkName;
+        s.tl(this, 'o', linkName);
     },
     log: function (obj) {
       if (isoTest.debug === true) {
