@@ -1,272 +1,281 @@
 <script>
-(function () {
-  "use strict";
-  var isoTest = {
-    account: "Enterprise",
-    portfolio: "EHI",
-    test: "Res Background Image",
-    creative: "Challenger 1",
-    selector: ".booking-widget-hero .img-container img[src]",
-    debug: true,
-    init: function () {
-      isoTest.debug = ${user.mvtDebug};
-      if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-        _satellite.setVar('TargetCampaign', isoTest.test);
-        _satellite.setVar('TargetCreative', isoTest.creative);
-      }
-      isoTest.log("Test Running...");
-      isoTest.log(isoTest.account + " - " + isoTest.portfolio);
-      isoTest.log(isoTest.test + " - " + isoTest.creative);
+  (function () {
+    "use strict";
+    var isoTest = {
+      account: "Enterprise",
+      portfolio: "EHI",
+      test: "Res Background Image",
+      creative: "Challenger 1",
+      selector: ".booking-widget-hero .img-container img[src]",
+      debug: false,
+      init: function () {
+        isoTest.debug = ${user.mvtDebug};
 
-      isoTest.chall();
-    },
-    defaultRegion: 'NORT EAST',
-    cycle: -1,
-    regionBasedStates: {
-      'NORT EAST': ['PA', 'NY', 'ME', 'VT', 'NH', 'MA', 'RI', 'CT', 'NJ', 'DE', 'MD'],
-      'WEST': ['WA', 'OR', 'CA', 'NV', 'ID', 'AZ', 'UT', 'NM', 'CO', 'MT', 'WY', 'AK', 'HI'],
-      'SOUTH': ['FL', 'GA', 'AL', 'MS', 'TN', 'KY', 'WV', 'VA', 'SC', 'LA',' TX', 'OK', 'AR', 'SJU'],
-      'MIDWEST': ['ND', 'SD', 'NE', 'KS', 'MO', 'IA', 'MN', 'WI', 'IL', 'IN', 'MI', 'OH']
-    },
-    locationBasedImages: {
-      'NORT EAST': [
-        {
-          cityName: 'city_hero_brooklyn',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/east_1.png'
-        },
-        {
-          cityName: 'new_hampshire-6',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/east_4%403x.png'
-        },
-        {
-          cityName: 'times-square-new-york',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/east_3.png'
+        if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+          _satellite.setVar('TargetCampaign', isoTest.test);
+          _satellite.setVar('TargetCreative', isoTest.creative);
+          //_satellite.track('target_variables');
         }
-      ],
-      'WEST': [
-        {
-          cityName: 'Maui-0147',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/west_1.png'
-        },
-        {
-          cityName: 'road-trip-Bierstadt-lake-featured-image',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/west_2.png'
-        },
-        {
-          cityName: 'us-sanfrancisco',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/west_3.png'
+
+        isoTest.log('Test Running...');
+        isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+        isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+
+        isoTest.chall();
+      },
+      defaultRegion: 'NORTH EAST',
+      cycle: -1,
+      regionBasedStates: {
+        'NORT EAST': ['PA', 'NY', 'ME', 'VT', 'NH', 'MA', 'RI', 'CT', 'NJ', 'DE', 'MD'],
+        'WEST': ['WA', 'OR', 'CA', 'NV', 'ID', 'AZ', 'UT', 'NM', 'CO', 'MT', 'WY', 'AK', 'HI'],
+        'SOUTH': ['FL', 'GA', 'AL', 'MS', 'TN', 'KY', 'WV', 'VA', 'SC', 'LA', ' TX', 'OK', 'AR', 'SJU'],
+        'MIDWEST': ['ND', 'SD', 'NE', 'KS', 'MO', 'IA', 'MN', 'WI', 'IL', 'IN', 'MI', 'OH']
+      },
+      locationBasedImages: {
+        'NORT EAST': [
+          {
+            cityName: 'background-image-of-brooklyn',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/east_1.png'
+          },
+          {
+            cityName: 'background-image-of-new-hampshire',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/east_4%403x.png'
+          },
+          {
+            cityName: 'background-image-of-new-york',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/east_3.png'
+          }
+        ],
+        'WEST': [
+          {
+            cityName: 'background-image-of-maui',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/west_1.png'
+          },
+          {
+            cityName: 'background-image-of-bierstadt-lake',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/west_2.png'
+          },
+          {
+            cityName: 'background-image-of-san-francisco',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/west_3.png'
+          }
+        ],
+        'SOUTH': [
+          {
+            cityName: 'background-image-of-fort-lauderdale',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/south_1.png'
+          },
+          {
+            cityName: 'background-image-of-clearwater',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/south_2.png'
+          },
+          {
+            cityName: 'background-image-of-atlanta',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/south_3.png'
+          }
+        ],
+        'MIDWEST': [
+          {
+            cityName: 'background-image-of-montana',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_4%403x.png'
+          },
+          {
+            cityName: 'background-image-of-chicago',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_2.png'
+          },
+          {
+            cityName: 'background-image-of-utah',
+            imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_3.png'
+          }
+        ]
+      },
+      getUserStateRegion: function (stateCode) {
+        var keys = Object.keys(isoTest.regionBasedStates);
+        for (var i = 0; i < keys.length; i++) {
+          if (isoTest.regionBasedStates[keys[i]].indexOf(stateCode) != -1) {
+            return keys[i]; // RETURN USER'S STATE REGION
+          }
         }
-      ],
-      'SOUTH': [
-        {
-          cityName: 'us-ftlauderdale',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/south_1.png'
-        },
-        {
-          cityName: 'explore-beyond-orlando-clearwater',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/south_2.png'
-        },
-        {
-          cityName: 'us-atlanta',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/south_3.png'
+        return '';
+      },
+      getRegionObject: function (action, region, cycle) {
+        if (action == 'next') {
+          return {
+            curr: JSON.parse(window.localStorage.getItem('iso_region')).curr,
+            next: region + '_' + cycle,
+          }
         }
-      ],
-      'MIDWEST': [
-        {
-          cityName: 'montana_ski_areas_19',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_4%403x.png'
-        },
-        {
-          cityName: 'explore-beyond-chicago-skyline',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_2.png'
-        },
-        {
-          cityName: 'drives-utah-byway-12-kodachromebasinx',
-          imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_3.png'
-        }
-      ]
-    },
-    getUserStateRegion: function(stateCode) {
-      var keys = Object.keys(isoTest.regionBasedStates);
-      for(var i = 0; i < keys.length; i++) {
-        if(isoTest.regionBasedStates[keys[i]].indexOf(stateCode) != -1) {
-          return keys[i]; // RETURN USER'S STATE REGION i.e MIDWEST
-        }
-      }
-      return '';
-    },
-    getRegionObject: function(action, region, cycle) {
-      if(action == 'next') {
         return {
-          curr: JSON.parse(window.localStorage.getItem('iso_region')).curr, 
-          next: region + '_' + cycle,
-        }
-      }
-      return {
-        curr: region + '_' + cycle,
-        next: ''
-      }
-    },
-    swapRegionData: function() {
-      var data = isoTest.getRegionData();
-      if(data.next.length && this.getUsersSession() == null) {
-        var tempObj = {
-          curr: data.next,
+          curr: region + '_' + cycle,
           next: ''
+        }
+      },
+      swapRegionData: function () {
+        var data = isoTest.getRegionData();
+        if (data.next.length && this.getUsersSession() == null) {
+          var tempObj = {
+            curr: data.next,
+            next: ''
+          };
+          window.localStorage.setItem('iso_region', JSON.stringify(tempObj));
+        }
+      },
+      setRegionData: function (region, index) {
+        var regionData = JSON.parse(window.localStorage.getItem('iso_region'));
+        if (regionData != null) {
+          if (region == regionData.curr.split('_')[0]) {
+            window.localStorage.setItem('iso_region', JSON.stringify(isoTest.getRegionObject('curr', region, regionData.curr.split('_')[1])));
+          } else {
+            window.localStorage.setItem('iso_region', JSON.stringify(isoTest.getRegionObject('next', region, index)));
+          }
+        } else {
+          window.localStorage.setItem('iso_region', JSON.stringify(isoTest.getRegionObject('curr', region, index)));
+        }
+      },
+      getRegionData: function () {
+        return JSON.parse(window.localStorage.getItem('iso_region'));
+      },
+      setUsersSession: function (value) {
+        window.sessionStorage.setItem('iso_state_image', value);
+      },
+      getUsersSession: function () {
+        return window.sessionStorage.getItem('iso_state_image');
+      },
+      heroImageChangeListener: function (trigger) {
+        var targetNode = document.querySelector('.booking-widget-hero .img-container img');
+        var config = { attributes: true, childList: true, subtree: true };
+        var callback = function (mutationsList, observer) {
+          for (var i = 0; i < mutationsList.length; i++) {
+            if (mutationsList[i].type == 'attributes' && targetNode.getAttribute('src').indexOf('/hosted/res-widget-background/') < 0) {
+              trigger();
+            }
+          }
         };
-        window.localStorage.setItem('iso_region', JSON.stringify(tempObj));
-      }
-    },
-    setRegionData: function(region, index) {
-      var regionData = JSON.parse(window.localStorage.getItem('iso_region'));
-      if(regionData != null) {
-        if(region == regionData.curr.split('_')[0]) {
-          window.localStorage.setItem('iso_region', JSON.stringify(isoTest.getRegionObject('curr', region, regionData.curr.split('_')[1])));
-        } else {
-          window.localStorage.setItem('iso_region', JSON.stringify(isoTest.getRegionObject('next', region, index)));
-        }
-      } else {
-        window.localStorage.setItem('iso_region', JSON.stringify(isoTest.getRegionObject('curr', region, index)));
-      }
-    },
-    getRegionData: function() {
-      return JSON.parse(window.localStorage.getItem('iso_region'));
-    },
-    setUsersSession: function(value) {
-      window.sessionStorage.setItem('iso_state_image', value);
-    },
-    getUsersSession: function() {
-      return window.sessionStorage.getItem('iso_state_image');
-    },
-    heroImageChangeListener: function(trigger) {
-      var targetNode = document.querySelector('.booking-widget-hero .img-container img');
-      var config = { attributes: true, childList: true, subtree: true };
-      var callback = function(mutationsList, observer) {
-        for(var i = 0; i < mutationsList.length; i++) {
-          if(mutationsList[i].type == 'attributes' && targetNode.getAttribute('src').indexOf('/hosted/res-widget-background/') < 0) {
-            trigger();
-          }
-        }
-      };
-      var observer = new MutationObserver(callback);
-      observer.observe(targetNode, config);
-    },
-    changeImageAttribute: function(region, index) {
-      document.querySelector('.booking-widget-hero .img-container img').setAttribute('src', isoTest.locationBasedImages[region][index].imageLink);
-      document.querySelector('.booking-widget-hero .img-container img').setAttribute('data-original', isoTest.locationBasedImages[region][index].imageLink);
-      document.querySelector('.booking-widget-hero .img-container img').setAttribute('alt', isoTest.locationBasedImages[region][index].cityName);
-    },
-    changeImageHandler: function(region, index) {
-      isoTest.log(isoTest.locationBasedImages[region][index])
-      // CHANGE IMAGE
-      helpers.elementLoaded(isoTest.selector, function () {
-        isoTest.changeImageAttribute(region, index);
-        // IF IMAGE CHANGE 
-        isoTest.heroImageChangeListener(function() {
-          isoTest.changeImageAttribute(region, index);      
+        var observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+      },
+      changeImageAttribute: function (region, index) {
+        document.querySelector('.booking-widget-hero .img-container img').setAttribute('src', isoTest.locationBasedImages[region][index].imageLink);
+        document.querySelector('.booking-widget-hero .img-container img').setAttribute('data-original', isoTest.locationBasedImages[region][index].imageLink);
+        document.querySelector('.booking-widget-hero .img-container img').setAttribute('alt', isoTest.locationBasedImages[region][index].cityName);
+      },
+      changeImageHandler: function (region, index) {
+        isoTest.log(isoTest.locationBasedImages[region][index])
+        // CHANGE IMAGE
+        helpers.elementLoaded(isoTest.selector, function () {
+          isoTest.changeImageAttribute(region, index);
+          // IF IMAGE CHANGE 
+          isoTest.heroImageChangeListener(function () {
+            isoTest.changeImageAttribute(region, index);
+          });
         });
-      });
-      // FIRE TAG 
-      var cityNameTracking = isoTest.locationBasedImages[region][index].cityName;
-      isoTest.log('cityNameTracking ' + cityNameTracking);
-      // isoTest.fireTag('', cityNameTracking);
-      this.setUsersSession(true);
-    },
-    resetCycleHandler: function(region, round) {
-      var cycle = ++round;
-      if(cycle > 2) cycle = 0;
-      var data = this.getRegionData();
-      data.curr = region + '_' + cycle;
-      window.localStorage.setItem('iso_region', JSON.stringify(data));
-      return cycle;
-    },
-    chall: function () {
-      if(window.location.pathname == '/en/reserve.html') {
-        this.waitForEntDatalayer(function() {
-          var stateCode = window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code;
-          var region = isoTest.getUserStateRegion(stateCode);
-          isoTest.setRegionData(region, isoTest.cycle);
-        });
-      }
-      
-      if(window.location.pathname == '/en/home.html') {
-        var regionData = this.getRegionData(); 
-        if(regionData != null) {
-          this.swapRegionData();
-          regionData = this.getRegionData(); 
-          var region = regionData.curr.split('_')[0];
-          var cycle = regionData.curr.split('_')[1];
-          if(this.getUsersSession() == null) {
-            var cycle = this.resetCycleHandler(region, cycle);
-            this.changeImageHandler(region, cycle);
-          } else if(this.getUsersSession() == 'true') {
-            this.changeImageHandler(region, cycle);
-          } else if(this.getUsersSession() == 'false') {
-            this.changeImageHandler(this.defaultRegion, cycle);
-          }
-        } else {
-          if(this.getUsersSession() == null) {
-            this.setRegionData(this.defaultRegion, this.cycle);
-            var cycle = this.resetCycleHandler(this.defaultRegion, this.cycle);
-            this.changeImageHandler(this.defaultRegion, cycle);
-          }
-          this.setUsersSession(false);
+        // FIRE TAG 
+        var cityNameTracking = isoTest.locationBasedImages[region][index].cityName;
+        isoTest.log('cityNameTracking ' + cityNameTracking);
+        isoTest.fireTag('', cityNameTracking);
+        this.setUsersSession(true);
+      },
+      resetCycleHandler: function (region, round) {
+        var cycle = ++round;
+        if (cycle > 2) cycle = 0;
+        var data = this.getRegionData();
+        data.curr = region + '_' + cycle;
+        window.localStorage.setItem('iso_region', JSON.stringify(data));
+        return cycle;
+      },
+      chall: function () {
+        if (window.location.pathname == '/en/reserve.html' && window.location.hash == '#cars') {
+          this.waitForEntDatalayer(function () {
+            var stateCode = window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code;
+            var region = isoTest.getUserStateRegion(stateCode);
+            if(region.length > 0) {
+              isoTest.setRegionData(region, isoTest.cycle);
+            }
+          });
         }
-      }
 
-    },
-    waitForEntDatalayer: function(callback) {
-      var maxCheck = 500;
-      var interval = window.setInterval(function() {
-        if (
-          window.store &&
-          window.store.getState() &&
-          window.store.getState().toJS() &&
-          window.store.getState().toJS().app &&
-          window.store.getState().toJS().app.baobab &&
-          window.store.getState().toJS().app.baobab.session &&
-          window.store.getState().toJS().app.baobab.session.gbo &&
-          window.store.getState().toJS().app.baobab.session.gbo.pickup_location &&
-          window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address &&
-          window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code
-        ) {
-          callback();
-          window.clearInterval(interval);
-        } else if (--maxCheck < 0) {
-          window.clearInterval(interval);
+        if (window.location.pathname == '/en/home.html') {
+          var regionData = this.getRegionData();
+          if (regionData != null) {
+            this.swapRegionData();
+            regionData = this.getRegionData();
+            var region = regionData.curr.split('_')[0];
+            var cycle = regionData.curr.split('_')[1];
+            if (this.getUsersSession() == null) {
+              var cycle = this.resetCycleHandler(region, cycle);
+              this.changeImageHandler(region, cycle);
+            } else if (this.getUsersSession() == 'true') {
+              this.changeImageHandler(region, cycle);
+            } else if (this.getUsersSession() == 'false') {
+              this.changeImageHandler(this.defaultRegion, cycle);
+            }
+          } else {
+            if (this.getUsersSession() == null) {
+              this.setRegionData(this.defaultRegion, this.cycle);
+              var cycle = this.resetCycleHandler(this.defaultRegion, this.cycle);
+              this.changeImageHandler(this.defaultRegion, cycle);
+            }
+            this.setUsersSession(false);
+          }
         }
-      }, 50);
-    },
-    fireTag: function(element, value) {
+
+      },
+      waitForEntDatalayer: function (callback) {
+        var maxCheck = 500;
+        var interval = window.setInterval(function () {
+          if (
+            window.store &&
+            window.store.getState() &&
+            window.store.getState().toJS() &&
+            window.store.getState().toJS().app &&
+            window.store.getState().toJS().app.baobab &&
+            window.store.getState().toJS().app.baobab.session &&
+            window.store.getState().toJS().app.baobab.session.gbo &&
+            window.store.getState().toJS().app.baobab.session.gbo.pickup_location &&
+            window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address &&
+            window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code
+          ) {
+            callback();
+            window.clearInterval(interval);
+          } else if (--maxCheck < 0) {
+            window.clearInterval(interval);
+          }
+        }, 50);
+      },
+      fireTag: function (element, value) {
+        s.events = '';
         var linkName = value ? value : element.innerText;
         linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-        s.linkTrackVars = 'eVar20';
-        s.eVar20 = linkName;
+        s.linkTrackVars = 'eVar89';
+        s.eVar89 = linkName;
         s.tl(this, 'o', linkName);
-    },
-    log: function (obj) {
-      if (isoTest.debug === true) {
-        console.log(obj);
-      }
-    },
-  };
-
-  var helpers = {
-    elementLoaded: function (ele, callback) {
-      isoTest.log("elementLoaded::  " + ele + " - Checking...");
-      window.clearTimeout(isoTest.eleTimer);
-      if (document.querySelectorAll(ele).length > 0) {
-        if (typeof callback === "function") {
-          isoTest.log("elementLoaded::  " + ele + " - Found!");
-          callback();
+        s.eVar20 = '';
+        s.eVar89 = '';
+      },
+      log: function (obj) {
+        if (isoTest.debug === true) {
+          console.log(obj);
         }
-      } else {
-        isoTest.eleTimer = window.setTimeout(function () {
-          helpers.elementLoaded(ele, callback);
-        }, 100);
-      }
-    },
-  };
-  isoTest.init();
-})();
+      },
+    };
+
+    var helpers = {
+      elementLoaded: function (ele, callback) {
+        isoTest.log("elementLoaded::  " + ele + " - Checking...");
+        window.clearTimeout(isoTest.eleTimer);
+        if (document.querySelectorAll(ele).length > 0) {
+          if (typeof callback === "function") {
+            isoTest.log("elementLoaded::  " + ele + " - Found!");
+            callback();
+          }
+        } else {
+          isoTest.eleTimer = window.setTimeout(function () {
+            helpers.elementLoaded(ele, callback);
+          }, 100);
+        }
+      },
+    };
+    isoTest.init();
+  })();
 </script>
