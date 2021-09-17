@@ -1,0 +1,60 @@
+<style>
+@media (max-width: 40.8125em) {
+	.vehicle-item__main-content {
+		text-align: center;
+	}
+	.vehicle-item__attributes {
+		margin-top: 8px;
+		margin-bottom: 0;
+	}
+	.vehicle-item__summary {
+		margin: 0 auto;
+		order: 1;
+		width: 100%;
+	}
+	.vehicle-item__image {
+		margin: 0 auto;
+		margin-bottom: 15px;
+		order: 2;
+		position: relative;
+		right: auto;
+		top: auto; 
+		width: 180px;
+	}
+	.vehicle-item__pricing {
+		order: 3;
+	}
+	.vehicle-pricing {
+		margin: 0 auto;
+		max-width: 350px;
+	}
+	.vehicle-item__attribute-item:last-of-type {
+		margin-right: 0;
+	}
+	.vehicle-pricing__button--alternative, .vehicle-pricing__button--no-action {
+		background: none;
+		border: 1px solid #169a5a;
+		color: #169a5a;
+	}
+	.no-rates-tile:not(.net-rate) {
+		color: #656565;
+	}
+	.vehicle-item__truck-badge {
+		width: 180px;
+	    padding-left: 53px;
+	    margin: 0 auto;
+	    padding-top: 5px;
+	}
+}
+@media (min-width: 250px) and (max-width: 40.8125em) {
+	.vehicle-item__models {
+		left: 50%;
+		position: absolute;
+		transform: translate(-50%, 155px);
+		width: 100%;
+	}
+	[data-dtm-tracking*="carDisplayed|SKAR|"] .vehicle-item__models {
+		transform: translate(-50%, 210px);
+	}
+}
+</style>
