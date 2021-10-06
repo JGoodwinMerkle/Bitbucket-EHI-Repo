@@ -41,6 +41,7 @@ body {
   align-items: center;
   font-size: 12px;
   line-height: 16px;
+  cursor: pointer;
 }
 
 .iso-bottom-overlay {
@@ -69,11 +70,17 @@ body {
   text-decoration: underline;
   margin-bottom: 8px;
 }
-.iso-bottom-overlay > p {
+.iso-bottom-overlay > .iso-info-txt {
   font-weight: 500;
   font-size: 14px;
   line-height: 22px;
   cursor: pointer;
+  border: none;
+  color: #fff;
+  padding: 0;
+  width: auto;
+  height: auto;
+  text-transform: none;
 }
 
 .iso-bottom-overlay > button {
@@ -170,13 +177,14 @@ body {
   height: -moz-fit-content;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
 }
 .compare-vehicle > div {
   background: hsl(0deg 0% 95%);
   padding: 24px 16px;
   flex: 1 1;
-  height: 337px;
+  min-height: 334px;
+  max-height: 374px;
   text-align: center;
   position: relative;
   display: flex;
@@ -217,7 +225,6 @@ body {
   color: #393a3b;
 }
 .compare-vehicle img {
-  bottom: -9%;
   position: relative;
   z-index: 1;
 }
@@ -396,21 +403,20 @@ body {
 (function () {
   "use strict";
   var isoTest = {
-    account : 'Enterprise',
-	portfolio : 'EHI',
-	test : 'Vehicle Selection Side by Side Comparison',
+    account: "Enterprise",
+    portfolio: "EHI",
+    test: "",
     creative: "Challenger 1",
     selector: ".vehicle-select .vehicle-list",
     debug: false,
     init: function () {
-      isoTest.debug = ${user.mvtDebug};
+      // isoTest.debug = ${user.mvtDebug};
 
-      if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-				//_satellite.track('target_variables');
-	  }
-
+      // if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+      // _satellite.setVar('TargetCampaign', isoTest.test);
+      // _satellite.setVar('TargetCreative', isoTest.creative);
+      //_satellite.track('target_variables');
+      // }
 
       isoTest.log("Test Running...");
       isoTest.log(isoTest.account + " - " + isoTest.portfolio);
@@ -444,7 +450,7 @@ body {
                   isoTest.filterChangeHandler
                 );
               } else if (/extras/.test(location.hash)) {
-                document.querySelector(".iso-bottom-overlay").remove();
+                document.querySelector(".iso-bottom-overlay") && document.querySelector(".iso-bottom-overlay").remove();
               }
               clearInterval(timer);
             }
@@ -530,21 +536,31 @@ body {
     addCompareItemHandler: function (src, txt, index) {
       var compareVehicleHTML =
         "" +
-        '  <div class="iso-compare-item" iso-data-index="' +
-        index +
-        '">' +
         '      <img src="' +
         src +
-        '" />' +
+        '" alt=""/>' +
         "      <h2>" +
         txt +
         "</h2>" +
-        '      <a href="javascript:void(0)" class="iso-close"></a>' +
-        "  </div>";
+        '      <a href="javascript:void(0)" class="iso-close" aria-label="Close"></a>';
+
+      var compareVehicle = document.createElement('div');
+      compareVehicle.className = 'iso-compare-item';
+      compareVehicle.setAttribute('iso-data-index', index);
+      compareVehicle.innerHTML = compareVehicleHTML;
+      compareVehicle.addEventListener('click', function(e) {
+        e.preventDefault();
+        this.closest(".iso-compare-item").remove();
+        document.querySelector(".iso-open-modal").disabled = true;
+        isoTest.syncCompareItemHandler(
+          this.closest(".iso-compare-item").getAttribute("iso-data-index")
+        );
+        isoTest.fireTag('', 'Compare Modal Remove')
+      })
 
       document
         .querySelector(".iso-compare-box")
-        .insertAdjacentHTML("beforeend", compareVehicleHTML);
+        .insertAdjacentElement("beforeend", compareVehicle);
       document
         .querySelector(".iso-bottom-overlay")
         .classList.add("iso-compared");
@@ -619,6 +635,14 @@ body {
       var vehicleItem2 = document
         .querySelector('.iso-checkbox[iso-check="' + idx2 + '"]')
         .closest(".vehicle-item");
+
+        var bag1 = vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[2].innerText.match(/\d/g)[0];
+        var bag2 = vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[2].innerText.match(/\d/g)[0];
+        var pass1 = vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[1].innerText.match(/\d/g)[0];
+        var pass2 = vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[1].innerText.match(/\d/g)[0];
+
+        
+
       var modalHTML =
         "" +
         '  <div class="iso-location-filters-modal iso-modal">\
@@ -627,7 +651,7 @@ body {
                 <div class="modal-inner">\
                     <div class="modal-header">\
                         <div class="iso-modal-title"></div>\
-                        <button id="iso-close-modal" class="close-modal iso-modal-close-icon" aria-label="Close" role="button" type="button"><i class="icon icon-close-x-white" aria-hidden="true">X</i></button>\
+                        <button id="iso-close-modal" class="close-modal iso-modal-close-icon" aria-label="Close" type="button"><i class="icon icon-close-x-white" aria-hidden="true">X</i></button>\
                     </div>' +
         '              <div class="iso-selected-compare">' +
         '  <div class="iso-compare-wrapper">' +
@@ -636,7 +660,7 @@ body {
         vehicleItem1
           .querySelector(".vehicle-item__image img")
           .getAttribute("src") +
-        '">' +
+        '" alt="">' +
         "          <div>" +
         '              <h2 class="iso-m-title-0">' +
         vehicleItem1.querySelector(".vehicle-item__title").innerText +
@@ -649,7 +673,7 @@ body {
         vehicleItem2
           .querySelector(".vehicle-item__image img")
           .getAttribute("src") +
-        '">' +
+        '" alt="">' +
         "          <div>" +
         '              <h2 class="iso-m-title-1">' +
         vehicleItem2.querySelector(".vehicle-item__title").innerText +
@@ -697,33 +721,34 @@ body {
         "          </div>" +
         "          <div>" +
         '              <p class="iso-modal-title">Baggage capacity</p>' +
-        '              <div class="iso-modal-baggage"> <span class="iso-modal-bagg-0">' +
-        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
-        '                              class="icon icon-specs-passenger-gray"></i>' +
-        vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[1]
-          .innerText +
-        "</li>" +
-        '                  </span> <span class="iso-modal-bagg-1">' +
-        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
-        '                              class="icon icon-specs-passenger-gray"></i>' +
-        vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[1]
-          .innerText +
-        "</li>" +
-        "                  </span> </div>" +
-        "          </div>" +
-        "          <div>" +
-        '              <p class="iso-modal-title">passenger seat</p>' +
         '              <div class="iso-modal-passenger"> <span class="iso-modal-pass-0">' +
         '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
         '                              class="icon icon-specs-bags-gray"></i>' +
         vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[2]
-          .innerText +
+          .innerText.match(/\d/g)[0] +
         "</li>" +
         '                  </span> <span class="iso-modal-pass-1">' +
         '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
         '                              class="icon icon-specs-bags-gray"></i>' +
         vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[2]
-          .innerText +
+          .innerText.match(/\d/g)[0] +
+        "</li>" +
+        "                  </span> </div>" +
+        "          </div>" +
+        "          <div>" +
+        '              <p class="iso-modal-title">passenger seats</p>' +
+        
+        '              <div class="iso-modal-baggage"> <span class="iso-modal-bagg-0">' +
+        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
+        '                              class="icon icon-specs-passenger-gray"></i>' +
+        vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[1]
+          .innerText.match(/\d/g)[0] +
+        "</li>" +
+        '                  </span> <span class="iso-modal-bagg-1">' +
+        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
+        '                              class="icon icon-specs-passenger-gray"></i>' +
+        vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[1]
+          .innerText.match(/\d/g)[0] +
         "</li>" +
         "                  </span> </div>" +
         "          </div>" +
@@ -752,6 +777,7 @@ body {
           e.preventDefault();
           this.closest(".iso-modal").remove();
           document
+              .querySelector(".iso-bottom-overlay") && document
             .querySelector(".iso-bottom-overlay")
             .classList.add("iso-compared");
         });
@@ -764,6 +790,7 @@ body {
           ) {
             this.closest(".iso-modal").remove();
             document
+              .querySelector(".iso-bottom-overlay") && document
               .querySelector(".iso-bottom-overlay")
               .classList.add("iso-compared");
           }
@@ -845,8 +872,8 @@ body {
       // Add Compare overlay component on lower bottom screen;
       var overlayElement =
         "" +
-        ' <div class="iso-bottom-overlay">' +
-        '     <p class="iso-info-txt">Select 1 more vehicle to compare </p>' +
+        ' <div role="banner" class="iso-bottom-overlay">' +
+        '     <button class="iso-info-txt">Select 1 more vehicle to compare </button>' +
         '     <div class="iso-compare-box"></div>' +
         '     <button class="iso-open-modal" disabled="disabled">COMPARE (2) VEHICLES</button>' +
         "  </div>";
@@ -921,34 +948,10 @@ body {
               }
               isoTest.fireTag('', 'compare checkbox unchecked');
             }
-            isoTest.log(isoTest.compareItemsChecked);
-            document
-              .querySelectorAll(".iso-compare-input .iso-checkbox")
-              .forEach(function (el) {
-                if (isoTest.compareItemsChecked == 2) {
-                  isoTest.log("disable");
-                  if (!el.checked) {
-                    el.closest(".iso-label").style.opacity = "0.6";
-                  }
-                } else {
-                  isoTest.log("enable");
-                  el.closest(".iso-label").style.opacity = "1";
-                }
-              });
           });
         });
 
-      helpers.live("click", ".iso-close", function (e) {
-        e.preventDefault();
-        this.closest(".iso-compare-item").remove();
-        document.querySelector(".iso-open-modal").disabled = true;
-        isoTest.syncCompareItemHandler(
-          this.closest(".iso-compare-item").getAttribute("iso-data-index")
-        );
-        isoTest.fireTag('', 'Compare Modal Remove')
-      });
-
-      helpers.live("click", ".iso-open-modal", function () {
+      document.querySelector('.iso-open-modal').addEventListener('click', function () {
         var item1 = document
           .querySelectorAll(".iso-compare-box .iso-compare-item")[0]
           .getAttribute("iso-data-index");
@@ -959,7 +962,7 @@ body {
         isoTest.fireTag('', 'Compare CTA')
       });
 
-      helpers.live("click", ".iso-info-txt", function () {
+      document.querySelector(".iso-info-txt").addEventListener('click', function () {
         if (this.innerText.includes("Clear")) {
           isoTest.fireTag('', 'Compare Modal Clear All')
           document.querySelector(".iso-compare-box").innerHTML = "";
@@ -972,6 +975,7 @@ body {
             .querySelector(".iso-bottom-overlay")
             .classList.remove("iso-compared");
           isoTest.compareItemsChecked = 0;
+          document.querySelector(".iso-open-modal").disabled = true;
         }
       });
     },
