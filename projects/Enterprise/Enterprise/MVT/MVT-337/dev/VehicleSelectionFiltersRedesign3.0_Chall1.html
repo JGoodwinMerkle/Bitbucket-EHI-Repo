@@ -1,5 +1,12 @@
 <style>
 @media (max-width: 1135px) {
+	button[data-dtm-tracking="cars|filter_modal|submit"]::before {
+		content: 'Show ';
+	}
+	.vehicle-filter--alternative .vehicle-filter__header-link.btn {
+		border: 0;
+		text-decoration: underline;
+	}
 	.vehicle-filter--alternative .vehicle-filter__filter-list-item {
 		background: #f3f3f3;
 		border: 1px solid transparent;
@@ -46,7 +53,9 @@
 		width: 100%;
 	}
 	.vehicle-filter--alternative .vehicle-filter__price-indicator {
+		color: #333;
 		display: none;
+		font-weight: 300;
 	}
 	.vehicle-filter--alternative .form-checkbox__input+.form-checkbox__control::after {
 		color: #169a5a;
@@ -65,20 +74,24 @@
 		padding: 0 1.25rem;
 	}
 	.iso-filters-active > a {
-		border: 2px solid #169a5a;
+		border: 1px solid #169a5a;
 		border-radius: 20px;
 		cursor: pointer;
 		color: #169a5a;
 		display: inline-block;
+		font-size: 14px;
 		font-weight: 500;
-		margin: 1.25rem 1rem 1.25rem 0;
+		margin: 1.25rem 1rem 0 0;
 	    padding: 5px 30px 5px 10px;
 	    position: relative;
 	    text-transform: uppercase;
 	}
+	.iso-filters-active > a:last-of-type {
+		margin-bottom: 1.25rem;
+	}
 	.iso-filters-active > a::after {
 		content: '+';
-	    font-size: 40px;
+	    font-size: 38px;
 	    font-weight: 300;
 	    transform: rotate(45deg);
 	    position: absolute;

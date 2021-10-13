@@ -1,4 +1,11 @@
 <style>
+button[data-dtm-tracking="cars|filter_modal|submit"]::before {
+	content: 'Show ';
+}
+.vehicle-filter--alternative .vehicle-filter__header-link.btn {
+	border: 0;
+	text-decoration: underline;
+}
 .ReactModalPortal .modal-content {
 	overflow-x: hidden;
 }
@@ -7,12 +14,8 @@
 }
 .iso-mm {
 	background: #fff;
-    top: 50px;
-    right: 0;
-    bottom: 0;
     left: 100%;
-    overflow: hidden;
-    position: absolute;
+    height: 0;
     transition: left 0.5s ease-in-out;
     visibility: hidden;
     z-index: 1;
@@ -23,40 +26,24 @@
 .iso-filters-active {
 	border-bottom: 1px solid #cecece;
 	display: block;
-	overflow: scroll;
 	padding: 0 1.25rem;
-	white-space: nowrap;
-	-ms-overflow-style: none;  /* Internet Explorer 10+ */
-	scrollbar-width: none;  /* Firefox */
-}
-.iso-filters-active::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
-}
-.iso-filters-active::after {
-	content: '';
-	background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 80%, rgba(255,255,255,1) 100%);
-	height: 51px;
-	pointer-events: none;
-	position: absolute;
-	top: 1px;
-	right: 0;
-	width: 50px;
 }
 .iso-filters-active > a, .ifa-mm > a {
-	border: 2px solid #169a5a;
+	border: 1px solid #169a5a;
 	border-radius: 20px;
 	cursor: pointer;
 	color: #169a5a;
 	display: inline-block;
+	font-size: 14px;
 	font-weight: 500;
-	margin: 1px 1rem 1rem 0;
+	margin: 0 1rem 1.25rem 0;
     padding: 5px 30px 5px 10px;
     position: relative;
     text-transform: uppercase;
 }
 .iso-filters-active > a::after, .ifa-mm > a::after {
 	content: '+';
-    font-size: 40px;
+    font-size: 38px;
     font-weight: 300;
     transform: rotate(45deg);
     position: absolute;
@@ -71,6 +58,8 @@
 	display: block;
 } 
 .iso-mm-active .iso-mm {
+	border-top: 1px solid #cecece;
+	height: auto;
 	left: 0;
 	visibility: visible;
 }
@@ -110,6 +99,7 @@
 }
 .iso-mm-active .iso-cte-expanded .vehicle-filter__list-content {
 	left: 0;
+	margin-top: 1.25rem;
 	visibility: visible;
 }
 .vehicle-filter--alternative .vehicle-filter__filter {
@@ -119,7 +109,9 @@
 	margin-bottom: 0;
 }
 .vehicle-filter--alternative .vehicle-filter__filter-header .vehicle-filter__price-indicator {
+	color: #333;
 	display: none;
+	font-weight: 300;
 }
 .iso-cte-collapsed .vehicle-filter__filter-header::after {
 	background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNC45IDE0LjciPjxwYXRoIGQ9Im0xNC4zIDQuOC0xLjItMS4yYy0uMi0uMi0uNC0uMi0uNiAwbC01IDUuMS01LjItNS4xYy0uMi0uMi0uNC0uMi0uNiAwTC42IDQuOGMtLjIuMi0uMi40IDAgLjZsNS4zIDUuM3MwIC4xLjEuMUw3LjIgMTJjLjIuMi40LjIuNiAwTDkgMTAuOGw1LjQtNS40Yy4xLS4yLjEtLjQtLjEtLjZ6IiBzdHlsZT0iZmlsbDojMTY5YTVhIi8+PC9zdmc+);
@@ -127,8 +119,8 @@
 	content: '';
 	position: absolute;
 	right: 1.25rem;
-	height: 20px;
-	width: 20px;
+	height: 13px;
+	width: 13px;
 	transform: rotate(-90deg);
 }
 .iso-cte-expanded .vehicle-filter__filter-header::after {
@@ -137,8 +129,8 @@
 	content: '';
 	position: absolute;
 	right: 1.25rem;
-	height: 20px;
-	width: 20px;
+	height: 13px;
+	width: 13px;
 	transform: rotate(90deg);
 }
 .vehicle-filter--alternative:nth-of-type(2) .vehicle-filter__filter:last-child {
