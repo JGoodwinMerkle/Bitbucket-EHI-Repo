@@ -36,10 +36,13 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 	display: inline-block;
 	font-size: 14px;
 	font-weight: 500;
-	margin: 0 1rem 1.25rem 0;
+	margin: 0 1rem 10px 0;
     padding: 5px 30px 5px 10px;
     position: relative;
     text-transform: uppercase;
+}
+.iso-filters-active > a:last-of-type {
+	margin-bottom: 1rem;
 }
 .iso-filters-active > a::after, .ifa-mm > a::after {
 	content: '+';
@@ -99,8 +102,15 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 }
 .iso-mm-active .iso-cte-expanded .vehicle-filter__list-content {
 	left: 0;
-	margin-top: 1.25rem;
+	margin-top: 1.8rem;
 	visibility: visible;
+}
+.iso-mm-active .iso-cte-expanded .vehicle-filter__list-content::before {
+	content: 'Total from';
+	font-size: 14px;
+	position: absolute;
+	top: -19px;
+	right: 1.25rem;
 }
 .vehicle-filter--alternative .vehicle-filter__filter {
 	cursor: pointer;
@@ -112,6 +122,13 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 	color: #333;
 	display: none;
 	font-weight: 300;
+}
+.vehicle-filter--alternative .vehicle-filter__price-indicator {
+	color: #333;
+	font-weight: 300;
+}
+.iso-filters .vehicle-filter__filter:last-child {
+	border-bottom: 1px solid #c3c3c3;
 }
 .iso-cte-collapsed .vehicle-filter__filter-header::after {
 	background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNC45IDE0LjciPjxwYXRoIGQ9Im0xNC4zIDQuOC0xLjItMS4yYy0uMi0uMi0uNC0uMi0uNiAwbC01IDUuMS01LjItNS4xYy0uMi0uMi0uNC0uMi0uNiAwTC42IDQuOGMtLjIuMi0uMi40IDAgLjZsNS4zIDUuM3MwIC4xLjEuMUw3LjIgMTJjLjIuMi40LjIuNiAwTDkgMTAuOGw1LjQtNS40Yy4xLS4yLjEtLjQtLjEtLjZ6IiBzdHlsZT0iZmlsbDojMTY5YTVhIi8+PC9zdmc+);
