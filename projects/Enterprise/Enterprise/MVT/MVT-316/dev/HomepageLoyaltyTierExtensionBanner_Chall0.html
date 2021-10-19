@@ -52,9 +52,64 @@
 		content: {
 			en_US : {
 				text: '<strong>Enterprise Plus</strong> tier status is extended\u00A0again!',
-				url: '/en/loyalty/tier-extension.html',
+				url: 'https://www.enterprise.com/en/loyalty/tier-extension.html',
 				cta: 'See details'
-			}
+			},
+			es_US : {
+				text: '¡El estado del nivel de <strong>Enterprise Plus</strong> se extendió\u00A0nuevamente!',
+				url: 'https://www.enterprise.com/es/loyalty/tier-extension.html',
+				cta: 'Ver detalles'
+			},
+			en_CA : {
+				text: '<strong>Enterprise Plus</strong> tier status is extended\u00A0again!',
+				url: 'https://www.enterprise.ca/en/loyalty/tier-extension.html',
+				cta: 'See details'
+			},
+			fr_CA : {
+				text: 'Le maintien du statut de niveau <strong>Enterprise Plus</strong> est prolongé de\u00A0nouveau!',
+				url: 'https://www.enterprise.ca/fr/loyalty/tier-extension.html',
+				cta: 'Voir les détails'
+			},
+			en_GB : {
+				text: '<strong>Enterprise Plus</strong> tier status is extended\u00A0again!',
+				url: 'https://www.enterprise.co.uk/en/loyalty/tier-extension.html',
+				cta: 'See details'
+			},
+			en_IE : {
+				text: '<strong>Enterprise Plus</strong> tier status is extended\u00A0again!',
+				url: 'https://www.enterprise.ie/en/loyalty/tier-extension.html',
+				cta: 'See details'
+			},
+			de_DE : {
+				text: 'Der <strong>Enterprise Plus</strong>-Status wird erneut\u00A0verlängert!',
+				url: 'https://www.enterprise.de/de/treueprogramm/tier-extension.html',
+				cta: 'Siehe Details'
+			},
+			en_DE : {
+				text: '<strong>Enterprise Plus</strong> tier status is extended\u00A0again!',
+				url: 'https://www.enterprise.de/en/loyalty/tier-extension.html',
+				cta: 'See details'
+			},
+			es_ES : {
+				text: 'Hemos vuelto a ampliar el estatus de nivel <strong>Enterprise\u00A0Plus</strong>.',
+				url: 'https://www.enterprise.es/es/fidelidad/tier-extension.html',
+				cta: 'Ver detalles'
+			},
+			en_ES : {
+				text: '<strong>Enterprise Plus</strong> tier status is extended\u00A0again!',
+				url: 'https://www.enterprise.es/en/loyalty/tier-extension.html',
+				cta: 'See details'
+			},
+			fr_FR : {
+				text: 'Les statuts des membres Enterprise Plus sont à nouveau\u00A0prolongés!',
+				url: 'https://www.enterprise.fr/fr/programme-enterprise-plus/tier-extension.html',
+				cta: 'En savoir plus'
+			},
+			en_FR : {
+				text: '<strong>Enterprise Plus</strong> tier status is extended\u00A0again!',
+				url: 'https://www.enterprise.fr/en/loyalty/tier-extension.html',
+				cta: 'See details'
+			}   
 		},
 		init : function() {
 
@@ -122,7 +177,7 @@
 		events : function() {
 			document.addEventListener('click', function (event) {
 				if (event.target.matches('.iso-preres-banner a')) {
-					isoTest.fireTag('',event.target.innerText);
+					isoTest.fireTag('','See Details');
 				}
 			}, false);
 		},
