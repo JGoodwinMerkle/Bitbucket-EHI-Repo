@@ -102,6 +102,9 @@
 	.vehicle-filter--alternative:nth-of-type(2) .vehicle-filter__filter:last-child {
 		border-bottom: 1px solid #c3c3c3;
 	}
+	.vehicle-filter--alternative:nth-of-type(2) .vehicle-filter__filter {
+		padding: 1rem 1.25rem;
+	}
 	.vehicle-filter--alternative .vehicle-filter__filter {
 		cursor: pointer;
 	}
@@ -335,7 +338,15 @@
 				event.target.closest('.iso-cte-expanded').classList.add('iso-cte-collapsed');
 				event.target.closest('.iso-cte-expanded').classList.remove('iso-cte-expanded');
 				if (!event.target.closest('.vehicle-filter__filter-list-item')) {
-					isoTest.fireTag89('','Filter Type: Close');
+					if (event.target.closest('.vehicle-filter--alternative:nth-of-type(2) .vehicle-filter__filter:nth-of-type(3)')) {
+						isoTest.fireTag89('','Filter Type: Mileage Close');
+					} else
+					if (event.target.closest('.vehicle-filter--alternative:nth-of-type(2) .vehicle-filter__filter:nth-of-type(4)')) {
+						isoTest.fireTag89('','Filter Type: Vehicle Type Close');
+					} else
+					if (event.target.closest('.vehicle-filter--alternative:nth-of-type(2) .vehicle-filter__filter:nth-of-type(5)')) {
+						isoTest.fireTag89('','Filter Type: Passengers Close');
+					}
 				}
 			}
 
@@ -410,8 +421,8 @@
 		fireTag89 : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
 			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){

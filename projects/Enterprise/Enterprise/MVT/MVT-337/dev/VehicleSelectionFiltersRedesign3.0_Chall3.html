@@ -54,11 +54,11 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
     right: 7px;
 }
 .ifa-mm > a {
-	margin: 1rem 1rem 0 0;
+	margin: 10px 1rem 0 0;
 }
 .ifa-mm {
 	cursor: auto;
-	display: block;
+	display: inline;
 } 
 .iso-mm-active .iso-mm {
 	border-top: 1px solid #cecece;
@@ -74,7 +74,7 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 	display: inline-block;
 	font-size: 14px;
 	font-weight: 600;
-	margin: 1.25rem 0 1rem 1.25rem;
+	margin: 1rem 0 1rem 1.25rem;
 	padding-left: 20px;
 	position: relative;
 	text-transform: uppercase;
@@ -126,6 +126,9 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 .vehicle-filter--alternative .vehicle-filter__price-indicator {
 	color: #333;
 	font-weight: 300;
+}
+.iso-filters .vehicle-filter__filter {
+	padding: 1rem;
 }
 .iso-filters .vehicle-filter__filter:last-child {
 	border-bottom: 1px solid #c3c3c3;
@@ -369,14 +372,17 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 				// Filter title
 				if (event.target.closest('.iso-filters .vehicle-filter__filter:nth-of-type(2)')) {
 					$('.vehicle-filter--alternative:nth-of-type(1) .vehicle-filter__header-title').innerText = 'Mileage';
+					$('.iso-mm-back').setAttribute('data-filter-type','Mileage');
 					isoTest.fireTag89('','Filter Type: Mileage Open');
 				} else
 				if (event.target.closest('.iso-filters .vehicle-filter__filter:nth-of-type(3)')) {
 					$('.vehicle-filter--alternative:nth-of-type(1) .vehicle-filter__header-title').innerText = 'Vehicle Type';
+					$('.iso-mm-back').setAttribute('data-filter-type','Vehicle Type');
 					isoTest.fireTag89('','Filter Type: Vehicle Type Open');
 				} else
 				if (event.target.closest('.iso-filters .vehicle-filter__filter:nth-of-type(4)')) {
 					$('.vehicle-filter--alternative:nth-of-type(1) .vehicle-filter__header-title').innerText = 'Passengers';
+					$('.iso-mm-back').setAttribute('data-filter-type','Passengers');
 					isoTest.fireTag89('','Filter Type: Passengers Open');
 				}
 			} 
@@ -387,7 +393,8 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 				$('.iso-cte-expanded').classList.add('iso-cte-collapsed');
 				$('.iso-cte-expanded').classList.remove('iso-cte-expanded');
 				$('.vehicle-filter--alternative:nth-of-type(1) .vehicle-filter__header-title').innerText = 'Sort';
-				isoTest.fireTag89('','Filter Type: Close');
+				isoTest.fireTag89('','Filter Type: '+$('.iso-mm-back').getAttribute('data-filter-type')+' Close');
+				$('.iso-mm-back').removeAttribute('data-filter-type');
 			}
 
 			// Bubble removal
@@ -459,8 +466,8 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 		fireTag89 : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
 			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
