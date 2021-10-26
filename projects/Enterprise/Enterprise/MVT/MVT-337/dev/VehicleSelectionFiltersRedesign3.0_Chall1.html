@@ -81,12 +81,13 @@
 		display: inline-block;
 		font-size: 14px;
 		font-weight: 500;
-		margin: 10px 1rem 0 0;
+		margin: 10px 10px 0 0;
 	    padding: 5px 30px 5px 10px;
 	    position: relative;
 	    text-transform: uppercase;
 	}
 	.iso-filters-active > a:last-of-type {
+		margin-right: 0;
 		margin-bottom: 10px;
 	}
 	.iso-filters-active > a::after {
@@ -276,6 +277,11 @@
 		},
 		events: function() {
 			document.addEventListener('click', function (event) {
+				// Checkbox unchecked
+				if (event.target.closest('.vehicle-filter__filter-list-item label') && event.target.closest('.vehicle-filter__active-filter')) {
+					isoTest.fireTag89('','Filter Unchecked');
+				}
+
 				// If the event target doesn't match, bail
 				if (!event.target.closest('.iso-filters-active > a')) return;
 
