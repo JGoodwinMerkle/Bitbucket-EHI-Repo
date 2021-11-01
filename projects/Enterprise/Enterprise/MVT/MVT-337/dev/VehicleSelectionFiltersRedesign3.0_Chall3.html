@@ -69,6 +69,9 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 .iso-mm-active .iso-filters {
 	visibility: hidden;
 }
+.iso-mm-active .vehicle-filter--alternative:not(.iso-filters) .vehicle-filter__filter {
+	display: none;
+}
 .iso-mm-back {
 	cursor: pointer;
 	display: inline-block;
@@ -133,6 +136,9 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 .iso-filters .vehicle-filter__filter:last-child {
 	border-bottom: 1px solid #c3c3c3;
 }
+.iso-cte-collapsed .vehicle-filter__list-content {
+	display: none;
+}
 .iso-cte-collapsed .vehicle-filter__filter-header::after {
 	background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNC45IDE0LjciPjxwYXRoIGQ9Im0xNC4zIDQuOC0xLjItMS4yYy0uMi0uMi0uNC0uMi0uNiAwbC01IDUuMS01LjItNS4xYy0uMi0uMi0uNC0uMi0uNiAwTC42IDQuOGMtLjIuMi0uMi40IDAgLjZsNS4zIDUuM3MwIC4xLjEuMUw3LjIgMTJjLjIuMi40LjIuNiAwTDkgMTAuOGw1LjQtNS40Yy4xLS4yLjEtLjQtLjEtLjZ6IiBzdHlsZT0iZmlsbDojMTY5YTVhIi8+PC9zdmc+);
 	background-size: 100%;
@@ -153,7 +159,7 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 	width: 13px;
 	transform: rotate(90deg);
 }
-.vehicle-filter--alternative:nth-of-type(2) .vehicle-filter__filter:last-child {
+.iso-filters .vehicle-filter__filter:last-child {
 	border-bottom: 1px solid #c3c3c3;
 }
 </style>
@@ -166,6 +172,7 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 		test : 'Vehicle Selection Filters Redesign 3.0',
 		creative : 'Challenger 3',
 		selector : '.ReactModalPortal',
+		globalEvents : '',
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -196,9 +203,11 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 		},
 		chall : function() {
 
-			isoTest.clickEvents();
-
-			isoTest.keyEvents();
+			if (isoTest.globalEvents !== true) {
+				isoTest.globalEvents = true;
+				isoTest.clickEvents();
+				isoTest.keyEvents();
+			}
 
 			var observer = new MutationObserver(function(mutations) {
 			    mutations.forEach(function(mutation) {
@@ -209,17 +218,26 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 			    			$('#modal-content .vehicle-filter--alternative').insertAdjacentHTML('afterend','<div class="iso-mm"><a class="iso-mm-back" tabindex="0">Back to Sort & Filter</a><div class="ifa-wrap"><div class="iso-filters-active"></div></div></div>');
 
 				    		var filterWrap = $$('.iso-filters .vehicle-filter__filter');
-			    			filterWrap[0].classList.add('iso-cte-collapsed');
-			    			filterWrap[0].tabIndex = 0;
-			    			filterWrap[1].classList.add('iso-cte-collapsed');
-			    			filterWrap[1].tabIndex = 0;
-			    			filterWrap[2].classList.add('iso-cte-collapsed');
-			    			filterWrap[2].tabIndex = 0;
+			    			filterWrap.forEach(function(filterGroup) {
+			    				filterGroup.classList.add('iso-cte-collapsed');
+			    				filterGroup.tabIndex = 0;
+			    			});
 
 						    var filterHeaders = $$('.iso-filters .vehicle-filter__filter-header');
-						    filterHeaders[0].insertAdjacentHTML('afterend','<div class="ifa-mm ifa-mm-mileage"></div>');
-						    filterHeaders[1].insertAdjacentHTML('afterend','<div class="ifa-mm ifa-mm-vehicle"></div>');
-						    filterHeaders[2].insertAdjacentHTML('afterend','<div class="ifa-mm ifa-mm-passeng"></div>');
+						    filterHeaders.forEach(function(filterHeader) {
+						    	if (filterHeader.querySelector('#transmission')) {
+						    		filterHeader.insertAdjacentHTML('afterend','<div class="ifa-mm ifa-mm-transmission"></div>');
+						    	} else
+						    	if (filterHeader.querySelector('#mileage')) {
+						    		filterHeader.insertAdjacentHTML('afterend','<div class="ifa-mm ifa-mm-mileage"></div>');
+						    	} else
+						    	if (filterHeader.querySelector('#vehicle-type')) {
+						    		filterHeader.insertAdjacentHTML('afterend','<div class="ifa-mm ifa-mm-vehicle"></div>');
+						    	} else
+						    	if (filterHeader.querySelector('#number-of-passengers')) {
+						    		filterHeader.insertAdjacentHTML('afterend','<div class="ifa-mm ifa-mm-passeng"></div>');
+						    	}
+						    });
 
 						    isoTest.filterCheck();
 							
@@ -292,6 +310,16 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 					$('.ifa-vans').remove();
 				}
 			}
+			if ($('[value="Passenger Vans"]:checked')) {
+				if (!$('.ifa-passvans')) {
+					$('.iso-filters-active').insertAdjacentHTML('beforeend','<a class="ifa-passvans" tabindex="0" aria-label="Remove Passenger Vans Filter">Passenger Vans</a>');
+					$('.ifa-mm-vehicle').insertAdjacentHTML('beforeend','<a class="ifa-passvans" tabindex="0" aria-label="Remove Passenger Vans Filter">Passenger Vans</a>');
+				}
+			} else if ($('[value="Passenger Vans"]:not(:checked)')) {
+				if ($('.ifa-passvans')) {
+					$('.ifa-passvans').remove();
+				}
+			}
 			if ($('[value="2"]:checked')) {
 				if (!$('.ifa-2')) {
 					$('.iso-filters-active').insertAdjacentHTML('beforeend','<a class="ifa-2" tabindex="0" aria-label="Remove 2+ Passenger Filter">2+ Passengers</a>');
@@ -300,6 +328,16 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 			} else if ($('[value="2"]:not(:checked)')) {
 				if ($('.ifa-2')) {
 					$('.ifa-2').remove();
+				}
+			}
+			if ($('[value="3"]:checked')) {
+				if (!$('.ifa-3')) {
+					$('.iso-filters-active').insertAdjacentHTML('beforeend','<a class="ifa-3" tabindex="0" aria-label="Remove 3+ Passenger Filter">3+ Passengers</a>');
+					$('.ifa-mm-passeng').insertAdjacentHTML('beforeend','<a class="ifa-3" tabindex="0" aria-label="Remove 3+ Passenger Filter">3+ Passengers</a>');
+				}
+			} else if ($('[value="3"]:not(:checked)')) {
+				if ($('.ifa-3')) {
+					$('.ifa-3').remove();
 				}
 			}
 			if ($('[value="4"]:checked')) {
@@ -342,6 +380,16 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 					$('.ifa-8').remove();
 				}
 			}
+			if ($('[value="9"]:checked')) {
+				if (!$('.ifa-9')) {
+					$('.iso-filters-active').insertAdjacentHTML('beforeend','<a class="ifa-9" tabindex="0" aria-label="Remove 9+ Passenger Filter">9+ Passengers</a>');
+					$('.ifa-mm-passeng').insertAdjacentHTML('beforeend','<a class="ifa-9" tabindex="0" aria-label="Remove 9+ Passenger Filter">9+ Passengers</a>');
+				}
+			} else if ($('[value="9"]:not(:checked)')) {
+				if ($('.ifa-9')) {
+					$('.ifa-9').remove();
+				}
+			}
 			if ($('[value="12"]:checked')) {
 				if (!$('.ifa-12')) {
 					$('.iso-filters-active').insertAdjacentHTML('beforeend','<a class="ifa-12" tabindex="0" aria-label="Remove 12+ Passenger Filter">12+ Passengers</a>');
@@ -362,26 +410,64 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 					$('.ifa-15').remove();
 				}
 			}
+			if ($('[value="Automatic"]:checked')) {
+				if (!$('.ifa-automatic')) {
+					$('.iso-filters-active').insertAdjacentHTML('beforeend','<a class="ifa-automatic" tabindex="0" aria-label="Remove Automatic Transmission Filter">Automatic</a>');
+					$('.ifa-mm-transmission').insertAdjacentHTML('beforeend','<a class="ifa-automatic" tabindex="0" aria-label="Remove Automatic Transmission Filter">Automatic</a>');
+				}
+			} else if ($('[value="Automatic"]:not(:checked)')) {
+				if ($('.ifa-automatic')) {
+					$('.ifa-automatic').remove();
+				}
+			}
+			if ($('[value="Manual"]:checked')) {
+				if (!$('.ifa-manual')) {
+					$('.iso-filters-active').insertAdjacentHTML('beforeend','<a class="ifa-manual" tabindex="0" aria-label="Remove Manual Transmission Filter">Manual</a>');
+					$('.ifa-mm-transmission').insertAdjacentHTML('beforeend','<a class="ifa-manual" tabindex="0" aria-label="Remove Manual Transmission Filter">Manual</a>');
+				}
+			} else if ($('[value="Manual"]:not(:checked)')) {
+				if ($('.ifa-manual')) {
+					$('.ifa-manual').remove();
+				}
+			}
 		},
 		events : function(event) {
+			// Checkbox selected/unselected
+			if (event.target.closest('.iso-filters .vehicle-filter__filter-list-item label')) {
+				var checkboxName = event.target.closest('label').querySelector('.form-checkbox__text').innerText;
+				setTimeout(function(){
+					if (event.target.closest('.iso-filters input:checked')) {
+						isoTest.fireTag89('', checkboxName+' Filter Checked');
+					} else
+					if (event.target.closest('.iso-filters input:not(:checked)')) {
+						isoTest.fireTag89('', checkboxName+' Filter Unchecked');
+					}
+				}, 500);
+			}
+
 			if (event.target.matches('.iso-cte-collapsed') || event.target.closest('.vehicle-filter__filter-header')) {
 				event.target.closest('.iso-cte-collapsed').classList.add('iso-cte-expanded');
 				event.target.closest('.iso-cte-collapsed').classList.remove('iso-cte-collapsed');
 				$('#modal-content').classList.add('iso-mm-active');
 
 				// Filter title
-				if (event.target.closest('.iso-filters .vehicle-filter__filter:nth-of-type(2)')) {
-					$('.vehicle-filter--alternative:nth-of-type(1) .vehicle-filter__header-title').innerText = 'Mileage';
+				if (event.target.querySelector('#transmission')) {
+					$('.vehicle-filter--alternative .vehicle-filter__header-title').innerText = 'Transmission';
+					$('.iso-mm-back').setAttribute('data-filter-type','Transmission');
+					isoTest.fireTag89('','Filter Type: Transmission Open');
+				} else
+				if (event.target.querySelector('#mileage')) {
+					$('.vehicle-filter--alternative .vehicle-filter__header-title').innerText = 'Mileage';
 					$('.iso-mm-back').setAttribute('data-filter-type','Mileage');
 					isoTest.fireTag89('','Filter Type: Mileage Open');
 				} else
-				if (event.target.closest('.iso-filters .vehicle-filter__filter:nth-of-type(3)')) {
-					$('.vehicle-filter--alternative:nth-of-type(1) .vehicle-filter__header-title').innerText = 'Vehicle Type';
+				if (event.target.querySelector('#vehicle-type')) {
+					$('.vehicle-filter--alternative .vehicle-filter__header-title').innerText = 'Vehicle Type';
 					$('.iso-mm-back').setAttribute('data-filter-type','Vehicle Type');
 					isoTest.fireTag89('','Filter Type: Vehicle Type Open');
 				} else
-				if (event.target.closest('.iso-filters .vehicle-filter__filter:nth-of-type(4)')) {
-					$('.vehicle-filter--alternative:nth-of-type(1) .vehicle-filter__header-title').innerText = 'Passengers';
+				if (event.target.querySelector('#number-of-passengers')) {
+					$('.vehicle-filter--alternative .vehicle-filter__header-title').innerText = 'Passengers';
 					$('.iso-mm-back').setAttribute('data-filter-type','Passengers');
 					isoTest.fireTag89('','Filter Type: Passengers Open');
 				}
@@ -392,63 +478,83 @@ button[data-dtm-tracking="cars|filter_modal|submit"]::before {
 				$('.iso-mm-active').classList.remove('iso-mm-active');
 				$('.iso-cte-expanded').classList.add('iso-cte-collapsed');
 				$('.iso-cte-expanded').classList.remove('iso-cte-expanded');
-				$('.vehicle-filter--alternative:nth-of-type(1) .vehicle-filter__header-title').innerText = 'Sort';
+				$('.vehicle-filter--alternative .vehicle-filter__header-title').innerText = 'Sort';
 				isoTest.fireTag89('','Filter Type: '+$('.iso-mm-back').getAttribute('data-filter-type')+' Close');
 				$('.iso-mm-back').removeAttribute('data-filter-type');
 			}
 
 			// Bubble removal
 			if (event.target.closest('.ifa-unlimited')) {
-				$('.vehicle-filter--alternative [value="Unlimited Mileage"]').click();
+				$('[value="Unlimited Mileage"]').click();
 				isoTest.fireTag89('','Unlimited Bubble Removed');
 			} else
 			if (event.target.closest('.ifa-limited')) {
-				$('.vehicle-filter--alternative [value="Limited Mileage"]').click();
+				$('[value="Limited Mileage"]').click();
 				isoTest.fireTag89('','Limited Bubble Removed');
 			} else
 			if (event.target.closest('.ifa-suvs')) {
-				$('.vehicle-filter--alternative [value="SUVs"]').click();
+				$('[value="SUVs"]').click();
 				isoTest.fireTag89('','SUVs Bubble Removed');
 			} else
 			if (event.target.closest('.ifa-cars')) {
-				$('.vehicle-filter--alternative [value="Cars"]').click();
+				$('[value="Cars"]').click();
 				isoTest.fireTag89('','Cars Bubble Removed');
 			} else
 			if (event.target.closest('.ifa-trucks')) {
-				$('.vehicle-filter--alternative [value="Trucks"]').click();
+				$('[value="Trucks"]').click();
 				isoTest.fireTag89('','Trucks Bubble Removed');
 			} else
 			if (event.target.closest('.ifa-vans')) {
-				$('.vehicle-filter--alternative [value="Vans"]').click();
+				$('[value="Vans"]').click();
 				isoTest.fireTag89('','Vans Bubble Removed');
 			} else
+			if (event.target.closest('.ifa-passvans')) {
+				$('[value="Passenger Vans"]').click();
+				isoTest.fireTag89('','Passenger Vans Bubble Removed');
+			} else
 			if (event.target.closest('.ifa-2')) {
-				$('.vehicle-filter--alternative [value="2"]').click();
+				$('[value="2"]').click();
 				isoTest.fireTag89('','2+ Bubble Removed');
 			} else
+			if (event.target.closest('.ifa-3')) {
+				$('[value="3"]').click();
+				isoTest.fireTag89('','3+ Bubble Removed');
+			} else
 			if (event.target.closest('.ifa-4')) {
-				$('.vehicle-filter--alternative [value="4"]').click();
+				$('[value="4"]').click();
 				isoTest.fireTag89('','4+ Bubble Removed');
 			} else
 			if (event.target.closest('.ifa-5')) {
-				$('.vehicle-filter--alternative [value="5"]').click();
+				$('[value="5"]').click();
 				isoTest.fireTag89('','5+ Bubble Removed');
 			} else
 			if (event.target.closest('.ifa-7')) {
-				$('.vehicle-filter--alternative [value="7"]').click();
+				$('[value="7"]').click();
 				isoTest.fireTag89('','7+ Bubble Removed');
 			} else
 			if (event.target.closest('.ifa-8')) {
-				$('.vehicle-filter--alternative [value="8"]').click();
+				$('[value="8"]').click();
 				isoTest.fireTag89('','8+ Bubble Removed');
 			} else
+			if (event.target.closest('.ifa-9')) {
+				$('.vehicle-filter--alternative [value="9"]').click();
+				isoTest.fireTag89('','9+ Bubble Removed');
+			} else
 			if (event.target.closest('.ifa-12')) {
-				$('.vehicle-filter--alternative [value="12"]').click();
+				$('[value="12"]').click();
 				isoTest.fireTag89('','12+ Bubble Removed');
 			} else
 			if (event.target.closest('.ifa-15')) {
-				$('.vehicle-filter--alternative [value="15"]').click();
+				$('[value="15"]').click();
 				isoTest.fireTag89('','15+ Bubble Removed');
+			} else
+			if (event.target.closest('.ifa-automatic')) {
+				$('[value="Automatic"]').click();
+				isoTest.fireTag89('','Automatic Bubble Removed');
+			} else
+			if (event.target.closest('.ifa-manual')) {
+				$('[value="Manual"]').click();
+				isoTest.fireTag89('','Manual+ Bubble Removed');
 			}
 		},
 		clickEvents : function() {
