@@ -1,0 +1,147 @@
+<style>
+    .wrapperIso {
+      position: absolute;
+    }
+  
+    .iso-promo-header {
+      color: #181918;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1.25rem;
+    }
+    .iso-button-box {
+      width: 9em;
+    }
+    .sup {
+      font-size: 8px;
+    }
+  
+    .iso-promo-body {
+      color: #181918;
+      font-size: 15px;
+      margin-bottom: 0px;
+    }
+    .iso-promo-bottom {
+      color: #181918;
+      font-size: 11px;
+    }
+    .iso-promo-body-top {
+      color: #181918;
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .bg-new {
+      background-image: url("https://www.enterprise.com/content/dam/ecom/hosted/car-highway-view.jpeg") !important;
+    }
+  
+    .iso-promo-break {
+      margin: 10px;
+      display: block;
+    }
+  
+    @media (max-width: 1000px) {
+      .wrapperIso {
+        top: 20px;
+      }
+    }
+  </style>
+  <script>
+  
+    (function() {
+     'use strict';
+     var isoTest = {
+      account : 'EHI',
+      portfolio : 'Enterprise',
+      test : 'Loyalty Sub Menu Tile',
+      creative : 'Challenger 2',
+      selector : '.primary-nav>li .primary-nav-content .promo',
+      init : function() {
+  
+          isoTest.debug = ${user.mvtDebug};
+  
+          if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+              _satellite.setVar('TargetCampaign', isoTest.test);
+              _satellite.setVar('TargetCreative', isoTest.creative);
+          }
+  
+          isoTest.log('Test Running...');
+          isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+          isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+  
+          helpers.elementLoaded(isoTest.selector, function() {
+  
+           isoTest.log('Test Ready!');
+           isoTest.chall();
+  
+          });
+  
+      },
+  
+      chall : function() {
+       document.querySelector(".primary-nav>li .primary-nav-content .promo").classList.add("bg-new");
+       document.querySelector(".primary-nav>li .primary-nav-content .promo").insertAdjacentHTML("afterbegin",'<div class="wrapperIso"> <h2 class="iso-promo-header">Join Enterprise Plus</h2> <br> <p class="iso-promo-body-top"> You can be on your way to a free rental day<sup class="sup"> ‡ </sup> – it’s easy! </p> <p class="iso-promo-body"> For every qualifying rental dollar spent at participating Enterprise locations worldwide, you earn one point. Terms apply.</p> <p class="iso-promo-bottom"> <sup> ‡ </sup> Free day covers base rate (Time and Mileage) only </p> <br> <a id="iso-Promo-Button" href="https://www.enterprise.com/en/enroll.html"> <button class="iso-button-box"> JOIN NOW </button></a> </div>');
+       document.querySelector(".primary-nav>li  .primary-nav-wrapper .promo #iso-Promo-Button").addEventListener('click', function (a) {isoTest.fireTag20('', 'Loyalty Sub Menu Tile : Loyalty CTA Click'); console.log('fire')}, false);
+       document.querySelector(".primary-nav>li:first-child .primary-nav-label").addEventListener('click', function (a) {
+         if(!document.querySelector(".utility-nav-label--logged-in")){
+           isoTest.fireTag89('', 'Nav Learn Tab Redesign:Desktop:Nav:Reservations'); console.log('Reservation fire')
+         }
+       },);
+  
+         // selects an item that mutates when there is a login in or sign out
+         var elementToObserve = document.querySelector("#login-container");
+         //looks for a Mutation and if there is remove the test items else add the test
+         var observer = new MutationObserver(function() {
+             if (document.querySelector(".utility-nav-label--logged-in")){
+                 document.querySelector(".primary-nav>li .primary-nav-content .wrapperIso").classList.add("hide");
+                 document.querySelector(".primary-nav>li .primary-nav-content .promo").classList.remove("bg-new");
+               } else{
+                   document.querySelector(".primary-nav>li .primary-nav-content .wrapperIso").classList.remove("hide");
+                   document.querySelector(".primary-nav>li .primary-nav-content .promo").classList.add("bg-new");
+               }
+         });
+  
+         observer.observe(elementToObserve, {subtree: true, childList: true, attributes:true});
+     },
+  
+       fireTag89 : function(element, value) {
+     var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+     s.linkTrackVars = 'eVar89';
+     s.eVar20 = linkName;
+     s.tl(this, 'o', linkName);
+    },
+      fireTag20 : function(element, value) {
+          var linkName = value ? value : element.innerText;
+              linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+          s.linkTrackVars = 'eVar20';
+          s.eVar20 = linkName;
+          s.tl(this, 'o', linkName);
+      },
+      log : function(obj){
+          if(isoTest.debug === true){
+              console.log(obj);
+          }
+      }
+     };
+  
+     var helpers = {
+      elementLoaded : function (ele, callback) {
+          isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+          window.clearTimeout(isoTest.eleTimer);
+          if (document.querySelectorAll(ele).length > 0) {
+              if (typeof callback === 'function') {
+                  isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+                  callback();
+              }
+          } else {
+              isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+          }
+      },
+     };
+  
+     isoTest.init();
+    })();
+  </script>
+  
