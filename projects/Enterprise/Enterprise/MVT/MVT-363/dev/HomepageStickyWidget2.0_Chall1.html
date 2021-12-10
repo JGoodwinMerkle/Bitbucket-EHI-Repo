@@ -13,6 +13,11 @@ div.booking-widget-hero + .reservationWidget {
 .inner-container.collapsed .filter-modal-button {
 	display: none;
 }
+.booking-widget .custom-label__text .tooltip-info {
+	line-height: initial;
+	margin-left: 5px;
+	text-transform: none;
+}
 @media (max-width: 48em) {
 	.booking-widget .filter-modal-button {
 		margin-left: 2.8125rem;
@@ -43,10 +48,10 @@ div.booking-widget-hero + .reservationWidget {
 		cursor: pointer;
 		display: none;
 		position: absolute;
-		top: 8px;
-	    right: 8px;
-	    height: 50px;
-	    width: 50px;
+		top: 14px;
+	    right: calc(5% - 7px);
+	    height: 40px;
+	    width: 40px;
 		z-index: 1;
 	}
 	.reservationWidget .inner-container {
@@ -201,7 +206,7 @@ div.booking-widget-hero + .reservationWidget {
 }
 @media (max-width: 370px) {
 	.style-modal .booking-widget .coupon-field-add .custom-label__text {
-		margin: 25px 25px 0 30px;
+		margin: 25px 30px 0 30px;
 	}
 	.style-modal .coupon-field-wrapper.coupon-field-add .tooltip-info {
 		position: absolute;
@@ -305,6 +310,7 @@ div.booking-widget-hero + .reservationWidget {
 		width: 100%;
 	}
 	.booking-widget .error-container {
+		margin-top: 0;
 		position: relative;
 		z-index: 2;
 	}
@@ -560,6 +566,12 @@ div.booking-widget-hero + .reservationWidget {
 	    flex: 1 0 25%;
 	}
 }
+/* Breakpoint-Specific Bugfix  */
+@media (width: 980px) {
+	div.booking-widget-hero + .reservationWidget {
+		margin-top: 0;
+	}
+}
 </style>
 <script>
 (function() {
@@ -720,7 +732,11 @@ div.booking-widget-hero + .reservationWidget {
 					}
 					if ($('.reservationWidget[stuck]')) {
 						if (event.target.closest('.booking-submit')) {
-							isoTest.fireTag('','Sticky Continue CTA');
+							setTimeout(function(){
+								if (!$('.error-container')) {
+									isoTest.fireTag('','Sticky Continue CTA');
+								}
+							}, 1000);
 						}
 					}
 				} else
