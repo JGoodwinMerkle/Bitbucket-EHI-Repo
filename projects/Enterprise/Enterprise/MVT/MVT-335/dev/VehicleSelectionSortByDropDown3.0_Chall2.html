@@ -1,0 +1,220 @@
+<style>
+.sort-pills-wrap {
+	border-top: 1px solid #c3c3c3;
+	position: relative;
+}
+.sort-pills-wrap::before, .sort-pills-wrap::after {
+	content: '';
+	background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+	pointer-events: none;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 20px;
+}
+.sort-pills-wrap::after {
+	right: 0;
+	left: auto;
+	transform: rotate(180deg);
+}
+.sort-pills {
+	padding: 10px .9375rem;
+	-ms-overflow-style: none;  /* Hide Scrollbar: Internet Explorer 10+ */
+	overflow-x: scroll;
+	scrollbar-width: none; /* Hide Scrollbar: Firefox */
+	white-space: nowrap;
+}
+.sort-pills::-webkit-scrollbar { /* Hide Scrollbar: WebKit */
+    width: 0;
+    height: 0;
+}
+.sort-pills button {
+	background: #fff;
+	border: 2px solid #169a5a;
+	border-radius: 20px;
+	color: #169a5a;
+	font-size: 11px;
+	letter-spacing: normal;
+	margin-left: 6px;
+	padding: 4px 8px;
+	text-transform: uppercase;
+}
+.sort-pills button[aria-selected="true"] {
+    background: #006639;
+    border: 2px solid #006639;
+    color: #fff;
+}
+.sort-pills > span {
+	font-size: 14px;
+}
+/*.vehicle-filter--alternative:first-of-type {
+	display: none;
+}*/
+#main .vehicle-header__sorted-by {
+	display: none;
+}
+@media (min-width: 654px) {
+	.sort-pills {
+		display: none;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Vehicle Selection Sort By Drop Down 3.0',
+		creative : 'Challenger 2',
+		selector : '.vehicle-select__header',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			if (!$('.sort-pills')) {
+				$('.vehicle-select__header').insertAdjacentHTML('afterend','<div class="sort-pills-wrap"><div class="sort-pills"><span>Sort By:</span><button class="sort-featured">Featured</button><button class="sort-low-high">Price Low to High</button><button class="sort-high-low">Price High to Low</button></div></div>');
+
+				isoTest.sortCheck();
+
+				isoTest.syncSorts();
+
+				isoTest.events();
+			}
+		},
+		sortCheck : function() {
+			if ($('.vehicle-header__sorted-by').innerHTML.indexOf('Featured') > -1) {
+				isoTest.isFeatured();
+			}
+			else
+			if ($('.vehicle-header__sorted-by').innerHTML.indexOf('Low to High') > -1) {
+			    isoTest.isLowHigh();
+			} 
+			else
+			if ($('.vehicle-header__sorted-by').innerHTML.indexOf('High to Low') > -1) {
+			    isoTest.isHighLow();
+			}
+		},
+		syncSorts : function() {
+			var observer = new MutationObserver(function(mutations) {
+				mutations.forEach(function(mutation) {
+					console.log(mutation.type);
+					if (mutation.type === 'characterData') {
+						isoTest.sortCheck();
+					}
+				});    
+			});
+			var observerConfig = { attributes: true, childList: true, subtree: true, characterData: true };
+			observer.observe($('.vehicle-header__details-group'), observerConfig);
+		},
+		events : function() {
+			document.addEventListener('click', function (event) {
+				if (event.target.matches('.sort-featured')) {
+					$('#vehicleSortBy').value = 'Recommended';
+					$('#vehicleSortBy').dispatchEvent(new Event('change', { 'bubbles': true }));
+					isoTest.isFeatured();
+					isoTest.fireTag('','Sort: Featured');
+				} 
+				else 
+				if (event.target.matches('.sort-low-high')) {
+					$('#vehicleSortBy').value = 'Low to High';
+					$('#vehicleSortBy').dispatchEvent(new Event('change', { 'bubbles': true }));
+					isoTest.isLowHigh();
+					isoTest.fireTag('','Sort: Low to High');
+				} 
+				else 
+				if (event.target.matches('.sort-high-low')) {
+					$('#vehicleSortBy').value = 'High to Low';
+					$('#vehicleSortBy').dispatchEvent(new Event('change', { 'bubbles': true }));
+					isoTest.isHighLow();
+					isoTest.fireTag('','Sort: High to Low');
+				}
+			}, false);
+			document.addEventListener('change', function (event) {
+				if (event.target.value === 'Recommended' && event.target.matches('.form-radio__input')) {
+					isoTest.fireTag('','Mobile Sort: Recommended Selected');
+				}
+				else
+				if (event.target.value === 'Low to High' && event.target.matches('.form-radio__input')) {
+					isoTest.fireTag('','Mobile Sort: Low to High Selected');
+				}
+				else
+				if (event.target.value === 'High to Low' && event.target.matches('.form-radio__input')) {
+					isoTest.fireTag('','Mobile Sort: High to Low Selected');
+				}
+			}, false);
+		},
+		isFeatured : function() {
+			$('.sort-featured').ariaSelected = 'true';
+			$('.sort-low-high').ariaSelected = 'false';
+			$('.sort-high-low').ariaSelected = 'false';
+		},
+		isLowHigh : function() {
+			$('.sort-featured').ariaSelected = 'false';
+			$('.sort-low-high').ariaSelected = 'true';
+			$('.sort-high-low').ariaSelected = 'false';
+		},
+		isHighLow : function() {
+			$('.sort-featured').ariaSelected = 'false';
+			$('.sort-low-high').ariaSelected = 'false';
+			$('.sort-high-low').ariaSelected = 'true';
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+	var $ = document.querySelector.bind(document);
+	var $$ = document.querySelectorAll.bind(document);
+	isoTest.init();
+})();
+</script>
