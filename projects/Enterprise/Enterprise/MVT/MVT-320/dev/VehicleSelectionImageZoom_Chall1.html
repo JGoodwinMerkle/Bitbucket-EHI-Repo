@@ -1,0 +1,714 @@
+<style>
+  body .iso-modal-wrapper {
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .iso-modal-wrapper .iso-modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+body .iso-modal-wrapper .iso-modal {
+  width: 750px;
+  z-index: 9999;
+  padding: 30px 40px;
+  position: relative;
+  box-sizing: border-box;
+}
+body .iso-modal-wrapper .iso-modal-image img {
+  margin: auto;
+  display: block;
+}
+body .iso-modal-wrapper .iso-modal h1 {
+  margin-bottom: 15px;
+  letter-spacing: -0.5px;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 36px;
+  color: #181918;
+  text-transform: capitalize;
+}
+body .iso-modal-wrapper .iso-modal-para {
+  letter-spacing: -0.5px;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 25px;
+  color: #000000;
+}
+body .iso-modal-wrapper .iso-modal-button {
+  width: 261.96px;
+  text-align: center;
+  height: 34px;
+  line-height: 21px;
+  font-weight: 700;
+  font-size: 14px;
+}
+body .iso-zoom {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='16' viewBox='0 0 17 16' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.14933 1.57294C10.6809 3.10453 11.1264 5.3854 10.3324 7.35976C10.066 8.02455 9.66668 8.63174 9.14923 9.1492C7.05721 11.2404 3.66531 11.2404 1.57318 9.14909C-0.518861 7.05704 -0.518861 3.66499 1.57318 1.57294C3.66523 -0.519105 7.05729 -0.519105 9.14933 1.57294ZM8.10629 2.61598C6.5903 1.09998 4.13221 1.09998 2.61622 2.61598C1.10022 4.13197 1.10022 6.59006 2.61611 8.10595C4.13213 9.62134 6.59038 9.62134 8.10629 8.10605C8.48207 7.73028 8.77069 7.2914 8.96354 6.81021C9.53913 5.37884 9.21634 3.72602 8.10629 2.61598ZM10.9784 9.86235L9.93539 10.9054L14.9617 15.9317L16.0048 14.8887L10.9784 9.86235ZM8.41858 4.97362L8.41858 5.60155L5.73593 5.60154L5.73594 8.28421L5.10801 8.2842L5.108 5.60154L2.42531 5.60153L2.42531 4.9736L5.108 4.97361L5.10799 2.36597L5.73592 2.36597L5.73593 4.97361L8.41858 4.97362Z' fill='%23169A5A'/%3E%3C/svg%3E");
+  height: 16px;
+  width: 15px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: transparent;
+  border: none;
+}
+body .vehicle-item__image {
+  position: relative;
+  cursor: pointer;
+}
+body .iso-modal-wrapper .iso-modal-close {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'%3E%3Ccircle cx='11' cy='11' r='10.2' stroke='white' stroke-width='1.6'/%3E%3Cpath d='M16.5 6L6 16' stroke='white' stroke-width='1.6'/%3E%3Cpath d='M6 6L16.5 16' stroke='white' stroke-width='1.6'/%3E%3C/svg%3E");
+  width: 22px;
+  height: 22px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 12%;
+  right: 5px;
+  cursor: pointer;
+  background-color: transparent;
+}
+body .iso-modal-wrapper .iso-modal::before {
+  content: "";
+  width: 100%;
+  display: inline-block;
+  height: 65%;
+  background: #fff;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+.iso-thumbnail {
+  min-height: 503px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iso-modal-image, .iso-modal h1, .iso-modal-para, .iso-modal-button,
+.iso-image-loaded .iso-thumbnail {
+  display: none;
+}
+.iso-image-loaded .iso-modal-image, .iso-image-loaded .iso-modal h1, .iso-image-loaded .iso-modal-para, .iso-image-loaded .iso-modal-button {
+  display: block;
+}
+.iso-thumbnail .loading {
+    position: absolute;
+    bottom: 32% !important;
+    width: 90%;
+}
+@media (max-width: 1135px) and (min-width: 654px) {
+  body .iso-zoom {
+    bottom: 40px;
+    right: 16px;
+  }
+}
+@media (max-width: 767px) {
+  body .iso-modal-wrapper .iso-modal {
+    width: 340px;
+    padding: 0;
+  }
+  .iso-thumbnail {
+    min-height: 255px;
+    padding: 0 25px;
+  }
+  .iso-thumbnail .loading {
+    bottom: 37% !important;
+  }
+  body .iso-modal-wrapper .iso-modal > p,
+  body .iso-modal-wrapper .iso-modal > h1 {
+    padding: 0 20px;
+  }
+  body .iso-modal-wrapper .iso-modal-button {
+    margin: 0px 20px 20px 20px;
+  }
+  body .iso-modal-wrapper .iso-modal::before {
+    height: 75%;
+  }
+  body .iso-modal-wrapper .iso-modal-close {
+    top: 5%;
+  }
+  body .iso-zoom {
+    bottom: auto;
+    right: 5px;
+    top: 70px;
+  }
+}
+@media (max-width: 653px) {
+  body .vehicle-item__image {
+    position: absolute;
+  }
+  body .iso-zoom {
+    bottom: 5px;
+    right: 0px;
+  }
+}
+</style>
+<script>
+  (function () {
+  "use strict";
+  var isoTest = {
+    account: "Enterprise",
+    portfolio: "EHI",
+    test: "Vehicle Selection Image Zoom",
+    creative: "Challenger 1",
+    selector: ".vehicle-item:not(.is-sold-out) .vehicle-item__image",
+    debug: false,
+    vehicleData: {
+      CCAR: {
+        title: "Compact",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/CCAR.doi.768.high.imageLargeSideProfileNodePath.png/1611777286679.png",
+        copy: "Compact cars offer great gas mileage and the ease of driving and parking in high traffic areas. Reserve now and get low rates on a compact car rental from Enterprise Rent-A-Car.",
+      },
+      CFAR: {
+        title: "Compact SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/CFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262879339.png",
+        copy: "A compact SUV provides plenty of room for bags, plus nimble handing that is great for city driving.",
+      },
+      CTAR: {
+        title: "Compact Convertible",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/CTAR.doi.768.high.imageLargeSideProfileNodePath.png/1567006637480.png",
+        copy: "",
+      },
+      ECAR: {
+        title: "Economy",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/ECAR.doi.768.high.imageLargeSideProfileNodePath.png/1492780366644.png",
+        copy: "Rent an economy car for driving in crowded, downtown areas with busy traffic and tight parking spaces. Economy car rentals typically offer the best fuel efficiency. Reserve now and get low rates on an economy car rental from Enterprise Rent-A-Car.",
+      },
+      EYMR: {
+        title: "Luxury Performance",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/EYMR.doi.768.high.imageLargeSideProfileNodePath.png/1618262784685.png",
+        copy: "RENT A LUXURY PERFORMANCE SPORT <br>To view pricing and start a reservation online for the Luxury Performance Sport, begin by choosing one of the select locations below. The actual model you'll receive is subject to availability, but the class includes these vehicles: Porsche 911 Carrera, Porsche 911 Carrera Convertible, Jaguar F-type SVR, Jaguar F-Type Convertible SVR, and Mercedes Benz SL450 Roadster.<br> To rent an exotic vehicle, driver must meet the following requirements: minimum age 25, valid driver’s license, major credit card. Fully transferable insurance must be verified. Rental costs and additional security deposits are taken at time of rental. Security deposits vary depending on vehicle selection. ",
+      },
+      FCAH: {
+        title: "Full Size Hybrid",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/FCAH.doi.768.high.imageLargeSideProfileNodePath.png/1492780375254.png",
+        copy: "",
+      },
+      FCAR: {
+        title: "Full Size",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/FCAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262777765.png",
+        copy: "A Full-Size car rental is helpful when needing more passenger room and luggage space than a smaller car offers. Reserve now and get low rates on a Full-Size car from Enterprise Rent-A-Car.",
+      },
+      FFAR: {
+        title: "Full Size SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/FFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262877780.png",
+        copy: "A large SUV rental has room for up to seven people and offers third row of seating along with plenty of room for luggage. Full-size SUVs are great for weekend road trips and special occasions.",
+      },
+      FJAR: {
+        title: "Jeep Wrangler 4 door",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/FJAR.doi.768.high.imageLargeSideProfileNodePath.png/1543606103567.png",
+        copy: "Enjoy the flexibility a Jeep offers with plenty of space for passengers and cargo. Whether you are looking to explore the beautiful Hawaii beaches, taking a trip along the Pacific Coast Highway, or a driving through New York City, a Jeep is a great choice.",
+      },
+      FVAR: {
+        title: "15 Passenger Van",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/FVAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744312521.png",
+        copy: "Going on a kids' team road trip? Need a vehicle to get around town with a large family or group? A full size, 15 passenger van is the most convenient choice and is a great alternative to renting a bus. Van rental is available across many Enterprise locations including: Atlanta, Chicago, Dallas, Denver, Houston, Las Vegas, Los Angeles, Orange County, Orlando, New York City, San Diego, San Francisco.",
+      },
+      FYMR: {
+        title: "Exotic Sports Car",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/FYMR.doi.768.high.imageLargeSideProfileNodePath.png/1570206624361.png",
+        copy: "To view pricing and start a reservation online for the Exotic Sport, begin by choosing one of the select locations below. The actual model you'll receive is subject to availability, but the class includes these vehicles: Infiniti Q60, BMW 4-Series, and Lexus RC 350.",
+      },
+      GKAR: {
+        title: "Heavy Duty Extended Cargo Van",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/GKAR.doi.768.high.imageLargeSideProfileNodePath.png/1582219877888.png",
+        copy: "",
+      },
+
+      GXAR: {
+        title: "Full Size Elite",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/GXAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262775554.png",
+        copy: "See all luxury rental cars.",
+      },
+      GYMR: {
+        title: "Performance Sports Car",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/GYMR.doi.768.high.imageLargeSideProfileNodePath.png/1579721333086.png",
+        copy: "To view pricing and start a reservation online for the Performance Sport, begin by choosing one of the select locations below. The actual model you'll receive is subject to availability, but the class includes these vehicles: GM Corvette Coupe, GM Corvette Convertible, Mercedes Benz E400 Cabriolet, and Porsche Boxster Convertible.",
+      },
+      ICAE: {
+        title: "Intermediate Electric",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/ICAE.doi.768.high.imageLargeSideProfileNodePath.png/1544210775276.png",
+        copy: "",
+      },
+      ICAR: {
+        title: "Midsize",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/ICAR.doi.768.high.imageLargeSideProfileNodePath.png/1620230914227.png",
+        copy: "An intermediate car rental provides some more room for passengers and luggage than most smaller cars. Reserve now and get low rates on an intermediate car rental from Enterprise Rent-A-Car.",
+      },
+      IFAR: {
+        title: "Midsize SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/IFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262879727.png",
+        copy: "This mid-size SUV strikes the perfect balance of a larger interior with the easy driving of a sedan.",
+      },
+      IFDR: {
+        title: "Midsize SUV AWD",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/IFDR.doi.768.high.imageLargeSideProfileNodePath.png/1618262879727.png",
+        copy: "",
+      },
+      IJAR: {
+        title: "Jeep",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/IJAR.doi.768.high.imageLargeSideProfileNodePath.png/1544220629072.png",
+        copy: "Rent a 2-door Jeep Wrangler and embark on your next adventure. Whether it's exploring the beautiful Hawaii beaches, taking a trip along the Pacific Coast Highway, or a driving through New York City, a Jeep is a great choice.",
+      },
+
+      ITAR: {
+        title: "Midsize Convertible",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/ITAR.doi.768.high.imageLargeSideProfileNodePath.png/1526421297876.png",
+        copy: "",
+      },
+      IYMR: {
+        title: "Super Sports Car",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/IYMR.doi.768.high.imageLargeSideProfileNodePath.png/1618262775188.png",
+        copy: "To view pricing and start a reservation online for a Super Sports car, begin by choosing one of the select locations below. The actual model you'll receive is subject to availability, but the class includes these vehicles: Maserati Granturismo Convertible, Audi R8, Aston Martin DB11, Lamborghini Huracan, Mercedes AMG GT Roadster, and Bentley Continental GT.",
+      },
+      JKAR: {
+        title: "Compact Cargo Van",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/JKAR.doi.768.high.imageLargeSideProfileNodePath.png/1517591717238.png",
+        copy: "Van rental is available across many Enterprise locations including: Atlanta, Chicago, Dallas, Denver, Houston, Las Vegas, Los Angeles, Orange County, Orlando, New York City, San Diego, San Francisco.",
+      },
+      LCAR: {
+        title: "Luxury",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/LCAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262778275.png",
+        copy: "Relax on the road with a luxury rental car from Enterprise. Luxury car rentals include leather seats, 6-8 cylinder performance and plenty of room for passengers and luggage.",
+      },
+      LFAR: {
+        title: "Luxury SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/LFAR.doi.768.high.imageLargeSideProfileNodePath.png/1554401969012.png",
+        copy: "Our large luxury SUVs offer 7 passenger seating, plus features like leather seats and a sunroof.",
+      },
+
+      LTAR: {
+        title: "Luxury Convertible",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/LTAR.doi.768.high.imageLargeSideProfileNodePath.png/1501593253092.png",
+        copy: "To view pricing and start a reservation online for the Luxury Convertible, begin by choosing one of the select locations below. The actual model you'll receive is subject to availability, but the class includes these vehicles: BMW 430i Convertible, and Mercedes Benz SLC 300.",
+      },
+      LYMR: {
+        title: "Executive Luxury SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/LYMR.doi.768.high.imageLargeSideProfileNodePath.png/1618262878209.png",
+        copy: "To view pricing and and start a reservation online for the Executive Luxury SUV, begin by choosing one of the select locations below. The actual model you'll receive is subject to availability, but the class includes these vehicles: Land Rover Range Rover Sport, Mercedes GLS450, Maserati Levante, and Porsche Cayenne.",
+      },
+      MVAR: {
+        title: "7 Passenger Minivan",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/MVAR.doi.768.high.imageLargeSideProfileNodePath.png/1618263096675.png",
+        copy: "A minivan rental is perfect for long road trips and family vacations with room for 7 people. Reserve now and get low rates on a minivan rental whether you are looking for a rental for a few days or weeks. Start a reservation to see pricing and availability. Van rental is available across many Enterprise locations including: Atlanta, Chicago, Dallas, Denver, Houston, Las Vegas, Los Angeles, Orlando, New York City, San Diego, San Francisco.",
+      },
+      OVAR: {
+        title: "12 Passenger Van",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/OVAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744296328.png",
+        copy: "12 Passenger vans are ideal for hauling large groups around town or on a long road trip. Enjoy the convenience of a large van for your next trip. Check van pricing and availability by starting a reservation today.",
+      },
+      PCAR: {
+        title: "Premium",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/PCAR.doi.768.high.imageLargeSideProfileNodePath.png/1574880326763.png",
+        copy: "A premium car rental offers comfortable seating with plenty of room in the trunk for luggage. A premium rental car is a great choice for a business travel or leisure. Reserve now and get low rates from Enterprise Rent-A-Car. What is a premium car rental? A premium rental car offers additional passenger room, trunk space, and features than other sedans. It comfortably seats five passengers and is a great option for people on business or leisurely travel. A Nissan Maxima is an example of a premium car rental.",
+      },
+      PFAR: {
+        title: "Premium SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/PFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262876980.png",
+        copy: "The large premium SUV seats up to 8 passengers while still providing ample cargo space, making it great for long trips.",
+      },
+      PGAR: {
+        title: "Premium Crossover",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/PGAR.doi.768.high.imageLargeSideProfileNodePath.png/1547581755813.png",
+        copy: "A Crossover Premium, such as a Volkswagen Atlas or similar, seats up to 7 passengers and holds 4 bags. Its spacious cabin is perfect for a family vacation.",
+      },
+      PPAR: {
+        title: "Pickup",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/TRUCKS/PPAR.doi.768.high.imageLargeSideProfileNodePath.png/1512427309887.png",
+        copy: "Need to haul or move something? A pickup truck rental has the space, power, and durability to for the job. Reserve now and get low rates on a pickup truck rental from Enterprise Rent-A-Car.",
+      },
+
+      PXAR: {
+        title: "Premium Special",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/PXAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262777268.png",
+        copy: "Whether you're traveling for business or pleasure, a premium special car provides plenty of cabin and trunk space. Choose from cars like a Chrysler 300, Ford Taurus, or similar.",
+      },
+      PYMR: {
+        title: "Luxury Sports Car",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/PYMR.doi.768.high.imageLargeSideProfileNodePath.png/1619102956613.png",
+        copy: "To view pricing and start a reservation online for the Luxury Sport, begin by choosing one of the select locations below. The actual model you'll receive is subject to availability, but the class includes these vehicles: Jaguar F-Type Convertible, Porsche Cayman, and Mercedes Benz GLE400.",
+      },
+      RFAR: {
+        title: "Standard Elite SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/RFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262875775.png",
+        copy: "This small premium SUV boasts sporty driving characteristics and a high-end interior. Rent an Audi Q3, Lincoln MKC, or similar.",
+      },
+      RKAR: {
+        title: "Heavy Duty Cargo Van",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/RKAR.doi.768.high.imageLargeSideProfileNodePath.png/1582219862970.png",
+        copy: "",
+      },
+      RVAR: {
+        title: "12 Passenger Van",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/RVAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744320042.png",
+        copy: "12 Passenger vans are ideal for hauling large groups around town or on a long road trip. Enjoy the convenience of a large van for your next trip. Check van pricing and availability by starting a reservation today. Van rental is available across many Enterprise locations including: Atlanta, Chicago, Dallas, Denver, Houston, Las Vegas, Los Angeles, Orange County, Orlando, New York City, San Diego, San Francisco.",
+      },
+      RXAR: {
+        title: "Standard Elite",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/RXAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262775892.png",
+        copy: "Standard elite vehicles offer sporty driving characteristics and high-end interiors, perfect for car enthusiasts. Rent cars like a Mercedes CLA, Audi A3, or similar.",
+      },
+      SCAH: {
+        title: "Standard Hybrid",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/SCAH.doi.768.high.imageLargeSideProfileNodePath.png/1543605920546.png",
+        copy: "",
+      },
+      SCAR: {
+        title: "Standard",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/SCAR.doi.768.high.imageLargeSideProfileNodePath.png/1544210775124.png",
+        copy: "A standard car rental is a larger sedan, which provides more room for passengers and can fit an additional bag in the trunk compared to an intermediate car.",
+      },
+
+      SFAR: {
+        title: "Standard SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/SFAR.doi.768.high.imageLargeSideProfileNodePath.png/1551905658879.png",
+        copy: "A standard SUV rental provides plenty of room for passengers and luggage. SUVs are great for business, leisure, or weekend road trips. Reserve now and get low rates on a standard SUV from Enterprise Rent-A-Car.",
+      },
+      SFDR: {
+        title: "Standard SUV AWD",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/SFDR.doi.768.high.imageLargeSideProfileNodePath.png/1551905658879.png",
+        copy: "",
+      },
+      SKAR: {
+        title: "Cargo Van",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/SKAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744297142.png",
+        copy: "Renting a cargo van is a great way to make small moves easy. Reserve now and get low rates on a cargo van rental from Enterprise Rent-A-Car. Van rental is available across many Enterprise locations including: Atlanta, Chicago, Dallas, Denver, Houston, Las Vegas, New York City, San Francisco, Orlando, San Diego, Los Angeles, Orange County.",
+      },
+      SPAR: {
+        title: "Standard Pickup",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/TRUCKS/SPAR.doi.768.high.imageLargeSideProfileNodePath.png/1618263047434.png",
+        copy: "A small pickup truck rental is great for hauling smaller items that won't fit in your own car. Reserve now and get low rates on a small pickup truck rental from Enterprise Rent-A-Car.",
+      },
+      SSAR: {
+        title: "Sporty Car",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/SSAR.doi.768.high.imageLargeSideProfileNodePath.png/1574880314547.png",
+        copy: "",
+      },
+      STAR: {
+        title: "Convertible",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/STAR.doi.768.high.imageLargeSideProfileNodePath.png/1543605919377.png",
+        copy: "Rent a convertible and enjoy your next trip in style. Whether you are taking a road trip along the Pacific Coast Highway, enjoying a drive in the desert of the Southwest, or exploring New York city, a convertible is the perfect choice.",
+      },
+      SVAR: {
+        title: "8 Passenger Minivan",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/SVAR.doi.768.high.imageLargeSideProfileNodePath.png/1547668804155.png",
+        copy: "Eight passenger minivan rentals are great for traveling with a large group whether it's for a family vacation or business trip. Reserve now and get low rates on a minivan rental from Enterprise Rent-A-Car. Van rental is available across many Enterprise locations including: Atlanta, Chicago, Dallas, Denver, Houston, Las Vegas, Los Angeles, Orlando, New York City, San Diego, San Francisco.",
+      },
+      SYMR: {
+        title: "American Muscle Car",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/SYMR.doi.768.high.imageLargeSideProfileNodePath.png/1618262783445.png",
+        copy: "To view pricing and start a reservation online for an American Muscle Car, begin by choosing one of the select locations below. The actual model you'll receive is subject to availability, but the class includes these vehicles: Ford Mustang GT Convertible, and Chevy Camaro SS.",
+      },
+      UFAR: {
+        title: "Premium Elite SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/UFAR.doi.768.high.imageLargeSideProfileNodePath.png/1544210749802.png",
+        copy: "The Premium Elite class includes SUVs like the Lincoln MKX, BMW X3, and more. This size vehicle is easy to drive and still provides plenty of leg room and luggage space.",
+      },
+
+      UVAR: {
+        title: "15 Passenger Van",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/UVAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744296328.png",
+        copy: "Going on a kids' team road trip? Need a vehicle to get around town with a large family or group? A full size, 15 passenger van is the most convenient choice and is a great alternative to renting a bus. Van rental is available across many Enterprise locations including: Atlanta, Chicago, Dallas, Denver, Houston, Las Vegas, Los Angeles, Orange County, Orlando, New York City, San Diego, San Francisco.",
+      },
+      UXAR: {
+        title: "Premium Elite",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/UXAR.doi.768.high.imageLargeSideProfileNodePath.png/1543605917710.png",
+        copy: "A premium elite car combines a powerful engine with a luxurious intertior for the ultimate driving experience. Drive an Audi A6, BMW 5 Series, or similar.",
+      },
+      WCAE: {
+        title: "Luxury Elite Electric",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/WCAE.doi.768.high.imageLargeSideProfileNodePath.png/1554931356778.png",
+        copy: "A luxury elite electric car provides excellent fuel economy without compromising on comfort or style, great for a long road trip. Rent a Tesla Model S or similar from Enterprise.",
+      },
+      WCAR: {
+        title: "Executive Luxury",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/WCAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262784133.png",
+        copy: "The lavish design of an elite convertible rental provides the ultimate driving experience. Drive a Maserati Ghibli or similar. See all luxury rental cars.",
+      },
+      WFAR: {
+        title: "Luxury Elite SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/WFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262879191.png",
+        copy: "This mid-size luxury SUV offers a premium interior and advanced technology. Choose from vehicles like an Audi Q7, BMW X5, or similar.",
+      },
+      WXAR: {
+        title: "Large Executive Luxury",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/WXAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262776166.png",
+        copy: "",
+      },
+      WZAR: {
+        title: "Large Executive Luxury SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/WZAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262876399.png",
+        copy: "To view pricing and start a reservation online for the Large Executive Luxury SUV, begin by choosing one of the select locations below. The actual model you'll receive is subject to availability, but the class includes these vehicles: Cadillac Escalade ESV, Land Rover Range Rover HSE, and Mercedes Benz G550.",
+      },
+      XFAR: {
+        title: "Special SUV",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/XFAR.doi.768.high.imageLargeSideProfileNodePath.png/1574796945850.png",
+        copy: "",
+      },
+      XXAR: {
+        title: "You Click. We Pick.",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/XXAR.doi.768.high.imageLargeSideProfileNodePath.png/1587645528243.png",
+        copy: "This is a special car class where you click on a great rate and we pick your vehicle at the time of rental. You’ll always get at least a compact-sized car which holds five passengers. Reserve now and get a great rate with the You Click. We Pick. car rental from Enterprise Rent-A-Car.",
+      },
+    },
+    init: function () {
+      isoTest.debug = ${user.mvtDebug};
+      if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+        _satellite.setVar('TargetCampaign', isoTest.test);
+        _satellite.setVar('TargetCreative', isoTest.creative);
+      }
+      isoTest.log("Test Running...");
+      isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+      isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+      var timer = setInterval(function () {
+        if (document.querySelector("#loader .spinner-container") === null && document.querySelector('.vehicle-select .vehicle-select__main .transition') === null) {
+          helpers.elementLoaded(isoTest.selector, isoTest.chall);
+          helpers.elementLoaded('.vehicle-select__aside .vehicle-filter__header-title', isoTest.filterChangeHandler);
+          clearInterval(timer);
+        }
+      }, 100);
+      isoTest.viewChange();
+    },
+    viewChange: function () {
+      window.addEventListener(
+        "hashchange",
+        function () {
+          var timer = setInterval(function () {
+            if (document.querySelector("#loader .spinner-container") === null && document.querySelector('.vehicle-select .vehicle-select__main .transition') === null) {
+              if (/cars/.test(location.hash)) {
+                helpers.elementLoaded(isoTest.selector, isoTest.chall);
+                helpers.elementLoaded('.vehicle-select__aside .vehicle-filter__header-title', isoTest.filterChangeHandler);
+              }
+              clearInterval(timer);
+            }
+          }, 100);
+        },
+        false
+      );
+    },
+    generateModalHandler(vehicleCode) {
+      var vehicle = isoTest.vehicleData[vehicleCode];
+      var modalHTML =
+        "" +
+        '  <div class="iso-modal-wrapper">' +
+        '      <div class="iso-modal-overlay"></div>' +
+        '      <div class="iso-modal" tabindex="0">' +
+        '          <div class="iso-thumbnail"><div class="loading"></div></div>'+
+        '          <div class="iso-modal-image"><img src="' +
+        vehicle.image +
+        '" alt="image" /></div>' +
+        "          <h1>" +
+        vehicle.title +
+        " Car Details</h1>" +
+        '          <p class="iso-modal-para">' +
+        vehicle.copy +
+        "</p>" +
+        '          <button class="iso-modal-button" iso-code="' +
+        vehicleCode +
+        '">Select</button>' +
+        '          <button class="iso-modal-close" tabindex="0"></button>' +
+        "      </div>" +
+        "  </div>";
+      return modalHTML;
+    },
+    renderModalHandler: function (vehicleCode) {
+      isoTest.fireTag('', vehicleCode +' vehicle image clicked');
+      document.querySelector("body").insertAdjacentHTML("beforeend", isoTest.generateModalHandler(vehicleCode));
+      document.querySelector(".iso-modal-button").addEventListener("click", function () {
+        isoTest.fireTag20('','Modal Select CTA');
+        var code = this.getAttribute("iso-code");
+        document.querySelector('.vehicle-item[iso-vehicle-code="' + code + '"] .vehicle-pricing__button').click();
+        this.closest(".iso-modal-wrapper").remove();
+      });
+      document.querySelector(".iso-modal-close").addEventListener("click", function () {
+        this.closest(".iso-modal-wrapper").remove();
+      });
+      // ACCESSIBILITY
+      document.querySelector(".iso-modal-button").focus();
+      document.addEventListener('keydown', function(e) {
+        if (e.key == 'Escape') {
+          document.querySelector(".iso-modal-wrapper").remove();
+        }
+      })
+      // ONCE IMAGE LOADED
+      document.querySelector('.iso-modal-image img').addEventListener('load', function() {
+        this.closest(".iso-modal-wrapper").classList.add('iso-image-loaded')
+      })
+    },
+    filterChangeHandler: function() {
+      var targetNode = document.querySelector('.vehicle-select__aside .vehicle-filter__header-title');
+      var config = { characterData: true, childList: true, subtree: true };
+      var callback = function (mutationsList, observer) {
+        for (var i = 0; i < mutationsList.length; i++) {
+          var addedNodes = mutationsList[i].addedNodes;
+          var removedNodes = mutationsList[i].removedNodes;
+          // IF FILTER IS CHANGED
+          if(mutationsList[i].type == "characterData") {
+            setTimeout(function() {
+              helpers.elementLoaded(isoTest.selector, isoTest.chall);
+            }, 200)
+          }
+          // IF FILTER IS ADDED
+          for (var j = 0; j < addedNodes.length; j++) {
+            var el = addedNodes[j].tagName && addedNodes[j].classList.contains('vehicle-filter__amount-selected');
+            if (el) {
+              setTimeout(function() {
+                helpers.elementLoaded(isoTest.selector, isoTest.chall);
+              }, 200)
+            }
+          }
+          // IF FILTER IS REMOVED
+          var removedNodes = mutationsList[i].removedNodes;
+          for (var j = 0; j < removedNodes.length; j++) {
+            var el = removedNodes[j].tagName && removedNodes[j].classList.contains('vehicle-filter__amount-selected');
+            if (el) {
+              setTimeout(function() {
+                helpers.elementLoaded(isoTest.selector, isoTest.chall);
+              }, 200)
+            }
+          }
+        }
+      };
+      var observer = new MutationObserver(callback);
+      observer.observe(targetNode, config);
+    },
+    triggerModalHandler: function() {
+      var vehicleCode =
+      this.closest(".vehicle-item__main-content").querySelector(".vehicle-item__tour-info").innerText;
+      isoTest.renderModalHandler(vehicleCode);
+    },
+    chall: function () {
+      document.querySelectorAll(".vehicle-select .vehicle-item:not(.is-sold-out)").forEach(function (item, index) {
+        var vehicleCode = item.querySelector(".vehicle-item__tour-info").innerText;
+        if (isoTest.vehicleData[vehicleCode] != undefined) {
+          item.setAttribute("iso-vehicle-code", vehicleCode);
+          if(item.querySelector('.iso-zoom')) {
+            item.querySelector('.iso-zoom').remove();
+          }
+          item.querySelector(".vehicle-item__image").insertAdjacentHTML("beforeend", '<button class="iso-zoom" tab-index="0"></button>');
+        }
+      });
+
+      var zoomIcons = document.querySelectorAll(".vehicle-item:not(.is-sold-out) .vehicle-item__image");
+      for (var i = 0; i < zoomIcons.length; i++) {
+        zoomIcons[i].removeEventListener("click", isoTest.triggerModalHandler);
+        zoomIcons[i].addEventListener("click", isoTest.triggerModalHandler);
+      }
+    },
+    fireTag: function (element, value) {
+      var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+      s.linkTrackVars = "eVar89";
+      s.eVar89 = linkName;
+      s.tl(this, "o", linkName);
+    },
+    fireTag20: function (element, value) {
+      var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+      s.linkTrackVars = "eVar20";
+      s.eVar20 = linkName;
+      s.tl(this, "o", linkName);
+    },
+    log: function (obj) {
+      if (isoTest.debug === true) {
+        console.log(obj);
+      }
+    },
+  };
+
+  var helpers = {
+    elementLoaded: function (ele, callback) {
+      isoTest.log("elementLoaded::  " + ele + " - Checking...");
+      window.clearTimeout(isoTest.eleTimer);
+      if (document.querySelectorAll(ele).length > 0) {
+        if (typeof callback === "function") {
+          isoTest.log("elementLoaded::  " + ele + " - Found!");
+          callback();
+        }
+      } else {
+        isoTest.eleTimer = window.setTimeout(function () {
+          helpers.elementLoaded(ele, callback);
+        }, 100);
+      }
+    },
+  };
+  isoTest.init();
+})();
+</script>

@@ -1,0 +1,566 @@
+<style>
+  body .iso-modal-wrapper {
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .iso-modal-wrapper .iso-modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+body .iso-modal-wrapper .iso-modal {
+  width: 750px;
+  z-index: 9999;
+  padding: 30px 40px;
+  position: relative;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+body .iso-modal-wrapper .iso-modal-image img {
+  margin: auto;
+  display: block;
+}
+body .iso-modal-wrapper .iso-modal h1 {
+  margin-bottom: 15px;
+  letter-spacing: -0.5px;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 36px;
+  color: #181918;
+  text-transform: capitalize;
+}
+body .iso-modal-wrapper .iso-modal-para {
+  letter-spacing: -0.5px;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 25px;
+  color: #000000;
+}
+body .iso-modal-wrapper .iso-modal-button {
+  width: 261.96px;
+  margin: 0 auto;
+  text-align: center;
+  height: 34px;
+  line-height: 21px;
+  font-weight: 700;
+  font-size: 14px;
+}
+body .iso-zoom {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='16' viewBox='0 0 17 16' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.14933 1.57294C10.6809 3.10453 11.1264 5.3854 10.3324 7.35976C10.066 8.02455 9.66668 8.63174 9.14923 9.1492C7.05721 11.2404 3.66531 11.2404 1.57318 9.14909C-0.518861 7.05704 -0.518861 3.66499 1.57318 1.57294C3.66523 -0.519105 7.05729 -0.519105 9.14933 1.57294ZM8.10629 2.61598C6.5903 1.09998 4.13221 1.09998 2.61622 2.61598C1.10022 4.13197 1.10022 6.59006 2.61611 8.10595C4.13213 9.62134 6.59038 9.62134 8.10629 8.10605C8.48207 7.73028 8.77069 7.2914 8.96354 6.81021C9.53913 5.37884 9.21634 3.72602 8.10629 2.61598ZM10.9784 9.86235L9.93539 10.9054L14.9617 15.9317L16.0048 14.8887L10.9784 9.86235ZM8.41858 4.97362L8.41858 5.60155L5.73593 5.60154L5.73594 8.28421L5.10801 8.2842L5.108 5.60154L2.42531 5.60153L2.42531 4.9736L5.108 4.97361L5.10799 2.36597L5.73592 2.36597L5.73593 4.97361L8.41858 4.97362Z' fill='%23169A5A'/%3E%3C/svg%3E");
+  height: 16px;
+  width: 15px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: transparent;
+  border:none;
+}
+body .vehicle-item__image {
+  position: relative;
+  cursor: pointer;
+}
+body .iso-modal-wrapper .iso-modal-close {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'%3E%3Ccircle cx='11' cy='11' r='10.2' stroke='%234F4F4F' stroke-width='1.6'/%3E%3Cpath d='M16.5 6L6 16' stroke='%234F4F4F' stroke-width='1.6'/%3E%3Cpath d='M6 6L16.5 16' stroke='%234F4F4F' stroke-width='1.6'/%3E%3C/svg%3E");
+  width: 22px;
+  height: 22px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  background-color: transparent;
+}
+.iso-thumbnail {
+  min-height: 503px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iso-modal-image, .iso-modal-button,
+.iso-image-loaded .iso-thumbnail {
+  display: none;
+}
+.iso-image-loaded .iso-modal-image, .iso-image-loaded .iso-modal-button  {
+  display: block;
+}
+@media (max-width: 1135px) and (min-width: 654px) {
+  body .iso-zoom {
+    bottom: 40px;
+    right: 16px;
+  }
+}
+@media (max-width: 767px) {
+  body .iso-modal-wrapper .iso-modal {
+    width: 340px;
+    padding: 0;
+  }
+  .iso-thumbnail {
+    min-height: 255px;
+    padding: 0 25px;
+  }
+  body .iso-modal-wrapper .iso-modal-button {
+    margin: 0 0px 20px 20px;
+    width: 88%;
+  }
+  body .iso-zoom {
+    bottom: auto;
+    right: 5px;
+    top: 70px;
+  }
+}
+@media (max-width: 653px) {
+  body .vehicle-item__image {
+    position: absolute;
+  }
+  body .iso-zoom {
+    bottom: 5px;
+    right: 0px;
+  }
+}
+  </style>
+  <script>
+  (function () {
+  "use strict";
+  var isoTest = {
+    account: "Enterprise",
+    portfolio: "EHI",
+    test: "Vehicle Selection Image Zoom",
+    creative: "Challenger 1",
+    selector: ".vehicle-item:not(.is-sold-out) .vehicle-item__image",
+    debug: false,
+    vehicleData: {
+      CCAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/CCAR.doi.768.high.imageLargeSideProfileNodePath.png/1611777286679.png",
+      },
+      CFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/CCAR.doi.768.high.imageLargeSideProfileNodePath.png/1611777286679.png",
+      },
+      CTAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/CCAR.doi.768.high.imageLargeSideProfileNodePath.png/1611777286679.png",
+      },
+      ECAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/ECAR.doi.768.high.imageLargeSideProfileNodePath.png/1492780366644.png",
+      },
+      EYMR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/EYMR.doi.768.high.imageLargeSideProfileNodePath.png/1618262784685.png",
+      },
+      FCAH: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/FCAH.doi.768.high.imageLargeSideProfileNodePath.png/1492780375254.png",
+      },
+      FCAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/FCAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262777765.png",
+      },
+      FFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/FFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262877780.png",
+      },
+      FJAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/FJAR.doi.768.high.imageLargeSideProfileNodePath.png/1543606103567.png",
+      },
+      FVAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/FVAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744312521.png",
+      },
+      FYMR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/FYMR.doi.768.high.imageLargeSideProfileNodePath.png/1570206624361.png",
+      },
+      GKAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/GKAR.doi.768.high.imageLargeSideProfileNodePath.png/1582219877888.png",
+      },
+
+      GXAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/GXAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262775554.png",
+      },
+      GYMR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/GYMR.doi.768.high.imageLargeSideProfileNodePath.png/1579721333086.png",
+      },
+      ICAE: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/ICAE.doi.768.high.imageLargeSideProfileNodePath.png/1544210775276.png",
+      },
+      ICAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/ICAR.doi.768.high.imageLargeSideProfileNodePath.png/1620230914227.png",
+      },
+      IFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/IFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262879727.png",
+      },
+      IFDR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/IFDR.doi.768.high.imageLargeSideProfileNodePath.png/1618262879727.png",
+      },
+      IJAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/IJAR.doi.768.high.imageLargeSideProfileNodePath.png/1544220629072.png",
+      },
+
+      ITAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/ITAR.doi.768.high.imageLargeSideProfileNodePath.png/1526421297876.png",
+      },
+      IYMR: {
+        title: "Super Sports Car",
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/IYMR.doi.768.high.imageLargeSideProfileNodePath.png/1618262775188.png",
+        copy: "",
+      },
+      JKAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/JKAR.doi.768.high.imageLargeSideProfileNodePath.png/1517591717238.png",
+      },
+      LCAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/LCAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262778275.png",
+      },
+      LFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/LFAR.doi.768.high.imageLargeSideProfileNodePath.png/1554401969012.png",
+      },
+
+      LTAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/LTAR.doi.768.high.imageLargeSideProfileNodePath.png/1501593253092.png",
+      },
+      LYMR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/LYMR.doi.768.high.imageLargeSideProfileNodePath.png/1618262878209.png",
+      },
+      MVAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/MVAR.doi.768.high.imageLargeSideProfileNodePath.png/1618263096675.png",
+      },
+      OVAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/OVAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744296328.png",
+      },
+      PCAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/PCAR.doi.768.high.imageLargeSideProfileNodePath.png/1574880326763.png",
+      },
+      PFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/PFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262876980.png",
+      },
+      PGAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/PGAR.doi.768.high.imageLargeSideProfileNodePath.png/1547581755813.png",
+      },
+      PPAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/TRUCKS/PPAR.doi.768.high.imageLargeSideProfileNodePath.png/1512427309887.png",
+      },
+
+      PXAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/PXAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262777268.png",
+      },
+      PYMR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/PYMR.doi.768.high.imageLargeSideProfileNodePath.png/1619102956613.png",
+      },
+      RFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/RFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262875775.png",
+      },
+      RKAR: { 
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/RKAR.doi.768.high.imageLargeSideProfileNodePath.png/1582219862970.png",
+      },
+      RVAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/RVAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744320042.png",
+      },
+      RXAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/RXAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262775892.png",
+      },
+      SCAH: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/SCAH.doi.768.high.imageLargeSideProfileNodePath.png/1543605920546.png",
+      },
+      SCAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/SCAR.doi.768.high.imageLargeSideProfileNodePath.png/1544210775124.png",
+      },
+
+      SFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/SFAR.doi.768.high.imageLargeSideProfileNodePath.png/1551905658879.png",
+      },
+      SFDR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/SFDR.doi.768.high.imageLargeSideProfileNodePath.png/1551905658879.png",
+      },
+      SKAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/SKAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744297142.png",
+      },
+      SPAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/TRUCKS/SPAR.doi.768.high.imageLargeSideProfileNodePath.png/1618263047434.png",
+      },
+      SSAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/SSAR.doi.768.high.imageLargeSideProfileNodePath.png/1574880314547.png",
+      },
+      STAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/STAR.doi.768.high.imageLargeSideProfileNodePath.png/1543605919377.png",
+      },
+      SVAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/SVAR.doi.768.high.imageLargeSideProfileNodePath.png/1547668804155.png",
+      },
+      SYMR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/SYMR.doi.768.high.imageLargeSideProfileNodePath.png/1618262783445.png",
+      },
+      UFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/UFAR.doi.768.high.imageLargeSideProfileNodePath.png/1544210749802.png",
+      },
+
+      UVAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/VANS/UVAR.doi.768.high.imageLargeSideProfileNodePath.png/1492744296328.png",
+      },
+      UXAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/UXAR.doi.768.high.imageLargeSideProfileNodePath.png/1543605917710.png",
+      },
+      WCAE: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/WCAE.doi.768.high.imageLargeSideProfileNodePath.png/1554931356778.png",
+      },
+      WCAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/WCAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262784133.png",
+      },
+      WFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/WFAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262879191.png",
+      },
+      WXAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/WXAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262776166.png",
+      },
+      WZAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/WZAR.doi.768.high.imageLargeSideProfileNodePath.png/1618262876399.png",
+      },
+      XFAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/SUVS/XFAR.doi.768.high.imageLargeSideProfileNodePath.png/1574796945850.png",
+      },
+      XXAR: {
+        image:
+          "https://assets.gcs.ehi.com/content/enterprise_cros/data/vehicle/bookingCountries/US/CARS/XXAR.doi.768.high.imageLargeSideProfileNodePath.png/1587645528243.png",
+      },
+    },
+    init: function () {
+      isoTest.debug = ${user.mvtDebug};
+      if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+        _satellite.setVar('TargetCampaign', isoTest.test);
+        _satellite.setVar('TargetCreative', isoTest.creative);
+      }
+      isoTest.log("Test Running...");
+      isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+      isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+      var timer = setInterval(function () {
+        if (document.querySelector("#loader .spinner-container") === null && document.querySelector('.vehicle-select .vehicle-select__main .transition') === null) {
+          helpers.elementLoaded(isoTest.selector, isoTest.chall);
+          helpers.elementLoaded('.vehicle-select__aside .vehicle-filter__header-title', isoTest.filterChangeHandler);
+          clearInterval(timer);
+        }
+      }, 100);
+      isoTest.viewChange();
+    },
+    viewChange: function () {
+      window.addEventListener(
+        "hashchange",
+        function () {
+          var timer = setInterval(function () {
+            if (document.querySelector("#loader .spinner-container") === null && document.querySelector('.vehicle-select .vehicle-select__main .transition') === null) {
+              if (/cars/.test(location.hash)) {
+                helpers.elementLoaded(isoTest.selector, isoTest.chall);
+                helpers.elementLoaded('.vehicle-select__aside .vehicle-filter__header-title', isoTest.filterChangeHandler);
+              }
+              clearInterval(timer);
+            }
+          }, 100);
+        },
+        false
+      );
+    },
+    generateModalHandler(vehicleCode) {
+      var vehicle = isoTest.vehicleData[vehicleCode];
+      var modalHTML =
+        "" +
+        '  <div class="iso-modal-wrapper">' +
+        '      <div class="iso-modal-overlay"></div>' +
+        '      <div class="iso-modal" tabindex="0">' +
+        '          <div class="iso-thumbnail"><div class="loading"></div></div>'+
+        '          <div class="iso-modal-image">'+
+        '           <img src="'+vehicle.image +'" alt="image" /></div>' +
+        '          <button class="iso-modal-button" iso-code="' +
+        vehicleCode +
+        '">Select</button>' +
+        '          <button class="iso-modal-close" tabindex="0"></button>' +
+        "      </div>" +
+        "  </div>";
+      return modalHTML;
+    },
+    renderModalHandler: function (vehicleCode) {
+      isoTest.fireTag('', vehicleCode +' vehicle image clicked');
+      document.querySelector("body").insertAdjacentHTML("beforeend", isoTest.generateModalHandler(vehicleCode));
+      document.querySelector(".iso-modal-button").addEventListener("click", function () {
+        isoTest.fireTag20('','Modal Select CTA');
+        var code = this.getAttribute("iso-code");
+        document.querySelector('.vehicle-item[iso-vehicle-code="' + code + '"] .vehicle-pricing__button').click();
+        this.closest(".iso-modal-wrapper").remove();
+      });
+      document.querySelector(".iso-modal-close").addEventListener("click", function () {
+        this.closest(".iso-modal-wrapper").remove();
+      });
+      // ACCESSIBILITY
+      document.querySelector(".iso-modal-button").focus();
+      document.addEventListener('keydown', function(e) {
+        if (e.key == 'Escape') {
+          document.querySelector(".iso-modal-wrapper").remove();
+        }
+      })
+      // ONCE IMAGE LOADED
+      document.querySelector('.iso-modal-image img').addEventListener('load', function() {
+        this.closest(".iso-modal-wrapper").classList.add('iso-image-loaded')
+      })
+    },
+    filterChangeHandler: function() {
+      var targetNode = document.querySelector('.vehicle-select__aside .vehicle-filter__header-title');
+      var config = { characterData: true, childList: true, subtree: true };
+      var callback = function (mutationsList, observer) {
+        for (var i = 0; i < mutationsList.length; i++) {
+          var addedNodes = mutationsList[i].addedNodes;
+          var removedNodes = mutationsList[i].removedNodes;
+          // IF FILTER IS CHANGED
+          if(mutationsList[i].type == "characterData") {
+            setTimeout(function() {
+              helpers.elementLoaded(isoTest.selector, isoTest.chall);
+            }, 200)
+          }
+          // IF FILTER IS ADDED
+          for (var j = 0; j < addedNodes.length; j++) {
+            var el = addedNodes[j].tagName && addedNodes[j].classList.contains('vehicle-filter__amount-selected');
+            if (el) {
+              setTimeout(function() {
+                helpers.elementLoaded(isoTest.selector, isoTest.chall);
+              }, 200)
+            }
+          }
+          // IF FILTER IS REMOVED
+          var removedNodes = mutationsList[i].removedNodes;
+          for (var j = 0; j < removedNodes.length; j++) {
+            var el = removedNodes[j].tagName && removedNodes[j].classList.contains('vehicle-filter__amount-selected');
+            if (el) {
+              setTimeout(function() {
+                helpers.elementLoaded(isoTest.selector, isoTest.chall);
+              }, 200)
+            }
+          }
+        }
+      };
+      var observer = new MutationObserver(callback);
+      observer.observe(targetNode, config);
+    },
+    triggerModalHandler: function() {
+      var vehicleCode =
+      this.closest(".vehicle-item__main-content").querySelector(".vehicle-item__tour-info").innerText;
+      isoTest.renderModalHandler(vehicleCode);
+    },
+    chall: function () {
+      document.querySelectorAll(".vehicle-select .vehicle-item:not(.is-sold-out)").forEach(function (item, index) {
+        var vehicleCode = item.querySelector(".vehicle-item__tour-info").innerText;
+        if (isoTest.vehicleData[vehicleCode] != undefined) {
+          item.setAttribute("iso-vehicle-code", vehicleCode);
+          if(item.querySelector('.iso-zoom')) {
+            item.querySelector('.iso-zoom').remove();
+          }
+          item.querySelector(".vehicle-item__image").insertAdjacentHTML("beforeend", '<button class="iso-zoom" tab-index="0"></button>');
+        }
+      });
+
+      var zoomIcons = document.querySelectorAll(".vehicle-item:not(.is-sold-out) .vehicle-item__image");
+      for (var i = 0; i < zoomIcons.length; i++) {
+        zoomIcons[i].removeEventListener("click", isoTest.triggerModalHandler);
+        zoomIcons[i].addEventListener("click", isoTest.triggerModalHandler);
+      }
+    },
+    fireTag: function (element, value) {
+      var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+      s.linkTrackVars = "eVar89";
+      s.eVar89 = linkName;
+      s.tl(this, "o", linkName);
+    },
+    fireTag20: function (element, value) {
+      var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+      s.linkTrackVars = "eVar20";
+      s.eVar20 = linkName;
+      s.tl(this, "o", linkName);
+    },
+    log: function (obj) {
+      if (isoTest.debug === true) {
+        console.log(obj);
+      }
+    },
+  };
+
+  var helpers = {
+    elementLoaded: function (ele, callback) {
+      isoTest.log("elementLoaded::  " + ele + " - Checking...");
+      window.clearTimeout(isoTest.eleTimer);
+      if (document.querySelectorAll(ele).length > 0) {
+        if (typeof callback === "function") {
+          isoTest.log("elementLoaded::  " + ele + " - Found!");
+          callback();
+        }
+      } else {
+        isoTest.eleTimer = window.setTimeout(function () {
+          helpers.elementLoaded(ele, callback);
+        }, 100);
+      }
+    },
+  };
+  isoTest.init();
+})();
+  </script>
