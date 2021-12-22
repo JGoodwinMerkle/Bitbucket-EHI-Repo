@@ -1,0 +1,391 @@
+<style>
+#navContentRent .nav-section{
+	width:50%;
+}
+
+#navContentShare .nav-section{
+	width:33%;  
+}
+#navContentShare .nav-section:nth-child(3){
+    border: none;
+}
+
+#navContentShare .promo{
+	background-image: url(/content/dam/ecom/hosted/Nav_Vehicle_Lineup.jpg) !important;
+}
+
+div#navContentBuy .nav-section-text {
+    display: none;
+}
+
+div#navContentBuy .menu .nav-section:first-child li:nth-child(2) {
+    display: none;
+}
+
+@media screen and (max-width: 884px ){
+
+    #navContentRent .nav-section, #navContentShare .nav-section{
+        width:100%;  
+    }
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise.com',
+		test : 'Mobile Nav Menu Collapse',
+		creative : 'Challenger 0',
+		selector: '#primary-nav',
+		init : function() {
+
+			// isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		
+		chall : function() {
+
+			var labels = document.querySelectorAll('#primary-nav .primary-nav-label');
+			labels.forEach( function(item) {
+				var text = item.firstChild.textContent;
+				if(text.trim() === "Rent"){
+					item.firstChild.textContent = "Reservations";
+				}
+
+				if(text.trim() === "Share"){
+					item.firstChild.textContent = "Vehicles";
+				}
+
+				if(text.trim() === "Buy"){
+					item.firstChild.textContent = "Car Sales";
+				}
+			});
+
+			function insertAfter(newNode, existingNode) {
+			    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+			}
+
+			isoTest.reservation_rentTab();
+			isoTest.vehicles_shareTab();
+			isoTest.carSales_buyTab();
+			isoTest.forBusinessTab();
+			isoTest.fireEvents();
+			isoTest.bindEvents();
+			isoTest.changeTabIndex();
+
+
+			helpers.insertAfter(document.querySelector('#navContentShare').closest('li'), document.querySelector('#navContentRent').closest('li'));
+			helpers.insertAfter(document.querySelector('#navContentLocations').closest('li'), document.querySelector('#navContentShare').closest('li'));
+			helpers.insertAfter(document.querySelector('#navContentLearn').closest('li'), document.querySelector('div[id^=navContentFor]').closest('li'));
+
+			
+		},
+		reservation_rentTab: function(){
+
+			document.querySelector('#navContentRent .title').firstChild.textContent = "Car Rental";
+
+			var parentDiv = document.querySelector('#navContentRent .sub-menu li:last-child').parentNode;
+
+			
+
+			var text = 'Rent a Car After an Accident';
+			var link = '/en/car-rental/rent-a-car-after-an-accident.html';
+			var content = '<i class="icon icon-nav-carrot-white"></i> <a href="'+link+'">'+text+'</a>';
+
+			parentDiv.insertBefore(isoTest.buildHTML('li', 'iso-new-item', '', content ), document.querySelector('#navContentRent .sub-menu li:last-child'));
+
+
+
+		},
+		vehicles_shareTab: function(){
+
+
+					document.querySelector('#navContentShare .menu').append(document.querySelector('#navContentRent .menu .nav-section:nth-child(2)'));
+					document.querySelector('#navContentShare .menu').append(document.querySelector('#navContentRent .menu .nav-section:nth-child(2)'));
+			
+					document.querySelector('#navContentShare .nav-section:nth-child(3) .title').firstChild.textContent = "Vehicles for Rent";
+
+					document.querySelector('#navContentShare .nav-section:nth-child(1)').style.display = 'none';
+					document.querySelector('#navContentShare .nav-section:nth-child(2)').style.display = 'none';
+
+					var replaceText = document.querySelector('#navContentShare .nav-section:nth-child(3) .title ~ .sub-menu li a').textContent.replace(', Minivans','');
+					document.querySelector('#navContentShare .nav-section:nth-child(3) .title ~ .sub-menu li a').textContent = replaceText;
+
+					document.querySelector('#navContentShare .nav-section:nth-child(4) li:nth-child(2)').style.display = 'none';
+
+					var replaceText2 = document.querySelector('#navContentShare .nav-section:nth-child(4) .title ~ .sub-menu li a').textContent.replace('Rentals','Vehicles');
+					document.querySelector('#navContentShare .nav-section:nth-child(4) .title ~ .sub-menu li a').textContent = replaceText2;
+
+
+
+
+					// image change
+
+					document.querySelector('#navContentShare .promo');
+
+
+					var contentDiv = '<div class="title" tabindex="-1">Buy a Car<i class="icon icon-nav-carrot-white"></i></div>'+
+								'</div>'+
+								'<ul class="sub-menu" aria-hidden="false">'+
+
+								   '<li>'+
+								       '<i class="icon icon-nav-carrot-white"></i>'+
+								       '<a class="external-link" target="_blank" href="https://www.enterprisecarsales.com/list/buy-a-car/?cur=Home_Rental&amp;icid=EnterpriseWebsite-_-header.buy.buy.car-_-browse.selection">'+
+								            ' Browse Selection'+
+								            '<span class="is-vishidden">Link opens in a new window</span>'+
+								            '<i class="icon icon-nav-external-link-green"></i>'+
+								            '<i class="icon icon-nav-external-link-white"></i>'+
+								        '</a>'+
+								   '</li>'+
+								  '<li>'+
+								       '<i class="icon icon-nav-carrot-white"></i>'+
+								       '<a class="external-link" target="_blank" href="https://www.enterprisecarsales.com/locations/?cur=Home_Rental&amp;icid=EnterpriseWebsite-_-header.buy.buy.car-_-find.dealership">'+
+								            ' Find a Dealership'+
+								            '<span class="is-vishidden">Link opens in a new window</span>'+
+								            '<i class="icon icon-nav-external-link-green"></i>'+
+								            '<i class="icon icon-nav-external-link-white"></i>'+
+								        '</a>'+
+								   '</li>'+
+								   '<li>'+
+								       '<i class="icon icon-nav-carrot-white"></i>'+
+								        '<a class="external-link" target="_blank" href="https://www.enterprisecarsales.com/list/under-17500/?cur=Home_Rental&amp;icid=EnterpriseWebsite-_-header.buy.buy.car-_-17500.vehicles">'+
+								            ' Vehicles Under $17,500'+
+								            '<span class="is-vishidden">Link opens in a new window</span>'+
+								            '<i class="icon icon-nav-external-link-green"></i>'+
+								            '<i class="icon icon-nav-external-link-white"></i>'+
+								        '</a>'+
+								   '</li>'+
+
+								'</ul>';
+			        document.querySelector('#navContentShare .menu').append(isoTest.buildHTML('div', 'nav-section iso-clickable', 'false', contentDiv ));
+
+		},
+		carSales_buyTab: function(){
+			
+			var contentDiv = '<div class="title" tabindex="-1">Plan Your Purchase<i class="icon icon-nav-carrot-white"></i></div>'+
+						'</div>'+
+						'<ul class="sub-menu" aria-hidden="false">'+
+
+						   '<li>'+
+						       '<i class="icon icon-nav-carrot-white"></i>'+
+						        '<a class="external-link" target="_blank" href="https://www.enterprisecarsales.com/buy-a-car-online/">'+
+						           ' Start Your Purchase Online'+
+						           '<span class="is-vishidden">Link opens in a new window</span>'+
+						           '<i class="icon icon-nav-external-link-green"></i>'+
+						           '<i class="icon icon-nav-external-link-white"></i>'+
+						       '</a>'+
+						   '</li>'+
+						  '<li>'+
+						       '<i class="icon icon-nav-carrot-white"></i>'+
+						        '<a class="external-link" target="_blank" href="https://www.enterprisecarsales.com/schedule/">'+
+						           ' Scehdule Your Test Drive'+
+						           '<span class="is-vishidden">Link opens in a new window</span>'+
+						           '<i class="icon icon-nav-external-link-green"></i>'+
+						           '<i class="icon icon-nav-external-link-white"></i>'+
+						       '</a>'+
+						   '</li>'+
+						   '<li>'+
+						       '<i class="icon icon-nav-carrot-white"></i>'+
+						        '<a class="external-link" target="_blank" href="https://www.enterprisecarsales.com/value-your-vehicle/">'+
+						           ' Value Your Vehicle'+
+						           '<span class="is-vishidden">Link opens in a new window</span>'+
+						           '<i class="icon icon-nav-external-link-green"></i>'+
+						           '<i class="icon icon-nav-external-link-white"></i>'+
+						       '</a>'+
+						   '</li>'+
+
+						'</ul>';
+
+			document.querySelector('#navContentBuy .menu').append(isoTest.buildHTML('div', 'nav-section iso-clickable', 'false', contentDiv ));
+			document.querySelector('#navContentBuy .nav-section:nth-child(2)').style.display = 'none';
+
+
+			var text = 'Why Buy a Car from Enterprise';
+			var link = 'https://www.enterprisecarsales.com/why-buy-car-from-enterprise';
+			var content = '<i class="icon icon-nav-carrot-white"></i> <a class="external-link" target="_blank" href="'+link+'"> '+text+' <span class="is-vishidden">Link opens in a new window</span> <i class="icon icon-nav-external-link-green"></i> <i class="icon icon-nav-external-link-white"></i> </a> </li>';
+
+			document.querySelector('#navContentBuy .sub-menu').append(isoTest.buildHTML('li', 'iso-new-item', '', content ));
+
+			
+		},
+		forBusinessTab: function(){
+
+			var text = 'Car Sales for Business';
+			var link = 'https://www.enterprisecarsales.com/business/?icid=nav-_-For%20Business-_-HomePage';
+			var content = '<i class="icon icon-nav-carrot-white"></i> <a class="external-link" target="_blank" href="'+link+'"> '+text+'  <span class="is-vishidden">Link opens in a new window</span> <i class="icon icon-nav-external-link-green"></i> <i class="icon icon-nav-external-link-white"></i> </a> </li>';
+			
+			document.querySelector('div[id^=navContentFor] .sub-menu').append(isoTest.buildHTML('li', 'iso-new-item', '', content ));
+		},
+		buildHTML: function(tag, className, ariaAttr, body){
+            var x = document.createElement(tag);
+            if(className){
+            	x.setAttribute('class', className);
+            }
+            if(ariaAttr){
+             	x.setAttribute('aria-expanded', ariaAttr);
+            }
+            x.innerHTML = body;
+            return x;
+        },
+        bindEvents: function(){
+        	var clickableNewLinks = document.querySelectorAll('.iso-clickable');
+
+        	clickableNewLinks.forEach( function(item) {
+				item.addEventListener('click', function(e){
+					if(this.classList.contains('open')){
+						this.classList.remove('open');
+						this.setAttribute('aria-expanded', 'false');
+
+					}else{
+						this.classList.add('open');
+						this.setAttribute('aria-expanded', 'true');
+					}
+				},false);
+        	});
+        },
+        changeTabIndex: function(){
+        	var subnavTitleNew = document.querySelectorAll('.iso-clickable .title');
+
+			subnavTitleNew.forEach( function(item) {
+    	
+	        	if(window.innerWidth > 885){
+						item.setAttribute('tabindex', '-1');
+	        	}else { // mobile
+						item.setAttribute('tabindex', '0');
+
+						item.addEventListener("keydown", function (e) {
+
+			                var keyCode = (e.keyCode ? e.keyCode : e.which);
+			                if (keyCode == 13 || keyCode == 32) {
+			                    	item.click();
+			              
+			                }
+			            }, false);
+				        		
+	        	}
+
+    		});
+
+    		document.querySelector('.iso-gps');
+
+        },
+		fireEvents: function(){
+			// test name: nav: rent: close
+			var nav = document.querySelectorAll('#primary-nav .primary-nav-label');
+			nav.forEach( function(item) {
+				item.addEventListener('click', function(){
+					var tabName = item.innerHTML.trim();
+					setTimeout(function(){
+	                    var action = item.getAttribute('aria-expanded');
+							if(action === "true"){
+								isoTest.fireTag(item, ': nav: ' + tabName + ': open');
+							}
+                    }, 500);
+				}, false);
+
+			});
+
+			// test name: link: rent: start a car reservation
+
+			var li = document.querySelectorAll('#primary-nav .primary-nav-content .sub-menu li');
+			li.forEach( function(item) {
+				// statements
+				item.addEventListener('click', function(){
+
+					var tabName = item.closest('.primary-nav-content').previousElementSibling.innerHTML.trim();
+					
+					var linkName;
+
+					if(item.querySelector('.external-link')){ // external link
+						linkName = item.innerText.split('Link opens in a new window')[0];
+					}else {
+						linkName = item.innerText;
+					}
+
+					isoTest.fireTag(item, ': link: ' + tabName + ': ' + linkName);
+
+							
+				}, false);
+			});
+
+
+			// test name: submenu: car rental: open
+			var submenu = document.querySelectorAll('#primary-nav .primary-nav-content .title');
+			submenu.forEach( function(item) {
+				// statements
+				item.addEventListener('click', function(){
+
+					if(window.innerWidth < 885){
+						var submenuTitle = item.innerText.trim();
+						setTimeout(function(){
+		                    var action = item.getAttribute('aria-expanded');
+								if(action === "true"){
+									isoTest.fireTag(item, ': submenu: ' + submenuTitle + ': open');
+									
+								}
+	                    }, 500);
+					}
+
+
+							
+				}, false);
+			});
+			
+		},
+		fireTag : function(element, value) {
+			s.events='';
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+			s.eVar89 = '';
+			
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		insertAfter: function(newNode, existingNode){
+			    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+
+		}
+	    
+	};
+
+	isoTest.init();
+})();
+</script>
