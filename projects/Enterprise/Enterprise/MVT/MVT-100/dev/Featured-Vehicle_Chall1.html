@@ -139,26 +139,38 @@
 
 			isoTest.elementLoaded(isoTest.vehicleItem, function() {
 				isoTest.log('Test Ready!');
-				if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
-					isoTest.chall();
-				}
+				isoTest.chall();
 			});
 
 			window.addEventListener('hashchange', isoTest.hashHandler, false);
 			window.addEventListener('ttFeatVehicle', isoTest.labelVehicle, false);
+
+			var spinnerUpdate = new MutationObserver(function(mutationsList) {
+				mutationsList.forEach(function(mutation) {
+					mutation.removedNodes.forEach(function(removedNode) {
+						if (removedNode.classList !== undefined) {
+							if(removedNode.classList.contains('spinner-container')) {
+								isoTest.elementLoaded(isoTest.vehicleItem, function() {
+					  				isoTest.chall();
+								});
+							}
+						}
+					});
+				});
+			});
+			spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
 		},
 		hashHandler : function(){
 			if(/cars/.test(location.hash)){
 				isoTest.elementLoaded(isoTest.vehicleItem, function() {
-					if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
-						isoTest.chall();
-					}
+					isoTest.chall();
 				});
 			}
 		},
 		chall : function(){
-			isoTest.log('chall()');
-			isoTest.runTest();
+			if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
+				isoTest.runTest();
+			}
 		},
 		runTest : function() {
 			isoTest.log('runTest()');
