@@ -1,0 +1,127 @@
+<style>
+@media only screen and (min-width: 886px) {
+    #commit .review-section div.pre-expedited-banner__buttons {
+            width: auto;
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+    }
+    #commit .review-section button.pre-expedited-banner__button {
+        width: 150px;
+        height: 43px;
+        color: #269a5a;
+    }
+   
+    #commit .review-section button.pre-expedited-banner__button.btn.btn-secondary{
+        display: none;
+    }
+
+    #commit .review-section p.pre-expedited-banner__description {
+        margin-bottom: 0;
+    }
+
+    
+}
+
+@media (min-width: 749px) and (max-width: 886px) {
+    #commit .review-section button.pre-expedited-banner__button.btn.btn-secondary{
+    display: none;
+    }
+    
+}
+
+
+</style>
+<script>
+(function() {
+    'use strict';
+    var isoTest = {
+        account : 'EHI',
+        portfolio : 'Enterprise',
+        test : 'Review Loyalty Sign-in Banner (Desktop and Tablet)',
+        creative : 'Challenger 1',
+        selector: '.review-section button.pre-expedited-banner__button.btn',
+        debug: true,
+        init : function() {
+            console.log('init called');
+            if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+                _satellite.setVar('TargetCampaign', isoTest.test);
+                _satellite.setVar('TargetCreative', isoTest.creative);
+                //_satellite.track('target_variables');
+            }
+            isoTest.log('Test Running...');
+            isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+            isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+            helpers.elementLoaded(isoTest.selector, function() {
+                isoTest.log('Test Ready!');
+                isoTest.chall();
+            });
+            window.addEventListener('hashchange', isoTest.viewChange, false);
+            
+        },
+        viewChange : function(){
+          if(/commit/.test(location.hash)){
+            helpers.elementLoaded(isoTest.selector, function() {
+              isoTest.chall();
+            });
+          }
+        },
+        chall : function() {
+            // Your code goes here
+
+            if(window.innerWidth > 748){
+                document.querySelector('.review-section button.pre-expedited-banner__button.btn').textContent = "Sign In"
+                document.querySelector('.review-section button.pre-expedited-banner__button.btn').setAttribute('aria-label', 'sign into enterprise plus or emerald club');
+            }   
+
+            document.querySelector('.review-section button.pre-expedited-banner__button.btn').addEventListener('click', function(e){
+                    isoTest.fireTag(e.target, 'Sign In')
+            }, false);
+
+            
+
+
+            
+        },
+        fireTag : function(element, value) {
+            var linkName = value ? value : element.innerText;
+                linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+            s.linkTrackVars = 'eVar20';
+            s.eVar20 = linkName;
+            s.tl(this, 'o', linkName);
+        },
+        log : function(obj){
+            if(isoTest.debug === true){
+                console.log(obj);
+            }
+        }
+    }
+    var helpers = {
+        elementLoaded : function (ele, callback) {
+            isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+            window.clearTimeout(isoTest.eleTimer);
+            if (document.querySelectorAll(ele).length > 0) {
+                if (typeof callback === 'function') {
+                    isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+                    callback();
+                }
+            } else {
+                isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+            }
+        },
+        supplant : function(str, o) {
+            return str.replace(/{([^{}]*)}/g, function(a, b) {
+                var p = b.split(/\./),
+                    c = o;
+                for (var i = 0; i < p.length; i++) {
+                  if (c[p[i]] == null)
+                    return a;
+                  c = c[p[i]];
+                }
+                return typeof c === 'string' || typeof c === 'number' ? c : a;
+            });
+        }
+    }
+    isoTest.init();
+})();
+</script>
