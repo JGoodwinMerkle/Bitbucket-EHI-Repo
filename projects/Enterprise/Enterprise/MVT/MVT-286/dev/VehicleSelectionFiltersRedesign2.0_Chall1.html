@@ -1,0 +1,594 @@
+<style>
+#cars .vehicle-filter__filter {
+     padding: 0 !important;
+}
+ aside .vehicle-filter__header {
+     background: #fff !important;
+     padding: 0.9em 1em;
+}
+ .vehicle-filter .vehicle-filter__content {
+     background: #fff;
+}
+ .vehicle-filter__list-content {
+     display: none !important;
+     padding: 35px 12px 0;
+     position: relative;
+}
+ .vehicle-filter__list-content:before {
+     content: 'Total from';
+     position: absolute;
+     right: 12px;
+     top: 15px;
+     font-size: 10px;
+     letter-spacing: 0.33px;
+}
+ .iso-active+.vehicle-filter__list-content {
+     display: block !important;
+}
+ .vehicle-filter__filter-header {
+     background-color: #fff !important;
+     padding: 14px 12px !important;
+     margin-bottom: 0 !important;
+     background-position: center;
+     position: relative;
+}
+ .vehicle-filter__filter-header:before {
+     content: '';
+     position: absolute;
+     top: 14px;
+     right: 10px;
+     width: 12px;
+     height: 12px;
+     background-repeat: no-repeat;
+     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 11 11'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23169A5A'%3E%3Cg%3E%3Cg%3E%3Cpath d='M5.5 6.125L9.625 2 11 3.375 5.5 8.875 0 3.375 1.375 2z' transform='translate(-344 -288) translate(0 240) translate(344 48)'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+}
+ .vehicle-filter__filter-header.iso-active:before {
+     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 11 11'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23169A5A'%3E%3Cg%3E%3Cg%3E%3Cpath d='M5.5 6.125L9.625 2 11 3.375 5.5 8.875 0 3.375 1.375 2z' transform='translate(-344 -438) translate(0 390) translate(344 48) matrix(1 0 0 -1 0 10.875)'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+}
+ .vehicle-filter__filter-header span.vehicle-filter__price-indicator {
+     display: none;
+}
+ .iso-filters {
+     border-bottom: .125rem solid #c3c3c3;
+}
+ .iso-filter {
+     border: 1px solid #179a5a;
+     padding: 2px 26px 2px 9px;
+     border-radius: 25px;
+     color: #599959;
+     display: inline-block;
+     margin-right: 10px;
+     position: relative;
+     margin-bottom: 7px;
+     background: none;
+     font-weight: 500;
+     line-height: 19px;
+}
+ .iso-filter-txt {
+     text-transform: capitalize;
+     font-size: 12px;
+     letter-spacing: normal;
+}
+ .iso-label {
+     margin-right: 12px;
+}
+ .iso-filters-wrap {
+     line-height: 21px;
+     display: flex;
+     align-items: center;
+     flex-direction: row;
+     min-height: 50px;
+}
+ .iso-filters-label {
+     display: inline-block;
+     line-height: 26px;
+     white-space: nowrap;
+     font-size: 18px;
+     font-weight: normal;
+     letter-spacing: 0.6px;
+     color: #000000;
+     margin-right: 10px;
+}
+ .iso-selected-filters {
+     display: flex;
+     flex-wrap: wrap;
+     align-items: center;
+     padding: 7px 0 0;
+     width: 92%;
+}
+ .iso-close-icon {
+     cursor: pointer;
+}
+ .iso-close-icon:before {
+     content: "";
+     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13.254' height='13.254' viewBox='10.292 4.792 13.254 13.254'%3E%3Cpath fill='%23179a5a' d='M11.267 4.954l-.813.813 5.65 5.65-5.812 5.815.812.814 5.814-5.815 5.814 5.816.814-.814-5.815-5.814 5.816-5.813-.814-.813-5.813 5.813'/%3E%3C/svg%3E");
+     width: 9px;
+     height: 9px;
+     position: absolute;
+     top: 7.3px;
+     right: 10px;
+     z-index: 99999;
+     background-size: 100%;
+}
+ .iso-selected-head.vehicle-filter__filter-header:after {
+     content: '';
+     position: absolute;
+     width: 5px;
+     height: 5px;
+     background: green;
+     right: 34px;
+     top: 17px;
+     border-radius: 50%;
+}
+ .vehicle-filter__filter-list-item.vehicle-filter__active-filter .form-checkbox__text {
+     color: #169a5a;
+}
+ .vehicle-filter--alternative .vehicle-filter__active-filter .vehicle-filter__price-indicator {
+     color: #333;
+}
+ .vehicle-filter__filter-list-item label.form-checkbox {
+     width: 66%;
+}
+ .form-checkbox__input:checked+.form-checkbox__control:before {
+     background: #fff !important;
+}
+
+.vehicle-filter--alternative:nth-child(2) .vehicle-filter__header {
+    border-bottom: 1px solid #c3c3c3 !important;
+}
+
+ @media screen and (max-width: 1135px) {
+     .vehicle-filter__header.iso-mob-ready h3 {
+         display: flex;
+         align-items: center;
+    }
+     .vehicle-filter--alternative:nth-child(2) {
+         border-top: 1px solid #ccc;
+    }
+     .iso-selected-filters {
+         width: 100%;
+    }
+     #cars .iso-filters {
+         display: none !important;
+    }
+     #modal-content .vehicle-filter__header {
+         background: #fff;
+    }
+     .iso-filters {
+         order: 3;
+         border-bottom: none;
+    }
+     #modal-content .iso-filter {
+         margin-bottom: 11px;
+    }
+     .iso-mob-ready {
+         border-top: 1px solid #c3c3c3 !important;
+         border-bottom: 1px solid #c3c3c3 !important;
+    }
+     .vehicle-filter__filter-header.iso-active {
+         padding-bottom: 28px !important;
+    }
+     .vehicle-filter__filter {
+         padding: 0 1.2em !important;
+    }
+     .vehicle-filter__header.iso-mob-ready {
+         display: flex;
+         flex-wrap: wrap;
+    }
+     .iso-mob-ready h3, .vehicle-filter__header-cta {
+         width: 50%;
+    }
+     .vehicle-filter__header-cta button {
+         border: none !important;
+    }
+     .iso-mob-ready .iso-filters-label {
+         display: none;
+    }
+     .iso-filters-wrap {
+         padding: 5px 0 0 0;
+    }
+     .vehicle-filter--alternative:nth-child(2) .vehicle-filter__filter {
+         padding: 0;
+    }
+     .vehicle-filter--alternative:nth-child(2) .vehicle-filter__list-content {
+         padding: 0;
+         padding-bottom: 20px;
+    }
+     .vehicle-filter--alternative:nth-child(1) .vehicle-filter__filter {
+         padding-top: 12px !important;
+    }
+     .vehicle-filter--alternative:nth-child(1) .vehicle-filter__header {
+         padding-bottom: 0 !important;
+    }
+     .vehicle-filter--alternative:nth-child(2) button.vehicle-filter__header-link {
+         padding-right: 0 !important;
+         font-weight: bold;
+    }
+     .vehicle-filter.vehicle-filter--alternative {
+         padding-bottom: 1.2em;
+    }
+     .vehicle-filter__filter-header {
+         padding: 14px 0 !important;
+    }
+     .vehicle-filter__list-content:before {
+         right: 0;
+         top: -17px;
+    }
+     .vehicle-filter__filter-header:before {
+         right: 0;
+    }
+}
+
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'EHI',
+		test : 'Vehicle Selection Filters Redesign 2.0',
+		creative : 'Challenger 1',
+		selector: '.vehicle-filter__filter-header',
+		items: [],
+		debug: false,
+		tabClicked: [],
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange: function () {
+			if (/cars/.test(location.hash)) {
+				helpers.elementLoaded(isoTest.selector,function () {
+					isoTest.chall();
+				});
+			}
+		},
+		chall: function () {
+			// for mobile
+			isoTest.tabClicked = [];
+			var filterBtn = document.querySelector('button.vehicle-header__filter');
+			var exitFilter;
+			var btnCopy;
+			if (filterBtn) {
+				filterBtn.addEventListener('click',function () {
+					var timer = setInterval(function () {
+						var mobParent = document.querySelector('.ReactModalPortal .vehicle-filter:nth-child(2) .vehicle-filter__header');
+						if (mobParent) {
+							clearInterval(timer);
+							isoTest.getFiltersOnchange('mobFilter');
+							isoTest.makeCollapsible('mobFilter');
+							exitFilter = document.querySelectorAll('.ReactModalPortal .vehicle-filter:nth-child(1) .vehicle-filter__header-link, .ReactModalPortal .modal-button-bar button');
+							exitFilter.forEach(function (item) {
+								item.addEventListener('click',function () {
+									isoTest.getFiltersOnchange(); // on load and when change the view from mobile to desktop
+									// Any new filter becomes collapsible
+									document.querySelectorAll('aside.vehicle-select__aside .vehicle-filter__filter .vehicle-filter__filter-header:not(.iso-active)').forEach(function (item) {
+										item.classList.add('iso-active'); //only for desktops
+										item.addEventListener('click',function () {
+											isoTest.switchArrows(item);
+										},false);
+									});
+								},false);
+							});
+							isoTest.addShowCopy();
+						}
+					},10);
+				},false);
+			}
+			isoTest.getFiltersOnchange(); // on load and when change the view from mobile to desktop
+			isoTest.makeCollapsible();
+		},
+		getFiltersOnchange: function (filterParam) {
+			setTimeout(function () {
+
+				var filterSelectionPanel;
+				var filterWrap;
+				var filterClear;
+				var filterInputs;
+				if (filterParam === "mobFilter") {
+					filterSelectionPanel = document.querySelector('.ReactModalPortal');
+					filterWrap = filterSelectionPanel.querySelectorAll('.vehicle-filter:nth-child(2) .vehicle-filter__filter');
+					filterClear = filterSelectionPanel.querySelector('.vehicle-filter:nth-child(2) .vehicle-filter__header-link');
+					filterInputs = filterSelectionPanel.querySelectorAll('.vehicle-filter:nth-child(2) input');
+				} else {
+					filterSelectionPanel = document.querySelector('aside.vehicle-select__aside');
+					filterWrap = filterSelectionPanel.querySelectorAll('.vehicle-filter__filter');
+					filterClear = filterSelectionPanel.querySelector('.vehicle-filter__header-link');
+					filterInputs = filterSelectionPanel.querySelectorAll('.vehicle-filter__filter-list-item input');
+				}
+				var selectedText;
+				isoTest.getValues(filterInputs,selectedText,filterWrap,filterParam);
+				filterSelectionPanel.addEventListener('change',function () {
+					isoTest.getValues(filterInputs,selectedText,filterWrap,filterParam);
+				});
+				isoTest.log(filterWrap);
+				isoTest.log('re-render onchange');
+				filterInputs.forEach(function (item) {
+					item.addEventListener('click',function (e) {
+						setTimeout(function () {
+							if (item.closest('li').classList.contains('vehicle-filter__active-filter')) {
+								isoTest.log('filter is active');
+							} else {
+								isoTest.log('filter is Not active');
+								if (e.isTrusted) {
+									isoTest.log('Filter Checkbox Removed');
+									isoTest.fireTag(item,'Filter Checkbox Removed');
+
+								} else {
+									isoTest.log('bubbleClose');
+								}
+							}
+						},500);
+						isoTest.log('click');
+						isoTest.log(this.value);
+					},false);
+				});
+			},1000);
+		},
+		getValues: function (filterInputs,selectedText,filterWrap,filterParam) {
+			var filterContainer;
+			isoTest.items = []; // reset the selected values
+			filterInputs.forEach(function (item) {
+				if (item.closest('.vehicle-filter__filter-list-item').classList.contains('vehicle-filter__active-filter')) {
+					selectedText = item.closest('.vehicle-filter__filter-list-item').querySelector('.form-checkbox__text').innerHTML;
+					if (item.closest('.vehicle-filter__filter').querySelector('.vehicle-filter__title').innerHTML === 'Number of Passengers') {
+						selectedText = selectedText.replace(/\s/g,'');
+						selectedText = selectedText + ' Passengers';
+					}
+					isoTest.items.push(selectedText);
+				}
+			});
+			isoTest.log(isoTest.items);
+			if (isoTest.items.length > 0) {
+				if (document.querySelector('.iso-filters')) {
+					document.querySelector('.iso-filters').remove();
+					isoTest.log('removed');
+				}
+				if (filterParam === "mobFilter") {
+					// mobile
+					var mobParent = document.querySelector('.ReactModalPortal .vehicle-filter:nth-child(2) .vehicle-filter__header');
+					mobParent.classList.add('iso-mob-ready');
+					var mobContent = '<div class="iso-filters-wrap"><div class="iso-filters-label">Filtering by: </div><div class="iso-selected-filters"></div></div>';
+					var mobDiv = isoTest.buildHTML('div','','iso-filters','',mobContent);
+					mobParent.append(mobDiv);
+					filterContainer = document.querySelector('.ReactModalPortal').querySelector('.iso-selected-filters');
+					isoTest.addShowCopy();
+				} else {
+					//desktop
+					var parent = document.querySelector('.vehicle-select__main');
+					var content = '<div class="iso-filters-wrap"><div class="iso-filters-label">Filtering by: </div><div class="iso-selected-filters"></div></div>';
+					var div = isoTest.buildHTML('div','','iso-filters','',content);
+					parent.prepend(div);
+					filterContainer = document.querySelector('.vehicle-select__main').querySelector('.iso-selected-filters');
+				}
+				isoTest.items.forEach(function (x) {
+					filterContainer.innerHTML += '<button class="iso-filter"><span class="iso-filter-txt">' + x + '</span><span class="iso-close-icon"></span></button>';
+				});
+				isoTest.log('added');
+				isoTest.addCloseEvent(filterInputs);
+				//desktop Cancel Button
+				if (document.querySelector('aside .vehicle-filter__header-link')) {
+					document.querySelector('aside .vehicle-filter__header-link').addEventListener('click',function () {
+						if (document.querySelector('.iso-filters')) {
+							document.querySelector('.iso-filters').remove();
+						}
+						isoTest.log('cancel desktop');
+						isoTest.clearEvent();
+					});
+				}
+				//Mobile Cancel Button
+				if (document.querySelector('.vehicle-filter--alternative:nth-child(2) .vehicle-filter__header-link')) {
+					document.querySelector('.vehicle-filter--alternative:nth-child(2) .vehicle-filter__header-link').addEventListener('click',function () {
+						document.querySelector('.iso-selected-filters').innerHTML = '';
+						isoTest.log('cancel Mobile');
+						isoTest.clearEvent();
+					});
+				}
+			} else {
+				if (document.querySelector('.iso-filters')) {
+					document.querySelector('.iso-filters').remove();
+					isoTest.log('removed');
+				}
+			}
+			isoTest.highlightHeader(filterWrap);
+		},
+		addShowCopy: function () {
+			var exitFilter = document.querySelectorAll('.ReactModalPortal .vehicle-filter:nth-child(1) .vehicle-filter__header-link, .ReactModalPortal .modal-button-bar button');
+			var btnCopy = exitFilter[1].textContent;
+			if (btnCopy.indexOf('Show') > -1 === false) {
+				btnCopy = "Show " + btnCopy;
+				document.querySelectorAll('.ReactModalPortal .vehicle-filter:nth-child(1) .vehicle-filter__header-link, .ReactModalPortal .modal-button-bar button')[1].textContent = btnCopy;
+			}
+		},
+		highlightHeader: function (filterWrap) {
+			// highlight header
+			filterWrap.forEach(function (item) {
+				if (item.querySelector('.vehicle-filter__active-filter')) {
+					item.querySelector('.vehicle-filter__filter-header').classList.add('iso-selected-head');
+				} else {
+					item.querySelector('.vehicle-filter__filter-header').classList.remove('iso-selected-head');
+				}
+			});
+		},
+		clearEvent: function () {
+			document.querySelectorAll('.vehicle-filter__filter-header').forEach(function (item) {
+				item.classList.remove('iso-selected-head');
+			},false);
+		},
+		addCloseEvent: function (inputs) {
+			var close = document.querySelectorAll('.iso-filter');
+			var value;
+			close.forEach(function (item) {
+				item.addEventListener('click',function () {
+					isoTest.log('bubble removed');
+					var filterName = item.querySelector('.iso-filter-txt').innerHTML;
+					if (filterName.indexOf('Passengers') > -1) {
+						filterName = filterName.split('+')[0];
+					}
+					inputs.forEach(function (input) {
+						// statements
+						value = input.getAttribute('value');
+						if (value === filterName) {
+							isoTest.fireTag(item,'Filter Bubble Removed');
+							input.click();
+						}
+					});
+				},false);
+			});
+		},
+		makeCollapsible: function (filterParam) {
+			if (filterParam === "mobFilter") {
+				document.querySelectorAll('.ReactModalPortal .vehicle-filter:nth-child(2) .vehicle-filter__filter').forEach(function (item) {
+					var itemHeader = item.querySelector('.vehicle-filter__filter-header');
+					itemHeader.addEventListener('click',function (e) {
+						
+						var filterHead = itemHeader.querySelector('.vehicle-filter__title').innerHTML;
+						var filterHeadText = itemHeader.querySelector('.vehicle-filter__title').textContent;
+						var idx = isoTest.tabClicked.indexOf(filterHeadText);
+						isoTest.log(filterHead);
+						if (itemHeader.classList.contains('iso-active')) {
+							itemHeader.classList.remove('iso-active'); // if already open then close that particular tab
+							
+							if (idx == -1) {
+								isoTest.tabClicked.push(filterHeadText);
+							}
+							isoTest.log(itemHeader);
+							isoTest.log(' Filter Type ' + filterHead + ' Close');
+							if (e.isTrusted) {
+								isoTest.fireTag(itemHeader,'Filter Type ' + filterHead + ' Close');
+							}
+						} else {
+							itemHeader.classList.add('iso-active'); // open clicked header ONLY
+							isoTest.log(' Filter Type ' + filterHead + ' Open');
+							if (idx != -1) {
+								isoTest.tabClicked.splice(idx,1);
+							}
+							if (e.isTrusted) {
+								isoTest.fireTag(itemHeader,'Filter Type ' + filterHead + ' Open');
+							}
+
+							
+						}
+					},false);
+					/* expand for last opened & need to open */
+					var dropdownHeader = item.querySelector('.vehicle-filter__filter-header');
+					if (isoTest.tabClicked.indexOf(dropdownHeader.querySelector('.vehicle-filter__title').textContent) == -1) {
+   						dropdownHeader.click();
+   					}
+   					// adding class to make it open by default
+   					if(isoTest.tabClicked.length == 0) {
+   						itemHeader.classList.add('iso-active');
+   					}
+				});
+			} else {
+				setTimeout(function () {
+					document.querySelectorAll('aside.vehicle-select__aside .vehicle-filter__filter .vehicle-filter__filter-header').forEach(function (item) {
+						item.classList.add('iso-active'); //only for desktops
+						item.addEventListener('click',function () {
+							isoTest.switchArrows(item);
+						},false);
+					});
+					isoTest.log('re-render');
+					isoTest.log(document.querySelectorAll('aside.vehicle-select__aside .vehicle-filter__filter .vehicle-filter__filter-header'));
+				},1000);
+			}
+		},
+		switchArrows: function (item) {
+			var filterHead = item.querySelector('.vehicle-filter__title').innerHTML;
+			isoTest.log(filterHead);
+
+			if (item.classList.contains('iso-active')) {
+				item.classList.remove('iso-active');
+				isoTest.log(' Filter Type ' + filterHead + ' Close');
+				isoTest.fireTag(item,'Filter Type ' + filterHead + ' Close');
+			} else {
+				item.classList.add('iso-active');
+				isoTest.log(' Filter Type ' + filterHead + ' Open');
+				isoTest.fireTag(item,'Filter Type ' + filterHead + ' Open');
+			}
+		},
+		buildHTML: function (tag,id,className,attr,body) {
+
+			var x = document.createElement(tag);
+			x.setAttribute('tabindex','0');
+			if (id) {
+				x.setAttribute('id',id);
+			}
+			if (className) {
+				x.setAttribute('class',className);
+			}
+			if (attr) {
+				x.setAttribute('data-package',attr);
+			}
+			x.innerHTML = body;
+			return x;
+		},
+		getSiblings: function (elem) {
+			// Setup siblings array and get the first sibling
+			var siblings = [];
+			var sibling = elem.parentNode.firstChild;
+
+			// Loop through each sibling and push to the array
+			while (sibling) {
+				if (sibling.nodeType === 1 && sibling !== elem) {
+					siblings.push(sibling);
+				}
+				sibling = sibling.nextSibling;
+			}
+
+			return siblings;
+		},
+		fireTag: function (element,value) {
+			s.events='';
+			var linkName = value ? value : element.innerText;
+			linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			isoTest.log('firetag event ' + linkName);
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this,'o',linkName);
+			s.eVar89 = '';
+		},
+		log: function (obj) {
+			if (isoTest.debug === true) {
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded: function (ele,callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+			} else {
+				isoTest.eleTimer = window.setTimeout(function () {
+					helpers.elementLoaded(ele,callback);
+				},100);
+			}
+		}
+	};
+	isoTest.init();
+})();
+</script>
