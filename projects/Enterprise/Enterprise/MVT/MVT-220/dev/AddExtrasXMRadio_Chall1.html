@@ -1,0 +1,140 @@
+<style> 
+	.iso-sxm-desktop {
+		margin-top: -10px;
+	}
+	.extras-row.details .iso-sxm-desktop {
+		margin-top: 0;
+	}
+	.iso-sxm-msg {
+		font-size: 14px;
+		padding-bottom: 19px;
+		padding-left: 30px;
+		position: relative;
+	}
+	.details .iso-sxm-msg {
+		padding-bottom: 13px;
+	}
+	span.iso-icon {
+	    width: 24px;
+	    height: 24px;
+	    position: absolute;
+	    top: -2px;
+	   	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 50 54'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg%3E%3Cg%3E%3Cpath fill='%23006639' d='M47.38 34.033c-2.113-1.549-4.28-3.458-5.824-5.772l-1.35-2.026c-.287-.43-.82-.62-1.316-.472-.494.15-.832.606-.832 1.123v18.39c-.693-.405-1.487-.653-2.345-.653-2.585 0-4.688 2.102-4.688 4.688s2.103 4.69 4.688 4.69c2.586 0 4.688-2.104 4.688-4.69V30.733c1.657 2.094 3.73 3.824 5.592 5.191.916.671 1.442 1.706 1.442 2.838 0 1.94-1.577 3.517-3.517 3.517-.647 0-1.172.524-1.172 1.172 0 .647.525 1.172 1.172 1.172 3.232 0 5.86-2.629 5.86-5.86 0-1.86-.896-3.628-2.399-4.73' transform='translate(-4) translate(4)'/%3E%3Cpath fill='%23181918' d='M28.539 5.607v2.2H4.275c-1.144 0-2.075.93-2.075 2.074V38.47c0 1.142.931 2.073 2.075 2.073h31.583v1.882l-.144-.002c-.723 0-1.418.113-2.073.32H4.275C1.914 42.743 0 40.829 0 38.47V9.88c0-2.36 1.914-4.273 4.275-4.273h24.264zM10.793 21.66v2.2c-2.346 0-4.255 1.909-4.255 4.255s1.91 4.255 4.255 4.255c2.346 0 4.255-1.91 4.255-4.255h2.2c0 3.558-2.896 6.454-6.455 6.454S4.34 31.672 4.34 28.114c0-3.559 2.895-6.454 6.454-6.454zm25.065 8.913v2.2H23.212c-.607 0-1.1-.493-1.1-1.1 0-.608.493-1.1 1.1-1.1h12.646zM25.277 0l16.522 5.659c2.115.257 3.758 2.037 3.758 4.222v19.751c-.868-.858-1.59-1.718-2.171-2.591l-.03-.044V9.881c0-1.144-.93-2.074-2.072-2.074L24.59 2.09 25.277 0zm14.841 23.455c.457 0 .849.28 1.015.676-.555-.384-1.207-.618-1.903-.618-.33 0-.657.048-.973.143-1.021.31-1.793 1.058-2.16 1.998H23.212c-.607 0-1.1-.492-1.1-1.1 0-.607.493-1.099 1.1-1.099zm0-9.053c.607 0 1.1.492 1.1 1.1 0 .606-.493 1.098-1.1 1.098H5.438c-.607 0-1.099-.492-1.099-1.099s.492-1.1 1.1-1.1z' transform='translate(-4) translate(4)'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+	}
+	.extras-row.selected span.iso-icon { 
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 50 54'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg%3E%3Cg%3E%3Cpath fill='%23169A5A' d='M47.38 34.033c-2.113-1.549-4.28-3.458-5.824-5.772l-1.35-2.026c-.287-.43-.82-.62-1.316-.472-.494.15-.832.606-.832 1.123v18.39c-.693-.405-1.487-.653-2.345-.653-2.585 0-4.688 2.102-4.688 4.688s2.103 4.69 4.688 4.69c2.586 0 4.688-2.104 4.688-4.69V30.733c1.657 2.094 3.73 3.824 5.592 5.191.916.671 1.442 1.706 1.442 2.838 0 1.94-1.577 3.517-3.517 3.517-.647 0-1.172.524-1.172 1.172 0 .647.525 1.172 1.172 1.172 3.232 0 5.86-2.629 5.86-5.86 0-1.86-.896-3.628-2.399-4.73' transform='translate(-4) translate(4)'/%3E%3Cpath fill='%23FFF' d='M28.539 5.607v2.2H4.275c-1.144 0-2.075.93-2.075 2.074V38.47c0 1.142.931 2.073 2.075 2.073h31.583v1.882l-.144-.002c-.723 0-1.418.113-2.073.32H4.275C1.914 42.743 0 40.829 0 38.47V9.88c0-2.36 1.914-4.273 4.275-4.273h24.264zM10.793 21.66v2.2c-2.346 0-4.255 1.909-4.255 4.255s1.91 4.255 4.255 4.255c2.346 0 4.255-1.91 4.255-4.255h2.2c0 3.558-2.896 6.454-6.455 6.454S4.34 31.672 4.34 28.114c0-3.559 2.895-6.454 6.454-6.454zm25.065 8.913v2.2H23.212c-.607 0-1.1-.493-1.1-1.1 0-.608.493-1.1 1.1-1.1h12.646zM25.277 0l16.522 5.659c2.115.257 3.758 2.037 3.758 4.222v19.751c-.868-.858-1.59-1.718-2.171-2.591l-.03-.044V9.881c0-1.144-.93-2.074-2.072-2.074L24.59 2.09 25.277 0zm14.841 23.455c.457 0 .849.28 1.015.676-.555-.384-1.207-.618-1.903-.618-.33 0-.657.048-.973.143-1.021.31-1.793 1.058-2.16 1.998H23.212c-.607 0-1.1-.492-1.1-1.1 0-.607.493-1.099 1.1-1.099zm0-9.053c.607 0 1.1.492 1.1 1.1 0 .606-.493 1.098-1.1 1.098H5.438c-.607 0-1.099-.492-1.099-1.099s.492-1.1 1.1-1.1z' transform='translate(-4) translate(4)'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A") !important;
+	}
+	tr#SXMAriaDescription p {
+    	font-size: 14px;
+	}
+	
+	.iso-sxm-desktop {
+		display: none;
+	}
+
+	.iso-sxm-desktop span.iso-icon {
+		left: 32px;
+	}
+	.iso-sxm-desktop span.iso-icon-text {
+	    margin-left: 33px;
+	}
+	.iso-sxm-mobile span.iso-icon {
+		left: 24px;
+	}
+	.iso-sxm-mobile span.iso-icon-text {
+	    margin-left: 26px;
+	}
+	@media screen and (max-width: 768px) {
+		.extras-row.details .extras-mobile-row__details-item button[aria-controls="SXMAriaDescription"] {
+		    position: relative;
+		    top: 6px;
+		}
+	}
+	@media screen and (min-width: 769px) {
+		.iso-sxm-desktop {
+			display: block;
+		}
+		.iso-sxm-mobile {
+			display: none;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Add Extras XM Radio',
+		creative : 'Challenger 1',
+		selector: '.extras-section',
+		init : function() {
+
+			// isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/extras/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			var xpath = "//strong[text()='Sirius XM®']";
+			var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+			if (matchingElement !== null ) {
+				var sxmRow = matchingElement.parentNode.parentNode;
+				sxmRow.insertAdjacentHTML('afterend','<div class="iso-sxm-msg iso-sxm-desktop"><span class="iso-icon"></span> <span class="iso-icon-text">Listen to anything you want, everywhere you drive.</span></div>');
+
+				document.querySelector('.iso-sxm-desktop').nextSibling.insertAdjacentHTML('afterend','<div class="iso-sxm-msg iso-sxm-mobile"><span class="iso-icon"></span> <span class="iso-icon-text">Listen to anything you want, everywhere you drive.</span></div>');
+			}
+
+			
+
+		},
+		
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
