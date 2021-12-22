@@ -1,0 +1,249 @@
+<style>
+.iso-weather-info p {
+     margin: 0;
+     font-size: 16px;
+     color: #656565;
+     font-weight: normal;
+     text-transform: none;
+}
+ .iso-weather-info svg {
+     width: 24px;
+     height: 24px;
+     vertical-align: bottom;
+     margin-right: 5px;
+}
+ .iso-weather-info {
+     margin-left: 15px;
+     display: inline-block;
+}
+@media (min-width: 50em) {
+     .verification-page header .verification-title {
+         float: none;
+         display: inline-block;
+    }
+}
+@media (min-width: 1136px) {
+     .vehicle-header .vehicle-header__sub-title {
+         margin-bottom: 30px;
+    }
+     .vehicle-header .vehicle-header__details {
+         display: block;
+         margin-left: 294px;
+    }
+     .vehicle-select .vehicle-select__aside {
+         margin-top: -50px;
+         z-index: 9;
+    }
+}
+@media (max-width: 1135px) {
+     .iso-weather-info {
+         margin: 5px 0;
+         display: block;
+    }
+     .vehicle-header__title .vehicle-header__details {
+         margin-top: 20px;
+    }
+}
+
+</style>
+<script>
+(function() {
+    "use strict";
+    var isoTest = {
+        account: 'Enterprise',
+        portfolio: 'EHI',
+        test: "Res Flow Weather Forecast",
+        creative: "Challenger 1",
+        selector: "body",
+        debug: false,
+        weatherData: {
+            Clouds: {
+                icon: '<svg alt="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 40 40" version="1.1"><g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons/big/cloudy" fill="#181918" fill-rule="nonzero"><path d="M13.3226439,15.7674688 C17.2312524,15.0687968 21.1731198,16.8101261 23.2888315,20.1700556 L23.2888315,20.1700556 L21.0288315,20.1700556 C18.9886547,17.7732542 15.7215885,16.81412 12.7095578,17.7277114 C9.69752704,18.6413029 7.5137714,21.2537484 7.14883146,24.3800556 C7.12351,24.6264178 6.99668012,24.8510879 6.79883146,25.0000556 C6.59335326,25.1382115 6.34392649,25.1952234 6.09883146,25.1600556 C5.91234992,25.1482987 5.725313,25.1482987 5.53883146,25.1600556 C3.29655537,25.1600556 1.47883146,26.9777795 1.47883146,29.2200556 C1.47883146,31.4623317 3.29655537,33.2800556 5.53883146,33.2800556 L5.53883146,33.2800556 L24.5388315,33.2800556 C26.7017987,33.1898463 28.4135243,31.4184065 28.42954,29.2536182 C28.4455557,27.0888299 26.7602272,25.2922578 24.5988315,25.1700556 L24.5988315,25.1700556 L21.4788315,25.1700556 L21.4788315,23.3600556 L24.7388315,23.3600556 L24.7788315,23.3400556 C27.9318943,23.5153151 30.3812424,26.1537085 30.3220248,29.3110831 C30.2628072,32.4684578 27.7162487,35.0131513 24.5588315,35.0700556 L24.5588315,35.0700556 L5.55883146,35.0700556 C2.45381518,34.9052263 0.0159965113,32.3477073 2.80664381e-13,29.2383598 C-0.0158398105,26.1290124 2.39566556,23.5466675 5.49883146,23.3500556 C6.31952903,19.4652367 9.41403551,16.4661408 13.3226439,15.7674688 Z M33.3588315,26.4000556 L35.4688315,28.4900556 C35.8207918,28.8480346 35.8207918,29.4220766 35.4688315,29.7800556 C35.2980503,29.9516534 35.0659306,30.048125 34.8238315,30.048125 C34.5817323,30.048125 34.3496126,29.9516534 34.1788315,29.7800556 L34.1788315,29.7800556 L32.0788315,27.6800556 L33.3588315,26.4000556 Z M25.2288315,11.9100045 C28.0196968,11.9095162 30.5893931,13.4288518 31.9339639,15.8744722 C33.2785348,18.3200925 33.1845894,21.3038643 31.6888315,23.6600556 L31.6888315,23.6600556 L30.3088315,22.3400556 C30.7821485,21.4864013 31.0299562,20.5261466 31.0288315,19.5500556 C31.0233267,16.3325185 28.4163686,13.7255604 25.1988315,13.7200556 C23.9876902,13.7124927 22.804982,14.0869003 21.8188315,14.7900556 L21.8188315,14.7900556 L20.5188315,13.4900556 C21.8532464,12.4598404 23.4930176,11.9038665 25.1788315,11.9100045 L25.1788315,11.9100045 Z M38.7988315,18.6200556 C39.2936303,18.6254638 39.6934233,19.0252568 39.6988315,19.5200556 C39.701503,19.7604784 39.6078625,19.9919743 39.4387894,20.1629261 C39.2697162,20.3338778 39.0392691,20.4300556 38.7988315,20.4300556 L38.7988315,20.4300556 L35.7988315,20.4300556 L35.7988315,18.6200556 Z M34.1788315,9.27005563 C34.5334009,8.91927665 35.104262,8.91927665 35.4588315,9.27005563 C35.6323678,9.43775295 35.7303656,9.6687317 35.7303656,9.91005563 C35.7303656,10.1513796 35.6323678,10.3823583 35.4588315,10.5500556 L35.4588315,10.5500556 L33.3688315,12.6500556 L32.0788315,11.3700556 Z M15.5988315,9.00282731 C15.839298,9.00282731 16.0697644,9.09905724 16.2388315,9.27005563 L16.2388315,9.27005563 L18.3388315,11.3700556 L17.0588315,12.6500556 L14.9588315,10.5500556 C14.6080525,10.1954862 14.6080525,9.62462509 14.9588315,9.27005563 C15.1278986,9.09905724 15.358365,9.00282731 15.5988315,9.00282731 Z M25.2088315,5.00005563 C25.4492542,4.9973841 25.6807501,5.09102457 25.8517019,5.26009774 C26.0226537,5.4291709 26.1188315,5.65961804 26.1188315,5.90005563 L26.1188315,5.90005563 L26.1188315,8.90005563 L24.2988315,8.91005563 L24.2988315,5.91005563 C24.3042408,5.40973427 24.7085101,5.00546499 25.2088315,5.00005563 Z"/></g></g></svg>',
+                str: "Cloudy",
+            },
+            Rain: {
+                icon: '<svg alt="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 40 40" version="1.1"><g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons/big/rainy" fill="#181918" fill-rule="nonzero"><path d="M21.3633422,28.6221921 L23.0233422,29.6221921 L19.0233422,36.4921921 C18.7465973,36.9472 18.1618085,37.1054887 17.6933422,36.8521921 C17.2532381,36.57337 17.1009458,36.0033617 17.3433422,35.5421921 L17.3433422,35.5421921 L21.3633422,28.6221921 Z M11.2433422,26.8021921 L12.9033422,27.8021921 L8.90334217,34.6621921 C8.74202381,34.9685123 8.41930149,35.1551469 8.07334217,35.1421921 C7.90424008,35.1453476 7.73773966,35.1002537 7.59334217,35.0121921 C7.15323813,34.73337 7.00094583,34.1633617 7.24334217,33.7021921 L7.24334217,33.7021921 L11.2433422,26.8021921 Z M18.0233422,23.6821921 L19.7233422,24.6321921 L15.7233422,31.4921921 C15.5617794,31.8200608 15.2179682,32.0176535 14.8533422,31.9921921 C14.6843755,31.9942653 14.5181689,31.949251 14.3733422,31.8621921 C13.9332381,31.58337 13.7809458,31.0133617 14.0233422,30.5521921 L14.0233422,30.5521921 L18.0233422,23.6821921 Z M16.3183422,8.50855535 C21.2072965,8.50855535 25.4294802,11.9295194 26.4433422,16.7121921 L26.4433422,16.7121921 L26.4433422,16.7021921 C29.889599,16.7215222 32.667672,19.5309354 32.6484423,22.9771921 C32.6290121,26.4234489 29.819599,29.201522 26.3733422,29.1822924 L26.3733422,29.1822924 L26.3233422,29.1822924 L27.5133422,27.0921921 C29.581215,26.5117566 30.9036746,24.494488 30.6112299,22.3667005 C30.3187851,20.238913 28.5011323,18.6532238 26.3533422,18.6521921 C26.1491171,18.6551487 25.9453228,18.6718531 25.7433422,18.7021921 C25.2151632,18.7442662 24.7458483,18.3670598 24.6733422,17.8421921 C24.1463717,13.6232307 20.560087,10.4570247 16.3083422,10.4570247 C12.0565974,10.4570247 8.47031266,13.6232307 7.94334217,17.8421921 C7.87083601,18.3670598 7.40152112,18.7442662 6.87334217,18.7021921 C6.66126473,18.6721548 6.44751136,18.6554553 6.23334217,18.6521921 C3.85851777,18.6107708 1.89976359,20.5023677 1.85834224,22.8771921 C1.81692088,25.2520165 3.70851777,27.2107708 6.08334217,27.2521921 L6.08334217,27.2521921 L5.02334217,29.0721921 C1.88433696,28.4480108 -0.273517463,25.550183 0.0280906031,22.3639644 C0.32969867,19.1777459 2.99297102,16.7362869 6.19334217,16.7121921 C7.20720417,11.9295194 11.4293878,8.50855535 16.3183422,8.50855535 Z M23.0233422,5.30219214 C25.2344226,3.86843442 28.0052671,3.60146198 30.4494177,4.58668556 C32.8935683,5.57190913 34.7046824,7.68584372 35.3033422,10.2521921 L35.3033422,10.2521921 L35.3333422,10.2321921 C37.8485966,10.5313741 39.7427704,12.6642068 39.7427704,15.1971921 C39.7427704,17.7301775 37.8485966,19.8630102 35.3333422,20.1621921 L35.3333422,20.1621921 L34.5333422,18.2621921 L35.0333422,18.2621921 C36.6901964,18.2621921 38.0333422,16.9190464 38.0333422,15.2621921 C38.0336626,13.5953577 36.6998562,12.2348751 35.0333422,12.2021921 C34.896876,12.1917228 34.7598083,12.1917228 34.6233422,12.2021921 C34.3651472,12.2551097 34.0972538,12.1806949 33.9033422,12.0021921 C33.6968307,11.8433063 33.5604894,11.610091 33.5233422,11.3521921 C33.1663916,8.24644044 30.5295015,5.90684673 27.4033422,5.92219214 C26.1011471,5.92650647 24.8350968,6.35086126 23.7933422,7.13219214 L23.7933422,7.13219214 Z"/></g></g></svg>',
+                str: "Rainy",
+            },
+            Clear: {
+                icon: '<svg alt="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 40 40" version="1.1"><g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons/big/sunny" fill="#181918" fill-rule="nonzero"><path d="M21.5924352,33.5221921 L21.5924352,38.6821921 C21.5924352,39.3725481 21.0327912,39.9321921 20.3424352,39.9321921 C19.6520793,39.9321921 19.0924352,39.3725481 19.0924352,38.6821921 L19.0924352,38.6821921 L19.0924352,33.5221921 L21.5924352,33.5221921 Z M30.8324352,28.6521921 L34.4824352,32.3021921 C34.9712072,32.7909642 34.9712072,33.5834201 34.4824352,34.0721921 C33.9936632,34.5609641 33.2012073,34.5609641 32.7124352,34.0721921 L32.7124352,34.0721921 L29.0624352,30.4221921 L30.8324352,28.6521921 Z M9.85243524,28.6521921 L11.6224352,30.4221921 L7.97243524,34.0721921 C7.48366324,34.5609641 6.69120725,34.5609641 6.20243525,34.0721921 C5.71366326,33.5834201 5.71366325,32.7909641 6.20243524,32.3021921 L6.20243524,32.3021921 L9.85243524,28.6521921 Z M20.3424352,9.38219214 C26.1739122,9.38219214 30.9058999,14.1007386 30.9224352,19.9321921 C30.9224352,25.7548858 26.2050979,30.4766413 20.3824068,30.4821496 C14.5597157,30.4876482 9.83348462,25.7748185 9.82243483,19.9521353 C9.81142373,14.129452 14.5197651,9.39874957 20.3424352,9.38219214 Z M23.4578401,12.5094083 C20.4514212,11.2476519 16.9808039,11.9239792 14.6681412,14.2222775 C12.3554785,16.5205758 11.6575408,19.986912 12.9005413,23.0011338 C14.1435418,26.0153557 17.0819777,27.9821921 20.3424352,27.9821921 C24.766624,27.9768256 28.3595041,24.4062616 28.3925916,19.9821921 C28.4126865,16.7217975 26.464259,13.7711647 23.4578401,12.5094083 Z M39.0924352,18.6821921 C39.7827912,18.6821921 40.3424352,19.2418362 40.3424352,19.9321921 C40.3424352,20.6225481 39.7827912,21.1821921 39.0924352,21.1821921 L39.0924352,21.1821921 L33.9324352,21.1821921 L33.9324352,18.6821921 Z M6.75243524,18.6821921 L6.75243524,21.1821921 L1.59243524,21.1821921 C0.902079304,21.1821921 0.342435242,20.6225481 0.342435242,19.9321921 C0.342435242,19.2418362 0.902079304,18.6821921 1.59243524,18.6821921 L1.59243524,18.6821921 L6.75243524,18.6821921 Z M32.7124352,5.79219214 C33.2012072,5.30342015 33.9936632,5.30342016 34.4824352,5.79219216 C34.9712072,6.28096416 34.9712072,7.07342014 34.4824352,7.56219214 L34.4824352,7.56219214 L30.8324352,11.2121921 L29.0624352,9.44219214 Z M6.20243525,5.79219216 C6.69120725,5.30342016 7.48366324,5.30342015 7.97243524,5.79219214 L7.97243524,5.79219214 L11.6224352,9.44219214 L9.85243524,11.2121921 L6.20243524,7.56219214 C5.71366325,7.07342014 5.71366326,6.28096416 6.20243525,5.79219216 Z M20.3424352,-0.0678078562 C21.0327912,-0.0678078562 21.5924352,0.491836206 21.5924352,1.18219214 L21.5924352,1.18219214 L21.5924352,6.34219214 L19.0924352,6.34219214 L19.0924352,1.18219214 C19.0924352,0.491836206 19.6520793,-0.0678078562 20.3424352,-0.0678078562 Z"/></g></g></svg>',
+                str: "Sunny",
+            },
+            Snow: {
+                icon: '<svg alt="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 40 40" version="1.1"><g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons/big/snowy" fill="#181918"><polygon id="Fill-1" points="18.768 1.0658141e-14 18.768 4.036 17.25 2.518 15.835 3.933 18.768 6.865 18.768 17.354 11.351 9.937 11.351 5.79 9.351 5.79 9.351 7.936 6.497 5.083 5.084 6.497 7.937 9.351 5.79 9.351 5.79 11.351 9.937 11.351 17.354 18.768 6.864 18.768 3.931 15.835 2.518 17.249 4.037 18.768 -1.42108547e-14 18.768 -1.42108547e-14 20.768 4.037 20.768 2.519 22.286 3.933 23.701 6.864 20.768 17.354 20.768 9.938 28.184 5.789 28.184 5.789 30.183 7.937 30.183 5.084 33.038 6.497 34.452 9.351 31.599 9.351 33.745 11.351 33.745 11.351 29.598 18.768 22.181 18.768 32.67 15.835 35.602 17.25 37.017 18.768 35.498 18.768 39.535 20.768 39.535 20.768 35.498 22.285 37.017 23.699 35.602 20.768 32.67 20.768 22.181 28.184 29.597 28.184 33.745 30.184 33.745 30.184 31.598 33.039 34.452 34.453 33.038 31.598 30.183 33.746 30.183 33.746 28.184 29.599 28.184 22.182 20.768 32.67 20.768 35.603 23.701 37.017 22.286 35.499 20.768 39.535 20.768 39.535 18.768 35.499 18.768 37.017 17.249 35.603 15.835 32.67 18.768 22.182 18.768 29.599 11.351 33.746 11.351 33.746 9.351 31.599 9.351 34.453 6.497 33.039 5.083 30.184 7.938 30.184 5.79 28.184 5.79 28.184 9.938 20.768 17.354 20.768 6.865 23.699 3.933 22.285 2.518 20.768 4.036 20.768 1.0658141e-14"/></g></g></svg>',
+                str: "Snowy",
+            },
+        },
+        init: function() {
+            isoTest.debug = ${user.mvtDebug};
+
+            if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+                _satellite.setVar('TargetCampaign', isoTest.test);
+                _satellite.setVar('TargetCreative', isoTest.creative);
+                //_satellite.track('target_variables');
+            }
+            isoTest.log("Test Running...");
+            isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+            isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+            isoTest.chall();
+            window.addEventListener('hashchange', function() {
+                var timer = setInterval(function() {
+                    if (document.querySelector('#loader .spinner-container') === null) {
+                        isoTest.viewChange();
+                        clearInterval(timer);
+                        isoTest.log('spinner gone!');
+
+                    }
+                    isoTest.log('timer');
+                }, 100);
+            }, false);
+        },
+        viewChange: function() {
+            if (/cars|extras|commit/.test(location.hash)) {
+                isoTest.chall();
+            }
+        },
+        chall: function() {
+            isoTest.getWeatherInfo();
+        },
+        getWeatherInfo: function() {
+            isoTest.waitForEntDatalayer(function() {
+                var pickupLocation = isoTest.getPickupCity() + ", " + isoTest.getPickupCountrySubDivision(),
+                    pickupDate = isoTest.getPickupDate(),
+                    xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        isoTest.log(data);
+                        var location = data.cities[pickupLocation];
+                        if(location) {
+                            var weather = location[pickupDate];
+                            if (weather) {
+                                var infoHTML = isoTest.createWeatherInfoHTML(
+                                    weather,
+                                    isoTest.getDateFormat(pickupDate),
+                                    isoTest.getPickupCity()
+                                );
+                                helpers.elementLoaded(
+                                    ".vehicle-select__header .vehicle-header__title, .extras-header .extras-header__title, .verification-page .verification-title",
+                                    function() {
+                                        if(document.querySelector('.iso-weather-info') === null){
+                                            isoTest.addWeatherInfo(infoHTML);
+                                            isoTest.fireTag('','Qualifies for Weather Widget');
+                                        }
+
+                                    }
+                                );
+                            }
+                        }
+                    }
+                };
+                xhttp.open("GET", "https://www.enterprise.com/content/dam/mvt/res_flow_weather_mvt_289");
+                xhttp.send();
+            });
+        },
+        addWeatherInfo: function(infoHTML) {
+            if (window.location.hash == "#extras") {
+                document.querySelector(".extras-header .extras-header__title").insertAdjacentHTML("beforeend", infoHTML);
+            } else if (window.location.hash == "#cars") {
+                document
+                    .querySelector(".vehicle-select__header .vehicle-header__title h1")
+                    .insertAdjacentHTML("afterend", infoHTML);
+            } else if (window.location.hash == "#commit") {
+                document.querySelector(".verification-page .verification-title").insertAdjacentHTML("afterend", infoHTML);
+            }
+        },
+        createWeatherInfoHTML: function(weather, date, location) {
+            var weatherInfoHTML =
+                '<div class="iso-weather-info">' +
+                  "<p>" + isoTest.weatherData[weather].icon + "<b>" + isoTest.weatherData[weather].str + "</b> on " + date + " @ " + location + "</p>" +
+                '</div>';
+            return weatherInfoHTML;
+        },
+        getPickupCity: function() {
+            return window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address.city; // "Chicago"
+        },
+        getPickupCountrySubDivision: function() {
+            return window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address
+                .country_subdivision_code; // "IL"
+        },
+        getPickupDate: function() {
+            return window.store
+                .getState()
+                .toJS()
+                .app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.dateTime.split("T")[0]; // "2021-07-10"
+        },
+        getDateFormat: function(date) {
+            var monthNames = [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                ],
+                month = monthNames[+date.split("-")[1] - 1], // May
+                day = date.split("-").pop(); // 10
+            return month + " " + day;
+        },
+        waitForEntDatalayer: function(callback) {
+            isoTest.log("WAIT FOR DATALAYER");
+            var maxCheck = 200;
+            var interval = window.setInterval(function() {
+                if (
+                    window.store &&
+                    window.store.getState() &&
+                    window.store.getState().toJS() &&
+                    window.store.getState().toJS().app &&
+                    window.store.getState().toJS().app.baobab &&
+                    window.store.getState().toJS().app.baobab.session &&
+                    window.store.getState().toJS().app.baobab.session.reservationSession &&
+                    window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest
+                ) {
+                    callback();
+                    window.clearInterval(interval);
+                } else if (--maxCheck < 0) {
+                    window.clearInterval(interval);
+                }
+            }, 50);
+        },
+       fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+        log: function(obj) {
+            if (isoTest.debug === true) {
+                console.log(obj);
+            }
+        },
+    };
+
+    var helpers = {
+        elementLoaded: function(ele, callback) {
+            isoTest.log("elementLoaded::  " + ele + " - Checking...");
+            window.clearTimeout(isoTest.eleTimer);
+            if (document.querySelectorAll(ele).length > 0) {
+                if (typeof callback === "function") {
+                    isoTest.log("elementLoaded::  " + ele + " - Found!");
+                    callback();
+                }
+            } else {
+                isoTest.eleTimer = window.setTimeout(function() {
+                    helpers.elementLoaded(ele, callback);
+                }, 100);
+            }
+        },
+    };
+    isoTest.init();
+})();
+</script>

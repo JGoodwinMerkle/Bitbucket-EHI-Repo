@@ -1,0 +1,138 @@
+<script>
+(function() {
+    "use strict";
+    var isoTest = {
+        account: 'Enterprise',
+        portfolio: 'EHI',
+        test: "Res Flow Weather Forecast",
+        creative: "Challenger 0",
+        selector: "body",
+        debug: false,
+        init: function() {
+            isoTest.debug = ${user.mvtDebug};
+
+            if (_satellite && typeof _satellite.setVar === "function" && typeof _satellite.track === "function") {
+                _satellite.setVar("TargetCampaign", isoTest.test);
+                _satellite.setVar("TargetCreative", isoTest.creative);
+                //_satellite.track('target_variables');
+            }
+            isoTest.log("Test Running...");
+            isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+            isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+            isoTest.chall();
+            window.addEventListener('hashchange', function() {
+                var timer = setInterval(function() {
+                    if (document.querySelector('#loader .spinner-container') === null) {
+                        isoTest.viewChange();
+                        clearInterval(timer);
+                        isoTest.log('spinner gone!');
+
+                    }
+                    isoTest.log('timer');
+                }, 500);
+            }, false);
+        },
+        viewChange: function() {
+            if (/cars|extras|commit/.test(location.hash)) {
+                isoTest.chall();
+            }
+        },
+        chall: function() {
+            isoTest.getWeatherInfo();
+        },
+        getWeatherInfo: function() {
+            isoTest.waitForEntDatalayer(function() {
+                var pickupLocation = isoTest.getPickupCity() + ", " + isoTest.getPickupCountrySubDivision(),
+                    pickupDate = isoTest.getPickupDate(),
+                    xhttp = new XMLHttpRequest();
+
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        isoTest.log(data);
+                        var location = data.cities[pickupLocation];
+                        if(location) {
+                            var weather = location[pickupDate];
+                            if (weather) {
+                                
+                                helpers.elementLoaded(".verification-page .verification-title", function() {
+                                    isoTest.fireTag('','Qualifies for Weather Widget');
+
+                                });
+                            }
+                        }
+                    }
+                };
+                xhttp.open("GET", "https://www.enterprise.com/content/dam/mvt/res_flow_weather_mvt_289");
+                xhttp.send();
+            });
+        },
+        
+        getPickupCity: function() {
+            return window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address.city; // "Chicago"
+        },
+        getPickupCountrySubDivision: function() {
+            return window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address
+                .country_subdivision_code; // "IL"
+        },
+        getPickupDate: function() {
+            return window.store
+                .getState()
+                .toJS()
+                .app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.dateTime.split("T")[0]; // "2021-07-10"
+        },
+        waitForEntDatalayer: function(callback) {
+            isoTest.log("WAIT FOR DATALAYER");
+            var maxCheck = 200;
+            var interval = window.setInterval(function() {
+                if (
+                    window.store &&
+                    window.store.getState() &&
+                    window.store.getState().toJS() &&
+                    window.store.getState().toJS().app &&
+                    window.store.getState().toJS().app.baobab &&
+                    window.store.getState().toJS().app.baobab.session &&
+                    window.store.getState().toJS().app.baobab.session.reservationSession &&
+                    window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest
+                ) {
+                    callback();
+                    window.clearInterval(interval);
+                } else if (--maxCheck < 0) {
+                    window.clearInterval(interval);
+                }
+            }, 50);
+        },
+        fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+        log: function(obj) {
+            if (isoTest.debug === true) {
+                console.log(obj);
+            }
+        },
+    };
+
+    var helpers = {
+        elementLoaded: function(ele, callback) {
+            isoTest.log("elementLoaded::  " + ele + " - Checking...");
+            window.clearTimeout(isoTest.eleTimer);
+            if (document.querySelectorAll(ele).length > 0) {
+                if (typeof callback === "function") {
+                    isoTest.log("elementLoaded::  " + ele + " - Found!");
+                    callback();
+                }
+            } else {
+                isoTest.eleTimer = window.setTimeout(function() {
+                    helpers.elementLoaded(ele, callback);
+                }, 100);
+            }
+        },
+    };
+    isoTest.init();
+})();
+</script>
