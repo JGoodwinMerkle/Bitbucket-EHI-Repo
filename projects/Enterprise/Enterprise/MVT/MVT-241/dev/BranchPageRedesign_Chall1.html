@@ -1,0 +1,327 @@
+<style>
+.cf.booking-widget.iso-heading {
+    text-align: center;
+    padding: 22px;
+    width: 100%;
+}
+
+h1.alpha.reservation-toggle-header{
+	padding-bottom: 23px;
+}
+#iso-reserve_sticky_btn {
+    display: none;
+    z-index: 999999;
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    height: 88px;
+    bottom: 0px;
+    background: white;
+    box-shadow: rgb(0 0 0 / 80%) 0px 0px 10px;
+}
+
+#iso-reserve_sticky_btn a {
+    width: 90%;
+    margin-top: 20px;
+    height: 50px;
+    line-height: 28px;
+}
+
+div#start-reservation {
+    background: #fff !important;
+}
+
+h2#branch-page-booking-header {
+    text-align: left;
+    text-transform: uppercase !important;
+}
+
+a.iso_reserve_vehicle_cta {
+    font-size: 17px;
+    text-decoration: underline;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+main#main section:first-child>div:nth-child(n+3):nth-child(-n+7),
+div#branch-policies ul {
+    background: #f3f3f3 !important;
+}
+
+.footer.section {
+    margin-bottom: 90px
+}
+
+.branchpage .policy-container {
+    margin-top: 0 !important;
+    padding-top: 32px;
+    margin-bottom: 0;
+}
+
+.band.seocontent-band.full-bleed.side-by-side-band {
+    margin: 0 !important;
+}
+
+.branchpage .policy-descriptions-wrapper .toggle-show-more-wrapper {
+    border: none !important;
+}
+
+.branchpage .policy-descriptions-wrapper .toggle-show-more-wrapper button {
+    background: #f3f3f3 !important;
+    position: relative;
+}
+
+.branchpage .policy-descriptions-wrapper .toggle-show-more-wrapper::before {
+    content: '';
+    width: 100%;
+    position: absolute;
+    height: 1px;
+    left: 0px;
+    top: 11px;
+    background: #dbdbdb !important;
+}
+
+.branchpage .policy-descriptions-wrapper {
+    margin-bottom: 36px !important;
+}
+
+.iso-branchWayfinding {
+    padding-bottom: 40px;
+}
+
+.iso-nearByLocation {
+     padding-top: 46px; 
+}
+.iso-branchPolicies {
+    padding-top: 38px;
+}
+@media screen and (max-width:1055px) {
+    .cf.booking-widget.iso-heading {
+        width: 100%;
+    }
+
+}
+@media screen and (max-width:768px) {
+    #iso-reserve_sticky_btn.iso-block {
+        display: block !important;
+    }
+
+    .cf.booking-widget.iso-heading {
+        padding: 0px;
+        text-align: left;
+        margin-bottom: 19px;
+    }
+
+    .cf.booking-widget.iso-heading h1.alpha.reservation-toggle-header {
+        margin: 7px 49px 17px 40px !important;
+        text-align: left;
+    }
+    h1.alpha.reservation-toggle-header {
+     	padding-bottom: 0px; 
+	}
+
+    a.iso_reserve_vehicle_cta {
+        padding-left: 40px;
+        padding-right: 40px;
+        line-height: 24px;
+        display: block;
+    }
+
+    .iso-branchWayfinding {
+        padding-top: 40px;
+    }
+
+    .iso-nearByLocation {
+        padding-bottom: 40px;
+         padding-top: 0px; 
+    }
+    .booking-widget .booking-submit {
+	    margin-left: 1.875rem;
+	    margin-right: 1.875rem;
+	    width: calc(100% - 3.75rem);
+	}
+	div#iso-reserve_sticky_btn.iso-block.iso-hide {
+	    display: none !important;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'ENT',
+		test : 'Branch Page Redesign',
+		creative : 'Challenger 1',
+		selector: '#start-reservation',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		
+		},
+		chall: function () {
+	      var heading, reservationContainer, covidContainer, mapContainer, branchPolicies, branchWayfinding, locationOtherDetailsContainer, nearByLocation, sections;
+
+	      if (document.getElementsByTagName("section")[0]) {
+	        sections = document.getElementsByTagName("section")[0];
+
+	      }
+	      if(document.querySelectorAll('#start-reservation .inner-container .cf')[0]){
+	        heading = document.querySelectorAll('#start-reservation .inner-container .cf')[0];
+	        heading.classList.add('iso-heading');
+	        sections.prepend(heading);
+	      }
+	      if(document.querySelector('#start-reservation').parentElement){
+	        reservationContainer = document.querySelector('#start-reservation').parentElement;
+	        reservationContainer.classList.add('iso-reservationContainer');
+	        sections.appendChild(reservationContainer);
+	      }
+	      if(document.querySelector('.accordion')){
+	        covidContainer = document.querySelector('.accordion').parentElement.parentElement;
+	        covidContainer.classList.add('iso-covidContainer');
+	        sections.appendChild(covidContainer);
+	      }
+
+	      if(document.querySelector('#branch-policies')){
+	        branchPolicies = document.querySelector('#branch-policies').parentElement;
+	        branchPolicies.classList.add('iso-branchPolicies');
+	      }
+
+	      if (document.querySelector('#branch-wayfinding')) {
+	        branchWayfinding = document.querySelector('#branch-wayfinding').parentElement.parentElement;
+	        branchWayfinding.classList.add('iso-branchWayfinding');
+	      }
+
+	      if (document.querySelector('.location-other-details') && document.querySelector('.locationdetails-wrapper')) {
+	          locationOtherDetailsContainer = document.querySelector('.location-other-details');
+	          mapContainer = document.querySelector('.locationdetails-wrapper').parentElement;
+	           locationOtherDetailsContainer.closest('.band').parentElement.parentElement.classList.add('iso-locationOtherDetailsContainer');
+	          mapContainer.classList.add('iso-mapContainer');
+	          locationOtherDetailsContainer = locationOtherDetailsContainer.closest('.band').parentElement.parentElement;
+	          helpers.insertAfter(locationOtherDetailsContainer, mapContainer);
+
+	      }
+
+	      if (document.querySelector('#nearbylocationsDiv')) {
+	        nearByLocation = document.querySelector('#nearbylocationsDiv').parentElement.parentElement;
+	        nearByLocation.classList.add('iso-nearByLocation');
+	      }
+
+	      
+	      isoTest.addStickyButton(heading);
+	    },
+	    addStickyButton: function(heading){
+	      var subHead = '<a href="#reserve_vehicle" class="iso_reserve_vehicle_cta">Reserve a Vehicle at this location</a>';
+	      heading.innerHTML += subHead;
+
+	      var stickyBtn = '<a href="#reserve_vehicle" class="btn btn-next btn-next__compact">Start a Reservation</a>';
+	      document.body.append(isoTest.buildHTML('div', 'iso-reserve_sticky_btn', '', stickyBtn));
+	      
+	      
+
+	      document.querySelector('.iso_reserve_vehicle_cta').addEventListener('click', function(e){
+                isoTest.fireTag(this, 'Reserve a Vehicle at this location');
+				isoTest.scrollEvent();
+				document.querySelector('#iso-reserve_sticky_btn').classList.add('iso-hide');
+	      },false);   
+
+	      document.querySelector('#iso-reserve_sticky_btn').addEventListener('click', function(e){
+                isoTest.fireTag(this, 'Start a Reservation');
+				isoTest.scrollEvent();
+	      },false);   
+
+	      window.addEventListener("scroll", isoTest.myScrollFunc);
+	    },
+	     formHeight: function(){
+                var x = document.querySelector('.iso-reservationContainer').offsetTop - window.innerHeight;
+                return x;
+        },
+	    myScrollFunc: function(){
+
+
+	            var y = window.scrollY;   
+	                if(y > document.querySelector('.iso_reserve_vehicle_cta').offsetTop && y < isoTest.formHeight()){
+	                  document.getElementById("iso-reserve_sticky_btn").classList.add('iso-block');
+
+	                } else if(y > document.querySelector('.iso-covidContainer').offsetTop){
+	                	document.getElementById("iso-reserve_sticky_btn").classList.add('iso-block');
+
+	                }else{
+	                  document.getElementById("iso-reserve_sticky_btn").classList.remove('iso-block');
+
+
+	            }  
+	    },
+	    scrollEvent: function(){
+	    	  var scrollDiv = document.getElementById("start-reservation").offsetTop;
+	          window.scrollTo({ top: scrollDiv, behavior: 'smooth'});
+	          setTimeout(function(){
+	          	document.querySelector('#iso-reserve_sticky_btn').classList.remove('iso-hide');
+	          }, 500);
+	          
+	    },
+	    buildHTML: function (tag, id, className, body) {
+	      var x = document.createElement(tag);
+	      x.setAttribute("tabindex", "0");
+	      if (id) {
+	        x.setAttribute("id", id);
+	      }
+	      if (className) {
+	        x.setAttribute("class", className);
+	      }
+	      x.innerHTML = body;
+	      return x;
+	    },
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    insertAfter: function(newNode, existingNode){
+          existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+
+    	}
+	};
+
+	isoTest.init();
+})();
+</script>
