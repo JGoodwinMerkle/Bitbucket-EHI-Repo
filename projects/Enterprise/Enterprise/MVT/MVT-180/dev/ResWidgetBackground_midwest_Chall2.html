@@ -1,0 +1,338 @@
+<style>
+.pickup-calendar, .dropoff-calendar {
+    position: relative !important;
+}
+.iso-bg {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 369px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+section.cf.reserve-widget-band.colors.white {
+    position: relative;
+}
+
+	div#reservationWidget .inner-container {
+    background: white;
+    padding-top: 29px;
+    padding-right: 78px;
+    padding-left: 78px;
+    border: 1px solid #ccc;
+    z-index: 999;
+    position: relative;
+    margin-top: 151px;
+    margin-bottom: 38px;
+}
+
+.booking-widget {
+    width: 100%;
+}
+
+
+@media (min-width: 1025px){
+div#reservationWidget .inner-container {width:63em;}
+
+}
+
+
+@media (min-width: 768px) and (max-width: 1024px){
+div#reservationWidget .inner-container { 
+	width:100%;
+    border: none;
+	margin-top: 130px;
+	/*padding: 0;*/
+
+}
+.iso-bg{
+	height: 130px;
+}
+}
+
+
+@media (max-width: 767px){
+div#reservationWidget .inner-container {
+	padding: 0;
+    border: none;
+    margin-top: 90px;
+}
+.iso-bg{
+	height: 90px;
+}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'EHI',
+		test : 'Res Widget Background',
+		creative : 'Challenger 2',
+		selector: 'body',
+		state: '',
+		images: [ 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/midwest_1.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/midwest_2.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/midwest_3.png' ],
+		imagesBasedOnPickup: [
+			{
+				states: 'PA, NY, ME, VT, NH, MA, RI, CT, NJ, DE, MD', //North east
+				images: [ 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/east_1.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/east_2.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/east_3.png' ]
+
+			},
+			{
+				states: 'WA, OR, CA, NV, ID, AZ, UT, NM, CO, MT, WY, AK, HI', // West
+				images: [ 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/west_1.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/west_2.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/west_3.png' ]
+				
+			},
+			{
+				states: 'FL, GA, AL, MS, TN, KY, WV, VA, SC, LA, TX, OK, AR, SJU', //south
+				images: [ 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/south_1.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/south_2.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/south_3.png' ]
+				
+			},
+			{
+				states: 'ND, SD, NE, KS, MO, IA, MN, WI, IL, IN, MI, OH', // Midwest
+				images: [ 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/midwest_1.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/midwest_2.png', 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/midwest_3.png' ]
+				
+
+			}
+		],
+		debug: true,
+		init : function() {
+
+			// isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		chall : function() {
+			
+			isoTest.log('Midwest');
+
+			if((document.location.pathname === "/en/home.html") || (document.location.pathname === "/en/car-rental.html") ){
+				helpers.elementLoaded('#reservationWidget .inner-container', function() {
+				
+
+					isoTest.homePage();
+				
+				});
+			}
+
+			
+			if(document.location.hash === "#cars"){
+
+				var state;
+				var timer = setInterval(function(){
+
+					if(store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code != undefined){
+						state = store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code;
+						localStorage.setItem('isoMVT180PickupLocation', state);
+						clearInterval(timer);
+					}
+				}, 2000);
+
+				
+			}
+
+
+		},
+		homePage: function(){
+				function insertBefore(newNode, existingNode) {
+				    existingNode.parentNode.insertBefore(newNode, existingNode);
+				}
+				var ele = document.querySelector('.reserve-widget-band');
+				var index = 0; // first time
+
+				var hasSeenImage = localStorage.getItem('isoMVT180image');
+				var imageIndex = parseInt(localStorage.getItem('isoMVT180image'));
+				var lastPickedUpLocation = localStorage.getItem('isoMVT180PickupLocation');
+				var lastPickedUpLocationImage = localStorage.getItem('isoMVT180PickupImage');
+				var isoMVT180PickupLocationKeep = sessionStorage.getItem('isoMVT180PickupLocationKeep');
+				var lastPickedUpLocationImageIndex = parseInt(localStorage.getItem('isoMVT180PickupImage'));
+
+				var isUSLocation = false;
+				var activateGeo = false
+
+				if(lastPickedUpLocation){ // check if lastPickedUpLocation is of US states, if false then only geolocate images
+					isoTest.imagesBasedOnPickup.forEach( function(item) {
+							if(item.states.indexOf(lastPickedUpLocation) > -1){
+					    	
+								isUSLocation = true;
+									
+							}
+					});
+				}
+
+				isoTest.log('isUSLocation '+ isUSLocation);
+
+				if(lastPickedUpLocation){ // FL // returned visit
+						isoTest.log('pickuplocation exist');
+
+						if(sessionStorage.getItem('isoMVT180image') === null){ 
+							
+							if(lastPickedUpLocationImage){
+								index = lastPickedUpLocationImageIndex;
+								if(sessionStorage.getItem('isoMVT180PickupImage') === null){
+								
+							
+								    index++;
+								    isoTest.log(index);
+									isoTest.imagesBasedOnPickup.forEach( function(item) {
+										if(item.states.indexOf(lastPickedUpLocation) > -1){
+											index = index % item.images.length;
+										}
+									});
+									isoTest.log('New session Image should rotate');
+
+						
+								}
+							}
+
+							if(isoMVT180PickupLocationKeep !== null){  // same session ignore NEW pickup location
+								lastPickedUpLocation = isoMVT180PickupLocationKeep;
+								isoTest.log('Pickuplocation exist + same session');
+							}else if(isUSLocation === false){
+								isoTest.log('Activate GEO');
+								activateGeo = true;
+							}
+							
+							isoTest.log('lastPickedUpLocation ' + lastPickedUpLocation);
+
+							if(activateGeo === false){
+								isoTest.log('lastPickedUpLocation based images are shown');
+
+								isoTest.imagesBasedOnPickup.forEach( function(item) {
+										if(item.states.indexOf(lastPickedUpLocation) > -1){
+								    	
+											var newNode = isoTest.buildHTML('div', '','iso-bg', 'background-image: url(' + item.images[index] + ')' , '');
+											var existingNode = document.querySelector('#reservationWidget .inner-container');
+											insertBefore(newNode, existingNode);
+											localStorage.setItem('isoMVT180PickupImage',index);
+											sessionStorage.setItem('isoMVT180PickupImage','true');
+											sessionStorage.setItem('isoMVT180PickupLocationKeep', lastPickedUpLocation); //FL
+
+											localStorage.removeItem('isoMVT180image');
+												
+										}
+								});
+							}else{
+								isoTest.log('lastPickedUpLocation was outside US');
+								index = 0;
+								// ele.style.backgroundImage = 'url(' + isoTest.images[index] + ')';
+								var bgImage = 'background-image: url(' + isoTest.images[index] + ')';
+								var newNode = isoTest.buildHTML('div', '','iso-bg', bgImage , '');
+								isoTest.log(newNode);
+										var existingNode = document.querySelector('#reservationWidget .inner-container');
+										isoTest.log(existingNode);
+										insertBefore(newNode, existingNode);
+
+								localStorage.setItem('isoMVT180image',index);
+								sessionStorage.setItem('isoMVT180image','true');
+								localStorage.removeItem('isoMVT180PickupLocation');
+							}
+
+						}else{
+
+							// It will only run the first time user have pickuplocation and returns to HP in same session 
+							isoTest.log('The user returns to HP in the same session');
+
+							index = imageIndex;
+							var bgImage = 'background-image: url(' + isoTest.images[index] + ')';
+							var newNode = isoTest.buildHTML('div', '','iso-bg', bgImage , '');
+							isoTest.log(newNode);
+									var existingNode = document.querySelector('#reservationWidget .inner-container');
+									isoTest.log(existingNode);
+									insertBefore(newNode, existingNode);
+
+							localStorage.setItem('isoMVT180image',index);
+							sessionStorage.setItem('isoMVT180image','true');
+
+						}
+						
+
+						
+				}else{
+				
+					
+					if(hasSeenImage != null){ // returned visit
+						    index = imageIndex;
+
+						if(sessionStorage.getItem('isoMVT180image') === null){ // Not same session
+						    index++;
+						    isoTest.log(index);
+						    index = index % isoTest.images.length; // revert index to first image
+						}
+					}
+					
+
+					    
+					// ele.style.backgroundImage = 'url(' + isoTest.images[index] + ')';
+					var bgImage = 'background-image: url(' + isoTest.images[index] + ')';
+					var newNode = isoTest.buildHTML('div', '','iso-bg', bgImage , '');
+					isoTest.log(newNode);
+							var existingNode = document.querySelector('#reservationWidget .inner-container');
+							isoTest.log(existingNode);
+							insertBefore(newNode, existingNode);
+
+					localStorage.setItem('isoMVT180image',index);
+					sessionStorage.setItem('isoMVT180image','true');
+
+
+				}
+			
+		},
+		
+		buildHTML: function(tag, id, className, attr, body){
+		
+            var x = document.createElement(tag);
+            if(id){
+                x.setAttribute('id', id);
+            }
+            if(className){
+                x.setAttribute('class', className);
+            }
+            if(attr){
+                x.setAttribute('style', attr);
+            }
+            x.innerHTML = body;
+            return x;
+    	},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
