@@ -1,0 +1,1064 @@
+<style>
+body {
+  position: relative;
+}
+.iso-modal-open {
+  height: 100%;
+  overflow: hidden;
+}
+.iso-modal-content {
+  padding: 34px 31px;
+}
+.form-checkbox__control {
+  margin-right: 4px;
+}
+
+.vehicle-item__details {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+}
+.vehicle-item__details > .btn {
+  margin-left: 12px;
+}
+.vehicle-item__details > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0px;
+  position: absolute;
+  left: 485px;
+  top: -65px;
+  z-index: 4;
+}
+
+.iso-label {
+  display: flex;
+  flex-direction: row-reverse;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.iso-bottom-overlay {
+  display: flex;
+  background: #15804d;
+  flex-direction: column;
+  color: white;
+  align-items: center;
+  padding: 12px 18px;
+  padding-bottom: 33px;
+  width: 100%;
+  max-width: 375px;
+  margin-left: 100px;
+  position: fixed;
+  z-index: 6;
+  box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px 8px 0px 0px;
+  bottom: -300px;
+  transition: bottom 0.3s;
+}
+.iso-bottom-overlay.iso-compared.iso-hide {
+  bottom: -300px;
+  transition: bottom 0.3s;
+}
+.iso-info-txt {
+  text-decoration: underline;
+  margin-bottom: 8px;
+}
+.iso-bottom-overlay > .iso-info-txt {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  padding: 0;
+  width: auto;
+  height: auto;
+  text-transform: none;
+}
+
+.iso-bottom-overlay > button {
+  width: 100%;
+  background: transparent;
+  border: 2px solid white;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  letter-spacing: 0.36px;
+  opacity: 1;
+}
+.iso-bottom-overlay > button:disabled {
+  opacity: 0.4;
+}
+.iso-bottom-overlay > .iso-selected {
+  opacity: 1;
+}
+.iso-compare-box {
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.iso-compare-item {
+  position: relative;
+  background: white;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  margin-bottom: 12px;
+  align-content: center;
+  flex-direction: row;
+  padding: 6px 12px;
+  transition: all 0.3s;
+}
+.iso-compare-item img {
+  height: 128%;
+  max-width: 70px;
+  transform: translate(-3px, -5px);
+}
+.iso-compare-item > h2 {
+  width: fit-content;
+  width: -moz-fit-content;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: auto 10px;
+  color: black;
+  margin-right: 16px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 28px;
+}
+.iso-close {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 8px;
+  justify-content: center;
+  align-items: center;
+}
+.iso-close:before,
+.iso-close:after {
+  position: absolute;
+  content: " ";
+  height: 24px;
+  width: 1.3px;
+  background-color: hsl(151deg 72% 29%);
+}
+
+.iso-close:before {
+  transform: rotate(45deg);
+}
+
+.iso-close:after {
+  transform: rotate(-45deg);
+}
+.iso-close {
+  opacity: 1;
+}
+/* overlay transition */
+.iso-compared {
+  bottom: 0;
+  transition: bottom 0.3s;
+}
+
+.compare-vehicle {
+  height: fit-content;
+  height: -moz-fit-content;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+.compare-vehicle > div {
+  background: hsl(0deg 0% 95%);
+  padding: 24px 16px;
+  flex: 1 1;
+  min-height: 334px;
+  max-height: 374px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-between;
+  align-items: center;
+}
+.compare-vehicle > div::before {
+  background: white;
+  position: absolute;
+  z-index: 0;
+  content: "";
+  width: 100%;
+  height: 36%;
+  top: 0;
+  left: 0;
+}
+.iso-m-vh-0 {
+  margin-right: 2px;
+}
+.iso-m-vh-1 {
+  margin-left: 2px;
+}
+.compare-vehicle h2 {
+  margin-bottom: 8px;
+  font-family: DIN 2014;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  /* line-height: 24px; */
+}
+.compare-vehicle p {
+  font-size: 14px;
+  /* line-height: 28px; */
+  text-align: center;
+  letter-spacing: -0.25px;
+  color: #393a3b;
+}
+.compare-vehicle img {
+  position: relative;
+  z-index: 1;
+}
+.iso-modal-vhInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.iso-modal-title {
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  font-family: DIN 2014;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 28px;
+  text-align: center;
+  letter-spacing: -0.1px;
+  text-transform: uppercase;
+  color: #181918;
+}
+.iso-modal-pricing,
+.iso-modal-transmission,
+.iso-modal-features,
+.iso-modal-passenger,
+.iso-modal-baggage {
+  display: flex;
+  margin-bottom: 14px;
+}
+
+.iso-modal-trans-0,
+.iso-modal-trans-1,
+.iso-modal-feat-0,
+.iso-modal-feat-1,
+.iso-modal-bagg-0,
+.iso-modal-bagg-1,
+.iso-modal-pass-0,
+.iso-modal-pass-1,
+.iso-modal-price-0,
+.iso-modal-price-1 {
+  text-align: right;
+  margin: 12px 0;
+  padding: 0 40px;
+  font-family: DIN 2014;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.5px;
+  color: #000000;
+}
+
+.iso-modal-feat-0,
+.iso-modal-bagg-0,
+.iso-modal-pass-0,
+.iso-modal-trans-0,
+.iso-modal-price-0 {
+  border-right: 2px solid hsl(210deg 13% 32%);
+  transform: translateX(0.2px);
+  padding-left: 0;
+}
+.iso-modal-feat-1,
+.iso-modal-bagg-1,
+.iso-modal-pass-1,
+.iso-modal-trans-1,
+.iso-modal-price-1 {
+  padding-right: 0;
+}
+
+.iso-modal-feat-0 ul {
+  list-style: none;
+  text-align: right;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.5px;
+}
+.iso-modal-feat-1 ul {
+  align-items: flex-start;
+  text-align: left;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.5px;
+}
+.iso-modal-features li {
+  display: block;
+}
+
+.form-checkbox__control + .icon-check-green {
+  display: none !important;
+}
+
+.iso-compare-input > *:last-child {
+  display: none;
+}
+.ReactModal__Content--after-open.default-modal {
+  max-width: 719px;
+
+  margin: 3% auto 3%;
+}
+
+.ReactModal__Overlay--after-open.modal-overlay {
+  overflow-y: scroll;
+}
+
+/* media queries */
+@media screen and (max-width: 1400px) {
+  .vehicle-item__details > div {
+    left: calc(100vw - 88%);
+  }
+}
+
+@media screen and (max-width: 1241px) {
+  .vehicle-item__details > div {
+    padding: 0;
+    position: relative;
+    left: 224px;
+    top: -16px;
+  }
+}
+
+@media screen and (max-width: 1136px) {
+  .vehicle-item__details {
+    position: relative;
+    top: -16px;
+  }
+  .vehicle-item__toggle-details-button,
+  .vehicle-item__details > div {
+    position: relative;
+    left: 0;
+    top: 0;
+  }
+}
+
+@media screen and (max-width: 1135px) {
+  .vehicle-item__details > div {
+    position: relative;
+  }
+  .iso-bottom-overlay {
+    margin: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media screen and (max-width: 675px) {
+  .vehicle-item__details {
+    justify-content: space-between;
+    margin-right: 8px;
+  }
+}
+@media screen and (max-width: 654px) {
+  .vehicle-item__details {
+    position: static;
+  }
+  .vehicle-item__details > div {
+    padding: 12px 16px;
+    margin-right: 8px;
+    position: relative;
+    left: 0;
+    top: 0;
+    z-index: initial;
+  }
+  .iso-bottom-overlay {
+    left: 0;
+    transform: translateX(0%);
+    max-width: 100%;
+  }
+}
+</style>
+
+<script>
+(function () {
+  "use strict";
+  var isoTest = {
+    account: "Enterprise",
+    portfolio: "EHI",
+    test: "",
+    creative: "Challenger 1",
+    selector: ".vehicle-select .vehicle-list",
+    debug: false,
+    init: function () {
+      // isoTest.debug = ${user.mvtDebug};
+
+      // if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+      // _satellite.setVar('TargetCampaign', isoTest.test);
+      // _satellite.setVar('TargetCreative', isoTest.creative);
+      //_satellite.track('target_variables');
+      // }
+
+      isoTest.log("Test Running...");
+      isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+      isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+      helpers.elementLoaded(isoTest.selector, function () {
+        isoTest.log("Test Ready!");
+        isoTest.chall();
+        helpers.elementLoaded(
+          ".vehicle-select__aside .vehicle-filter__header-title",
+          isoTest.filterChangeHandler
+        );
+      });
+      isoTest.viewChange();
+    },
+    viewChange: function () {
+      window.addEventListener(
+        "hashchange",
+        function () {
+          var timer = setInterval(function () {
+            if (
+              document.querySelector("#loader .spinner-container") === null &&
+              document.querySelector(
+                ".vehicle-select .vehicle-select__main .transition"
+              ) === null
+            ) {
+              if (/cars/.test(location.hash)) {
+                helpers.elementLoaded(isoTest.selector, isoTest.chall);
+                helpers.elementLoaded(
+                  ".vehicle-select__aside .vehicle-filter__header-title",
+                  isoTest.filterChangeHandler
+                );
+              } else if (/extras/.test(location.hash)) {
+                document.querySelector(".iso-bottom-overlay") && document.querySelector(".iso-bottom-overlay").remove();
+              }
+              clearInterval(timer);
+            }
+          }, 100);
+        },
+        false
+      );
+    },
+    filterChangeHandler: function () {
+      var targetNode = document.querySelector(
+        ".vehicle-select__aside .vehicle-filter__header-title"
+      );
+      var config = { characterData: true, childList: true, subtree: true };
+      var callback = function (mutationsList, observer) {
+        for (var i = 0; i < mutationsList.length; i++) {
+          var addedNodes = mutationsList[i].addedNodes;
+          var removedNodes = mutationsList[i].removedNodes;
+          // IF FILTER IS CHANGED
+          if (mutationsList[i].type == "characterData") {
+            setTimeout(function () {
+              helpers.elementLoaded(isoTest.selector, isoTest.chall);
+            }, 200);
+          }
+          // IF FILTER IS ADDED
+          for (var j = 0; j < addedNodes.length; j++) {
+            var el =
+              addedNodes[j].tagName &&
+              addedNodes[j].classList.contains(
+                "vehicle-filter__amount-selected"
+              );
+            if (el) {
+              setTimeout(function () {
+                helpers.elementLoaded(isoTest.selector, isoTest.chall);
+              }, 200);
+            }
+          }
+          // IF FILTER IS REMOVED
+          var removedNodes = mutationsList[i].removedNodes;
+          for (var j = 0; j < removedNodes.length; j++) {
+            var el =
+              removedNodes[j].tagName &&
+              removedNodes[j].classList.contains(
+                "vehicle-filter__amount-selected"
+              );
+            if (el) {
+              setTimeout(function () {
+                helpers.elementLoaded(isoTest.selector, isoTest.chall);
+              }, 200);
+            }
+          }
+        }
+      };
+      var observer = new MutationObserver(callback);
+      observer.observe(targetNode, config);
+    },
+    changeCompareWidgetText: function () {
+      if (isoTest.compareItemsChecked == 1) {
+        document.querySelector(".iso-info-txt").innerText =
+          "Select 1 more vehicle to compare";
+      } else if (isoTest.compareItemsChecked == 2) {
+        document.querySelector(".iso-info-txt").innerText = "Clear All";
+      }
+    },
+    syncCompareItemHandler: function (index) {
+      --isoTest.compareItemsChecked;
+      if (isoTest.compareItemsChecked == 0) {
+        document
+          .querySelector(".iso-bottom-overlay")
+          .classList.remove("iso-compared");
+      }
+      document.querySelector(
+        '.iso-checkbox[iso-check="' + index + '"]'
+      ).checked = false;
+      isoTest.changeCompareWidgetText();
+    },
+    removeCompareItemHandler: function (index) {
+      document
+        .querySelector('.iso-compare-item[iso-data-index="' + index + '"]')
+        .remove();
+      document.querySelector(".iso-open-modal").disabled = true;
+      isoTest.changeCompareWidgetText();
+    },
+    addCompareItemHandler: function (src, txt, index) {
+      var compareVehicleHTML =
+        "" +
+        '      <img src="' +
+        src +
+        '" alt=""/>' +
+        "      <h2>" +
+        txt +
+        "</h2>" +
+        '      <a href="javascript:void(0)" class="iso-close" aria-label="Close"></a>';
+
+      var compareVehicle = document.createElement('div');
+      compareVehicle.className = 'iso-compare-item';
+      compareVehicle.setAttribute('iso-data-index', index);
+      compareVehicle.innerHTML = compareVehicleHTML;
+      compareVehicle.addEventListener('click', function(e) {
+        e.preventDefault();
+        this.closest(".iso-compare-item").remove();
+        document.querySelector(".iso-open-modal").disabled = true;
+        isoTest.syncCompareItemHandler(
+          this.closest(".iso-compare-item").getAttribute("iso-data-index")
+        );
+        isoTest.fireTag('', 'Compare Modal Remove')
+      })
+
+      document
+        .querySelector(".iso-compare-box")
+        .insertAdjacentElement("beforeend", compareVehicle);
+      document
+        .querySelector(".iso-bottom-overlay")
+        .classList.add("iso-compared");
+      if (isoTest.compareItemsChecked > 1) {
+        document.querySelector(".iso-open-modal").disabled = false;
+      }
+      isoTest.changeCompareWidgetText();
+    },
+    getCompareFeaturesHTML: function (feature1, feature2) {
+      var feature1Array = [];
+      var feature2Array = [];
+      feature1.forEach(function (item) {
+        feature1Array.push(item.innerText);
+      });
+      feature2.forEach(function (item) {
+        feature2Array.push(item.innerText);
+      });
+
+      if (feature1Array.length > feature2Array.length) {
+        for (var i = 0; i < feature1Array.length; i++) {
+          var idx = feature2Array.indexOf(feature1Array[i]);
+          if (idx != -1) {
+            var temp = feature2Array[idx];
+            feature2Array[idx] = feature2Array[i];
+            feature2Array[i] = temp;
+          } else {
+            feature2Array.splice(i, 0, "-");
+          }
+        }
+      } else {
+        for (var i = 0; i < feature2Array.length; i++) {
+          var idx = feature1Array.indexOf(feature2Array[i]);
+          if (idx != -1) {
+            var temp = feature1Array[idx];
+            feature1Array[idx] = feature1Array[i];
+            feature1Array[i] = temp;
+          } else {
+            feature1Array.splice(i, 0, "-");
+          }
+        }
+      }
+
+      var feature1HTML = "";
+      var feature2HTML = "";
+      feature1Array.forEach(function (item, index) {
+        feature1HTML += "<li>" + feature1Array[index] + "</li>";
+        feature2HTML += "<li>" + feature2Array[index] + "</li>";
+      });
+
+      return (
+        "" +
+        '   <span class="iso-modal-feat-0">' +
+        '      <ul class="" style="">' +
+        "         " +
+        feature1HTML +
+        "      </ul>" +
+        '   </span> <span class="iso-modal-feat-1">' +
+        '      <ul class="" style="">' +
+        "         " +
+        feature2HTML +
+        "      </ul>" +
+        "   </span> "
+      );
+    },
+    triggerModalHandler: function (idx1, idx2) {
+      document
+        .querySelector(".iso-bottom-overlay")
+        .classList.remove("iso-compared");
+      var vehicleItem1 = document
+        .querySelector('.iso-checkbox[iso-check="' + idx1 + '"]')
+        .closest(".vehicle-item");
+      var vehicleItem2 = document
+        .querySelector('.iso-checkbox[iso-check="' + idx2 + '"]')
+        .closest(".vehicle-item");
+
+        var bag1 = vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[2].innerText.match(/\d/g)[0];
+        var bag2 = vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[2].innerText.match(/\d/g)[0];
+        var pass1 = vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[1].innerText.match(/\d/g)[0];
+        var pass2 = vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[1].innerText.match(/\d/g)[0];
+
+        
+
+      var modalHTML =
+        "" +
+        '  <div class="iso-location-filters-modal iso-modal">\
+        <div class="ReactModal__Overlay ReactModal__Overlay--after-open modal-overlay" aria-modal="true">\
+            <div class="ReactModal__Content ReactModal__Content--after-open default-modal" role="dialog" aria-describedby="modal-context">\
+                <div class="modal-inner">\
+                    <div class="modal-header">\
+                        <div class="iso-modal-title"></div>\
+                        <button id="iso-close-modal" class="close-modal iso-modal-close-icon" aria-label="Close" type="button"><i class="icon icon-close-x-white" aria-hidden="true">X</i></button>\
+                    </div>' +
+        '              <div class="iso-selected-compare">' +
+        '  <div class="iso-compare-wrapper">' +
+        '      <div class="compare-vehicle">' +
+        '          <div class="iso-m-vh-0"> <img src="' +
+        vehicleItem1
+          .querySelector(".vehicle-item__image img")
+          .getAttribute("src") +
+        '" alt="">' +
+        "          <div>" +
+        '              <h2 class="iso-m-title-0">' +
+        vehicleItem1.querySelector(".vehicle-item__title").innerText +
+        "</h2>" +
+        '              <p class="iso-m-model-0">' +
+        vehicleItem1.querySelector(".vehicle-item__models").innerText +
+        '</p> </div> <button type="button" class="vehicle-pricing__button vehicle-pricing__button--select iso-select-btn1" aria-label="" iso-btn-idx="'+idx1+'">SELECT</button>' +
+        "          </div>" +
+        '          <div class="iso-m-vh-1"> <img src="' +
+        vehicleItem2
+          .querySelector(".vehicle-item__image img")
+          .getAttribute("src") +
+        '" alt="">' +
+        "          <div>" +
+        '              <h2 class="iso-m-title-1">' +
+        vehicleItem2.querySelector(".vehicle-item__title").innerText +
+        "</h2>" +
+        '              <p class="iso-m-model-1">' +
+        vehicleItem2.querySelector(".vehicle-item__models").innerText +
+        '</p></div> <button type="button" class="vehicle-pricing__button vehicle-pricing__button--select iso-select-btn2" aria-label="" iso-btn-idx="'+idx2+'">SELECT</button>' +
+        "          </div>" +
+        "      </div>" +
+        '      <div class="iso-modal-vhInfo">' +
+        "          <div>" +
+        '              <p class="iso-modal-title">Total price</p>' +
+        '              <div class="iso-modal-pricing"> <span class="iso-modal-price-0">' +
+        vehicleItem1.querySelectorAll(".price-tile .price-tile__amount")[1]
+          .innerText +
+        '</span> <span class="iso-modal-price-1">' +
+        vehicleItem2.querySelectorAll(".price-tile .price-tile__amount")[1]
+          .innerText +
+        "</span> </div>" +
+        "          </div>" +
+        "          <div>" +
+        '              <p class="iso-modal-title">Transmission</p>' +
+        '              <div class="iso-modal-transmission"> <span class="iso-modal-trans-0">' +
+        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
+        '                              class="icon icon-specs-transmission-gray"></i>' +
+        vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[0]
+          .innerText +
+        "</li>" +
+        '                  </span> <span class="iso-modal-trans-1">' +
+        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
+        '                              class="icon icon-specs-transmission-gray"></i>' +
+        vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[0]
+          .innerText +
+        "</li>" +
+        "                  </span> </div>" +
+        "          </div>" +
+        "          <div>" +
+        '              <p class="iso-modal-title">Features</p>' +
+        '              <div class="iso-modal-features">' +
+        isoTest.getCompareFeaturesHTML(
+          vehicleItem1.querySelectorAll(".vehicle-details__feature-list > li"),
+          vehicleItem2.querySelectorAll(".vehicle-details__feature-list > li")
+        ) +
+        "</div>" +
+        "          </div>" +
+        "          <div>" +
+        '              <p class="iso-modal-title">Baggage capacity</p>' +
+        '              <div class="iso-modal-passenger"> <span class="iso-modal-pass-0">' +
+        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
+        '                              class="icon icon-specs-bags-gray"></i>' +
+        vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[2]
+          .innerText.match(/\d/g)[0] +
+        "</li>" +
+        '                  </span> <span class="iso-modal-pass-1">' +
+        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
+        '                              class="icon icon-specs-bags-gray"></i>' +
+        vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[2]
+          .innerText.match(/\d/g)[0] +
+        "</li>" +
+        "                  </span> </div>" +
+        "          </div>" +
+        "          <div>" +
+        '              <p class="iso-modal-title">passenger seats</p>' +
+        
+        '              <div class="iso-modal-baggage"> <span class="iso-modal-bagg-0">' +
+        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
+        '                              class="icon icon-specs-passenger-gray"></i>' +
+        vehicleItem1.querySelectorAll(".vehicle-item__attribute-item")[1]
+          .innerText.match(/\d/g)[0] +
+        "</li>" +
+        '                  </span> <span class="iso-modal-bagg-1">' +
+        '                      <li class="vehicle-item__attribute-item" style="margin-right:0;"> <i' +
+        '                              class="icon icon-specs-passenger-gray"></i>' +
+        vehicleItem2.querySelectorAll(".vehicle-item__attribute-item")[1]
+          .innerText.match(/\d/g)[0] +
+        "</li>" +
+        "                  </span> </div>" +
+        "          </div>" +
+        "      </div>" +
+        "  </div>" +
+        "              </div>" +
+        "          </div>" +
+        "      </div>" +
+        "  </div></div>";
+      if (
+        document.querySelector(".iso-modal.iso-location-filters-modal") != null
+      ) {
+        document
+          .querySelector(".iso-modal.iso-location-filters-modal")
+          .remove();
+      }
+      document.body.insertAdjacentHTML("afterbegin", modalHTML);
+      var modalFocus = document.querySelector(
+        ".iso-modal.iso-location-filters-modal"
+      );
+      modalFocus.querySelector(".close-modal").focus();
+      isoTest.keepFocus(modalFocus);
+      document
+        .querySelector(".iso-modal-close-icon")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          this.closest(".iso-modal").remove();
+          document
+              .querySelector(".iso-bottom-overlay") && document
+            .querySelector(".iso-bottom-overlay")
+            .classList.add("iso-compared");
+        });
+      document
+        .querySelector(".iso-modal .modal-overlay")
+        .addEventListener("click", function (e) {
+          if (
+            e.target.closest(".default-modal") !=
+            document.querySelector(".modal-overlay .default-modal")
+          ) {
+            this.closest(".iso-modal").remove();
+            document
+              .querySelector(".iso-bottom-overlay") && document
+              .querySelector(".iso-bottom-overlay")
+              .classList.add("iso-compared");
+          }
+        });
+      modalFocus.addEventListener(
+        "keydown",
+        function (e) {
+          var keyCode = e.which || e.keyCode;
+          if (keyCode == 27) {
+            this.closest(".iso-modal").remove();
+            document
+              .querySelector(".iso-bottom-overlay")
+              .classList.add("iso-compared");
+          }
+        },
+        false
+      );
+
+      document.querySelectorAll('.iso-select-btn2, .iso-select-btn1').forEach(function(item) {
+        item.addEventListener('click', function() {
+          var idx = this.getAttribute('iso-btn-idx');
+          document.querySelector('.iso-compare-input .iso-checkbox[iso-check="'+idx+'"]').closest('.vehicle-item').querySelector('.vehicle-pricing__button').click();
+          document.querySelector('.iso-location-filters-modal.iso-modal').remove();
+          document.querySelector(".iso-bottom-overlay").remove();
+          isoTest.fireTag('', 'Select');
+        })
+      })
+
+    },
+    keepFocus: function (context) {
+      var keyListener = function (e) {
+        var keyCode = e.which || e.keyCode;
+        e.preventDefault =
+          e.preventDefault ||
+          function () {
+            e.returnValue = false;
+          };
+
+        if (e.shiftKey) {
+          /* shift + tab */ if (keyCode === 9) {
+            if (
+              document.activeElement ===
+              document.querySelector("#iso-close-modal")
+            ) {
+              e.preventDefault();
+              document.querySelector(".iso-select-btn2").focus();
+            }
+          }
+        } /* tab */ else {
+          if (keyCode === 9) {
+            if (
+              document.activeElement ===
+              document.querySelector(".iso-select-btn2")
+            ) {
+              e.preventDefault();
+              document.querySelector("#iso-close-modal").focus();
+            }
+          }
+        }
+      };
+      var context = document.querySelector(
+        ".iso-modal.iso-location-filters-modal"
+      );
+
+      context.addEventListener("keydown", keyListener, false);
+
+      document
+        .querySelector(".iso-modal.iso-location-filters-modal .close-modal")
+        .addEventListener(
+          "click",
+          function (e) {
+            context.removeEventListener("keydown", keyListener, false);
+          },
+          false
+        );
+    },
+    compareItemsChecked: 0,
+    chall: function () {
+      // Add Compare overlay component on lower bottom screen;
+      var overlayElement =
+        "" +
+        ' <div role="banner" class="iso-bottom-overlay">' +
+        '     <button class="iso-info-txt">Select 1 more vehicle to compare </button>' +
+        '     <div class="iso-compare-box"></div>' +
+        '     <button class="iso-open-modal" disabled="disabled">COMPARE (2) VEHICLES</button>' +
+        "  </div>";
+
+      if (document.querySelector(".iso-bottom-overlay") != null) {
+        document.querySelector(".iso-bottom-overlay").remove();
+      }
+      if (
+        document.querySelector(
+          ".vehicle-select__main > ul.vehicle-list .vehicle-list__empty-message:not(:first-child)"
+        ) != null
+      ) {
+        document.body.insertAdjacentHTML("afterbegin", overlayElement);
+      }
+
+      isoTest.compareItemsChecked = 0;
+      // ADDING CHECKBOX FOR EVERY VEHICLE ITEM
+      document
+        .querySelectorAll(".vehicle-item .vehicle-item__details")
+        .forEach(function (item, index) {
+          var compareInputHTML =
+            "" +
+            '  <div class="iso-compare-input">' +
+            '      <label class="iso-label">' +
+            "          Compare" +
+            '          <input type="checkbox" class="form-checkbox__input is-vishidden iso-checkbox" iso-check="' +
+            index +
+            '">' +
+            '          <span class="form-checkbox__control">' +
+            '              <i class="icon icon-check-green">' +
+            "          </span>" +
+            "      </label>" +
+            "  </div>";
+          if (item.querySelector(".iso-compare-input")) {
+            item.querySelector(".iso-compare-input").remove();
+          }
+          if (
+            !item
+              .closest(".vehicle-item")
+              .querySelector(".vehicle-item__title")
+              .innerText.includes("You Click. We Pick.")
+          ) {
+            item.insertAdjacentHTML("beforeend", compareInputHTML);
+          }
+        });
+
+      document
+        .querySelectorAll(".iso-compare-input .iso-checkbox")
+        .forEach(function (item) {
+          item.addEventListener("click", function (e) {
+            var vehicleImg = this.closest(".vehicle-item")
+              .querySelector(".vehicle-item__image img")
+              .getAttribute("src");
+            var vehicleName = this.closest(".vehicle-item").querySelector(
+              ".vehicle-item__title"
+            ).innerText;
+            var checkId = this.getAttribute("iso-check");
+            if (isoTest.compareItemsChecked > 1 && this.checked) {
+              e.preventDefault();
+            } else if (this.checked) {
+              isoTest.compareItemsChecked++;
+              isoTest.addCompareItemHandler(vehicleImg, vehicleName, checkId);
+              isoTest.fireTag('', 'compare checkbox checked');
+              isoTest.fireTag89('', 'compare: '+this.closest('.vehicle-item').querySelector('.vehicle-item__tour-info').innerText+'');
+            } else if (!this.checked) {
+              isoTest.compareItemsChecked--;
+              isoTest.removeCompareItemHandler(checkId);
+              if (isoTest.compareItemsChecked < 1 && !this.checked) {
+                document
+                  .querySelector(".iso-bottom-overlay")
+                  .classList.remove("iso-compared");
+              }
+              isoTest.fireTag('', 'compare checkbox unchecked');
+            }
+          });
+        });
+
+      document.querySelector('.iso-open-modal').addEventListener('click', function () {
+        var item1 = document
+          .querySelectorAll(".iso-compare-box .iso-compare-item")[0]
+          .getAttribute("iso-data-index");
+        var item2 = document
+          .querySelectorAll(".iso-compare-box .iso-compare-item")[1]
+          .getAttribute("iso-data-index");
+        isoTest.triggerModalHandler(item1, item2);
+        isoTest.fireTag('', 'Compare CTA')
+      });
+
+      document.querySelector(".iso-info-txt").addEventListener('click', function () {
+        if (this.innerText.includes("Clear")) {
+          isoTest.fireTag('', 'Compare Modal Clear All')
+          document.querySelector(".iso-compare-box").innerHTML = "";
+          document
+            .querySelectorAll(".iso-compare-input input:checked")
+            .forEach(function (item) {
+              item.checked = false;
+            });
+          document
+            .querySelector(".iso-bottom-overlay")
+            .classList.remove("iso-compared");
+          isoTest.compareItemsChecked = 0;
+          document.querySelector(".iso-open-modal").disabled = true;
+        }
+      });
+    },
+
+    fireTag: function (element, value) {
+      var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+      s.linkTrackVars = "eVar20";
+      s.eVar20 = linkName;
+      s.tl(this, "o", linkName);
+    },
+    fireTag89: function (element, value) {
+      var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+      s.linkTrackVars = "eVar89";
+      s.eVar89 = linkName;
+      s.tl(this, "o", linkName);
+    },
+    log: function (obj) {
+      if (isoTest.debug === true) {
+        console.log(obj);
+      }
+    },
+  };
+
+  var helpers = {
+    elementLoaded: function (ele, callback) {
+      isoTest.log("elementLoaded::  " + ele + " - Checking...");
+      window.clearTimeout(isoTest.eleTimer);
+      if (document.querySelectorAll(ele).length > 0) {
+        if (typeof callback === "function") {
+          isoTest.log("elementLoaded::  " + ele + " - Found!");
+          callback();
+        }
+      } else {
+        isoTest.eleTimer = window.setTimeout(function () {
+          helpers.elementLoaded(ele, callback);
+        }, 100);
+      }
+    },
+    live: function (event, selector, callback, context) {
+      // helper for enabling IE 8 event bindings
+      function addEvent(el, type, handler) {
+        if (el.attachEvent) el.attachEvent("on" + type, handler);
+        else el.addEventListener(type, handler);
+      }
+      // matches polyfill
+      this.Element &&
+        (function (ElementPrototype) {
+          ElementPrototype.matches =
+            ElementPrototype.matches ||
+            ElementPrototype.matchesSelector ||
+            ElementPrototype.webkitMatchesSelector ||
+            ElementPrototype.msMatchesSelector ||
+            function (selector) {
+              var node = this,
+                nodes = (node.parentNode || node.document).querySelectorAll(
+                  selector
+                ),
+                i = -1;
+              while (nodes[++i] && nodes[i] != node);
+              return !!nodes[i];
+            };
+        })(Element.prototype);
+      // live binding helper using matchesSelector
+      function live(selector, event, callback, context) {
+        addEvent(context || document, event, function (e) {
+          var found,
+            el = e.target || e.srcElement;
+          while (
+            el &&
+            el.matches &&
+            el !== context &&
+            !(found = el.matches(selector))
+          )
+            el = el.parentElement;
+          if (found) callback.call(el, e);
+        });
+      }
+      live(selector, event, callback, context);
+    },
+  };
+
+  isoTest.init();
+})();
+</script>
