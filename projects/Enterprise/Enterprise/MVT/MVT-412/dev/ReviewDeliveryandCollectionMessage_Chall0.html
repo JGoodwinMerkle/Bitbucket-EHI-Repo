@@ -1,0 +1,120 @@
+<style>
+	.d-dac-banner {
+		align-items: center;
+		background-color: #fff;
+		border: 1px solid #e6e6e6;
+		display: inline-flex;
+		margin-bottom: 40px;
+		padding: 16px 21px;
+		width: 100%;
+	}
+	.d-dac-banner-icon {
+		margin-right: 21px;
+		min-width: 20px;
+	}
+	.d-dac-banner p {
+		font-size: .9375rem;
+		margin-bottom: 0;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Review Delivery and Collection Message',
+		creative : 'Challenger 0',
+		selector : '#commit .aside',
+		template : '<div class="d-dac-banner">\
+						<div class="d-dac-banner-icon">\
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11.07 15.67"><defs><style>.cls-1{fill:#211915;}</style></defs><title>phone</title><g id="Camada_2" data-name="Camada 2"><g id="Layer_1" data-name="Layer 1"><path class="cls-1" d="M8.93,15.67H2.14A2.14,2.14,0,0,1,0,13.54V2.14A2.14,2.14,0,0,1,2.14,0H8.93a2.14,2.14,0,0,1,2.14,2.14v11.4A2.14,2.14,0,0,1,8.93,15.67ZM2.14,1.31a.83.83,0,0,0-.83.83v11.4a.83.83,0,0,0,.83.83H8.93a.83.83,0,0,0,.83-.83V2.14a.83.83,0,0,0-.83-.83Z"/><path class="cls-1" d="M5.59,13.05A1.31,1.31,0,1,1,6.9,11.74,1.31,1.31,0,0,1,5.59,13.05Zm0-1.31h0Z"/><path class="cls-1" d="M7.73,9.14H3.45A1.12,1.12,0,0,1,2.33,8V6.82h1.3v1H7.55v-1H8.86V8A1.13,1.13,0,0,1,7.73,9.14Z"/></g></g></svg>\
+						</div>\
+						<p>This location offers delivery and collection. Call the location to arrange. See confirmation email for branch details.</p>\
+					</div>',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/commit/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			if(!document.querySelector('.d-dac-banner')){
+				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',isoTest.template);
+			}
+
+			isoTest.resizeLogic();
+
+		},
+		resizeLogic : function() {
+			var banner = document.querySelector('.d-dac-banner');
+			var reviewSection = document.querySelector('.review-section');
+			var asideSection = document.querySelector('.aside');
+			var mQ = window.matchMedia('(max-width: 748px)');
+			
+			// Relocate countdown module depending on screen width
+			function handleTabletChange(e) {
+				if (e.matches) {
+					isoTest.log('mQ: W < 748px');
+					reviewSection.insertAdjacentElement('afterbegin',banner);
+				} else {
+					isoTest.log('mQ: W > 748px');
+					asideSection.insertAdjacentElement('afterbegin',banner);
+				}
+			}
+
+			// Register event listener
+			mQ.addListener(handleTabletChange);
+
+			// Initial check
+			handleTabletChange(mQ);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
