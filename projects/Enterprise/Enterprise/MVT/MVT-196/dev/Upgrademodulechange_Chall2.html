@@ -1,0 +1,229 @@
+
+<style>
+
+.reservation-step#extras section.upgrade-banner__main {
+	text-align: left;
+}
+.reservation-step#extras section.upgrade-vehicle-box--current-vehicle{
+	display: none;
+}
+
+.reservation-step#extras section.upgrade-banner__main .upgrade-banner__button{
+	display: none;
+}
+
+.reservation-step#extras .upgrade-banner{
+	    padding-top: 20px !important;
+      height: 150px;
+}
+
+.iso-dup-button
+{
+	margin: 0;
+    padding: 0;
+    color: black;
+    background: none;
+    font-weight: 600 !important;
+    min-width: 150px;
+    height: 34px;
+    font-style: normal;
+    font-size: 1em;
+    text-transform: none;
+    letter-spacing: normal;
+    line-height: inherit;
+    font-weight: 400;
+    font-style: normal;
+    border: 2px solid #169a5a;
+    padding: 5px 40px;
+    color: #169a5a;
+    font-size: .875rem;
+}
+
+.reservation-step#extras section.upgrade-vehicle-box:not(.upgrade-vehicle-box--current-vehicle){
+	padding-right: 12px;
+}
+
+ .reservation-step#extras section.upgrade-vehicle-box:not(.upgrade-vehicle-box--current-vehicle) :nth-child(n+2){
+	display:none !important;
+	text-align: left !important;
+ }
+
+ .iso-new-copy {
+    margin-bottom: 4px;
+        font-size: 13px;
+}
+
+.reservation-step#extras section.upgrade-banner__main h2 {
+    font-size: 16px !important;
+}
+
+.reservation-step#extras section.upgrade-banner__main p {
+    font-size: 13px !important;
+}
+ 
+@media (max-width: 48em){
+	.reservation-step#extras section.upgrade-banner__main {
+    	flex: 1 1 50%;
+	    
+	    margin-left: 15px;
+	    margin-right: 15px;
+	    box-sizing: border-box;
+	    text-align: left;
+	}
+	section.iso-new-cta-wrap {
+    	flex: 1 1 100%;
+          margin-top: 16px;
+	}
+	.reservation-step#extras section.upgrade-banner__main h2.upgrade-banner__title {
+    	font-size: 16px !important;
+	}	
+	.reservation-step#extras section.upgrade-banner__main p.upgrade-banner__description {
+    	font-size: 16px !important;
+    	width: 90%;
+	}
+	.reservation-step#extras .upgrade-banner{
+		display:flex !important;
+		flex-direction: row;
+		flex-wrap: wrap;
+     height: auto !important;
+	}
+	.reservation-step#extras section.upgrade-vehicle-box:not(.upgrade-vehicle-box--current-vehicle) > img {
+		    margin: 0 !important;
+	}
+}
+</style>
+<script>
+(function() {
+  'use strict';
+  var isoTest = {
+    account : 'Enterprise',
+    portfolio : 'Enterprise.com',
+    test : 'Upgrade module change',
+    creative : 'Challenger 2',
+    selector: '.reservation-step#extras .upgrade-banner',
+    total: '0',
+    init : function() {
+      // isoTest.debug = ${user.mvtDebug};
+      
+      if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+        _satellite.setVar('TargetCampaign', isoTest.test);
+        _satellite.setVar('TargetCreative', isoTest.creative);
+        //_satellite.track('target_variables');
+      }
+
+      isoTest.log('Test Running...');
+      isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+      isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+      helpers.elementLoaded(isoTest.selector, function() {
+        isoTest.log('Test Ready!');
+          isoTest.chall();
+      });
+
+    window.addEventListener('hashchange', isoTest.viewChange, false);
+    
+    },
+    viewChange : function(){
+      if(/extras/.test(location.hash)){
+        helpers.elementLoaded(isoTest.selector, function() {
+          isoTest.chall();
+        });
+      }
+    },
+    chall : function() {
+      
+      
+      
+
+      var parent = document.querySelector(".reservation-step#extras .upgrade-banner");
+      
+      var section = document.createElement('section');
+      section.setAttribute('class', 'iso-new-cta-wrap');
+      section.innerHTML = '<div class="iso-new-copy">New total will be <span>New price<span></div><button class="iso-dup-button">UPGRADE NOW</button>';
+
+      parent.append(section);
+      isoTest.calculateTotal();
+
+
+      isoTest.amendCopyAndRelocate();
+      
+      isoTest.bindEvent();
+
+    },
+    calculateTotal: function (argument) {
+      var total = document.querySelector('.reservation-step#extras .upgrade-banner__main .upgrade-banner__description').innerText.split('(')[1];
+      total = total.split('total')[0];
+      isoTest.total = total
+      document.querySelector('.iso-new-copy span').innerHTML = total;
+        // return total
+    },
+    amendCopyAndRelocate: function (argument) {
+        var textToBeMoved = document.querySelector('.reservation-step#extras section.upgrade-vehicle-box:not(.upgrade-vehicle-box--current-vehicle) .upgrade-vehicle-box__description').innerHTML;
+
+        var targetText = document.querySelector('.reservation-step#extras .upgrade-banner__main .upgrade-banner__description');
+        var targetTextTrim = document.querySelector('.reservation-step#extras .upgrade-banner__main .upgrade-banner__description').innerHTML.split('($')[0];
+
+        targetText.innerHTML = textToBeMoved + ' ' + targetTextTrim;
+
+        var title = document.querySelector('.reservation-step#extras .upgrade-banner .upgrade-banner__main h2').innerHTML.replace('Upgrade now','Upgrade');
+
+        document.querySelector('.reservation-step#extras .upgrade-banner .upgrade-banner__main h2').innerHTML = title;
+
+
+
+    },
+    bindEvent: function (argument) {
+  
+          document.querySelector('.iso-dup-button').onclick = function(){
+            document.querySelector('.reservation-step#extras .upgrade-banner__button').click();
+          };
+
+          document.querySelector('.extras-section').onclick = function(){
+          var timer = setInterval(function(){
+              // setTimeout(function(){
+                  if(document.querySelector(".extras-header__btn-continue.disabled")){
+                      console.log('diabsled');
+                  }else{
+                    clearInterval(timer)
+                      console.log('new total calculate'+ isoTest.total);
+                      isoTest.calculateTotal();
+                      isoTest.amendCopyAndRelocate();
+                      
+                  }
+              }, 500);
+          // }, 200);
+
+          }
+
+    },
+    
+    log : function(obj){
+      if(isoTest.debug === true){
+        console.log(obj);
+      }
+    }
+
+  }
+
+  var helpers = {
+    elementLoaded : function (ele, callback) {
+      isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+      window.clearTimeout(isoTest.eleTimer);
+      if (document.querySelectorAll(ele).length > 0) {
+        if (typeof callback === 'function') {
+          isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+          callback();
+        }
+          } else {
+              isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+          }
+    }
+  }
+
+
+  isoTest.init();
+})();
+
+
+
+</script>
