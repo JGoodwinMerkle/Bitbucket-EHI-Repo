@@ -1,0 +1,156 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise.co.uk',
+		test : 'Vehicle Selection Filters Redesign',
+		creative : 'Challenger 0',
+		selector: '.vehicle-filter__filter-header',
+		items: [],
+		debug: true,
+		tabClicked: 'Vehicle Type',
+		init : function() {
+
+			// isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/cars/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+			isoTest.log('11 Feb 10:37');
+			// for mobile
+			var filterBtn = document.querySelector('button.vehicle-header__filter');
+			if(filterBtn){
+
+				filterBtn.addEventListener('click', function(){
+					var timer = setInterval(function(){
+
+						var mobParent = document.querySelector('.ReactModalPortal .vehicle-filter:nth-child(2) .vehicle-filter__header');
+						if(mobParent){
+							clearInterval(timer);
+							isoTest.getFiltersOnchange('mobFilter');
+
+							
+						}
+
+					}, 10);
+
+
+				}, false);
+			}
+
+			
+			isoTest.getFiltersOnchange(); // on load and when change the view from mobile to desktop
+
+		},
+		getFiltersOnchange: function(filterParam){
+			setTimeout(function(){
+
+				var filterSelectionPanel;
+				var filterWrap;
+				var filterClear;
+				var filterInputs;
+				if(filterParam === "mobFilter"){
+					filterSelectionPanel = document.querySelector('.ReactModalPortal');
+					filterWrap = filterSelectionPanel.querySelectorAll('.vehicle-filter:nth-child(2) .vehicle-filter__filter');
+					filterClear = filterSelectionPanel.querySelector('.vehicle-filter:nth-child(2) .vehicle-filter__header-link');
+					filterInputs = filterSelectionPanel.querySelectorAll('.vehicle-filter:nth-child(2) input');
+
+				}else{
+					filterSelectionPanel = document.querySelector('aside.vehicle-select__aside');
+					filterWrap = filterSelectionPanel.querySelectorAll('.vehicle-filter__filter');
+					filterClear = filterSelectionPanel.querySelector('.vehicle-filter__header-link');
+					filterInputs = filterSelectionPanel.querySelectorAll('.vehicle-filter__filter-list-item input');
+
+				}
+				
+				
+				// isoTest.log()
+				filterInputs.forEach(function(item){
+					item.addEventListener('click', function(e){
+						setTimeout(function(){
+							if(item.closest('li').classList.contains('vehicle-filter__active-filter')){
+								isoTest.log('filter is active');
+							}else{
+								isoTest.log('filter is Not active');
+								if(e.isTrusted){
+									isoTest.log('Filter Checkbox Removed');
+									isoTest.fireTag(item, 'Filter Checkbox Removed' );
+
+								}
+								else{
+									isoTest.log('bubbleClose');
+								}
+							}
+						}, 500);
+						isoTest.log('click');
+						isoTest.log(this.value);
+					}, false);
+				});
+			}, 1000);
+
+
+		},
+		fireTag : function(element, value) {
+			// isoTest.log('firetag element '+element);
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			isoTest.log('firetag event '+linkName);
+
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	    
+	}
+
+	isoTest.init();
+})();
+ 
+</script>
