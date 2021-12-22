@@ -1,0 +1,478 @@
+<style>
+
+
+#extras tbody.extras-row.cf.selected .extras-row__details .icon { 
+        filter: invert(100%) sepia(0%) saturate(2%) hue-rotate(322deg) brightness(300%) contrast(101%); 
+}
+table.extras-section .extras-row__details-text p, table.extras-section .extras-mobile-row__details-text p, table.extras-section .extras-row__details-text span, table.extras-section .extras-mobile-row__details-text span {
+    font-size: 16px !important;
+    line-height:22px;
+}
+.reservation-flow .reservation-step#extras .extras-content {
+    margin-top: 40px !important;
+}
+#extras table.extras-section td.extras-row__first-item {
+     position:relative;
+     width: 32% !important;
+}
+#extras table.extras-section .add-remove .label {
+     position: relative;
+     top: -3px;
+}
+#extras .extras-row td[class$="first-item"]::before{
+    content: "";
+     position: absolute;
+     top:20%;
+     left: 20px;
+     width: 48px;
+     height: 48px;
+     background-repeat: no-repeat!important;
+    background-size: 78%;
+}
+#extras .extras-container.iso-protect .extras-row td[class$="first-item"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Protection%20General.svg);
+}
+
+#extras .extras-container.iso-protect .extras-row.selected td[data-id="data-protection"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Protection%20General.svg);
+}
+
+#extras .extras-container:not(.iso-protect) .extras-row td[class$="first-item"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Equipment%20General.svg);
+}
+#extras .extras-container:not(.iso-protect) .extras-row.selected td[class$="first-item"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Equipment%20General.svg);
+}
+
+td[data-id="data-damage"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Damage%20waiver.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-damage"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Damage%20waiver.svg) !important;
+}
+td[data-id="data-boost"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Booster%20Seat.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-boost"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Booster%20Seat.svg) !important;
+}
+td[data-id="data-winter"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Winter%20tire.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-winter"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Winter%20tire.svg) !important;
+}
+td[data-id="data-third"]::before{
+    background-image:url(https://www.enterprise.com//content/dam/ecom/hosted/add-extras-icons/idle/Third%20Part.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-third"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Third%20Part.svg) !important;
+}
+td[data-id="data-ski"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Ski%20rack.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-ski"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Ski%20rack.svg) !important;
+}
+td[data-id="data-siri"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Sirius%20XM.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-siri"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Sirius%20XM.svg) !important;
+}
+td[data-id="data-road"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Roadside%20Protection.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-road"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Roadside%20Protection.svg) !important;
+}
+td[data-id="data-protection"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Protection%20General.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-protection"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Protection%20General.svg) !important;
+}
+td[data-id="data-personal"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Personal%20insurance.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-personal"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Personal%20insurance.svg) !important;
+}
+td[data-id="data-baby"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Baby%20Seat.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-baby"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Baby%20Seat.svg) !important;
+}
+td[data-id="data-child"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Child%20Seat.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-child"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Child%20Seat.svg) !important;
+}
+td[data-id="data-greenhouse"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Greenhouse.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-greenhouse"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Greenhouse.svg) !important;
+}
+td[data-id="data-gps"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/GPS.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-gps"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/GPS.svg) !important;
+}
+td[data-id="data-excess"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/idle/Excess%20Protection.svg) !important;
+}
+#extras .extras-row.selected td[data-id="data-excess"]::before{
+    background-image:url(https://www.enterprise.com/content/dam/ecom/hosted/add-extras-icons/selected/Excess%20Protection.svg) !important;
+}
+#extras .extras-row td[class$="first-item"] .extras-row__name{
+    margin-left: 42px;
+    display:block;
+}
+
+#extras .extras-row .extras-mobile-row__details-text ul, #extras .extras-row .extras-row__details-text ul {
+    list-style: disc;
+     margin-left: 20px;
+     line-height:24px
+}
+ @media screen and (max-width: 768px){
+    #extras td.extras-mobile-row__last-item {
+         position: relative;
+    }
+    #extras td.extras-mobile-row__last-item .numeric-stepper {
+         position: absolute;
+         top: 37px;
+         right: 8px;
+         width: 100px;
+    }
+    #extras td.extras-mobile-row__last-item .add-remove, #extras td.extras-mobile-row__last-item .included-cell {
+         position: absolute;
+         top: 21px;
+         right: 22px;
+         width: 120px;
+    }
+    td.extras-mobile-row__first-item {
+         width: 70% !important;
+         padding-bottom: 0;
+         position: relative;
+         padding-top: 17px;
+    }
+    #extras .extras-row td[class$="first-item"] .extras-row__name {
+        margin-left: 44px;
+    }
+    #extras .extras-row td[class$="first-item"]::before{
+        background-size: 82%;
+        top: 20px;
+    }
+    td.extras-mobile-row__details-item {
+         padding-left: 68px !important;
+         padding-bottom: 15px;
+    }
+    td.extras-mobile-row__price-item {
+         padding: 0;
+         padding-left: 8px !important;
+    }
+    td.extras-mobile-row__price-item span {
+         padding-left: 60px;
+    }
+    tr.extras-mobile-row:nth-of-type(2) {
+         margin-bottom: 20px;
+    }
+    .extras-mobile-row__details-info--show {
+         margin-top: 14px;
+    }
+    
+}
+@media (min-width: 769px) and (max-width: 1480px){
+    #extras td.extras-row__fifth-item {width: 25%;}
+
+    #extras td.extras-row__second-item {
+        width: 18%;
+    }
+}
+
+@media screen and (max-width: 370px){
+
+td.extras-mobile-row__first-item {
+    padding-left: 10px !important;
+}
+
+
+#extras .extras-row td[class$="first-item"]::before {
+    left: 10px;
+}
+
+
+.extras-row td.extras-mobile-row__price-item span {
+    padding-left: 48px;
+}
+.extras-row:not(.included) td.extras-mobile-row__price-item span {
+    padding-left: 48px;
+    width: 199px;
+    display: block;
+}
+
+#extras td.extras-mobile-row__last-item .add-remove, #extras td.extras-mobile-row__last-item .included-cell {
+    right: 10px;
+}
+
+td.extras-mobile-row__details-item {
+    padding-left: 55px !important;
+}
+
+}
+
+</style>
+
+<script>
+(function() {
+    'use strict';
+    var isoTest = {
+        account : 'Enterprise',
+        portfolio : 'Enterprise.com',
+        test : 'Add Extras Layout Redesign',
+        creative : 'Challenger 3',
+        selector: '.extras-section',
+        headline: 'Insurance and Other Protection Products',
+        extras: [
+                {
+                    exTitle:'Protection',
+                    id: "data-protection",
+                },
+
+                {
+                  exTitle: 'Personal',
+                  id: "data-personal",
+                },
+                
+                {
+                    exTitle:'Excess Protection',
+                    id: "data-excess",
+                },
+                
+                {
+                    exTitle:'third',
+                    id: "data-third",
+                },
+                
+                {
+                    exTitle:'Supplemental Liability',
+                    id: "data-third",
+                },
+                
+                {
+                    exTitle:'Damage',
+                    id: "data-damage",
+                },
+                
+                {
+                    exTitle:'Roadside',
+                    id: "data-road",    
+                },
+                
+                {
+                    exTitle:'winter',
+                    id: "data-winter",
+                },
+                
+                {
+                    exTitle: 'Sirius',
+                    id: "data-siri",
+                },
+                
+                {
+                    exTitle: 'Booster Seat',
+                    id: "data-boost",
+                },
+                
+                {
+                    exTitle: 'Greenhouse',
+                    id: "data-greenhouse",
+                },
+
+                {
+                    exTitle: 'Carbon',
+                    id: "data-greenhouse",
+                },
+
+                {
+                    exTitle: 'Baby',
+                    id: "data-baby",
+                },
+                
+                {
+                    exTitle: 'Infant',
+                    id: "data-baby",
+                },
+
+                {
+                    exTitle: 'Child',
+                    id: "data-child",
+                },
+
+                {
+                    exTitle: 'GPS',
+                    id: "data-gps",
+                },
+                
+                {
+                    exTitle: 'Sat Nav',
+                    id: "data-gps",
+                },
+
+                {
+                    exTitle:'ski',
+                    id: "data-ski",
+                },
+        ],
+        content: {
+            CDW : 'Damage Waiver (DW) is optional and can be added to your rental now or at the counter.<br /><br />When you purchase DW, we will waive your responsibility for damage, loss, or theft of your rental vehicle as long as you do not violate the terms of the DW as listed on your rental agreement.',
+            RAP : 'Roadside Assistance Protection (RAP) is optional and can be added to your rental either now or at the counter. <br /><br />If you purchase RAP, we will waive your responsibility for providing 24/7 roadside assistance (where available) which includes:<br><ul><li>replacement of lost keys </li><li>flat tire service </li><li>lockout service </li><li>jumpstarts, and</li><li>fuel delivery service for up to 3 gallons</li></ul>',
+            PAI : 'Personal Accident Insurance/Personal Effects Coverage (PAI/PEC) is optional and can be added to your rental now or at the counter.<br /><ul><li>PAI covers you and your passengers in case of accidental death or injury requiring an ambulance or medical treatment.</li><li>PEC insures your personal effects and the belongings of those traveling with you.</li><li>Benefits are payable in addition to any other insurance coverage.</li></ul><br />See the full policy when you pick up your vehicle. ',
+            SLP : 'Supplemental Liability Protection (SLP) is optional and may be added to your rental now or at the counter.<br /><br />If purchased, SLP provides you and any authorized drivers with up to $300,000 combined single limit for third party liability claims.<br /><br />See the full policy when you pick up your vehicle.'
+        },
+        init : function() {
+            // isoTest.debug = ${user.mvtDebug};
+            
+            if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+                _satellite.setVar('TargetCampaign', isoTest.test);
+                _satellite.setVar('TargetCreative', isoTest.creative);
+                //_satellite.track('target_variables');
+            }
+
+            isoTest.log('Test Running...');
+            isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+            isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+            helpers.elementLoaded(isoTest.selector, function() {
+                isoTest.log('Test Ready!');
+                isoTest.chall();
+            });
+
+            
+            window.addEventListener('hashchange', function(){
+               var timer = setInterval(function(){
+                if(document.querySelector('#loader .spinner-container') === null){
+                    isoTest.viewChange();
+                    clearInterval(timer);
+                    isoTest.log('spinner gone!');
+
+                }
+                isoTest.log('timer');
+               }, 500)
+                    
+            
+                
+            }, false);
+            window.addEventListener('resize', function(){
+                    isoTest.log('fn: resize');
+
+                    isoTest.updateContent();
+
+                    var contentInt = setInterval(function(){
+                        isoTest.updateContent();
+                    },100);
+
+                    setTimeout(function(){ clearInterval(contentInt) }, 1000);
+                });
+        
+        },
+        viewChange : function(){
+            if(/extras/.test(location.hash)){
+                helpers.elementLoaded(isoTest.selector, function() {
+                    isoTest.chall();
+                });
+            }
+        },
+        
+        chall : function() {
+            
+            if (document.querySelectorAll('.extras-content > .extras-container').length === 2) {
+                isoTest.updateContent();
+                document.querySelectorAll('.extras-container h2')[0].innerText = isoTest.headline;
+                document.querySelectorAll('.extras-content > .extras-container')[0].classList.add('iso-protect');
+            }
+
+            isoTest.extras.forEach(function(x){
+                document.querySelectorAll('.extras-row').forEach(function(item){
+
+
+                    if(item.querySelector('td[class$="first-item"] .extras-row__name').innerHTML.toLowerCase().includes(x.exTitle.toLowerCase())){
+                       item.querySelector('td[class$="first-item"]').setAttribute('data-id',  x.id);
+ 
+                    }
+
+
+                });
+
+             });
+
+        },
+        updateContent: function(){
+            isoTest.log('fn: updateContent()');
+
+            var groupNumber = ['42', '07', '35', '41', '43'];
+            var currentLocation = ReservationStateTree.get(['session','reservationSession','pickupLocationWithDetail','location_id']).substring(0, 2);
+            groupNumber.forEach(function(item){
+                if(item === currentLocation){
+                    for(var i=0;i<Object.keys(isoTest.content).length;i++){
+                        isoTest.updateExtra(Object.keys(isoTest.content)[i]);
+                    }
+
+                }
+            })
+            
+        },
+        updateExtra: function (code) {
+            isoTest.log('fn: updateExtra() : ' + code);
+            if(document.querySelector('div[data-code^='+code+']')){
+                var extraRow = document.querySelector('div[data-code^='+code+']').parentNode.parentNode.parentNode.parentNode;
+                var detailsSelector = extraRow.querySelector('.extras-row__details-text') ? '.extras-row__details-text' : '.extras-mobile-row__details-text';
+                var details = extraRow.querySelector(detailsSelector + ' div p') ? extraRow.querySelector(detailsSelector + ' div p') : extraRow.querySelector(detailsSelector + ' p');
+                details.innerHTML = isoTest.content[code];
+            }
+        },
+        
+        
+        log : function(obj){
+            if(isoTest.debug === true){
+                console.log(obj);
+            }
+        }
+
+    }
+
+    var helpers = {
+        elementLoaded : function (ele, callback) {
+            isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+            window.clearTimeout(isoTest.eleTimer);
+            if (document.querySelectorAll(ele).length > 0) {
+                if (typeof callback === 'function') {
+                    isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+                    callback();
+                }
+            } else {
+                isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+            }
+        },
+        supplant : function(str, o) {
+            return str.replace(/{([^{}]*)}/g, function(a, b) {
+                var p = b.split(/\./),
+                    c = o;
+                for (var i = 0; i < p.length; i++) {
+                  if (c[p[i]] == null)
+                    return a;
+                  c = c[p[i]];
+                }
+                return typeof c === 'string' || typeof c === 'number' ? c : a;
+            });
+        }
+    }
+
+    isoTest.init();
+})();
+
+</script>
