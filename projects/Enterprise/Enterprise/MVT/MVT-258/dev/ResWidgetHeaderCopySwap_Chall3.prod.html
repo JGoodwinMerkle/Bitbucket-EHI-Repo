@@ -1,0 +1,107 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'EHI',
+		test : 'Res Widget Header Copy Swap',
+		creative : 'Challenger 3',
+		selector: '#reservationWidget .cf h2',
+		newCopyClass: 'Start Reservation For This Vehicle Class',
+		newCopyType:'Start Reservation For This Vehicle Type',
+		init : function() {
+
+			// isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		
+		},
+		chall : function() {
+			isoTest.log('2 March 17:33');
+			var loc = window.location.pathname;
+		      var isVehicleType = loc.split("/");
+		      var ele;
+		      if (isVehicleType.length === 6) {
+		        ele = document.querySelector('#reservationWidget .cf h2');
+		        ele.innerText = isoTest.newCopyType;
+		      }
+		      if (isVehicleType.length === 7) {
+		        ele = document.querySelector('#reservationWidget .cf h2');
+		        ele.innerText = isoTest.newCopyClass;
+		      }
+		      
+		      isoTest.bindEvent(ele.innerText);
+
+
+		},
+		bindEvent: function(param){
+			var timer = setInterval(function(){
+				if(document.querySelector('#viewModifyCancelBookingWidget')){
+					clearInterval(timer);
+					document.querySelector('#viewModifyCancelBookingWidget').addEventListener('click',function(){
+                        
+			        	if(document.querySelector('#book')){
+				        	document.querySelector('#viewModifyCancelBookingWidget').innerText = param;
+                        	isoTest.log('Check Prices & Availability');
+				        }else{
+				        	document.querySelector('#viewModifyCancelBookingWidget').innerText = "VIEW / MODIFY / CANCEL";
+                        	isoTest.log('VIEW / MODIFY / CANCEL');
+                        	// isoTest.chall();
+                        	var timerTitle = setInterval(function(){
+								if(document.querySelector('#viewModifyCancelBookingWidget').innerText === "VIEW / MODIFY / CANCEL"){
+                        			isoTest.chall();
+                        			clearInterval(timerTitle);
+                        		}
+                        	}, 10);
+
+				        }
+					}, false)
+
+				}
+
+			}, 100);
+			
+
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>

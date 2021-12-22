@@ -1,0 +1,95 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'EHI',
+		test : 'Res Widget Header Copy Swap',
+		creative : 'Challenger 1',
+		selector: '#reservationWidget .cf h2',
+        debug: true,
+        newCopy: 'Check Prices & Availability',
+		init : function() {
+
+			// isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+  				isoTest.bindEvent();
+			});
+			
+		},
+		chall : function() {
+			isoTest.log('2 March 17:33');
+			var ele = document.querySelector('#reservationWidget .cf h2');
+      		ele.innerText = isoTest.newCopy;
+      		isoTest.log(ele);
+		},
+		bindEvent: function(){
+			var timer = setInterval(function(){
+				if(document.querySelector('#viewModifyCancelBookingWidget')){
+					clearInterval(timer);
+					document.querySelector('#viewModifyCancelBookingWidget').addEventListener('click',function(){
+                        
+			        	if(document.querySelector('#book')){
+				        	document.querySelector('#viewModifyCancelBookingWidget').innerText = isoTest.newCopy;
+                        	isoTest.log('Check Prices & Availability');
+				        }else{
+				        	document.querySelector('#viewModifyCancelBookingWidget').innerText = "VIEW / MODIFY / CANCEL";
+                        	isoTest.log('VIEW / MODIFY / CANCEL');
+                        	// isoTest.chall();
+                        	var timerTitle = setInterval(function(){
+								if(document.querySelector('#viewModifyCancelBookingWidget').innerText === "VIEW / MODIFY / CANCEL"){
+                        			isoTest.chall();
+                        			clearInterval(timerTitle);
+                        		}
+                        	}, 10);
+
+				        }
+					}, false)
+
+				}
+
+			}, 100);
+			
+
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
