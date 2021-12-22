@@ -1,0 +1,685 @@
+<style>
+.extras-orig {
+	display: none;
+}
+.extras-bundle, .extras-indiv {
+	border-top: 3px solid #181918;
+	display: flex;
+	flex-direction: column;
+	padding-top: 20px;
+}
+.extras-bundle-col, .extras-indiv-col {
+	margin-right: 20px;
+	margin-bottom: 20px;
+	margin-left: 20px;
+}
+.extras-subtitle {
+	padding: 0 20px;
+	text-align: center;
+}
+.eb-col-top {
+	border: 1px solid #c5c5c5;
+	border-bottom: none;
+	flex-grow: 1;
+	padding: 20px;
+}
+.eb-header {
+	font-size: 20px;
+	font-weight: 500;
+	margin-bottom: 10px;
+}
+.eb-price {
+	font-size: 15px;
+	margin-bottom: 30px;
+}
+.eb-col-top ul {
+	margin-bottom: 1rem;
+}
+.extras-bundle li {
+	margin-bottom: 6px;
+}
+.extras-bundle li span {
+	border: 2px solid #169a5a;
+    border-radius: 50%;
+    display: inline-block;
+    font-size: .7rem;
+    height: 18px;
+    margin-right: 5px;
+    margin-bottom: -3px;
+    width: 18px;
+    position: relative;
+    text-align: center;
+}
+.extras-bundle li span:after, .extras-bundle li span:before {
+    content: "";
+    display: block;
+    width: 4px;
+    height: 8px;
+    border: solid #169a5a;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 0;
+    left: 5px;
+}
+.extras-bundle li span:before {
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    left: 8px;
+    top: 0;
+}
+.extras-bundle button {
+	background: #169a5a;
+	color: #fff;
+	font-weight: 600;
+	margin-left: 0;
+	padding: 14px 10px;
+	position: relative;
+	text-transform: uppercase;
+	width: 100%;
+}
+.extras-bundle button .iso-selected {
+	display: none;
+}
+.extras-bundle button > span {
+	padding-left: 30px;
+}
+.extras-bundle button icon {
+	position: relative;
+}
+.extras-bundle button icon::before {
+	align-items: center;
+	background-color: #fff;
+	border-radius: 50%;
+    border: 2px solid white;
+    color: #169a5a;
+	content: '\FF0B';
+    display: inline-flex;
+    font-size: 16px;
+    height: 20px;
+    justify-content: center;
+    /*margin-right: 8px;*/
+    padding-left: 1px;
+    width: 20px;
+    position: absolute;
+    left: -33px;
+    top: -2px;
+}
+.extra-added, .extras-indiv-included {
+	background-color: #f2f2f2;
+}
+.extras-bundle .extra-added button {
+	background: #006639;
+	cursor: not-allowed;
+}
+.extras-bundle .extra-added button icon::before {
+	background-color: transparent;
+	content: '';
+    border: solid #ffffff;
+    border-radius: 0;
+    border-width: 0 2px 2px 0;
+    height: 15px;
+    transform: rotate(45deg);
+    width: 9px;
+    top: -3px;
+    left: -25px;
+}
+.extras-bundle .extra-added button .iso-selected {
+	display: inline;
+}
+.extras-bundle a, .extras-indiv a {
+	cursor: pointer;
+	font-size: 15px;
+	font-weight: 600;
+}
+.extras-indiv-content {
+	border: 1px solid #c5c5c5;
+	display: flex;
+	padding: 20px;
+}
+.ei-col-right {
+	flex-grow: 1;
+    text-align: right;
+}
+.ei-header {
+	font-size: 16px;
+	font-weight: 400;
+    margin-bottom: 10px;
+}
+.extras-indiv button {
+	font-weight: 600;
+	letter-spacing: normal;
+	padding: 0;
+}
+.extras-indiv button icon {
+	position: relative;
+}
+.extras-indiv button[disabled] {
+	background: transparent;
+	color: #a3a4a5;
+	display: none;
+}
+.extras-indiv .indiv-add {
+	background: #ffffff;
+	color: #169a5a;
+}
+.extras-indiv .indiv-remove {
+	background: transparent;
+	color: #006639;
+	display: none;
+}
+.extras-indiv .indiv-add icon::before, .extras-indiv .indiv-remove icon::before {
+	align-items: center;
+	background-color: #169a5a;
+	border-radius: 50%;
+    border: 2px solid white;
+    color: #ffffff;
+	content: '\FF0B';
+    display: inline-flex;
+    font-size: 16px;
+    height: 22px;
+    justify-content: center;
+    margin-right: 5px;
+    width: 22px;
+}
+.extras-indiv .indiv-remove icon::before {
+	background-color: #006639;
+	border: 2px solid #006639;
+	transform: rotate(45deg);
+}
+.extras-indiv-included button:not([disabled]) {
+	display: none;
+}
+.extras-indiv-included button[disabled] {
+	display: inline-block;
+}
+.extras-indiv-included button[disabled] icon::before {
+	align-items: center;
+	background-color: transparent;
+    border: solid #a3a4a5;
+    border-radius: 0;
+    border-width: 0 2px 2px 0;
+    content: '';
+    display: inline-flex;
+    font-size: 16px;
+    height: 14px;
+    justify-content: center;
+	margin-right: 2px;
+    padding-left: 1px;
+    transform: rotate(45deg) translate(-12px,0px);
+    width: 7px;
+}
+.extras-indiv .extra-added .indiv-add {
+	display: none;
+}
+.extras-indiv .extra-added .indiv-remove {
+	display: inline-block;
+}
+.extras-indiv-included.extra-added .indiv-remove {
+	display: none;
+}
+.iso-excl {
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNC45IDE0LjciPjxwYXRoIGQ9Ik0uNiAxMC44TDEuOCAxMmMuMi4yLjQuMi42IDBsNS01LjEgNS4yIDUuMWMuMi4yLjQuMi42IDBsMS4xLTEuMmMuMi0uMi4yLS40IDAtLjZMOSA0LjlzMC0uMS0uMS0uMUw3LjcgMy42Yy0uMi0uMi0uNC0uMi0uNiAwTDUuOSA0LjguNSAxMC4yYy0uMS4yLS4xLjQuMS42eiIgZmlsbD0iIzE2OWE1YSIvPjwvc3ZnPg==');
+	background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 600;
+    margin-top: 16px;
+    margin-bottom: 14px;
+    padding-left: 25px;
+    text-transform: uppercase;
+    height: 20px;
+    width: 20px;
+}
+.iso-excl-collapsed {
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNC45IDE0LjciPjxwYXRoIGQ9Ik0xNC4zIDQuOGwtMS4yLTEuMmMtLjItLjItLjQtLjItLjYgMGwtNSA1LjEtNS4yLTUuMWMtLjItLjItLjQtLjItLjYgMEwuNiA0LjhjLS4yLjItLjIuNCAwIC42bDUuMyA1LjNzMCAuMS4xLjFMNy4yIDEyYy4yLjIuNC4yLjYgMEw5IDEwLjhsNS40LTUuNGMuMS0uMi4xLS40LS4xLS42eiIgZmlsbD0iIzE2OWE1YSIvPjwvc3ZnPg==');
+}
+/* Modal */
+.iso-modal-open { 
+	height: 100%; 
+	overflow: hidden;
+}
+.iso-modal {
+	display: hidden;
+}
+.iso-modal.active {
+	display: block;
+}
+
+@media (min-width: 477px) {
+	.extras-bundle, .extras-indiv {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		margin: 0 20px;
+	}
+	.extras-indiv {
+		align-items: center;
+		flex-direction: column;
+	}
+	.extras-bundle-col, .extras-indiv-col {
+		display: flex;
+    	flex-direction: column;
+    	margin-right: 20px;
+		margin-bottom: 20px;
+		margin-left: 0;
+		width: calc(50% - 10px);
+	}
+	.extras-bundle-col:nth-of-type(2), .extras-indiv-col:nth-of-type(2), .extras-bundle-col:last-of-type, .extras-indiv-col:last-of-type {
+		margin-right: 0;
+	}
+}
+
+@media (min-width: 769px) {
+	.extras-bundle, .extras-indiv {
+		flex-wrap: nowrap;
+		margin: 0;
+	}
+	.extras-indiv {
+		flex-direction: row;
+	}
+	.extras-bundle-col, .extras-indiv-col {
+		width: 33.3%;
+	}
+	.extras-bundle-col:nth-of-type(2), .extras-indiv-col:nth-of-type(2) {
+		margin-right: 20px;
+	}
+	.extras-bundle-col:last-of-type, .extras-indiv-col:last-of-type {
+		margin-right: 0;
+	}
+}
+
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : '(Conversion) Add Extras Protection Package Bundle',
+		creative : 'Challenger 1',
+		selector : '.extras-container .insurance:nth-of-type(3)',
+		modalTemplate : '<div class="iso-modal modal-container iso-modal-331" tabindex="0">\
+							<div class="modal-content">\
+								<div class="modal-header"><button class="close-modal"><i class="icon icon-close-x-white">X</i></button></div>\
+								<div class="modal-body">\
+									<h2 class="modal-content__heading">Damage Waiver</h2>\
+									<div class="modal-content__text">\
+									</div>\
+								</div>\
+							</div>\
+						</div>',
+		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/extras/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			// Add HTML structure
+			q('.extras-container').classList.add('extras-orig');
+			q('.extras-content').insertAdjacentHTML('afterbegin','<div class="extras-container"><h2 class="extras-title beta">Protection Package Options</h2><p class="extras-subtitle">Standard Cover is automatically selected, you can upgrade by choosing from the following optional extras</p><div class="extras-bundle">\
+				<div class="extras-bundle-col"><div class="eb-col-top"><p class="eb-header">Standard Cover</p><p class="eb-price">Included with reservation</p><ul><li><span></span>Damage waiver</li></ul><a tabindex="0">DETAILS</a></div><div class="eb-col-bot"><button><span><icon></icon>Select<span class="iso-selected">ed</span></span></button></div></div>\
+				<div class="extras-bundle-col"><div class="eb-col-top"><p class="eb-header">Premium</p><p class="eb-price"></p><ul><li><span></span>Damage waiver</li><li><span></span>Excess protection</li></ul><a tabindex="0">DETAILS</a></div><div class="eb-col-bot"><button><span><icon></icon>Select<span class="iso-selected">ed</span></span></button></div></div>\
+				<div class="extras-bundle-col"><div class="eb-col-top"><p class="eb-header">Premium Plus</p><p class="eb-price"></p><ul><li><span></span>Damage waiver</li><li><span></span>Excess protection</li><li><span></span>Roadside protection</li></ul><a tabindex="0">DETAILS</a></div><div class="eb-col-bot"><button><span><icon></icon>Select<span class="iso-selected">ed</span></span></button></div></div>\
+				</div></div>\
+				<div class="extras-container"><h2 class="extras-title beta">Other Coverage Options</h2><div class="extras-indiv"><div class="extras-indiv-col"></div><div class="extras-indiv-col"><div class="extras-indiv-content"><div class="ei-col-left"><p class="ei-header">Roadside protection</p><p class="eb-price"></p><a tabindex="0">DETAILS</a></div><div class="ei-col-right"><button class="indiv-add"><icon></icon>Add</button><button class="indiv-remove"><icon></icon>Remove</button><button disabled><icon></icon>Included</button></div></div></div><div class="extras-indiv-col"></div></div></div>' + isoTest.modalTemplate);
+
+			// Check for already added extras on load (in-flight modify), select default if not
+			isoTest.selectionCheck();
+			
+			// Check prices
+			isoTest.priceCheck();
+
+			// Add events
+			isoTest.addEvents();
+
+			// Keybpress events
+			isoTest.keyEvents();
+
+			// Re-fire on inflight modify
+			var observer = new MutationObserver(function (mutation) {
+				if (q('.extras-row__fifth-item .icon-check-gray')) {
+					// Reset if date/time/location changed
+					q('.extras-bundle-col:nth-of-type(2)').classList.remove('extra-added');
+					q('.extras-bundle-col:nth-of-type(3)').classList.remove('extra-added');
+					q('.extras-indiv-col:nth-of-type(2)').classList.remove('extra-added');
+					q('.extras-indiv-col:nth-of-type(2)').classList.remove('extras-indiv-included');
+					isoTest.selectionCheck();
+			  		isoTest.priceCheck();
+				}
+			});
+			observer.observe(q('.reservation-steps'), {
+			  childList: true, // observe direct children
+			  subtree: true, // and lower descendants too
+			});
+
+		},
+		selectionCheck : function() {
+			if (q('.extras-orig [data-code="TWR"] [data-action="remove"]') && q('.extras-orig [data-code="EXS"] [data-action="remove"]')) {
+				q('.extras-bundle-col:nth-of-type(3)').classList.add('extra-added');
+				q('.extras-indiv-col:nth-of-type(2)').classList.add('extras-indiv-included');
+			} else if (q('.extras-orig [data-code="TWR"] [data-action="remove"]') && q('.extras-orig [data-code="EXS"] [data-action="add"]')) {
+				q('.extras-bundle-col:nth-of-type(1)').classList.add('extra-added');
+				q('.extras-indiv-col:nth-of-type(2)').classList.add('extra-added');
+			} else if (q('.extras-orig [data-code="EXS"] [data-action="remove"]')) {
+				q('.extras-bundle-col:nth-of-type(2)').classList.add('extra-added');
+			} else {
+				q('.extras-bundle-col:nth-of-type(1)').classList.add('extra-added');
+			}
+		},
+		priceCheck : function() {
+			// Grab prices and convert string to number
+			var excessStr = ( qa('.extras-orig .extras-row__second-item').length > 0 ? qa('.extras-orig .extras-row__second-item')[1].innerText : qa('.extras-orig .extras-mobile-row__price-item')[1].innerText );
+			var excessNum = parseFloat(excessStr.replace( /[^\d\.]*/g, ''));
+			var roadsideStr = ( qa('.extras-orig .extras-row__second-item').length > 0 ? qa('.extras-orig .extras-row__second-item')[2].innerText : qa('.extras-orig .extras-mobile-row__price-item')[2].innerText );
+			var roadsideNum = parseFloat(roadsideStr.replace( /[^\d\.]*/g, ''));
+			
+			// Grab currency
+			var currencySymb = excessStr.substring(0, 2);
+			
+			// Update prices
+			qa('.extras-bundle-col')[1].querySelector('.eb-price').innerText = currencySymb + excessNum + ' / Day';
+			qa('.extras-bundle-col')[2].querySelector('.eb-price').innerText = currencySymb + ( excessNum + roadsideNum ) + ' / Day';
+			qa('.extras-indiv-col')[1].querySelector('.eb-price').innerText = currencySymb + roadsideNum + ' / Day';
+		},
+		addEvents : function() {
+			var bundle1 = q('.extras-bundle-col:nth-of-type(1)');
+			var bundle2 = q('.extras-bundle-col:nth-of-type(2)');
+			var bundle3 = q('.extras-bundle-col:nth-of-type(3)');
+			var bundle1Btn = q('.extras-bundle-col:nth-of-type(1) button');
+			var bundle2Btn = q('.extras-bundle-col:nth-of-type(2) button');
+			var bundle3Btn = q('.extras-bundle-col:nth-of-type(3) button');
+			var indiv2 = q('.extras-indiv-col:nth-of-type(2)');
+
+			q('.extras-content').addEventListener('click', function(e) {
+				// Details modals
+				if (e.target.closest('.extras-bundle-col:nth-of-type(1) a')) {
+					isoTest.modalOpen();
+					isoTest.modalStandard();
+					isoTest.fireTag('','Standard Details Modal Opened');
+				} else if (e.target.closest('.extras-bundle-col:nth-of-type(2) a')) {
+					isoTest.modalOpen();
+					isoTest.modalPremium();
+					isoTest.fireTag('','Premium Details Modal Opened');
+				} else if (e.target.closest('.extras-bundle-col:nth-of-type(3) a')) {
+					isoTest.modalOpen();
+					isoTest.modalPremiumPlus();
+					isoTest.fireTag('','Premium Plus Details Modal Opened');
+				} else if (e.target.closest('.extras-indiv-col:nth-of-type(2) a')) {
+					isoTest.modalOpen();
+					isoTest.modalRoadside();
+					isoTest.fireTag('','Roadside Details Modal Opened');
+				}
+				// Bundle 1
+				if (e.target.closest('.extras-bundle-col:nth-of-type(1) button')) {
+					bundle1.classList.add('extra-added');    bundle1Btn.disabled = true;
+					bundle2.classList.remove('extra-added'); bundle2Btn.disabled = false;
+					bundle3.classList.remove('extra-added'); bundle3Btn.disabled = false;
+					if (q('[data-code="EXS"] [data-action="remove"]')) {
+						q('[data-code="EXS"] button').click();
+					}
+					if (q('[data-code="TWR"] [data-action="remove"]') && !q('.extras-indiv-col.extra-added')) {
+						q('[data-code="TWR"] button').click();
+					}
+					indiv2.classList.remove('extras-indiv-included');
+					isoTest.fireTag('','Standard Added');
+				}
+				// Bundle 2
+	        	else if (e.target.closest('.extras-bundle-col:nth-of-type(2) button')) {
+	        		bundle1.classList.remove('extra-added'); bundle1Btn.disabled = false;
+	        		bundle2.classList.add('extra-added');    bundle2Btn.disabled = true;
+					bundle3.classList.remove('extra-added'); bundle3Btn.disabled = false;
+					if (q('[data-code="EXS"] [data-action="add"]')) {
+	        			q('[data-code="EXS"] button').click();
+	        		}
+	        		if (q('[data-code="TWR"] [data-action="remove"]') && !q('.extras-indiv-col.extra-added')) {
+						q('[data-code="TWR"] button').click();
+					}
+					indiv2.classList.remove('extras-indiv-included');
+					isoTest.fireTag('','Premium Added');
+	        	}
+	        	// Bundle 3
+	        	else if (e.target.closest('.extras-bundle-col:nth-of-type(3) button')) {
+	        		bundle1.classList.remove('extra-added'); bundle1Btn.disabled = false;
+					bundle2.classList.remove('extra-added'); bundle2Btn.disabled = false;
+					bundle3.classList.add('extra-added');    bundle3Btn.disabled = true;
+					if (q('[data-code="EXS"] [data-action="add"]')) {
+	        			q('[data-code="EXS"] button').click();
+	        		}
+	        		if (q('[data-code="TWR"] [data-action="add"]')) {
+	        			q('[data-code="TWR"] button').click();
+	        		}
+	        		indiv2.classList.add('extras-indiv-included');
+	        		isoTest.fireTag('','Premium Plus Added');
+	        	}
+	        	// Other - Roadside
+	        	else if (e.target.closest('.extras-indiv-col:nth-of-type(2) button')) {
+	        		if (q('.extra-added.extras-indiv-col:nth-of-type(2)')) {
+	        			q('[data-code="TWR"] button').click();
+	        			indiv2.classList.remove('extra-added');
+	        		} else {
+	        			q('[data-code="TWR"] button').click();
+						indiv2.classList.add('extra-added');
+	        		}
+	        		if (e.target.closest('.extras-indiv-col:nth-of-type(2) .indiv-add')) {
+	        			isoTest.fireTag('','Roadside Added');
+	        		} else if (e.target.closest('.extras-indiv-col:nth-of-type(2) .indiv-remove')){
+	        			isoTest.fireTag('','Roadside Removed');
+	        		}
+	        	}
+	        });
+
+	        document.querySelector('.iso-modal .close-modal').addEventListener('click', function (e) {
+				isoTest.destroyModal();
+			}, false);
+
+			document.querySelector('.iso-modal .close-modal .icon-close-x-white').addEventListener('click', function (e) {
+				isoTest.destroyModal();
+			}, false);
+		},
+		keyEvents : function() {
+			document.addEventListener('keydown', function (e) {
+				//var keyCode = (e.keyCode ? e.keyCode : e.which);
+				var closeContainer = document.querySelector('.iso-modal .close-modal');
+				var closeButton = document.querySelector('.iso-modal .icon-close-x-white');
+
+		        if (e.key == 'Enter' || e.key == ' ') {
+		        	if (e.target == closeContainer || e.target == closeButton) {
+			          	isoTest.destroyModal();
+			        }
+
+			        if ( e.target.matches('.extras-bundle-col a') || e.target.matches('.extras-indiv-col a') ) {
+			        	e.target.click();
+			        }
+		        }
+
+		        if (e.key == 'Escape') {
+	          		if (document.querySelector('html').classList.contains('iso-modal-open')) {
+	            		isoTest.destroyModal();
+	          		}
+	        	}
+
+			}, false);
+
+		},
+		modalOpen : function() {
+			document.querySelector('.iso-modal').classList.add('active');
+			document.querySelector('html').classList.add('iso-modal-open');
+
+		    var modalFocus = document.querySelector('.iso-modal');
+		    isoTest.keepFocus(modalFocus);
+
+		    modalFocus.focus();
+		},
+		destroyModal : function() {
+	    	document.querySelector('html').classList.remove('iso-modal-open');
+	      	var elModal = document.querySelector('.iso-modal');
+			elModal.classList.remove('active');
+	    },
+	    keepFocus : function(context) {
+	      	var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+	          	firstTabbableElement = allTabbableElements[0],
+	          	lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+	      	var keyListener = function(e) {
+	    		e.preventDefault = e.preventDefault || function () {
+	    			e.returnValue = false;
+	    		};
+	    		if (e.key === 'Tab') {
+	          		if (e.target === lastTabbableElement && !e.shiftKey) {
+	    				e.preventDefault();
+	    				firstTabbableElement.focus();
+	          		} else if (e.target === firstTabbableElement && e.shiftKey) {
+	    				e.preventDefault();
+	    				lastTabbableElement.focus();
+	    			}
+	    		}
+	    	};
+	    	context.addEventListener('keydown', keyListener, false);
+    	},
+    	modalStandard : function() {
+    		var damageWaiverTxt = q('[headers="CDW1Header"] div').innerText;
+    		q('.iso-modal-331 h2').innerText = 'Standard Cover';
+    		q('.iso-modal-331 .modal-content__text').innerHTML = '<p>' + damageWaiverTxt + '</p>' + '<a class="iso-excl iso-excl-collapsed">Exclusions</a><div class="iso-exclusions hide"></div>';
+    		// Exclusions
+    		q('[headers="CDW1Header"] button').click();
+    		q('.ReactModal__Overlay--after-open').style = 'display: none;';
+    		var damageWaiverExclusionsTxt = q('.extras-modal').innerText;
+    		q('.iso-exclusions').innerHTML = '<p>' + damageWaiverExclusionsTxt + '</p>';
+    		q('.ReactModal__Overlay--after-open .icon-close-x-white').click();
+    		// Toggle
+    		q('.iso-modal-331 .iso-excl').addEventListener('click', function (e) {
+				q('.iso-modal-331 .iso-excl').classList.toggle('iso-excl-collapsed');
+				q('.iso-modal-331 .iso-exclusions').classList.toggle('hide');
+			}, false);
+    	},
+    	modalPremium : function() {
+    		var damageWaiverTxt = q('[headers="CDW1Header"] div').innerText;
+    		var excessProtectionTxt = q('[headers="EXSHeader"] div').innerText;
+    		q('.iso-modal-331 h2').innerText = 'Premium';
+    		q('.iso-modal-331 .modal-content__text').innerHTML = '<p>' + damageWaiverTxt + '</p><p>' + excessProtectionTxt + '</p>' + '<a class="iso-excl iso-excl-collapsed">Exclusions</a><div class="iso-exclusions hide"></div>';
+    		// Exclusions
+    		q('[headers="CDW1Header"] button').click();
+    		q('.ReactModal__Overlay--after-open').style = 'display: none;';
+    		var damageWaiverExclusionsTxt = q('.extras-modal').innerText;
+    		q('.ReactModal__Overlay--after-open .icon-close-x-white').click();
+    		
+    		q('[headers="EXSHeader"] button').click();
+    		q('.ReactModal__Overlay--after-open').style = 'display: none;';
+    		var excessProtectionExclusionsTxt = q('.extras-modal').innerText;
+    		q('.ReactModal__Overlay--after-open .icon-close-x-white').click();
+    		q('.iso-exclusions').innerHTML = '<p>' + damageWaiverExclusionsTxt + '</p><p>' + excessProtectionExclusionsTxt + '</p>';
+    		// Toggle
+    		q('.iso-modal-331 .iso-excl').addEventListener('click', function (e) {
+				q('.iso-modal-331 .iso-excl').classList.toggle('iso-excl-collapsed');
+				q('.iso-modal-331 .iso-exclusions').classList.toggle('hide');
+			}, false);
+    	},
+    	modalPremiumPlus : function() {
+    		var damageWaiverTxt = q('[headers="CDW1Header"] div').innerText;
+    		var excessProtectionTxt = q('[headers="EXSHeader"] div').innerText;
+    		var roadsideProtectionTxt = q('[headers="TWRHeader"] div').innerText;
+    		q('.iso-modal-331 h2').innerText = 'Premium Plus';
+    		q('.iso-modal-331 .modal-content__text').innerHTML = '<p>' + damageWaiverTxt + '</p><p>' + excessProtectionTxt + '</p><p>' + roadsideProtectionTxt + '</p>' + '<a class="iso-excl iso-excl-collapsed">Exclusions</a><div class="iso-exclusions hide"></div>';
+    		// Exclusions
+    		q('[headers="CDW1Header"] button').click();
+    		q('.ReactModal__Overlay--after-open').style = 'display: none;';
+    		var damageWaiverExclusionsTxt = q('.extras-modal').innerText;
+    		q('.ReactModal__Overlay--after-open .icon-close-x-white').click();
+    		
+    		q('[headers="EXSHeader"] button').click();
+    		q('.ReactModal__Overlay--after-open').style = 'display: none;';
+    		var excessProtectionExclusionsTxt = q('.extras-modal').innerText;
+    		q('.ReactModal__Overlay--after-open .icon-close-x-white').click();
+
+    		q('[headers="TWRHeader"] button').click();
+    		q('.ReactModal__Overlay--after-open').style = 'display: none;';
+    		var roadsideProtectionExclusionsTxt = q('.extras-modal').innerText;
+    		q('.ReactModal__Overlay--after-open .icon-close-x-white').click();
+
+    		q('.iso-exclusions').innerHTML = '<p>' + damageWaiverExclusionsTxt + '</p><p>' + excessProtectionExclusionsTxt + '</p><p>' + roadsideProtectionExclusionsTxt + '</p>';
+    		// Toggle
+    		q('.iso-modal-331 .iso-excl').addEventListener('click', function (e) {
+				q('.iso-modal-331 .iso-excl').classList.toggle('iso-excl-collapsed');
+				q('.iso-modal-331 .iso-exclusions').classList.toggle('hide');
+			}, false);
+    	},
+    	modalRoadside : function() {
+    		var roadsideProtectionTxt = q('[headers="TWRHeader"] div').innerText;
+    		q('.iso-modal-331 h2').innerText = 'Roadside protection';
+    		q('.iso-modal-331 .modal-content__text').innerHTML = '<p>' + roadsideProtectionTxt + '</p>' + '<a class="iso-excl iso-excl-collapsed">Exclusions</a><div class="iso-exclusions hide"></div>';
+    		// Exclusions
+    		q('[headers="TWRHeader"] button').click();
+    		q('.ReactModal__Overlay--after-open').style = 'display: none;';
+    		var roadsideProtectionExclusionsTxt = q('.extras-modal').innerText;
+    		q('.ReactModal__Overlay--after-open .icon-close-x-white').click();
+    		q('.iso-exclusions').innerHTML = '<p>' + roadsideProtectionExclusionsTxt + '</p>';
+    		// Toggle
+    		q('.iso-modal-331 .iso-excl').addEventListener('click', function (e) {
+				q('.iso-modal-331 .iso-excl').classList.toggle('iso-excl-collapsed');
+				q('.iso-modal-331 .iso-exclusions').classList.toggle('hide');
+			}, false);
+    	},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (qa(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	function q (css, parent) { return (parent || document).querySelector(css); }
+	function qa (css, parent) { var nodes = (parent || document).querySelectorAll(css); 
+		return Array.prototype.slice.call(nodes, 0); 
+	}
+
+	isoTest.init();
+})();
+</script>
