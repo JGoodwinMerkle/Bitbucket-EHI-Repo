@@ -1,0 +1,178 @@
+<style>
+.iso-gps {
+    padding-left: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+button.iso-current-location-copy {
+    letter-spacing: normal !important;
+    font-weight: 600;
+    text-transform: none;
+    background: none;
+    color: #169a5a;
+    padding: 0;
+    font-size: 16px;
+}
+span.iso-search-copy {
+    color: #656565;
+}
+
+.location-search .auto-complete__pre-search {
+    display: none !important;
+}
+
+.pick-up-location button.location-btn, .drop-off-input-margin button.location-btn{
+	display:none !important;
+}
+
+.iso-gps .icon {
+    top: 10px;
+    right: 3px;
+    position: relative;
+    display: inline-block;
+}
+
+div#locations-list.iso-hide {
+    display: none;
+}
+
+@media screen and (max-width: 768px){
+	.booking-widget .location-search .location-chicklet .chicklet{
+		width: 100%;
+	}
+}
+</style>
+<script> 
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'Enterprise',
+		test : 'Res Widget - Use My Location CTA',
+		creative : 'Challenger 2',
+		selector: '#pickupLocationTextBox',
+		dropdownId: '#locations-list',
+		button: '<div class="iso-gps"><span class="iso-search-copy">Search and select from result list or </span> <button class="iso-current-location-copy" tabindex="0" type="button"> use your current location</button> <i class="icon icon-nav-nearme" role="presentation"></i> </button>',
+		debug: true,
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		
+		chall : function() {
+
+			isoTest.focusEvents();
+
+			var vmcCTA = document.querySelector('#reservationWidget .cf');
+			vmcCTA.addEventListener('click', function(e){
+				if(e.target.id === 'viewModifyCancelBookingWidget'){
+					setTimeout(function(){
+						if(document.querySelector('#pickupLocationTextBox')){
+							isoTest.focusEvents();
+						}
+					}, 100);
+
+				}
+			});
+
+		},
+		focusEvents: function(){
+			var input = document.querySelectorAll('input[id$=LocationTextBox]');
+			input.forEach( function(item) {
+				item.addEventListener('focus', function(){
+						if(item.nextElementSibling.classList.contains('iso-hide')){
+	                    		item.nextElementSibling.classList.remove('iso-hide');
+	                    };
+						if(item.nextElementSibling.querySelector('.iso-gps') === null){
+							helpers.elementLoaded(isoTest.dropdownId, function() {
+								var html = isoTest.buildHTML('div', 'iso-gps-wrap', isoTest.button);
+								var dropdown = item.nextElementSibling;
+						    	dropdown.insertAdjacentHTML('afterbegin', html.innerHTML);
+						    	isoTest.clickEvent();
+						    	isoTest.tabEvent(item.nextElementSibling);
+							});
+						};
+				});
+
+			});
+			
+		},
+		buildHTML: function(tag, className, body){
+            var x = document.createElement(tag);
+            x.setAttribute('class', className);
+            x.innerHTML = body;
+            return x;
+        },
+        clickEvent: function(){
+        	var el = document.querySelector('.iso-current-location-copy');
+			el.addEventListener('click', function(e){
+					var parent = e.target.closest('.locationInput-active');
+
+						var originalBtn = parent.querySelector('button.location-btn');
+						originalBtn.click();
+			});
+
+        },
+       tabEvent: function(locationBox){
+
+        	 locationBox.previousElementSibling.addEventListener("keydown", function (e) {
+
+                var keyCode = (e.keyCode ? e.keyCode : e.which);
+                if (keyCode == 9) {
+                 // e.preventDefault();
+        		 e.stopPropagation();
+                
+             
+
+                }
+            }, false);
+        	locationBox.querySelector('.iso-gps').addEventListener("keydown", function (e) {
+
+                var keyCode = (e.keyCode ? e.keyCode : e.which);
+                if (keyCode == 9) {
+                    	locationBox.classList.add('iso-hide');
+              	}
+            }, false);
+        },
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
