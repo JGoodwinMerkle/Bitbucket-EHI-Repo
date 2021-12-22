@@ -1,0 +1,136 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise.com',
+		test : 'Site Nav Restructure',
+		creative : 'Challenger 0',
+		selector: 'body',
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		},
+		
+		chall : function() {
+
+			isoTest.fireEvents();
+
+		},
+		fireEvents: function(){
+			// test name: nav: rent: close
+			var nav = document.querySelectorAll('#primary-nav .primary-nav-label');
+			nav.forEach( function(item) {
+				item.addEventListener('click', function(){
+					var tabName = item.innerHTML.trim();
+					setTimeout(function(){
+	                    var action = item.getAttribute('aria-expanded');
+							if(action === "true"){
+								isoTest.fireTag(item, ': nav: ' + tabName + ': open');
+							}
+                    }, 500);
+				}, false);
+
+			});
+
+			// test name: link: rent: start a car reservation
+
+			var li = document.querySelectorAll('#primary-nav .primary-nav-content .sub-menu li');
+			li.forEach( function(item) {
+				// statements
+				item.addEventListener('click', function(){
+
+					var tabName = item.closest('.primary-nav-content').previousElementSibling.innerHTML.trim();
+					
+					var linkName;
+
+					if(item.querySelector('.external-link')){ // external link
+						linkName = item.innerText.split('Link opens in a new window')[0];
+					}else {
+						linkName = item.innerText;
+					}
+
+					isoTest.fireTag(item, ': link: ' + tabName + ': ' + linkName);
+
+							
+				}, false)
+			});
+
+			// test name: submenu: car rental: open
+			var submenu = document.querySelectorAll('#primary-nav .primary-nav-content .title');
+			submenu.forEach( function(item) {
+				// statements
+				item.addEventListener('click', function(){
+
+					if(window.innerWidth < 885){
+						var submenuTitle = item.innerText.trim();
+						setTimeout(function(){
+		                    var action = item.getAttribute('aria-expanded');
+								if(action === "true"){
+									isoTest.fireTag(item, ': submenu: ' + submenuTitle + ': open');
+									
+								}
+	                    }, 500);
+					}
+
+
+							
+				}, false)
+			});
+			
+		},
+		fireTag : function(element, value) {
+			s.events='';
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+			s.eVar89 = '';
+		
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    
+	}
+
+	isoTest.init();
+})();
+</script>
