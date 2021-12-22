@@ -1,0 +1,281 @@
+<style>
+html {
+  scroll-behavior: smooth;
+}
+body .iso-sticky-header.iso-desktop {
+  position: fixed;
+  top: -75px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 999;
+  background: #169A5A;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+body.iso-show-sticky .iso-sticky-header.iso-desktop {
+  top: 0;
+}
+body .iso-sticky-header.iso-mobile {
+  display: none;
+}
+body .iso-sticky-header.iso-desktop .iso-left {
+  width: 20%;
+}
+body .iso-sticky-header.iso-desktop .iso-right {
+  width: 20%;
+}
+body .iso-sticky-header.iso-desktop .iso-middle {
+  width: 60%;
+  display: flex;
+}
+body .iso-sticky-header.iso-desktop .iso-left img {
+  width: 165.49px;
+  border: 1px solid #fff;
+  vertical-align: middle;
+}
+body .iso-sticky-header.iso-desktop .iso-right button {
+  border: 1.2px solid #FFFFFF;
+  box-sizing: border-box;
+  background: #169A5A;
+  width: 200px;
+  height: 39px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+}
+body .iso-sticky-header.iso-desktop .iso-middle .iso-input-long {
+    width: 60%;
+    border: 1px solid #BDBDBD;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    color: #828282;
+    font-weight: 300;
+    font-size: 16px;
+    padding: .5em .85rem;
+    font-family: 'tk-din-2014-n3';
+    margin: 0;
+    text-align: left;
+}
+body .iso-sticky-header.iso-desktop .iso-middle > button {
+  width: 20%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.31836 4.125L10.4434 0L11.8184 1.375L6.31836 6.875L0.818359 1.375L2.19336 0L6.31836 4.125Z' fill='%23169A5A'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 10px);
+  background-position-y: center;
+}
+body .iso-sticky-header.iso-desktop .iso-pickup-date,
+body .iso-sticky-header.iso-desktop .iso-pickup-time {
+  border: none;
+  border: 1px solid #BDBDBD;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  color: #181918;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  margin: 0;
+  text-align: left;
+  font-family: 'tk-din-2014-n3';
+}
+body .iso-sticky-header.iso-desktop .iso-pickup-date span,
+body .iso-sticky-header.iso-desktop .iso-pickup-time span {
+  color: #181918;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 16px;
+}
+body .iso-sticky-header.iso-desktop .iso-pickup-time {
+  background: #F3F3F3;
+  border: 1.2px solid #BDBDBD;
+  box-sizing: border-box;
+}
+@media (min-width: 769px) and (max-width: 1200px) {
+  body .iso-sticky-header.iso-desktop .iso-left {
+    display: none;
+  }
+  body .iso-sticky-header.iso-desktop {
+    padding: 0 60px;
+  }
+  body .iso-sticky-header.iso-desktop .iso-middle {
+    width: 75%;
+  }
+  body .iso-sticky-header.iso-desktop .iso-right {
+    width: 25%;
+    text-align: right;
+  }
+}
+@media (min-width: 769px) and (max-width: 991px) {
+  body .iso-sticky-header.iso-desktop .iso-right button {
+    width: 100%;
+    font-size: 12px;
+  }
+  body .iso-sticky-header.iso-desktop .iso-right {
+    padding-left: 25px;
+  }
+  body .iso-sticky-header.iso-desktop {
+    padding: 0 20px;
+  }
+}
+@media (max-width: 768px) {
+  body .iso-sticky-header.iso-desktop {
+    display: none;
+  }
+  body .iso-sticky-header.iso-mobile {
+    display: block;
+    position: fixed;
+    top: -81px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 999;
+    background: #006639;
+    box-shadow: 0px 0px 11px rgb(0 0 0 / 25%);
+    padding: 15px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+  }
+  body.iso-show-sticky .iso-sticky-header.iso-mobile {
+    top: 0;
+  }
+  body .iso-sticky-header.iso-mobile .iso-input-wrapper {
+    position: relative;
+  }
+  body .iso-sticky-header.iso-mobile button {
+    background: #169A5A;
+    border: 1.2px solid #FFFFFF;
+    box-sizing: border-box;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11.333 2.77283C13.0635 4.50335 13.5668 7.08046 12.6698 9.31127C12.3687 10.0624 11.9176 10.7485 11.3329 11.3331C8.96914 13.6959 5.13669 13.6959 2.77283 11.333C0.409057 8.96924 0.409057 5.1366 2.77283 2.77283C5.1366 0.409057 8.96923 0.409057 11.333 2.77283ZM10.1545 3.95134C8.44159 2.23844 5.66423 2.23844 3.95134 3.95134C2.23844 5.66424 2.23844 8.4416 3.95122 10.1544C5.66414 11.8666 8.44169 11.8666 10.1545 10.1545C10.5791 9.72992 10.9052 9.23403 11.1231 8.69034C11.7734 7.07305 11.4087 5.20557 10.1545 3.95134ZM13.3997 12.1389L12.2212 13.3174L17.9003 18.9966L19.0788 17.8181L13.3997 12.1389Z' fill='white'/%3E%3Cmask id='mask0' mask-type='alpha' maskUnits='userSpaceOnUse' x='1' y='1' width='19' height='18'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11.333 2.77283C13.0635 4.50335 13.5668 7.08046 12.6698 9.31127C12.3687 10.0624 11.9176 10.7485 11.3329 11.3331C8.96914 13.6959 5.13669 13.6959 2.77283 11.333C0.409057 8.96924 0.409057 5.1366 2.77283 2.77283C5.1366 0.409057 8.96923 0.409057 11.333 2.77283ZM10.1545 3.95134C8.44159 2.23844 5.66423 2.23844 3.95134 3.95134C2.23844 5.66424 2.23844 8.4416 3.95122 10.1544C5.66414 11.8666 8.44169 11.8666 10.1545 10.1545C10.5791 9.72992 10.9052 9.23403 11.1231 8.69034C11.7734 7.07305 11.4087 5.20557 10.1545 3.95134ZM13.3997 12.1389L12.2212 13.3174L17.9003 18.9966L19.0788 17.8181L13.3997 12.1389Z' fill='white'/%3E%3C/mask%3E%3Cg mask='url(%23mask0)'%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: center;
+  }
+
+  body .iso-sticky-header.iso-mobile .iso-input-wrapper {
+    background: #FFFFFF;
+    border: none;
+    box-shadow: 0px 2px 4px rgb(0 0 0 / 24%);
+    padding: 15px 15px;
+    font-weight: normal;
+    font-size: 16px;
+    height: 50px;
+  }
+ 
+}
+</style>
+<script>
+(function () {
+  "use strict";
+  var isoTest = {
+    account: "Enterprise",
+    portfolio: "EHI",
+    test: "Homepage Sticky Widget",
+    creative: "Challenger 4",
+    selector: ".date-time-form .pickupCalendar-label .day",
+    debug: false,
+    init: function () {
+      isoTest.debug = ${user.mvtDebug};
+      if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+        _satellite.setVar('TargetCampaign', isoTest.test);
+        _satellite.setVar('TargetCreative', isoTest.creative);
+      }
+      isoTest.log("Test Running...");
+      isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+      isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+      helpers.elementLoaded(isoTest.selector, isoTest.chall);
+    },
+    chall: function () {
+      var pickupDay = document.querySelector('.date-time-form .pickupCalendar-label .day').textContent;
+      var pickupMonth = document.querySelector('.date-time-form .pickupCalendar-label .month').textContent;
+      var pickupYear = document.querySelector('.date-time-form .pickupCalendar-label .year').textContent;
+      var stickyHeaderHTML = '' +
+        '  <div class="iso-sticky-header iso-desktop" role="banner">' +
+        '      <div class="iso-left">' +
+        '          <img src="https://enterprise-int6-aem.enterprise.com/content/dam/ecom/logo-enterprise.png" alt="Enterprise Logo – Home" />' +
+        '      </div>' +
+        '      <div class="iso-middle">' +
+                  '<div class="iso-input-long">Enter your Pick-Up Location, Zip, City or Airport</div>'+
+        '          <button class="iso-pickup-date"><span>' + pickupDay + ' ' + pickupMonth + ',</span> ' + pickupYear + '</button>' +
+        '          <button class="iso-pickup-time"><span>12:00</span> PM</button>' +
+        '      </div>' +
+        '      <div class="iso-right">' +
+        '          <button>CHECK AVAILABILITY</button>' +
+        '      </div>' +
+        '  </div>' +
+        '  <div class="iso-sticky-header iso-mobile" role="banner">' +
+        '      <div class="iso-input-wrapper">' +
+              '<div class="iso-input"><div class="iso-input-wrap">Enter Pick-up Location</div></div>'+
+        '          <button></button>' +
+        '      </div>' +
+        '  </div>';
+
+      document.querySelector('body').insertAdjacentHTML('beforeend', stickyHeaderHTML);
+
+      isoTest.renderStickyHandler();
+    },
+    renderStickyHandler: function () {
+      // SHOW ON SCROLL
+      window.addEventListener('scroll', function () {
+        var elOffsetTop = document.querySelector('.reservationWidget').clientHeight;
+        if (this.scrollY > elOffsetTop) {
+          document.body.classList.add('iso-show-sticky');
+        } else {
+          document.body.classList.remove('iso-show-sticky');
+        }
+      });
+      // CLICK ON STICKER HEADER
+      document.querySelectorAll('body .iso-sticky-header').forEach(function (item, index) {
+        item.addEventListener('click', function () {
+          window.scroll(0, 0);
+          // FIRE TAG
+          isoTest.fireTag('', 'anchored CTA');
+        });
+      });
+    },
+    fireTag: function (element, value) {
+      var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+      s.linkTrackVars = "eVar20";
+      s.eVar20 = linkName;
+      s.tl(this, "o", linkName);
+    },
+    log: function (obj) {
+      if (isoTest.debug === true) {
+        console.log(obj);
+      }
+    },
+  };
+
+  var helpers = {
+    elementLoaded: function (ele, callback) {
+      isoTest.log("elementLoaded::  " + ele + " - Checking...");
+      window.clearTimeout(isoTest.eleTimer);
+      if (document.querySelectorAll(ele).length > 0) {
+        if (typeof callback === "function") {
+          isoTest.log("elementLoaded::  " + ele + " - Found!");
+          callback();
+        }
+      } else {
+        isoTest.eleTimer = window.setTimeout(function () {
+          helpers.elementLoaded(ele, callback);
+        }, 100);
+      }
+    },
+  };
+  isoTest.init();
+})();
+</script>

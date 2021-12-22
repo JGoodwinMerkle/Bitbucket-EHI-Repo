@@ -1,0 +1,120 @@
+<style>
+html {
+  scroll-behavior: smooth;
+}
+body .iso-sticky-cta {
+  background: #169A5A;
+  box-shadow: 0px 0px 10px rgb(0 0 0 / 20%);
+  width: 375px;
+  height: 60px;
+  position: fixed;
+  bottom: -70px;
+  right: 64px;
+  color: #fff;
+  z-index: 999;
+  padding: 0 16px;
+  line-height: 60px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cg clip-path='url(%23clip0)'%3E%3Cpath d='M10.7629 0.28372L1.2679 10.4951C0.874413 10.8996 0.928379 11.551 1.33807 11.9512C1.74842 12.3518 2.40293 12.39 2.79826 11.9862L10.4078 3.80219L10.4078 22.9323C10.4078 23.5239 10.8916 24 11.4844 24C12.0768 24 12.561 23.5239 12.561 22.9323L12.561 1.08264C12.561 1.06813 12.5595 1.05574 12.5586 1.04954C12.5578 1.03601 12.5563 1.02467 12.5556 1.01917L12.5554 1.01786L12.5548 1.01295C12.5276 0.598436 12.2651 0.248284 11.8956 0.0965029C11.5194 -0.0728162 11.0643 -0.0247376 10.7629 0.28372Z' fill='white'/%3E%3Cpath d='M14.4538 5.47865C14.0361 5.06182 14.0361 4.38516 14.4537 3.96831C14.8712 3.55131 15.5476 3.55132 15.9651 3.96831L22.9705 10.9661C23.1793 11.1744 23.2837 11.4481 23.2837 11.7211C23.2837 11.9941 23.1793 12.2678 22.9705 12.476C22.5534 12.8931 21.8765 12.8931 21.4593 12.476L14.4538 5.47865Z' fill='white'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0'%3E%3Crect width='24' height='24' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 16px);
+  background-position-y: center;
+}
+body.iso-show-sticky .iso-sticky-cta {
+  bottom: 0px;
+}
+body .iso-sticky-cta p {
+  font-weight: bold;
+  font-size: 21px;
+  font-family: 'din-2014';
+  margin: 0;
+}
+@media (max-width: 768px) {
+  body .iso-sticky-cta {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+}
+</style>
+<script>
+(function () {
+  "use strict";
+  var isoTest = {
+    account: "Enterprise",
+    portfolio: "EHI",
+    test: "Homepage Sticky Widget",
+    creative: "Challenger 1",
+    selector: "body",
+    debug: false,
+    init: function () {
+      isoTest.debug = ${user.mvtDebug};
+      if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+        _satellite.setVar('TargetCampaign', isoTest.test);
+        _satellite.setVar('TargetCreative', isoTest.creative);
+      }
+      isoTest.log("Test Running...");
+      isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+      isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+      helpers.elementLoaded(isoTest.selector, isoTest.chall);
+    },
+    chall: function () {
+      var stickyCtaHTML = '' +
+        '  <div class="iso-sticky-cta" role="banner">' +
+        '      <p>RESERVE A VEHICLE</p>' +
+        '  </div>';
+      document.querySelector('body').insertAdjacentHTML('beforeend', stickyCtaHTML);
+      isoTest.renderStickyHandler();
+    },
+    renderStickyHandler: function () {
+      // SHOW ON SCROLL
+      window.addEventListener('scroll', function () {
+        var elOffsetTop = document.querySelector('.reservationWidget').clientHeight;
+        if (this.scrollY > elOffsetTop) {
+          document.body.classList.add('iso-show-sticky');
+        } else {
+          document.body.classList.remove('iso-show-sticky');
+        }
+      });
+      // CLICK ON STICKER HEADER
+      document.querySelector('body .iso-sticky-cta').addEventListener('click', function () {
+        window.scroll(0, 0);
+        // FIRE TAG
+        isoTest.fireTag('', 'anchored CTA');
+      });
+    },
+    fireTag: function (element, value) {
+      var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+      s.linkTrackVars = "eVar20";
+      s.eVar20 = linkName;
+      s.tl(this, "o", linkName);
+    },
+    log: function (obj) {
+      if (isoTest.debug === true) {
+        console.log(obj);
+      }
+    },
+  };
+
+  var helpers = {
+    elementLoaded: function (ele, callback) {
+      isoTest.log("elementLoaded::  " + ele + " - Checking...");
+      window.clearTimeout(isoTest.eleTimer);
+      if (document.querySelectorAll(ele).length > 0) {
+        if (typeof callback === "function") {
+          isoTest.log("elementLoaded::  " + ele + " - Found!");
+          callback();
+        }
+      } else {
+        isoTest.eleTimer = window.setTimeout(function () {
+          helpers.elementLoaded(ele, callback);
+        }, 100);
+      }
+    },
+  };
+  isoTest.init();
+})();
+</script>

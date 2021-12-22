@@ -1,0 +1,267 @@
+<style>
+html {
+  scroll-behavior: smooth;
+}
+body .iso-sticky-header.iso-desktop {
+  position: fixed;
+  top: -57px;
+  left: 0;
+  right: 0;
+  background: #169A5A;
+  height: 57px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 0 63px;
+  transition: all 0.3s ease-in-out;
+}
+body.iso-show-sticky .iso-sticky-header.iso-desktop {
+  top: 0;
+}
+body .iso-sticky-header.iso-mobile {
+  display: none;
+}
+body .iso-sticky-header.iso-desktop img {
+  width: 167px;
+  vertical-align: middle;
+  border: 1px solid #fff;
+  cursor: pointer;
+}
+body .iso-sticky-header.iso-desktop .iso-item {
+  color: #FFFFFF;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  font-family: 'din-2014';
+  display: inline-block;
+  padding-left: 20px;
+  cursor: pointer;
+}
+body .iso-sticky-header.iso-desktop .iso-item.iso-start {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11.7329 1.06667H13.3329V14.9333H2.66628V1.06667H4.26627V2.66667H11.7329V1.06667ZM11.7329 0H14.3996V16H1.59961V0H4.26627H11.7329ZM6.13293 6.4H11.7329V5.33334H6.13293V6.4ZM11.7329 9.33333H6.13293V8.26667H11.7329V9.33333ZM6.13293 12H11.7329V10.9333H6.13293V12ZM5.33293 5.86667C5.33293 6.16122 5.09415 6.4 4.7996 6.4C4.50505 6.4 4.26627 6.16122 4.26627 5.86667C4.26627 5.57212 4.50505 5.33334 4.7996 5.33334C5.09415 5.33334 5.33293 5.57212 5.33293 5.86667ZM4.7996 9.33333C5.09415 9.33333 5.33293 9.09455 5.33293 8.8C5.33293 8.50545 5.09415 8.26667 4.7996 8.26667C4.50505 8.26667 4.26627 8.50545 4.26627 8.8C4.26627 9.09455 4.50505 9.33333 4.7996 9.33333ZM5.33293 11.4667C5.33293 11.7612 5.09415 12 4.7996 12C4.50505 12 4.26627 11.7612 4.26627 11.4667C4.26627 11.1721 4.50505 10.9333 4.7996 10.9333C5.09415 10.9333 5.33293 11.1721 5.33293 11.4667Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+body .iso-sticky-header.iso-desktop .iso-item.iso-location {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='16' viewBox='0 0 12 16' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.14811 8.04908L5.98808 16L10.8281 7.95092C11.8578 6.38037 11.8578 4.31902 10.8281 2.65031C9.79827 0.981595 7.94467 0 5.98808 0C5.06128 0 4.0315 0.294479 3.20767 0.785276C0.530243 2.25767 -0.39656 5.49693 1.14811 8.04908ZM2.38385 7.36196C1.97194 6.67485 1.76598 5.98773 1.76598 5.30061C1.76598 4.6135 1.97194 3.92638 2.38385 3.33742C3.1047 2.06135 4.44341 1.27607 5.98808 1.27607C6.70893 1.27607 7.53275 1.47239 8.15062 1.86503C10.2102 2.94479 10.8281 5.39877 9.6953 7.36196L6.09106 13.4479L2.38385 7.36196ZM3.41367 5.30099C3.41367 6.67523 4.54643 7.85314 5.98812 7.85314C7.42982 7.85314 8.66555 6.77339 8.66555 5.39915C8.66555 4.02492 7.5328 2.84701 6.0911 2.84701C4.64941 2.84701 3.41367 3.92676 3.41367 5.30099ZM4.75239 5.39915C4.75239 4.71204 5.26728 4.22124 5.98812 4.22124C6.70897 4.22124 7.32684 4.71204 7.22386 5.39915C7.22386 6.08627 6.70897 6.57707 5.98812 6.57707C5.26728 6.57707 4.75239 6.08627 4.75239 5.39915Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+body .iso-sticky-header.iso-desktop .iso-item.iso-vmc {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='17' viewBox='0 0 16 17' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.46581 12.9725C9.24615 12.1649 8.59571 11.5151 7.79323 11.3046C6.50085 10.9672 5.23279 11.7194 4.87371 12.9633C4.87344 12.9642 4.87321 12.9651 4.87302 12.9659C4.8722 12.9693 4.87213 12.9716 4.87282 12.973H0.266602V14.3115H4.90664C5.49516 14.3115 5.97939 13.9037 6.1424 13.3387C6.30333 12.7813 6.86918 12.4456 7.46251 12.6005C7.81125 12.692 8.10569 12.9902 8.19559 13.3435C8.37894 14.0615 7.86582 14.7231 7.16618 14.7231C6.91237 14.7231 6.6728 14.6327 6.48085 14.4695L5.63097 15.4946C6.05843 15.8581 6.59799 16.0616 7.16618 16.0616C8.27596 16.0616 9.1786 15.3103 9.46248 14.3116L13.0783 14.3115V12.973L9.46581 12.9725ZM15.3863 7.39649C15.1765 6.57206 14.5187 5.90586 13.7041 5.69216C12.4118 5.35479 11.1437 6.107 10.7846 7.35082C10.7843 7.35176 10.7841 7.35262 10.7839 7.35342C10.7831 7.35689 10.7831 7.35916 10.7837 7.36059H0.266602V8.69907H10.8175C11.4064 8.69907 11.8918 8.2906 12.0537 7.72488C12.2142 7.16883 12.7801 6.83317 13.3734 6.98806C13.7222 7.07955 14.0166 7.37773 14.1065 7.73102C14.2898 8.44895 13.7768 9.11065 13.0778 9.11065C12.8233 9.11065 12.5838 9.02033 12.3918 8.8571L11.5419 9.8822C11.9694 10.2457 12.509 10.4491 13.0778 10.4491C14.6367 10.4491 15.787 8.96556 15.3863 7.39649ZM7.68275 1.74865C7.46297 0.940597 6.81273 0.29105 6.00917 0.080698C4.71775 -0.256644 3.44972 0.495709 3.09066 1.73946C3.09039 1.74039 3.09016 1.74125 3.08997 1.74206C3.08916 1.74553 3.08909 1.74779 3.08978 1.74923H0.266602V3.0877H3.12358C3.71243 3.0877 4.19786 2.67923 4.35975 2.11352C4.52026 1.55752 5.08602 1.22185 5.67869 1.37666C6.02853 1.46824 6.32254 1.76597 6.41254 2.11966C6.59586 2.83752 6.08289 3.49929 5.38445 3.49929C5.12982 3.49929 4.88961 3.40881 4.6978 3.24573L3.84791 4.27083C4.27538 4.63426 4.81565 4.83776 5.38445 4.83776C6.49349 4.83776 7.39574 4.08639 7.67948 3.08762L13.078 3.0877V1.74923L7.68275 1.74865Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+body .iso-sticky-header.iso-desktop .iso-item.iso-vehicle {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='8' viewBox='0 0 16 8' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.2282 3.06158C15.1141 3.36006 15.9194 3.79421 16 4.93386V6.04637C16 6.26345 15.9194 6.48052 15.7852 6.6162C15.651 6.75187 15.4631 6.83327 15.2483 6.83327H13.5302V5.80216H15.0067L14.953 5.01526C14.9262 4.58111 14.7382 4.3369 13.7181 3.98415L12.2684 3.49573C11.9463 3.44146 11.5973 3.30579 11.302 3.11585L9.66441 1.9762C8.99327 1.51491 8.42952 1.29783 6.87247 1.29783H6.81878H6.79194C6.1208 1.29783 5.42281 1.40637 4.77852 1.59631C4.51006 1.67772 4.2416 1.84053 3.99999 2.03047C3.91946 2.08474 3.83892 2.16614 3.75838 2.24754C3.32885 2.7631 2.71141 3.08871 2.01342 3.14298H1.2349C1.12751 3.14298 1.02013 3.25152 1.02013 3.36006V5.42228C1.02013 5.63936 1.18121 5.80216 1.39597 5.80216H3.27516C3.30201 5.80216 3.32885 5.77503 3.32885 5.77503C3.51677 5.01526 4.21476 4.49971 5.02013 4.55398C5.53019 4.55398 6.01341 4.77105 6.33556 5.17807C6.65771 5.55795 6.79194 6.07351 6.7114 6.56193C6.55033 7.37596 5.87919 7.94579 5.07382 8.00006H5.02013C4.80536 8.00006 4.5906 7.94579 4.40268 7.86438L4.2953 7.81011L4.67113 6.83327L4.80536 6.88754C4.8859 6.91468 4.96643 6.94181 5.04697 6.94181C5.39596 6.94181 5.69127 6.67047 5.74496 6.34485C5.79865 6.15491 5.74496 5.96497 5.61073 5.80216C5.4765 5.63935 5.28858 5.55795 5.07382 5.55795C4.75167 5.53082 4.48321 5.72076 4.40268 6.01924C4.26845 6.50766 3.83892 6.83327 3.3557 6.80614H1.42282C0.644294 6.80614 0 6.15491 0 5.36801V3.33292C0 2.65456 0.536912 2.08474 1.2349 2.08474H2.04027C2.4161 2.03047 2.79194 1.81339 3.0604 1.48778L3.14093 1.40637C3.1812 1.37924 3.21476 1.34532 3.24832 1.3114C3.28187 1.27748 3.31543 1.24357 3.3557 1.21643C3.70469 0.917952 4.08053 0.72801 4.51006 0.592338C5.26174 0.375262 6.04026 0.266724 6.84563 0.266724H6.92616C8.72482 0.266724 9.44965 0.538069 10.2819 1.10789L11.9194 2.24754C12.0805 2.35608 12.2953 2.43748 12.51 2.46462H12.5906L14.2282 3.06158ZM11.1678 4.58127C11.651 4.60841 12.1342 4.79835 12.4564 5.17823C12.7785 5.55811 12.9127 6.04653 12.8859 6.48069C12.7248 7.32186 12.0268 7.91882 11.1946 7.91882H11.0604C10.9198 7.91882 10.7996 7.87746 10.6642 7.83085C10.6445 7.82407 10.6245 7.81717 10.604 7.81028L10.4698 7.75601L10.8188 6.77917L10.953 6.83344C11.0067 6.86057 11.0872 6.8877 11.1409 6.8877C11.4899 6.91484 11.8121 6.67063 11.8658 6.31788C11.9195 6.12794 11.8658 5.938 11.7315 5.80232C11.5973 5.66665 11.4094 5.58525 11.1946 5.58525C10.8725 5.55811 10.604 5.74806 10.5235 6.0194C10.3893 6.48069 9.98658 6.8063 9.50336 6.8063H7.51678V5.77519L9.47651 5.80232C9.47651 5.80232 9.50336 5.80232 9.50336 5.77519C9.69128 5.04256 10.3893 4.527 11.1678 4.58127Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+body .iso-sticky-header.iso-desktop .iso-right .iso-button {
+  background: #15804D;
+  border: 2px solid #FFFFFF;
+  width: 112px;
+  letter-spacing: -0.342857px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 25px;
+  padding: 0;
+  height: 31px;
+}
+body .iso-sticky-header.iso-desktop .iso-left {
+  width: 30%;
+  text-align: left;
+}
+body .iso-sticky-header.iso-desktop .iso-right {
+  width: 70%;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@media (min-width: 769px) and (max-width: 1200px) {
+  body .iso-sticky-header.iso-desktop .iso-left {
+    display: none;
+  }
+  body .iso-sticky-header.iso-desktop .iso-right {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+  body .iso-sticky-header.iso-desktop .iso-item {
+    margin-right: 30px;
+  }
+  body .iso-sticky-header.iso-desktop .iso-right .iso-button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    right: 63px;
+  }
+  body .iso-sticky-header.iso-desktop .iso-item.iso-vehicle {
+    display: none;
+  }
+}
+@media (min-width: 769px) and (max-width: 900px) {
+  body .iso-sticky-header.iso-desktop .iso-item {
+    margin-right: 15px;
+  }
+  body .iso-sticky-header.iso-desktop .iso-right .iso-button {
+    right: 30px;
+  }
+}
+@media (max-width: 768px) {
+  body .iso-sticky-header.iso-desktop {
+    display: none;
+  }
+  body .iso-sticky-header.iso-mobile {
+    display: block;
+    position: fixed;
+    top: -90px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 15px;
+    background: #fff;
+    box-shadow: 0px 0px 11px rgb(0 0 0 / 40%);
+    z-index: 999;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  body .iso-sticky-header.iso-mobile button {
+    text-transform: uppercase;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 13px;
+    background: #219653;
+    height: 50px;
+    width: 100%;
+  }
+  body.iso-show-sticky .iso-sticky-header.iso-mobile {
+    top: 0;
+  }
+}
+</style>
+<script>
+(function () {
+  "use strict";
+  var isoTest = {
+    account: "Enterprise",
+    portfolio: "EHI",
+    test: "Homepage Sticky Widget",
+    creative: "Challenger 3",
+    selector: "body",
+    debug: false,
+    init: function () {
+      isoTest.debug = ${user.mvtDebug};
+      if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+        _satellite.setVar('TargetCampaign', isoTest.test);
+        _satellite.setVar('TargetCreative', isoTest.creative);
+      }
+      isoTest.log("Test Running...");
+      isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+      isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+      helpers.elementLoaded(isoTest.selector, isoTest.chall);
+    },
+    chall: function () {
+      var stickyCtaHTML =''+ 
+        '  <div class="iso-sticky-header iso-desktop" role="banner">'+ 
+        '      <div class="iso-left">'+ 
+        '          <img src="https://enterprise-int6-aem.enterprise.com/content/dam/ecom/logo-enterprise.png" alt="Enterprise Logo – Home" />'+ 
+        '      </div>'+ 
+        '      <div class="iso-right">'+ 
+        '          <div class="iso-item iso-start">Start a Reservation</div>'+ 
+        '          <div class="iso-item iso-vmc">View/Modify/Cancel Reservation</div>'+ 
+        '          <a href="/en/car-rental/locations.html" class="iso-item iso-location">Find a Location</a>'+ 
+        '          <a href="/en/car-rental/vehicles/us.html?icid=header.rent.vehicles-_-us.vehicles-_-ENUS.NULL%5D" class="iso-item iso-vehicle">View All Vehicles</a>'+ 
+        '          <button class="iso-button">Sign in / join</button>'+ 
+        '      </div>'+ 
+        '  </div>'+ 
+        '  <div class="iso-sticky-header iso-mobile" role="banner">'+ 
+        '      <button>RESERVE a vehicle</button>'+ 
+        '  </div>';
+      document.querySelector('body').insertAdjacentHTML('beforeend', stickyCtaHTML);
+      
+      isoTest.renderStickyHandler();
+    },
+    renderStickyHandler: function () {
+      // SHOW ON SCROLL
+      window.addEventListener('scroll', function () {
+        var elOffsetTop = document.querySelector('.reservationWidget').clientHeight;
+        if (this.scrollY > elOffsetTop) {
+          document.body.classList.add('iso-show-sticky');
+        } else {
+          document.body.classList.remove('iso-show-sticky');
+        }
+      });
+      // CLICK ON STICKER HEADER
+      document.querySelector('.iso-sticky-header.iso-desktop .iso-right .iso-button').addEventListener('click', function() {
+        document.querySelector('#login-container button').click();
+        window.scroll(0, 0);
+       
+      })
+      // LISTENER ON VMC
+      document.querySelector('.iso-sticky-header.iso-desktop .iso-item.iso-vmc').addEventListener('click', function() {
+        if(document.querySelector('#reservationWidget #book'))
+          document.querySelector('#reservationWidget .reservation-toggle__button').click();
+        window.scroll(0, 0);
+        
+      })
+      // LISTENER ON START RESERVATION
+      document.querySelector('.iso-sticky-header.iso-desktop .iso-item.iso-start').addEventListener('click', function() {
+        if(!document.querySelector('#reservationWidget #book'))
+          document.querySelector('#reservationWidget .reservation-toggle__button').click();
+        window.scroll(0, 0);
+        // FIRE TAG
+        isoTest.fireTag('', 'anchored CTA');
+      })
+      // LISTENER ON FIND LOCATION
+      document.querySelector('.iso-sticky-header.iso-mobile button').addEventListener('click', function() {
+        // FIRE TAG
+        isoTest.fireTag('', 'anchored CTA');
+      })
+      
+      // LISTENER ON LOGO AND MOB CTA
+      document.querySelectorAll('.iso-sticky-header.iso-desktop img, .iso-sticky-header.iso-mobile button').forEach(function(item, index) {
+        item.addEventListener('click', function() {
+          window.scroll(0, 0);
+        })
+      }) 
+    },
+    fireTag: function (element, value) {
+      var linkName = value ? value : element.innerText;
+      linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+      s.linkTrackVars = "eVar20";
+      s.eVar20 = linkName;
+      s.tl(this, "o", linkName);
+    },
+    log: function (obj) {
+      if (isoTest.debug === true) {
+        console.log(obj);
+      }
+    },
+  };
+
+  var helpers = {
+    elementLoaded: function (ele, callback) {
+      isoTest.log("elementLoaded::  " + ele + " - Checking...");
+      window.clearTimeout(isoTest.eleTimer);
+      if (document.querySelectorAll(ele).length > 0) {
+        if (typeof callback === "function") {
+          isoTest.log("elementLoaded::  " + ele + " - Found!");
+          callback();
+        }
+      } else {
+        isoTest.eleTimer = window.setTimeout(function () {
+          helpers.elementLoaded(ele, callback);
+        }, 100);
+      }
+    },
+  };
+  isoTest.init();
+})();
+</script>
