@@ -1,0 +1,162 @@
+<style>
+.reservation-step#extras section.upgrade-vehicle-box--current-vehicle{
+	display: none;
+}
+
+.reservation-step#extras .upgrade-banner{
+        padding-top: 20px !important;
+        height: 150px;
+}
+.reservation-step#extras section.upgrade-banner__main .upgrade-banner__button{
+	display: none;
+}
+
+.iso-dup-button
+{
+	margin: 0;
+    padding: 0;
+    color: black;
+    background: none;
+    font-weight: 600 !important;
+    width: 150px;
+    height: 34px;
+    font-style: normal;
+    font-size: 1em;
+    text-transform: none;
+    letter-spacing: normal;
+    line-height: inherit;
+    font-weight: 400;
+    font-style: normal;
+    border: 2px solid #169a5a;
+    padding: 5px 40px;
+    color: #169a5a;
+    font-size: .875rem;
+}
+
+.reservation-step#extras section.upgrade-vehicle-box:not(.upgrade-vehicle-box--current-vehicle){
+	display: flex;
+	width: auto !important;
+}
+.isoTextWrap{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    margin: 0 12px;
+}
+@media (max-width: 48em){
+  .reservation-step#extras .upgrade-banner{
+        height: auto !important;
+  }
+  .iso-dup-button{
+    margin-top: 16px;
+  }
+	.reservation-step#extras section.upgrade-vehicle-box:not(.upgrade-vehicle-box--current-vehicle){
+		justify-content: center;
+	}
+	.reservation-step#extras section.upgrade-vehicle-box:not(.upgrade-vehicle-box--current-vehicle) > img {
+		    margin: 0 !important;
+	}
+}
+</style>
+<script>
+(function() {
+  'use strict';
+  var isoTest = {
+    account : 'Enterprise',
+    portfolio : 'Enterprise.com',
+    test : 'Upgrade module change',
+    creative : 'Challenger 1',
+    selector: '.reservation-step#extras .upgrade-banner',
+    init : function() {
+      isoTest.debug = ${user.mvtDebug};
+      
+      if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+        _satellite.setVar('TargetCampaign', isoTest.test);
+        _satellite.setVar('TargetCreative', isoTest.creative);
+        //_satellite.track('target_variables');
+      }
+
+      isoTest.log('Test Running...');
+      isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+      isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+      helpers.elementLoaded(isoTest.selector, function() {
+        isoTest.log('Test Ready!');
+          isoTest.chall();
+      });
+
+    window.addEventListener('hashchange', isoTest.viewChange, false);
+    
+    },
+    viewChange : function(){
+      if(/extras/.test(location.hash)){
+        helpers.elementLoaded(isoTest.selector, function() {
+          isoTest.chall();
+        });
+      }
+    },
+    chall : function() {
+      // debugger;
+      console.log('chall')
+      var parent = document.querySelector(".reservation-step#extras .upgrade-banner");
+
+      var button = document.createElement('button');
+      button.setAttribute('class', 'iso-dup-button');
+
+      button.innerHTML = 'UPGRADE';
+      parent.append(button);
+      
+      isoTest.bindEvent();
+      isoTest.wrapToExtract();
+    },
+    wrapToExtract: function (argument) {
+      var main = document.querySelector('.upgrade-vehicle-box:not(.upgrade-vehicle-box--current-vehicle)');
+      var nodes = [...main.children].splice(1);
+      var isoTextWrap = document.createElement('div');
+
+      isoTextWrap.classList.add('isoTextWrap');
+
+      nodes.map(node => isoTextWrap.appendChild(node));
+
+      main.appendChild(isoTextWrap);
+    },
+    bindEvent: function (argument) {
+      
+          document.querySelector('.iso-dup-button').onclick = function(){
+            document.querySelector('.reservation-step#extras .upgrade-banner__button').click();
+          };
+
+    },
+    
+    log : function(obj){
+      if(isoTest.debug === true){
+        console.log(obj);
+      }
+    }
+
+  }
+
+  var helpers = {
+    elementLoaded : function (ele, callback) {
+      isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+      window.clearTimeout(isoTest.eleTimer);
+      if (document.querySelectorAll(ele).length > 0) {
+        if (typeof callback === 'function') {
+          isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+          callback();
+        }
+          } else {
+              isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+          }
+    }
+      
+  }
+
+
+  isoTest.init();
+})();
+
+
+
+</script>
