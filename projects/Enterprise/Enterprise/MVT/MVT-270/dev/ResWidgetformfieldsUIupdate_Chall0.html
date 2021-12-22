@@ -1,0 +1,105 @@
+<style>
+</style>
+<script>
+  (function () {
+	"use strict";
+	var isoTest = {
+		account: "EHI",
+		portfolio: "Enterprise",
+		test: "Res Widget form fields UI update",
+		creative: "Challenger 0",
+		selector: ".coupon-filters-wrapper .coupon-field-wrapper",
+		debug: false,
+		
+		init: function () {
+			isoTest.debug = ${user.mvtDebug};
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function () {
+				isoTest.log('Test Ready!');
+				isoTest.chall();
+			});
+		},
+		chall: function () {
+			isoTest.resWidgetHandler();
+			if (document.querySelector("#viewModifyCancelBookingWidget") != null) {
+				document
+					.querySelector("#viewModifyCancelBookingWidget")
+					.addEventListener("click", function () {
+						document.body.classList.add('iso-reserve-label');
+						setTimeout(function () {
+							if (
+								document.querySelector(
+									".inner-container #book"
+								) != null
+							) {
+								isoTest.resWidgetHandler();
+							}
+						}, 50);
+					});
+			}
+		},
+
+		resWidgetHandler: function () {
+
+			/* ON TOGGLE CHECKBOX */
+			document
+				.querySelector('.booking-widget:not(#modal-content) input[type="checkbox"]')
+				.addEventListener("change", function () {
+					document
+						.querySelector("main")
+						.classList.toggle("hd-toggle");
+						if(document.querySelector("main").classList.contains('hd-toggle')){
+							isoTest.fireTag('RW: Oneway: On')
+						}else {
+							isoTest.fireTag('RW: Oneway: Off')
+						}
+				});
+
+
+		},
+
+		
+		fireTag: function (value) {
+			var linkName = value ? value : element.innerText;
+			linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+			s.linkTrackVars = "eVar89";
+			s.eVar89 = linkName;
+			s.tl(this, "o", linkName);
+		},
+		log: function (obj) {
+			if (isoTest.debug === true) {
+				console.log(obj);
+			}
+		},
+	};
+
+	var helpers = {
+		elementLoaded: function (ele, callback) {
+			isoTest.log("elementLoaded::  " + ele + " - Checking...");
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === "function") {
+					isoTest.log("elementLoaded::  " + ele + " - Found!");
+					callback();
+				}
+			} else {
+				isoTest.eleTimer = window.setTimeout(function () {
+					helpers.elementLoaded(ele, callback);
+				}, 100);
+			}
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
