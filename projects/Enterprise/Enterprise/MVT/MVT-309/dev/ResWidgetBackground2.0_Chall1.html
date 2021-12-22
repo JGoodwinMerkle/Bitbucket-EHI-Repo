@@ -1,0 +1,169 @@
+<style>
+.pickup-calendar, .dropoff-calendar {
+    position: relative !important;
+}
+.iso-bg {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+section.cf.reserve-widget-band.colors.white {
+    position: relative;
+}
+
+div#reservationWidget .inner-container {
+    background: white;
+    padding-top: 29px;
+    padding-right: 78px;
+    padding-left: 78px;
+    border: 1px solid #ccc;
+    z-index: 999;
+    position: relative;
+    margin-top: 151px;
+    margin-bottom: 38px;
+	width: 64em;
+
+}
+
+.booking-widget {
+    width: 100%;
+}
+
+@media (min-width: 884px) and (max-width: 1025px){
+	div#reservationWidget .inner-container {
+		width:53em;
+		margin-top: 105px;
+	}
+	.iso-bg {
+    	height: 205px;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 883px){
+	
+	div#reservationWidget .inner-container { 
+		width: 46em;
+		margin-top: 105px;
+		padding-top: 8px;
+	    padding-right: 40px;
+	    padding-left: 20px;
+	    padding-bottom: 5px;
+
+	}
+	.iso-bg {
+    	height: 205px;
+	}
+}
+
+@media (max-width: 767px){
+	div#reservationWidget .inner-container {
+		padding: 1px;
+	    border: none;
+	    margin-top: 90px;
+	    width: 100%;
+	}
+	.iso-bg{
+		height: 90px;
+	}
+}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'Enterprise',
+		portfolio : 'EHI',
+		test : 'Res Widget Background 2.0',
+		creative : 'Challenger 1',
+		selector: '#reservationWidget .inner-container',
+		images: [ 'https://www.enterprise.com/content/dam/ecom/hosted/res-widget-background/img_1_2x'],
+		init : function() {
+
+			isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+				//_satellite.track('target_variables');
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		
+		},
+		
+		chall : function() {
+				var ele = document.querySelector('.reserve-widget-band');
+				var bgImage = 'background-image: url(' + isoTest.images[0] + ')';
+				var newNode = isoTest.buildHTML('div', '','iso-bg', bgImage , '');
+				isoTest.log(newNode);
+				var existingNode = document.querySelector('#reservationWidget .inner-container');
+				isoTest.log(existingNode);
+				helpers.insertBefore(newNode, existingNode);
+
+		},
+		buildHTML: function(tag, id, className, attr, body){
+		
+            var x = document.createElement(tag);
+            x.setAttribute('tabindex', '0');
+            if(id){
+                x.setAttribute('id', id);
+            }
+            if(className){
+                x.setAttribute('class', className);
+            }
+            if(attr){
+                x.setAttribute('style', attr);
+            }
+            x.innerHTML = body;
+            return x;
+    	},
+		
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+
+	}
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		insertBefore : function(newNode, existingNode){
+				    existingNode.parentNode.insertBefore(newNode, existingNode);
+		}
+	}
+
+	isoTest.init();
+})();
+</script>
