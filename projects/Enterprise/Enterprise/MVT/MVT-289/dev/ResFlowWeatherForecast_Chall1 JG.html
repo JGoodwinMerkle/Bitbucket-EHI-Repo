@@ -9,6 +9,11 @@
     }
 
     /* stop */
+
+    /* JG added */
+    /* .iso-weather-info, .dentsu-display-none {
+        display: none;
+    }  */
     .iso-weather-info p {
         margin: 0;
         font-size: 16px;
@@ -120,36 +125,7 @@
                 isoTest.log(isoTest.test + " - " + isoTest.creative);
 
                 isoTest.chall();
-                // console.log("chall init");
-                // window.addEventListener('hashchange', function () {
-                //     var timer = setInterval(function () {
-                //         if (document.querySelector('#loader .spinner-container') === null) {
-                //             isoTest.viewChange();
-                //             clearInterval(timer);
-                //             isoTest.log('spinner gone!');
-
-                //         }
-                //         isoTest.log('timer');
-                //     }, 100);
-                // }, false);
-
-                // var reactUpdates = new MutationObserver(function (mutationsList) {
-                //     // console.log(mutationsList)
-                //     mutationsList.forEach(function (mutation) {
-                //         if (mutation.target.matches('body')) {
-                //             // console.log("REFIRED")  
-                //             helpers.elementLoaded(isoTest.selector, function () {
-                //                 isoTest.log('Page updated: Test code re-fired');
-                //                 isoTest.chall();     
-                //                 // console.log("REFIRED")                                                                                
-                //                 isoTest.log('spinner gone!');
-                //             });
-                //         }
-                //     });
-                // });
-
-
-                // Fires anytime page is loaded or in-flight modify occurs
+                
                 var spinnerUpdates = new MutationObserver(function (mutationsList) {
                     mutationsList.forEach(function (mutation) {
                         mutation.removedNodes.forEach(function (removedNode) {
@@ -194,10 +170,11 @@
                             var data = JSON.parse(this.responseText);
                             isoTest.log(data);
                             var location = data.cities[pickupLocation];
+                            // console.log(location);
                             if (location) {
                                 var weather = location[pickupDate];
                                 if (weather) {
-                                    
+
                                     var infoHTML = isoTest.createWeatherInfoHTML(
                                         weather,
                                         isoTest.getDateFormat(pickupDate),
@@ -206,45 +183,74 @@
                                     helpers.elementLoaded(
                                         ".vehicle-select__header .vehicle-header__title, .extras-header .extras-header__title, .verification-page .verification-title",
                                         function () {
-                                            if (document.querySelector('.iso-weather-info') === null) {
-                                                isoTest.addWeatherInfo(infoHTML)
-                                                isoTest.fireTag('', 'Qualifies for Weather Widget');
-                                            }
-                                            /* //Ramsey added  */
-                                            //this checks if the currently city is within the weather data if its not the data is refired
-                                            var currentDate = isoTest.getDateFormat(pickupDate).toString();
-                                            console.log(currentDate, 'is the current city');
-                                            console.log(isoTest.getPickupDate());
-                                            if (document.querySelector('.iso-weather-info').innerText.includes(currentDate)) {
-                                                // console.log('city is up to date')
+                                            setTimeout(function () {
 
-                                                var grabMonth = document.querySelector("#main > header > div > div.vehicle-header__title > div > p").innerText.split(" ")[2];
-                                                var grabDay = document.querySelector("#main > header > div > div.vehicle-header__title > div > p").innerText.split(" ")[3];
-                                                console.log(grabMonth, grabDay);
-                                            } else {
-                                                document.querySelector('.iso-weather-info').remove();
-                                                isoTest.addWeatherInfo(infoHTML);
-                                                // console.log('city data updated')
-                                            };
 
-                                            var currentCity = isoTest.getPickupCity().toString();
-                                            console.log(currentCity, 'is the current city');
-                                            if (document.querySelector('.iso-weather-info').innerText.includes(currentCity)) {
-                                                console.log('city is up to date')
-                                            } else {
-                                                document.querySelector('.iso-weather-info').remove();
-                                                isoTest.addWeatherInfo(infoHTML);
-                                                console.log('city data updated')
-                                            };
-                                            ///stop 
+                                                if (document.querySelector('.iso-weather-info') === null) {
+                                                    isoTest.addWeatherInfo(infoHTML)
+                                                    isoTest.fireTag('', 'Qualifies for Weather Widget');
+                                                }
+                                                /* //Ramsey added  */
+                                                //this checks if the currently city is within the weather data if its not the data is refired
+                                                var currentDate = isoTest.getDateFormat(pickupDate).toString();
+                                                // console.log(currentDate, 'is the current city');
+                                                // console.log(isoTest.getPickupDate());
+                                                if (document.querySelector('.iso-weather-info').innerText.includes(currentDate)) {
+                                                    // console.log('city is up to date')
+
+                                                    var grabMonth = document.querySelector("#main > header > div > div.vehicle-header__title > div > p").innerText.split(" ")[2];
+                                                    var grabDay = document.querySelector("#main > header > div > div.vehicle-header__title > div > p").innerText.split(" ")[3];
+                                                    // console.log(grabMonth, grabDay);
+                                                } else {
+                                                    document.querySelector('.iso-weather-info').remove();
+                                                    isoTest.addWeatherInfo(infoHTML);
+                                                    // console.log('city data updated')
+                                                };
+
+                                                var currentCity = isoTest.getPickupCity().toString();
+                                                console.log(currentCity, 'is the current city');
+                                                console.log(isoTest.getPickupCity(location))
+                                                if (document.querySelector('.iso-weather-info').innerText.includes(currentCity) && window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address.city != currentCity) {
+                                                    console.log('city is up to date')
+                                                    // isoTest.addWeatherInfo(infoHTML);
+                                                    // document.querySelector('.iso-weather-info').remove();
+                                                    // if (window.matchMedia("(max-width: 1135px)").matches) {
+                                                    //     // Viewport is less or equal to 1135 pixels wide
+                                                    //     console.log("less that 1135");
+
+                                                    //     document.querySelector('.iso-weather-info').remove();
+                                                    // }
+                                                    // else {
+                                                    //     console.log("more than 1135");
+                                                    //     document.querySelector('.iso-weather-info').remove();
+                                                    // }
+
+                                                }
+                                                else {
+                                                    document.querySelector('.iso-weather-info').remove();
+                                                    isoTest.addWeatherInfo(infoHTML);
+                                                    console.log(currentCity, 'city data updated')
+                                                };
+                                                // if (document.querySelector('.iso-weather-info').innerText.includes(currentCity) != isoTest.getPickupCity(location)) {
+                                                //     document.querySelector(".iso-weather-info").style.display = "none";
+                                                // }
+                                                ///stop 
+                                                // console.log('wait for the city check');
+                                            }, 3000);
                                         }
                                     );
 
+                                } else {
+                                    if (document.querySelector(".iso-weather-info")) {
+                                        document.querySelector(".iso-weather-info").remove();
+                                    }
                                 }
-                                 else {
-                                     document.querySelector(".iso-weather-info").style.display = "none";
-                                 }
+                            } else if (document.querySelector(".iso-weather-info") && !location) {
+
+                                document.querySelector(".iso-weather-info").remove();
+
                             }
+
                         }
                     };
                     xhttp.open("GET", "https://www.enterprise.com/content/dam/mvt/res_flow_weather_mvt_289");
@@ -310,7 +316,7 @@
                 ],
                     month = monthNames[+date.split("-")[1] - 1], // May
                     day = date.split("-").pop(); // 10
-                console.log(month + " " + day);
+                // console.log(month + " " + day);
                 return month + " " + day;
             },
             getDaysBetweenDates: function getNumberOfDays(start, end) {
