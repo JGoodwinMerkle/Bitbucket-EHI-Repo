@@ -108,12 +108,6 @@
             init: function () {
                 // isoTest.debug = ${user.mvtDebug};
 
-                //Ramsey added //
-                var vehicleInfo = document.querySelector(".vehicle-header__info");
-                document.querySelector(".vehicle-header__title").insertAdjacentElement("afterend", vehicleInfo);
-                var vehicleDetails = document.querySelector(".vehicle-header__details");
-                document.querySelector(".vehicle-header__sort-by ").insertAdjacentElement("afterend", vehicleDetails);
-                ///stop//
 
                 if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
                     _satellite.setVar('TargetCampaign', isoTest.test);
@@ -125,7 +119,7 @@
                 isoTest.log(isoTest.test + " - " + isoTest.creative);
 
                 isoTest.chall();
-                
+
                 var spinnerUpdates = new MutationObserver(function (mutationsList) {
                     mutationsList.forEach(function (mutation) {
                         mutation.removedNodes.forEach(function (removedNode) {
@@ -152,23 +146,19 @@
             },
             chall: function () {
 
-                // if (isoTest.getDaysBetweenDates(isoTest.getPickupDate(), isoTest.getReturnDate()) <= 6) {
                 isoTest.getWeatherInfo();
-
-                // console.log(isoTest.getDaysBetweenDates("2/1/2021", "3/1/2021"));
-                // console.log(isoTest.getDaysBetweenDates(isoTest.getPickupDate(), isoTest.getReturnDate()));
-                // }
             },
             getWeatherInfo: function () {
                 isoTest.waitForEntDatalayer(function () {
-                    var pickupLocation = isoTest.getPickupCity() + ", " + isoTest.getPickupCountrySubDivision(),
-                        pickupDate = isoTest.getPickupDate(),
-                        xhttp = new XMLHttpRequest();
+
+                    var xhttp = new XMLHttpRequest();
                     // console.log(isoTest.pickupDate());
                     xhttp.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
                             var data = JSON.parse(this.responseText);
                             isoTest.log(data);
+                            var pickupLocation = isoTest.getPickupCity() + ", " + isoTest.getPickupCountrySubDivision(),
+                                pickupDate = isoTest.getPickupDate();
                             var location = data.cities[pickupLocation];
                             // console.log(location);
                             if (location) {
@@ -181,62 +171,20 @@
                                         isoTest.getPickupCity(),
                                     );
                                     helpers.elementLoaded(
-                                        ".vehicle-select__header .vehicle-header__title, .extras-header .extras-header__title, .verification-page .verification-title",
+                                        ".vehicle-item__main-content, .vehicle-select__header .vehicle-header__title, .extras-header .extras-header__title, .verification-page .verification-title",
                                         function () {
-                                            setTimeout(function () {
+                                            //     setTimeout(function () {
 
 
-                                                if (document.querySelector('.iso-weather-info') === null) {
-                                                    isoTest.addWeatherInfo(infoHTML)
-                                                    isoTest.fireTag('', 'Qualifies for Weather Widget');
-                                                }
-                                                /* //Ramsey added  */
-                                                //this checks if the currently city is within the weather data if its not the data is refired
-                                                var currentDate = isoTest.getDateFormat(pickupDate).toString();
-                                                // console.log(currentDate, 'is the current city');
-                                                // console.log(isoTest.getPickupDate());
-                                                if (document.querySelector('.iso-weather-info').innerText.includes(currentDate)) {
-                                                    // console.log('city is up to date')
+                                            if (document.querySelector('.iso-weather-info') === null) {
 
-                                                    var grabMonth = document.querySelector("#main > header > div > div.vehicle-header__title > div > p").innerText.split(" ")[2];
-                                                    var grabDay = document.querySelector("#main > header > div > div.vehicle-header__title > div > p").innerText.split(" ")[3];
-                                                    // console.log(grabMonth, grabDay);
-                                                } else {
-                                                    document.querySelector('.iso-weather-info').remove();
-                                                    isoTest.addWeatherInfo(infoHTML);
-                                                    // console.log('city data updated')
-                                                };
+                                                isoTest.addWeatherInfo(infoHTML)
+                                                isoTest.fireTag('', 'Qualifies for Weather Widget');
+                                            } else {
+                                                document.querySelector(".iso-weather-info").remove();
+                                                isoTest.addWeatherInfo(infoHTML)
+                                            }
 
-                                                var currentCity = isoTest.getPickupCity().toString();
-                                                console.log(currentCity, 'is the current city');
-                                                console.log(isoTest.getPickupCity(location))
-                                                if (document.querySelector('.iso-weather-info').innerText.includes(currentCity) && window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address.city != currentCity) {
-                                                    console.log('city is up to date')
-                                                    // isoTest.addWeatherInfo(infoHTML);
-                                                    // document.querySelector('.iso-weather-info').remove();
-                                                    // if (window.matchMedia("(max-width: 1135px)").matches) {
-                                                    //     // Viewport is less or equal to 1135 pixels wide
-                                                    //     console.log("less that 1135");
-
-                                                    //     document.querySelector('.iso-weather-info').remove();
-                                                    // }
-                                                    // else {
-                                                    //     console.log("more than 1135");
-                                                    //     document.querySelector('.iso-weather-info').remove();
-                                                    // }
-
-                                                }
-                                                else {
-                                                    document.querySelector('.iso-weather-info').remove();
-                                                    isoTest.addWeatherInfo(infoHTML);
-                                                    console.log(currentCity, 'city data updated')
-                                                };
-                                                // if (document.querySelector('.iso-weather-info').innerText.includes(currentCity) != isoTest.getPickupCity(location)) {
-                                                //     document.querySelector(".iso-weather-info").style.display = "none";
-                                                // }
-                                                ///stop 
-                                                // console.log('wait for the city check');
-                                            }, 3000);
                                         }
                                     );
 
@@ -258,7 +206,7 @@
                 });
             },
             addWeatherInfo: function (infoHTML) {
-                // if (isoTest.getDaysBetweenDates(isoTest.getPickupDate(), isoTest.getReturnDate()) < 6) {
+
                 if (window.location.hash == "#extras") {
                     document.querySelector(".extras-header .extras-header__title").insertAdjacentHTML("beforeend", infoHTML);
                 } else if (window.location.hash == "#cars") {
@@ -268,20 +216,19 @@
                 } else if (window.location.hash == "#commit") {
                     document.querySelector(".verification-page .verification-title").insertAdjacentHTML("afterend", infoHTML);
                 }
-                // }
             },
             createWeatherInfoHTML: function (weather, date, location) {
-                // if (!document.querySelector(".iso-weather-info")) {
+
                 var weatherInfoHTML =
                     '<div class="iso-weather-info">' +
                     "<p>" + isoTest.weatherData[weather].icon + "<b>" + isoTest.weatherData[weather].str + "</b> on " + date + " @ " + location + "</p>" +
                     '</div>';
                 return weatherInfoHTML;
-
-                // }
             },
             getPickupCity: function () {
-                return window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address.city; // "Chicago"
+                if (window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address.city != undefined) {
+                    return window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address.city; // "Chicago"
+                }
             },
             getPickupCountrySubDivision: function () {
                 return window.store.getState().toJS().app.baobab.session.reservationSession.pickup_location.address
