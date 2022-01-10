@@ -91,70 +91,10 @@ body.iso-changed-hero .booking-widget {
             isoTest.log('Test Running...');
             isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
             isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+            
             isoTest.viewChange();
             isoTest.chall();
-        },
-        defaultRegion: 'EAST',
-        regionBasedStates: {
-            'EAST': ['PA', 'NY', 'ME', 'VT', 'NH', 'MA', 'RI', 'CT', 'NJ', 'DE', 'MD', 'district of columbia'],
-            'WEST': ['WA', 'OR', 'CA', 'NV', 'ID', 'AZ', 'UT', 'NM', 'CO', 'MT', 'WY', 'AK', 'HI'],
-            'SOUTH': ['FL', 'GA', 'AL', 'MS', 'TN', 'KY', 'WV', 'VA', 'SC', 'LA', ' TX', 'OK', 'AR', 'SJU'],
-            'MIDWEST': ['ND', 'SD', 'NE', 'KS', 'MO', 'IA', 'MN', 'WI', 'IL', 'IN', 'MI', 'OH']
-        },
-        locationBasedImages: {
-            'EAST': [{
-                    cityName: 'background-image-of-brooklyn',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/east_1.png'
-                },
-                {
-                    cityName: 'background-image-of-east',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/east_4%403x.png'
-                },
-                {
-                    cityName: 'background-image-of-new-york',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/east_3.png'
-                }
-            ],
-            'WEST': [{
-                    cityName: 'background-image-of-maui',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/west_1.png'
-                },
-                {
-                    cityName: 'background-image-of-bierstadt-lake',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/west_2.png'
-                },
-                {
-                    cityName: 'background-image-of-san-francisco',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/west_3.png'
-                }
-            ],
-            'SOUTH': [{
-                    cityName: 'background-image-of-fort-lauderdale',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/south_1.png'
-                },
-                {
-                    cityName: 'background-image-of-clearwater',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/south_2.png'
-                },
-                {
-                    cityName: 'background-image-of-atlanta',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/south_3.png'
-                }
-            ],
-            'MIDWEST': [{
-                    cityName: 'background-image-of-midwest',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_4%403x.png'
-                },
-                {
-                    cityName: 'background-image-of-chicago',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_2.png'
-                },
-                {
-                    cityName: 'background-image-of-utah',
-                    imageLink: '/content/dam/ecom/hosted/res-widget-background/midwest_3.png'
-                }
-            ]
-        },
+        },        
         viewChange: function() {
             window.addEventListener("hashchange", function() {
                 var timer = setInterval(function() {
@@ -167,15 +107,15 @@ body.iso-changed-hero .booking-widget {
                 }, 100);
             }, false);
         },
-        getUserStateRegion: function(stateCode) {
-            var keys = Object.keys(isoTest.regionBasedStates);
-            for (var i = 0; i < keys.length; i++) {
-                if (isoTest.regionBasedStates[keys[i]].indexOf(stateCode) != -1) {
-                    return keys[i]; // RETURN USER'S STATE REGION
-                }
-            }
-            return '';
-        },
+        // getUserStateRegion: function(stateCode) {
+        //     var keys = Object.keys(isoTest.regionBasedStates);
+        //     for (var i = 0; i < keys.length; i++) {
+        //         if (isoTest.regionBasedStates[keys[i]].indexOf(stateCode) != -1) {
+        //             return keys[i]; // RETURN USER'S STATE REGION
+        //         }
+        //     }
+        //     return '';
+        // },
         getRegionObject: function(action, region) {
             if (action == 'next') {
                 return {
@@ -213,27 +153,12 @@ body.iso-changed-hero .booking-widget {
         getRegionData: function() {
             return JSON.parse(window.localStorage.getItem('iso_region'));
         },
-        setUsersSession: function(value) {
-            window.sessionStorage.setItem('iso_state_image', value);
-        },
-        getUsersSession: function() {
-            return window.sessionStorage.getItem('iso_state_image');
-        },
-        heroImageChangeListener: function(trigger) {
-            var targetNode = document.querySelector('.booking-widget-hero .img-container img');
-            if (targetNode != null) {
-                var config = { attributes: true, childList: true, subtree: true };
-                var callback = function(mutationsList, observer) {
-                    for (var i = 0; i < mutationsList.length; i++) {
-                        if (mutationsList[i].type == 'attributes' && targetNode.getAttribute('src').indexOf('/hosted/res-widget-background/') < 0) {
-                            trigger();
-                        }
-                    }
-                };
-                var observer = new MutationObserver(callback);
-                observer.observe(targetNode, config);
-            }
-        },
+        // setUsersSession: function(value) {
+        //     window.sessionStorage.setItem('iso_state_image', value);
+        // },
+        // getUsersSession: function() {
+        //     return window.sessionStorage.getItem('iso_state_image');
+        // },
         changeImageAttribute: function(region, index) {
             if (window.location.pathname == '/en/home.html') {
                 document.querySelector('.booking-widget-hero .img-container img').setAttribute('src', '/content/dam/ecom/hosted/mvt-393_res-widget-background-images/res_widget_bg_'+region+'.webp');
@@ -242,29 +167,16 @@ body.iso-changed-hero .booking-widget {
             }
         },
         changeImageHandler: function(region, index) {
-            //isoTest.log(isoTest.locationBasedImages[region][index]);
             // CHANGE IMAGE
             helpers.elementLoaded(isoTest.selector, function() {
                 isoTest.changeImageAttribute(region, index);
-                // IF IMAGE CHANGE 
-                // isoTest.heroImageChangeListener(function() {
-                //     isoTest.changeImageAttribute(region, index);
-                // });
             });
-            this.setUsersSession(true);
+            //this.setUsersSession(true);
             // FIRE TAG 
             // var cityNameTracking = isoTest.locationBasedImages[region][index].cityName;
             // isoTest.log('cityNameTracking ' + cityNameTracking);
             // isoTest.fireTag('', cityNameTracking);
         },
-        // resetCycleHandler: function(region, round) {
-        //     var cycle = ++round;
-        //     if (cycle > 2) cycle = 0;
-        //     var data = this.getRegionData();
-        //     data.curr = region + '_' + cycle;
-        //     window.localStorage.setItem('iso_region', JSON.stringify(data));
-        //     return cycle;
-        // },
         chall: function() {
             if (window.location.pathname == '/en/reserve.html' && window.location.hash == '#cars') {
                 this.waitForEntDatalayer(function() {
@@ -294,7 +206,7 @@ body.iso-changed-hero .booking-widget {
                         this.setRegionData(this.defaultRegion);
                         this.changeImageHandler(this.defaultRegion);
                     }
-                    this.setUsersSession(false);
+                    //this.setUsersSession(false);
                 }
             }
 
