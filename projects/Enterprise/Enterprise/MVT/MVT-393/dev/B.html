@@ -1,0 +1,138 @@
+<style>
+    .booking-widget-hero div.img-container {
+        align-items: flex-start;
+    }
+</style>
+<script>
+(function() {
+    "use strict";
+    var isoTest = {
+        account: "EHI",
+        portfolio: "Enterprise",
+        test: "Res Background Image 3.0",
+        creative: "Challenger 1",
+        selector: ".booking-widget-hero .img-container img[src], section.cf.reserve-widget-band.colors.white",
+        init: function() {
+            isoTest.debug = ${user.mvtDebug};
+
+            if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+                _satellite.setVar('TargetCampaign', isoTest.test);
+                _satellite.setVar('TargetCreative', isoTest.creative);
+                //_satellite.track('target_variables');
+            }
+
+            isoTest.log('Test Running...');
+            isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+            isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+            
+            isoTest.viewChange();
+            isoTest.chall();
+        },        
+        viewChange: function() {
+            window.addEventListener("hashchange", function() {
+                var timer = setInterval(function() {
+                    if (document.querySelector("#loader .spinner-container") === null && document.querySelector('.vehicle-select .vehicle-select__main .transition') === null) {
+                        if (/cars/.test(location.hash)) {
+                            isoTest.chall();
+                        }
+                        clearInterval(timer);
+                    }
+                }, 100);
+            }, false);
+        },
+        setRegionData: function(region) {
+            window.localStorage.setItem('MVT', JSON.stringify({'pickupState': region}));
+        },
+        getRegionData: function() {
+            return JSON.parse(window.localStorage.getItem('MVT'));
+        },
+        changeImageAttribute: function(region) {
+            if (window.location.href.indexOf('/home.html') > -1) {
+                document.querySelector('.booking-widget-hero .img-container img').addEventListener('error', function(event) {
+                    isoTest.imgError();
+                });
+                document.querySelector('.booking-widget-hero .img-container img').setAttribute('src', '/content/dam/ecom/hosted/mvt-393_res-widget-background-images/res_widget_bg_'+region+'.webp');
+                document.querySelector('.booking-widget-hero .img-container img').setAttribute('data-original', '/content/dam/ecom/hosted/mvt-393_res-widget-background-images/res_widget_bg_'+region+'.webp');
+                document.querySelector('.booking-widget-hero .img-container img').setAttribute('alt', 'Landscape of '+region);
+            } else if (window.location.href.indexOf('/car-rental.html') > -1) {
+                document.querySelector('.reservationWidget.section').insertAdjacentHTML('beforebegin', '<div class="booking-widget-hero section"><style>.booking-widget-hero + .reservationWidget{min-height: 300px;} @media all and (min-width: 61.25em) {.booking-widget-hero + .reservationWidget{margin-top: -340px;}}</style><section class="band full-bleed"><div class="img-container"><img width="1680" height="400" src="/content/dam/ecom/hosted/mvt-393_res-widget-background-images/res_widget_bg_'+region+'.webp" alt="Landscape of '+region+'"></div></section></div>');
+                document.querySelector('.booking-widget-hero .img-container img').addEventListener('error', function(event) {
+                    isoTest.imgError();
+                });
+            }
+        },
+        imgError : function() {
+            isoTest.log('MVT-393: Error loading image');
+            document.querySelector('.booking-widget-hero .img-container img').setAttribute('src', '/content/dam/enterprise/img_2_3x.img_2@3x.png.wrend.1280.1280.png');
+            document.querySelector('.booking-widget-hero .img-container img').setAttribute('data-original', '/content/dam/enterprise/img_2_3x.img_2@3x.png.wrend.1280.1280.png');
+            document.querySelector('.booking-widget-hero .img-container img').setAttribute('alt', 'Winding Road');
+        },
+        changeImageHandler: function(region) {
+            helpers.elementLoaded(isoTest.selector, function() {
+                isoTest.changeImageAttribute(region);
+            });
+        },
+        chall: function() {
+            if (window.location.href.indexOf('/reserve.html') > -1 && window.location.hash == '#cars') {
+                this.waitForEntDatalayer(function() {
+                    var region = window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code;
+                    isoTest.setRegionData(region);
+                });
+            }
+
+            if (window.location.href.indexOf('/home.html') > -1 || window.location.href.indexOf('/car-rental.html') > -1) {
+                var regionData = this.getRegionData();
+                if (regionData != null) {
+                    var region = regionData.pickupState;
+                    this.changeImageHandler(region);
+                }
+            }
+        },
+        waitForEntDatalayer: function(callback) {
+            var maxCheck = 500;
+            var interval = window.setInterval(function() {
+                if (
+                    window.store &&
+                    window.store.getState() &&
+                    window.store.getState().toJS() &&
+                    window.store.getState().toJS().app &&
+                    window.store.getState().toJS().app.baobab &&
+                    window.store.getState().toJS().app.baobab.session &&
+                    window.store.getState().toJS().app.baobab.session.gbo &&
+                    window.store.getState().toJS().app.baobab.session.gbo.pickup_location &&
+                    window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address &&
+                    window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code
+                ) {
+                    callback();
+                    window.clearInterval(interval);
+                } else if (--maxCheck < 0) {
+                    window.clearInterval(interval);
+                }
+            }, 50);
+        },
+        log: function(obj) {
+            if (isoTest.debug === true) {
+                console.log(obj);
+            }
+        },
+    };
+
+    var helpers = {
+        elementLoaded: function(ele, callback) {
+            isoTest.log("elementLoaded::  " + ele + " - Checking...");
+            window.clearTimeout(isoTest.eleTimer);
+            if (document.querySelectorAll(ele).length > 0) {
+                if (typeof callback === "function") {
+                    isoTest.log("elementLoaded::  " + ele + " - Found!");
+                    callback();
+                }
+            } else {
+                isoTest.eleTimer = window.setTimeout(function() {
+                    helpers.elementLoaded(ele, callback);
+                }, 100);
+            }
+        },
+    };
+    isoTest.init();
+})();
+</script>
