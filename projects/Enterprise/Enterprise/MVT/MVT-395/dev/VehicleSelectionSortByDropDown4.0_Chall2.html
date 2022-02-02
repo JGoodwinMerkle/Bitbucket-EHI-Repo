@@ -211,6 +211,9 @@
 		syncSorts : function() {
 			var observer = new MutationObserver(function(mutations) {
 				mutations.forEach(function(mutation) {
+					if (mutation.type === 'characterData') {
+						isoTest.sortCheck();
+					}
 					if (mutation.type === 'attributes') {
 						var filters = ['Cars', 'SUVs', 'Unlimited Mileage'];
 						for (var i = 0; i < filters.length; i++) {
@@ -226,6 +229,20 @@
 			});
 			var observerConfig = { attributes: true, childList: true, subtree: true, characterData: true };
 			observer.observe($('.vehicle-select__aside'), observerConfig);
+			observer.observe($('.vehicle-header__details-group'), observerConfig);
+		},
+		sortCheck : function() {
+			if ($('.vehicle-header__sorted-by').innerHTML.indexOf('Featured') > -1) {
+				isoTest.isFeatured();
+			}
+			else
+			if ($('.vehicle-header__sorted-by').innerHTML.indexOf('Low to High') > -1) {
+			    isoTest.isLowHigh();
+			} 
+			else
+			if ($('.vehicle-header__sorted-by').innerHTML.indexOf('High to Low') > -1) {
+			    isoTest.isHighLow();
+			}
 		},
 		events : function() {
 			document.addEventListener('click', function (event) {
