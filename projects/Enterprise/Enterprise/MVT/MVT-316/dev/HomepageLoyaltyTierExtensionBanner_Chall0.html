@@ -126,9 +126,13 @@
 
 			helpers.elementLoaded(isoTest.selector, function() {
 				isoTest.log('Test Selector Found');
-				helpers.userProfileLoaded(function() {
-					// Exclude 'Plus' tier users
-					if (store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Plus') {
+				isoTest.observer();
+				helpers.userProfileLoaded(0, function() {
+					// Exclude specific loyalty tiers
+					if (store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Plus' &&
+						store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Emerald Club' &&
+						store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Executive' &&
+						store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Executive Elite') {
 						isoTest.log('Test Ready!');
 		  				isoTest.chall();
 					}
@@ -139,7 +143,6 @@
 		chall : function() {
 
 			isoTest.addBanner();
-			isoTest.observer();
 			isoTest.events();
 
 		},
@@ -154,11 +157,14 @@
 			var observer = new MutationObserver(function(mutations) {
 				mutations.forEach(function(mutation) {
 					isoTest.log(mutation.type);
-					if ($('#signin-content.authenticated')) {
-						if (store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Plus') {
+					if (!$('#signInJoinButton')) {
+						if (store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Plus' &&
+							store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Emerald Club' &&
+							store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Executive' &&
+							store.getState().toJS().app.baobab.User.profile.basicProfile.loyaltyData.loyalty_tier !== 'Executive Elite') {
 							isoTest.addBanner();
 						}
-					} else if ($('#signin-content')) {
+					} else if ($('#signInJoinButton')) {
 						if ($('.iso-preres-banner')) {
 							$('.iso-preres-banner').remove();
 						}
@@ -172,7 +178,7 @@
 				characterData: true,
 			};
 			 
-			observer.observe($('body'), observerConfig);
+			observer.observe($(isoTest.selector), observerConfig);
 		},
 		events : function() {
 			document.addEventListener('click', function (event) {
@@ -202,14 +208,18 @@
 		}
 	};
 	var helpers = {
-		userProfileLoaded : function (callback) {
+		userProfileLoaded : function (count, callback) {
 			if (typeof store.getState().toJS().app.baobab.User.profile !== 'undefined') {
 				isoTest.log('User.profile loaded');
 				if (typeof store.getState().toJS().app.baobab.User.profile.basicProfile !== 'undefined') {
 					callback();
 				}
 			} else {
-				isoTest.eleTimer = window.setTimeout(function(){helpers.userProfileLoaded(callback);}, 100);
+				if (count < 100) {
+					count += 1;
+					isoTest.log('User.profile check: '+count);
+					isoTest.eleTimer = window.setTimeout(function(){helpers.userProfileLoaded(count, callback);}, 100);
+				}
 			}
 		},
 		elementLoaded : function (ele, callback) {
