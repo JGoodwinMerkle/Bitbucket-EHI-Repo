@@ -148,7 +148,9 @@
 			if (!$('.d-sort-select')) {
 				$('.vehicle-header__filter').innerHTML = '<i class="icon icon-filter"></i> <span>Sort &&nbsp;</span> Filter';
 				$('.vehicle-header__sorted-by').insertAdjacentHTML('afterend','<div class="d-sort-select">Sorted By: <button>Featured</button></div>');
-				$('.footer').insertAdjacentHTML('afterend','<div class="d-sort-modal"><div class="dsm-header"><button class="dsm-down">Down</button><button class="dsm-up">Up</button><button class="dsm-ok">OK</button></div><div class="dsm-body"><ul><li><button class="dsm-feat">Featured</button></li><li><button class="dsm-lth">Low to High</button></li><li><button class="dsm-htl">High to Low</button></li></ul></div></div>');
+				helpers.elementLoaded('.footer', function() {
+					$('.footer').insertAdjacentHTML('afterend','<div class="d-sort-modal"><div class="dsm-header"><button class="dsm-down">Down</button><button class="dsm-up">Up</button><button class="dsm-ok">OK</button></div><div class="dsm-body"><ul><li><button class="dsm-feat">Featured</button></li><li><button class="dsm-lth">Low to High</button></li><li><button class="dsm-htl">High to Low</button></li></ul></div></div>');
+				});
 				isoTest.syncSorts();
 				isoTest.events();
 			}
