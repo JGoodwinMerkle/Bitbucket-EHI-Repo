@@ -93,6 +93,33 @@
 .d-sort-modal .dsm-up {
 	transform: rotate(270deg);
 }
+.vehicle-header__filter {
+	position: relative;
+	padding-right: 15px;
+}
+.vehicle-header__filter .icon-filter {
+	background-color: #fff;
+	position: absolute;
+	left: 17px;
+}
+.vehicle-header__filter .icon-filter::before {
+	background: #fff;
+    content: '';
+    display: block;
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    left: -17px;
+}
+.vehicle-header__filter .icon-filter::after {
+	background: #fff;
+    content: '';
+    display: block;
+    position: absolute;
+    width: 8px;
+    height: 17px;
+    right: -8px;
+}
 /* Pills */
 .sort-pills-wrap {
 	border-top: 1px solid #c3c3c3;
@@ -150,6 +177,10 @@
 	.vehicle-header__filter span {
 		display: inline;
 	}
+	.vehicle-header__filter .icon-filter {
+		position: static;
+		left: auto;
+	}
 	/* Pills */
 	.sort-pills {
 		display: none;
@@ -201,14 +232,17 @@
 		chall : function() {
 			if (!$('.sort-pills')) {
 				$('.vehicle-select__header').insertAdjacentHTML('afterend','<div class="sort-pills-wrap"><div class="sort-pills"><span>Quick Filters:</span><button data-filter="Cars">Cars +</button><button data-filter="SUVs">SUVs +</button><button data-filter="Unlimited Mileage">Unlimited Mileage +</button></div></div>');
-				$('.vehicle-header__filter').innerHTML = '<i class="icon icon-filter"></i> <span>Sort &&nbsp;</span> Filter';
-				$('.vehicle-header__sorted-by').insertAdjacentHTML('afterend','<div class="d-sort-select">Sorted By: <button>Featured</button></div>');
+				$('.vehicle-header__sorted-by').insertAdjacentHTML('afterend','<div class="d-sort-select">Sorted By: <button>Featured</button></div>');				
+			}
+			if (!$('.d-sort-modal')) {
+				isoTest.events();
 				helpers.elementLoaded('.footer', function() {
 					$('.footer').insertAdjacentHTML('afterend','<div class="d-sort-modal"><div class="dsm-header"><button class="dsm-down">Down</button><button class="dsm-up">Up</button><button class="dsm-ok">OK</button></div><div class="dsm-body"><ul><li><button class="dsm-feat">Featured</button></li><li><button class="dsm-lth">Low to High</button></li><li><button class="dsm-htl">High to Low</button></li></ul></div></div>');
 				});
-				isoTest.syncSorts();
-				isoTest.events();
 			}
+			isoTest.syncSorts();
+			isoTest.sortCheck();
+			isoTest.quickFilterCheck();
 		},
 		syncSorts : function() {
 			var observer = new MutationObserver(function(mutations) {
@@ -217,15 +251,7 @@
 						isoTest.sortCheck();
 					}
 					if (mutation.type === 'attributes') {
-						var filters = ['Cars', 'SUVs', 'Unlimited Mileage'];
-						for (var i = 0; i < filters.length; i++) {
-							if ($('input[value="'+filters[i]+'"]').checked === true ) {
-								$('[data-filter="'+filters[i]+'"]').setAttribute('aria-selected','true');
-							} else 
-							if ($('input[value="'+filters[i]+'"]').checked === false ) {
-								$('[data-filter="'+filters[i]+'"]').setAttribute('aria-selected','false');
-							}
-						}
+						isoTest.quickFilterCheck();
 					}
 				});    
 			});
@@ -244,6 +270,17 @@
 			else
 			if ($('.vehicle-header__sorted-by').innerHTML.indexOf('High to Low') > -1) {
 			    isoTest.isHighLow();
+			}
+		},
+		quickFilterCheck : function() {
+			var filters = ['Cars', 'SUVs', 'Unlimited Mileage'];
+			for (var i = 0; i < filters.length; i++) {
+				if ($('input[value="'+filters[i]+'"]').checked === true ) {
+					$('[data-filter="'+filters[i]+'"]').setAttribute('aria-selected','true');
+				} else 
+				if ($('input[value="'+filters[i]+'"]').checked === false ) {
+					$('[data-filter="'+filters[i]+'"]').setAttribute('aria-selected','false');
+				}
 			}
 		},
 		events : function() {

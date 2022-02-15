@@ -93,12 +93,43 @@
 .d-sort-modal .dsm-up {
 	transform: rotate(270deg);
 }
+.vehicle-header__filter {
+	position: relative;
+	padding-right: 15px;
+}
+.vehicle-header__filter .icon-filter {
+	background-color: #fff;
+	position: absolute;
+	left: 17px;
+}
+.vehicle-header__filter .icon-filter::before {
+	background: #fff;
+    content: '';
+    display: block;
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    left: -17px;
+}
+.vehicle-header__filter .icon-filter::after {
+	background: #fff;
+    content: '';
+    display: block;
+    position: absolute;
+    width: 8px;
+    height: 17px;
+    right: -8px;
+}
 @media(min-width: 654px) {
 	.d-sort-select {
 		display: none;
 	}
 	.vehicle-header__filter span {
 		display: inline;
+	}
+	.vehicle-header__filter .icon-filter {
+		position: static;
+		left: auto;
 	}
 }
 @media (min-width: 654px) and (max-width: 70.9375em) {
@@ -146,14 +177,16 @@
 		},
 		chall : function() {
 			if (!$('.d-sort-select')) {
-				$('.vehicle-header__filter').innerHTML = '<i class="icon icon-filter"></i> <span>Sort &&nbsp;</span> Filter';
 				$('.vehicle-header__sorted-by').insertAdjacentHTML('afterend','<div class="d-sort-select">Sorted By: <button>Featured</button></div>');
+			}
+			if (!$('.d-sort-modal')) {
+				isoTest.events();
 				helpers.elementLoaded('.footer', function() {
 					$('.footer').insertAdjacentHTML('afterend','<div class="d-sort-modal"><div class="dsm-header"><button class="dsm-down">Down</button><button class="dsm-up">Up</button><button class="dsm-ok">OK</button></div><div class="dsm-body"><ul><li><button class="dsm-feat">Featured</button></li><li><button class="dsm-lth">Low to High</button></li><li><button class="dsm-htl">High to Low</button></li></ul></div></div>');
 				});
-				isoTest.syncSorts();
-				isoTest.events();
 			}
+			isoTest.syncSorts();
+			isoTest.sortCheck();
 		},
 		syncSorts : function() {
 			var observer = new MutationObserver(function(mutations) {
