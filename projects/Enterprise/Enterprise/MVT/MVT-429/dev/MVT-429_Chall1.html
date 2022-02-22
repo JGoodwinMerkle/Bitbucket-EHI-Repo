@@ -278,7 +278,7 @@ div.booking-widget-hero + .reservationWidget {
 		max-width: 65.6875rem;
 	}
 	#main .booking-widget-hero+.reservationWidget[stuck] .inner-container {
-		background: rgb(22 154 90 / 90%);
+		background: rgb(22 154 90 / 95%);
 		padding: 15px 50px 15px 65px;
 		position: relative;
 		width: 100%;
@@ -288,13 +288,13 @@ div.booking-widget-hero + .reservationWidget {
 		/*background-color: #169a5a;*/
 		background-image: url(/etc.clientlibs/ecom/clientlibs/clientlib-ecom/resources/img/mfn-e-logo.svg);
 		background-repeat: no-repeat;
-		background-size: 90%;
+		background-size: 60px;
 		content: '';
 		position: absolute;
-		top: 0;
+		top: 22px;
 		left: 0;
 		bottom: 0;
-		width: 5vw;
+		width: 100%;
 	}
 	.reservation-toggle-header-container {
 		margin-top: 0;
@@ -339,8 +339,13 @@ div.booking-widget-hero + .reservationWidget {
 	[stuck] .booking-widget .custom-label__text {
 		color: #fff;
 	}
-	[stuck] .icon.icon-icon-info-green {
+	[stuck] .icon.icon-icon-info-green,
+	[stuck] .icon.icon-icon-info-green-fill {
+		background-image: url(/etc.clientlibs/ecom/clientlibs/clientlib-ecom/resources/img/icon-info-green.svg);
 		filter: grayscale(1) brightness(2);
+	}
+	[stuck] .tooltip-info__content {
+		width: 415px;
 	}
 	/* Location */
 	.booking-widget .location-input-container > div {
@@ -348,6 +353,7 @@ div.booking-widget-hero + .reservationWidget {
 	}
 	.booking-widget .pick-up-location {
 		flex: 1 0 50%;
+		padding-left: 6px;
 	}
 	.booking-widget .location-search .drop-off-input-margin {
 		flex: 1 0 50%;
@@ -428,7 +434,7 @@ div.booking-widget-hero + .reservationWidget {
 	.booking-widget .location-input-container {
 		display: inline-block;
 		margin: 0;
-		padding-left: 6px;
+		/*padding-left: 6px;*/
 		flex: 1 0 50%;	
 	}
 	.booking-widget .date-time-form {
