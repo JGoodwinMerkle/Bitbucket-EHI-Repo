@@ -374,6 +374,13 @@ div.booking-widget-hero + .reservationWidget {
 		margin-top: 46px;
 	}
 	/* Pickup & Return Time */
+	.booking-widget .location-chicklet .chicklet:first-of-type {
+	    text-overflow: ellipsis;
+	    overflow: hidden;
+	    max-width: calc(100vw - 87vw);
+	    width: 100%;
+	    white-space: nowrap;
+	}
 	.booking-widget .location-search .location-input-label__required-label {
 		display: none;
 		position: absolute;
@@ -715,7 +722,7 @@ div.booking-widget-hero + .reservationWidget {
 
 
 			// Handle res widget switching between book & v/m/c 
-			var spinnerUpdates = new MutationObserver(function(mutationsList) {
+			var vmcToggle = new MutationObserver(function(mutationsList) {
 				mutationsList.forEach(function(mutation) {
 					mutation.addedNodes.forEach(function(addedNode) {
 						if (addedNode.classList !== undefined) {
@@ -729,7 +736,7 @@ div.booking-widget-hero + .reservationWidget {
 					});
 				});
 			});
-			spinnerUpdates.observe(document.querySelector('body'), { subtree: true, childList: true, attributes: true, });
+			vmcToggle.observe(document.querySelector('body'), { subtree: true, childList: true, attributes: true, });
 
 
 			// Scroll events
@@ -778,6 +785,9 @@ div.booking-widget-hero + .reservationWidget {
 
 			// Click events
 			document.addEventListener('click', function (event) {
+				if (event.target.matches('.same-location-info__checkbox')) {
+					//$('.pick-up-location').classList.toggle('diff-dropoff-selected');
+				} else
 				if (event.target.matches('.iso-sticky-toggle')) {
 					if ($('.reservationWidget .inner-container.expanded')) {
 						$('.reservationWidget .inner-container').classList.remove('expanded');
