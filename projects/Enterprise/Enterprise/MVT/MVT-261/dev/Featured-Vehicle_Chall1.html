@@ -146,6 +146,22 @@
 
 			window.addEventListener('hashchange', isoTest.hashHandler, false);
 			window.addEventListener('ttFeatVehicle', isoTest.labelVehicle, false);
+
+			var spinnerUpdate = new MutationObserver(function(mutationsList) {
+				mutationsList.forEach(function(mutation) {
+					mutation.removedNodes.forEach(function(removedNode) {
+						if (removedNode.classList !== undefined) {
+							if(removedNode.classList.contains('spinner-container')) {
+								isoTest.elementLoaded(isoTest.vehicleItem, function() {
+					  				isoTest.chall();
+								});
+							}
+						}
+					});
+				});
+			});
+			spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
+			
 		},
 		hashHandler : function(){
 			if(/cars/.test(location.hash)){
