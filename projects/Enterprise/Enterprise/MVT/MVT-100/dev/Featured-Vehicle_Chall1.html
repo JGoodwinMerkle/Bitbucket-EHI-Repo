@@ -150,9 +150,7 @@
 					mutation.removedNodes.forEach(function(removedNode) {
 						if (removedNode.classList !== undefined) {
 							if(removedNode.classList.contains('spinner-container')) {
-								isoTest.elementLoaded(isoTest.vehicleItem, function() {
-					  				isoTest.chall();
-								});
+								isoTest.hashHandler();
 							}
 						}
 					});
