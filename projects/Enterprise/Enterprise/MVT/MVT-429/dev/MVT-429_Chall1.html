@@ -676,6 +676,7 @@ div.booking-widget-hero + .reservationWidget {
 		selector : '.coupon-field-wrapper #coupon',
 		stickySeenCounter : 0,
 		stickyExpandCounter : 0,
+		stickyCollapseCounter : 0,
 		init : function() {
 
 			isoTest.debug = ${user.mvtDebug};
@@ -785,9 +786,6 @@ div.booking-widget-hero + .reservationWidget {
 
 			// Click events
 			document.addEventListener('click', function (event) {
-				if (event.target.matches('.same-location-info__checkbox')) {
-					//$('.pick-up-location').classList.toggle('diff-dropoff-selected');
-				} else
 				if (event.target.matches('.iso-sticky-toggle')) {
 					if ($('.reservationWidget .inner-container.expanded')) {
 						$('.reservationWidget .inner-container').classList.remove('expanded');
@@ -801,6 +799,10 @@ div.booking-widget-hero + .reservationWidget {
 						$('.reservationWidget .inner-container').classList.add('expanded');
 						$('.reservationWidget .inner-container').classList.remove('collapsed');
 						$('.iso-sticky-toggle').classList.remove('iso-arrow-down');
+						if (isoTest.stickyExpandCounter < 1) {
+							isoTest.stickyExpandCounter = 1;
+							isoTest.fireTag('','Sticky Res Widget Expand');
+						}
 					}
 				} else
 				if (event.target.matches('.iso-res-widget-close')) {
@@ -821,7 +823,7 @@ div.booking-widget-hero + .reservationWidget {
 				} else
 				if (event.target.closest('.reserve-widget-band') || event.target.closest('.ReactModal__Content')) {
 					$('.iso-sticky-toggle').classList.remove('iso-arrow-down');
-					if ($('#reservationWidget .inner-container.collapsed')) {
+					if ($('#reservationWidget .inner-container.collapsed') || event.target.matches('#pickupLocationTextBox')) {
 						$('#reservationWidget .inner-container').classList.add('expanded');
 						$('#reservationWidget .inner-container').classList.remove('collapsed');
 						if ($('.reservationWidget[stuck]')) {
