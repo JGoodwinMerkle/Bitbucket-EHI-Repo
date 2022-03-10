@@ -71,7 +71,7 @@
 			min-height: 100vh;
 		}
 
-		.style-modal .booking-widget .date-time-selector .date-label,
+		#reservationWidget.style-modal .booking-widget .date-time-selector .date-label,
 		.style-modal .booking-widget .date-time-selector .time-label {
 			height: 3.5rem;
 		}
@@ -99,7 +99,7 @@
 			display: block;
 		}
 
-		.style-modal .booking-widget--user-friendly .date-time-form:before,
+		#reservationWidget .style-modal .booking-widget--user-friendly .date-time-form:before,
 		.style-modal .booking-widget--user-friendly .location-search:before {
 			display: none;
 		}
@@ -107,7 +107,7 @@
 		.style-modal .booking-widget.booking-widget--user-friendly .age-input,
 		.style-modal .booking-widget.booking-widget--user-friendly .coupon-field-wrapper,
 		.style-modal .booking-widget.booking-widget--user-friendly .coupon-filters-wrapper,
-		.style-modal .booking-widget.booking-widget--user-friendly .date-time-form,
+		#reservationWidget .style-modal .booking-widget.booking-widget--user-friendly .date-time-form,
 		.style-modal .booking-widget.booking-widget--user-friendly .location-search,
 		.style-modal .booking-widget.booking-widget--user-friendly .filter-modal-button {
 			margin: 0 auto;
@@ -137,7 +137,7 @@
 			margin-top: 10px;
 		}
 
-		.style-modal .booking-widget.booking-widget--user-friendly .date-time-form,
+		#reservationWidget .style-modal .booking-widget.booking-widget--user-friendly .date-time-form,
 		.style-modal .booking-widget.booking-widget--user-friendly .age-input {
 			margin-top: 15px;
 		}
@@ -279,10 +279,10 @@
 			align-items: start;
 		}
 
-		div.booking-widget-hero img {
+		/* div.booking-widget-hero img {
 			height: 25em;
 			object-fit: cover;
-		}
+		} */
 
 		/* Outer Elements */
 		.reservationWidget {
@@ -467,8 +467,8 @@
 			display: none;
 		}
 
-		.booking-widget div.arrow,
-		.booking-widget--user-friendly .date-time-form:before,
+		#reservationWidget .booking-widget div.arrow,
+		#reservationWidget .booking-widget--user-friendly .date-time-form:before,
 		.booking-widget--user-friendly .location-search:before {
 			display: none;
 		}
@@ -541,7 +541,7 @@
 			flex: 1 0 50%;
 		}
 
-		.booking-widget .date-time-form {
+		#reservationWidget .booking-widget .date-time-form {
 			display: inline-block;
 			float: right;
 			margin-bottom: 0;
@@ -733,10 +733,11 @@
 
 	@media (min-width: 600px) and (max-width: 61.24em) {
 
+
 		.booking-widget.booking-widget--user-friendly .age-input,
 		.booking-widget.booking-widget--user-friendly .coupon-field-wrapper,
 		.booking-widget.booking-widget--user-friendly .coupon-filters-wrapper,
-		.booking-widget.booking-widget--user-friendly .date-time-form,
+		#reservationWidget .booking-widget.booking-widget--user-friendly .date-time-form,
 		.booking-widget.booking-widget--user-friendly .location-search {
 			margin-left: 0;
 			margin-right: 0;
@@ -746,6 +747,8 @@
 		.booking-widget .pickupCalendar-active .pickup-calendar {
 			top: -2px;
 		}
+
+
 	}
 
 	/* Desktop */
@@ -753,6 +756,12 @@
 		div.booking-widget-hero+.reservationWidget {
 			margin-top: -355px;
 		}
+
+		div.booking-widget-hero img {
+			height: 25em;
+			object-fit: cover;
+		}
+
 
 		.reservationWidget section.cf.reserve-widget-band.colors {
 			background: transparent;
@@ -763,16 +772,16 @@
 			right: -100%;
 		}
 
-		.inner-container.collapsed .date-time-form {
+		#reservationWidget .inner-container.collapsed .date-time-form {
 			display: inline;
 			opacity: 1;
 		}
 
-		.booking-widget .date-time-form {
+		#reservationWidget .booking-widget .date-time-form {
 			margin-top: 0;
 		}
 
-		.booking-widget .date-time-selector .label-container {
+		#reservationWidget .booking-widget .date-time-selector .label-container {
 			padding-left: 6px;
 		}
 
@@ -879,7 +888,7 @@
 		}
 
 		.booking-widget .age-input,
-		.booking-widget .date-time-form {
+		#reservationWidget .booking-widget .date-time-form {
 			margin-top: 0px;
 		}
 
@@ -894,6 +903,12 @@
 		}
 	}
 
+	@media (min-width: 1630px) {
+		.booking-widget .cf div.arrow {
+			display: none;
+		}
+	}
+
 	/* Breakpoint-Specific Bugfix  */
 	@media (width: 980px) {
 		div.booking-widget-hero+.reservationWidget {
@@ -902,7 +917,7 @@
 
 	}
 
-	@media (min-width: 600px) and (max-width: 979px) {
+	@media (min-width: 600px) and (max-width: 980px) {
 		#reservationWidget .booking-widget .booking-submit .btn {
 			height: 3rem;
 			margin-top: 34px;
@@ -913,6 +928,15 @@
 			flex: 1 0 50%;
 			margin: 7px 0 0 0;
 			padding-left: 6px;
+		}
+
+		#main .booking-widget-hero {
+			height: 7.5rem;
+		}
+
+		div.booking-widget-hero img {
+			height: 8em;
+			object-fit: cover;
 		}
 	}
 </style>
@@ -1045,12 +1069,18 @@
 						//$('.pick-up-location').classList.toggle('diff-dropoff-selected');
 					}
 					else if (event.target.matches('#continueButton')) {
-						if (isoTest.stickyMobileCTA < 1) {
-							console.log(isoTest.stickyMobileCTA.value)
-							isoTest.stickyMobileCTA = 1;
+						if (window.matchMedia("(max-width: 599px)").matches) {
+							if (isoTest.stickyMobileCTA < 1) {
+								console.log(isoTest.stickyMobileCTA.value)
+								isoTest.stickyMobileCTA = 1;
 
-							isoTest.fireTag('', 'Mobile Sticky Continue CTA');
+								isoTest.fireTag('', 'Mobile Sticky Continue CTA');
+							}
 						}
+						else {
+							isoTest.fireTag('', 'Sticky Continue CTA');
+						}
+
 					}
 					else
 						if (event.target.matches('.iso-sticky-toggle')) {
@@ -1097,6 +1127,7 @@
 									$('.reservationWidget .inner-container').classList.remove('collapsed');
 									$('.iso-sticky-toggle').classList.remove('iso-arrow-down');
 									isoTest.fireTag('', 'Homepage Sticky Widget 3.0 : Sticky Widget Click');
+
 								} else
 									if (event.target.closest('.reserve-widget-band') || event.target.closest('.ReactModal__Content')) {
 										// console.log("Hello world 1");
