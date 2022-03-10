@@ -811,6 +811,55 @@
 		}
 
 		/* QA fix */
+		.booking-widget .location-search .location-chicklet {
+			background-color: #fff;
+			border: 2px solid #c3c3c3;
+			border-collapse: separate;
+			border-spacing: 0.1em 0;
+			color: #181918;
+			font-size: 1.5em;
+			height: auto;
+			margin: 0;
+			padding: 3px 0;
+			width: 100%;
+		}
+
+		.booking-widget .location-search .location-field {
+			border: 2px solid #c3c3c3;
+			color: #c3c3c3;
+			float: left;
+			font-size: 1.1875rem;
+			height: 3rem;
+			margin-left: 0;
+			padding: 0.6875rem 1.125rem 0.5625rem;
+			transition: color .2s ease-in-out;
+			width: 98%;
+		}
+
+		.booking-widget .location-search .drop-off-input-margin {
+			flex: 1 0 50%;
+			margin: 0;
+			padding-left: 1px;
+		}
+
+		.booking-widget .location-search .locationInput-active .location-field.selected {
+			width: 98%;
+		}
+
+		/* .booking-widget .location-search .auto-complete {
+			background: #fff;
+			border: 2px solid #c3c3c3;
+			left: 0;
+			margin-top: 60px;
+			max-height: 400px;
+			overflow-x: hidden;
+			overflow-y: auto;
+			position: absolute;
+			top: 0;
+			width: 98%;
+			z-index: 11;
+		} */
+
 		.filter-modal-button.vehicle-filters-trigger>.filter-modal-button__label {
 			padding-bottom: 0px;
 			margin-top: 0rem;
@@ -879,6 +928,9 @@
 			stickySeenCounter: 0,
 			stickyCollapseCounter: 0,
 			stickyExpandCounter: 0,
+			mobileCloseCounter: 0,
+			stickyMobileCTA: 0,
+			stickyMobileExpand: 0,
 
 			init: function () {
 
@@ -991,7 +1043,16 @@
 				document.addEventListener('click', function (event) {
 					if (event.target.matches('.same-location-info__checkbox')) {
 						//$('.pick-up-location').classList.toggle('diff-dropoff-selected');
-					} else
+					}
+					else if (event.target.matches('#continueButton')) {
+						if (isoTest.stickyMobileCTA < 1) {
+							console.log(isoTest.stickyMobileCTA.value)
+							isoTest.stickyMobileCTA = 1;
+
+							isoTest.fireTag('', 'Mobile Sticky Continue CTA');
+						}
+					}
+					else
 						if (event.target.matches('.iso-sticky-toggle')) {
 							if ($('.reservationWidget .inner-container.expanded')) {
 								$('.reservationWidget .inner-container').classList.remove('expanded');
@@ -999,7 +1060,7 @@
 								$('.iso-sticky-toggle').classList.add('iso-arrow-down');
 								if (isoTest.stickyCollapseCounter < 1) {
 									isoTest.stickyCollapseCounter = 1;
-									console.log("does this work");
+									// console.log("does this work");
 									isoTest.fireTag('', 'Sticky Chevron Collapse');
 								}
 							} else if ($('.iso-arrow-down')) {
@@ -1018,6 +1079,12 @@
 								$('.reservationWidget').classList.remove('style-modal');
 								$('body').classList.remove('iso-noscroll');
 								$('.threeup').scrollIntoView({ behavior: "smooth" });
+								if (isoTest.mobileCloseCounter < 1) {
+									console.log(isoTest.mobileCloseCounter.value)
+									isoTest.mobileCloseCounter = 1;
+
+									isoTest.fireTag('', 'Mobile Sticky Widget Close');
+								}
 							} else
 								if (event.target.closest('.iso-res-widget')) {
 									if ($('.existing-reservation')) {
@@ -1029,6 +1096,7 @@
 									$('.reservationWidget .inner-container').classList.add('expanded');
 									$('.reservationWidget .inner-container').classList.remove('collapsed');
 									$('.iso-sticky-toggle').classList.remove('iso-arrow-down');
+									isoTest.fireTag('', 'Homepage Sticky Widget 3.0 : Sticky Widget Click');
 								} else
 									if (event.target.closest('.reserve-widget-band') || event.target.closest('.ReactModal__Content')) {
 										// console.log("Hello world 1");
@@ -1063,13 +1131,13 @@
 											}
 										}
 									} else
-											if (!event.target.closest('.reserve-widget-band')) {
-												if ($('#reservationWidget .inner-container.expanded')) {
-													$('#reservationWidget .inner-container').classList.add('collapsed');
-													$('#reservationWidget .inner-container').classList.remove('expanded');
-													$('.iso-sticky-toggle').classList.add('iso-arrow-down');
-												}
+										if (!event.target.closest('.reserve-widget-band')) {
+											if ($('#reservationWidget .inner-container.expanded')) {
+												$('#reservationWidget .inner-container').classList.add('collapsed');
+												$('#reservationWidget .inner-container').classList.remove('expanded');
+												$('.iso-sticky-toggle').classList.add('iso-arrow-down');
 											}
+										}
 
 
 				}, true);
