@@ -416,12 +416,15 @@
 		}
 
 		.booking-widget .pick-up-location {
-			flex: 1 0 50%;
+			/* flex: 1 0 50%; */
+			width: 50%;
+			padding-left: 6px;
 			padding-left: 6px;
 		}
 
 		.booking-widget .location-search .drop-off-input-margin {
-			flex: 1 0 50%;
+			/* flex: 1 0 50%; */
+			width: 50%;
 			margin: 0;
 			padding-left: 6px;
 		}
@@ -537,8 +540,9 @@
 		.booking-widget .location-input-container {
 			display: inline-block;
 			margin: 0;
-			/*padding-left: 6px;*/
-			flex: 1 0 50%;
+			/* padding-left: 6px; */
+			/* flex: 1 0 50%; */
+			width: 60%;
 		}
 
 		#reservationWidget .booking-widget .date-time-form {
@@ -722,6 +726,29 @@
 		[stuck] .iso-sticky-toggle {
 			display: block;
 		}
+
+		/* jb's changes */
+
+		.booking-widget .location-search .same-location-info {
+			margin: 5px 0 10px 0;
+		}
+
+		.booking-widget .pick-up-location {
+			flex: 1 0 60%;
+			padding-left: 6px;
+		}
+
+		div.booking-widget-hero+.reservationWidget .inner-container {
+			transition: all 0.2s ease-in-out;
+			width: auto;
+			max-width: 72.6875rem;
+		}
+
+		[stuck] .booking-widget {
+			margin: 0 auto;
+			max-width: 1115px;
+		}
+
 	}
 
 	/* Up to Desktop */
@@ -753,6 +780,11 @@
 
 	/* Desktop */
 	@media (min-width: 61.25em) {
+
+		.booking-widget .location-search .location-input-wrapper:nth-of-type(1) {
+			margin-right: 5px;
+		}
+
 		div.booking-widget-hero+.reservationWidget {
 			margin-top: -355px;
 		}
@@ -842,17 +874,18 @@
 			margin-left: 0;
 			padding: 0.6875rem 1.125rem 0.5625rem;
 			transition: color .2s ease-in-out;
-			width: 98%;
+			width: 100%;
 		}
 
 		.booking-widget .location-search .drop-off-input-margin {
-			flex: 1 0 50%;
+			/* flex: 1 0 50%; */
+			width: 50%;
 			margin: 0;
 			padding-left: 1px;
 		}
 
 		.booking-widget .location-search .locationInput-active .location-field.selected {
-			width: 98%;
+			width: 100%;
 		}
 
 		/* .booking-widget .location-search .auto-complete {
@@ -901,6 +934,25 @@
 			margin-top: 0px;
 			position: relative;
 		}
+
+		/*jb's changes pt 2*/
+
+		#reservationWidget .booking-widget .date-time-form {
+			display: inline-block;
+			float: right;
+			margin-bottom: 0;
+			width: 40%;
+		}
+
+		.booking-widget .location-search .auto-complete .location-group {
+			border-top: 0.1875rem solid #181918;
+			display: flex;
+			padding-bottom: 0.625rem;
+			padding-top: 0.5rem;
+			flex-wrap: nowrap;
+			flex-direction: column;
+		}
+
 	}
 
 	@media (min-width: 1630px) {
