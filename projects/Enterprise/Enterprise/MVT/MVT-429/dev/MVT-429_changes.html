@@ -63,7 +63,7 @@
 		top: 21px;
 	}
 
-	#main .booking-widget .coupon-input, #main .booking-widget .age-input #age, #main .filter-modal-button .btn-input, #main .booking-widget .booking-submit .btn {
+	#main .booking-widget .coupon-input, #main .booking-widget .age-input #age, #main .filter-modal-button .btn-input, #main .booking-widget .booking-submit .btn, #main .booking-widget .location-search .location-field {
 		height: 50px;
 	}
 
@@ -71,16 +71,19 @@
 		min-height: unset;
 	}
 
-	@media (max-width: 48em) {
-		.booking-widget .filter-modal-button {
-			margin-left: 2.8125rem;
-			margin-right: .9375rem;
-			width: calc(100% - 3.75rem);
-		}
-	}
-
 	/* Mobile Only */
-	@media (max-width: 599px) {
+	@media (max-width: 767px) {
+       .booking-widget--user-friendly .date-time-form:before, .booking-widget--user-friendly .location-search:before{
+            display: none;
+        }
+        #main .booking-widget .date-time-selector .date-label, #main .booking-widget .date-time-selector .time-label{
+            width: 50%;
+        }
+        .filter-modal-button.vehicle-filters-trigger {
+            margin-left: 2.8125rem;
+            margin-right: 0.9375rem;
+            width: calc(100% - 3.75rem);
+        }
 		.style-modal {
 			overflow: auto;
 			position: fixed;
@@ -319,7 +322,7 @@
 	@media (min-width: 55.31em){
 		#main .booking-widget-hero+.reservationWidget .inner-container{
 			max-width: 1100px;
-			width: 94%;
+			width: 100%;
 		}
 	}
 
@@ -330,7 +333,7 @@
 	}
 
 	/* Tablet + */
-	@media (min-width: 600px) and (max-width:1100px) {
+	@media (min-width: 768px) {
 		.homepage #main>div {
 			background: #f3f3f3;
 			position: relative;
@@ -340,6 +343,14 @@
 		.homepage .interrupter-tile {
 			background: #ffffff;
 		}
+
+        #main .filter-modal-button__label{
+            margin-top: 0;
+        }
+
+        #main .booking-widget .custom-label{
+            margin-top: 0;
+        }
 
 		/* Fix Background Size */
 		div.booking-widget-hero .img-container {
@@ -444,12 +455,13 @@
 			flex-wrap: wrap;
 			margin: 20px 0 0 0;
 			width: 100%;
+            justify-content: flex-end;
 		}
 
 		#main .booking-widget-hero+.reservationWidget .inner-container {
 			box-shadow: 0 3px 5px rgb(0 0 0 / 40%);
 			margin: 0 auto;
-			padding: 1.5rem;
+			padding: 20px 40px;
 		}
 
 		.reservation-toggle-header,
@@ -494,14 +506,11 @@
 		}
 
 		.booking-widget .pick-up-location {
-			/* flex: 1 0 50%; */
 			width: 50%;
-			padding-left: 6px;
-			padding-left: 6px;
+            flex: 1;
 		}
 
 		.booking-widget .location-search .drop-off-input-margin {
-			/* flex: 1 0 50%; */
 			width: 50%;
 			margin: 0;
 			padding-left: 6px;
@@ -522,6 +531,7 @@
 
 		.booking-widget .location-search .auto-complete {
 			margin-top: 46px;
+            min-width: 450px;
 		}
 
 		/* Pickup & Return Time */
@@ -562,11 +572,17 @@
 			margin-top: 0;
 		}
 
-		.booking-widget .date-time-selector .label-container {
-			float: left;
-			padding-left: 6px;
-			width: auto;
+		#main .booking-widget .date-time-selector .date-label, #main .booking-widget .date-time-selector .time-label {
+			width: 50%;
 		}
+
+        .booking-widget .date-time-selector .label-container{
+            width: 49.75%;
+        }
+
+        .booking-widget .date-time-selector .pickup.label-container{
+            margin-right: 0.5%;
+        }
 
 		.booking-widget .date-time-selector .date-label,
 		.booking-widget .date-time-selector .time-label {
@@ -615,25 +631,21 @@
 			right: 0px;
 		}
 
-		.booking-widget .location-input-container {
-			display: inline-block;
-			margin: 0;
-			/* padding-left: 6px; */
-			/* flex: 1 0 50%; */
-			width: 60%;
+		#main .booking-widget.booking-widget--user-friendly .location-search {
+			width: 100%;
+            margin: 0;
 		}
 
-		#reservationWidget .booking-widget .date-time-form {
-			display: inline-block;
-			float: right;
-			margin-bottom: 0;
-			width: 50%;
-		}
+		#reservationWidget .booking-widget.booking-widget--user-friendly .date-time-form {
+            width: 100%;
+            margin: 0 0 10px 0;
+        }
 
 		/* CAN/Promo */
-		.booking-widget .coupon-filters-wrapper {
-			flex: 0 0 50%;
-			padding-left: 6px;
+		#main .booking-widget .coupon-filters-wrapper {
+			width: 49.75%;
+            order: 3;
+            margin: 12px 0 0 0;
 		}
 
 		.booking-widget .filter-modal-button+.coupon-filters-wrapper {
@@ -658,8 +670,9 @@
 			text-transform: none;
 		}
 
-		.booking-widget .coupon-field-wrapper {
+		#main .booking-widget .coupon-field-wrapper {
 			width: 100%;
+            margin-top: 0;
 		}
 
 		.coupon-field-wrapper .coupon-input {
@@ -670,9 +683,9 @@
 
 		/* Vehicle Class */
 		.booking-widget .filter-modal-button {
-			margin: 0;
-			padding-left: 6px;
-			flex: 0 0 50%;
+			width: 24.75%;
+            order: 5;
+            margin-top: 9px;
 		}
 
 		.booking-widget .filter-modal-button__label-text {
@@ -694,13 +707,13 @@
 			flex: auto !important;
 		}
 
-		.filter-modal-button__label {
-			padding-bottom: 2px;
-		}
 
 		/* Age Input */
 		div.booking-widget.booking-widget--user-friendly .age-input {
-			flex: 0 0 50%;
+			width: 24.75%;
+            margin-right: 0.5%;
+            order: 4;
+            margin-top: 12px;
 		}
 
 		.booking-widget .custom-select.age-input {
@@ -709,16 +722,11 @@
 			margin-left: 0;
 		}
 
-		.custom-select label {
-			padding-bottom: 2px;
-		}
-
 		/* Res Button */
-		#reservationWidget .booking-widget .booking-submit {
-			flex: 1 0 50%;
-			margin: 7px 0 0 0;
-			/* updated from 30px */
-			padding-left: 6px;
+		#main #reservationWidget .booking-widget .booking-submit {
+            width: 50%;
+            order: 6;
+            margin: 6px 0 0 0;
 		}
 
 		.booking-widget .booking-submit .btn {
@@ -811,11 +819,6 @@
 			margin: 5px 0 10px 0;
 		}
 
-		.booking-widget .pick-up-location {
-			flex: 1 0 60%;
-			padding-left: 6px;
-		}
-
 		div.booking-widget-hero+.reservationWidget .inner-container {
 			transition: all 0.2s ease-in-out;
 			width: auto;
@@ -827,13 +830,6 @@
 			max-width: 1115px;
 		}
 
-	}
-
-	/* Up to Desktop */
-	@media (min-width: 600px) and (max-width: 668px) {
-		.booking-widget .custom-label+.tooltip-info {
-			left: 35px;
-		}
 	}
 
 	/* @media (min-width: 1101px) and (max-width: 61.24em) {
@@ -864,10 +860,13 @@
 			display: none;
 		}
 
+        #main .booking-widget-hero+.reservationWidget .inner-container{
+			width: 94%;
+		}
+
 		#main .booking-widget.booking-widget--user-friendly{
-			display: flex;
-			flex-wrap: wrap;
 			width: auto;
+            justify-content: flex-start;
 		}
 
 		#main .booking-widget.booking-widget--user-friendly .location-search{
@@ -958,7 +957,7 @@
 			width: 32%;
 			padding-left: 6px;
 			order: 3;
-			margin-top: 6.5px;
+			margin-top: 12px;
 		}
 
 		#main .coupon-field-wrapper{
@@ -971,25 +970,25 @@
 
 		/* Vehicle Filter */
 		.booking-widget .filter-modal-button {
-			width: 26%;
+			width: 26.5%;
+            margin-right: 0.5%;
 			order: 5;
-			margin-right: 1%;
 			margin-top: 12px;
 		}
 
 		/* Age Input */
 		div.booking-widget.booking-widget--user-friendly .age-input {
-			width: 18%;
-			margin-right: 1%;
+			width: 17.5%;
+            margin-right: 0.5%;
 			order: 4;
 			margin-top: 12px;
 		}
 
 		/* Res Button */
-		#reservationWidget .booking-widget .booking-submit {
+		#main #reservationWidget .booking-widget .booking-submit {
 			width: 22%;
 			order: 6;
-			margin-top: 33px;
+			margin-top: 19px;
 		}
 
 		/* QA fix */
@@ -1019,7 +1018,6 @@
 		}
 
 		.booking-widget .location-search .drop-off-input-margin {
-			/* flex: 1 0 50%; */
 			width: 50%;
 			margin: 0;
 			padding-left: 1px;
@@ -1110,18 +1108,7 @@ z-index: 11;
 
 	}
 
-	@media (min-width: 600px) and (max-width: 980px) {
-		#reservationWidget .booking-widget .booking-submit .btn {
-			height: 3rem;
-			margin-top: 34px;
-			padding: 5px;
-		}
-
-		#reservationWidget .booking-widget .booking-submit {
-			flex: 1 0 50%;
-			margin: 7px 0 0 0;
-			padding-left: 6px;
-		}
+	@media (min-width: 768px) and (max-width: 980px) {
 
 		#main .booking-widget-hero {
 			height: 7.5rem;
@@ -1215,7 +1202,7 @@ z-index: 11;
 				// Scroll events
 				document.addEventListener('scroll', function () {
 					// Mobile only
-					if (window.matchMedia("(max-width: 599px)").matches) {
+					if (window.matchMedia("(max-width: 767px)").matches) {
 						var elDistanceTop = $('.iso-res-widget').getBoundingClientRect().top;
 						if (elDistanceTop < 0) {
 							$('.iso-res-widget').setAttribute('stuck', '');
@@ -1230,7 +1217,7 @@ z-index: 11;
 							}
 					}
 					// Tablet up
-					else if (window.matchMedia("(min-width: 600px)").matches) {
+					else if (window.matchMedia("(min-width: 768px)").matches) {
 						if ($('#book')) {
 							$('.reservationWidget').classList.remove('reservationWidget-Existing');
 							var elDistanceTop = $('.reservationWidget').getBoundingClientRect().top;
@@ -1262,7 +1249,7 @@ z-index: 11;
 						//$('.pick-up-location').classList.toggle('diff-dropoff-selected');
 					}
 					else if (event.target.matches('#continueButton')) {
-						if (window.matchMedia("(max-width: 599px)").matches) {
+						if (window.matchMedia("(max-width: 767px)").matches) {
 							if (isoTest.stickyMobileCTA < 1) {
 								console.log(isoTest.stickyMobileCTA.value)
 								isoTest.stickyMobileCTA = 1;
