@@ -95,6 +95,23 @@
             width: 50%;
         }
 
+        #main .style-modal .booking-widget.booking-widget--user-friendly .date-time-form {
+            margin: 20px auto 0;
+            width: 90%;
+            overflow: auto;
+        }
+
+        #book .booking-widget.booking-widget--user-friendly .date-time-form {
+            margin-left: 2.8125rem;
+            margin-right: 0.9375rem;
+            width: calc(100% - 3.75rem);
+        }
+
+        #main .booking-widget .date-time-selector .date-label .icon.icon-nav-carrot-down,
+        #main .booking-widget .date-time-selector .time-label .icon.icon-nav-carrot-down {
+            top: 10px;
+        }
+
         .filter-modal-button.vehicle-filters-trigger {
             margin-left: 2.8125rem;
             margin-right: 0.9375rem;
@@ -133,6 +150,8 @@
 
         .reservationWidget .inner-container {
             position: relative;
+            padding-bottom: 0;
+            width: 100%;
         }
 
         .style-modal .reserve-widget-band {
@@ -155,7 +174,7 @@
         .style-modal .booking-widget .date-time-selector .time-label .hour {
             font-size: 2.4rem;
             top: 0;
-            left: 16px;
+            left: 10px;
         }
 
         .style-modal .booking-widget .date-time-selector .date-label .year,
@@ -326,10 +345,10 @@
 
     /* Mobile & Tablet */
     @media (max-width: 66em) {
-        .reservationWidget .inner-container {
+        /* .reservationWidget .inner-container {
             padding-bottom: 0;
             width: 92%;
-        }
+        } */
 
         #main .booking-widget .date-time-selector {
             display: block;
@@ -1157,7 +1176,7 @@ z-index: 11;
 
             init: function () {
 
-                isoTest.debug = ${ user.mvtDebug };
+                isoTest.debug = ${user.mvtDebug};
 
                 if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
                     _satellite.setVar('TargetCampaign', isoTest.test);
