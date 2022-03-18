@@ -491,16 +491,11 @@
 
         #main .booking-widget-hero+.reservationWidget[stuck] .inner-container {
             background: rgb(22 154 90 / 95%);
-            padding: 15px 50px 15px 65px;
+            padding: 15px 50px 9px 65px;
             position: relative;
             width: 100%;
             max-width: 100%;
 
-        }
-
-        .content-include-container #main .booking-widget-hero+.reservationWidget[stuck] .inner-container.collapsed {
-            max-height: 95px;
-            /* jb's max-height */
         }
 
         .content-include-container #main .booking-widget-hero+.reservationWidget[stuck] .inner-container .inner-container.expanded {
@@ -804,6 +799,7 @@
             margin-right: 0;
             order: 4;
             margin-top: 12px;
+            line-height: 1.3;
         }
 
         .booking-widget .custom-select.age-input {
@@ -970,6 +966,7 @@
 
         #main #reservationWidget .booking-widget.booking-widget--user-friendly .date-time-form {
             width: 48%;
+            margin: 0;
         }
 
         #main .booking-widget.booking-widget--user-friendly .date-time-form .date-time-selector {
@@ -1078,6 +1075,7 @@
             margin-left: 7px;
             order: 4;
             margin-top: 12px;
+            line-height: 1.33;
         }
 
         /* Res Button */
@@ -1411,6 +1409,7 @@ z-index: 11;
                                         if ($('#reservationWidget .inner-container.collapsed')) {
                                             // console.log("hello world 2");
                                             $('#reservationWidget .inner-container').classList.add('expanded');
+                                            $('.reservationWidget .inner-container').classList.add('expand-desktop');
                                             $('#reservationWidget .inner-container').classList.remove('collapsed');
                                             if (isoTest.stickyExpandCounter < 1) {
                                                 console.log(isoTest.stickyExpandCounter.value)
@@ -1441,7 +1440,6 @@ z-index: 11;
                                         if (!event.target.closest('.reserve-widget-band')) {
                                             if ($('#reservationWidget .inner-container.expanded')) {
                                                 $('#reservationWidget .inner-container').classList.add('collapsed');
-                                                $('#reservationWidget .inner-container').classList.add('expand-desktop');
                                                 $('#reservationWidget .inner-container').classList.remove('expanded');
                                                 $('.iso-sticky-toggle').classList.add('iso-arrow-down');
                                             }
