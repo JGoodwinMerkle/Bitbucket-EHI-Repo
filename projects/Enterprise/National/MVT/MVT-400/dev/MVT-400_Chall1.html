@@ -1,4 +1,170 @@
 <style>
+	.progress-bar-wrapper {
+    display: flex;
+    background-color: #f0f0f0;
+    position: fixed;
+    top: 65px;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    border-top: 1px solid #BFC0C1;
+    border-bottom: 1px solid #BFC0C1;
+  }
+  .step-wrapper {
+    margin-top: 4%;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    width: 80%;
+  }
+  .step-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    font-size: 12px;
+  }
+
+  .step-item::before {
+    position: absolute;
+    content: "";
+    border-bottom: 1px solid #bfc0c1;
+    width: 100%;
+    top: 10px;
+    left: -50%;
+    z-index: 2;
+  }
+
+  .step-item::after {
+    position: absolute;
+    content: "";
+    border-bottom: 1px solid #bfc0c1;
+    width: 100%;
+    top: 10px;
+    left: 50%;
+    z-index: 2;
+  }
+
+  .step-item .step-index {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 22px;
+    height: 22px;
+    border: 1px solid #bfc0c1;
+    border-radius: 50%;
+    background: #f0f0f0;
+    color: #6d6d6d;
+    margin-bottom: 6px;
+  }
+  .step-item.active .step-index,.step-item.active.visited .step-index {
+    background: #00703c;
+    color: #ffffff;
+    border: 1px solid #00703c;
+  }
+  .step-item.visited .step-index {
+    border: 1px solid #00703c;
+    color: #00703c;
+    background: #f0f0f0;
+  }
+
+  .step-item.active .step-title {
+    opacity: 1;
+    font-weight: bold;
+    text-align: center;
+    line-height: 14px;
+  }
+  .step-item.active .step-num {
+      font-weight: 600;
+  }
+  .step-item .step-title {
+    opacity: 0;
+  }
+  .step-item.step-1 .step-title  {
+      position:absolute;
+      top:50%;
+  }
+
+  .step-item.completed .step-index {
+    background-color: #f0f0f0;
+    border: 1px solid #00703c;
+  }
+  .step-item.completed .step-num {
+    opacity: 0;
+  }
+  .step-item.completed::after {
+    position: absolute;
+    content: "";
+    border-bottom: 1px solid #00703c;
+    width: 100%;
+    top: 10px;
+    left: 50%;
+    z-index: 3;
+  }
+
+  .step-item:first-child::before {
+    content: none;
+  }
+  .step-item:last-child::after {
+    content: none;
+  }
+
+  .step-item.completed .step-index:after,
+  .step-item.completed .step-index:before {
+    border: solid #169a5a;
+    border-width: 0 2px 2px 0;
+    content: "";
+    display: block;
+    height: 10.56px;
+    left: 7px;
+    position: absolute;
+    top: 2px;
+    transform: rotate(45deg);
+    width: 6px;
+  }
+
+  .dropdown-chevron {
+    width: 20%;
+    display: flex;
+    align-content: center;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    border-left: 1px solid #BFC0C1;
+  }
+
+  .dropdown-chevron > div {
+    margin:auto;
+    width: 16px;
+    height: 16px;
+    border: solid #00703c;
+    border-width: 0px 4px 4px 0;
+    transform: rotate(45deg);
+    transition: transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  } 
+  .dropdown-chevron.dropdown-selected > div {
+      transform: rotate(227deg);
+  } 
+
+  @media screen and (max-width: 40em){
+    .page__content {
+    padding-top: 9.0625rem;
+    }
+    .reserve__progress-menu .reserve__progress-menu-item:first-child {
+    padding-top: 5.25rem;
+    }
+  }
+
+  @media screen and (min-width: 40.0625em) and (max-width: 56.9375em) {
+    .page__content {
+        padding-top: 9.0625rem;
+    }
+    .reserve__progress-menu .reserve__progress-menu-item:first-child {
+    padding-top: 7.25rem;
+    }
+  }
 </style>
 <script>
 (function() {
@@ -8,7 +174,9 @@
 		portfolio : 'National',
 		test : 'MVT-400',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '.page__header.reserve__progress',
+		progressHTML: '<div class="progress-bar-wrapper"> <div class="step-wrapper"> <div class="step-1 step-item completed"> <div class="step-index"><div class="step-num">1</div></div><div class="step-title">Pick Up & Return</div></div><div class="step-2 step-item active"> <div class="step-index"><div class="step-num">2</div></div><div class="step-title">Vehicle</div></div><div class="step-3 step-item"> <div class="step-index"><div class="step-num">3</div></div><div class="step-title">Add-ons</div></div><div class="step-4 step-item"> <div class="step-index"><div class="step-num">4</div></div><div class="step-title">Review</div></div></div><div class="dropdown-chevron"><div> </div>',
+        stepLocation: "",
 		init : function() {
 
 			isoTest.debug = true;
@@ -30,16 +198,101 @@
 		window.addEventListener('hashchange', isoTest.viewChange, false);
 		
 		},
+		//Check view to check progress steps
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
+			/*if(/viewName/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
-			}
+			}*/
+			isoTest.log("viewChange");
+            helpers.elementLoaded(isoTest.selector, function () {
+              	isoTest.checkProgress();
+            });
 		},
-		chall : function() {
+		//Check for location hash
+		checkHash: function () {
+            return location.hash;
+        },
+		//Update Progress
+		updateProgress: function (n) {
+            for (var i = n; i > 1 ; i--) {
+                document.querySelector('.step-item.step-'+(i-1)).classList.add('completed');
+            }
+        },
+		//Check for completed steps inflight
+		checkVisited: function(n) {
+            var visitedSteps = document.querySelectorAll('.step-item.completed') ;
+            visitedSteps.forEach(step => {
+                var num = isoTest.getStepNumber(step);
+                if(num >= n) {
+                    step.classList.remove('completed');
+                }
+            });
+        },
+		getStepNumber: function(step) {
+            return parseInt(step.className.split(' ')[0].split('-')[1]);
+        },
+		//Check progress at each step
+		checkProgress: function () {
+            isoTest.stepLocation = isoTest.checkHash();
+            isoTest.log(isoTest.stepLocation);
+            var step1 = document.querySelector(".step-1.step-item");
+            var step2 = document.querySelector(".step-2.step-item");
+            var step3 = document.querySelector(".step-3.step-item");
+            var step4 = document.querySelector(".step-4.step-item");
 
-			// Your code goes here
+            if(document.querySelector('.step-item.active')) {
+                document.querySelector('.step-item.active').classList.remove('active');
+            }
+            //switch
+            switch (isoTest.stepLocation) {
+              	case "#/start":
+              	case "#/map_pickup":
+					step1.classList.add("active");
+					isoTest.checkVisited(1);
+                break;
+              	case "#/car_select":
+					step2.classList.add("active");
+					step2.classList.add("visited");
+					isoTest.updateProgress(2);
+					isoTest.checkVisited(2);
+                break;
+             	case "#/extras":
+					step3.classList.add("active");
+					step3.classList.add("visited");
+					isoTest.updateProgress(3);
+					isoTest.checkVisited(3);
+                break;
+              	case "#/review":
+					step4.classList.add("active");
+					step4.classList.add("visited");
+					isoTest.updateProgress(4);
+                break;
+
+              	default:
+                break;
+            }
+        },
+		//Function for dropdown drawer opening/closing 
+		addEvents: function() {
+            document.querySelector('.progress-bar-wrapper').addEventListener('click',function(){
+                var chevron = document.querySelector('.dropdown-chevron');
+                var dropdown = document.querySelector(isoTest.selector);
+                chevron.classList.contains('dropdown-selected') ? chevron.classList.remove('dropdown-selected') : chevron.classList.add('dropdown-selected');
+                dropdown.classList.contains('page__header--active') ? dropdown.classList.remove('page__header--active') :dropdown.classList.add('page__header--active');
+
+            })
+        },
+		chall : function() {
+ 		// Your code goes here
+ 			if (!document.querySelector(".progress-bar-wrapper")) {
+              document
+                .querySelector(isoTest.selector)
+                .insertAdjacentHTML("afterbegin", isoTest.progressHTML);
+            }
+            isoTest.checkProgress();
+            isoTest.addEvents();
 
 		},
 		fireTag : function(element, value) {
