@@ -1,0 +1,272 @@
+<style>
+	/* 403 code */
+	.page__content--reserve .rental__categories{
+		display: none;
+	}
+	/* Hide existing required text */
+	#additionalDriverSection .input-container__required-text{
+		display: none;
+	}
+	/* Adjust existing drawer padding */
+	@media screen and (min-width: 40.0625em){
+		.review__form .review__section-content, .review__form .review__section .input-container__required-text {
+			padding: 0 2.4rem;
+		}
+	}
+	#requiredInfo h2 button {
+		cursor: default;
+		pointer-events: none;
+		position: relative;
+	}
+	.reserve #paymentSection{
+		display: none;
+	}
+	#requiredInfo .required-driver-info-container{
+		display: flex;
+	}
+	#requiredInfo .input-container__required-text{
+		color: #00703c;
+		position: absolute;
+    right: 0;
+    padding: 0;
+    top: 0;
+	}
+	.reserve .information-header{
+		margin-bottom: 20px;
+    margin-top: 30px;
+	}
+	.reserve .information-header.driver-information{
+		margin-top: 15px;
+	}
+	.reserve .optional{
+		margin-left: 30px;
+    font-style: italic;
+    font-size: 16px;
+    font-weight: normal;
+	}
+
+	@media screen and (min-width: 40.0625em){
+		#requiredInfo .review__authenticated-driver{
+			margin-bottom: 20px;
+		}
+
+		#requiredInfo .review__authenticated-driver dl{
+			margin-right: 1.5%;
+			width: 23.5%;
+			margin-top: 0;
+			clear: none;
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'National',
+		test : 'Desktop Review Page Restructure',
+		creative : 'Challenger 1',
+		selector : '.reserve .review__form input[type="email"]',
+		debug : true,
+		init : function() {
+
+			// isoTest.debug = ${user.mvtDebug};
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/review/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		getReactComponent : function(node){
+			for(var key in node) {
+				if(key.startsWith('__reactInternalInstance$') ) {
+					return node[key];
+				}
+			}
+			return null;
+		},
+		getReviewFormComponent : function(reviewFormEl){
+			var reviewFormEl = document.querySelector('.reserve .review__form');
+			return isoTest.getReactComponent(reviewFormEl);
+		},
+		addRequiredInfoHTML : function(){
+			var reviewFormEl = document.querySelector('.reserve .review__form');
+			reviewFormEl.insertAdjacentHTML('afterbegin', `
+				<section id="requiredInfo" class="review__section review__section--open">
+					<h2 class="review__section-header-wrapper">
+						<button type="button" class="review__section-header" aria-expanded="true">
+							<span class="icon" aria-hidden="true" style="visibility: hidden;"><span class="icon__text">Expanded Section</span></span><span class="review__section-header-text">Required Information</span>
+							<p class="input-container__required-text">*Required to complete your reservation</p>
+						</button>
+					</h2>
+					<div class="drawer-container drawer-container--open">
+						<div class="drawer review__section-content drawer--expanded">
+							<div class="required-info-container">
+								<div class="required-driver-info-container"></div>
+							</div>
+						</div>
+					</div>
+				</section>
+			`);
+		},
+		addOptionalText : function(){
+			// Loop through the headers and add a span of "Optional" to each
+			var headers = document.querySelectorAll('.review__section:not(#requiredInfo) > h2 .review__section-header-text');
+			for(var i = 0; i < headers.length; i++){
+				if(!headers[i].querySelector('.optional')){
+					headers[i].insertAdjacentHTML('beforeend', '<span class="optional">Optional</span>');
+				}
+			}
+		},
+		movePaymentSection : function(){
+			var requiredInfoEl = document.querySelector('#requiredInfo .required-info-container');
+			var paymentInfoEl = document.querySelector('#paymentSection .review__section-sub-heading');
+			var paymentSectionEl = document.querySelector('#paymentSection .review__payment-container');
+
+			requiredInfoEl.insertAdjacentHTML('beforeend', `
+				<h3 class="information-header">Payment Information</h3>
+			`);
+			requiredInfoEl.insertAdjacentElement('beforeend', paymentInfoEl);
+			requiredInfoEl.insertAdjacentElement('beforeend', paymentSectionEl);
+		},
+		moveDriverInfo : function(){
+			var requiredInfoEl = document.querySelector('#requiredInfo .required-info-container');
+			var requiredDriverInfoEl = document.querySelector('#requiredInfo .required-driver-info-container');
+			var driverNameEl = document.querySelector('#additionalDriverSection .review__driver-name');
+			var driverEmailInputEl = document.querySelector('#additionalDriverSection input[type="email"]');
+			var driverEmailEl = driverEmailInputEl.parentElement;
+			var driverEmailTooltipEl = driverEmailEl.parentElement.querySelector('.tooltip__container');
+			var driverInfoButtonEl = document.querySelector('#additionalDriverSection h2 button[aria-expanded="true"]');
+			var driverAuthEl = document.querySelector('.review__authenticated-driver');
+
+			// Move the email into required info
+			if(driverEmailTooltipEl){
+				requiredDriverInfoEl.insertAdjacentElement('afterbegin', driverEmailTooltipEl);
+			}
+			requiredDriverInfoEl.insertAdjacentElement('afterbegin', driverEmailEl);
+
+			// Move driver name if it exists
+			if(driverNameEl){
+				// Update class name to add right margin
+				var driverLastNameEl = driverNameEl.querySelector('.input-container--half');
+				driverLastNameEl.classList.add('input-container--leading-half');
+				driverLastNameEl.classList.remove('input-container--half');
+
+				requiredDriverInfoEl.insertAdjacentElement('afterbegin', driverNameEl);
+			}
+
+			if(driverAuthEl){
+				requiredDriverInfoEl.insertAdjacentElement('beforebegin', driverAuthEl);
+			}
+
+			// Add in header
+			requiredDriverInfoEl.parentElement.insertAdjacentHTML('afterbegin', `
+				<h3 class="information-header driver-information">Driver Information</h3>
+			`);
+
+			// Move email promo check to required info
+			var emailPromoEl = document.querySelector('#additionalDriverSection  .email-subscription');
+			if(emailPromoEl){
+				requiredInfoEl.insertAdjacentElement('afterend', emailPromoEl);
+			}
+
+			// Collapse the existing driver info section
+			if(driverInfoButtonEl){
+				driverInfoButtonEl.click();
+			}
+		},
+		getReviewFormInfo : function(){
+			// Get all the info we need to determine what to move
+			var reviewFormComponent = isoTest.getReviewFormComponent();
+			var memoizedProps = reviewFormComponent.return.memoizedProps;
+			var contractDetails = memoizedProps.contractDetails || false;
+			var additionalInfoBeforeRates = (contractDetails) ? contractDetails.additional_info_before_rates : false;
+			var paymentSection = (contractDetails) ? memoizedProps.showPaymentSection : false;
+			
+			console.log('paymentSection', paymentSection);
+			console.log('contractDetails', contractDetails);
+			console.log('additionalInfoBeforeRates', additionalInfoBeforeRates);
+			console.log('memoizedProps', memoizedProps);
+
+			isoTest.addRequiredInfoHTML();
+			isoTest.addOptionalText();
+			isoTest.moveDriverInfo();
+			
+			if(contractDetails){
+				// Authenticated users 
+				console.log('Authenticated users');
+
+				if(paymentSection){
+					isoTest.movePaymentSection();
+				}
+			}else{
+				// Unauthenticated users
+				console.log('Unauthenticated users');
+			}
+
+			if(additionalInfoBeforeRates){
+				// Includes pre & post rate fields ("Corporate" account type)
+				console.log('Includes pre & post rate fields - Corporate');
+			}else if(contractDetails){
+				console.log('Retail account type');
+			}
+		},
+		chall : function() {
+
+			// Your code goes here
+			console.log('chall');
+			isoTest.log('Running Challenge...');
+			
+			isoTest.getReviewFormInfo();
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
