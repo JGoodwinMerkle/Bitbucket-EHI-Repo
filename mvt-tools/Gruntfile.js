@@ -57,6 +57,7 @@ module.exports = function(grunt) {
 
     grunt.config('copy.main.src', filename);
     grunt.config('copy.main.dest', destFile);
+    grunt.config('copy.main.dest', 'currentFile.html');
   });
 
 };
