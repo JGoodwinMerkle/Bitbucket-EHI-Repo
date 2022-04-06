@@ -14,6 +14,9 @@
 			padding: 0 2.4rem;
 		}
 	}
+	.review__section--empty{
+		display: none;
+	}
 	#requiredInfo h2 button {
 		cursor: default;
 		pointer-events: none;
@@ -83,6 +86,48 @@
 			clear: none;
 		}
 	}
+
+	/* Add extra margin to make space for fixed footer */
+	.page__footer{
+		margin-bottom: 88px;
+	}
+	.review__form-footer{
+		background-color: #f5eee4;
+		z-index: 9;
+		position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-left: 14.28rem;
+    box-shadow: 0 0px 4px 3px rgb(0, 0, 0, 0.15);
+	}
+	.review__form-footer .review__form-controls{
+		max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 4.75rem;
+    padding-right: 4.75rem;
+		margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+	}
+	.review__form-footer .third-party-email-message{
+		max-width: 45%;
+	}
+	.review__form-footer .estimated-total-value{
+		font-size: 1.5rem;
+    font-weight: 600;
+    color: #231f20;
+    text-transform: none;
+    letter-spacing: 0.02rem;
+    line-height: 1.1818181818;
+	}
+	.review__form-footer .estimated-total-container{
+		flex-grow: 1;
+    text-align: right;
+    margin-right: 40px;
+	}
+	.review__form-footer .review__form-controls .review__submit-button-container{
+		flex-grow: 0;
+	}
 </style>
 <script>
 (function() {
@@ -91,7 +136,7 @@
 		account : 'EHI',
 		portfolio : 'National',
 		test : 'Desktop Review Page Restructure',
-		creative : 'Challenger 1',
+		creative : 'Challenger 2',
 		selector : '.reserve .review__form input[type="email"]',
 		debug : true,
 		init : function() {
@@ -120,6 +165,11 @@
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
+			}else{
+				var addedFooter = document.querySelector('.review__form-footer');
+				if(addedFooter){
+					addedFooter.parentNode.removeChild(addedFooter);
+				}
 			}
 		},
 		getReactComponent : function(node){
@@ -154,13 +204,18 @@
 				</section>
 			`);
 		},
-		addOptionalText : function(){
+		updateSections : function(){
 			// Loop through the headers and add a span of "Optional" to each
 			var headers = document.querySelectorAll('.review__section:not(#requiredInfo) > h2 .review__section-header-text');
 			for(var i = 0; i < headers.length; i++){
 				if(!headers[i].querySelector('.optional')){
 					headers[i].insertAdjacentHTML('beforeend', '<span class="optional">Optional</span>');
 				}
+			}
+
+			var openSections = document.querySelectorAll('.review__section:not(#requiredInfo) > h2 button[aria-expanded="true"]');
+			for(var i = 0; i < openSections.length; i++){
+				openSections[i].click();
 			}
 		},
 		movePaymentSection : function(){
@@ -192,9 +247,9 @@
 				driverEmailEl.insertAdjacentElement('afterend', preRateContainerEl);
 			}
 
-			if(postRateButtonEl){
-				postRateButtonEl.click();
-			}
+			// if(postRateButtonEl){
+			// 	postRateButtonEl.click();
+			// }
 		},
 		moveDriverInfo : function(){
 			var requiredInfoEl = document.querySelector('#requiredInfo .required-info-container');
@@ -238,9 +293,9 @@
 			}
 
 			// Collapse the existing driver info section
-			if(driverInfoButtonEl){
-				driverInfoButtonEl.click();
-			}
+			// if(driverInfoButtonEl){
+			// 	driverInfoButtonEl.click();
+			// }
 		},
 		getReviewFormInfo : function(){
 			// Get all the info we need to determine what to move
@@ -249,14 +304,81 @@
 			var contractDetails = memoizedProps.contractDetails || false;
 			var additionalInfoBeforeRates = (contractDetails) ? contractDetails.additional_info_before_rates : false;
 			var paymentSection = (contractDetails) ? memoizedProps.showPaymentSection : false;
+
+
+			// Loop through forms and check to see if the inputs are required
+			var forms = reviewFormComponent.return.stateNode.forms;
+			var requiredInputs = [];
+			var inputSections = {
+				totalRequired : 0,
+				totalValidList: {},
+			};
+			for(var i = 0; i < forms.length; i++){
+				var current = forms[i].current;
+				var inputs = (current && current.inputs) ? current.inputs : false;
+				// The state exists and has inputs - we'll check them to see if they're required
+				if(inputs && inputs.length > 0){
+					// console.log('form number', i);
+					// console.log(inputs.length);
+					inputSections[i] = {
+						sectionLength : inputs.length,
+						requiredSections : 0
+					};
+
+					for(var j = 0; j < inputs.length; j++){
+						(function () {
+							var input = inputs[j];
+							if(input.props.required){
+								var inputName = input.props.name;
+								var el = document.querySelector('[name="' + inputName + '"]');
+								
+								console.log(input);
+								inputSections[i].requiredSections++;
+								inputSections.totalRequired++;
+								inputSections[i].innerInput = el;
+								requiredInputs.push(el);
+								
+								el.addEventListener('change', function(){
+									console.log(input.props.name);
+									console.log(input);
+									console.log('isValid: ', input.isValid());
+									console.log('getErrorMessage: ', input.getErrorMessage());
+									console.log('isFormDisabled: ', input.isFormDisabled());
+									
+									inputSections.totalValidList[inputName] = input.isValid();
+
+									console.log(inputSections.totalValidList);
+
+									if(inputSections.totalValid === inputSections.totalRequired){
+										console.log('All inputs are valid');
+									}
+								});
+							}
+						})();
+					}
+
+					if(inputSections[i].requiredSections === inputSections[i].sectionLength){
+						console.log('All required inputs have been moved from this section');
+						console.log(inputSections[i].innerInput.closest('.review__section'));
+						console.log(reviewFormComponent.return.stateNode);
+
+						var emptyContainer = inputSections[i].innerInput.closest('.review__section');
+						emptyContainer.classList.add('review__section--empty');
+					}
+				}
+			}
+			console.log('inputSections', inputSections);
+			console.log('requiredInputs', requiredInputs);
 			
+			
+			console.log('reviewFormComponent', reviewFormComponent);
 			console.log('paymentSection', paymentSection);
 			console.log('contractDetails', contractDetails);
 			console.log('additionalInfoBeforeRates', additionalInfoBeforeRates);
 			console.log('memoizedProps', memoizedProps);
 
 			isoTest.addRequiredInfoHTML();
-			isoTest.addOptionalText();
+			isoTest.updateSections();
 			isoTest.moveDriverInfo();
 			
 			if(contractDetails){
@@ -279,6 +401,65 @@
 				console.log('Retail account type');
 			}
 		},
+		addFixedFooter : function() {
+			var footerHTML = `
+				<div class="review__form-controls">
+					<div class="third-party-email-message"></div>
+					<div class="estimated-total-container">
+						<h5 class="estimated-total-label">Estimated Total:</h5>
+						<div class="estimated-total-value"></div>
+					</div>
+					<div class="review__submit-button-container">
+						<button type="button" class="btn btn--size-medium">
+							<span class="initial-text">Reserve now</span>
+						</button>
+					</div>
+				</div>
+			`;
+			var footerEl = document.createElement('div');
+			footerEl.classList.add('review__form-footer');
+			footerEl.innerHTML = footerHTML;
+			document.querySelector('.reserve .reserve__progress').insertAdjacentElement('afterend', footerEl);
+
+			var changeTotal = function(priceEl){
+				console.log('changeTotal', priceEl);
+				var price = priceEl.innerHTML;
+				var priceEl = footerEl.querySelector('.estimated-total-value');
+				priceEl.innerHTML = price;
+			};
+
+			var addMessageInfo = function(priceEl){
+				var buttonContainerEl = priceEl.closest('.review__form-controls');
+				var messageEl = buttonContainerEl.querySelector('.third-party-email-message');
+				var footerMessageEl = footerEl.querySelector('.third-party-email-message');
+				
+				if(messageEl){
+					footerMessageEl.innerHTML = messageEl.innerHTML;
+				}
+			};
+
+			// Wait for button to be added
+			helpers.elementLoaded('.review__submit-button-container .text--no-break', function() {
+				
+				var priceEl = document.querySelector('.review__submit-button-container .text--no-break');
+				changeTotal(priceEl);
+				
+				// Adds in the email message if it exists
+				addMessageInfo(priceEl);
+
+				var priceObserver = new MutationObserver(function(priceMutationEl) {
+					console.log(priceMutationEl);
+					var priceEl = document.querySelector('.review__submit-button-container .text--no-break');
+					changeTotal(priceEl);
+				});
+				priceObserver.observe(priceEl, {
+					attributes: true,
+					childList: true,
+					characterData: true,
+					subtree: true
+				});
+			});
+		},
 		chall : function() {
 
 			// Your code goes here
@@ -286,6 +467,7 @@
 			isoTest.log('Running Challenge...');
 			
 			isoTest.getReviewFormInfo();
+			isoTest.addFixedFooter();
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
