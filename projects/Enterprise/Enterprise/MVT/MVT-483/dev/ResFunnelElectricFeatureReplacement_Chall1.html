@@ -131,30 +131,6 @@
 					}
 				}
 			});
-			
-			//Reservation Confirmation page
-			//TO-DO
-
-			// Estimated Total Dropdown
-			// isoTest.observeEl('#reservationSummaryTooltipContent .summary-container', function(el){
-			// 	var reactInfo = isoTest.getReactComponent(el);
-			// 	var sippCode = reactInfo.return.memoizedProps.car.code || '';
-
-			// 	if (sippCode.endsWith('E')){
-			// 		var automaticEl = el.querySelectorAll('.summary-sub-row .summary-item');
-			// 		for (var i=0; i<automaticEl.length; i++){
-			// 			var si = automaticEl[i];
-			// 			if (si.innerHTML == "Automatic") si.innerHTML = lang[lang_code];
-			// 		}
-			// 	}
-			// });
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
