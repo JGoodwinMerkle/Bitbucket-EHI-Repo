@@ -9,12 +9,10 @@
 	var isoTest = {
 		account : 'EHI',
 		portfolio : 'National',
-		test : 'Desktop Review Page Restructure',
+		test : 'MVT-441',
 		creative : 'Challenger 0',
-		selector : 'body',
+		selector : '.review__form-controls button',
 		init : function() {
-
-			isoTest.debug = ${user.mvtDebug};
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -24,6 +22,41 @@
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			isoTest.addTagging();
+		},
+		addTagging : function(){
+			document.addEventListener('click', function(e){
+				if(/review/.test(location.hash) !== true) return;
+
+				var target = e.target;
+
+				// Track section opening and closing tags
+				var buttonEl = target.closest('.review__section-header-wrapper');
+				if(buttonEl){
+					var buttonContainerEl = buttonEl.parentElement;
+					var buttonText = buttonEl.querySelector('.review__section-header-text').innerText || '';
+					if(buttonContainerEl.classList.contains('review__section--open')){
+						isoTest.log('Res_Review: Tab Expand: ' + buttonText);
+						isoTest.fireTag89('', 'Res_Review: Tab Expand: ' + buttonText);
+					}else{
+						isoTest.log('Res_Review: Tab Collapse: ' + buttonText);
+						isoTest.fireTag89('', 'Res_Review: Tab Collapse: ' + buttonText);
+					}
+				}
+			});
+
+			isoTest.observeEl('.reserve .input-container__inline-error', function(){
+				isoTest.log('Res_Review: FE: Missing: Required Field');
+				isoTest.fireTag89('', 'Res_Review: FE: Missing: Required Field');
+			});
+		},
+		fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
@@ -36,21 +69,52 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
-		}
-	};
+		},
+		observeEl: function(selector, callback) {
+			var processed = new Map();
 
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
+			var processElement = function processElement(el) {
+				if (processed && !processed.has(el)) {
+					processed.set(el, true);
+					callback(el);
 				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
+			};
+
+			var lookForSelector = function lookForSelector() {
+				var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+				if (el.matches && el.matches(selector)) {
+					if (processElement(el)) return true;
+				}
+
+				if (el.querySelectorAll) {
+					var elements = el.querySelectorAll(selector);
+
+					if (elements.length) {
+						for (var i = 0; i < elements.length; i++) {
+							var _el = elements[i];
+							if (processElement(_el)) return true;
+						}
+					}
+				}
+			};
+			lookForSelector();
+
+			var obs = new MutationObserver(function (mutationsList) {
+				mutationsList.forEach(function (record) {
+					if (record && record.addedNodes && record.addedNodes.length) {
+						for (var i = 0; i < record.addedNodes.length; i++) {
+							var el = record.addedNodes[i].parentElement;
+							if (el && lookForSelector(el)) return true;
+						}
+					}
+				});
+			});
+			obs.observe(document, {
+				attributes: false,
+				childList: true,
+				subtree: true
+			});
 		}
 	};
 

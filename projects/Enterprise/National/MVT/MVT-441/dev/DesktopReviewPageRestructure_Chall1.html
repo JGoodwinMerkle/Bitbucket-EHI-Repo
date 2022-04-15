@@ -4,33 +4,43 @@
 		display: none;
 	}
 	/* Hide existing required text */
-	#additionalDriverSection .input-container__required-text,
-	#postRateAdditionalInfoSection .input-container__required-text{
+	.mvt441 #additionalDriverSection .input-container__required-text,
+	.mvt441 #postRateAdditionalInfoSection .input-container__required-text{
 		display: none;
 	}
 	/* Adjust existing drawer padding */
 	@media screen and (min-width: 40.0625em){
-		.review__form .review__section-content, .review__form .review__section .input-container__required-text {
+		.mvt441 .review__form .review__section-content, .mvt441 .review__form .review__section .input-container__required-text {
 			padding: 0 2.4rem;
 		}
+	}
+	.mvt441 .review__section--empty{
+		display: none;
 	}
 	#requiredInfo h2 button {
 		cursor: default;
 		pointer-events: none;
 		position: relative;
 	}
-	.reserve #paymentSection{
+	.mvt441 .reserve #paymentSection{
 		display: none;
 	}
 	#requiredInfo .required-driver-info-container{
-		position: relative;
+		display: flex;
+    flex-wrap: wrap;
+		align-items: flex-start;
+	}
+	#requiredInfo .required-driver-info-container .input-container--leading-half{
+		flex-basis: calc(50% - 0.25rem);
+    margin-right: .25rem;
 	}
 	#requiredInfo .required-driver-info-container .input-container--half{
 		width: 100%;
 		margin-top: 0;
 	}
 	#requiredInfo .review__driver-name{
-		display: inline-block;
+		flex-basis: 50%;
+    display: flex;
 	}
 	#requiredInfo .required-driver-info-container .post-rate-container{
 		margin-top: 0.25rem;
@@ -57,14 +67,14 @@
     padding: 0;
     top: 0;
 	}
-	.reserve .information-header{
+	.mvt441 .reserve .information-header{
 		margin-bottom: 20px;
     margin-top: 30px;
 	}
-	.reserve .information-header.driver-information{
+	.mvt441 .reserve .information-header.driver-information{
 		margin-top: 15px;
 	}
-	.reserve .optional{
+	.mvt441 .reserve .optional{
 		margin-left: 30px;
     font-style: italic;
     font-size: 16px;
@@ -90,9 +100,10 @@
 	var isoTest = {
 		account : 'EHI',
 		portfolio : 'National',
-		test : 'Desktop Review Page Restructure',
+		test : 'MVT-441',
 		creative : 'Challenger 1',
 		selector : '.reserve .review__form input[type="email"]',
+		buttonActive : false,
 		debug : true,
 		init : function() {
 
@@ -110,16 +121,37 @@
 			helpers.elementLoaded(isoTest.selector, function() {
 				isoTest.log('Test Ready!');
   				isoTest.chall();
+
+					// Adding separately since we only need it added once
+					isoTest.addTagging();
 			});
 			
 			window.addEventListener('hashchange', isoTest.viewChange, false);
 		
+		},
+		addTagging : function(){
+			isoTest.observeEl('.reserve .input-container__inline-error', function(){
+				isoTest.log('Res_Review: FE: Missing: Required Field');
+				isoTest.fireTag89('', 'Res_Review: FE: Missing: Required Field');
+			});
+		},
+		fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
 		},
 		viewChange : function(){
 			if(/review/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
+			}else{
+				var addedFooter = document.querySelector('.review__form-footer');
+				if(addedFooter){
+					addedFooter.parentNode.removeChild(addedFooter);
+				}
 			}
 		},
 		getReactComponent : function(node){
@@ -154,13 +186,38 @@
 				</section>
 			`);
 		},
-		addOptionalText : function(){
+		updateSections : function(){
+
+			// Start by closing sections so we can track them just after
+			var openSections = document.querySelectorAll('.review__section:not(#requiredInfo) > h2 button[aria-expanded="true"]');
+			for(var i = 0; i < openSections.length; i++){
+				openSections[i].click();
+			}
+
 			// Loop through the headers and add a span of "Optional" to each
 			var headers = document.querySelectorAll('.review__section:not(#requiredInfo) > h2 .review__section-header-text');
 			for(var i = 0; i < headers.length; i++){
-				if(!headers[i].querySelector('.optional')){
-					headers[i].insertAdjacentHTML('beforeend', '<span class="optional">Optional</span>');
-				}
+				(function () {
+					if(!headers[i].querySelector('.optional')){
+						headers[i].insertAdjacentHTML('beforeend', '<span class="optional">Optional</span>');
+					}
+
+					// Track section opening and closing tags
+					var buttonEl = headers[i].closest('.review__section-header-wrapper');
+					if(buttonEl){
+						buttonEl.addEventListener('click', function(){
+							var buttonContainerEl = buttonEl.parentElement;
+							var buttonText = buttonEl.querySelector('.review__section-header-text').childNodes[0].textContent || '';
+							if(buttonContainerEl.classList.contains('review__section--open')){
+								isoTest.log('Res_Review: Tab Collapse: ' + buttonText);
+								isoTest.fireTag89('', 'Res_Review: Tab Collapse: ' + buttonText);
+							}else{
+								isoTest.log('Res_Review: Tab Expand: ' + buttonText);
+								isoTest.fireTag89('', 'Res_Review: Tab Expand: ' + buttonText);
+							}
+						});
+					}
+				})();
 			}
 		},
 		movePaymentSection : function(){
@@ -175,7 +232,6 @@
 			requiredInfoEl.insertAdjacentElement('beforeend', paymentSectionEl);
 		},
 		moveRateFields : function(){
-			var postRateButtonEl = document.querySelector('#postRateAdditionalInfoSection h2 button[aria-expanded="true"]');
 			var driverEmailInputEl = document.querySelector('#requiredInfo input[type="email"]');
 			var driverEmailEl = driverEmailInputEl.parentElement;
 			
@@ -190,10 +246,6 @@
 				var preRateContainerEl = preRateEl.parentElement.parentElement;
 				preRateContainerEl.classList.add('pre-rate-container');
 				driverEmailEl.insertAdjacentElement('afterend', preRateContainerEl);
-			}
-
-			if(postRateButtonEl){
-				postRateButtonEl.click();
 			}
 		},
 		moveDriverInfo : function(){
@@ -236,10 +288,16 @@
 			if(emailPromoEl){
 				requiredInfoEl.insertAdjacentElement('afterend', emailPromoEl);
 			}
+		},
+		moveRequiredInfo : function(requiredInputs){
+			isoTest.log('requiredInputs', requiredInputs);
+			var requiredInfoEl = document.querySelector('#requiredInfo .required-info-container .required-driver-info-container');
 
-			// Collapse the existing driver info section
-			if(driverInfoButtonEl){
-				driverInfoButtonEl.click();
+			// For each of the requiredInputs, add them to the required info section
+			for(var i = 0; i < requiredInputs.length; i++){
+				if(!requiredInputs[i].closest('#requiredInfo')){
+					requiredInfoEl.insertAdjacentElement('beforeend', requiredInputs[i].parentElement);
+				}
 			}
 		},
 		getReviewFormInfo : function(){
@@ -249,40 +307,120 @@
 			var contractDetails = memoizedProps.contractDetails || false;
 			var additionalInfoBeforeRates = (contractDetails) ? contractDetails.additional_info_before_rates : false;
 			var paymentSection = (contractDetails) ? memoizedProps.showPaymentSection : false;
-			
-			console.log('paymentSection', paymentSection);
-			console.log('contractDetails', contractDetails);
-			console.log('additionalInfoBeforeRates', additionalInfoBeforeRates);
-			console.log('memoizedProps', memoizedProps);
 
-			isoTest.addRequiredInfoHTML();
-			isoTest.addOptionalText();
-			isoTest.moveDriverInfo();
-			
-			if(contractDetails){
-				// Authenticated users 
-				console.log('Authenticated users');
+			// Loop through forms and check to see if the inputs are required
+			var forms = reviewFormComponent.return.stateNode.forms;
+			var requiredInputs = [];
+			var inputSections = {
+				totalRequired : 0,
+				totalValidList: {},
+			};
 
+			// Each separate section is a "form" we need to loop through
+			for(var i = 0; i < forms.length; i++){
+				var current = forms[i].current;
+				var inputs = (current && current.inputs) ? current.inputs : false;
+				// If there are any inputs in the "form" we'll check to see if they're required
+				if(inputs && inputs.length > 0){
+					
+					// Store the total number of inputs now & we'll check to see if it matches required inputs later
+					inputSections[i] = {
+						sectionLength : inputs.length,
+						requiredSections : 0
+					};
+
+					// Loop through each input in the form
+					for(var j = 0; j < inputs.length; j++){
+						(function () {
+							var input = inputs[j];
+							if(input.props.required){
+								var inputName = input.props.name;
+								var el = document.querySelector('[name="' + inputName + '"]');
+								
+								// Required section is used to see if the specific "form" should be hidden
+								inputSections[i].requiredSections++;
+								// Total required is used to see when the form is valid
+								inputSections.totalRequired++;
+								inputSections[i].innerInput = el;
+								requiredInputs.push(el);
+
+								var validInputCheck = function(){
+									isoTest.log('isValid: ', input.isValid());
+									
+									inputSections.totalValidList[inputName] = input.isValid();
+
+									// Check to see if every input is valid that all of the inputs have been checked
+									var allValid = Object.keys(inputSections.totalValidList).every(function(k){ return inputSections.totalValidList[k] });
+									var validNumber = Object.keys(inputSections.totalValidList).length;
+
+									var stickyButton = document.querySelector('.review__form-footer .review__submit-button-container button');
+									if(allValid && validNumber >= inputSections.totalRequired){
+										// All required inputs are now valid
+										isoTest.buttonActive = true;
+										if(stickyButton){
+											stickyButton.classList.remove('disabled');
+										}
+									}else{
+										isoTest.buttonActive = false;
+										if(stickyButton){
+											stickyButton.classList.add('disabled');
+										}
+									}
+								};
+								
+								// Check if the input is valid initially and then on any change
+								validInputCheck();
+								el.addEventListener('change', function(){
+									validInputCheck();
+								});
+								// Need blur specifically for pre-filled email inputs
+								el.addEventListener('blur', function(){
+									validInputCheck();
+								});
+							}
+						})();
+					}
+
+					// Hide the section if we've moved everything inside of it
+					if(inputSections[i].requiredSections === inputSections[i].sectionLength){
+						isoTest.log('All required inputs have been moved from this section');
+						var emptyContainer = inputSections[i].innerInput.closest('.review__section');
+						emptyContainer.parentElement.classList.add('review__section--empty');
+					}
+				}
+			}
+			isoTest.log('inputSections', inputSections);
+			isoTest.log('requiredInputs', requiredInputs);
+			
+			// May limit the number of required inputs to 4
+			isoTest.log(requiredInputs.length);
+			
+			// if(requiredInputs.length < 5){
+				document.documentElement.classList.add('mvt441');
+
+				isoTest.addRequiredInfoHTML();
+				isoTest.updateSections();
+
+				// Pull driver info into it's own section (should exist for ever user type)
+				isoTest.moveDriverInfo();
+				
+				// Move payment info into it's own section as well
 				if(paymentSection){
 					isoTest.movePaymentSection();
 				}
-			}else{
-				// Unauthenticated users
-				console.log('Unauthenticated users');
-			}
+				if(additionalInfoBeforeRates){
+					// Includes pre & post rate fields ("Corporate" account type)
+					isoTest.moveRateFields();
+				}
 
-			if(additionalInfoBeforeRates){
-				// Includes pre & post rate fields ("Corporate" account type)
-				console.log('Includes pre & post rate fields - Corporate');
-				isoTest.moveRateFields();
-			}else if(contractDetails){
-				console.log('Retail account type');
-			}
+				// Moves remaining required inputs
+				isoTest.moveRequiredInfo(requiredInputs);
+			// }
 		},
 		chall : function() {
 
 			// Your code goes here
-			console.log('chall');
+			isoTest.log('chall');
 			isoTest.log('Running Challenge...');
 			
 			isoTest.getReviewFormInfo();
@@ -298,6 +436,52 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
+		},
+		observeEl: function(selector, callback) {
+			var processed = new Map();
+
+			var processElement = function processElement(el) {
+				if (processed && !processed.has(el)) {
+					processed.set(el, true);
+					callback(el);
+				}
+			};
+
+			var lookForSelector = function lookForSelector() {
+				var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+				if (el.matches && el.matches(selector)) {
+					if (processElement(el)) return true;
+				}
+
+				if (el.querySelectorAll) {
+					var elements = el.querySelectorAll(selector);
+
+					if (elements.length) {
+						for (var i = 0; i < elements.length; i++) {
+							var _el = elements[i];
+							if (processElement(_el)) return true;
+						}
+					}
+				}
+			};
+			lookForSelector();
+
+			var obs = new MutationObserver(function (mutationsList) {
+				mutationsList.forEach(function (record) {
+					if (record && record.addedNodes && record.addedNodes.length) {
+						for (var i = 0; i < record.addedNodes.length; i++) {
+							var el = record.addedNodes[i].parentElement;
+							if (el && lookForSelector(el)) return true;
+						}
+					}
+				});
+			});
+			obs.observe(document, {
+				attributes: false,
+				childList: true,
+				subtree: true
+			});
 		}
 	};
 
