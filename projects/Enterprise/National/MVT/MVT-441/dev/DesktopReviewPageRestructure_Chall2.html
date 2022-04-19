@@ -452,7 +452,7 @@
 			// May limit the number of required inputs to 4
 			isoTest.log(requiredInputs.length);
 			
-			// if(requiredInputs.length < 5){
+			if(requiredInputs.length < 5){
 				document.documentElement.classList.add('mvt441');
 
 				isoTest.addRequiredInfoHTML();
@@ -475,7 +475,7 @@
 
 				// Add the footer after everything else is completed
 				isoTest.addFixedFooter();
-			// }
+			}
 		},
 		addFixedFooter : function() {
 			var footerHTML = `
