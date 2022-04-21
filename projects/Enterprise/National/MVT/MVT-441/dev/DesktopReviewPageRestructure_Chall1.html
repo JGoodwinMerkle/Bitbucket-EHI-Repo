@@ -8,6 +8,10 @@
 	.mvt441 #postRateAdditionalInfoSection .input-container__required-text{
 		display: none;
 	}
+	/* Remove extra border line */
+	.mvt441 .review__section:first-child{
+		border-top: 0;
+	}
 	/* Adjust existing drawer padding */
 	@media screen and (min-width: 40.0625em){
 		.mvt441 .review__form .review__section-content, .mvt441 .review__form .review__section .input-container__required-text {
@@ -235,6 +239,7 @@
 			var paymentInfoEl = document.querySelector('#paymentSection .review__section-sub-heading');
 			var paymentSectionEl = document.querySelector('#paymentSection .review__payment-container');
 
+			paymentInfoEl.textContent = 'Please Select a Method of Payment';
 			requiredInfoEl.insertAdjacentHTML('beforeend', `
 				<h3 class="information-header">Payment Information</h3>
 			`);
@@ -405,7 +410,7 @@
 			// May limit the number of required inputs to 4
 			isoTest.log(requiredInputs.length);
 			
-			if(requiredInputs.length < 5){
+			if(requiredInputs.length < 5 || window.location.href.indexOf('attempt441=true') > -1){
 				document.documentElement.classList.add('mvt441');
 
 				isoTest.addRequiredInfoHTML();

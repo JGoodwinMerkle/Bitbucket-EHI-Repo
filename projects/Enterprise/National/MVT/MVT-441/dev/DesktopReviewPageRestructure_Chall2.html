@@ -8,6 +8,10 @@
 	.mvt441 #postRateAdditionalInfoSection .input-container__required-text{
 		display: none;
 	}
+	/* Remove extra border line */
+	.mvt441 .review__section:first-child{
+		border-top: 0;
+	}
 	/* Adjust existing drawer padding */
 	@media screen and (min-width: 40.0625em){
 		.mvt441 .review__form .review__section-content, .mvt441 .review__form .review__section .input-container__required-text {
@@ -114,8 +118,13 @@
 		position: fixed;
     bottom: 0;
     width: 100%;
-    padding-left: 14.28rem;
+    padding-left: 0;
     box-shadow: 0 0px 4px 3px rgb(0, 0, 0, 0.15);
+	}
+	@media(min-width: 80rem){
+		.review__form-footer{
+			padding-left: 14.28rem;
+		}
 	}
 	.review__form-footer .review__form-controls{
 		max-width: 80rem;
@@ -125,6 +134,12 @@
     padding-right: 4.75rem;
 		margin-top: 1.5rem;
     margin-bottom: 1.5rem;
+	}
+	@media(min-width: 1665px){
+		.review__form-footer .review__form-controls{
+			margin-left: 70px;
+			/* padding-right: 0; */
+		}
 	}
 	.review__form-footer .third-party-email-message{
 		max-width: 45%;
@@ -141,6 +156,9 @@
 		flex-grow: 1;
     text-align: right;
     margin-right: 40px;
+	}
+	.review__form-footer .estimated-total-label{
+		font-weight: 800;
 	}
 	.review__form-footer .review__form-controls .review__submit-button-container{
 		flex-grow: 0;
@@ -281,6 +299,7 @@
 			var paymentInfoEl = document.querySelector('#paymentSection .review__section-sub-heading');
 			var paymentSectionEl = document.querySelector('#paymentSection .review__payment-container');
 
+			paymentInfoEl.textContent = 'Please Select a Method of Payment';
 			requiredInfoEl.insertAdjacentHTML('beforeend', `
 				<h3 class="information-header">Payment Information</h3>
 			`);
@@ -452,7 +471,7 @@
 			// May limit the number of required inputs to 4
 			isoTest.log(requiredInputs.length);
 			
-			if(requiredInputs.length < 5){
+			if(requiredInputs.length < 5 || window.location.href.indexOf('attempt441=true') > -1){
 				document.documentElement.classList.add('mvt441');
 
 				isoTest.addRequiredInfoHTML();
