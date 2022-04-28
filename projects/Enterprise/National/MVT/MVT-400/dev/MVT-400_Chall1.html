@@ -1,5 +1,11 @@
 <style>
-	.progress-bar-wrapper {
+  .iso-hide {
+    display: none !important;
+  }
+  .iso-sticky.progress-bar-wrapper {
+    position: absolute;
+  }
+  .progress-bar-wrapper {
     display: flex;
     background-color: #f0f0f0;
     position: fixed;
@@ -7,8 +13,8 @@
     left: 0;
     z-index: 1;
     width: 100%;
-    border-top: 1px solid #BFC0C1;
-    border-bottom: 1px solid #BFC0C1;
+    border-top: 1px solid #bfc0c1;
+    border-bottom: 1px solid #bfc0c1;
   }
   .step-wrapper {
     margin-top: 4%;
@@ -60,7 +66,8 @@
     color: #6d6d6d;
     margin-bottom: 6px;
   }
-  .step-item.active .step-index,.step-item.active.visited .step-index {
+  .step-item.active .step-index,
+  .step-item.active.visited .step-index {
     background: #00703c;
     color: #ffffff;
     border: 1px solid #00703c;
@@ -78,14 +85,14 @@
     line-height: 14px;
   }
   .step-item.active .step-num {
-      font-weight: 600;
+    font-weight: 600;
   }
   .step-item .step-title {
     opacity: 0;
   }
-  .step-item.step-1 .step-title  {
-      position:absolute;
-      top:50%;
+  .step-item.step-1 .step-title {
+    position: absolute;
+    top: 50%;
   }
 
   .step-item.completed .step-index {
@@ -130,212 +137,333 @@
     width: 20%;
     display: flex;
     align-content: center;
-    margin-top: 3%;
-    margin-bottom: 3%;
-    border-left: 1px solid #BFC0C1;
+    background: rgba(191, 192, 193, 0.2);
   }
 
   .dropdown-chevron > div {
-    margin:auto;
-    width: 16px;
-    height: 16px;
-    border: solid #00703c;
-    border-width: 0px 4px 4px 0;
-    transform: rotate(45deg);
+    margin: auto;
     transition: transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
-  } 
+    border-left: 0.3125rem solid transparent;
+    border-right: 0.3125rem solid transparent;
+    border-top: 0.3125rem solid #6D6D6D;
+  }
   .dropdown-chevron.dropdown-selected > div {
-      transform: rotate(227deg);
-  } 
+    transform: rotate(-180deg);
+    border-top: 0.3125rem solid #00703c;
+  }
+  .iso-test .page__header .reserve__progress-total:after {
+    border-left: 0.3125rem solid transparent;
+    border-right: 0.3125rem solid transparent;
+    border-top: 0.3125rem solid #6D6D6D;
+    top: 60%;
+  }
+  .iso-test .page__header--active .iso-active.reserve__progress-total:after {
+    transform: rotate(-180deg) ;
+    border-top: 0.3125rem solid #00703c;
+    top: 40%;
+  }
+  .page__header--active .reserve__progress-total:after {
+    transform: none;
+  }
+  .iso-test .page__header .reserve__progress-menu-total-amount:after , .iso-test .page__header .reserve__progress-menu-total--open .reserve__progress-menu-total-amount:after {
+    display: none;
+  }
+  .iso-test .page__header .reserve__progress-menu-total:hover,.iso-test .page__header .reserve__progress-menu-total:focus,.iso-test .page__header .reserve__progress-menu-total.reserve__progress-menu-total--open {
+    pointer-events: none;
+    min-height: 7.375rem;
+  }
+  .iso-test .page__header .reserve__progress-menu-price-breakdown-wrap>div>p, .iso-test .page__header .line-items, .iso-test .page__header .section-title {
+    font-size: 12px;
+  }
+  .iso-test .page__header .reserve__progress-menu-price-breakdown--pricing .reserve__progress-menu-price-breakdown-wrap-contract {
+    padding-bottom: 0px;
+    border-bottom: none;
+    margin-bottom: none;
+  }
 
-  @media screen and (max-width: 40em){
+  .iso-test .page__header__menu {
+    padding-top:0px;
+  }
+
+  @media screen and (max-width: 40em) {
     .page__content {
-    padding-top: 9.0625rem;
+      padding-top: 9.0625rem;
     }
     .reserve__progress-menu .reserve__progress-menu-item:first-child {
-    padding-top: 5.25rem;
+      padding-top: 5.25rem;
     }
   }
 
   @media screen and (min-width: 40.0625em) and (max-width: 56.9375em) {
     .page__content {
-        padding-top: 9.0625rem;
+      padding-top: 9.0625rem;
     }
     .reserve__progress-menu .reserve__progress-menu-item:first-child {
-    padding-top: 7.25rem;
+      padding-top: 7.25rem;
+    }
+    .iso-test .page__header__menu {
+      padding-top:66px;
     }
   }
 </style>
 <script>
-(function() {
-	'use strict';
-	var isoTest = {
-		account : 'EHI',
-		portfolio : 'National',
-		test : 'MVT-400',
-		creative : 'Challenger 1',
-		selector : '.page__header.reserve__progress',
-		progressHTML: '<div class="progress-bar-wrapper"> <div class="step-wrapper"> <div class="step-1 step-item completed"> <div class="step-index"><div class="step-num">1</div></div><div class="step-title">Pick Up & Return</div></div><div class="step-2 step-item active"> <div class="step-index"><div class="step-num">2</div></div><div class="step-title">Vehicle</div></div><div class="step-3 step-item"> <div class="step-index"><div class="step-num">3</div></div><div class="step-title">Add-ons</div></div><div class="step-4 step-item"> <div class="step-index"><div class="step-num">4</div></div><div class="step-title">Review</div></div></div><div class="dropdown-chevron"><div> </div>',
-        stepLocation: "",
-		init : function() {
+  (function () {
+    "use strict";
+    var isoTest = {
+      account: "EHI",
+      portfolio: "National",
+      test: "MVT-400",
+      creative: "Challenger 1",
+      selector: ".page__header.reserve__progress",
+      parentSelector: ".reserve",
+      progressHTML:
+        '<div class="progress-bar-wrapper"> <div class="step-wrapper"> <div class="step-1 step-item completed"> <div class="step-index"><div class="step-num">1</div></div><div class="step-title">Pick Up & Return</div></div><div class="step-2 step-item active"> <div class="step-index"><div class="step-num">2</div></div><div class="step-title">Vehicle</div></div><div class="step-3 step-item"> <div class="step-index"><div class="step-num">3</div></div><div class="step-title">Add-ons</div></div><div class="step-4 step-item"> <div class="step-index"><div class="step-num">4</div></div><div class="step-title">Review</div></div></div><div class="dropdown-chevron"><div> </div>',
+      stepLocation: "",
+      init: function () {
+        isoTest.debug = true;
 
-			isoTest.debug = true;
-			
-			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-			}
+        if (
+          _satellite &&
+          typeof _satellite.setVar === "function" &&
+          typeof _satellite.track === "function"
+        ) {
+          _satellite.setVar("TargetCampaign", isoTest.test);
+          _satellite.setVar("TargetCreative", isoTest.creative);
+        }
 
-			isoTest.log('Test Running...');
-			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
-			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+        isoTest.log("Test Running...");
+        isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+        isoTest.log(isoTest.test + " - " + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});
-			
-		window.addEventListener('hashchange', isoTest.viewChange, false);
-		
-		},
-		//Check view to check progress steps
-		viewChange : function(){
-			/*if(/viewName/.test(location.hash)){
-				helpers.elementLoaded(isoTest.selector, function() {
-					isoTest.chall();
-				});
-			}*/
-			isoTest.log("viewChange");
-            helpers.elementLoaded(isoTest.selector, function () {
-              	isoTest.checkProgress();
-            });
-		},
-		//Check for location hash
-		checkHash: function () {
-            return location.hash;
-        },
-		//Update Progress
-		updateProgress: function (n) {
-            for (var i = n; i > 1 ; i--) {
-                document.querySelector('.step-item.step-'+(i-1)).classList.add('completed');
+        helpers.elementLoaded(isoTest.selector, function () {
+          isoTest.log("Test Ready!");
+          isoTest.chall();
+        });
+
+        window.addEventListener("hashchange", isoTest.viewChange, false);
+      },
+
+      viewChange: function () {
+        isoTest.log("viewChange");
+        helpers.elementLoaded(isoTest.selector, function () {
+         document.querySelector(isoTest.parentSelector).classList.add('iso-test');
+         isoTest.checkProgress();
+         
+        });
+      },
+
+      //Check for location hash
+      checkHash: function () {
+        return location.hash;
+      },
+
+      //Update Progress
+      updateProgress: function (n) {
+        for (var i = n; i > 1; i--) {
+          document.querySelector(".step-item.step-" + (i - 1)).classList.add("completed");
+        }
+      },
+
+      //Check for completed steps inflight
+      checkVisited: function (n) {
+        var visitedSteps = document.querySelectorAll(".step-item.completed");
+        visitedSteps.forEach((step) => {
+          var num = isoTest.getStepNumber(step);
+          if (num >= n) {
+            step.classList.remove("completed");
+          }
+        });
+      },
+
+      getStepNumber: function (step) {
+        return parseInt(step.className.split(" ")[0].split("-")[1]);
+      },
+
+      //Check progress at each step
+      checkProgress: function () {
+        isoTest.stepLocation = isoTest.checkHash();
+        isoTest.log(isoTest.stepLocation);
+        var step1 = document.querySelector(".step-1.step-item");
+        var step2 = document.querySelector(".step-2.step-item");
+        var step3 = document.querySelector(".step-3.step-item");
+        var step4 = document.querySelector(".step-4.step-item");
+
+        if (document.querySelector(".step-item.active")) {
+          document.querySelector(".step-item.active").classList.remove("active");
+        }
+        
+        switch (isoTest.stepLocation) {
+          case "#/start":
+          case "#/map_pickup":
+            step1.classList.add("active");
+            isoTest.checkVisited(1);
+            break;
+          case "#/car_select":
+            step2.classList.add("active");
+            step2.classList.add("visited");
+            isoTest.updateProgress(2);
+            isoTest.checkVisited(2);
+            break;
+          case "#/extras":
+            step3.classList.add("active");
+            step3.classList.add("visited");
+            isoTest.updateProgress(3);
+            isoTest.checkVisited(3);
+
+            break;
+          case "#/review":
+            step4.classList.add("active");
+            step4.classList.add("visited");
+            isoTest.updateProgress(4);
+            break;
+
+          default:
+            break;
+        }
+      },
+     
+      addEvents: function () {
+        var totalPrice = document.querySelector("button.reserve__progress-total");
+        var progressBar = document.querySelector('.progress-bar-wrapper');
+        var dropdown = document.querySelector('.page__header.reserve__progress');
+        var progressMenu = document.querySelector('.reserve__progress-menu-item-wrap');
+        var chevron = document.querySelector('.dropdown-chevron');
+        
+
+        totalPrice.addEventListener('click',function(e){
+            e.preventDefault();
+            var pricingMenu = document.querySelector('button.reserve__progress-menu-total');
+            if(pricingMenu) {
+              pricingMenu.click();
             }
-        },
-		//Check for completed steps inflight
-		checkVisited: function(n) {
-            var visitedSteps = document.querySelectorAll('.step-item.completed') ;
-            visitedSteps.forEach(step => {
-                var num = isoTest.getStepNumber(step);
-                if(num >= n) {
-                    step.classList.remove('completed');
-                }
-            });
-        },
-		getStepNumber: function(step) {
-            return parseInt(step.className.split(' ')[0].split('-')[1]);
-        },
-		//Check progress at each step
-		checkProgress: function () {
-            isoTest.stepLocation = isoTest.checkHash();
-            isoTest.log(isoTest.stepLocation);
-            var step1 = document.querySelector(".step-1.step-item");
-            var step2 = document.querySelector(".step-2.step-item");
-            var step3 = document.querySelector(".step-3.step-item");
-            var step4 = document.querySelector(".step-4.step-item");
-
-            if(document.querySelector('.step-item.active')) {
-                document.querySelector('.step-item.active').classList.remove('active');
+            if(dropdown.classList.contains('page__header--active')) {
+                dropdown.classList.remove('page__header--active');
+                totalPrice.classList.remove('iso-active');
+            } else {
+                dropdown.classList.add('page__header--active');
+                totalPrice.classList.add('iso-active');
             }
-            //switch
-            switch (isoTest.stepLocation) {
-              	case "#/start":
-              	case "#/map_pickup":
-					step1.classList.add("active");
-					isoTest.checkVisited(1);
-                break;
-              	case "#/car_select":
-					step2.classList.add("active");
-					step2.classList.add("visited");
-					isoTest.updateProgress(2);
-					isoTest.checkVisited(2);
-                break;
-             	case "#/extras":
-					step3.classList.add("active");
-					step3.classList.add("visited");
-					isoTest.updateProgress(3);
-					isoTest.checkVisited(3);
-                break;
-              	case "#/review":
-					step4.classList.add("active");
-					step4.classList.add("visited");
-					isoTest.updateProgress(4);
-                break;
+           !progressMenu.classList.contains('iso-hide') ? progressMenu.classList.add('iso-hide') : null;
+            progressBar.classList.contains('iso-hide') ? progressBar.classList.remove('iso-hide'): progressBar.classList.add('iso-hide');
+            progressBar.classList.contains('iso-sticky') ? progressBar.classList.remove('iso-sticky'): null;
+            chevron.classList.contains('dropdown-selected') ? chevron.classList.remove('dropdown-selected') :null;
+          });
 
-              	default:
-                break;
+
+        progressBar.addEventListener('click',function(){
+            var pricingMenu = document.querySelector('button.reserve__progress-menu-total');
+            chevron.classList.contains('dropdown-selected') ? chevron.classList.remove('dropdown-selected') : chevron.classList.add('dropdown-selected');
+            dropdown.classList.contains('page__header--active') ? dropdown.classList.remove('page__header--active') :dropdown.classList.add('page__header--active');
+            !progressBar.classList.contains('iso-sticky') ? progressBar.classList.add('iso-sticky') : progressBar.classList.remove('iso-sticky');
+            progressMenu.classList.contains('iso-hide') ? progressMenu.classList.remove('iso-hide') : null;
+            pricingMenu ? !pricingMenu.classList.contains('iso-hide') ? pricingMenu.classList.add('iso-hide'): null : null;
+        });
+
+        helpers.addEventOn("click",".reserve__progress-menu-item-toggle--complete,.reserve__progress-menu-item-toggle--complete>span",function () {
+            chevron.classList.contains("dropdown-selected")? chevron.classList.remove("dropdown-selected") : chevron.classList.add("dropdown-selected");
+            dropdown.classList.contains("page__header--active")? dropdown.classList.remove("page__header--active")  : dropdown.classList.add("page__header--active");
+            progressBar.classList.contains('iso-sticky') ? progressBar.classList.remove('iso-sticky'): null;
+          }
+        );
+
+        helpers.addEventOn("click",".profile-nav-modal button.modal__btn-close",function(){
+              progressBar.classList.remove('iso-hide');
+              console.log('bar see close');
+        });
+
+        helpers.addEventOn("click",".page__header__login a.page__header__login--authorized,.page__header__login a.page__header__login--authorized i.icon--triangle",function(){
+          console.log('xyz');
+              if(document.querySelector('.page__header__login--active')) {
+                  console.log('modal open');
+                if(!progressBar.classList.contains('iso-hide')) {
+                    progressBar.classList.add('iso-hide');
+                    console.log('bar hide');
+                  }
+              } else {
+                  console.log('modal close');
+                if(progressBar.classList.contains('iso-hide')) {
+                    progressBar.classList.remove('iso-hide');
+                      console.log('bar see');
+                  }
+              }
+       dropdown.classList.contains("page__header--active")? dropdown.classList.remove("page__header--active"): null;
+       progressBar.classList.contains('iso-sticky') ? progressBar.classList.remove('iso-sticky'): null;
+       chevron.classList.contains('dropdown-selected') ? chevron.classList.remove('dropdown-selected') :null;
+       totalPrice.classList.contains('iso-active') ? totalPrice.classList.remove('iso-active') : null;
+        });
+
+      },
+
+      chall: function () {
+        // Your code goes here
+        if (!document.querySelector(".progress-bar-wrapper")) {
+          document.querySelector(isoTest.selector).insertAdjacentHTML("afterbegin", isoTest.progressHTML);
+        }
+        document.querySelector(isoTest.parentSelector).classList.add('iso-test');
+        isoTest.checkProgress();
+        isoTest.addEvents();
+      },
+
+      fireTag: function (element, value) {
+        var linkName = value ? value : element.innerText;
+        linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+        s.linkTrackVars = "eVar20";
+        s.eVar20 = linkName;
+        s.tl(this, "o", linkName);
+      },
+
+      log: function (obj) {
+        if (isoTest.debug === true) {
+          console.log(obj);
+        }
+      },
+    };
+
+    var helpers = {
+      //adding helper to add events to multiple elements
+      addEventOn: function (eventType, selector, action) {
+        document.addEventListener(eventType, function (e) {
+          var target = e.target;
+          if (target.matches(selector)) {
+            action(e);
+          } else {
+            while (target && target.parentNode !== document) {
+              target = target.parentNode;
+              if (!target) {
+                return;
+              }
             }
-        },
-		//Function for dropdown drawer opening/closing 
-		addEvents: function() {
-            document.querySelector('.progress-bar-wrapper').addEventListener('click',function(){
-                var chevron = document.querySelector('.dropdown-chevron');
-                var dropdown = document.querySelector(isoTest.selector);
-                chevron.classList.contains('dropdown-selected') ? chevron.classList.remove('dropdown-selected') : chevron.classList.add('dropdown-selected');
-                dropdown.classList.contains('page__header--active') ? dropdown.classList.remove('page__header--active') :dropdown.classList.add('page__header--active');
+          }
+        });
+      },
 
-            })
-        },
-		chall : function() {
- 		// Your code goes here
- 			if (!document.querySelector(".progress-bar-wrapper")) {
-              document
-                .querySelector(isoTest.selector)
-                .insertAdjacentHTML("afterbegin", isoTest.progressHTML);
-            }
-            isoTest.checkProgress();
-            isoTest.addEvents();
+      elementLoaded: function (ele, callback) {
+        isoTest.log("elementLoaded::  " + ele + " - Checking...");
+        window.clearTimeout(isoTest.eleTimer);
+        if (document.querySelectorAll(ele).length > 0) {
+          if (typeof callback === "function") {
+            isoTest.log("elementLoaded::  " + ele + " - Found!");
+            callback();
+          }
+        } else {
+          isoTest.eleTimer = window.setTimeout(function () {
+            helpers.elementLoaded(ele, callback);
+          }, 100);
+        }
+      },
+      supplant: function (str, o) {
+        return str.replace(/{([^{}]*)}/g, function (a, b) {
+          var p = b.split(/\./),
+            c = o;
+          for (var i = 0; i < p.length; i++) {
+            if (c[p[i]] == null) return a;
+            c = c[p[i]];
+          }
+          return typeof c === "string" || typeof c === "number" ? c : a;
+        });
+      },
+    };
 
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
-		},
-		log : function(obj){
-			if(isoTest.debug === true){
-				console.log(obj);
-			}
-		}
-	};
-
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
-	};
-
-	isoTest.init();
-})();
+    isoTest.init();
+  })();
 </script>
