@@ -170,7 +170,7 @@
   }
   .iso-test .page__header .reserve__progress-menu-total:hover,.iso-test .page__header .reserve__progress-menu-total:focus,.iso-test .page__header .reserve__progress-menu-total.reserve__progress-menu-total--open {
     pointer-events: none;
-    min-height: 7.375rem;
+    min-height: 9.375rem;
   }
   .iso-test .page__header .reserve__progress-menu-price-breakdown-wrap>div>p, .iso-test .page__header .line-items, .iso-test .page__header .section-title {
     font-size: 12px;
@@ -336,6 +336,7 @@
             if(pricingMenu) {
               pricingMenu.click();
             }
+            isoTest.fireTag('button.reserve__progress-total', "National:RW:Price Toggle");
             if(dropdown.classList.contains('page__header--active')) {
                 dropdown.classList.remove('page__header--active');
                 totalPrice.classList.remove('iso-active');
@@ -351,6 +352,7 @@
 
 
         progressBar.addEventListener('click',function(){
+            isoTest.fireTag('.progress-bar-wrapper', "National:RW:Progress Toggle"); 
             var pricingMenu = document.querySelector('button.reserve__progress-menu-total');
             chevron.classList.contains('dropdown-selected') ? chevron.classList.remove('dropdown-selected') : chevron.classList.add('dropdown-selected');
             dropdown.classList.contains('page__header--active') ? dropdown.classList.remove('page__header--active') :dropdown.classList.add('page__header--active');
