@@ -1,0 +1,296 @@
+<style>
+	#updatedFiltersDrawer{
+		max-height: 0;
+	}
+	#updatedFiltersDrawer.filters-drawer--open{
+		max-height: none;
+    overflow: visible;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'National',
+		test : 'MVT-470',
+		creative : 'Challenger 1',
+		selector : '.vehicle-list > .vehicle',
+		allCarsObj : {},
+		getReactComponent : function(node){
+			for(var key in node) {
+				if(key.startsWith('__reactInternalInstance$') ) {
+					return node[key];
+				}
+			}
+			return null;
+		},
+		observeEl : function(selector, callback) {
+			var processed = new Map();
+
+			var processElement = function processElement(el) {
+				if (processed && !processed.has(el)) {
+					processed.set(el, true);
+					callback(el);
+				}
+			};
+
+			var lookForSelector = function lookForSelector() {
+				var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+				if (el.matches && el.matches(selector)) {
+					if (processElement(el)) return true;
+				}
+
+				if (el.querySelectorAll) {
+					var elements = el.querySelectorAll(selector);
+
+					if (elements.length) {
+						for (var i = 0; i < elements.length; i++) {
+							var _el = elements[i];
+							if (processElement(_el)) return true;
+						}
+					}
+				}
+			};
+			lookForSelector();
+
+			var obs = new MutationObserver(function (mutationsList) {
+				mutationsList.forEach(function (record) {
+					if (record && record.addedNodes && record.addedNodes.length) {
+						for (var i = 0; i < record.addedNodes.length; i++) {
+							var el = record.addedNodes[i].parentElement;
+							if (el && lookForSelector(el)) return true;
+						}
+					}
+				});
+			});
+			obs.observe(document, {
+				attributes: false,
+				childList: true,
+				subtree: true
+			});
+		},
+		updateCarsObject : function(){
+			isoTest.observeEl('.vehicle-list', function(vehicleList){
+				console.log('Updating cars object');
+
+				// List of all vehicles
+				var allCars = isoTest.getReactComponent(vehicleList).return.memoizedProps.vehicles.all;
+
+				// Loop through the allCars array and assign the "code" as the object key
+				allCars.forEach(function(car) {
+					isoTest.allCarsObj[car.code] = car;
+				});
+
+				console.log(isoTest.allCarsObj);
+
+				// Add the filter container alongside the vehicle list
+				isoTest.addFilterContainer(vehicleList);
+
+				setTimeout(function(){
+					isoTest.updateFilterContainer();
+				}, 0);
+			});
+		},
+		observeEachCar : function(){
+			// We'll want to make sure we've gotten the data we need before we start
+			isoTest.observeEl('.vehicle-list > .vehicle', function(vehicleEl){
+				var vehicleReact = isoTest.getReactComponent(vehicleEl);
+				var sippCode = vehicleReact.return.memoizedProps.vehicleCode;
+				var vehicleInfo = isoTest.allCarsObj[sippCode];
+
+				// console.log('Observing car');
+				console.log(vehicleInfo);
+
+				vehicleEl.setAttribute('data-capacity', vehicleInfo.people_capacity);
+				vehicleEl.setAttribute('data-category', vehicleInfo.category.name);
+				vehicleEl.setAttribute('data-sipp', vehicleInfo.code);
+				vehicleEl.setAttribute('data-unlimited', vehicleInfo.mileage_info.unlimited_mileage);
+			});
+		},
+		addFilterCategories : function(filtersShown, filterDrawer){
+
+			var allFiltersHTML = '';
+
+			// Loop through the filtersShown category, seats, and mileage objects and add in the filter category if there's more than one filter
+			var filterCategories = Object.keys(filtersShown);
+		
+			for (var i = 0; i < filterCategories.length; i++) {
+				var category = filterCategories[i];
+				var filters = filtersShown[category];
+
+				allFiltersHTML += `
+					<fieldset>
+						<legend class="section-title">${category}</legend>
+						<div class="filters-drawer__checkboxes">
+				`;
+
+				console.log(filters);
+				var filterCheckboxes = Object.keys(filters);
+				for (var j = 0; j < filterCheckboxes.length; j++) {
+					var filter = filterCheckboxes[j];
+					allFiltersHTML += `
+							<div class="input-option-container-wrapper">
+								<div class="input-option-container">
+									<input id="vehicle_select_${category}_${filter}" type="checkbox" name="${category}" data-dtm-track="checkbox.vehicle_select_${category}_${filter}.unchecked" disabled="" /><label for="vehicle_select_${category}_${filter}">${filter}</label>
+								</div>
+							</div>
+					`;
+				}
+
+				allFiltersHTML += `
+						</div>
+					</fieldset>
+				`;
+			}
+
+			console.log(allFiltersHTML);
+
+			filterDrawer.insertAdjacentHTML('beforeend', allFiltersHTML);
+		},
+		updateFilterContainer : function(){
+			var filterContainer = document.querySelector('.vehicle-select__controls.update');
+			var filterDrawer = filterContainer.querySelector('.filters-drawer__form .clearfix');
+			var filterResults = filterContainer.querySelector('.filters-drawer__results');
+
+			// console.log(isoTest.allCarsObj);
+
+			var allCars = document.querySelectorAll('.vehicle-list > .vehicle');
+			var filtersShown = {
+				category: {
+					'Cars': [],
+					'SUVs': [],
+					'Trucks': [],
+					'Vans': [],
+				},
+				mileage: {
+					'Unlimited Mileage': [],
+					'Limited Mileage': [],
+				},
+				seats: {
+					'2+': [],
+					'4+': [],
+					'5+': [],
+					'7+': [],
+				}
+			};
+
+			// Loop through cars and update our filters list
+			allCars.forEach(function(car){
+				var category = car.getAttribute('data-category');
+				var seats = car.getAttribute('data-capacity');
+				var mileage = car.getAttribute('data-unlimited');
+
+				if(filtersShown.category[category]){
+					filtersShown.category[category].push(car);
+				}
+
+				if(seats > 2){
+					filtersShown.seats['2+'].push(car);
+				}
+				if(seats > 4){
+					filtersShown.seats['4+'].push(car);
+				}
+				if(seats > 5){
+					filtersShown.seats['5+'].push(car);
+				}
+				if(seats > 7){
+					filtersShown.seats['7+'].push(car);
+				}
+
+				if(mileage === 'true'){
+					filtersShown.mileage['Unlimited Mileage'].push(car);
+				}else{
+					filtersShown.mileage['Limited Mileage'].push(car);
+				}
+			});
+
+			filterResults.innerHTML = allCars.length + ' Results';
+
+			console.log(filtersShown);
+
+			isoTest.addFilterCategories(filtersShown, filterDrawer);
+		},
+		addFilterContainer : function(){
+			var filterContainer = `
+				<div class="vehicle-select__controls update">
+					<div class="filters-drawer input-option--larger-on-large input-option--larger-on-medium" role="presentation">
+						<div class="filters-drawer__count"><button aria-controls="filtersDrawer" aria-expanded="false" class="btn-link btn-toggle">Filters</button><span class="filters-drawer__results">0 Results</span></div>
+						<div id="updatedFiltersDrawer" class="filters-drawer__form-wrap drawer-animation__content" aria-hidden="true">
+							<form class="filters-drawer__form">
+								<div class="clearfix"></div>
+								<fieldset class="filters-drawer__buttons cancel-and-apply-buttons cancel-and-apply-buttons--3-and-2-of-12">
+									<button type="submit" disabled="" class="btn">Apply</button><button type="button" disabled="" class="btn btn--opaque btn--underline">clear</button>
+								</fieldset>
+							</form>
+						</div>
+					</div>
+				</div>
+			`;
+			
+			var existingFilter = document.querySelectorAll('.vehicle-select__controls');
+			if(existingFilter.length === 1){
+				existingFilter[0].insertAdjacentHTML('afterend', filterContainer);
+
+				var filterContainer = document.querySelector('.vehicle-select__controls.update');
+				var filterButton = filterContainer.querySelector('.filters-drawer__count button');
+
+				filterButton.addEventListener('click', function(){
+					var filterDrawer = document.querySelector('#updatedFiltersDrawer');
+					filterDrawer.classList.toggle('filters-drawer--open');
+					filterContainer.querySelector('.filters-drawer').classList.toggle('drawer-animation--open');
+				});
+			}
+		},
+		init : function() {
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  			isoTest.chall();
+			});
+		},
+		chall : function() {
+			isoTest.updateCarsObject();
+			isoTest.observeEachCar();
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	    } else {
+				isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+			}
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
