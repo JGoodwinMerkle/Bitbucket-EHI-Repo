@@ -429,19 +429,23 @@
 									var validNumber = Object.keys(inputSections.totalValidList).length;
 
 									var stickyButton = document.querySelector('.review__form-footer .review__submit-button-container button');
-									if(allValid && validNumber >= inputSections.totalRequired){
+									if((allValid === true) && validNumber >= inputSections.totalRequired){
 										// All required inputs are now valid
+
+										isoTest.log('All required inputs are valid!');
 										isoTest.buttonActive = true;
 										if(stickyButton){
 											stickyButton.classList.remove('disabled');
 										}
 									}else{
+										isoTest.log('All required inputs are NOT valid!');
 										isoTest.buttonActive = false;
 										if(stickyButton){
 											stickyButton.classList.add('disabled');
 										}
 									}
 								};
+								isoTest.log('buttonActive', isoTest.buttonActive);
 								
 								// Check if the input is valid initially and then on any change
 								validInputCheck();
@@ -465,8 +469,6 @@
 					}
 				}
 			}
-			isoTest.log('inputSections', inputSections);
-			isoTest.log('requiredInputs', requiredInputs);
 			
 			// May limit the number of required inputs to 4
 			isoTest.log(requiredInputs.length);
@@ -497,6 +499,11 @@
 			}
 		},
 		addFixedFooter : function() {
+			isoTest.log('addFixedFooter');
+			isoTest.log(isoTest.buttonActive);
+
+			var buttonDisabled = isoTest.buttonActive ? '' : 'disabled';
+			isoTest.log(buttonDisabled);
 			var footerHTML = `
 				<div class="review__form-controls">
 					<div class="third-party-email-message"></div>
@@ -505,12 +512,13 @@
 						<div class="estimated-total-value"></div>
 					</div>
 					<div class="review__submit-button-container">
-						<button type="button" class="btn btn--size-medium ${(isoTest.buttonActive) ? '' : 'disabled'}">
+						<button type="button" class="btn btn--size-medium ` + buttonDisabled + `">
 							<span class="initial-text">Reserve now</span>
 						</button>
 					</div>
 				</div>
 			`;
+			isoTest.log(footerHTML);
 			var footerEl = document.createElement('div');
 			footerEl.classList.add('review__form-footer');
 			footerEl.innerHTML = footerHTML;
