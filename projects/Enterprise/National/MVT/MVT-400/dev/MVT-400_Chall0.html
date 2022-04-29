@@ -8,10 +8,10 @@
 		portfolio : 'National',
 		test : 'MVT-400',
 		creative : 'Challenger 0',
-		selector : 'body',
+		selector : '.reserve__progress-menu-item-wrap',
 		init : function() {
 
-			isoTest.debug = ${user.mvtDebug};
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -30,16 +30,20 @@
 		window.addEventListener('hashchange', isoTest.viewChange, false);
 		
 		},
-		viewChange : function(){
+		/*viewChange : function(){
 			if(/viewName/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
 			}
-		},
+		},*/
 		chall : function() {
 
 			// Your code goes here
+			helpers.addEventOn("click","button.reserve__progress-menu-total, span.reserve__progress-menu-total-wrap",function(e){
+				//console.log(e.target);
+				isoTest.fireTag('button.reserve__progress-menu-total', "National: RW: Price Toggle");
+       		});
 
 		},
 		fireTag : function(element, value) {
@@ -57,6 +61,21 @@
 	};
 
 	var helpers = {
+		addEventOn: function (eventType, selector, action) {
+        document.addEventListener(eventType, function (e) {
+          var target = e.target;
+          if (target.matches(selector)) {
+            action(e);
+          } else {
+            while (target && target.parentNode !== document) {
+              target = target.parentNode;
+              if (!target) {
+                return;
+              }
+            }
+          }
+        });
+      },
 		elementLoaded : function (ele, callback) {
 			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
 			window.clearTimeout(isoTest.eleTimer);
