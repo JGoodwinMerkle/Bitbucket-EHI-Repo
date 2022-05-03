@@ -99,7 +99,9 @@
 		
 		},
 		viewChange : function(){
-			if(/\/extras/.test(location.hash)){
+			console.log("view change");
+			if(/extras/.test(location.hash)){
+				console.log(location.hash)
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -123,7 +125,7 @@
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
 			s.linkTrackVars = 'eVar89';
-			s.eVar20 = linkName;
+			s.eVar89 = linkName;
 			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
