@@ -1,4 +1,45 @@
 <style>
+    .iso-dark-banner .upgrade-banner {
+        position: relative;
+        background-color: #393A3B;
+        border-bottom: 2px solid #393A3B;
+        border-top: 1px solid #393A3B;
+    }
+   
+    .iso-dark-banner .upgrade-banner__title ,.iso-dark-banner .upgrade-banner__description,.iso-dark-banner .upgrade-vehicle-box__name,.iso-dark-banner .descriptor,.iso-dark-banner .upgrade-banner__upgraded{
+        color:#ffffff;
+    }
+    .iso-dark-banner .upgrade-banner__button {
+        background-color: transparent;
+        border-color: #ffffff;
+        color:#ffffff;
+    }
+    .iso-dark-banner .icon.icon-arrow-right-2-gray {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNSAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yNC43NjQ0IDEwLjQ4MTJDMjUuMDE4MyAxMC43Mjk0IDI1LjA2NTMgMTEuMTEzMyAyNC45MTU4IDExLjQ0MjVDMjQuNzg1OCAxMS43NjI2IDI0LjQ4MzEgMTEuOTg5NCAyNC4xMjUxIDEyLjAxMTRDMjQuMTIwMiAxMi4wMTE4IDI0LjExNTUgMTIuMDEyNSAyNC4xMTA3IDEyLjAxMzFDMjQuMTAyNiAxMi4wMTQxIDI0LjA5NDYgMTIuMDE1MiAyNC4wODYzIDEyLjAxNTRDMjQuMDgwNSAxMi4wMTU3IDI0LjA3NSAxMi4wMTcyIDI0LjA2OTIgMTIuMDE3MkgxLjEwMzA0QzAuNTk3MzU1IDEyLjAxNzIgMC4xODc1IDExLjYwMjcgMC4xODc1IDExLjA5MTlDMC4xODc1IDEwLjU4MDggMC41OTczNTUgMTAuMTY2NyAxLjEwMzA0IDEwLjE2NjdIMjEuNzM2OEwxMi43NTMyIDEuODA5NjJDMTIuNDIyMSAxLjQ4NTMxIDEyLjQzOTggMC45Mjg2ODIgMTIuNzkzMiAwLjU2NjQ2MkMxMy4xNDY5IDAuMjA0MjQyIDEzLjcwMTcgMC4xNzM2NzUgMTQuMDMzMSAwLjQ5Nzk5MkwyNC43NjQ0IDEwLjQ4MTJaTTEyLjIzNyAyMy4xODY1QzEyLjQxNTUgMjMuMzY1NiAxMi42NDk5IDIzLjQ1NTIgMTIuODg0MyAyMy40NTUyQzEzLjExODcgMjMuNDU1MiAxMy4zNTMgMjMuMzY1NiAxMy41MzE2IDIzLjE4NjVMMjAuODg3IDE1LjgxOTZDMjEuMjQ0NiAxNS40NjEzIDIxLjI0NDYgMTQuODgwOCAyMC44ODcgMTQuNTIyNkMyMC41Mjk2IDE0LjE2NDMgMTkuOTQ5NSAxNC4xNjQzIDE5LjU5MjEgMTQuNTIyNkwxMi4yMzcgMjEuODg5OUMxMS44NzkzIDIyLjI0NzggMTEuODc5MyAyMi44Mjg2IDEyLjIzNyAyMy4xODY1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==);
+    }
+    .iso-dark-banner .upgrade-banner__callout-button-wrapper {
+        z-index: 11;
+    }
+    @media only screen and (min-width: 1024px){
+        .iso-dark-banner .upgrade-banner:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjE2MCIgaGVpZ2h0PSIxNjYiIHZpZXdCb3g9IjAgMCAyMTYwIDE2NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yMTU5LjE2IDcwLjgyNzJDMjE1Mi4xMiAzNS44NjMxIDIxMTEuMTkgMCAyMDQ2LjU0IDBDMTk4OS40OCAwIDE5NDguMSAzMC40MTg3IDE5MzQuNyA2MS42ODY2QzE5MzQuMDQgNjMuMTcwMSAxOTMzLjQ3IDY0LjY4NzMgMTkzMi45NyA2Ni4yMzE5SDBWNzguNjc3NEgyMTEyLjUyQzIxMjguODEgNzguNjc3NCAyMTMxLjI4IDc3LjgyMjkgMjEzMy4xMiA3Ni4wNjM2QzIxMzMuNDYgNzUuNzA5OCAyMTMzLjcyIDc1LjI4MjkgMjEzMy44OSA3NC44MTM1QzIxMzQuMDUgNzQuMzQ0MiAyMTM0LjExIDczLjg0NDEgMjEzNC4wNiA3My4zNDkyQzIxMzQuMDYgNjMuNjQ4IDIxMTEuMDkgMTguNzYwNyAyMDQ1Ljk0IDE4Ljc2MDdDMTk5MC4wNSAxOC43NjA3IDE5NjYuMjQgNTEuODg1OCAxOTYxLjI5IDYxLjU4NzFDMTk2MC40NSA2My4wMzgzIDE5NTkuNzIgNjQuNTUwNCAxOTU5LjExIDY2LjExMUgxOTUxLjc4QzE5NTIuNTEgNjQuMzk2NyAxOTUzLjMyIDYyLjcxOTIgMTk1NC4yMSA2MS4wODQ0QzE5NTkuOCA0OS42NzQxIDE5ODIuODIgMTIuNDI3MyAyMDQ1Ljk0IDEyLjQyNzNDMjExMS40OCAxMi40MjczIDIxNDAuMzkgNTcuNjY2NCAyMTQwLjk5IDc0Ljg1NzJDMjE0MS4yNiA3Ni4zMzAzIDIxNDEuMTMgNzcuODUxNCAyMTQwLjYgNzkuMjUyN0MyMTQwLjA4IDgwLjY1NCAyMTM5LjE4IDgxLjg4MTIgMjEzOC4wMiA4Mi43OTkyVjgyLjI5NjVDMjEzNS45OSA4My44MDQ1IDIxMzMuNTYgODUuMjExOSAyMTEyLjUyIDg1LjIxMTlIMFY5OC4yNDlIMjEyNy4yNkMyMTQyLjE1IDk4LjI0OSAyMTUyLjg2IDk3Ljc5OTQgMjE1Ny40OCA5Mi4xMDUzQzIxNjAuNyA4OC4yMDkzIDIxNjEuMiA4MS42MTYxIDIxNTkuMTYgNzAuODI3MlpNMjExMS4yOSA2My43ODQ0QzIxMTAuMjkgNjUuNzgyMyAyMTA2LjgyIDY2LjEzMiAyMTAzLjUgNjYuMjMxOUgxOTc5LjA2QzE5NzkuNzYgNjQuNjMxMyAxOTgwLjYzIDYzLjEwODEgMTk4MS42NCA2MS42ODY2QzE5OTMuNCA0NC4zMDQ0IDIwMjAuNTkgMzIuMDY3IDIwNDcuNDggMzIuMDE3MUMyMDc1LjY2IDMyLjAxNzEgMjA5OC40OCA0MS40NTc0IDIxMTAuMTQgNTguMjQwMUMyMTExLjU4IDYwLjgzNzQgMjExMS45OCA2Mi41MzU3IDIxMTEuMjkgNjMuNzg0NFpNMjA5NC4xNyAxMTkuMzQzSDIxMTkuOThDMjA5NC43MSAxNDUuNjQ1IDIwNDkuNCAxNDQuNzI4IDIwNDQuMjcgMTQ0LjYyNEMyMDQ0LjA3IDE0NC42MiAyMDQzLjkzIDE0NC42MTggMjA0My44NiAxNDQuNjE4QzIwMDAuMzYgMTQzLjQ3MiAxOTczLjk5IDEyMy4xOTkgMTk2My40NyAxMDQuODA4SDE5ODMuNjJDMTk5Ni4yOCAxMjAuMTkyIDIwMjAuNjQgMTMwLjY4MSAyMDQ1Ljg5IDEzMC42ODFDMjA2MS43NyAxMzAuNjgxIDIwODMgMTI4LjQzMyAyMDk0LjE3IDExOS4zNDNaTTIxMjguMDEgMTIwLjA0M0wyMTI4LjU1IDExOS4zNDNIMjE1MC42M0MyMTUwLjA5IDEyMC4zNTMgMjE0OS40OCAxMjEuMzIxIDIxNDguNzkgMTIyLjI0QzIxNDUuMDQgMTI3LjE2MSAyMTQzLjczIDEzMi4xMDkgMjE0Mi40OCAxMzYuODA1QzIxMzguMzggMTUyLjMyMiAyMTM1IDE2NS4wOTYgMjA0Ni40NCAxNjUuMDk2QzE5ODYuNSAxNjUuMTk2IDE5NDguMiAxMzUuNDc2IDE5MzUuNSAxMDQuODA4SDE5NTYuMDFDMTk2Ny4wNCAxMjcuMDQgMTk5OC4yNiAxNTAuNDEzIDIwNDMuNjYgMTUxLjE2MUMyMDQ5LjQxIDE1MS4zNjEgMjEwMi41NSAxNTIuMDEgMjEyOC4wMSAxMjAuMDQzWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==);
+        background-repeat: no-repeat;
+        background-size:100%;
+        opacity: 5%;
+        background-position: center;
+        }
+
+        .iso-dark-banner.iso-upgraded .upgrade-banner:before {
+            display: none;
+        }
+    }
 </style>
 <script>
 (function() {
@@ -8,10 +49,12 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-464',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '.upgrade-banner',
+        parentSelector: 'main.extras-view',
 		init : function() {
 
-			//isoTest.debug = ${user.mvtDebug};
+			isoTest.debug = true;
+            
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -28,10 +71,35 @@
 			});
 			
 		window.addEventListener('hashchange', isoTest.viewChange, false);
+
+        // mutation check on upgrade
+        var eleUpdates = new MutationObserver(function(mutationsList) {
+            mutationsList.forEach(function(mutation){
+            //removed nodes
+            mutation.removedNodes.forEach(function (removedNode){
+                if(removedNode.classList != undefined) {
+                    //console.log(removedNode);
+                    if(removedNode.classList.contains('upgrade-banner') ) {
+                        //actions
+                        console.log('upgrade done');
+                        helpers.elementLoaded(isoTest.selector, function() {
+                            document.querySelector(isoTest.parentSelector).classList.add('iso-upgraded');
+                            
+			            });
+                        
+                    }
+                }
+             });
+       
+
+            });
+        }) ;
+        
+        eleUpdates.observe(document.querySelector('body'), {subtree: true, childList: true});
 		
 		},
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
+			if(/\/extras/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -40,12 +108,21 @@
 		chall : function() {
 
 			// Your code goes here
+            document.querySelector(isoTest.parentSelector).classList.add('iso-dark-banner');
+            isoTest.fireTag89(isoTest.selector,'Upgrade Banner Seen');
 
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
 			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+        fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
 			s.eVar20 = linkName;
 			s.tl(this, 'o', linkName);
 		},
