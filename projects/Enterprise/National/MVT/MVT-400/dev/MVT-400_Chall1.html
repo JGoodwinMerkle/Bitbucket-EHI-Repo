@@ -16,7 +16,6 @@
     left: 0;
     z-index: 1;
     width: 100%;
-    /*border-top: 1px solid #bfc0c1;*/
     border-bottom: 1px solid #bfc0c1;
   }
   .step-wrapper {
@@ -406,23 +405,17 @@
 
         helpers.addEventOn("click",".profile-nav-modal button.modal__btn-close",function(){
               progressBar.classList.remove('iso-hide');
-              console.log('bar see close');
               document.body.classList.contains('disable-scroll') ? document.body.classList.remove('disable-scroll') : null;
         });
 
         helpers.addEventOn("click",".page__header__login a.page__header__login--authorized,.page__header__login a.page__header__login--authorized i.icon--triangle",function(){
-          console.log('xyz');
               if(document.querySelector('.page__header__login--active')) {
-                  console.log('modal open');
                 if(!progressBar.classList.contains('iso-hide')) {
                     progressBar.classList.add('iso-hide');
-                    console.log('bar hide');
                   }
               } else {
-                  console.log('modal close');
                 if(progressBar.classList.contains('iso-hide')) {
                     progressBar.classList.remove('iso-hide');
-                      console.log('bar see');
                   }
               }
        dropdown.classList.contains("page__header--active")? dropdown.classList.remove("page__header--active"): null;
