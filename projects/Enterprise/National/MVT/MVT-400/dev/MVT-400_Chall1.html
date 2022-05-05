@@ -389,6 +389,7 @@
         progressBar.addEventListener('click',function(){
             isoTest.fireTag('.progress-bar-wrapper', "National:RW:Progress Toggle"); 
             var pricingMenu = document.querySelector('button.reserve__progress-menu-total');
+            !document.body.classList.contains('disable-scroll') ? document.body.classList.add('disable-scroll') : document.body.classList.remove('disable-scroll');
             chevron.classList.contains('dropdown-selected') ? chevron.classList.remove('dropdown-selected') : chevron.classList.add('dropdown-selected');
             dropdown.classList.contains('page__header--active') ? dropdown.classList.remove('page__header--active') :dropdown.classList.add('page__header--active');
             !progressBar.classList.contains('iso-sticky') ? progressBar.classList.add('iso-sticky') : progressBar.classList.remove('iso-sticky');
@@ -406,6 +407,7 @@
         helpers.addEventOn("click",".profile-nav-modal button.modal__btn-close",function(){
               progressBar.classList.remove('iso-hide');
               console.log('bar see close');
+              document.body.classList.contains('disable-scroll') ? document.body.classList.remove('disable-scroll') : null;
         });
 
         helpers.addEventOn("click",".page__header__login a.page__header__login--authorized,.page__header__login a.page__header__login--authorized i.icon--triangle",function(){
@@ -427,6 +429,14 @@
        progressBar.classList.contains('iso-sticky') ? progressBar.classList.remove('iso-sticky'): null;
        chevron.classList.contains('dropdown-selected') ? chevron.classList.remove('dropdown-selected') :null;
        totalPrice.classList.contains('iso-active') ? totalPrice.classList.remove('iso-active') : null;
+       document.body.classList.contains('disable-scroll') ? document.body.classList.remove('disable-scroll') : null;
+        });
+
+        //resizing 
+        window.addEventListener('resize',function(){
+          if(progressBar.classList.contains('iso-sticky')) {
+            !document.body.classList.contains('disable-scroll') ? document.body.classList.add('disable-scroll') : null;
+          }
         });
 
       },
@@ -439,6 +449,7 @@
         document.querySelector(isoTest.parentSelector).classList.add('iso-test');
         isoTest.checkProgress();
         isoTest.addEvents();
+        
       },
 
       fireTag: function (element, value) {
