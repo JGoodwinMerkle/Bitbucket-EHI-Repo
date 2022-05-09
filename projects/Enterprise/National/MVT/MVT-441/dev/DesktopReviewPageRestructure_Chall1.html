@@ -45,6 +45,10 @@
 		flex-basis: calc(50% - 0.25rem);
     margin-right: .25rem;
 	}
+	#requiredInfo .required-driver-info-container .input-container--leading-half:last-child{
+		margin-right: 0;
+		flex-basis: 50%;
+	}
 	#requiredInfo .input-container, #requiredInfo .tooltip__container{
 		margin-top: 0;
 	}
@@ -407,10 +411,9 @@
 			isoTest.log('inputSections', inputSections);
 			isoTest.log('requiredInputs', requiredInputs);
 			
-			// May limit the number of required inputs to 4
-			isoTest.log(requiredInputs.length);
+			var browserWidth = window.innerWidth;
 			
-			if(requiredInputs.length < 5 || window.location.href.indexOf('attempt441=true') > -1){
+			if((requiredInputs.length < 5 && browserWidth >= 1280) || window.location.href.indexOf('attempt441=true') > -1){
 				document.documentElement.classList.add('mvt441');
 
 				isoTest.addRequiredInfoHTML();
