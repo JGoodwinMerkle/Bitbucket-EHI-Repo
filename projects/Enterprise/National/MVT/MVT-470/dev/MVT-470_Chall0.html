@@ -31,7 +31,29 @@
 		chall : function() {
 
 			// Your code goes here
+			isoTest.clickTracking();
+		},
+		clickTracking : function(){
+			document.addEventListener('click', function(e){
+				if (location.hash.indexOf('/car_select') === -1) return;
+				var target = e.target;
+				var inVehicleSelect = target.closest('.vehicle-select');
 
+
+				if(inVehicleSelect){
+					var targetAttribute = target.getAttribute('aria-controls');
+					var targetExpanded = target.getAttribute('aria-expanded');
+					var filterButton = target.closest('button[aria-controls="filtersDrawer"][aria-expanded="false"]');
+
+					if((targetAttribute === 'filtersDrawer' && targetExpanded === 'false') || filterButton){
+						isoTest.fireTag(target, 'Filters Opened');
+					}
+
+					if(target.getAttribute('type') === 'submit' && inVehicleSelect.classList.contains('vehicle-select--filters-active')){
+						isoTest.fireTag(target, 'Filters Applied');
+					}
+				}
+			});
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;

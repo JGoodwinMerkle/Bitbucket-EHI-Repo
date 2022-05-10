@@ -6,7 +6,7 @@
 		max-height: 0;
 	}
 	#updatedFiltersDrawer.filters-drawer--open{
-		max-height: none;
+		max-height: 500px;
     overflow: visible;
 	}
 	.filters-drawer__count__btn-reset.hide{
@@ -32,7 +32,7 @@
 		account : 'EHI',
 		portfolio : 'National',
 		test : 'MVT-470',
-		creative : 'Challenger 2',
+		creative : 'Challenger 1',
 		selector : '.vehicle-list > .vehicle',
 		allCarsObj : {},
 		filtersApplied : {},
@@ -276,6 +276,8 @@
 				allFilteredVehicles.forEach(function(vehicle){
 					vehicle.setAttribute('data-filter-applied', true);
 				});
+				
+				isoTest.fireTag(filterList, 'Filters Applied');
 			}else{
 				var clearBtn = document.querySelector('#updatedFiltersDrawer .cancel-and-apply-buttons .btn--underline');
 				var applyBtn = document.querySelector('#updatedFiltersDrawer .cancel-and-apply-buttons [type="submit"]');
@@ -307,8 +309,10 @@
 					// Update the filter count
 					if(filterIsChecked){
 						numOfFilters++;
+						isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + category + 'select' + name + ':checked');
 					} else {
 						numOfFilters--;
+						isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + category + 'select' + name + ':unchecked');
 					}
 
 					// Set a true or false value for existing filtersApplied object items depending on the filterIsChecked value
@@ -486,6 +490,11 @@
 					var filterDrawer = document.querySelector('#updatedFiltersDrawer');
 					filterDrawer.classList.toggle('filters-drawer--open');
 					filterContainer.querySelector('.filters-drawer').classList.toggle('drawer-animation--open');
+					filterContainer.parentElement.parentElement.classList.toggle('vehicle-select--filters-active');
+
+					if(filterDrawer.classList.contains('filters-drawer--open')){
+						isoTest.fireTag(filterButton, 'Filters Opened');
+					}
 
 					isoTest.checkFilters();
 				});
