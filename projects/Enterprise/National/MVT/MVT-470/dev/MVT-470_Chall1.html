@@ -93,7 +93,10 @@
 		},
 		updateCarsObject : function(){
 			isoTest.observeEl('.vehicle-list', function(vehicleList){
-				// console.log('Updating cars object');
+				
+				// Reset filter object on a new list
+				isoTest.filtersApplied = {};
+				isoTest.filtersAppliedCount = 0;
 
 				// List of all vehicles
 				var allCars = isoTest.getReactComponent(vehicleList).return.memoizedProps.vehicles.all;
@@ -102,8 +105,6 @@
 				allCars.forEach(function(car) {
 					isoTest.allCarsObj[car.code] = car;
 				});
-
-				// console.log(isoTest.allCarsObj);
 
 				// Add the filter container alongside the vehicle list
 				isoTest.addFilterContainer(vehicleList);
@@ -377,7 +378,7 @@
 
 				allFiltersHTML += `
 					<fieldset>
-						<legend class="section-title">${category} Category</legend>
+						<legend class="section-title">` + category +` Category</legend>
 						<div class="filters-drawer__checkboxes">
 				`;
 
@@ -391,7 +392,7 @@
 						allFiltersHTML += `
 								<div class="input-option-container-wrapper">
 									<div class="input-option-container">
-										<input id="vehicle_select_${category}_${filter}" type="checkbox" name="${category}" data-name="${filter}" data-category="${category}" data-dtm-track="checkbox.vehicle_select_${category}_${filter}.unchecked" /><label for="vehicle_select_${category}_${filter}">${filter}</label>
+										<input id="vehicle_select_` + category + `_` + filter + `" type="checkbox" name="` + category + `" data-name="` + filter + `" data-category="` + category + `" /><label for="vehicle_select_` + category + `_` + filter + `">` + filter + `</label>
 									</div>
 								</div>
 						`;
