@@ -36,6 +36,7 @@
 		selector : '.vehicle-list > .vehicle',
 		allCarsObj : {},
 		filtersApplied : {},
+		filtersAppliedCount : 0,
 		getReactComponent : function(node){
 			for(var key in node) {
 				if(key.startsWith('__reactInternalInstance$') ) {
@@ -174,7 +175,7 @@
 				}
 			}
 		},
-		changedFilter : function(clearFilters){
+		updateApplyButton : function(){
 			// For each item in the filtersApplied object, check to see if it's still checked
 			var change = false;
 			for(var inputId in isoTest.filtersApplied){
@@ -194,7 +195,7 @@
 				applyButton.setAttribute('disabled', true);
 			}
 		},
-		checkFilters : function(){
+		resetAppliedFilters : function(){
 
 			// Uncheck filters that were not applied
 			var checkedInputs = document.querySelectorAll('#updatedFiltersDrawer input:checked');
@@ -216,17 +217,17 @@
 				}
 			}
 		},
-		clearFilters : function(collapseFilters){
+		clearFilters : function(clearAndApplyFilters){
 			var checkedInputs = document.querySelectorAll('#updatedFiltersDrawer input:checked');
 			for(var i = 0; i < checkedInputs.length; i++){
 				checkedInputs[i].click();
 			}
-			if(collapseFilters){
+			if(clearAndApplyFilters){
 
 				// Reset the filters applied object
 				isoTest.filtersApplied = {};
 				// On clear, make sure the apply button is disabled
-				isoTest.changedFilter();
+				isoTest.updateApplyButton();
 				
 				var filtersButton = document.querySelector('.drawer-animation--open .js-filters-button');
 				if(filtersButton){
@@ -251,7 +252,7 @@
 
 			// Rest the filters applied object
 			isoTest.filtersApplied = {};
-			isoTest.changedFilter();
+			isoTest.updateApplyButton();
 
 			if(checkedInputs.length > 0){
 
@@ -291,29 +292,37 @@
 			var filtersButton = document.querySelector('.js-filters-button');
 			filtersButton.click();
 		},
-		addFilterEvents : function(filtersShown){
+		updateFilterCount : function(e){
 			var filterContainer = document.querySelector('.vehicle-select__controls.update');
 			var filtersButton = filterContainer.querySelector('.js-filters-button span');
+			var name = e.target.getAttribute('data-name');
+			var category = e.target.getAttribute('data-category');
+			var filterIsChecked = e.target.checked;
+
+			// Update the filter count
+			if(filterIsChecked){
+				isoTest.filtersAppliedCount++;
+				isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + category + '_select_' + name + ':checked');
+			} else {
+				isoTest.filtersAppliedCount--;
+				isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + category + '_select_' + name + ':unchecked');
+			}
+
+			// Update our results
+			if(isoTest.filtersAppliedCount > 0){
+				filtersButton.innerHTML = ' (' + isoTest.filtersAppliedCount + ')';
+			} else {
+				filtersButton.innerHTML = '';
+			}
+		},
+		addFilterEvents : function(filtersShown){
 			var inputs = document.querySelectorAll('#updatedFiltersDrawer input');
-			var numOfFilters = 0;
 
 			for(var i = 0; i < inputs.length; i++){
 				var input = inputs[i];
 
 				input.addEventListener('change', function(e){
-					var name = e.target.getAttribute('data-name');
-					var category = e.target.getAttribute('data-category');
-					var filteredVehicles = filtersShown[category][name];
 					var filterIsChecked = e.target.checked;
-
-					// Update the filter count
-					if(filterIsChecked){
-						numOfFilters++;
-						isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + category + 'select' + name + ':checked');
-					} else {
-						numOfFilters--;
-						isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + category + 'select' + name + ':unchecked');
-					}
 
 					// Set a true or false value for existing filtersApplied object items depending on the filterIsChecked value
 					var filterApplied = isoTest.filtersApplied[e.target.id];
@@ -328,16 +337,12 @@
 					}
 
 					// Check filters here if we want to disable the submit button if there are no filter changes
-					isoTest.changedFilter();
-					// console.log('Current filters applied object: ', isoTest.filtersApplied);
+					isoTest.updateApplyButton();
 
-					// Update our results
-					if(numOfFilters > 0){
-						filtersButton.innerHTML = ' (' + numOfFilters + ')';
-					} else {
-						filtersButton.innerHTML = '';
-					}
+					// Update the number of filters applied
+					isoTest.updateFilterCount(e);
 
+					// Update the filtered vehicles
 					isoTest.updateVehicleResults(filtersShown);
 				});
 			}
@@ -372,7 +377,7 @@
 
 				allFiltersHTML += `
 					<fieldset>
-						<legend class="section-title">${category}</legend>
+						<legend class="section-title">${category} Category</legend>
 						<div class="filters-drawer__checkboxes">
 				`;
 
@@ -409,7 +414,7 @@
 
 			var allCars = document.querySelectorAll('.vehicle-list > .vehicle');
 			var filtersShown = {
-				category: {
+				vehicle: {
 					'Cars': [],
 					'Trucks': [],
 					'SUVs': [],
@@ -433,8 +438,8 @@
 				var seats = car.getAttribute('data-capacity');
 				var mileage = car.getAttribute('data-unlimited');
 
-				if(filtersShown.category[category]){
-					filtersShown.category[category].push(car);
+				if(filtersShown.vehicle[category]){
+					filtersShown.vehicle[category].push(car);
 				}
 
 				if(seats > 2){
@@ -461,6 +466,24 @@
 
 			isoTest.addFilterCategories(filtersShown, filterDrawer);
 		},
+		addFilterContainerEvents : function(){
+			var filterContainer = document.querySelector('.vehicle-select__controls.update');
+			var filterButton = filterContainer.querySelector('.filters-drawer__count button');
+
+			// Opens and closes the filter drawer
+			filterButton.addEventListener('click', function(){
+				var filterDrawer = document.querySelector('#updatedFiltersDrawer');
+				filterDrawer.classList.toggle('filters-drawer--open');
+				filterContainer.querySelector('.filters-drawer').classList.toggle('drawer-animation--open');
+				filterContainer.parentElement.parentElement.classList.toggle('vehicle-select--filters-active');
+
+				if(filterDrawer.classList.contains('filters-drawer--open')){
+					isoTest.fireTag(filterButton, 'Filters Opened');
+				}
+
+				isoTest.resetAppliedFilters();
+			});
+		},
 		addFilterContainer : function(){
 			var filterContainer = `
 				<div class="vehicle-select__controls update">
@@ -482,22 +505,7 @@
 			if(existingFilter.length === 1){
 				existingFilter[0].insertAdjacentHTML('afterend', filterContainer);
 
-				var filterContainer = document.querySelector('.vehicle-select__controls.update');
-				var filterButton = filterContainer.querySelector('.filters-drawer__count button');
-
-				// Opens and closes the filter drawer
-				filterButton.addEventListener('click', function(){
-					var filterDrawer = document.querySelector('#updatedFiltersDrawer');
-					filterDrawer.classList.toggle('filters-drawer--open');
-					filterContainer.querySelector('.filters-drawer').classList.toggle('drawer-animation--open');
-					filterContainer.parentElement.parentElement.classList.toggle('vehicle-select--filters-active');
-
-					if(filterDrawer.classList.contains('filters-drawer--open')){
-						isoTest.fireTag(filterButton, 'Filters Opened');
-					}
-
-					isoTest.checkFilters();
-				});
+				isoTest.addFilterContainerEvents();
 			}
 		},
 		init : function() {
@@ -512,7 +520,10 @@
 
 			helpers.elementLoaded(isoTest.selector, function() {
 				isoTest.log('Test Ready!');
-  			isoTest.chall();
+  			var width = window.innerWidth;
+				if(width > 912){
+  				isoTest.chall();
+				}
 			});
 		},
 		chall : function() {
