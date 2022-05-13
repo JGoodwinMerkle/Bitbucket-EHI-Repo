@@ -83,7 +83,7 @@
         parentSelector: 'main.extras-view',
 		init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
             
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
@@ -111,7 +111,7 @@
                     //console.log(removedNode);
                     if(removedNode.classList.contains('upgrade-banner') ) {
                         //actions
-                        console.log('upgrade done');
+                        //console.log('upgrade done');
                         helpers.elementLoaded(isoTest.selector, function() {
                             document.querySelector(isoTest.parentSelector).classList.add('iso-upgraded');
                             
@@ -129,9 +129,9 @@
 		
 		},
 		viewChange : function(){
-			console.log("view change");
+			//console.log("view change");
 			if(/extras/.test(location.hash)){
-				console.log(location.hash)
+				//console.log(location.hash)
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
