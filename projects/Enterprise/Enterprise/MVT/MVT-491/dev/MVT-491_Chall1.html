@@ -8,10 +8,13 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-491',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '.two-up-three-up-container ul.two-up-three-up-container__list a > div >img',
+        loginSelector : '.header-nav-item.sign-in',
+        authSelector : '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
 		init : function() {
 
-			isoTest.debug = ${user.mvtDebug};
+			isoTest.debug = true;
+            
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -22,17 +25,70 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
+			helpers.elementLoaded(isoTest.authSelector, function() {
 				isoTest.log('Test Ready!');
+                helpers.elementLoaded(isoTest.selector, function() {
   				isoTest.chall();
+                isoTest.inFlightUpdates();
+                });
 			});
-			
+		
 		},
+	
 		chall : function() {
-
 			// Your code goes here
-
+                if (document.querySelector('.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in')) {
+                        isoTest.logInUpdates();
+                } 
+            
 		},
+        logInUpdates: function() {
+            var iconImg = document.querySelectorAll(isoTest.selector)[2];
+            var embeddedUrl = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement;
+                embeddedUrl.classList.add('iso-auth-loyalty');
+            var headline = document.querySelector('.iso-auth-loyalty h2.two-up-three-up-tile__heading');
+            var bodyCopy = document.querySelector('.iso-auth-loyalty .two-up-three-up-tile__text p');
+            iconImg.setAttribute('src','#');
+            embeddedUrl.setAttribute('href','https://www.enterprise.com/en/car-rental/mobile-app.html?icid=home.three.up-_-mobile-app-_-ENUS');
+            headline.innerText = 'Download The Enterprise App';
+            bodyCopy.innerText = 'Enterprise is bringing innovation to the rental experience. Members with the app may be eligible to try new features soon.';
+
+        },
+        logOutUpdates: function() {
+            var iconImg = document.querySelectorAll(isoTest.selector)[2];
+            var embeddedUrl = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement;
+                embeddedUrl.classList.add('iso-auth-loyalty');
+            var headline = document.querySelector('.iso-auth-loyalty h2.two-up-three-up-tile__heading');
+            var bodyCopy = document.querySelector('.iso-auth-loyalty .two-up-three-up-tile__text p');
+            iconImg.setAttribute('src','/content/dam/enterprise/icons/promo-icons/icon_enterprise-plus-member-promotion.svg.wrend.480.270.svg');
+            embeddedUrl.setAttribute('href','https://www.enterprise.com/en/loyalty.html?icid=home.3up1-_-loyalty-_-ENUS.NULL');
+            headline.innerText = 'Not an Enterprise Plus® member?';
+            bodyCopy.innerText = 'You could be earning points toward free rentals. What are you waiting for?';
+
+
+        },
+        inFlightUpdates: function() {
+            var eleUpdates = new MutationObserver(function(mutationsList) {
+                mutationsList.forEach(function(mutation){
+                    //added nodes 
+                    mutation.addedNodes.forEach(function (addedNode){
+                        if(addedNode.classList != undefined) {
+                          //  console.log('added:', addedNode);
+                        if(addedNode.classList.contains('utility-nav-label--logged-in') ) {
+                                //actions
+                                isoTest.logInUpdates();
+                            } else {
+                                isoTest.logOutUpdates();
+                            }
+                        }
+                    });
+
+                });
+            }) ;
+            //after observe  add target element
+            eleUpdates.observe(document.querySelector(isoTest.loginSelector), {subtree: true, childList: true});
+        },
+        
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
