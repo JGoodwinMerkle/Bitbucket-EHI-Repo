@@ -246,7 +246,7 @@
         '<div class="progress-bar-wrapper"> <div class="step-wrapper"> <div class="step-1 step-item completed"> <div class="step-index"><div class="step-num">1</div></div><div class="step-title">Pick Up & Return</div></div><div class="step-2 step-item active"> <div class="step-index"><div class="step-num">2</div></div><div class="step-title">Vehicle</div></div><div class="step-3 step-item"> <div class="step-index"><div class="step-num">3</div></div><div class="step-title">Add-ons</div></div><div class="step-4 step-item"> <div class="step-index"><div class="step-num">4</div></div><div class="step-title">Review</div></div></div><div class="dropdown-chevron"><div> </div>',
       stepLocation: "",
       init: function () {
-        isoTest.debug = true;
+       // isoTest.debug = true;
 
         if (
           _satellite &&
@@ -375,6 +375,13 @@
                 totalPrice.classList.remove('iso-active');
 if(progressBar.classList.contains('iso-hide')){
                   progressBar.classList.remove('iso-hide')
+                }
+                if(progressBar.classList.contains('iso-sticky')) {
+                 // console.log('sticky open');
+                  totalPrice.classList.add('iso-active');
+                  if(!progressBar.classList.contains('iso-hide')){
+                    progressBar.classList.add('iso-hide')
+                  }
                 }
             } else {
                 dropdown.classList.add('page__header--active');
