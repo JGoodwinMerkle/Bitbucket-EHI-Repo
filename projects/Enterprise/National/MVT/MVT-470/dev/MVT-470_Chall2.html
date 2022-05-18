@@ -1,5 +1,5 @@
 <style>
-	.vehicle-select__controls:not(.update){
+	.desktop .vehicle-select__controls:not(.update){
 		display: none;
 	}
 	#updatedFiltersDrawer{
@@ -8,6 +8,11 @@
 	#updatedFiltersDrawer.filters-drawer--open{
 		max-height: 500px;
     overflow: visible;
+	}
+	@media(max-width: 640px){
+		#updatedFiltersDrawer.filters-drawer--open{
+			max-height: 700px;
+		}
 	}
 	.filters-drawer__count__btn-reset.hide{
 		display: none;
@@ -24,12 +29,25 @@
 	.vehicle-list > div[data-filter-applied="true"] ~ div{
     border-top: 0;
 	}
+	button[aria-controls="filtersDrawer"]:before{
+		content: '';
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='16' viewBox='0 0 17 16' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3.40967 8.18815C4.41633 8.47738 5.15301 9.40514 5.15301 10.5047C5.15301 11.6039 4.41626 12.5314 3.40967 12.8206L3.40967 15.667L2.07633 15.667L2.07633 12.8206C1.06975 12.5314 0.333008 11.6039 0.333008 10.5047C0.333008 9.40515 1.06968 8.47739 2.07633 8.18815L2.07633 2.74342L3.40967 2.74342L3.40967 8.18815ZM2.74301 9.42806C2.14853 9.42806 1.66634 9.91025 1.66634 10.5047C1.66634 11.0986 2.14859 11.5807 2.74301 11.5807C3.33742 11.5807 3.81967 11.0986 3.81967 10.5047C3.81967 9.91025 3.33748 9.42806 2.74301 9.42806ZM14.5903 15.667L14.5903 11.0219C15.597 10.7328 16.3337 9.80545 16.3337 8.7059C16.3337 7.60631 15.597 6.67856 14.5903 6.38932L14.5903 2.74306L13.257 2.74306L13.257 6.38932C12.2503 6.67856 11.5137 7.60631 11.5137 8.7059C11.5137 9.80545 12.2503 10.7328 13.257 11.0219L13.257 15.667L14.5903 15.667ZM8.99951 15.667L7.66618 15.667L7.66618 5.05957C6.65959 4.77036 5.92285 3.84279 5.92285 2.74366C5.92285 1.4128 7.00199 0.333661 8.33285 0.333661C9.66371 0.333661 10.7429 1.4128 10.7429 2.74366C10.7429 3.8428 10.0061 4.77037 8.99951 5.05957L8.99951 15.667ZM12.847 8.7059C12.847 8.11142 13.3292 7.62923 13.9237 7.62923C14.5181 7.62923 15.0003 8.11142 15.0003 8.7059C15.0003 9.30017 14.5184 9.7819 13.9237 9.7819C13.329 9.7819 12.847 9.30017 12.847 8.7059ZM8.33285 1.66699C7.73837 1.66699 7.25618 2.14918 7.25618 2.74366C7.25618 3.33753 7.73844 3.81966 8.33285 3.81966C8.92726 3.81966 9.40952 3.33753 9.40952 2.74366C9.40952 2.14918 8.92733 1.66699 8.33285 1.66699Z' fill='%23396451'/%3E%3C/svg%3E");
+		height: 16px;
+    width: 16px;
+    display: inline-block;
+    margin-right: 0.5rem;
+		position: relative;
+    top: 3px;
+	}
+	button[aria-controls="filtersDrawer"]:focus, button[aria-controls="filtersDrawer"]:hover{
+		filter: brightness(0);
+	}
 	/* v2 styles */
 	.filters-drawer__count{
 		margin-bottom: .625rem;
 	}
 	.filters-drawer__results{
-		font-weight: 600;
+		font-weight: 500;
     margin: 0 30px;
 	}
 	.filters-drawer__count .filter-button{
@@ -693,6 +711,7 @@
 
 				var width = window.innerWidth;
 				if(width > 912){
+					document.documentElement.classList.add('desktop');
   				isoTest.chall();
 				}
 			});
