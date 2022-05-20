@@ -158,17 +158,33 @@
 
 			// Get the filters that are currently applied
 			var filters = [];
+			var categories = {};
 			for(var i = 0; i < inputs.length; i++){
 				var input = inputs[i];
 				var name = input.getAttribute('data-name');
 				var category = input.getAttribute('data-category');
 
-				// console.log(filtersShown[category][name]);
 				filters.push(...filtersShown[category][name]);
+
+				// Add all of the related filtersShown names into the categories object
+				categories[category] = categories[category] || [];
+				categories[category].push(...filtersShown[category][name]);
+			}
+
+			// If there are more than one filter applied, we'll need to show the "and"
+			var matchedVehicles = [];
+			for(var category in categories){
+				if(matchedVehicles.length === 0){
+					matchedVehicles = categories[category];
+				} else {
+					matchedVehicles = matchedVehicles.filter(function(vehicle){
+						return categories[category].indexOf(vehicle) > -1;
+					});
+				}
 			}
 			
 			// For the list of vehicles in the filters vehicle list, set the "data-filtered" attribute to true
-			for(var i = 0; i < filters.length; i++){
+			for(var i = 0; i < matchedVehicles.length; i++){
 				var vehicle = filters[i];
 				vehicle.setAttribute('data-filtered', true);
 			}
@@ -179,7 +195,7 @@
 			var clearBtn = document.querySelector('#updatedFiltersDrawer .cancel-and-apply-buttons .btn--underline');
 			var applyBtn = document.querySelector('#updatedFiltersDrawer .cancel-and-apply-buttons [type="submit"]');
 
-			if(filteredVehicles.length > 0){
+			if(filteredVehicles.length > 0 || inputs.length > 0){
 				filterResults.innerHTML = filteredVehicles.length + ' Results';
 				clearResults.classList.remove('hide');
 				clearBtn.disabled = false;

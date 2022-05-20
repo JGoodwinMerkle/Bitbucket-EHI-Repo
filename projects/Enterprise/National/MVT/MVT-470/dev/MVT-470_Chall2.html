@@ -118,6 +118,7 @@
 		test : 'MVT-470',
 		creative : 'Challenger 1',
 		selector : '.vehicle-list > .vehicle',
+		lastCategory : 'vehicle',
 		allCarsObj : {},
 		filtersApplied : {},
 		filtersAppliedCount : 0,
@@ -234,17 +235,33 @@
 
 			// Get the filters that are currently applied
 			var filters = [];
+			var categories = {};
 			for(var i = 0; i < inputs.length; i++){
 				var input = inputs[i];
 				var name = input.getAttribute('data-name');
 				var category = input.getAttribute('data-category');
 
-				// console.log(filtersShown[category][name]);
 				filters.push(...filtersShown[category][name]);
+
+				// Add all of the related filtersShown names into the categories object
+				categories[category] = categories[category] || [];
+				categories[category].push(...filtersShown[category][name]);
+			}
+
+			// If there are more than one filter applied, we'll need to show the "and"
+			var matchedVehicles = [];
+			for(var category in categories){
+				if(matchedVehicles.length === 0){
+					matchedVehicles = categories[category];
+				} else {
+					matchedVehicles = matchedVehicles.filter(function(vehicle){
+						return categories[category].indexOf(vehicle) > -1;
+					});
+				}
 			}
 			
 			// For the list of vehicles in the filters vehicle list, set the "data-filtered" attribute to true
-			for(var i = 0; i < filters.length; i++){
+			for(var i = 0; i < matchedVehicles.length; i++){
 				var vehicle = filters[i];
 				vehicle.setAttribute('data-filtered', true);
 			}
@@ -255,13 +272,12 @@
 			var clearBtn = document.querySelector('#updatedFiltersDrawer .cancel-and-apply-buttons .btn--underline');
 			var applyBtn = document.querySelector('#updatedFiltersDrawer .cancel-and-apply-buttons [type="submit"]');
 
-			if(filteredVehicles.length > 0){
+			if(filteredVehicles.length > 0 || inputs.length > 0){
 				filterResults.innerHTML = filteredVehicles.length + ' Results';
 				clearResults.classList.remove('hide');
 				clearBtn.disabled = false;
 				// applyBtn.disabled = false;
 			} else {
-				// Keeping results amount in v2
 				filterResults.innerHTML = allVehicles.length + ' Results';
 				clearResults.classList.add('hide');
 
@@ -633,6 +649,7 @@
 					}else{
 						button.classList.add('open');
 						filterDrawer.setAttribute('data-category', category);
+						isoTest.lastCategory = category;
 						isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + category + '_quick_filter:expand');
 
 						if(!filterDrawerOpen){
@@ -654,6 +671,10 @@
 				filterContainer.parentElement.parentElement.classList.toggle('vehicle-select--filters-active');
 
 				if(filterDrawer.classList.contains('filters-drawer--open')){
+					var lastClickedCategory = document.querySelector('.js-toggle-' + isoTest.lastCategory);
+					if(lastClickedCategory && !lastClickedCategory.classList.contains('open')){
+						lastClickedCategory.click();
+					}
 					isoTest.fireTag(filterButton, 'Filters Opened');
 				}
 
