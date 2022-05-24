@@ -255,14 +255,16 @@
 					matchedVehicles = categories[category];
 				} else {
 					matchedVehicles = matchedVehicles.filter(function(vehicle){
-						return categories[category].indexOf(vehicle) > -1;
+						if(categories[category].indexOf(vehicle) > -1){
+							return true;
+						}
 					});
 				}
 			}
 			
 			// For the list of vehicles in the filters vehicle list, set the "data-filtered" attribute to true
 			for(var i = 0; i < matchedVehicles.length; i++){
-				var vehicle = filters[i];
+				var vehicle = matchedVehicles[i];
 				vehicle.setAttribute('data-filtered', true);
 			}
 
@@ -551,7 +553,7 @@
 				`;
 			}
 
-			filterDrawer.insertAdjacentHTML('beforeend', allFiltersHTML);
+			filterDrawer.innerHTML = allFiltersHTML;
 			isoTest.addFilterEvents(filtersShown);
 		},
 		updateFilterContainer : function(){
@@ -592,13 +594,13 @@
 				if(seats > 2){
 					filtersShown.seats['2+'].push(car);
 				}
-				if(seats > 4){
+				if(seats > 3){
 					filtersShown.seats['4+'].push(car);
 				}
-				if(seats > 5){
+				if(seats > 4){
 					filtersShown.seats['5+'].push(car);
 				}
-				if(seats > 7){
+				if(seats > 6){
 					filtersShown.seats['7+'].push(car);
 				}
 
@@ -664,7 +666,7 @@
 			var filterButton = filterContainer.querySelector('.filters-drawer__count button.btn-link');
 
 			// Opens and closes the filter drawer
-			filterButton.addEventListener('click', function(){
+			filterButton.addEventListener('click', function(e){
 				var filterDrawer = document.querySelector('#updatedFiltersDrawer');
 				filterDrawer.classList.toggle('filters-drawer--open');
 				filterContainer.querySelector('.filters-drawer').classList.toggle('drawer-animation--open');
@@ -676,6 +678,8 @@
 						lastClickedCategory.click();
 					}
 					isoTest.fireTag(filterButton, 'Filters Opened');
+				}else{
+					isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + isoTest.lastCategory + '_quick_filter:collapse');
 				}
 
 				isoTest.resetAppliedFilters();
