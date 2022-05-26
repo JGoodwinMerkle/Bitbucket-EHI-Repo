@@ -223,8 +223,9 @@
 				}
 			}
 
+			var checkedInputs = document.querySelectorAll('#updatedFiltersDrawer input:checked');
 			var applyButton = document.querySelector('#updatedFiltersDrawer .cancel-and-apply-buttons [type="submit"]');
-			if(change){
+			if(change || checkedInputs.length > 0){
 				// console.log('Apply button should be active');
 				applyButton.removeAttribute('disabled');
 			}else{

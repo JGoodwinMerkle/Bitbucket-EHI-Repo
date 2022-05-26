@@ -300,8 +300,9 @@
 				}
 			}
 
+			var checkedInputs = document.querySelectorAll('#updatedFiltersDrawer input:checked');
 			var applyButton = document.querySelector('#updatedFiltersDrawer .cancel-and-apply-buttons [type="submit"]');
-			if(change){
+			if(change || checkedInputs.length > 0){
 				// console.log('Apply button should be active');
 				applyButton.removeAttribute('disabled');
 			}else{
@@ -615,9 +616,70 @@
 
 			isoTest.addFilterCategories(filtersShown, filterDrawer);
 		},
+		filterDrawerClick : function(isRealFilterDrawerClick){
+			var filterContainer = document.querySelector('.vehicle-select__controls.update');
+			var filterDrawer = document.querySelector('#updatedFiltersDrawer');
+			var filterButton = filterContainer.querySelector('.filters-drawer__count button.btn-link');
+			
+			filterDrawer.classList.toggle('filters-drawer--open');
+			filterContainer.querySelector('.filters-drawer').classList.toggle('drawer-animation--open');
+			filterContainer.parentElement.parentElement.classList.toggle('vehicle-select--filters-active');
+
+			if(filterDrawer.classList.contains('filters-drawer--open')){
+				var lastClickedCategory = document.querySelector('.js-toggle-' + isoTest.lastCategory);
+				if(lastClickedCategory && !lastClickedCategory.classList.contains('open')){
+					isoTest.quickFilterClick(lastClickedCategory, false);
+				}
+
+				if(isRealFilterDrawerClick){
+					isoTest.fireTag(filterButton, 'Filters Opened');
+				}
+			}
+
+			isoTest.resetAppliedFilters();
+		},
+		quickFilterClick : function(button, isRealClick){
+			// Check the existing state of the drawer
+			var filterContainer = document.querySelector('.vehicle-select__controls.update');
+			var filterDrawer = document.querySelector('#updatedFiltersDrawer');
+			var filterDrawerOpen = filterDrawer.classList.contains('filters-drawer--open');
+
+			// Check the existing state of the button
+			var buttonOpen = button.classList.contains('open');
+			
+			// Make sure another button isn't active
+			var activeButton = filterContainer.querySelector('.filter-button.open');
+			if(activeButton){
+				activeButton.classList.remove('open');
+			}
+
+			var category = button.getAttribute('data-category');
+
+			if(buttonOpen){
+				button.classList.remove('open');
+				filterDrawer.setAttribute('data-category', '');
+
+				if(filterDrawerOpen){
+					isoTest.filterDrawerClick(false);
+				}
+				if(isRealClick){
+					isoTest.fireTag(button, 'RW:CarClass:Filter:' + category + '_quick_filter:collapse');
+				}
+			}else{
+				button.classList.add('open');
+				filterDrawer.setAttribute('data-category', category);
+				isoTest.lastCategory = category;
+
+				if(!filterDrawerOpen){
+					isoTest.filterDrawerClick(false);
+				}
+				if(isRealClick){
+					isoTest.fireTag(button, 'RW:CarClass:Filter:' + category + '_quick_filter:expand');
+				}
+			}
+		},
 		addFilterCategoryEvents : function(){
 			var filterContainer = document.querySelector('.vehicle-select__controls.update');
-			var filterButton = filterContainer.querySelector('.filters-drawer__count button.btn-link');
 				
 			// v2 category filter buttons
 			var filterButtons = filterContainer.querySelectorAll('.filter-button');
@@ -625,39 +687,7 @@
 			// Add event listeners for each of our category filter buttons
 			filterButtons.forEach(function(button){
 				button.addEventListener('click', function(e){
-					// Check the existing state of the drawer
-					var filterDrawer = document.querySelector('#updatedFiltersDrawer');
-					var filterDrawerOpen = filterDrawer.classList.contains('filters-drawer--open');
-
-					// Check the existing state of the button
-					var buttonOpen = button.classList.contains('open');
-					
-					// Make sure another button isn't active
-					var activeButton = filterContainer.querySelector('.filter-button.open');
-					if(activeButton){
-						activeButton.classList.remove('open');
-					}
-
-					var category = button.getAttribute('data-category');
-
-					if(buttonOpen){
-						button.classList.remove('open');
-						filterDrawer.setAttribute('data-category', '');
-						isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + category + '_quick_filter:collapse');
-
-						if(filterDrawerOpen){
-							filterButton.click();
-						}
-					}else{
-						button.classList.add('open');
-						filterDrawer.setAttribute('data-category', category);
-						isoTest.lastCategory = category;
-						isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + category + '_quick_filter:expand');
-
-						if(!filterDrawerOpen){
-							filterButton.click();
-						}
-					}
+					isoTest.quickFilterClick(button, true);
 				});
 			});
 		},
@@ -667,22 +697,7 @@
 
 			// Opens and closes the filter drawer
 			filterButton.addEventListener('click', function(e){
-				var filterDrawer = document.querySelector('#updatedFiltersDrawer');
-				filterDrawer.classList.toggle('filters-drawer--open');
-				filterContainer.querySelector('.filters-drawer').classList.toggle('drawer-animation--open');
-				filterContainer.parentElement.parentElement.classList.toggle('vehicle-select--filters-active');
-
-				if(filterDrawer.classList.contains('filters-drawer--open')){
-					var lastClickedCategory = document.querySelector('.js-toggle-' + isoTest.lastCategory);
-					if(lastClickedCategory && !lastClickedCategory.classList.contains('open')){
-						lastClickedCategory.click();
-					}
-					isoTest.fireTag(filterButton, 'Filters Opened');
-				}else{
-					isoTest.fireTag(e.target, 'RW:CarClass:Filter:' + isoTest.lastCategory + '_quick_filter:collapse');
-				}
-
-				isoTest.resetAppliedFilters();
+				isoTest.filterDrawerClick(true);
 			});
 
 			// v2 category button events
