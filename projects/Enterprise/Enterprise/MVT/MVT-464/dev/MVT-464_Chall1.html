@@ -1,0 +1,197 @@
+<style>
+    .iso-dark-banner .upgrade-banner {
+        position: relative;
+        background-color: #393A3B;
+        border-bottom: 1px solid #393A3B;
+        border-top: 1px solid #393A3B;
+		/*padding-bottom: 5px;*/
+    }
+   
+	.iso-dark-banner .upgrade-vehicle-box__sub, .iso-dark-banner .upgrade-banner__title ,.iso-dark-banner .upgrade-banner__description,.iso-dark-banner .upgrade-vehicle-box__name,.iso-dark-banner .descriptor,.iso-dark-banner .upgrade-banner__upgraded{
+        color:#ffffff;
+    }
+    .iso-dark-banner .upgrade-banner__callout-button-wrapper .cta.cta--secondary{
+        background-color: transparent;
+        border-color: #ffffff;
+        color:#ffffff;
+    }
+	.iso-dark-banner .upgrade-banner__callout-button-wrapper .cta.cta--secondary:hover {
+		background-color: #ffffff;
+    	color: #181918;
+	} 
+    .iso-dark-banner .icon.icon-arrow-right-2-gray {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNSAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yNC43NjQ0IDEwLjQ4MTJDMjUuMDE4MyAxMC43Mjk0IDI1LjA2NTMgMTEuMTEzMyAyNC45MTU4IDExLjQ0MjVDMjQuNzg1OCAxMS43NjI2IDI0LjQ4MzEgMTEuOTg5NCAyNC4xMjUxIDEyLjAxMTRDMjQuMTIwMiAxMi4wMTE4IDI0LjExNTUgMTIuMDEyNSAyNC4xMTA3IDEyLjAxMzFDMjQuMTAyNiAxMi4wMTQxIDI0LjA5NDYgMTIuMDE1MiAyNC4wODYzIDEyLjAxNTRDMjQuMDgwNSAxMi4wMTU3IDI0LjA3NSAxMi4wMTcyIDI0LjA2OTIgMTIuMDE3MkgxLjEwMzA0QzAuNTk3MzU1IDEyLjAxNzIgMC4xODc1IDExLjYwMjcgMC4xODc1IDExLjA5MTlDMC4xODc1IDEwLjU4MDggMC41OTczNTUgMTAuMTY2NyAxLjEwMzA0IDEwLjE2NjdIMjEuNzM2OEwxMi43NTMyIDEuODA5NjJDMTIuNDIyMSAxLjQ4NTMxIDEyLjQzOTggMC45Mjg2ODIgMTIuNzkzMiAwLjU2NjQ2MkMxMy4xNDY5IDAuMjA0MjQyIDEzLjcwMTcgMC4xNzM2NzUgMTQuMDMzMSAwLjQ5Nzk5MkwyNC43NjQ0IDEwLjQ4MTJaTTEyLjIzNyAyMy4xODY1QzEyLjQxNTUgMjMuMzY1NiAxMi42NDk5IDIzLjQ1NTIgMTIuODg0MyAyMy40NTUyQzEzLjExODcgMjMuNDU1MiAxMy4zNTMgMjMuMzY1NiAxMy41MzE2IDIzLjE4NjVMMjAuODg3IDE1LjgxOTZDMjEuMjQ0NiAxNS40NjEzIDIxLjI0NDYgMTQuODgwOCAyMC44ODcgMTQuNTIyNkMyMC41Mjk2IDE0LjE2NDMgMTkuOTQ5NSAxNC4xNjQzIDE5LjU5MjEgMTQuNTIyNkwxMi4yMzcgMjEuODg5OUMxMS44NzkzIDIyLjI0NzggMTEuODc5MyAyMi44Mjg2IDEyLjIzNyAyMy4xODY1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==);
+    }
+    .iso-dark-banner .upgrade-banner__callout-button-wrapper {
+        z-index: 1;
+    }
+	@media only screen and (min-width: 769px){
+		 section.upgrade-banner__main:not(.upgrade-banner__main--mobile) {
+			padding-left: 30px;
+    		width: 16rem;
+		 }
+
+		 .upgrade-banner__callout-button-wrapper .cta.cta--secondary {
+			 margin-left: 8%;
+		 }
+	}
+    @media only screen and (min-width: 981px){
+        .iso-dark-banner .upgrade-banner:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 5px;
+        width: 100%;
+        height: 100%;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjE2MCIgaGVpZ2h0PSIxNjYiIHZpZXdCb3g9IjAgMCAyMTYwIDE2NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yMTU5LjE2IDcwLjgyNzJDMjE1Mi4xMiAzNS44NjMxIDIxMTEuMTkgMCAyMDQ2LjU0IDBDMTk4OS40OCAwIDE5NDguMSAzMC40MTg3IDE5MzQuNyA2MS42ODY2QzE5MzQuMDQgNjMuMTcwMSAxOTMzLjQ3IDY0LjY4NzMgMTkzMi45NyA2Ni4yMzE5SDBWNzguNjc3NEgyMTEyLjUyQzIxMjguODEgNzguNjc3NCAyMTMxLjI4IDc3LjgyMjkgMjEzMy4xMiA3Ni4wNjM2QzIxMzMuNDYgNzUuNzA5OCAyMTMzLjcyIDc1LjI4MjkgMjEzMy44OSA3NC44MTM1QzIxMzQuMDUgNzQuMzQ0MiAyMTM0LjExIDczLjg0NDEgMjEzNC4wNiA3My4zNDkyQzIxMzQuMDYgNjMuNjQ4IDIxMTEuMDkgMTguNzYwNyAyMDQ1Ljk0IDE4Ljc2MDdDMTk5MC4wNSAxOC43NjA3IDE5NjYuMjQgNTEuODg1OCAxOTYxLjI5IDYxLjU4NzFDMTk2MC40NSA2My4wMzgzIDE5NTkuNzIgNjQuNTUwNCAxOTU5LjExIDY2LjExMUgxOTUxLjc4QzE5NTIuNTEgNjQuMzk2NyAxOTUzLjMyIDYyLjcxOTIgMTk1NC4yMSA2MS4wODQ0QzE5NTkuOCA0OS42NzQxIDE5ODIuODIgMTIuNDI3MyAyMDQ1Ljk0IDEyLjQyNzNDMjExMS40OCAxMi40MjczIDIxNDAuMzkgNTcuNjY2NCAyMTQwLjk5IDc0Ljg1NzJDMjE0MS4yNiA3Ni4zMzAzIDIxNDEuMTMgNzcuODUxNCAyMTQwLjYgNzkuMjUyN0MyMTQwLjA4IDgwLjY1NCAyMTM5LjE4IDgxLjg4MTIgMjEzOC4wMiA4Mi43OTkyVjgyLjI5NjVDMjEzNS45OSA4My44MDQ1IDIxMzMuNTYgODUuMjExOSAyMTEyLjUyIDg1LjIxMTlIMFY5OC4yNDlIMjEyNy4yNkMyMTQyLjE1IDk4LjI0OSAyMTUyLjg2IDk3Ljc5OTQgMjE1Ny40OCA5Mi4xMDUzQzIxNjAuNyA4OC4yMDkzIDIxNjEuMiA4MS42MTYxIDIxNTkuMTYgNzAuODI3MlpNMjExMS4yOSA2My43ODQ0QzIxMTAuMjkgNjUuNzgyMyAyMTA2LjgyIDY2LjEzMiAyMTAzLjUgNjYuMjMxOUgxOTc5LjA2QzE5NzkuNzYgNjQuNjMxMyAxOTgwLjYzIDYzLjEwODEgMTk4MS42NCA2MS42ODY2QzE5OTMuNCA0NC4zMDQ0IDIwMjAuNTkgMzIuMDY3IDIwNDcuNDggMzIuMDE3MUMyMDc1LjY2IDMyLjAxNzEgMjA5OC40OCA0MS40NTc0IDIxMTAuMTQgNTguMjQwMUMyMTExLjU4IDYwLjgzNzQgMjExMS45OCA2Mi41MzU3IDIxMTEuMjkgNjMuNzg0NFpNMjA5NC4xNyAxMTkuMzQzSDIxMTkuOThDMjA5NC43MSAxNDUuNjQ1IDIwNDkuNCAxNDQuNzI4IDIwNDQuMjcgMTQ0LjYyNEMyMDQ0LjA3IDE0NC42MiAyMDQzLjkzIDE0NC42MTggMjA0My44NiAxNDQuNjE4QzIwMDAuMzYgMTQzLjQ3MiAxOTczLjk5IDEyMy4xOTkgMTk2My40NyAxMDQuODA4SDE5ODMuNjJDMTk5Ni4yOCAxMjAuMTkyIDIwMjAuNjQgMTMwLjY4MSAyMDQ1Ljg5IDEzMC42ODFDMjA2MS43NyAxMzAuNjgxIDIwODMgMTI4LjQzMyAyMDk0LjE3IDExOS4zNDNaTTIxMjguMDEgMTIwLjA0M0wyMTI4LjU1IDExOS4zNDNIMjE1MC42M0MyMTUwLjA5IDEyMC4zNTMgMjE0OS40OCAxMjEuMzIxIDIxNDguNzkgMTIyLjI0QzIxNDUuMDQgMTI3LjE2MSAyMTQzLjczIDEzMi4xMDkgMjE0Mi40OCAxMzYuODA1QzIxMzguMzggMTUyLjMyMiAyMTM1IDE2NS4wOTYgMjA0Ni40NCAxNjUuMDk2QzE5ODYuNSAxNjUuMTk2IDE5NDguMiAxMzUuNDc2IDE5MzUuNSAxMDQuODA4SDE5NTYuMDFDMTk2Ny4wNCAxMjcuMDQgMTk5OC4yNiAxNTAuNDEzIDIwNDMuNjYgMTUxLjE2MUMyMDQ5LjQxIDE1MS4zNjEgMjEwMi41NSAxNTIuMDEgMjEyOC4wMSAxMjAuMDQzWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==);
+        background-repeat: no-repeat;
+        background-size:cover;
+        opacity: 5%;
+        background-position: right;
+        }
+
+        .iso-dark-banner.iso-upgraded .upgrade-banner:before {
+            display: none;
+        }
+		section.upgrade-banner__main:not(.upgrade-banner__main--mobile) {
+			padding-left: 30px;
+    		width: 16rem;
+		}
+
+		.upgrade-banner__callout-button-wrapper .cta.cta--secondary {
+			 margin-left: 8%;
+		}
+    }
+	@media only screen and (min-width: 2215px){
+		
+		.iso-dark-banner .upgrade-banner:before {
+			background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI2LjAuMiwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MDAwIDE2NiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTAwMCAxNjY7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7ZmlsbDojRkZGRkZGO30KPC9zdHlsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTQ5OTkuMiw3MC44Yy03LTM1LTQ4LTcwLjgtMTEyLjYtNzAuOGMtNTcuMSwwLTk4LjQsMzAuNC0xMTEuOCw2MS43Yy0wLjcsMS41LTEuMiwzLTEuNyw0LjVIMHYxMi40aDQ5NTIuNQoJYzE2LjMsMCwxOC44LTAuOSwyMC42LTIuNmMwLjMtMC40LDAuNi0wLjgsMC44LTEuM2MwLjItMC41LDAuMi0xLDAuMi0xLjVjMC05LjctMjMtNTQuNi04OC4xLTU0LjZjLTU1LjksMC03OS43LDMzLjEtODQuNiw0Mi44CgljLTAuOCwxLjUtMS42LDMtMi4yLDQuNWgtNy4zYzAuNy0xLjcsMS41LTMuNCwyLjQtNWM1LjYtMTEuNCwyOC42LTQ4LjcsOTEuNy00OC43YzY1LjUsMCw5NC40LDQ1LjIsOTUsNjIuNGMwLjMsMS41LDAuMSwzLTAuNCw0LjQKCXMtMS40LDIuNi0yLjYsMy41VjgyYy0yLDEuNS00LjUsMi45LTI1LjUsMi45SDB2MTNoNDk2Ny4zYzE0LjksMCwyNS42LTAuNCwzMC4yLTYuMUM1MDAwLjcsODguMiw1MDAxLjIsODEuNiw0OTk5LjIsNzAuOHoKCSBNNDk1MS4zLDYzLjhjLTEsMi00LjUsMi4zLTcuOCwyLjRoLTEyNC40YzAuNy0xLjYsMS42LTMuMSwyLjYtNC41YzExLjgtMTcuNCwzOC45LTI5LjYsNjUuOC0yOS43YzI4LjIsMCw1MSw5LjQsNjIuNywyNi4yCglDNDk1MS42LDYwLjgsNDk1Miw2Mi41LDQ5NTEuMyw2My44eiBNNDkzNC4yLDExOS4zaDI1LjhjLTI1LjMsMjYuMy03MC42LDI1LjQtNzUuNywyNS4zYy0wLjIsMC0wLjMsMC0wLjQsMAoJYy00My41LTEuMS02OS45LTIxLjQtODAuNC0zOS44aDIwLjFjMTIuNywxNS40LDM3LDI1LjksNjIuMywyNS45QzQ5MDEuOCwxMzAuNyw0OTIzLDEyOC40LDQ5MzQuMiwxMTkuM3ogTTQ5NjgsMTIwbDAuNS0wLjdoMjIuMQoJYy0wLjUsMS0xLjEsMi0xLjgsMi45Yy0zLjgsNC45LTUuMSw5LjktNi4zLDE0LjZjLTQuMSwxNS41LTcuNSwyOC4zLTk2LDI4LjNjLTU5LjksMC4xLTk4LjItMjkuNi0xMTAuOS02MC4zaDIwLjUKCWMxMSwyMi4yLDQyLjIsNDUuNiw4Ny43LDQ2LjRDNDg4OS40LDE1MS40LDQ5NDIuNSwxNTIsNDk2OCwxMjB6Ii8+Cjwvc3ZnPgo=);
+			
+		}
+	 }
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'MVT-464',
+		creative : 'Challenger 1',
+		selector : '.upgrade-banner',
+        parentSelector: 'main.extras-view',
+		init : function() {
+
+			//isoTest.debug = true;
+            
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+
+        // mutation check on upgrade
+        var eleUpdates = new MutationObserver(function(mutationsList) {
+            mutationsList.forEach(function(mutation){
+            //removed nodes
+            mutation.removedNodes.forEach(function (removedNode){
+                if(removedNode.classList != undefined) {
+                    //console.log(removedNode);
+                    if(removedNode.classList.contains('upgrade-banner') ) {
+                        //actions
+                        //console.log('upgrade done');
+                        helpers.elementLoaded(isoTest.selector, function() {
+                            document.querySelector(isoTest.parentSelector).classList.add('iso-upgraded');
+                            
+			            });
+                        
+                    }
+                }
+             });
+       
+
+            });
+        }) ;
+        
+        eleUpdates.observe(document.querySelector('body'), {subtree: true, childList: true});
+		
+		},
+		viewChange : function(){
+			//console.log("view change");
+			if(/extras/.test(location.hash)){
+				//console.log(location.hash)
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			// Your code goes here
+            document.querySelector(isoTest.parentSelector).classList.add('iso-dark-banner');
+            isoTest.fireTag89(isoTest.selector,'Upgrade Banner Seen');
+
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+        fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          	if (c[p[i]] == null)
+		            	return a;
+		          	c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
