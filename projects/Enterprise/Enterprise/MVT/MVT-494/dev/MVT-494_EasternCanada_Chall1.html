@@ -7,11 +7,11 @@
 		account : 'EHI',
 		portfolio : 'Enterprise',
 		test : 'MVT-494',
-		creative : 'Challenger 0',
+		creative : 'Challenger 1',
 		selector : 'body',
 		init : function() {
 
-			//isoTest.debug = ${user.mvtDebug};
+			isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -30,13 +30,7 @@
 		window.addEventListener('hashchange', isoTest.viewChange, false);
 		
 		},
-		viewChange : function(){
-			if(/viewName/.test(location.hash)){
-				helpers.elementLoaded(isoTest.selector, function() {
-					isoTest.chall();
-				});
-			}
-		},
+		
 		chall : function() {
 
 			// Your code goes here
