@@ -1,0 +1,124 @@
+<style>
+</style>
+<script>
+	(function () {
+		'use strict';
+		var isoTest = {
+			account: 'EHI',
+			portfolio: 'Alamo',
+			test: 'MVT-514',
+			creative: 'Challenger 1',
+			selector: '.individual-extras--trip-enhancements .individual-extra',
+			init: function () {
+
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+					_satellite.setVar('TargetCampaign', isoTest.test);
+					_satellite.setVar('TargetCreative', isoTest.creative);
+				}
+
+				isoTest.log('Test Running...');
+				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+
+        var getReactComponent = function(node){
+          for(var key in node) {
+            if(key.startsWith('__reactInternalInstance$') ) {
+              return node[key];
+            }
+          }
+          return null;
+        }
+
+        var getState = function(){
+          var reservation = window.localStorage.getItem('RES_INIT_LOCALSTORAGE');
+          if(reservation){
+            var reservationObject = JSON.parse(reservation);
+
+            var subdivisionCode = '';
+            try {
+              subdivisionCode = reservationObject.reservation.pickup_location.address.country_subdivision_code;
+            } catch(e) {
+              subdivisionCode = '';
+            }
+
+            return subdivisionCode;
+          }
+        };
+
+				// Add in the badge
+				isoTest.observeEl(isoTest.selector, function(extraEl){
+          var code = getReactComponent(extraEl).return.memoizedProps.extra.code;
+          var state = getState();
+
+          var stateMatch = state === 'MA' || state === 'WY';
+          var codeMatch = code === 'COF' || code === 'SKV';
+
+          if(stateMatch && codeMatch){
+            extraEl.classList.add('hide');
+          }
+				});
+			},
+			fireTag: function (element, value) {
+				var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+				s.linkTrackVars = 'eVar20';
+				s.eVar20 = linkName;
+				s.tl(this, 'o', linkName);
+			},
+			log: function (obj) {
+				if (isoTest.debug === true) {
+					console.log(obj);
+				}
+			},
+			observeEl: function(selector, callback) {
+				var processed = new Map();
+			
+				var processElement = function processElement(el) {
+					if (processed && !processed.has(el)) {
+						processed.set(el, true);
+						callback(el);
+					}
+				};
+			
+				var lookForSelector = function lookForSelector() {
+					var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+			
+					if (el.matches && el.matches(selector)) {
+						if (processElement(el)) return true;
+					}
+			
+					if (el.querySelectorAll) {
+						var elements = el.querySelectorAll(selector);
+			
+						if (elements.length) {
+							for (var i = 0; i < elements.length; i++) {
+								var _el = elements[i];
+								if (processElement(_el)) return true;
+							}
+						}
+					}
+				};
+				lookForSelector();
+			
+				var obs = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (record) {
+						if (record && record.addedNodes && record.addedNodes.length) {
+							for (var i = 0; i < record.addedNodes.length; i++) {
+								var el = record.addedNodes[i].parentElement;
+								if (el && lookForSelector(el)) return true;
+							}
+						}
+					});
+				});
+				obs.observe(document, {
+					attributes: false,
+					childList: true,
+					subtree: true
+				});
+			},
+		};
+
+		isoTest.init();
+	})();
+</script>
