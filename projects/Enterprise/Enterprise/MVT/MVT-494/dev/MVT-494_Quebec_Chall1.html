@@ -1,4 +1,35 @@
 <style>
+    .img-container.iso-background {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 0 0;
+    }
+    .booking-widget-hero.section .img-container.iso-background > img {
+        display: none;
+    }
+    .img-container.iso-background.iso-background-a {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_dt_quebec_a.png');
+    }
+    .img-container.iso-background.iso-background-b {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_dt_quebec_b.png');
+    }
+    @media only screen and (max-width:375px) {
+        .img-container.iso-background.iso-background-a {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_mb_quebec_a.png');
+         }
+        .img-container.iso-background.iso-background-b {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_mb_quebec_b.png');
+         }
+    }
+    @media only screen and (max-width:768px) {
+        .img-container.iso-background.iso-background-a {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_tb_quebec_a.png');
+         }
+        .img-container.iso-background.iso-background-b {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_tb_quebec_b.png');
+         }
+    }
+
 </style>
 <script>
 (function() {
@@ -8,7 +39,8 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-494',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '.booking-widget-hero.section .img-container',
+        images : ['a','b'],
 		init : function() {
 
 			isoTest.debug = true;
@@ -34,13 +66,49 @@
 		chall : function() {
 
 			// Your code goes here
+            var targetDiv = document.querySelector(isoTest.selector);
+            targetDiv.classList.add('iso-background');
+            var imageUse = isoTest.getImageIndex();
+            console.log('final index', imageUse );
+            targetDiv.classList.add('iso-background-'+isoTest.images[imageUse]);
+			if (imageUse == 0) {
+				isoTest.fireTag89(isoTest.selector,'Background Image - Quebec A');
+			} else  {
+				isoTest.fireTag89(isoTest.selector,'Background Image - Quebec B');
+			}
+            //targetDiv.style.backgroundImage = "url("+isoTest.images[imageUse]+")";
+            window.localStorage.setItem('iso-MVT-494-Image',imageUse);
+            window.sessionStorage.setItem('iso-MVT-494-Image','true');
 
 		},
+        getImageIndex: function () {
+            var index = 0;
+            var imageSeen = window.localStorage.getItem('iso-MVT-494-Image');
+            var imageIndex = parseInt(imageSeen);
+
+            if (imageSeen !== null) {
+                index = imageIndex; 
+                if(window.sessionStorage.getItem('iso-MVT-494-Image') === null) {
+                    index++;
+                    console.log(index);
+                    index = index % isoTest.images.length; // revert index to first image
+                }
+            }
+
+            return index;
+        },
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
 			s.linkTrackVars = 'eVar20';
 			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+        fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
 			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
