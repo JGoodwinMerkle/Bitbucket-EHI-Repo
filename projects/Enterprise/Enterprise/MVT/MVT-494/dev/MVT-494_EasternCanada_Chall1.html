@@ -13,7 +13,7 @@
     .img-container.iso-background.iso-background-b {
         background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_dt_eastern_b.png');
     }
-    @media only screen and (max-width:375px) {
+ /*   @media only screen and (max-width:375px) {
         .img-container.iso-background.iso-background-a {
         background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_mb_eastern_a.png');
          }
@@ -28,7 +28,7 @@
         .img-container.iso-background.iso-background-b {
         background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_tb_eastern_b.png');
          }
-    }
+    }*/
 
 </style>
 <script>
@@ -39,7 +39,7 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-494',
 		creative : 'Challenger 1',
-		selector : '.booking-widget-hero.section .img-container',
+		selector : 'body',
         images : ['a','b'],
 		init : function() {
 
@@ -66,7 +66,7 @@
 		chall : function() {
 
 			// Your code goes here
-            var targetDiv = document.querySelector(isoTest.selector);
+            var targetDiv = document.querySelector('.booking-widget-hero.section .img-container');
             targetDiv.classList.add('iso-background');
             var imageUse = isoTest.getImageIndex();
             console.log('final index', imageUse );
