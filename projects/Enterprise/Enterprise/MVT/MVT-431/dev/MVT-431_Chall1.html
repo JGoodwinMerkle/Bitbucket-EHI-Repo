@@ -40,6 +40,7 @@
         afterHoursPickup: false,
         afterHoursReturn: false
       },
+			tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
 			init: function () {
 
 				var open_prototype = window.XMLHttpRequest.prototype.open;
@@ -157,8 +158,13 @@
 			},
 			updateMainClearAll : function(){
 				// Check to see if we still need to show our clear all button
-				console.log('Update main clear all - hide if this is 0');
-				console.log(isoTest.filtersApplied.numApplied);
+				var clearAllButton = document.querySelector('.js-clear-all');
+				if(!clearAllButton) return;
+				if(isoTest.filtersApplied.numApplied){
+					clearAllButton.classList.remove('hide');
+				}else{
+					clearAllButton.classList.add('hide');
+				}
 			},
       triggerUpdate : function(){
 				isoTest.updateFilterCount();
@@ -242,7 +248,6 @@
             }
           }
 
-          console.log(filteredItems);
           return filteredItems;
         }else{
           return results;
@@ -298,6 +303,7 @@
 				isoTest.observeEl('.location-header__toggle-buttons [aria-label*="Filter"]', function(filterButton){
 					isoTest.clearFilters(false);
 					isoTest.creation();
+					isoTest.updateMainClearAll();
 				});
 			},
 			clearAllClick: function(){
@@ -342,7 +348,6 @@
 
           var openSundays = document.querySelector('.js-sunday input');
           openSundays.addEventListener('change', function(e) {
-            console.log('Open sundays clicked now!!');
             isoTest.applyFilter('openSundays');
           });
 
@@ -356,6 +361,32 @@
 					});
 				}
 			},
+			keepFocus : function(context) {
+    		context.querySelector('.close-modal').focus();
+
+	    	var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+	        	firstTabbableElement = allTabbableElements[0],
+	          	lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+	      	var keyListener = function(e) {
+	    		var keyCode = e.which || e.keyCode;
+
+	    		e.preventDefault = e.preventDefault || function () {
+	    			e.returnValue = false;
+	    		};
+
+	    		if (keyCode === 9) {
+	          		if (e.target === lastTabbableElement && !e.shiftKey) {
+	    				e.preventDefault();
+	    				firstTabbableElement.focus();
+	          		} else if (e.target === firstTabbableElement && e.shiftKey) {
+	    				e.preventDefault();
+	    				lastTabbableElement.focus();
+	    			}
+	    		}
+	    	};
+	    	context.addEventListener('keydown', keyListener, false);
+	    },
 			modalFunctionality: function () {
 
 				var afterHoursPickupChecked = isoTest.filtersApplied.afterHoursPickup ? 'checked' : '';
@@ -404,6 +435,8 @@
 
 				var applyModalBtn = modalContainer.querySelector(".js-modal-apply");
 				var checkboxes = modalContainer.querySelectorAll(".form-checkbox__input");
+
+				isoTest.keepFocus(modal);
 
 				// Apply filters on click of apply button
 				applyModalBtn.addEventListener('click', function (event) {
@@ -455,6 +488,12 @@
 						}
 
 						updateClearAll();
+					});
+
+					checkbox.addEventListener('keyup', function(event) {
+						if (event.key === 'Enter') {
+							checkbox.checked = !checkbox.checked;
+						}
 					});
 				});
 				updateClearAll();
