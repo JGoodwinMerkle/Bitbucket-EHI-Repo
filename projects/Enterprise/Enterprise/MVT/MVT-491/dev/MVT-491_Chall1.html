@@ -36,7 +36,7 @@
         authSelector : '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
 		init : function() {
 
-			//isoTest.debug = true;
+			isoTest.debug = true;
             
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
@@ -48,12 +48,16 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			
-            helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
+			//helpers.elementLoaded(isoTest.authSelector, function() {
+				
+                helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.log('Test Ready!');
   				isoTest.chall();
                 isoTest.inFlightUpdates();
-            });
+                });
+		//	});
+			
+	
 		
 		},
 	
@@ -67,22 +71,25 @@
 
 		},
         logInUpdates: function() {
-			if(!document.querySelector('.iso-auth-img')) {
+           if(!document.querySelector('.iso-auth-img')) {
 			//console.log('login');
             var iconImg = document.querySelectorAll(isoTest.selector)[2];
             var embeddedUrl = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement;
                 embeddedUrl.classList.add('iso-auth-loyalty');
             var headline = document.querySelector('.iso-auth-loyalty h2.two-up-three-up-tile__heading');
             var bodyCopy = document.querySelector('.iso-auth-loyalty .two-up-three-up-tile__text p');
+           
             iconImg.insertAdjacentHTML('beforebegin','<div class="iso-auth-img"></div');
+          
             iconImg.classList.add('iso-auth-hide');
+
             embeddedUrl.setAttribute('href','https://www.enterprise.com/en/car-rental/mobile-app.html?icid=home.three.up-_-mobile-app-_-ENUS');
             headline.innerText = 'Download The Enterprise App';
             bodyCopy.innerText = 'Enterprise is bringing innovation to the rental experience. Members with the app may be eligible to try new features soon.';
-			}
+           }
         },
         logOutUpdates: function() {
-			if(document.querySelector('.iso-auth-img')) {
+          if(document.querySelector('.iso-auth-img')) {
 				//console.log('logout');
             var iconImg = document.querySelectorAll(isoTest.selector)[2];
             var embeddedUrl = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement;
@@ -90,26 +97,29 @@
             var headline = document.querySelector('.iso-auth-loyalty h2.two-up-three-up-tile__heading');
             var bodyCopy = document.querySelector('.iso-auth-loyalty .two-up-three-up-tile__text p');
             iconImg.classList.remove('iso-auth-hide');
-            document.querySelector('.iso-auth-img').remove();
+            
+                document.querySelector('.iso-auth-img').remove();
+            
+            
             embeddedUrl.setAttribute('href','https://www.enterprise.com/en/loyalty.html?icid=home.3up1-_-loyalty-_-ENUS.NULL');
             headline.innerText = 'Not an Enterprise Plus® member?';
             bodyCopy.innerText = 'You could be earning points toward free rentals. What are you waiting for?';
+          }
 
-		}
         },
-        inFlightUpdates: function() {
+    inFlightUpdates: function() {
             var eleUpdates = new MutationObserver(function(mutationsList) {
                 mutationsList.forEach(function(mutation){
                     //added nodes 
                     mutation.addedNodes.forEach(function (addedNode){
                         if(addedNode.classList != undefined) {
                           //  console.log('added:', addedNode);
-                        if(addedNode.classList.contains('utility-nav-label--logged-in') ) {
+                        if(document.querySelector('.utility-nav-label--logged-in') ) {
                                 //actions
                                 isoTest.logInUpdates();
                             } else if(document.querySelector('.login-widget.active')){
-								//console.log(!document.querySelector('.field-container.logged-in'));
-								if(!document.querySelector('.field-container.logged-in')) {
+		//console.log(!document.querySelector('.field-container.logged-in'));
+						if(!document.querySelector('.field-container.logged-in')) {
 									isoTest.logOutUpdates();
 									//console.log('remove1');
 								}
