@@ -1,4 +1,28 @@
 <style>
+	.locations-filter-modal-content__checkbox-text {
+    align-items: center;
+    display: flex;
+    margin-top: 0.125rem;
+	}
+	.locations-filter-modal-content__checkbox-text .icon {
+    margin-left: 0.3125rem;
+	}
+	.locations-filter-modal-content__checkbox {
+    margin-bottom: 0.9375rem;
+	}
+	.icon-location{
+		filter: brightness(0);
+	}
+	.locations-filter-modal-content__checkbox-text .icon.icon-after-hours{
+		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='19' height='19' viewBox='0 0 19 19' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.29998 18.2969C9.29894 18.2969 9.29791 18.2969 9.29688 18.2969C4.32641 18.2969 0.296875 14.2673 0.296875 9.29688C0.296875 4.32641 4.32641 0.296875 9.29688 0.296875C9.29791 0.296875 9.29894 0.296875 9.29998 0.296875C14.2685 0.298553 18.2969 4.32771 18.2969 9.29688C18.2969 14.266 14.2685 18.2952 9.29998 18.2969ZM9.29998 1.22791V17.3658C13.7543 17.3642 17.3658 13.7518 17.3658 9.29687C17.3658 4.84192 13.7543 1.22959 9.29998 1.22791Z' fill='%23393A3B'/%3E%3Cmask id='mask0_99_153787' style='mask-type:alpha' maskUnits='userSpaceOnUse' x='0' y='0' width='9' height='18'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.00012 0.29712C8.99912 0.297119 8.99812 0.297119 8.99712 0.297119C4.19234 0.297119 0.297119 4.19234 0.297119 8.99712C0.297119 13.8019 4.19234 17.6971 8.99712 17.6971C8.99812 17.6971 8.99912 17.6971 9.00012 17.6971V0.29712Z' fill='white'/%3E%3C/mask%3E%3Cg mask='url(%23mask0_99_153787)'%3E%3C/g%3E%3C/svg%3E");
+	}
+	.locations-filter-modal-content .modal-content__heading {
+    display: flex;
+    justify-content: space-between;
+	}
+	.location-search-filter__clear-all:not(.js-clear-all){
+		display: none;
+	}
 </style>
 <script>
 	(function () {
@@ -9,9 +33,9 @@
 			portfolio: 'Enterprise',
 			test: 'MVT-431',
 			creative: 'Challenger 1',
-			selector: '.location-header__toggle-buttons [aria-label*="Filter"]',
+			selector: '#location-search-available-filter + span + .form-checkbox__text, .filter-modal-button.locations-filter-trigger.location-search-filter__locations-filter.location-search-filter__filter-input .icon.icon-nav-carrot-down',
       filtersApplied: {
-        anyApplied: false,
+        numApplied: 0,
         openSundays: false,
         afterHoursPickup: false,
         afterHoursReturn: false
@@ -57,10 +81,90 @@
 				helpers.elementLoaded(isoTest.selector, function () {
 					isoTest.log('Test Ready!');
 					isoTest.chall();
+
+					isoTest.watchFilter();
 				});
 
 			},
+			getTotalFilters : function(){
+				var locationFilter = document.querySelector('.btn[name="locations-filter-trigger"]:not(.service-trigger)');
+				var locationText = locationFilter.childNodes[0].nodeValue;
+				var totalLocation = 0;
+				
+				if(locationText !== 'All Locations'){
+					var moreThanOneLocation = isoTest.getFilterCount(locationFilter);
+					if(moreThanOneLocation){
+						totalLocation = moreThanOneLocation;
+					}else{
+						totalLocation = 1;
+					}
+				}
+
+				var vehicleClass = document.querySelector('[name="vehicle-filters-trigger"]');
+				var vehicleText = vehicleClass.childNodes[0].nodeValue;
+				var totalVehicle = (vehicleText === 'All Vehicles') ? 0 : 1;
+
+				var totalOther = document.querySelectorAll('.location-search-filter__container-check-filters-block label:not(.js-sunday) input:checked').length;
+
+				var totalFilters = totalLocation + totalVehicle + totalOther + isoTest.filtersApplied.numApplied;
+				
+				return totalFilters;
+			},
+			getFilterCount : function(filterButton){
+				var filterText = filterButton.childNodes[0].nodeValue;
+				var regEx = /(Filter|Locations) \((\d*)\)/;
+				var numMatch = filterText.match(regEx);
+				var numText = (!!numMatch && numMatch[2]) ? numMatch[2] : 0;
+				var numValue = parseInt(numText);
+
+				return numValue;
+			},
+			watchFilter : function(){
+				// Add a mutation observer that watches for changes to the filter and makes sure the filter count is update
+				var filterButton = document.querySelector('.location-header__toggle-buttons [aria-label*="Filter"]');
+
+				var observeEverything = new MutationObserver(function(observedEl) {
+					isoTest.updateFilterCount();
+				});
+				observeEverything.observe(filterButton, {
+					attributes: false,
+					childList: true,
+					characterData: true,
+					subtree: true
+				});
+			},
+			updateFilterCount : function(){
+				var totalFilters = isoTest.getTotalFilters();
+
+				var filterButton = document.querySelector('.location-header__toggle-buttons [aria-label*="Filter"]');
+				var filterNum = isoTest.getFilterCount(filterButton);
+
+				if(totalFilters !== filterNum){
+					var filterCount = (totalFilters > 0) ? '(' + totalFilters + ')' : '';
+
+					filterButton.setAttribute('aria-label', 'Filter ' + filterCount);
+					filterButton.childNodes[0].nodeValue = 'Filter ' + filterCount;
+				}
+			},
+			updateServicesCount : function(){
+				var pickupCount = isoTest.filtersApplied.afterHoursPickup ? 1 : 0;
+				var returnCount = isoTest.filtersApplied.afterHoursReturn ? 1 : 0;
+				var totalFilters = pickupCount + returnCount;
+				var serviceButton = document.querySelector('.service-trigger button');
+
+				var filterCount = (totalFilters > 0) ? 'Services (' + totalFilters + ')' : 'All Services';
+				serviceButton.childNodes[0].nodeValue = filterCount;
+			},
+			updateMainClearAll : function(){
+				// Check to see if we still need to show our clear all button
+				console.log('Update main clear all - hide if this is 0');
+				console.log(isoTest.filtersApplied.numApplied);
+			},
       triggerUpdate : function(){
+				isoTest.updateFilterCount();
+				isoTest.updateServicesCount();
+				isoTest.updateMainClearAll();
+
         var getReactComponent = function(node){
           for(var key in node) {
             if(key.startsWith('__reactInternalInstance$') ) {
@@ -72,26 +176,34 @@
         
         getReactComponent(document.querySelector('.map-wrapper')).return.memoizedProps.onSearchThisArea();
       },
-      clearFilters : function() {
+      clearFilters : function(triggerUpdate) {
         isoTest.filtersApplied = {
-          anyApplied: false,
+          numApplied: 0,
           openSundays: false,
           afterHoursPickup: false,
           afterHoursReturn: false
         };
-        isoTest.triggerUpdate();
+
+				if(triggerUpdate){
+					// Reset our checkbox if it was selected
+					var openSundays = document.querySelector('.js-sunday input:checked');
+					if(openSundays){
+						openSundays.checked = false;
+					}
+					
+					isoTest.triggerUpdate();
+				}
       },
       applyFilter : function(filter) {
         isoTest.filtersApplied[filter] = !isoTest.filtersApplied[filter];
 
         // If we have any filters applied, then we need to show the adjusted results
-        isoTest.filtersApplied.anyApplied = false;
+        isoTest.filtersApplied.numApplied = 0;
         for(var key in isoTest.filtersApplied) {
           if(!!isoTest.filtersApplied[key]){
-            isoTest.filtersApplied.anyApplied = true;
+            isoTest.filtersApplied.numApplied++;
           }
         }
-				console.log(isoTest.filtersApplied);
         isoTest.triggerUpdate();
       },
       getFilterMatches : function(results){
@@ -116,7 +228,7 @@
         return resultsObj;
       },
       filterRequest : function(results){
-        if(isoTest.filtersApplied.anyApplied) {
+        if(isoTest.filtersApplied.numApplied > 0) {
           var resultsObj = isoTest.getFilterMatches(results);
 
           var filteredItems = false;
@@ -136,16 +248,65 @@
           return results;
         }
       },
+			observeEl : function(selector, callback) {
+				var processed = new Map();
+
+				var processElement = function processElement(el) {
+					if (processed && !processed.has(el)) {
+						processed.set(el, true);
+						callback(el);
+					}
+				};
+
+				var lookForSelector = function lookForSelector() {
+					var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+					if (el.matches && el.matches(selector)) {
+						if (processElement(el)) return true;
+					}
+
+					if (el.querySelectorAll) {
+						var elements = el.querySelectorAll(selector);
+
+						if (elements.length) {
+							for (var i = 0; i < elements.length; i++) {
+								var _el = elements[i];
+								if (processElement(_el)) return true;
+							}
+						}
+					}
+				};
+				lookForSelector();
+
+				var obs = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (record) {
+						if (record && record.addedNodes && record.addedNodes.length) {
+							for (var i = 0; i < record.addedNodes.length; i++) {
+								var el = record.addedNodes[i].parentElement;
+								if (el && lookForSelector(el)) return true;
+							}
+						}
+					});
+				});
+				obs.observe(document, {
+					attributes: false,
+					childList: true,
+					subtree: true
+				});
+			},
 			chall: function () {
-        var filterFired = false;
-        var filterButton = document.querySelector('.location-header__toggle-buttons [aria-label*="Filter"]');
-        filterButton.addEventListener('click', function(e) {
-          if(!filterFired) {
-            console.log('Filter button clicked!');
-            filterFired = true;
-            isoTest.creation();
-          }
-        });
+				isoTest.observeEl('.location-header__toggle-buttons [aria-label*="Filter"]', function(filterButton){
+					isoTest.clearFilters(false);
+					isoTest.creation();
+				});
+			},
+			clearAllClick: function(){
+				var existingClearAll = document.querySelector('.location-search-filter__clear-all:not(.js-clear-all)');
+				if(existingClearAll){
+					existingClearAll.click();
+				}
+
+				isoTest.clearFilters(true);
 			},
 			//Creation of our items
 			creation: function () {
@@ -169,9 +330,12 @@
 					modalBtnTxt.innerText = 'All Services';
 					checkboxTxt.innerText = 'Open Sundays';
 					modalBtn.classList.add("iso");
+					modalBtn.classList.add('service-trigger');
 					checkbox.classList.add("iso");
+					checkbox.id = 'sunday-search-available-filter';
           checkbox.classList.add('js-sunday');
-					locationTypeContainer.insertAdjacentElement("beforeend", modalBtn);
+					locationType.insertAdjacentElement("afterend", modalBtn);
+					modalBtn.insertAdjacentHTML('afterend', `<button class="cta cta--text cta--text-a11y cta--large location-search-filter__clear-all js-clear-all" aria-label="Clear All">Clear All</button>`);
 					locationCheckboxContainer.insertAdjacentElement("beforeend", checkbox);
 					modalBtn.querySelector(".btn.filter-modal-button__button.btn-input").insertAdjacentElement("beforeend", carrot);
 
@@ -185,32 +349,46 @@
 					modalBtnTxt.addEventListener('click', function (event) {
 						isoTest.modalFunctionality()
 					});
-					// <button class="btn locations-filter-modal-content__clear-all btn-unstyled btn--outline btn--underline" type="button">Clear All</button>
+
+					var clearAll = document.querySelector('.js-clear-all');
+					clearAll.addEventListener('click', function(){
+						isoTest.clearAllClick();
+					});
 				}
 			},
 			modalFunctionality: function () {
+
+				var afterHoursPickupChecked = isoTest.filtersApplied.afterHoursPickup ? 'checked' : '';
+				var afterHoursReturnChecked = isoTest.filtersApplied.afterHoursReturn ? 'checked' : '';
+
 				document.querySelector('.ReactModalPortal').insertAdjacentHTML("beforeend", `
 					<div class="ReactModal__Overlay ReactModal__Overlay--after-open modal-overlay">
 						<div class="ReactModal__Content ReactModal__Content--after-open default-modal" tabindex="-1" role="dialog" aria-labelledby="modal-heading" aria-modal="true" aria-describedby="modal-content">
 							<div class="modal-inner">
 								<div class="modal-header">
-									<button class="close-modal" aria-label="Close" type="button"><i class="icon icon-close-x-white" aria-hidden="true">X</i></button>
+									<button class="cta cta--text cta--large cta--noMargin cta--text-inverted modal-header__close-icon close-modal" aria-label="Close">
+										<i role="img" aria-hidden="true" class="cta__icon">
+											<svg viewBox="0 0 24 24">
+												<use xlink:href="#btn-icn-close"></use>
+											</svg>
+										</i>
+									</button>
 								</div>
 								<div class="modal-content cf">
 									<div class="locations-filter-modal-content">
-										<h2 id="modal-heading" class="modal-content__heading">Service</h2>
+										<h2 id="modal-heading" class="modal-content__heading">Services</h2>
 										<div class="locations-filter-modal-content__filters" id="modal-content">
 											<p>Select the service you want to search by.</p>
-											<label class="form-checkbox locations-filter-modal-content__checkbox">
-												<input type="checkbox" name="afterHoursReturn" id="afterHoursReturn" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
-												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">Pick-Up Service Available </span></span>
+											<label class="form-checkbox locations-filter-modal-content__checkbox ` + afterHoursReturnChecked + `">
+												<input ` + afterHoursReturnChecked + ` type="checkbox" name="afterHoursReturn" id="afterHoursReturn" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
+												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">Pick-Up Service Available <i class="icon icon-location"></i></span></span>
 											</label>
-											<label class="form-checkbox locations-filter-modal-content__checkbox">
-												<input type="checkbox" name="afterHoursPickup" id="afterHoursPickup" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
-												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">After-Hours Service Available</span></span>
+											<label class="form-checkbox locations-filter-modal-content__checkbox ` + afterHoursPickupChecked + `">
+												<input ` + afterHoursPickupChecked + ` type="checkbox" name="afterHoursPickup" id="afterHoursPickup" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
+												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">After-Hours Service Available <i class="icon icon-after-hours"></i></span></span>
 											</label>
 										</div>
-										<div class="modal-buttons-container"><button class="btn modal-button modal-cancel" type="button">Cancel</button><button class="btn modal-button js-modal-apply" type="button">Apply</button></div>
+										<div class="cta-container cta-container--align-center modal-buttons-container"><button class="cta cta--secondary cta--large cta--noMargin modal-cancel" type="button">Cancel</button><button class="cta cta--primary cta--large cta--noMargin js-modal-apply" type="button">Apply</button></div>
 									</div>
 								</div>
 							</div>
@@ -221,9 +399,10 @@
 				var modalContainer = document.querySelector('.ReactModalPortal');
 				var modal = modalContainer.querySelector(".ReactModal__Overlay.ReactModal__Overlay--after-open.modal-overlay");
 				var closeModalBtn = modalContainer.querySelector(".close-modal");
-				var cancelModalBtn = modalContainer.querySelector(".btn.modal-button.modal-cancel");
+				var cancelModalBtn = modalContainer.querySelector(".modal-cancel");
+				var modalHeading = modal.querySelector('#modal-heading');
 
-				var applyModalBtn = modalContainer.querySelector(".btn.modal-button.js-modal-apply");
+				var applyModalBtn = modalContainer.querySelector(".js-modal-apply");
 				var checkboxes = modalContainer.querySelectorAll(".form-checkbox__input");
 
 				// Apply filters on click of apply button
@@ -235,7 +414,36 @@
 					});
 
 					isoTest.triggerUpdate();
+					modal.remove()
 				});
+
+				var numOfCheckedInputs = function(){
+					return modal.querySelectorAll('.checked input').length;
+				};
+
+				var updateClearAll = function(){
+					if(numOfCheckedInputs() > 0){
+						if(!modalHeading.querySelector('.cta')){
+							modalHeading.insertAdjacentHTML('beforeend', `
+								<button class="cta clear-all cta--text cta--large cta--noMargin" aria-label="Clear All">Clear All</button>
+							`);
+							var clearAll = modalHeading.querySelector('.cta');
+							clearAll.addEventListener('click', function(){
+								checkboxes.forEach(function (checkbox) {
+									checkbox.parentElement.classList.remove('checked');
+									checkbox.checked = false;
+								});
+
+								clearAll.remove();
+							});
+						}
+					}else{
+						var clearAllButton = modalHeading.querySelector('.cta');
+						if(clearAllButton){
+							clearAllButton.remove();
+						}
+					}
+				}
 
 				// On click of checkboxes we'll want to add/hide the "Clear all" modal button
 				checkboxes.forEach(function (checkbox) {
@@ -245,8 +453,11 @@
 						} else {
 							checkbox.parentElement.classList.remove('checked');
 						}
+
+						updateClearAll();
 					});
 				});
+				updateClearAll();
 				closeModalBtn.addEventListener('click', function (event) {
 					modal.remove()
 				});
@@ -273,7 +484,7 @@
 			elementLoaded: function (ele, callback) {
 				isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
 				window.clearTimeout(isoTest.eleTimer);
-				if (document.querySelectorAll(ele).length > 0) {
+				if (document.querySelectorAll(ele).length > 1) {
 					if (typeof callback === 'function') {
 						isoTest.log('elementLoaded::  ' + ele + ' - Found!');
 						callback();
