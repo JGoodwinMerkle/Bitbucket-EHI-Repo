@@ -1,4 +1,24 @@
 <style>
+    .iso-demand-message {
+        background: #FFFFFF;
+        padding:20px;
+        display: flex;
+        padding: 20px;
+        flex-direction: row;
+        margin-bottom: 10px;
+    }
+    .iso-demand-message .iso-copy {
+        margin-left: 12px;
+    }
+    .iso-demand-message .iso-copy > p {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;
+        color: #213B73;
+        margin-bottom: 0px;
+    }
 </style>
 <script>
 (function() {
@@ -8,7 +28,8 @@
 		portfolio : 'Alamo',
 		test : 'MVT-508',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : 'section.review-rental-details.rental-details',
+        template: '<div class="iso-demand-message"> <div class="iso-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M12 13.1299V9.37988" stroke="#213B73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M12 16.1299C11.86 16.1299 11.75 16.2399 11.75 16.3799C11.75 16.5199 11.86 16.6299 12 16.6299C12.14 16.6299 12.25 16.5199 12.25 16.3799C12.25 16.2399 12.14 16.1299 12 16.1299Z" stroke="#213B73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M14.03 4.1399L21.69 17.5399C22.58 19.0999 21.46 21.0399 19.66 21.0399H4.34C2.55 21.0399 1.42 19.0999 2.31 17.5399L9.97 4.1399C10.87 2.5699 13.13 2.5699 14.03 4.1399V4.1399Z" stroke="#213B73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg></div><div class="iso-copy"> <p class="iso-dynamic-copy"></p><p class="iso-static-copy">Book now!</p></div></div>',
 		init : function() {
 
 			isoTest.debug = true;
@@ -31,7 +52,7 @@
 		
 		},
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
+			if(/review/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -40,7 +61,12 @@
 		chall : function() {
 
 			// Your code goes here
-
+            if (!document.querySelector('.iso-demand-message')) {
+					document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', isoTest.template);
+                    var location = document.querySelector('.location-address__name').innerHTML;
+                    var month = document.querySelector('.rental-details__value').innerText.split(' ')[1];
+                    document.querySelector('.iso-copy .iso-dynamic-copy').innerHTML = "We're experiencing <strong>high demand</strong> at "+location+" for "+month+".";
+				}
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
