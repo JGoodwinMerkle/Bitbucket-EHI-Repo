@@ -19,6 +19,26 @@
         color: #213B73;
         margin-bottom: 0px;
     }
+	.iso-static-copy {
+		font-weight: 600;
+	}
+	.iso-static-book {
+			display: none;
+	}
+	@media only screen and (max-width:767px){
+		.iso-static-copy {
+			display: none;
+		}
+		.iso-static-book {
+			display: inline;
+		}
+	}
+	@media only screen and (max-width:1279px) {
+		.iso-demand-message {
+			margin-bottom: 20px;
+		}
+		
+	}
 </style>
 <script>
 (function() {
@@ -65,7 +85,7 @@
 					document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', isoTest.template);
                     var location = document.querySelector('.location-address__name').innerHTML;
                     var month = document.querySelector('.rental-details__value').innerText.split(' ')[1];
-                    document.querySelector('.iso-copy .iso-dynamic-copy').innerHTML = "We're experiencing <strong>high demand</strong> at "+location+" for "+month+".";
+                    document.querySelector('.iso-copy .iso-dynamic-copy').innerHTML = "We're experiencing <strong>high demand</strong> at "+location+" for "+month+". <strong class='iso-static-book'>Book now! </strong>";
 				}
 		},
 		fireTag : function(element, value) {
