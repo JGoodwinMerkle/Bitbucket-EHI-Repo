@@ -13,15 +13,30 @@
 	.icon-location{
 		filter: brightness(0);
 	}
-	.locations-filter-modal-content__checkbox-text .icon.icon-after-hours{
-		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='19' height='19' viewBox='0 0 19 19' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.29998 18.2969C9.29894 18.2969 9.29791 18.2969 9.29688 18.2969C4.32641 18.2969 0.296875 14.2673 0.296875 9.29688C0.296875 4.32641 4.32641 0.296875 9.29688 0.296875C9.29791 0.296875 9.29894 0.296875 9.29998 0.296875C14.2685 0.298553 18.2969 4.32771 18.2969 9.29688C18.2969 14.266 14.2685 18.2952 9.29998 18.2969ZM9.29998 1.22791V17.3658C13.7543 17.3642 17.3658 13.7518 17.3658 9.29687C17.3658 4.84192 13.7543 1.22959 9.29998 1.22791Z' fill='%23393A3B'/%3E%3Cmask id='mask0_99_153787' style='mask-type:alpha' maskUnits='userSpaceOnUse' x='0' y='0' width='9' height='18'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.00012 0.29712C8.99912 0.297119 8.99812 0.297119 8.99712 0.297119C4.19234 0.297119 0.297119 4.19234 0.297119 8.99712C0.297119 13.8019 4.19234 17.6971 8.99712 17.6971C8.99812 17.6971 8.99912 17.6971 9.00012 17.6971V0.29712Z' fill='white'/%3E%3C/mask%3E%3Cg mask='url(%23mask0_99_153787)'%3E%3C/g%3E%3C/svg%3E");
-	}
 	.locations-filter-modal-content .modal-content__heading {
     display: flex;
     justify-content: space-between;
 	}
 	.location-search-filter__clear-all:not(.js-clear-all){
 		display: none;
+	}
+	.tippy-popper{
+		display: none;
+	}
+	.tippy-popper.show{
+		display: block;
+	}
+	.locations-filter-modal-content__checkbox-text .icon{
+		height: 1.5rem;
+		width: 1.5rem;
+	}
+	.locations-filter-modal-content__checkbox-text .icon.icon-after-hours{
+		height: 1.25rem;
+		width: 1.5rem;
+	}
+	.pickup-tooltip, .afterhours-tooltip{
+		margin-top: 6px;
+		margin-left: -3px;
 	}
 </style>
 <script>
@@ -349,9 +364,14 @@
           var openSundays = document.querySelector('.js-sunday input');
           openSundays.addEventListener('change', function(e) {
             isoTest.applyFilter('openSundays');
+
+						if(openSundays.checked){
+							isoTest.fireTag(openSundays, 'Open Sundays Selected');
+						}
           });
 
 					modalBtnTxt.addEventListener('click', function (event) {
+						isoTest.fireTag(modalBtnTxt, 'Open Services Modal');
 						isoTest.modalFunctionality()
 					});
 
@@ -410,13 +430,15 @@
 										<h2 id="modal-heading" class="modal-content__heading">Services</h2>
 										<div class="locations-filter-modal-content__filters" id="modal-content">
 											<p>Select the service you want to search by.</p>
-											<label class="form-checkbox locations-filter-modal-content__checkbox ` + afterHoursReturnChecked + `">
-												<input ` + afterHoursReturnChecked + ` type="checkbox" name="afterHoursReturn" id="afterHoursReturn" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
-												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">Pick-Up Service Available <i class="icon icon-location"></i></span></span>
-											</label>
 											<label class="form-checkbox locations-filter-modal-content__checkbox ` + afterHoursPickupChecked + `">
 												<input ` + afterHoursPickupChecked + ` type="checkbox" name="afterHoursPickup" id="afterHoursPickup" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
-												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">After-Hours Service Available <i class="icon icon-after-hours"></i></span></span>
+												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">Pick-Up Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-pick-up-service"></i></span></span><div class="" data-tooltipped="" style="display: inline;"><button type="button" class="rs-tooltip-trigger pickup-tooltip" aria-label="Tooltip"><i class="rs-tooltip-trigger-icon"><svg class="rs-tooltip-trigger-icon--idle" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg><svg class="rs-tooltip-trigger-icon--active" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg></i></button></div>
+												<div class="tippy-popper" role="tooltip" aria-hidden="false" id="tippy-tooltip-5" style="left: 119px;top: 24px;" x-placement="bottom"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow="" style="left: 118px;"></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free pick-up service is available at non-airport locations during normal business hours. To schedule your pick-up time or make additional arrangements, please call your location's rental office directly.</div></div></div></div>
+											</label>
+											<label class="form-checkbox locations-filter-modal-content__checkbox ` + afterHoursReturnChecked + `">
+												<input ` + afterHoursReturnChecked + ` type="checkbox" name="afterHoursReturn" id="afterHoursReturn" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
+												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">After-Hours Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-after-hours"></i></span></span><div class="" data-tooltipped="" style="display: inline;"><button type="button" class="rs-tooltip-trigger afterhours-tooltip" aria-label="Tooltip"><i class="rs-tooltip-trigger-icon"><svg class="rs-tooltip-trigger-icon--idle" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg><svg class="rs-tooltip-trigger-icon--active" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg></i></button></div>
+												<div class="tippy-popper" role="tooltip" aria-hidden="false" id="tippy-tooltip-5" style="left: 144px;top: 24px;" x-placement="bottom"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow="" style="left: 118px;"></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free after-hours return service allows you to return your vehicle if your location is closed during your selected return time. Please check your specific location's after-hours return policy if available.</div></div></div></div>
 											</label>
 										</div>
 										<div class="cta-container cta-container--align-center modal-buttons-container"><button class="cta cta--secondary cta--large cta--noMargin modal-cancel" type="button">Cancel</button><button class="cta cta--primary cta--large cta--noMargin js-modal-apply" type="button">Apply</button></div>
@@ -447,7 +469,9 @@
 					});
 
 					isoTest.triggerUpdate();
-					modal.remove()
+					modal.remove();
+
+					isoTest.fireTag(applyModalBtn, 'Services Filter Applied');
 				});
 
 				var numOfCheckedInputs = function(){
@@ -482,6 +506,11 @@
 				checkboxes.forEach(function (checkbox) {
 					checkbox.addEventListener('change', function (e) {
 						if (checkbox.checked) {
+							if(checkbox.id === 'afterHoursReturn'){
+								isoTest.fireTag(checkbox, 'After-Hours Returns Selected');
+							}else if(checkbox.id === 'afterHoursPickup'){
+								isoTest.fireTag(checkbox, 'Pick-up Service Selected');
+							}
 							checkbox.parentElement.classList.add('checked');
 						} else {
 							checkbox.parentElement.classList.remove('checked');
@@ -503,13 +532,41 @@
 				cancelModalBtn.addEventListener('click', function (event) {
 					modal.remove()
 				});
+
+				// Add in tooltips
+				function hideTooltipListener() {
+					var openToolTip = document.querySelector('.tippy-popper.show');
+					if(openToolTip){
+						openToolTip.classList.remove('show');
+					}
+
+					document.documentElement.removeEventListener('click', hideTooltipListener,false);
+				}
+				var tooltips = document.querySelectorAll('.pickup-tooltip, .afterhours-tooltip');
+				tooltips.forEach(function (tooltip) {
+					tooltip.addEventListener('click', function(){
+						setTimeout(function(){
+							var openToolTip = document.querySelector('.tippy-popper.show');
+							if(openToolTip){
+								openToolTip.classList.remove('show');
+							}
+
+							var tooltipInfo = tooltip.parentElement.nextElementSibling;
+							tooltipInfo.classList.add('show');
+
+							setTimeout(function(){
+								document.documentElement.addEventListener('click', hideTooltipListener);
+							}, 0);
+						});
+					});
+				});
 			},
 			//Add enet lsteners to eveything
 			fireTag: function (element, value) {
 				var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-				s.linkTrackVars = 'eVar20';
-				s.eVar20 = linkName;
+				s.linkTrackVars = 'eVar89';
+				s.eVar89 = linkName;
 				s.tl(this, 'o', linkName);
 			},
 			log: function (obj) {
