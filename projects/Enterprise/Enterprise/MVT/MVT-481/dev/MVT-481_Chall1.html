@@ -1,0 +1,135 @@
+<style>
+	#signin-content{
+		width: 720px;
+    max-width: 100vw;
+	}
+	#signin-content .plus-icon {
+		display: inline-block;
+    height: 18px;
+    min-width: 18px;
+    background-repeat: no-repeat;
+		margin-top: 5px;
+    margin-right: 10px;
+		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17.513 8.32062L17.513 10.0642L10.0638 10.0638L10.0641 17.513L8.32061 17.513L8.32033 10.0632L0.871824 10.0641L0.871819 8.32056L8.32033 8.32034L8.32056 1.08018L10.0641 1.08018L10.0638 8.32095L17.513 8.32062Z' fill='%23169A5A' stroke='%23169A5A' stroke-width='0.5'/%3E%3C/svg%3E");
+	}
+	#signin-content .benefit{
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 18px;
+		color: #000;
+		display: flex;
+		margin-bottom: 10px;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'MVT-481',
+		creative : 'Challenger 1',
+		selector : '#signin-content:not(.authenticated)',
+		observeEl : function(selector, callback) {
+			var processed = new Map();
+
+			var processElement = function processElement(el) {
+				if (processed && !processed.has(el)) {
+					processed.set(el, true);
+					callback(el);
+				}
+			};
+
+			var lookForSelector = function lookForSelector() {
+				var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+				if (el.matches && el.matches(selector)) {
+					if (processElement(el)) return true;
+				}
+
+				if (el.querySelectorAll) {
+					var elements = el.querySelectorAll(selector);
+
+					if (elements.length) {
+						for (var i = 0; i < elements.length; i++) {
+							var _el = elements[i];
+							if (processElement(_el)) return true;
+						}
+					}
+				}
+			};
+			lookForSelector();
+
+			var obs = new MutationObserver(function (mutationsList) {
+				mutationsList.forEach(function (record) {
+					if (record && record.addedNodes && record.addedNodes.length) {
+						for (var i = 0; i < record.addedNodes.length; i++) {
+							var el = record.addedNodes[i].parentElement;
+							if (el && lookForSelector(el)) return true;
+						}
+					}
+				});
+			});
+			obs.observe(document, {
+				attributes: false,
+				childList: true,
+				subtree: true
+			});
+		},
+		init : function() {
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			isoTest.observeEl(isoTest.selector, function() {
+  			isoTest.chall();
+			});
+		},
+		chall : function() {
+			console.log('Non-authenticated user opened sign in modal');
+			var header = document.querySelector('#signin-content h4');
+			header.insertAdjacentHTML('afterend', `
+				<div class="benefit"><div class="plus-icon"></div> <div>Earn points that never expire as long as you remain an active member.<sup>1</sup></div></div>
+				<div class="benefit"><div class="plus-icon"></div> <div>Redeem for free rental days<sup>2</sup>—with no blackout dates—at thousands of participating Enterprise locations worldwide.</div></div>
+				<div class="benefit"><div class="plus-icon"></div> <div>Receive special offers when you subscribe to Email Specials.</div></div>
+				<div class="benefit"><div class="plus-icon"></div> <div>Can earn and redeem globally at participating locations.</div></div>
+			`);
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
