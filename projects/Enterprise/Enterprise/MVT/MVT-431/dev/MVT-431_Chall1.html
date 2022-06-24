@@ -1,4 +1,9 @@
 <style>
+	@media (min-width: 768px){
+		.ReactModal__Content--after-open.default-modal.services-modal{
+			width: 62%;
+		}
+	}
 	.locations-filter-modal-content__checkbox-text {
     align-items: center;
     display: flex;
@@ -20,11 +25,41 @@
 	.location-search-filter__clear-all:not(.js-clear-all){
 		display: none;
 	}
-	.tippy-popper{
+	.modal-tooltip{
 		display: none;
+		opacity: 0;
 	}
-	.tippy-popper.show{
+	.modal-tooltip.show{
 		display: block;
+    opacity: 1;
+    transform: translateY(-10px);
+    transition-duration: 375ms;
+	}
+	.modal-tooltip.top{
+		left: 123px;
+		top: -105px;
+	}
+	@media(max-width: 600px){
+		.modal-tooltip.top{
+			left: 40px;
+		}
+	}
+	.modal-tooltip.bottom{
+		left: 147px;
+		top: -105px;
+	}
+	@media(max-width: 600px){
+		.modal-tooltip.bottom{
+			left: 65px;
+		}
+	}
+	.modal-tooltip .arrow-regular{
+		left: 118px;
+	}
+	@media(max-width: 600px){
+		.modal-tooltip .arrow-regular{
+			left: 201px;
+		}
 	}
 	.locations-filter-modal-content__checkbox-text .icon{
 		height: 1.5rem;
@@ -34,9 +69,10 @@
 		height: 1.25rem;
 		width: 1.5rem;
 	}
-	.pickup-tooltip, .afterhours-tooltip{
-		margin-top: 6px;
-		margin-left: -3px;
+	.tooltip-icon{
+		position: relative;
+		top: 3px;
+		left: -6px;
 	}
 </style>
 <script>
@@ -414,7 +450,7 @@
 
 				document.querySelector('.ReactModalPortal').insertAdjacentHTML("beforeend", `
 					<div class="ReactModal__Overlay ReactModal__Overlay--after-open modal-overlay">
-						<div class="ReactModal__Content ReactModal__Content--after-open default-modal" tabindex="-1" role="dialog" aria-labelledby="modal-heading" aria-modal="true" aria-describedby="modal-content">
+						<div class="services-modal ReactModal__Content ReactModal__Content--after-open default-modal" tabindex="-1" role="dialog" aria-labelledby="modal-heading" aria-modal="true" aria-describedby="modal-content">
 							<div class="modal-inner">
 								<div class="modal-header">
 									<button class="cta cta--text cta--large cta--noMargin cta--text-inverted modal-header__close-icon close-modal" aria-label="Close">
@@ -432,13 +468,13 @@
 											<p>Select the service you want to search by.</p>
 											<label class="form-checkbox locations-filter-modal-content__checkbox ` + afterHoursPickupChecked + `">
 												<input ` + afterHoursPickupChecked + ` type="checkbox" name="afterHoursPickup" id="afterHoursPickup" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
-												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">Pick-Up Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-pick-up-service"></i></span></span><div class="" data-tooltipped="" style="display: inline;"><button type="button" class="rs-tooltip-trigger pickup-tooltip" aria-label="Tooltip"><i class="rs-tooltip-trigger-icon"><svg class="rs-tooltip-trigger-icon--idle" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg><svg class="rs-tooltip-trigger-icon--active" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg></i></button></div>
-												<div class="tippy-popper" role="tooltip" aria-hidden="false" id="tippy-tooltip-5" style="left: 119px;top: 24px;" x-placement="bottom"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow="" style="left: 118px;"></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free pick-up service is available at non-airport locations during normal business hours. To schedule your pick-up time or make additional arrangements, please call your location's rental office directly.</div></div></div></div>
+												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">Pick-Up Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-pick-up-service"></i></span></span><div class="tooltip-icon" data-tooltipped="" style="display: inline;"><button type="button" class="rs-tooltip-trigger pickup-tooltip" aria-label="Tooltip"><i class="rs-tooltip-trigger-icon"><svg class="rs-tooltip-trigger-icon--idle" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg><svg class="rs-tooltip-trigger-icon--active" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg></i></button></div>
+												<div class="tippy-popper modal-tooltip top" role="tooltip" aria-hidden="false" x-placement="top"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow=""></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free pick-up service is available at non-airport locations during normal business hours. To schedule your pick-up time or make additional arrangements, please call your location's rental office directly.</div></div></div></div>
 											</label>
 											<label class="form-checkbox locations-filter-modal-content__checkbox ` + afterHoursReturnChecked + `">
 												<input ` + afterHoursReturnChecked + ` type="checkbox" name="afterHoursReturn" id="afterHoursReturn" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
-												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">After-Hours Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-after-hours"></i></span></span><div class="" data-tooltipped="" style="display: inline;"><button type="button" class="rs-tooltip-trigger afterhours-tooltip" aria-label="Tooltip"><i class="rs-tooltip-trigger-icon"><svg class="rs-tooltip-trigger-icon--idle" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg><svg class="rs-tooltip-trigger-icon--active" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg></i></button></div>
-												<div class="tippy-popper" role="tooltip" aria-hidden="false" id="tippy-tooltip-5" style="left: 144px;top: 24px;" x-placement="bottom"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow="" style="left: 118px;"></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free after-hours return service allows you to return your vehicle if your location is closed during your selected return time. Please check your specific location's after-hours return policy if available.</div></div></div></div>
+												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">After-Hours Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-after-hours"></i></span></span><div class="tooltip-icon" data-tooltipped="" style="display: inline;"><button type="button" class="rs-tooltip-trigger afterhours-tooltip" aria-label="Tooltip"><i class="rs-tooltip-trigger-icon"><svg class="rs-tooltip-trigger-icon--idle" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg><svg class="rs-tooltip-trigger-icon--active" viewBox="0 0 24 24"><use xlink:href="#btn-icn-tooltip"></use></svg></i></button></div>
+												<div class="tippy-popper modal-tooltip bottom" role="tooltip" aria-hidden="false" x-placement="top"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow=""></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free after-hours return service allows you to return your vehicle if your location is closed during your selected return time. Please check your specific location's after-hours return policy if available.</div></div></div></div>
 											</label>
 										</div>
 										<div class="cta-container cta-container--align-center modal-buttons-container"><button class="cta cta--secondary cta--large cta--noMargin modal-cancel" type="button">Cancel</button><button class="cta cta--primary cta--large cta--noMargin js-modal-apply" type="button">Apply</button></div>
@@ -535,9 +571,14 @@
 
 				// Add in tooltips
 				function hideTooltipListener() {
-					var openToolTip = document.querySelector('.tippy-popper.show');
+					var openToolTip = document.querySelector('.modal-tooltip.show');
 					if(openToolTip){
 						openToolTip.classList.remove('show');
+					}
+
+					var tooltipSelected = document.querySelector('.pickup-tooltip.selected, .afterhours-tooltip.selected');
+					if(tooltipSelected){
+						tooltipSelected.classList.remove('selected');
 					}
 
 					document.documentElement.removeEventListener('click', hideTooltipListener,false);
@@ -545,19 +586,24 @@
 				var tooltips = document.querySelectorAll('.pickup-tooltip, .afterhours-tooltip');
 				tooltips.forEach(function (tooltip) {
 					tooltip.addEventListener('click', function(){
+						var tooltipSelected = tooltip.classList.contains('selected');
+
 						setTimeout(function(){
-							var openToolTip = document.querySelector('.tippy-popper.show');
-							if(openToolTip){
-								openToolTip.classList.remove('show');
-							}
+							if(!tooltipSelected){
+								tooltip.classList.add('selected');
+								var tooltipInfo = tooltip.parentElement.nextElementSibling;
+								tooltipInfo.classList.add('show');
 
-							var tooltipInfo = tooltip.parentElement.nextElementSibling;
-							tooltipInfo.classList.add('show');
-
-							setTimeout(function(){
 								document.documentElement.addEventListener('click', hideTooltipListener);
-							}, 0);
-						});
+							}else{
+								tooltip.classList.remove('selected');
+
+								var openToolTip = document.querySelector('.modal-tooltip.show');
+								if(openToolTip){
+									openToolTip.classList.remove('show');
+								}
+							}
+						}, 10);
 					});
 				});
 			},
