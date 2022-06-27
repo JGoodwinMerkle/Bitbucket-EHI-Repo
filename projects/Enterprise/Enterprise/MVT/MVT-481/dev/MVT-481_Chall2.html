@@ -1,23 +1,4 @@
 <style>
-	#signin-content{
-		width: 720px;
-    max-width: 100vw;
-	}
-	@media (min-width: 44.6875rem){
-		#signin-content .left-container{
-			width: 54%;
-		}
-	}
-	@media (min-width: 44.6875rem){
-		#signin-content .right-container{
-			width: 46%;
-			left: 54%;
-		}
-	}
-	#signin-content h4{
-		font-size: 18px;
-		line-height: 24px;
-	}
 	#signin-content .plus-icon {
 		display: inline-block;
     height: 18px;
@@ -25,7 +6,7 @@
     background-repeat: no-repeat;
 		margin-top: 5px;
     margin-right: 10px;
-		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17.513 8.32062L17.513 10.0642L10.0638 10.0638L10.0641 17.513L8.32061 17.513L8.32033 10.0632L0.871824 10.0641L0.871819 8.32056L8.32033 8.32034L8.32056 1.08018L10.0641 1.08018L10.0638 8.32095L17.513 8.32062Z' fill='%23169A5A' stroke='%23169A5A' stroke-width='0.5'/%3E%3C/svg%3E");
+  	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.4718 6.40048L13.4718 7.74165L7.74163 7.74141L7.74188 13.4715L6.4007 13.4715L6.40048 7.74093L0.670859 7.74161L0.670855 6.40043L6.40048 6.40026L6.40066 0.830906L7.74183 0.830911L7.74163 6.40073L13.4718 6.40048Z' fill='%23181918'/%3E%3C/svg%3E");
 	}
 	#signin-content .benefit{
 		font-weight: 400;
@@ -35,8 +16,15 @@
 		display: flex;
 		margin-bottom: 10px;
 	}
+	#signin-content h4{
+		font-size: 18px;
+		line-height: 24px;
+	}
 	#signin-content .disclaimers{
-		margin-top: 20px;
+		margin-top: -10px;
+	}
+	#signin-content .complete-enrollment{
+		margin-bottom: 0;
 	}
 	#signin-content .disclaimer{
 		font-weight: 400;
@@ -58,6 +46,9 @@
 		position: relative;
     margin-right: 22px;
 		top: -15px;
+	}
+	#signin-content [aria-label="Join Now"]{
+		margin: 0;
 	}
 	#signin-content .icon__container{
 		font-weight: normal;
@@ -84,7 +75,7 @@
 		account : 'EHI',
 		portfolio : 'Enterprise',
 		test : 'MVT-481',
-		creative : 'Challenger 1',
+		creative : 'Challenger 2',
 		selector : '#signin-content:not(.authenticated)',
 		observeEl : function(selector, callback) {
 			var processed = new Map();
@@ -150,10 +141,8 @@
 		chall : function() {
 			var header = document.querySelector('#signin-content h4');
 			header.insertAdjacentHTML('afterend', `
-				<div class="benefit"><div class="plus-icon"></div> <div>Earn points that never expire as long as you remain an active member.<sup>1</sup></div></div>
-				<div class="benefit"><div class="plus-icon"></div> <div>Redeem for free rental days<sup>2</sup>—with no blackout dates—at thousands of participating Enterprise locations worldwide.</div></div>
+				<div class="benefit"><div class="plus-icon"></div> <div>Earn and redeem points for free rental days<sup>1</sup>—with no blackout dates—at thousands of participating Enterprise locations worldwide.</div></div>
 				<div class="benefit"><div class="plus-icon"></div> <div>Receive special offers when you subscribe to Email Specials.</div></div>
-				<div class="benefit"><div class="plus-icon"></div> <div>Can earn and redeem globally at participating locations.</div></div>
 			`);
 
 			var moreBenefits = document.querySelector('#signin-content [aria-label="Benefits of Membership"]');
@@ -161,12 +150,15 @@
 
 			var enrollmentHeader = document.querySelector('#signin-content [aria-label="Join Now"] + h4');
 			enrollmentHeader.textContent = 'Complete your enrollment';
+			enrollmentHeader.classList.add('complete-enrollment');
+			var createPass = document.querySelector('#signin-content [aria-label="Create Password"]');
+			createPass.parentElement.insertAdjacentElement('afterbegin', createPass);
+			enrollmentHeader.parentElement.insertAdjacentElement('afterbegin', enrollmentHeader);
 
 			var leftContainer = document.querySelector('#signin-content .left-container');
 			leftContainer.insertAdjacentHTML('beforeend', `
 				<div class="disclaimers">
-					<div class="disclaimer"><sup>1</sup> <div>Points expire 36 months from last qualifying Enterprise Plus program rental or points earning event.</div></div>
-					<div class="disclaimer"><sup>2</sup> <div>Free rental day covers base rate (time and mileage) only.</div></div>
+					<div class="disclaimer"><sup>1</sup> <div>Free rental day covers base rate (time and mileage) only.</div></div>
 				</div>
 			`);
 		},
