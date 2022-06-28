@@ -15,7 +15,7 @@ Go to chrome://extensions and click **details** on the TamperMonkey card. On the
 #### 3. Click the Tampermonkey extension and "Create a new script"
 <img width="253" alt="Screen Shot 2022-01-24 at 8 41 27 AM" src="https://user-images.githubusercontent.com/7544582/150803815-dc1cc58f-e318-4506-abdd-e25c634f8c53.png">
 
-#### 4. Paste and save the [tampermonkey.js file](https://gist.github.com/chasemarlow/763bdadeeafa8882591235bfeffa5bc3#file-1-tampermonkey-js) (added below) into the UserScript.  Leave this page open so you can update your file directory.
+#### 4. Paste and save the tampermonkey.js file into the UserScript.  Leave this page open so you can update your file directory.
 <img width="1153" alt="Screen Shot 2022-01-24 at 8 44 03 AM" src="https://user-images.githubusercontent.com/7544582/150804311-65ef58f6-7705-452a-8cb4-ddb873325804.png">
 
 #### 5. NOTE: THIS IS ON THE MASTER BRANCH NOW - however, if you're working on an older branch: Add the following line into your Gruntfile.js (avoid committing this and the auto-generated currentFile.html)
