@@ -1,207 +1,174 @@
 <style>
-	.iso-icon-timer {
-		padding-left: 5px;
+    .iso-demand-message {
+        background: #FFFFFF;
+        padding:20px;
+        display: flex;
+        padding: 20px;
+        flex-direction: row;
+        margin-bottom: 10px;
+    }
+    .iso-demand-message .iso-copy {
+        display: flex;
+        margin-left: 10px;
+		flex-direction: column;
+    }
+    .iso-demand-message .iso-copy > p {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;
+        color: #213B73;
+        margin-bottom: 0px;
+    }
+    .iso-demand-message .iso-copy > p.iso-heading {
+		font-weight: 700;
 	}
+    .iso-mvt-countdown {
+        display:flex;
+    }
+    .iso-mvt-counter {
+        position : relative;
+        margin: auto;
+        height: 44px;
+        width: 44px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+    .iso-mvt-time {
+        color: #181918;
+        font-size: 12px;
+        font-weight: bold;
+        left: 0px;
+        margin: auto;
+        position: relative;
+        top: 1px;
+    }
+    .iso-mvt-countdown svg {
+        height: 44px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: rotateY(-180deg) rotateZ(-90deg);
+        width: 44px;
+        z-index: 2;
+    }
+    .iso-mvt-countdown svg circle {
+        fill: none;
+        stroke: #005DAA;
+        stroke-width: 4px;
+    }
+    .iso-mvt-countdown svg circle.iso-mvt-animation {
+        stroke-dasharray: 123px;
+        stroke-dashoffset: 0px;
+        animation: counter 1200s linear infinite forwards;
+    }
 
-	.page__content--reserve h2.rental__price-label-title {
-		margin-bottom: 5px;
-	}
+    svg.iso-background-svg circle {
+        stroke: #E9E9EA;
+        }
+    svg.iso-background-svg {
+        z-index : 1;
+    }
 
-	.iso-countdown-container {
-		align-items: center;
-		background-color: #fff;
-		display: inline-flex;
-		padding: 0;
-		max-width: 255px;
-	}
-
-	.iso-countdown-container .iso-content {
-		color: #213b73;
-		font-size: 12px;
-		text-align: right;
-		font-weight: bold;
-		line-height: 21px;
-		margin-left: 15px;
-		margin-top: 2px;
-		margin-right: 5px;
-	}
-
-	.iso-countdown-container #iso-countdown {
-		display: flex;
-		height: 60px;
-		justify-content: center;
-		position: relative;
-		width: 60px;
-	}
-
-	.iso-countdown-container #iso-countdown-number {
-		color: #181918;
-		font-size: 14px;
-		font-weight: bold;
-		left: -1px;
-		margin: auto;
-		position: relative;
-		top: 4px;
-	}
-
-	.iso-countdown-container svg {
-		height: 64px;
-		position: absolute;
-		right: 0;
-		top: 0;
-		transform: rotateY(-180deg) rotateZ(-90deg);
-		width: 64px;
-		z-index: 2;
-	}
-
-	.iso-countdown-container svg circle {
-		fill: none;
-		stroke: #8c4c9e;
-		stroke-width: 4px;
-	}
-
-	.iso-countdown-container svg.background-svg circle {
-		stroke: #E9E9EA;
-	}
-
-	.iso-countdown-container svg.background-svg {
-		z-index: 1;
-	}
-
-	.iso-countdown-container .iso-run-animation {
-		animation: countdown 1200s linear infinite forwards;
-		stroke-dasharray: 169px;
-		stroke-dashoffset: 0px;
-	}
-
-	@keyframes countdown {
-		from {
-			stroke-dashoffset: 0;
-		}
-
-		to {
-			stroke-dashoffset: 169px;
-		}
-	}
-
-	@media (max-width: 40.0625em) {
-		.iso-countdown-container {
-			margin-top: 15px;
-			margin-bottom: 0;
-		}
-
-		.review__complete-reservation__total-price {
-			text-align: right;
-		}
-	}
-
-	@media (max-width: 500px) {
-		.iso-countdown-container {
+    @keyframes counter {
+        from {
+            stroke-dashoffset: 0px;
+        }
+        to {
+            stroke-dashoffset: 123px;
+        }
+        }
+        
+     @media only screen and (min-width:768px) and (max-width:1279px) {
+		.iso-demand-message .iso-copy {
 			display: flex;
-			justify-content: center;
-			max-width: 100%;
+			margin-left: 10px;
+			flex-direction: row;
+			gap: 0.5rem;
+            align-items: center;
+   	 	}
+	}
+	@media only screen and (max-width:1279px) {
+		.iso-demand-message {
+			margin-bottom: 20px;
 		}
-
-		.iso-countdown-container .iso-content {
-			max-width: 200px;
-		}
+		
 	}
 </style>
 <script>
-	(function () {
-		var select = '';
-		if (window.innerWidth < 500) {
-			var select = '.review__section-card.theme--light.component-theme--light .button.review__form__submit-button'
-		} else {
-			var select = '.review__section-card.theme--light.component-theme--light  .review__section-card__header.review__section-card__header--border  .review__section-card__title'
-		}
-		'use strict';
-		var isoTest = {
-			account: 'EHI',
-			portfolio: 'Alamo',
-			test: 'Alamo: Add Scarcity Messaging',
-			creative: 'Challenger 1',
-			selector: select,
-			countdown: '',
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Alamo',
+		test : 'MVT-508',
+		creative : 'Challenger 2',
+		selector : 'section.review-rental-details.rental-details',
+        template: '<div class="iso-demand-message"> <div class="iso-mvt-countdown"> <div class="iso-mvt-counter"> <div class="iso-mvt-time">20:00</div><svg> <circle class="iso-mvt-circle iso-mvt-animation" r="20" cx="22" cy="22"/> </svg> <svg class="iso-background-svg"> <circle class="iso-mvt-circle-background" r="20" cx="22" cy="22"/> </svg> </div></div><div class="iso-copy"> <p class="iso-heading">Lock in Rate Before Session Expires.</p><p class="iso-subcopy">Pricing and availability subject to change.</p></div></div>',
+		countdown: '',
+        init : function() {
 
-			template: '<div class="iso-countdown-container">\
-			<div class="iso-content">Lock in your rate now before this session expires.</div>\
-						<div class="iso-icon-timer">\
-							<div id="iso-countdown">\
-								<div id="iso-countdown-number">20:00</div>\
-								<svg>\
-									<circle class="iso-circle iso-run-animation" r="27" cx="31" cy="32"></circle>\
-								</svg>\
-								<svg class="background-svg">\
-									<circle class="iso-circle-background" r="27" cx="31" cy="32"></circle>\
-								</svg>\
-							</div>\
-						</div>\
-					</div>',
-			init: function () {
+			isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
 
-				// isoTest.debug = ${user.mvtDebug};
-				isoTest.debug = true;
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-					_satellite.setVar('TargetCampaign', isoTest.test);
-					_satellite.setVar('TargetCreative', isoTest.creative);
-				}
-
-				isoTest.log('Test Running...');
-				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
-				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-
-				helpers.elementLoaded(isoTest.selector, function () {
-					isoTest.log('Test Ready!');
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+                //isoTest.addEvents();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+            window.clearInterval(isoTest.countdown);
+				isoTest.countdown = '';
+			if(/review/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
-
-					// Click event sticks around 
-					isoTest.addEvents();
 				});
+			}
+		},
+		chall : function() {
 
-				window.addEventListener('hashchange', isoTest.viewChange, false);
-
-			},
-			resetTimer: function () {
-				var allCircles = document.querySelectorAll('.iso-circle');
-				for (var i = 0; i < allCircles.length; i++) {
-					allCircles[i].classList.remove('iso-run-animation');
+			// Your code goes here
+            if (!document.querySelector('.iso-demand-message')) {
+					document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', isoTest.template);
+                 
 				}
-				var allNumbers = document.querySelectorAll('#iso-countdown-number');
-				for (var i = 0; i < allNumbers.length; i++) {
+            isoTest.resetTimer();
+			isoTest.startTimer();
+		},
+        resetTimer: function () {
+				var allCircles = document.querySelectorAll('.iso-mvt-circle');
+				for (var i = 0; i < allCircles.length; i++) {
+					allCircles[i].classList.remove('iso-mvt-animation');
+				}
+				var allNumbers = document.querySelectorAll('.iso-mvt-time');
+				
+                for (var i = 0; i < allNumbers.length; i++) {
 					allNumbers[i].innerHTML = '20:00';
 				}
+				
 			},
-			viewChange: function () {
-				window.clearInterval(isoTest.countdown);
-				isoTest.countdown = '';
-
-				if (/review/.test(location.hash)) {
-					helpers.elementLoaded(isoTest.selector, function () {
-						isoTest.chall();
-					});
-				}
-			},
-			chall: function () {
-				isoTest.log('chall()');
-
-				if (!document.querySelector('.iso-countdown-container')) {
-					document.querySelector(isoTest.selector).insertAdjacentHTML('afterend', isoTest.template);
-				}
-
-				isoTest.resetTimer();
-				isoTest.startTimer();
-			},
-			startTimer: function () {
+        startTimer: function () {
 				isoTest.log('startTimer()');
 
 				// Adding this class starts the animation
-				var allCircles = document.querySelectorAll('.iso-circle');
+				var allCircles = document.querySelectorAll('.iso-mvt-circle');
 				for (var i = 0; i < allCircles.length; i++) {
-					allCircles[i].classList.add('iso-run-animation');
+					allCircles[i].classList.add('iso-mvt-animation');
 				}
-
 				var duration = 60 * 19.99;
 				var timer = duration, minutes, seconds;
 
@@ -211,20 +178,21 @@
 
 					minutes = minutes < 10 ? "0" + minutes : minutes;
 					seconds = seconds < 10 ? "0" + seconds : seconds;
-					var allCountdownNumers = document.querySelectorAll('#iso-countdown-number');
-					for (var i = 0; i < allCountdownNumers.length; i++) {
+					var allCountdownNumers = document.querySelectorAll('.iso-mvt-time');
+                    for (var i = 0; i < allCountdownNumers.length; i++) {
 						allCountdownNumers[i].textContent = minutes + ":" + seconds;
 					}
+					
 
 					if (--timer < 0) {
 						timer = duration;
 					}
 				}, 1000);
 			},
-			addEvents: function () {
+		addEvents: function () {
 				isoTest.log('addEvents()');
 				document.addEventListener("click", function (event) {
-					if (/review/.test(location.hash) && event.target.classList.contains('btn') && event.target.parentNode.classList.contains('timeout-modal-cta')) {
+					if (/review/.test(location.hash) && event.target.classList.contains('modal-themed__footer__button--accept') && event.target.parentNode.classList.contains('modal-themed__footer--session-timeout-button')) {
 						isoTest.log('Timeout Modal Clicked');
 
 						window.clearInterval(isoTest.countdown);
@@ -237,37 +205,48 @@
 						}, 500);
 					}
 				}, false);
-			},
-			fireTag: function (element, value) {
-				var linkName = value ? value : element.innerText;
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-				s.linkTrackVars = 'eVar20';
-				s.eVar20 = linkName;
-				s.tl(this, 'o', linkName);
-			},
-			log: function (obj) {
-				if (isoTest.debug === true) {
-					console.log(obj);
-				}
-			}
-
-		}
-
-		var helpers = {
-			elementLoaded: function (ele, callback) {
-				isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-				window.clearTimeout(isoTest.eleTimer);
-				if (document.querySelectorAll(ele).length > 0) {
-					if (typeof callback === 'function') {
-						isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-						callback();
-					}
-				} else {
-					isoTest.eleTimer = window.setTimeout(function () { helpers.elementLoaded(ele, callback); }, 100);
-				}
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
 			}
 		}
+	};
 
-		isoTest.init();
-	})();
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          	if (c[p[i]] == null)
+		            	return a;
+		          	c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	};
+
+	isoTest.init();
+})();
 </script>
