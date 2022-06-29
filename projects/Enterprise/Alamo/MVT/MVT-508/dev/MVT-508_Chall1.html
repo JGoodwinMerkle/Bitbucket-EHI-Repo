@@ -8,7 +8,9 @@
         margin-bottom: 10px;
     }
     .iso-demand-message .iso-copy {
-        margin-left: 12px;
+		display: flex;
+        margin-left: 10px;
+		flex-direction: column;
     }
     .iso-demand-message .iso-copy > p {
         font-family: 'Poppins';
@@ -19,19 +21,16 @@
         color: #213B73;
         margin-bottom: 0px;
     }
-	.iso-static-copy {
-		font-weight: 600 !important;
+	.iso-demand-message .iso-copy > p.iso-heading {
+		font-weight: 700;
 	}
-	.iso-static-book {
-			display: none;
-	}
-	@media only screen and (max-width:767px){
-		.iso-static-copy {
-			display: none;
-		}
-		.iso-static-book {
-			display: inline;
-		}
+	@media only screen and (min-width:768px) and (max-width:1279px) {
+		.iso-demand-message .iso-copy {
+			display: flex;
+			margin-left: 10px;
+			flex-direction: row;
+			gap: 0.5rem;
+   	 	}
 	}
 	@media only screen and (max-width:1279px) {
 		.iso-demand-message {
@@ -49,7 +48,7 @@
 		test : 'MVT-508',
 		creative : 'Challenger 1',
 		selector : 'section.review-rental-details.rental-details',
-        template: '<div class="iso-demand-message"> <div class="iso-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M12 13.1299V9.37988" stroke="#213B73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M12 16.1299C11.86 16.1299 11.75 16.2399 11.75 16.3799C11.75 16.5199 11.86 16.6299 12 16.6299C12.14 16.6299 12.25 16.5199 12.25 16.3799C12.25 16.2399 12.14 16.1299 12 16.1299Z" stroke="#213B73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M14.03 4.1399L21.69 17.5399C22.58 19.0999 21.46 21.0399 19.66 21.0399H4.34C2.55 21.0399 1.42 19.0999 2.31 17.5399L9.97 4.1399C10.87 2.5699 13.13 2.5699 14.03 4.1399V4.1399Z" stroke="#213B73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg></div><div class="iso-copy"> <p class="iso-dynamic-copy"></p><p class="iso-static-copy">Book now!</p></div></div>',
+        template: '<div class="iso-demand-message"> <div class="iso-icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M10 2H14" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M9 10L12 13" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M20 5L17.66 7.34" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M19 4L21 6" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M3 15H8" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M8 18H5" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M8 21H7" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M4.27002 11C5.16002 7.55 8.28002 5 12 5C16.42 5 20 8.58 20 13C20 17.42 16.42 21 12 21" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </svg> </div><div class="iso-copy"> <p class="iso-heading">Book Now to Lock in Your Rate.</p><p class="iso-subcopy">Pricing and availability subject to change.</p></div></div>',
 		init : function() {
 
 			isoTest.debug = true;
@@ -83,9 +82,6 @@
 			// Your code goes here
             if (!document.querySelector('.iso-demand-message')) {
 					document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', isoTest.template);
-                    var location = document.querySelector('.location-address__name').innerHTML;
-                    var month = document.querySelector('.rental-details__value').innerText.split(' ')[1];
-                    document.querySelector('.iso-copy .iso-dynamic-copy').innerHTML = "We're experiencing <strong>high demand</strong> at "+location+" for "+month+". <strong class='iso-static-book'>Book now! </strong>";
 				}
 		},
 		fireTag : function(element, value) {
