@@ -1,4 +1,11 @@
 <style>
+	.iso-mvt-529 .reserve__header.add-ons__header .vehicle.vehicle--alt {
+        display: none ;
+    }
+
+    .iso-mvt-529 .add-ons__controls {
+        margin-top: 30px;
+    }
 </style>
 <script>
 (function() {
@@ -8,10 +15,10 @@
 		portfolio : 'National',
 		test : 'MVT-529',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '.reserve .add-ons',
 		init : function() {
 
-			isoTest.debug = ${user.mvtDebug};
+			isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -31,7 +38,7 @@
 		
 		},
 		viewChange : function(){
-			if(/viewName/.test(location.hash)){
+			if(/extras/.test(location.hash)){
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.chall();
 				});
@@ -40,6 +47,7 @@
 		chall : function() {
 
 			// Your code goes here
+			cument.querySelector(isoTest.selector).classList.add('iso-mvt-529');
 
 		},
 		fireTag : function(element, value) {
