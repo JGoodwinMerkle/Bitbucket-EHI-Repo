@@ -38,6 +38,9 @@
 		display: flex;
 		margin-bottom: 10px;
 	}
+	#signin-content .benefit.adjusted .plus-icon{
+		margin-top: 10px;
+	}
 	#signin-content .disclaimers{
 		margin-top: 20px;
 	}
@@ -65,6 +68,9 @@
 	#signin-content .icon__container{
 		font-weight: normal;
 	}
+	#signin-content [aria-label="Join Now"] i, #signin-content [aria-label="Benefits of Membership"] i{
+		top: 4px;
+	}
 	#signin-content [aria-label="Benefits of Membership"]:after{
 		content: '';
     height: 18px;
@@ -72,8 +78,8 @@
     background: #000;
     display: block;
     position: absolute;
-    top: 9px;
-    right: -6px;
+    top: 11px;
+    right: -8px;
 	}
 	#signin-content [aria-label="Join Now"] + h4{
 		margin-bottom: 0;
@@ -154,7 +160,7 @@
 			var header = document.querySelector('#signin-content h4');
 			header.insertAdjacentHTML('afterend', `
 				<div class="benefit"><div class="plus-icon"></div> <div>Earn points that never expire as long as you remain an active member.<sup>1</sup></div></div>
-				<div class="benefit"><div class="plus-icon"></div> <div>Redeem for free rental days<sup>2</sup>—with no blackout dates—at thousands of participating Enterprise locations worldwide.</div></div>
+				<div class="benefit adjusted"><div class="plus-icon"></div> <div>Redeem for free rental days<sup>2</sup>—with no blackout dates—at thousands of participating Enterprise locations worldwide.</div></div>
 				<div class="benefit"><div class="plus-icon"></div> <div>Receive special offers when you subscribe to Email Specials.</div></div>
 				<div class="benefit"><div class="plus-icon"></div> <div>Can earn and redeem globally at participating locations.</div></div>
 			`);
