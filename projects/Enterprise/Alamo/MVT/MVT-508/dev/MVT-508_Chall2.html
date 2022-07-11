@@ -96,6 +96,12 @@
 		}
 		
 	}
+	@media only screen and (max-width:375px) {
+		.iso-demand-message .iso-copy > p {
+			font-size: 12px;
+		}
+		
+	}
 </style>
 <script>
 (function() {
@@ -110,7 +116,7 @@
 		countdown: '',
         init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);

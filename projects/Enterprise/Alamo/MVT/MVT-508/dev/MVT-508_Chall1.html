@@ -42,6 +42,12 @@
 		}
 		
 	}
+	@media only screen and (max-width:375px) {
+		.iso-demand-message .iso-copy > p {
+			font-size: 12px;
+		}
+		
+	}
 </style>
 <script>
 (function() {
@@ -55,7 +61,7 @@
         template: '<div class="iso-demand-message"> <div class="iso-icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M10 2H14" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M9 10L12 13" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M20 5L17.66 7.34" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M19 4L21 6" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M3 15H8" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M8 18H5" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M8 21H7" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M4.27002 11C5.16002 7.55 8.28002 5 12 5C16.42 5 20 8.58 20 13C20 17.42 16.42 21 12 21" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </svg> </div><div class="iso-copy"> <p class="iso-heading">Book Now to Lock in Your Rate.</p><p class="iso-subcopy">Pricing and availability subject to change.</p></div></div>',
 		init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
