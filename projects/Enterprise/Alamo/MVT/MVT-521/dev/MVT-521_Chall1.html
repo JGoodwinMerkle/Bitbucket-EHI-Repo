@@ -133,6 +133,7 @@
 			padding: 0px 19px;
 			position: absolute;
 			bottom: 31px;
+			margin-bottom: 0px;
 		}
 		.iso-mvt-noThanks, .iso-mvt-signUp {
 			width: auto;
@@ -208,8 +209,27 @@
         triggerModal : function() {
             isoTest.cookieSet();
             document.body.insertAdjacentHTML('beforeend',isoTest.template);
+			isoTest.addEvents();
 
         },
+		addEvents : function() {
+			var signUpModal =  document.querySelector('.iso-mvt-modal-overlay')
+			var closeBtn = document.querySelector('.iso-mvt-modal button.iso-mvt-close');
+			var signUp = document.querySelector('.iso-mvt-modal button.iso-mvt-signUp');
+			var noThanks = document.querySelector('.iso-mvt-modal button.iso-mvt-noThanks');
+
+			signUp.addEventListener('click',function() {
+				window.location.href = 'https://www.alamo.com/en/car-rental-deals/email-specials.modal.html';
+			});
+
+			noThanks.addEventListener('click',function() {
+				signUpModal.remove();
+			});
+
+			closeBtn.addEventListener('click',function() {
+				noThanks.click();
+			});
+		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
