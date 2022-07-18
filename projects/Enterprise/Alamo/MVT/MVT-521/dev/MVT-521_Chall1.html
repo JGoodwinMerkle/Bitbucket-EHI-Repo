@@ -209,6 +209,7 @@
         triggerModal : function() {
             isoTest.cookieSet();
             document.body.insertAdjacentHTML('beforeend',isoTest.template);
+			document.body.classList.add('noscroll');
 			isoTest.addEvents();
 
         },
@@ -224,6 +225,7 @@
 
 			noThanks.addEventListener('click',function() {
 				signUpModal.remove();
+				document.body.classList.remove('noscroll');
 			});
 
 			closeBtn.addEventListener('click',function() {
