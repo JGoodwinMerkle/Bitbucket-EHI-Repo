@@ -172,10 +172,10 @@
                             </div>\
                         </div>\
                     </div>',
-
+		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
 		init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -198,7 +198,6 @@
 			if(localStorage.getItem(isoTest.cookieName) == null) { 
                 setTimeout(() => {
                     isoTest.triggerModal();
-                    console.log('isoTest.timeout')
                 }, isoTest.timeout);
             }
 
@@ -220,9 +219,13 @@
 			document.body.classList.remove('noscroll');
 		},
 		addEvents : function() {
+			var signUpModal =  document.querySelector('.iso-mvt-modal-overlay');
 			var closeBtn = document.querySelector('.iso-mvt-modal button.iso-mvt-close');
 			var signUp = document.querySelector('.iso-mvt-modal button.iso-mvt-signUp');
 			var noThanks = document.querySelector('.iso-mvt-modal button.iso-mvt-noThanks');
+			
+			isoTest.keepFocus(signUpModal);
+			closeBtn.focus();
 
 			signUp.addEventListener('click',function() {
 				window.location.href = 'https://www.alamo.com/en/car-rental-deals/email-specials.modal.html';
@@ -238,7 +241,40 @@
 				isoTest.removeModal();
 				isoTest.fireTag89(closeBtn,'Email Signup Modal Closed');
 			});
+
+			document.addEventListener('keydown', function (evt) {
+		    	evt = evt || window.event;
+				if (evt.keyCode == 27 || evt.key == 'Esc' || evt.key == 'Escape') {
+					if (document.querySelector('.iso-mvt-modal-overlay') != null) {
+						isoTest.removeModal();
+					}
+				}
+			}, false);
+
 		},
+		keepFocus : function(context) {
+      		var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+         		firstTabbableElement = allTabbableElements[0],
+          		lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+      		var keyListener = function(e) {
+    			var keyCode = e.which || e.keyCode;
+
+    			e.preventDefault = e.preventDefault || function () {
+    				e.returnValue = false;
+    			};
+    			if (keyCode === 9) {
+          			if (e.target === lastTabbableElement && !e.shiftKey) {
+    					e.preventDefault();
+    					firstTabbableElement.focus();
+          			} else if (e.target === firstTabbableElement && e.shiftKey) {
+    					e.preventDefault();
+    					lastTabbableElement.focus();
+    				}
+    			}
+    		};
+    		context.addEventListener('keydown', keyListener, false);
+    	},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
