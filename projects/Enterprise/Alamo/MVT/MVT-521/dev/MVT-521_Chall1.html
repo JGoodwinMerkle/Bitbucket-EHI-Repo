@@ -195,8 +195,7 @@
 		chall : function() {
 
 			// Your code goes here
-			if(localStorage.getItem(isoTest.cookieName) == null) {
-                
+			if(localStorage.getItem(isoTest.cookieName) == null) { 
                 setTimeout(() => {
                     isoTest.triggerModal();
                     console.log('isoTest.timeout')
@@ -210,27 +209,34 @@
         triggerModal : function() {
             isoTest.cookieSet();
             document.body.insertAdjacentHTML('beforeend',isoTest.template);
+			isoTest.fireTag89(document.querySelector('.iso-mvt-modal-overlay'),'Email Signup Modal Seen');
 			document.body.classList.add('noscroll');
 			isoTest.addEvents();
 
         },
+		removeModal : function() {
+			var signUpModal =  document.querySelector('.iso-mvt-modal-overlay');
+			signUpModal.remove();
+			document.body.classList.remove('noscroll');
+		},
 		addEvents : function() {
-			var signUpModal =  document.querySelector('.iso-mvt-modal-overlay')
 			var closeBtn = document.querySelector('.iso-mvt-modal button.iso-mvt-close');
 			var signUp = document.querySelector('.iso-mvt-modal button.iso-mvt-signUp');
 			var noThanks = document.querySelector('.iso-mvt-modal button.iso-mvt-noThanks');
 
 			signUp.addEventListener('click',function() {
 				window.location.href = 'https://www.alamo.com/en/car-rental-deals/email-specials.modal.html';
+				isoTest.fireTag(signUp,'Email Signup Button Clicked');
 			});
 
 			noThanks.addEventListener('click',function() {
-				signUpModal.remove();
-				document.body.classList.remove('noscroll');
+				isoTest.removeModal();
+				isoTest.fireTag(signUp,'No Thanks Button Clicked');
 			});
 
 			closeBtn.addEventListener('click',function() {
-				noThanks.click();
+				isoTest.removeModal();
+				isoTest.fireTag89(closeBtn,'Email Signup Modal Closed');
 			});
 		},
 		fireTag : function(element, value) {
@@ -238,6 +244,13 @@
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
 			s.linkTrackVars = 'eVar20';
 			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
 			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
