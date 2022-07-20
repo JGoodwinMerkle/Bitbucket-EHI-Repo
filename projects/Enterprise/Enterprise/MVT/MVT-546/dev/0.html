@@ -1,0 +1,255 @@
+<style>
+	.individual-extra-info {
+		display: flex;
+		align-items: center;
+		margin-top: 12px;
+    margin-bottom: 5px;
+	}
+	.individual-extra-info-svg {
+		margin-right: 12px;
+	}
+	.individual-extra-info-svg img {
+		max-width: 25px;
+	}
+	.individual-extra.selected .individual-extra-info-svg img{
+		filter: invert(100%) sepia(93%) saturate(6%) hue-rotate(215deg) brightness(150%) contrast(100%);
+	}
+	@media screen and (max-width: 768px) {
+		.individual-extra-info {
+			align-items: flex-start;
+		}
+
+		.individual-extra-info-svg img {
+			margin-top: 5px;
+		}
+	}
+</style>
+<script>
+	(function () {
+		'use strict';
+		var isoTest = {
+			account: 'EHI',
+			portfolio: 'Enterprise',
+			test: 'MVT-546',
+			creative: 'Challenger 0',
+			lang: document.URL.split('/')[3],
+			selector: '.extras-section .extras-row.equipment',
+			i18n: {
+				'accessible': {
+					'svg': `data:image/svg+xml;charset=utf8,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_60_4865)'%3E%3Cpath d='M19.7232 19.8724H16.721C16.5122 19.1223 16.2023 18.4045 15.7996 17.7383C16.0514 16.6646 17.314 10.7523 16.9462 9.58585C16.8124 9.1799 16.5124 8.8499 16.121 8.67793C15.6604 8.47715 15.1369 8.47715 14.6761 8.67793L7.21684 11.9388C6.91188 12.072 6.65224 12.2913 6.46974 12.5696C6.28725 12.8479 6.18983 13.1733 6.18944 13.5061V13.9999C4.23665 14.5721 2.55563 15.8295 1.45529 17.5411C0.354746 19.2528 -0.0913751 21.304 0.198863 23.3184C0.489102 25.3328 1.496 27.1745 3.03493 28.5059C4.57361 29.8374 6.54115 30.5692 8.57608 30.5668C10.611 30.5644 12.5769 29.828 14.1126 28.4931C15.6484 27.158 16.6511 25.3137 16.9366 23.2991H18.0168V28.8336V28.8334C18.0168 29.4455 18.3435 30.0111 18.8737 30.3172C19.4037 30.6232 20.0567 30.6232 20.5869 30.3172C21.1169 30.0111 21.4435 29.4455 21.4435 28.8334V21.5858C21.4427 21.1306 21.261 20.6944 20.9384 20.373C20.6159 20.0517 20.179 19.8718 19.7235 19.8726L19.7232 19.8724ZM6.85204 13.5063C6.85284 13.3025 6.91268 13.1031 7.0244 12.9326C7.13613 12.762 7.29496 12.6274 7.48164 12.5453L14.9414 9.27788C15.2301 9.15343 15.5573 9.15343 15.8461 9.27788C16.0674 9.37191 16.2376 9.5566 16.3133 9.78481C16.5618 10.5669 15.7467 14.9941 15.2927 16.9825C14.2114 15.5544 12.7019 14.5092 10.9845 14L13.818 12.7606C13.9755 12.6815 14.0436 12.4931 13.9731 12.3316C13.9025 12.1702 13.7178 12.0921 13.5528 12.1541L9.15201 14.1061C9.03075 14.159 8.95262 14.2786 8.95322 14.4108V19.1895C8.95322 19.5648 8.75283 19.9116 8.4278 20.0992C8.10278 20.2868 7.70239 20.2869 7.37734 20.0992C7.05231 19.9115 6.85213 19.5648 6.85213 19.1895L6.85204 13.5063ZM8.56528 29.9068C6.06759 29.9068 3.72115 28.7093 2.25566 26.6863C0.790322 24.6635 0.383796 22.0607 1.16229 19.6871C1.941 17.3138 3.81027 15.4577 6.18907 14.6959V19.1895C6.18907 19.8016 6.5157 20.3672 7.04569 20.6733C7.57588 20.9793 8.22893 20.9793 8.75892 20.6733C9.28912 20.3672 9.61575 19.8016 9.61575 19.1895V14.6263L10.0068 14.4573C12.5762 14.9374 14.7338 16.6742 15.7515 19.0818C16.7695 21.4894 16.5121 24.2473 15.0664 26.425C13.6206 28.6026 11.1789 29.9103 8.56495 29.9067L8.56528 29.9068ZM20.7804 28.8331C20.7804 29.2084 20.5802 29.5551 20.2552 29.7428C19.9302 29.9304 19.5298 29.9305 19.2048 29.7428C18.8797 29.5551 18.6793 29.2084 18.6793 28.8331V22.9678C18.6793 22.8797 18.6446 22.7954 18.5823 22.7334C18.5203 22.6711 18.436 22.6364 18.3479 22.6364H17.0025V22.1127C17.0017 21.5834 16.9518 21.0553 16.8534 20.5353H19.7232C20.0019 20.5353 20.2691 20.646 20.4662 20.843C20.6632 21.04 20.7739 21.3072 20.7739 21.5857L20.7804 28.8331Z' fill='black' stroke='black' stroke-width='0.4'/%3E%3Cpath d='M17.63 8.32032C18.385 8.32032 19.1092 8.02033 19.6432 7.48614C20.177 6.95198 20.4768 6.22773 20.4766 5.47254C20.4762 4.7173 20.176 3.99331 19.6416 3.4595C19.1073 2.92595 18.3829 2.62634 17.6278 2.62695C16.8726 2.62755 16.1486 2.92833 15.6152 3.46271C15.0816 3.99728 14.7824 4.72188 14.7832 5.47692C14.7842 6.23135 15.0844 6.95457 15.6181 7.48777C16.1519 8.02097 16.8755 8.32032 17.63 8.32032ZM17.63 3.29313C18.2091 3.29313 18.7645 3.52314 19.174 3.93264C19.5838 4.34237 19.8137 4.89782 19.8137 5.47692C19.8137 6.05623 19.5837 6.61166 19.174 7.02119C18.7645 7.43072 18.2091 7.66091 17.63 7.66091C17.0507 7.66091 16.4952 7.4307 16.0857 7.02119C15.6762 6.61168 15.446 6.05623 15.446 5.47692C15.447 4.89802 15.6772 4.34319 16.0867 3.93366C16.496 3.52434 17.0511 3.29395 17.63 3.29313Z' fill='black' stroke='black' stroke-width='0.4'/%3E%3Cpath d='M13.1418 22.0274C12.9589 22.0274 12.8104 22.1759 12.8104 22.3588C12.8072 23.1824 12.5593 23.9863 12.0987 24.669C11.6379 25.3515 10.9848 25.8821 10.2223 26.193C8.38638 27.0114 6.3682 26.6272 4.82413 25.1656V25.1658C4.69153 25.0393 4.4816 25.0445 4.35517 25.1773C4.22893 25.3099 4.2341 25.5198 4.3669 25.6463C5.41813 26.6727 6.82464 27.2541 8.29374 27.27C9.05255 27.2688 9.80244 27.1074 10.4942 26.7961C11.3765 26.4325 12.1309 25.815 12.6619 25.0222C13.1929 24.2292 13.4766 23.2965 13.4768 22.3423C13.4679 22.1645 13.3202 22.0254 13.142 22.0274L13.1418 22.0274Z' fill='black' stroke='black' stroke-width='0.4'/%3E%3Cpath d='M25.7975 29.6121C28.8344 29.6121 31.2964 27.1502 31.2964 24.1132C31.2964 21.0762 28.8344 18.6143 25.7975 18.6143C22.7605 18.6143 20.2985 21.0762 20.2985 24.1132C20.2985 27.1502 22.7605 29.6121 25.7975 29.6121Z' fill='%2307508E'/%3E%3Cpath d='M28.0148 21.8271L25.6886 25.4958C25.65 25.5572 25.5996 25.6105 25.5404 25.6524C25.4812 25.6944 25.4143 25.7243 25.3436 25.7404C25.2728 25.7565 25.1996 25.7585 25.128 25.7462C25.0565 25.734 24.9881 25.7078 24.9267 25.6692L23.3786 24.6976L23.0319 25.2418L24.5799 26.2134C24.8491 26.3804 25.1731 26.435 25.4822 26.3657C25.7913 26.2963 26.0608 26.1085 26.2329 25.8425L28.559 22.1698L28.0148 21.8271Z' fill='white'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_60_4865'%3E%3Crect width='32' height='32' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E`
+				},
+				'HCL': {
+					'name': {
+						'es': 'Control de la Mano Izquierda',
+						'pt': 'Controle da Mão Esquerda',
+						'fr': 'Commande à Gauche',
+						'de': 'Linke Handsteuerung'
+					},
+					'text': {
+						'en': `Request to add {name} to your vehicle, subject to equipment, vehicle and technician availability.`,
+						'es': 'Solicite agregar el control manual izquierdo a su vehículo, sujeto a la disponibilidad del equipo, el vehículo y el técnico',
+						'pt': 'Solicitar a adição de controle manual esquerdo ao seu veículo, sujeito à disponibilidade de equipamentos, veículos e técnicos',
+						'fr': 'Demande d\'ajout d\'une commande à main gauche à votre véhicule, sous réserve de la disponibilité de l\'équipement, du véhicule et du technicien',
+						'de': 'Fordern Sie an, Ihrem Fahrzeug eine linke Steuerung hinzuzufügen, abhängig von der Verfügbarkeit von Ausrüstung, Fahrzeug und Techniker'
+					}
+				},
+				'LFA': {
+					'name': {
+						'es': 'Acelerador de Pie Izquierdo',
+						'pt': 'Acelerador de Pé Esquerdo',
+						'fr': 'Accélérateur du Pied Gauche',
+						'de': 'Linker Fußbeschleuniger'
+					},
+					'text': {
+						'en': `Request to add {name} to your vehicle, subject to equipment, vehicle and technician availability.`,
+						'es': 'Solicite agregar el acelerador de pie izquierdo a su vehículo, sujeto a la disponibilidad del equipo, el vehículo y el técnico',
+						'pt': 'Solicitação para adicionar acelerador de pé esquerdo ao seu veículo, sujeito à disponibilidade de equipamentos, veículos e técnicos',
+						'fr': `Demande d'ajout de l'accélérateur pour pied gauche à votre véhicule, sous réserve de la disponibilité de l'équipement, du véhicule et du technicien`,
+						'de': 'Fordern Sie an, Ihrem Fahrzeug ein Gaspedal für den linken Fuß hinzuzufügen, abhängig von der Verfügbarkeit von Ausrüstung, Fahrzeug und Techniker',
+					}
+				},
+				'PDE': {
+					'name': {
+						'es': 'Extensores de Pedales',
+						'pt': 'Extensores de Pedais',
+						'fr': 'Rallonges de Pédale',
+						'de': 'Pedalverlängerungen'
+					},
+					'text': {
+						'en': `Request to add {name} to your vehicle, subject to equipment, vehicle and technician availability.`,
+						'es': 'Solicite agregar extensores de pedal a su vehículo, sujeto a la disponibilidad del equipo, el vehículo y el técnico',
+						'pt': 'Solicitar a adição de extensores de pedais ao seu veículo, sujeito à disponibilidade de equipamentos, veículos e técnicos',
+						'fr': `Demande d'ajout de rallonges de pédale à votre véhicule, sous réserve de la disponibilité de l'équipement, du véhicule et du technicien`,
+						'de': 'Fordern Sie an, Ihrem Fahrzeug Pedalverlängerungen hinzuzufügen, abhängig von der Verfügbarkeit von Ausrüstung, Fahrzeug und Techniker',
+					}
+				},
+				'SPR': {
+					'name': {
+						'es': 'Perilla Giratoria',
+						'pt': 'Botão Giratório',
+						'fr': 'Bouton Tournant',
+						'de': 'Drehknopf'
+					},
+					'text': {
+						'en': `Request to add {name} to your vehicle, subject to equipment, vehicle and technician availability.`,
+						'es': 'Solicite agregar una perilla giratoria a su vehículo, sujeto a la disponibilidad del equipo, el vehículo y el técnico',
+						'pt': 'Solicitação para adicionar o botão giratório ao seu veículo, sujeito à disponibilidade do equipamento, veículo e técnico',
+						'fr': `Demander l'ajout d'un bouton rotatif à votre véhicule, sous réserve de la disponibilité de l'équipement, du véhicule et du technicien`,
+						'de': 'Fordern Sie an, Ihrem Fahrzeug einen Drehknopf hinzuzufügen, abhängig von der Verfügbarkeit von Ausrüstung, Fahrzeug und Techniker',
+					}
+				}
+			},
+			init: function () {
+
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+					_satellite.setVar('TargetCampaign', isoTest.test);
+					_satellite.setVar('TargetCreative', isoTest.creative);
+				}
+
+				isoTest.log('Test Running...');
+				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+
+				var getReactComponent = function (node) {
+					for (var key in node) {
+						if (key.startsWith('__reactInternalInstance$')) {
+							return node[key];
+						}
+					}
+					return null;
+				}
+
+				var getState = function () {
+          var subdivisionCode = '';
+          try {
+            subdivisionCode = store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code;
+          } catch (e) {
+            subdivisionCode = '';
+          }
+
+          return subdivisionCode;
+				};
+
+				var benefitText = function(initialText, name){
+					return initialText.replace('{name}', name);
+				};
+
+				var addBenefitInfo = function(extraEl, codeName, name, code){
+
+					// Want to make sure we're reordering any accessible item
+					if(codeName === 'accessible'){
+						extraEl.parentElement.insertAdjacentElement('beforeend', extraEl);
+						
+						var nameEl = extraEl.querySelector('.individual-extra__name');
+						var extraName = isoTest.i18n[code].name && isoTest.i18n[code].name[isoTest.lang];
+						if(nameEl && extraName){
+							nameEl.textContent = extraName;
+						}
+					}
+
+					// Ensure there's actual values related to this benefit
+					if(!isoTest.i18n[codeName]) return;
+					if(!isoTest.i18n[code].text[isoTest.lang]) return;
+
+					var benefitSvg = isoTest.i18n[codeName].svg;
+					var benefitTextValue = benefitText(isoTest.i18n[code].text[isoTest.lang], name);
+					var infoHTML = `
+						<div class="individual-extra-info">
+							<div class="individual-extra-info-svg">` +
+								`<img src="` + benefitSvg + `"></img>
+							</div> 
+							<div class="individual-extra-info-text">` + benefitTextValue + `</div>
+						</div>
+					`;
+
+					// Take that info and add it to the page whereever we need it
+					var whereToAddEl = extraEl.querySelector('.add-on__name');
+					if (!extraEl.querySelector('.individual-extra-info')) {
+						whereToAddEl.insertAdjacentHTML('afterend', infoHTML);
+					}
+				};
+
+				// Add in the badge
+				isoTest.observeEl(isoTest.selector, function (extraEl) {
+					var name = getReactComponent(extraEl).return.memoizedProps.extra.name;
+					var code = getReactComponent(extraEl).return.memoizedProps.extra.code;
+					var state = getState();
+
+          console.log(name);
+          console.log(code);
+          console.log(state);
+
+					var stateMatch = state === 'CO';
+					var codeName = (code === 'HCL' || code === 'LFA' || code === 'PDE' || code === 'SPR') ? 'accessible' : code;
+
+					if (stateMatch) {
+						addBenefitInfo(extraEl, codeName, name, code);
+					}else if(codeName === 'accessible'){
+						extraEl.classList.add('hide');
+					}
+				});
+			},
+			fireTag: function (element, value) {
+				var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+				s.linkTrackVars = 'eVar20';
+				s.eVar20 = linkName;
+				s.tl(this, 'o', linkName);
+			},
+			log: function (obj) {
+				if (isoTest.debug === true) {
+					console.log(obj);
+				}
+			},
+			observeEl: function (selector, callback) {
+				var processed = new Map();
+
+				var processElement = function processElement(el) {
+					if (processed && !processed.has(el)) {
+						processed.set(el, true);
+						callback(el);
+					}
+				};
+
+				var lookForSelector = function lookForSelector() {
+					var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+					if (el.matches && el.matches(selector)) {
+						if (processElement(el)) return true;
+					}
+
+					if (el.querySelectorAll) {
+						var elements = el.querySelectorAll(selector);
+
+						if (elements.length) {
+							for (var i = 0; i < elements.length; i++) {
+								var _el = elements[i];
+								if (processElement(_el)) return true;
+							}
+						}
+					}
+				};
+				lookForSelector();
+
+				var obs = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (record) {
+						if (record && record.addedNodes && record.addedNodes.length) {
+							for (var i = 0; i < record.addedNodes.length; i++) {
+								var el = record.addedNodes[i].parentElement;
+								if (el && lookForSelector(el)) return true;
+							}
+						}
+					});
+				});
+				obs.observe(document, {
+					attributes: false,
+					childList: true,
+					subtree: true
+				});
+			},
+		};
+
+		isoTest.init();
+	})();
+</script>
