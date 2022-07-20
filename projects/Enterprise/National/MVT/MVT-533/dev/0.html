@@ -294,10 +294,6 @@
 					var stateMatch = state === 'CO';
 					var codeName = (code === 'HCL' || code === 'LFA' || code === 'PDE' || code === 'SPR') ? 'accessible' : code;
 
-          console.log(state);
-          console.log(name);
-          console.log(code);
-
 					if (stateMatch) {
 						addBenefitInfo(extraEl, codeName, name, code);
 					}else if(codeName === 'accessible'){
