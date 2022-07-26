@@ -1,0 +1,47 @@
+<style>
+	@media (max-width: 39.8em){
+		.booking-widget-hero.section{
+			height: 475px;
+			width: 100%;
+			position: absolute;
+			background-color: #585858;
+		}
+		#main .booking-widget-hero + .reservationWidget{
+			min-height: 475px;
+    	height: 100%;
+		}
+		.booking-widget-hero.section .img-container{
+			height: auto;
+		}
+		.booking-widget-hero.section .img-container img{
+			height: 475px;
+			object-fit: cover;
+		}
+		.reservationWidget.section{
+			position: relative;
+			height: 475px;
+			padding-top: 80px
+		}
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'MVT-552',
+		creative : 'Challenger 1',
+		selector : 'body',
+		init : function() {
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
