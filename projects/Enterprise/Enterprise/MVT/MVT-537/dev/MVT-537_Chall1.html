@@ -1,79 +1,202 @@
 <style>
 </style>
 <script>
-(function() {
-	'use strict';
-	var isoTest = {
-		account : 'EHI',
-		portfolio : 'Enterprise',
-		test : 'MVT-537',
-		creative : 'Challenger 1',
-		selector : 'body',
-		init : function() {
-
-			isoTest.debug = ${user.mvtDebug};
-			
-			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-			}
-
-			isoTest.log('Test Running...');
-			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
-			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});
-			
-		},
-		chall : function() {
-
-			// Your code goes here
-
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
-		},
-		log : function(obj){
-			if(isoTest.debug === true){
-				console.log(obj);
-			}
-		}
-	};
-
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
+	(function() {
+		'use strict';
+		var isoTest = {
+			account : 'EHI',
+			portfolio : 'Enterprise',
+			test : 'MVT-537',
+			creative : 'Challenger 1',
+			selector : '.two-up-three-up-container ul.two-up-three-up-container__list a > div >img',
+			loginSelector : '.header-nav-item.sign-in',
+			authSelector : '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
+			authData : {
+				0 : {
+					'Url':'https://www.enterprise.com/en/account.html#reward' ,
+					'Headline' : 'My Points Balance',
+					'Copy' : 'Manage your point balance and apply points to your next rental.'
+	
+				},
+				1 : {
+					'Url':' https://www.enterprise.com/en/account.html#reservation ' ,
+					'Headline' : 'Manage My Trips',
+					'Copy' : 'View past trip details or modify current & upcoming rentals'
+				},
+				2 : {
+					'Url':'https://www.enterprise.com/en/car-rental/mobile-app.html?icid=home.three.up-_-mobile-app-_-ENUS' ,
+					'Headline' : 'Download The Enterprise App',
+					'Copy' : 'Enterprise is bringing innovation to the rental experience. Members with the app may be eligible to try new features soon.'
 				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
-	};
-
-	isoTest.init();
-})();
-</script>
+			},
+			unAuthData : { 
+				 0 : {
+					'Url':'https://www.enterprise.com/en/car-rental/deals/email/enterprisefreesingleupgrade.html' ,
+					'Headline' : 'Free Upgrade',
+					'Copy' : 'Stretch your legs – and your travel budget – with a free upgrade at participating locations. '
+	
+				},
+				1 : {
+					'Url':' https://www.enterprise.com/en/email-specials.html?icid=home.3up1-_-email.specials-_-ENUS.NULL ' ,
+					'Headline' : 'Email Offers',
+					'Copy' : 'Don\'t miss an excuse to hit the road: our latest offers delivered to your inbox.'
+				},
+				2 : {
+					'Url':'https://www.enterprise.com/en/loyalty.html?icid=home.3up1-_-loyalty-_-ENUS.NULL' ,
+					'Headline' : 'Not an Enterprise Plus® member?',
+					'Copy' : 'You could be earning points toward free rentals. What are you waiting for?'
+				}},
+			init : function() {
+	
+				isoTest.debug = true;
+				
+				
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+					_satellite.setVar('TargetCampaign', isoTest.test);
+					_satellite.setVar('TargetCreative', isoTest.creative);
+				}
+	
+				isoTest.log('Test Running...');
+				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+	
+				//helpers.elementLoaded(isoTest.authSelector, function() {
+					
+					helpers.elementLoaded(isoTest.selector, function() {
+						isoTest.log('Test Ready!');
+						isoTest.chall();
+					   // isoTest.inFlightUpdates();
+					});
+			//	});
+				
+		
+			
+			},
+		
+			chall : function() {
+	
+				// Your code goes here
+				  //if (document.querySelector(isoTest.authSelector)) {
+							isoTest.logInUpdates();
+				  //  } 
+				
+	
+			},
+			logInUpdates: function() {
+			   if(!document.querySelector('.iso-auth-img')) {
+				
+				console.log('login');
+				var tiles = document.querySelectorAll(isoTest.selector);
+				for (var i = 0; i < tiles.length; i++) {
+					isoTest.tileUpdates(isoTest.authData,i);
+					tiles[i].insertAdjacentHTML('beforebegin','<div class="iso-auth-img iso-auth-img'+i+'"></div');
+					tiles[i].classList.add('iso-auth-hide');
+					
+				}
+			 
+			   }
+			},
+			tileUpdates: function(user,tile) {
+				var iconImg = document.querySelectorAll(isoTest.selector)[tile];
+				var embeddedUrl = document.querySelectorAll(isoTest.selector)[tile].parentElement.parentElement;
+			   
+				embeddedUrl.classList.add('iso-auth-loyalty'+tile);
+				var headline = document.querySelector('.iso-auth-loyalty'+tile+' h2.two-up-three-up-tile__heading');
+				var bodyCopy = document.querySelector('.iso-auth-loyalty'+tile+' .two-up-three-up-tile__text p');
+				embeddedUrl.setAttribute('href',user[tile].Url);
+				headline.innerText = user[tile].Headline;
+				bodyCopy.innerText = user[tile].Copy;
+			},
+	
+			logOutUpdates: function() {
+			  if(document.querySelector('.iso-auth-img')) {
+					console.log('logout');
+					var tiles = document.querySelectorAll(isoTest.selector);
+					for (var i = 0; i < tiles.length; i++) {
+						isoTest.tileUpdates(isoTest.unAuthData,i);
+						tiles[i].classList.remove('iso-auth-hide');
+					}
+					var authImg = document.querySelectorAll('.iso-auth-img');
+					for (var i = 0; i < authImg.length; i++) {
+						isoTest.tileUpdates(isoTest.unAuthData,i);
+						authImg[i].remove();
+					}
+					
+			  
+			  }
+	
+			},
+		inFlightUpdates: function() {
+				var eleUpdates = new MutationObserver(function(mutationsList) {
+					mutationsList.forEach(function(mutation){
+						//added nodes 
+						mutation.addedNodes.forEach(function (addedNode){
+							if(addedNode.classList != undefined) {
+							  //  console.log('added:', addedNode);
+							if(document.querySelector('.utility-nav-label--logged-in') ) {
+									//actions
+									isoTest.logInUpdates();
+								} else if(document.querySelector('.login-widget.active')){
+			//console.log(!document.querySelector('.field-container.logged-in'));
+							if(!document.querySelector('.field-container.logged-in')) {
+										isoTest.logOutUpdates();
+										//console.log('remove1');
+									}
+									
+								} else {
+									isoTest.logOutUpdates();
+									//console.log('remove2');
+								}
+							}
+						});
+	
+					});
+				}) ;
+				//after observe  add target element
+				eleUpdates.observe(document.querySelector(isoTest.loginSelector), {subtree: true, childList: true});
+			},
+			
+			fireTag : function(element, value) {
+				var linkName = value ? value : element.innerText;
+					linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+				s.linkTrackVars = 'eVar20';
+				s.eVar20 = linkName;
+				s.tl(this, 'o', linkName);
+			},
+			log : function(obj){
+				if(isoTest.debug === true){
+					console.log(obj);
+				}
+			}
+		};
+	
+		var helpers = {
+			elementLoaded : function (ele, callback) {
+				isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+				window.clearTimeout(isoTest.eleTimer);
+				if (document.querySelectorAll(ele).length > 0) {
+					if (typeof callback === 'function') {
+						isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+						callback();
+					}
+				} else {
+					isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+				}
+			},
+			supplant : function(str, o) {
+				return str.replace(/{([^{}]*)}/g, function(a, b) {
+					var p = b.split(/\./),
+						c = o;
+					for (var i = 0; i < p.length; i++) {
+						  if (c[p[i]] == null)
+							return a;
+						  c = c[p[i]];
+					}
+					return typeof c === 'string' || typeof c === 'number' ? c : a;
+				});
+			}
+		};
+	
+		isoTest.init();
+	})();
+	</script>
