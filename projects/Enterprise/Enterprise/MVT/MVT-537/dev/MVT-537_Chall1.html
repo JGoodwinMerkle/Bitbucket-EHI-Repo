@@ -83,13 +83,13 @@
 	
 			},
 			logInUpdates: function() {
-			   if(!document.querySelector('.iso-auth-img')) {
+			   if(!document.querySelector('.iso-auth-loyal-img')) {
 				
 				console.log('login');
 				var tiles = document.querySelectorAll(isoTest.selector);
 				for (var i = 0; i < tiles.length; i++) {
 					isoTest.tileUpdates(isoTest.authData,i);
-					tiles[i].insertAdjacentHTML('beforebegin','<div class="iso-auth-img iso-auth-img'+i+'"></div');
+					tiles[i].insertAdjacentHTML('beforebegin','<div class="iso-auth-loyal-img iso-auth-img'+i+'"></div');
 					tiles[i].classList.add('iso-auth-hide');
 					
 				}
@@ -109,14 +109,14 @@
 			},
 	
 			logOutUpdates: function() {
-			  if(document.querySelector('.iso-auth-img')) {
+			  if(document.querySelector('.iso-auth-loyal-img')) {
 					console.log('logout');
 					var tiles = document.querySelectorAll(isoTest.selector);
 					for (var i = 0; i < tiles.length; i++) {
 						isoTest.tileUpdates(isoTest.unAuthData,i);
 						tiles[i].classList.remove('iso-auth-hide');
 					}
-					var authImg = document.querySelectorAll('.iso-auth-img');
+					var authImg = document.querySelectorAll('.iso-auth-loyal-img');
 					for (var i = 0; i < authImg.length; i++) {
 						isoTest.tileUpdates(isoTest.unAuthData,i);
 						authImg[i].remove();
