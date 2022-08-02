@@ -65,20 +65,19 @@
 					helpers.elementLoaded(isoTest.selector, function() {
 						isoTest.log('Test Ready!');
 						isoTest.chall();
-					   // isoTest.inFlightUpdates();
+					    isoTest.inFlightUpdates();
 					});
 			//	});
 				
-		
 			
 			},
 		
 			chall : function() {
 	
 				// Your code goes here
-				  //if (document.querySelector(isoTest.authSelector)) {
+				  if (document.querySelector(isoTest.authSelector)) {
 							isoTest.logInUpdates();
-				  //  } 
+				    } 
 				
 	
 			},
@@ -93,21 +92,43 @@
 					tiles[i].classList.add('iso-auth-hide');
 					
 				}
-			 
+				isoTest.headerUpdate();
 			   }
 			},
+
 			tileUpdates: function(user,tile) {
 				var iconImg = document.querySelectorAll(isoTest.selector)[tile];
 				var embeddedUrl = document.querySelectorAll(isoTest.selector)[tile].parentElement.parentElement;
-			   
 				embeddedUrl.classList.add('iso-auth-loyalty'+tile);
 				var headline = document.querySelector('.iso-auth-loyalty'+tile+' h2.two-up-three-up-tile__heading');
 				var bodyCopy = document.querySelector('.iso-auth-loyalty'+tile+' .two-up-three-up-tile__text p');
 				embeddedUrl.setAttribute('href',user[tile].Url);
-				headline.innerText = user[tile].Headline;
+				if(tile == 0) {
+                console.log(isoTest.dynamicPoints());
+               	isoTest.dynamicPoints() > 0 ? headline.innerText = '['+isoTest.dynamicPoints()+'] Points Available': headline.innerText = user[tile].Headline;
+           		} else {
+                headline.innerText = user[tile].Headline;
+            	}
 				bodyCopy.innerText = user[tile].Copy;
 			},
-	
+
+			headerUpdate: function() {
+            var promoHeader = document.querySelectorAll('h2.two-up-three-up-container__title.two-up-three-up-container__title--mobile-only')[0];
+            promoHeader.classList.remove('two-up-three-up-container__title--mobile-only');
+            promoHeader.classList.add('iso-auth-loyalty-header');
+            isoTest.dynamicPromoHeader() == null ? promoHeader.innerText = 'Welcome Back': promoHeader.innerText = 'Welcome Back, '+ isoTest.dynamicPromoHeader();
+			},
+
+			dynamicPoints: function() {
+				var userPoints = ReservationStateTree.get(['session', 'reservationSession', 'profileResponse','profile','basic_profile','loyalty_data','points_to_date']);
+				return userPoints;
+			},
+
+			dynamicPromoHeader: function() {
+				var userName = ReservationStateTree.get(['User','profile','basicProfile','first_name']);
+				return userName;
+			},
+		
 			logOutUpdates: function() {
 			  if(document.querySelector('.iso-auth-loyal-img')) {
 					console.log('logout');
