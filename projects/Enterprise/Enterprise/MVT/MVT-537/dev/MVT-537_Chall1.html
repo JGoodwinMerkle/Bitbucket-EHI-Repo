@@ -69,6 +69,7 @@
 			loginSelector : '.header-nav-item.sign-in',
 			authSelector : '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
 			authData : {
+				'type': 'auth',
 				0 : {
 					'Url':'https://www.enterprise.com/en/account.html#reward' ,
 					'Headline' : 'My Points Balance',
@@ -87,6 +88,7 @@
 				}
 			},
 			unAuthData : { 
+				'type': 'unauth',
 				 0 : {
 					'Url':'https://www.enterprise.com/en/car-rental/deals/email/enterprisefreesingleupgrade.html' ,
 					'Headline' : 'Free Upgrade',
@@ -160,7 +162,8 @@
 				var headline = document.querySelector('.iso-auth-loyalty'+tile+' h2.two-up-three-up-tile__heading');
 				var bodyCopy = document.querySelector('.iso-auth-loyalty'+tile+' .two-up-three-up-tile__text p');
 				embeddedUrl.setAttribute('href',user[tile].Url);
-				if(tile == 0) {
+				console.log(user.type);
+				if(tile == 0 && user.type == 'auth') {
                 console.log(isoTest.dynamicPoints());
                	isoTest.dynamicPoints() > 0 ? headline.innerText = '['+isoTest.dynamicPoints()+'] Points Available': headline.innerText = user[tile].Headline;
            		} else {
