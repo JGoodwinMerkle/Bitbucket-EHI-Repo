@@ -149,9 +149,9 @@
 					isoTest.tileUpdates(isoTest.authData,i);
 					tiles[i].insertAdjacentHTML('beforebegin','<div class="iso-auth-loyal-img iso-auth-img'+i+'"></div');
 					tiles[i].classList.add('iso-auth-hide');
-					
+					isoTest.headerAuthUpdate();
 				}
-				isoTest.headerUpdate();
+				
 			   }
 			},
 
@@ -172,11 +172,18 @@
 				bodyCopy.innerText = user[tile].Copy;
 			},
 
-			headerUpdate: function() {
-            var promoHeader = document.querySelectorAll('h2.two-up-three-up-container__title.two-up-three-up-container__title--mobile-only')[0];
-            promoHeader.classList.remove('two-up-three-up-container__title--mobile-only');
-            promoHeader.classList.add('iso-auth-loyalty-header');
-            isoTest.dynamicPromoHeader() == null ? promoHeader.innerText = 'Welcome Back': promoHeader.innerText = 'Welcome Back, '+ isoTest.dynamicPromoHeader();
+			headerAuthUpdate: function() {
+				var promoHeader = document.querySelectorAll('h2.two-up-three-up-container__title.two-up-three-up-container__title--mobile-only')[0];
+				promoHeader.classList.remove('two-up-three-up-container__title--mobile-only');
+				promoHeader.classList.add('iso-auth-loyalty-header');
+				isoTest.dynamicPromoHeader() == null ? promoHeader.innerText = 'Welcome Back': promoHeader.innerText = 'Welcome Back, '+ isoTest.dynamicPromoHeader();
+			},
+
+			headerUnauthUpdate: function() {
+				var promoHeader = document.querySelector('h2.two-up-three-up-container__title.iso-auth-loyalty-header');
+				promoHeader.classList.add('two-up-three-up-container__title--mobile-only');
+				promoHeader.classList.remove('iso-auth-loyalty-header');
+				promoHeader.innerText = 'Promotions';
 			},
 
 			dynamicPoints: function() {
@@ -202,8 +209,7 @@
 						isoTest.tileUpdates(isoTest.unAuthData,i);
 						authImg[i].remove();
 					}
-					
-			  
+					isoTest.headerUnauthUpdate();
 			  }
 	
 			},
