@@ -109,7 +109,6 @@
 	
 				isoTest.debug = true;
 				
-				
 				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 					_satellite.setVar('TargetCampaign', isoTest.test);
 					_satellite.setVar('TargetCreative', isoTest.creative);
@@ -119,31 +118,24 @@
 				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 	
-				//helpers.elementLoaded(isoTest.authSelector, function() {
-					
-					helpers.elementLoaded(isoTest.selector, function() {
-						isoTest.log('Test Ready!');
-						isoTest.chall();
-					    isoTest.inFlightUpdates();
-					});
-			//	});
-				
+			
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.log('Test Ready!');
+					isoTest.chall();
+					isoTest.inFlightUpdates();
+				});
 			
 			},
 		
 			chall : function() {
-	
 				// Your code goes here
-				  if (document.querySelector(isoTest.authSelector)) {
-							isoTest.logInUpdates();
-				    } 
-				
-	
+				if (document.querySelector(isoTest.authSelector)) {
+						isoTest.logInUpdates();
+				} 
 			},
+			//signin changes
 			logInUpdates: function() {
 			   if(!document.querySelector('.iso-auth-loyal-img')) {
-				
-				console.log('login');
 				var tiles = document.querySelectorAll(isoTest.selector);
 				for (var i = 0; i < tiles.length; i++) {
 					isoTest.tileUpdates(isoTest.authData,i);
@@ -154,7 +146,7 @@
 				isoTest.addEventsTag();
 			   }
 			},
-
+			//Updating the tiles dynamically 
 			tileUpdates: function(user,tile) {
 				var iconImg = document.querySelectorAll(isoTest.selector)[tile];
 				var embeddedUrl = document.querySelectorAll(isoTest.selector)[tile].parentElement.parentElement;
@@ -195,7 +187,7 @@
 				var userName = ReservationStateTree.get(['User','profile','basicProfile','first_name']);
 				return userName;
 			},
-		
+			//signout updates
 			logOutUpdates: function() {
 			  if(document.querySelector('.iso-auth-loyal-img')) {
 					console.log('logout');
@@ -211,31 +203,27 @@
 					}
 					var authUrl = document.querySelectorAll('a[class*="iso-auth-loyalty"]');
 					for (var i = 0; i < authUrl.length; i++) {
-						
 						authUrl[i].classList.remove('iso-auth-loyalty'+i);
 					}
 					isoTest.headerUnauthUpdate();
 			  }
 	
 			},
-
+			//inflight changes
 			inFlightUpdates: function() {
 				var eleUpdates = new MutationObserver(function(mutationsList) {
 					mutationsList.forEach(function(mutation){
 						//added nodes 
 						mutation.addedNodes.forEach(function (addedNode){
 							if(addedNode.classList != undefined) {
-							  //  console.log('added:', addedNode);
 							if(document.querySelector('.utility-nav-label--logged-in') ) {
-									//actions
 									isoTest.logInUpdates();
 								} else if(document.querySelector('.login-widget.active')){
 							if(!document.querySelector('.field-container.logged-in')) {
-										isoTest.logOutUpdates();
-									}		
+									isoTest.logOutUpdates();
+								}		
 								} else {
 									isoTest.logOutUpdates();
-									//console.log('remove2');
 								}
 							}
 						});
