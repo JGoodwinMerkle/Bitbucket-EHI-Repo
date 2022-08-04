@@ -79,7 +79,7 @@
 				1 : {
 					'Url':' https://www.enterprise.com/en/account.html#reservation ' ,
 					'Headline' : 'Manage My Trips',
-					'Copy' : 'View past trip details or modify current & upcoming rentals'
+					'Copy' : 'View past trip details or modify current & upcoming rentals.'
 				},
 				2 : {
 					'Url':'https://www.enterprise.com/en/car-rental/mobile-app.html?icid=home.three.up-_-mobile-app-_-ENUS' ,
@@ -165,7 +165,7 @@
 				console.log(user.type);
 				if(tile == 0 && user.type == 'auth') {
                 console.log(isoTest.dynamicPoints());
-               	isoTest.dynamicPoints() > 0 ? headline.innerText = '['+isoTest.dynamicPoints()+'] Points Available': headline.innerText = user[tile].Headline;
+               	isoTest.dynamicPoints() > 0 ? headline.innerText = isoTest.dynamicPoints()+' Points Available': headline.innerText = user[tile].Headline;
            		} else {
                 headline.innerText = user[tile].Headline;
             	}
@@ -173,7 +173,7 @@
 			},
 
 			headerAuthUpdate: function() {
-				var promoHeader = document.querySelectorAll('h2.two-up-three-up-container__title.two-up-three-up-container__title--mobile-only')[0];
+				var promoHeader = document.querySelectorAll('h2.two-up-three-up-container__title')[0];
 				promoHeader.classList.remove('two-up-three-up-container__title--mobile-only');
 				promoHeader.classList.add('iso-auth-loyalty-header');
 				isoTest.dynamicPromoHeader() == null ? promoHeader.innerText = 'Welcome Back': promoHeader.innerText = 'Welcome Back, '+ isoTest.dynamicPromoHeader();
