@@ -23,12 +23,20 @@
     max-height: 64px;
 		padding: 1.5rem 1.125rem 0.3rem;
 	}
-	.stuck .locationChicklet-active  #pickupLocationTextBox,
-	.stuck .locationChicklet-active #dropoffLocationTextBox,
-	.stuck .locationChicklet-active .rs-input__fake-field{
+	.stuck .chicklet-active  #pickupLocationTextBox,
+	.stuck .chicklet-active #dropoffLocationTextBox,
+	.stuck .chicklet-active .rs-input__fake-field{
 		height: 74px;
     max-height: 74px;
 		padding: 1.75rem 1.125rem 0.3rem;
+	}
+	@media (max-width: 48em){
+		.iso-noscroll .booking-widget.booking-widget--user-friendly .age-input, 
+		.iso-noscroll .booking-widget.booking-widget--user-friendly .coupon-filters-wrapper, 
+		.iso-noscroll .booking-widget.booking-widget--user-friendly .date-time-form, 
+		.iso-noscroll .booking-widget.booking-widget--user-friendly .location-search {
+			margin-left: 1.875rem;
+		}
 	}
 	.stuck .booking-widget .location-search .locationChicklet-active .same-location-info {
 		top: 10px;
@@ -560,7 +568,7 @@
 				top: 17px;
 				z-index: 1;
 		}
-		.stuck .booking-widget .location-search .same-location-info.iso-same-return {
+		.stuck .booking-widget .location-search .locationChicklet-active .same-location-info.iso-same-return {
 			top: 5px;
 		}
 		.stuck .booking-widget .same-location-info .tooltip-info {
@@ -602,12 +610,12 @@
 		}
 		.stuck .booking-widget .same-location-info .rs-checkbox__text::before {
 			color: #169a5a;
-			content: 'DIFFERENT RETURN';
+			content: 'Different Return';
 			font-size: 14px;
 			font-weight: 700;
 		}
 		.stuck .booking-widget .same-location-info.iso-same-return .rs-checkbox__text::before {
-			content: 'SAME RETURN';
+			content: 'Same Return';
 		}
 		.stuck .booking-widget div.arrow,
 		.stuck .booking-widget--user-friendly .date-time-form:before, 
@@ -1001,6 +1009,19 @@
 				// }
 				// Add sticky collapse
 				$('#reservationWidget .inner-container #book').insertAdjacentHTML('beforeend','<button class="iso-sticky-toggle iso-arrow-down"></button>');
+
+				var locationForm = document.querySelector('.location-input-container.location-search');
+
+				var locationUpdates = new MutationObserver(function() {
+					var chickletsActive = document.querySelectorAll('.locationChicklet-active').length;
+					if(chickletsActive > 0 && !locationForm.classList.contains('chicklet-active')){
+						locationForm.classList.add('chicklet-active');
+					}else if(chickletsActive === 0 && locationForm.classList.contains('chicklet-active')){
+						locationForm.classList.remove('chicklet-active');
+					}
+				});
+
+				locationUpdates.observe(locationForm, { subtree: true, childList: true, attributes: true, });
 	
 	
 				// Handle res widget switching between book & v/m/c 
