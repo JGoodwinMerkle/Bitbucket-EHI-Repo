@@ -17,6 +17,15 @@
 	.individual-extra-info-svg img{
 		min-width: 30px;
 	}
+	@media (min-width: 40.0625em){
+		.add-on .add-on__content.accessible .add-on__actions{
+			margin-left: 0;
+			float: right;
+		}
+		.add-on .add-on__content.accessible .add-on__info{
+			width: 74.5901639345%;
+		}
+	}
 	@media screen and (max-width: 768px) {
 		.individual-extra-info {
 			align-items: flex-start;
@@ -279,6 +288,8 @@
 						if(nameEl && extraName){
 							nameEl.textContent = extraName;
 						}
+
+						extraEl.querySelector('.add-on__content').classList.add('accessible');
 					}
 
 					// Ensure there's actual values related to this benefit
