@@ -1,4 +1,12 @@
 <style>
+	.iso-collapse-cta.collapsed .iso-search-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='31' height='31' viewBox='0 0 31 31' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='31' height='31' rx='15.5' fill='%23127F4A'/%3E%3Cpath d='M17.2637 15.9577C16.616 15.3091 15.5983 15.2164 14.7656 15.6797C13.4703 16.421 11.7124 16.2357 10.6946 15.2164C9.95446 14.4751 9.6769 13.5485 9.76942 12.5292C9.86194 11.51 10.4171 10.676 11.3423 10.12C12.4525 9.47141 14.0254 9.56407 15.0431 10.398C16.0609 11.232 16.431 12.5292 16.1534 13.7338L15.9684 14.1972L17.6337 14.6605L17.7263 14.1972C18.2814 12.3439 17.6337 10.398 16.1534 9.10077C14.5805 7.8035 12.175 7.61818 10.3246 8.73012C9.02925 9.56407 8.19656 10.8613 8.01151 12.4366C7.91899 13.9192 8.3816 15.4018 9.49186 16.5137C11.0647 18.0889 13.7478 18.3669 15.6908 17.1623C15.7833 17.0697 15.9684 17.1623 16.0609 17.255L21.7972 23L23 21.7954L17.2637 15.9577Z' fill='white'/%3E%3C/svg%3E");
+        width: 31px;
+        height: 31px;
+        position: absolute;
+        right: 13px;
+        cursor: pointer;
+    }
 </style>
 <script>
 (function() {
@@ -8,7 +16,8 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-520',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '#reservationWidget .inner-container',
+        template : '<div class="iso-search-icon"></div>',
 		init : function() {
 
 			isoTest.debug = true;
@@ -31,6 +40,10 @@
 		chall : function() {
 
 			// Your code goes here
+			document.querySelector(isoTest.selector).classList.add('iso-collapse-cta');
+            var pickUplocation = document.getElementById('pickupLocationTextBox');
+            pickUplocation.setAttribute('placeholder','Search by ZIP, City or Airport');
+            pickUplocation.insertAdjacentHTML('beforebegin',isoTest.template);
 
 		},
 		fireTag : function(element, value) {
