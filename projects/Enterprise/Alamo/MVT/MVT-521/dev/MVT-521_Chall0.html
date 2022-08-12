@@ -8,7 +8,7 @@
 		portfolio : 'Alamo',
 		test : 'MVT-521',
 		creative : 'Challenger 0',
-		selector : 'body',
+		selector : 'a.button.cmp-button',
 		init : function() {
 
 			//isoTest.debug = ${user.mvtDebug};
@@ -31,6 +31,10 @@
 		chall : function() {
 
 			// Your code goes here
+			document.querySelector(isoTest.selector).addEventListener('click',function(e){
+				//console.log(e.target);
+				isoTest.fireTag(e.target,'Control Email Sign Up Clicked');
+			});
 
 		},
 		fireTag : function(element, value) {
