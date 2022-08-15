@@ -53,12 +53,12 @@
 		}
 	}
 	.modal-tooltip.bottom{
-		left: 147px;
+		left: 127px;
 		top: -105px;
 	}
 	@media(max-width: 600px){
 		.modal-tooltip.bottom{
-			left: 65px;
+			left: 45px;
 		}
 	}
 	.modal-tooltip .arrow-regular{
@@ -92,7 +92,7 @@
 			portfolio: 'Enterprise',
 			test: 'MVT-431',
 			creative: 'Challenger 1',
-			selector: '#location-search-available-filter + span + .form-checkbox__text, .filter-modal-button.locations-filter-trigger.location-search-filter__locations-filter.location-search-filter__filter-input .icon.icon-nav-carrot-down',
+			selector: '#location-search-available-filter + span + .rs-checkbox__text, #locations-filter-trigger .rs-icon',
       filtersApplied: {
         numApplied: 0,
         openSundays: false,
@@ -147,7 +147,7 @@
 
 			},
 			getTotalFilters : function(){
-				var locationFilter = document.querySelector('.btn[name="locations-filter-trigger"]:not(.service-trigger)');
+				var locationFilter = document.querySelector('#locations-filter-trigger:not(.service-trigger)');
 				var locationText = locationFilter.childNodes[0].nodeValue;
 				var totalLocation = 0;
 				
@@ -380,20 +380,21 @@
 					//We first find our elemnts
 					var locationTypeContainer = document.querySelector(".location-search-filter__container-modal-filters-block");
 					var locationCheckboxContainer = document.querySelector(".location-search-filter__container-check-filters-block");
-					var locationType = document.querySelector(".filter-modal-button.locations-filter-trigger.location-search-filter__locations-filter.location-search-filter__filter-input");
-					var locationTypeCarrot = locationType.querySelector(".icon.icon-nav-carrot-down");
-					var locationCheckbox = document.querySelector(".form-checkbox.location-search-filter__container-filter");
+					var locationType = document.querySelector(".vehicle-filters-trigger + div");
+					var locationTypeCarrot = locationType.querySelector(".rs-icon");
+					var locationCheckbox = document.querySelector("#location-search-available-filter").parentElement;
 					//Everything is cloned below
 					var modalBtn = locationType.cloneNode(true);
 					var checkbox = locationCheckbox.cloneNode(true);
-					var modalBtnLabelTxt = modalBtn.querySelector(".filter-modal-button__label-text");
-					var modalBtnTxt = modalBtn.querySelector(".btn.filter-modal-button__button.btn-input");
-					var checkboxTxt = checkbox.querySelector(".form-checkbox__text");
+					var modalBtnLabelTxt = modalBtn.querySelector(".rs-label span");
+					var modalBtnTxt = modalBtn.querySelector("#locations-filter-trigger");
+					var checkboxTxt = checkbox.querySelector(".rs-checkbox__text");
 					var carrot = locationTypeCarrot.cloneNode(true);
 					//Cloned elemnets are adjusted below (copy ect)
 					modalBtnLabelTxt.innerText = 'Services';
 					modalBtnTxt.innerText = 'All Services';
 					checkboxTxt.innerText = 'Open Sundays';
+					checkboxTxt.parentElement.removeAttribute('data-dtm-tracking');
 					modalBtn.classList.add("iso");
 					modalBtn.classList.add('service-trigger');
 					checkbox.classList.add("iso");
@@ -402,7 +403,7 @@
 					locationType.insertAdjacentElement("afterend", modalBtn);
 					modalBtn.insertAdjacentHTML('afterend', `<button class="cta cta--text cta--text-a11y cta--large location-search-filter__clear-all js-clear-all" aria-label="Clear All">Clear All</button>`);
 					locationCheckboxContainer.insertAdjacentElement("beforeend", checkbox);
-					modalBtn.querySelector(".btn.filter-modal-button__button.btn-input").insertAdjacentElement("beforeend", carrot);
+					modalBtn.querySelector(".rs-input__btn").insertAdjacentElement("beforeend", carrot);
 
 
           var openSundays = document.querySelector('.js-sunday input');
