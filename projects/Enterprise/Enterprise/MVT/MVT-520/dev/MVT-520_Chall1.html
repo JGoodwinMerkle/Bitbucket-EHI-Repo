@@ -44,7 +44,41 @@
             var pickUplocation = document.getElementById('pickupLocationTextBox');
             pickUplocation.setAttribute('placeholder','Search by ZIP, City or Airport');
             pickUplocation.insertAdjacentHTML('beforebegin',isoTest.template);
+			isoTest.addEvent();
 
+		},
+		addEvent : function() {
+			var searchIcon = document.querySelector('.iso-search-icon');
+			searchIcon.addEventListener('click',function(){
+				var inputLocation = document.querySelector('input#pickupLocationTextBox');
+				var clickEvent = new Event('click');
+				inputLocation.dispatchEvent(clickEvent);
+				var focusEvent = new Event('focus');
+				inputLocation.dispatchEvent(focusEvent);
+				inputLocation.select();
+
+			});
+		},
+		inflightChanges : function() {
+				var eleUpdates = new MutationObserver(function(mutationsList) {
+				mutationsList.forEach(function(mutation){
+			
+				//added nodes 
+				mutation.addedNodes.forEach(function (addedNode){
+					if(addedNode.classList != undefined) {
+						console.log(addedNode);
+						
+					if(addedNode.classList.contains('booking-widget') ) {
+							//actions
+							console.log("addNode");
+						}
+					}
+				});
+
+			});
+		}) ;
+		//after observe  add target element
+		eleUpdates.observe(document.querySelector('#book'), {subtree: true, childList: true});
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
