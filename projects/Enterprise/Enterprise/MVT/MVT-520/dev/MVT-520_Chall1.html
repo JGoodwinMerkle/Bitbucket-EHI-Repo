@@ -34,18 +34,18 @@
 			helpers.elementLoaded(isoTest.selector, function() {
 				isoTest.log('Test Ready!');
   				isoTest.chall();
+				isoTest.inflightChanges();  
 			});
 			
 		},
 		chall : function() {
-
 			// Your code goes here
 			document.querySelector(isoTest.selector).classList.add('iso-collapse-cta');
             var pickUplocation = document.getElementById('pickupLocationTextBox');
             pickUplocation.setAttribute('placeholder','Search by ZIP, City or Airport');
             pickUplocation.insertAdjacentHTML('beforebegin',isoTest.template);
 			isoTest.addEvent();
-
+			
 		},
 		addEvent : function() {
 			var searchIcon = document.querySelector('.iso-search-icon');
@@ -56,21 +56,19 @@
 				var focusEvent = new Event('focus');
 				inputLocation.dispatchEvent(focusEvent);
 				inputLocation.select();
-
 			});
 		},
 		inflightChanges : function() {
 				var eleUpdates = new MutationObserver(function(mutationsList) {
 				mutationsList.forEach(function(mutation){
-			
 				//added nodes 
 				mutation.addedNodes.forEach(function (addedNode){
 					if(addedNode.classList != undefined) {
-						console.log(addedNode);
-						
+						//console.log(addedNode);		
 					if(addedNode.classList.contains('booking-widget') ) {
 							//actions
 							console.log("addNode");
+							isoTest.chall();
 						}
 					}
 				});
