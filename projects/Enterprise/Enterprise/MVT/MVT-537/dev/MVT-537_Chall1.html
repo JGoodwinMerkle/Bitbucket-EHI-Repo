@@ -157,7 +157,7 @@
 				console.log(user.type);
 				if(tile == 0 && user.type == 'auth') {
                 console.log(isoTest.dynamicPoints());
-               	isoTest.dynamicPoints() > 0 ? (headline.innerText = isoTest.dynamicPoints()+' Points Available',isoTest.fireTag89(document.querySelector('.iso-auth-loyalty0'),'Points Tile_Dynamic Seen')): (headline.innerText = user[tile].Headline,isoTest.fireTag89(document.querySelector('.iso-auth-loyalty0'),'Points Tile_Static Seen'));
+               	isoTest.dynamicPoints() > 0 ? (headline.innerText = isoTest.dynamicPoints()+' Points Available'): (headline.innerText = user[tile].Headline);
            		} else {
                 headline.innerText = user[tile].Headline;
             	}
@@ -234,6 +234,7 @@
 				},
 
 			addEventsTag : function() {
+				isoTest.dynamicPoints() > 0 ? isoTest.fireTag89(document.querySelector('.iso-auth-loyalty0'),'Points Tile_Dynamic Seen'): isoTest.fireTag89(document.querySelector('.iso-auth-loyalty0'),'Points Tile_Static Seen');
 				document.querySelector('.iso-auth-loyalty0').addEventListener('click',function(){
 					isoTest.fireTag(document.querySelector('.iso-auth-loyalty0'),'Points Tile Clicked');
 				});
