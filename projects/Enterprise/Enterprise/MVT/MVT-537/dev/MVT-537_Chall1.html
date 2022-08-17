@@ -154,9 +154,9 @@
 				var headline = document.querySelector('.iso-auth-loyalty'+tile+' h2.two-up-three-up-tile__heading');
 				var bodyCopy = document.querySelector('.iso-auth-loyalty'+tile+' .two-up-three-up-tile__text p');
 				embeddedUrl.setAttribute('href',user[tile].Url);
-				console.log(user.type);
+				//console.log(user.type);
 				if(tile == 0 && user.type == 'auth') {
-                console.log(isoTest.dynamicPoints());
+                //console.log(isoTest.dynamicPoints());
                	isoTest.dynamicPoints() > 0 ? (headline.innerText = isoTest.dynamicPoints()+' Points Available'): (headline.innerText = user[tile].Headline);
            		} else {
                 headline.innerText = user[tile].Headline;
@@ -190,7 +190,7 @@
 			//signout updates
 			logOutUpdates: function() {
 			  if(document.querySelector('.iso-auth-loyal-img')) {
-					console.log('logout');
+					//console.log('logout');
 					var tiles = document.querySelectorAll(isoTest.selector);
 					for (var i = 0; i < tiles.length; i++) {
 						isoTest.tileUpdates(isoTest.unAuthData,i);
