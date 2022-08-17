@@ -45,17 +45,24 @@
             pickUplocation.setAttribute('placeholder','Search by ZIP, City or Airport');
             pickUplocation.insertAdjacentHTML('beforebegin',isoTest.template);
 			isoTest.addEvent();
+			isoTest.addTag();
 			
 		},
 		addEvent : function() {
 			var searchIcon = document.querySelector('.iso-search-icon');
-			searchIcon.addEventListener('click',function(){
+			searchIcon.addEventListener('click',function(e){
 				var inputLocation = document.querySelector('input#pickupLocationTextBox');
 				var clickEvent = new Event('click');
 				inputLocation.dispatchEvent(clickEvent);
 				var focusEvent = new Event('focus');
 				inputLocation.dispatchEvent(focusEvent);
 				inputLocation.select();
+				isoTest.fireTag(e.target, 'Magnifying Glass Click');
+			});
+		},
+		addTag : function() {
+			helpers.addEventOn('click','button#continueButton',function(e){
+				isoTest.fireTag(e.target,'Res Widget Continue CTA Click');
 			});
 		},
 		inflightChanges : function() {
@@ -93,6 +100,22 @@
 	};
 
 	var helpers = {
+		  //adding helper to add events to multiple elements
+		addEventOn: function (eventType, selector, action) {
+			document.addEventListener(eventType, function (e) {
+			var target = e.target;
+			if (target.matches(selector)) {
+				action(e);
+			} else {
+				while (target && target.parentNode !== document) {
+				target = target.parentNode;
+				if (!target) {
+					return;
+				}
+				}
+			}
+			});
+		},
 		elementLoaded : function (ele, callback) {
 			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
 			window.clearTimeout(isoTest.eleTimer);
