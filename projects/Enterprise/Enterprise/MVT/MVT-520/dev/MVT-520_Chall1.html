@@ -7,6 +7,22 @@
         right: 13px;
         cursor: pointer;
     }
+	.iso-collapse-cta.collapsed input#pickupLocationTextBox::placeholder {
+		color: #13884F !important;
+	}
+	.iso-collapse-cta.collapsed input#pickupLocationTextBox::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+		color: #13884F;
+	}
+	.iso-collapse-cta.collapsed input#pickupLocationTextBox::-moz-placeholder { /* Firefox 19+ */
+		color: #13884F;
+	}
+	.iso-collapse-cta.collapsed input#pickupLocationTextBox:-ms-input-placeholder { /* IE 10+ */
+		color: #13884F;
+	}
+	.iso-collapse-cta.collapsed input#pickupLocationTextBox:-moz-placeholder { /* Firefox 18- */
+		color: #13884F;
+	}
+
 </style>
 <script>
 (function() {
@@ -20,7 +36,7 @@
         template : '<div class="iso-search-icon"></div>',
 		init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -74,7 +90,6 @@
 						//console.log(addedNode);		
 					if(addedNode.classList.contains('booking-widget') ) {
 							//actions
-							console.log("addNode");
 							isoTest.chall();
 						}
 					}
