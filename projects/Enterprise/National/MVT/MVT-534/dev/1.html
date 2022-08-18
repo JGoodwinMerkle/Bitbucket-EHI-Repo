@@ -1,0 +1,109 @@
+<style>
+	.review .link-modify{
+    margin-left: 16px;
+	}
+	.review .modify-svg{
+		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='13' height='12' viewBox='0 0 13 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.825104 9.25V11.625H3.2001L10.0751 4.6875L7.7001 2.3125L0.825104 9.25ZM11.8876 2.875C12.1376 2.625 12.1376 2.25 11.8876 2L10.4501 0.5625C10.2001 0.3125 9.8251 0.3125 9.5751 0.5625L8.4501 1.6875L10.8251 4.0625C10.7626 4.0625 11.8876 2.875 11.8876 2.875Z' fill='%2300703C'/%3E%3C/svg%3E");
+		width: 13px;
+    height: 12px;
+    display: inline-block;
+		margin-left: 3px;
+	}
+	/* Right align modify links on mobile*/
+	/* @media(max-width: 40em){
+		.review .link-modify{
+			float: right;
+		}
+		.review .rental__vehicle-type-name{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+	} */
+</style>
+<script>
+	(function () {
+		'use strict';
+		var isoTest = {
+			account: 'EHI',
+			portfolio: 'National',
+			test: 'MVT-534',
+			creative: 'Challenger 1',
+			selector: '.review button.link-modify',
+			init: function () {
+
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+					_satellite.setVar('TargetCampaign', isoTest.test);
+					_satellite.setVar('TargetCreative', isoTest.creative);
+				}
+
+				isoTest.log('Test Running...');
+				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+				isoTest.observeEl(isoTest.selector, function (modifyEl) {
+					modifyEl.innerHTML = `Modify<span class="modify-svg"></span>`;
+				});
+			},
+			fireTag: function (element, value) {
+				var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+				s.linkTrackVars = 'eVar20';
+				s.eVar20 = linkName;
+				s.tl(this, 'o', linkName);
+			},
+			log: function (obj) {
+				if (isoTest.debug === true) {
+					console.log(obj);
+				}
+			},
+			observeEl: function (selector, callback) {
+				var processed = new Map();
+
+				var processElement = function processElement(el) {
+					if (processed && !processed.has(el)) {
+						processed.set(el, true);
+						callback(el);
+					}
+				};
+
+				var lookForSelector = function lookForSelector() {
+					var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+					if (el.matches && el.matches(selector)) {
+						if (processElement(el)) return true;
+					}
+
+					if (el.querySelectorAll) {
+						var elements = el.querySelectorAll(selector);
+
+						if (elements.length) {
+							for (var i = 0; i < elements.length; i++) {
+								var _el = elements[i];
+								if (processElement(_el)) return true;
+							}
+						}
+					}
+				};
+				lookForSelector();
+
+				var obs = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (record) {
+						if (record && record.addedNodes && record.addedNodes.length) {
+							for (var i = 0; i < record.addedNodes.length; i++) {
+								var el = record.addedNodes[i].parentElement;
+								if (el && lookForSelector(el)) return true;
+							}
+						}
+					});
+				});
+				obs.observe(document, {
+					attributes: false,
+					childList: true,
+					subtree: true
+				});
+			},
+		};
+    isoTest.init();
+	})();
+</script>
