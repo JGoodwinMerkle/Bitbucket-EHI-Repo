@@ -71,13 +71,13 @@
 			authData : {
 				'type': 'auth',
 				0 : {
-					'Url':'https://www.enterprise.com/en/account.html#reward' ,
+					'Url':'https://www.enterprise.com/en/account.html?icid=home.three.up-_-ENUS#reward' ,
 					'Headline' : 'My Points Balance',
 					'Copy' : 'Review your points balance and redeem towards your next rental.'
 	
 				},
 				1 : {
-					'Url':' https://www.enterprise.com/en/account.html#reservation ' ,
+					'Url':'https://www.enterprise.com/en/account.html?icid=home.three.up-_-ENUS#reservation' ,
 					'Headline' : 'Manage My Trips',
 					'Copy' : 'View past trip details or modify current & upcoming rentals.'
 				},
@@ -117,7 +117,10 @@
 				isoTest.log('Test Running...');
 				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-	
+				// adding 557 control 
+				helpers.elementLoaded('body', function() {
+					isoTest.organizer()
+				});
 			
 				helpers.elementLoaded(isoTest.selector, function() {
 					isoTest.log('Test Ready!');
@@ -234,7 +237,11 @@
 				},
 
 			addEventsTag : function() {
+				console.log('add event');
+				if(sessionStorage.getItem('MVT-537_TileSeen') == null) {
 				isoTest.dynamicPoints() > 0 ? isoTest.fireTag89(document.querySelector('.iso-auth-loyalty0'),'Points Tile_Dynamic Seen'): isoTest.fireTag89(document.querySelector('.iso-auth-loyalty0'),'Points Tile_Static Seen');
+				sessionStorage.setItem('MVT-537_TileSeen','true');
+				}
 				document.querySelector('.iso-auth-loyalty0').addEventListener('click',function(){
 					isoTest.fireTag(document.querySelector('.iso-auth-loyalty0'),'Points Tile Clicked');
 				});
@@ -245,7 +252,37 @@
 					isoTest.fireTag(document.querySelector('.iso-auth-loyalty2'),'App Tile Clicked');
 				});
 			},
+			//adding functions from 557
+			organizer:function () {
+				var sections = [
+					'.reservationWidget.section',
+					'.two-up-three-up.section',
+					'.threeup.section',
+					".text.parbase.section",
+					".meet-the-fleet.section",
+					".two-up-three-up.section",
+					".interrupter-tile.section"
+				];
+				// Loop through section and create a variable for each
+				for (var i = 0; i < sections.length; i++) {
+					var ele = document.querySelector(sections[i]);
+					ele.classList.add("iso_Home");
+					sections[i] = ele;
+				}
+				isoTest.sorter();
+			},
 
+			sorter: function () {
+				var ele_Array = document.querySelectorAll(".iso_Home")
+				ele_Array[0].insertAdjacentElement("afterend", ele_Array[2]) //3 =>  2
+               // console.log("step 1",ele_Array )
+				ele_Array[2].insertAdjacentElement("afterend", ele_Array[3]) // 4 => 3                               
+                              //  console.log("step 1",ele_Array )
+				ele_Array[2].insertAdjacentElement("afterend", ele_Array[4]) // 4 => 3
+                               // console.log("step 1",ele_Array )
+                                document.querySelector(".threeup.section").insertAdjacentElement("afterend",ele_Array[3] )
+				
+			},
 			fireTag : function(element, value) {
 				var linkName = value ? value : element.innerText;
 					linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
