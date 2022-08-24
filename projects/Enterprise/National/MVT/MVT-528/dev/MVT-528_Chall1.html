@@ -8,10 +8,10 @@
 		portfolio : 'National',
 		test : 'MVT-528',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '.vehicle-list .vehicle',
 		init : function() {
 
-			isoTest.debug = ${user.mvtDebug};
+			isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -31,8 +31,46 @@
 		chall : function() {
 
 			// Your code goes here
+            isoTest.vehicleCTAupdates();
+            if (window.matchMedia("(min-width: 57em)").matches ) { 
+                isoTest.desktopUpdates();
+            }
+
+            //window resize 
+            window.addEventListener('resize',function(){
+                console.log('resize');
+                    if (window.matchMedia("(min-width: 57em)").matches ) { 
+                        isoTest.desktopUpdates();
+                    }
+                });
 
 		},
+        //price updates for each vehicle 
+        vehicleCTAupdates : function () {
+            var vehicles = document.querySelectorAll('.vehicle-list >.vehicle');
+            vehicles.forEach(vehicle => {
+                var totalPrice = vehicle.querySelector('.vehicle__price-total');
+                var selectCTA = vehicle.querySelector('.vehicle__cta > button');
+                totalPrice.classList.add('iso-mvt-hide');
+                selectCTA.innerText = totalPrice.innerText;
+            });
+        },
+       
+        //desktop changes 
+        desktopUpdates : function() {
+        var vehicles = document.querySelectorAll('.vehicle-list >.vehicle');
+        vehicles.forEach(vehicle => {
+            var perDayPrice = vehicle.querySelector('.vehicle__price > p:not(.vehicle__price-total)');
+            var selectCTA = vehicle.querySelector('.vehicle__cta > button');
+            var attributes = vehicle.querySelector('.vehicle__attributes')
+            if(perDayPrice) {
+                attributes.classList.add('iso-mvt-desktop');
+                selectCTA.insertAdjacentElement('afterend',perDayPrice);
+            }  
+
+            });
+        },
+
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
