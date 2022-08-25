@@ -1,0 +1,40 @@
+<style>
+	.branch-result-list::-webkit-scrollbar {
+		-webkit-appearance: none;
+		width: 7px;
+	}
+
+	.branch-result-list::-webkit-scrollbar-thumb {
+		border-radius: 4px;
+		background-color: rgba(0, 0, 0, .5);
+		box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'National',
+		test : 'MVT-560',
+		creative : 'Challenger 1',
+		init : function() {
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
