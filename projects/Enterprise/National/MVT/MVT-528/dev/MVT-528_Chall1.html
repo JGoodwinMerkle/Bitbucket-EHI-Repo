@@ -41,7 +41,9 @@
                 console.log('resize');
                     if (window.matchMedia("(min-width: 57em)").matches ) { 
                         isoTest.desktopUpdates();
-                    }
+                    } else {
+						isoTest.removeDesktopUpdates();
+					}
                 });
 
 		},
@@ -65,10 +67,23 @@
             var attributes = vehicle.querySelector('.vehicle__attributes')
             if(perDayPrice) {
                 attributes.classList.add('iso-mvt-desktop');
+				perDayPrice.classList.add('iso-mvt-price');
                 selectCTA.insertAdjacentElement('afterend',perDayPrice);
             }  
 
             });
+        },
+		removeDesktopUpdates : function () {
+            var attributes = document.querySelectorAll('.iso-mvt-desktop');
+            if(attributes.length > 0) {
+                attributes.forEach(attribute => {
+                    attribute.classList.remove('iso-mvt-desktop');
+                    var parentContent = attribute.parentElement;
+                    var priceCompoment = parentContent.querySelector('.iso-mvt-price');
+                    parentContent.querySelector('.vehicle__price').insertAdjacentElement('afterbegin',priceCompoment);
+                    priceCompoment.classList.remove('iso-mvt-price');
+                });
+            }
         },
 
 		fireTag : function(element, value) {
