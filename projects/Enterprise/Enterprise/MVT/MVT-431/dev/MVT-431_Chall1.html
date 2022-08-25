@@ -92,7 +92,7 @@
 			portfolio: 'Enterprise',
 			test: 'MVT-431',
 			creative: 'Challenger 1',
-			selector: '#location-search-available-filter + span + .rs-checkbox__text, #locations-filter-trigger .rs-icon',
+			selector: '#location-search-available-filter + span + .rs-checkbox__text, #locations-filter-trigger:not(.rs-input__field--disabled)',
       filtersApplied: {
         numApplied: 0,
         openSundays: false,
@@ -106,7 +106,7 @@
         window.XMLHttpRequest.prototype.open = function() {
           this.addEventListener('readystatechange', function(event) {
               var matchPageHash = window.location.hash === '#location';
-              var matchRequest = this.responseURL.indexOf('prd.location.enterprise.com/enterprise-sls/search/location/enterprise/web/spatial') > -1;
+              var matchRequest = this.responseURL.indexOf('/enterprise-sls/search/location/enterprise/web/spatial') > -1;
               var matchParams = this.responseURL.indexOf('&pickupDate') > -1;
               
               if ( this.readyState === 4 && matchRequest && matchParams && matchPageHash ) {
@@ -381,7 +381,6 @@
 					var locationTypeContainer = document.querySelector(".location-search-filter__container-modal-filters-block");
 					var locationCheckboxContainer = document.querySelector(".location-search-filter__container-check-filters-block");
 					var locationType = document.querySelector(".vehicle-filters-trigger + div");
-					var locationTypeCarrot = locationType.querySelector(".rs-icon");
 					var locationCheckbox = document.querySelector("#location-search-available-filter").parentElement;
 					//Everything is cloned below
 					var modalBtn = locationType.cloneNode(true);
@@ -389,7 +388,6 @@
 					var modalBtnLabelTxt = modalBtn.querySelector(".rs-label span");
 					var modalBtnTxt = modalBtn.querySelector("#locations-filter-trigger");
 					var checkboxTxt = checkbox.querySelector(".rs-checkbox__text");
-					var carrot = locationTypeCarrot.cloneNode(true);
 					//Cloned elemnets are adjusted below (copy ect)
 					modalBtnLabelTxt.innerText = 'Services';
 					modalBtnTxt.innerText = 'All Services';
@@ -403,7 +401,6 @@
 					locationType.insertAdjacentElement("afterend", modalBtn);
 					modalBtn.insertAdjacentHTML('afterend', `<button class="cta cta--text cta--text-a11y cta--large location-search-filter__clear-all js-clear-all" aria-label="Clear All">Clear All</button>`);
 					locationCheckboxContainer.insertAdjacentElement("beforeend", checkbox);
-					modalBtn.querySelector(".rs-input__btn").insertAdjacentElement("beforeend", carrot);
 
 
           var openSundays = document.querySelector('.js-sunday input');
@@ -457,7 +454,13 @@
 				var afterHoursPickupChecked = isoTest.filtersApplied.afterHoursPickup ? 'checked' : '';
 				var afterHoursReturnChecked = isoTest.filtersApplied.afterHoursReturn ? 'checked' : '';
 
-				document.querySelector('.ReactModalPortal').insertAdjacentHTML("beforeend", `
+				var reactModalPortal = document.querySelector('.ReactModalPortal');
+				if(!reactModalPortal){
+					document.documentElement.querySelector('body').insertAdjacentHTML('beforeend', '<div class="ReactModalPortal"></div>');
+					reactModalPortal = document.querySelector('.ReactModalPortal');
+				}
+
+				reactModalPortal.insertAdjacentHTML("beforeend", `
 					<div class="ReactModal__Overlay ReactModal__Overlay--after-open modal-overlay">
 						<div class="services-modal ReactModal__Content ReactModal__Content--after-open default-modal" tabindex="-1" role="dialog" aria-labelledby="modal-heading" aria-modal="true" aria-describedby="modal-content">
 							<div class="modal-inner">
@@ -475,15 +478,31 @@
 										<h2 id="modal-heading" class="modal-content__heading">Services</h2>
 										<div class="locations-filter-modal-content__filters" id="modal-content">
 											<p>Select the service you want to search by.</p>
-											<label class="form-checkbox locations-filter-modal-content__checkbox pickup-service-filter ` + afterHoursPickupChecked + `">
-												<input ` + afterHoursPickupChecked + ` type="checkbox" name="afterHoursPickup" id="afterHoursPickup" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
-												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">Pick-Up Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-pick-up-service"></i></span></span><div class="tooltip-icon" data-tooltipped="" style="display: inline;"><button class="pickup-tooltip cta cta--text cta--large rs-tooltip-trigger rs-tooltip-trigger--a11y" aria-label="Tooltip" type="button"><i role="img" aria-hidden="true" class="rs-tooltip-trigger-icon rs-tooltip-trigger-icon--idle rs-icon"><svg viewBox="0 0 24 24"><use xlink:href="#icn-info"></use></svg></i><i role="img" aria-hidden="true" class="rs-tooltip-trigger-icon rs-tooltip-trigger-icon--active rs-icon"><svg viewBox="0 0 24 24"><use xlink:href="#icn-info"></use></svg></i></button></div>
-												<div class="tippy-popper modal-tooltip top" role="tooltip" aria-hidden="false" x-placement="top"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow=""></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free pick-up service is available at non-airport locations during normal business hours. To schedule your pick-up time or make additional arrangements, please call your location's rental office directly.</div></div></div></div>
+											<label class="rs-checkbox pickup-service-filter ` + afterHoursPickupChecked + `">
+												<input ` + afterHoursPickupChecked + ` type="checkbox" name="afterHoursPickup" id="afterHoursPickup" class="rs-checkbox__input" value="" />
+												<span class="rs-checkbox__control">
+													<i role="img" aria-hidden="true" class="rs-checkbox__control-icon-green rs-icon">
+														<svg viewBox="0 0 24 24"><use xlink:href="#btn-icn-check"></use></svg>
+													</i>
+													<div class="rs-checkbox__control-box"></div>
+												</span>
+												<span class="rs-checkbox__text">
+													<span class="locations-filter-modal-content__checkbox-text">Pick-Up Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-pick-up-service"></i></span></span><div class="tooltip-icon" data-tooltipped="" style="display: inline;"><button class="pickup-tooltip cta cta--text cta--large rs-tooltip-trigger rs-tooltip-trigger--a11y" aria-label="Tooltip" type="button"><i role="img" aria-hidden="true" class="rs-tooltip-trigger-icon rs-tooltip-trigger-icon--idle rs-icon"><svg viewBox="0 0 24 24"><use xlink:href="#icn-info"></use></svg></i><i role="img" aria-hidden="true" class="rs-tooltip-trigger-icon rs-tooltip-trigger-icon--active rs-icon"><svg viewBox="0 0 24 24"><use xlink:href="#icn-info"></use></svg></i></button></div></span>
+													<div class="tippy-popper modal-tooltip top" role="tooltip" aria-hidden="false" x-placement="top"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow=""></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free pick-up service is available at non-airport locations during normal business hours. To schedule your pick-up time or make additional arrangements, please call your location's rental office directly.</div></div></div></div>
+												</span>
 											</label>
-											<label class="form-checkbox locations-filter-modal-content__checkbox ` + afterHoursReturnChecked + `">
-												<input ` + afterHoursReturnChecked + ` type="checkbox" name="afterHoursReturn" id="afterHoursReturn" class="form-checkbox__input is-vishidden" value="" /><span class="form-checkbox__control"><i class="icon icon-check-green"></i></span>
-												<span class="form-checkbox__text"><span class="locations-filter-modal-content__checkbox-text">After-Hours Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-after-hours"></i></span></span><div class="tooltip-icon" data-tooltipped="" style="display: inline;"><button class="afterhours-tooltip cta cta--text cta--large rs-tooltip-trigger rs-tooltip-trigger--a11y" aria-label="Tooltip" type="button"><i role="img" aria-hidden="true" class="rs-tooltip-trigger-icon rs-tooltip-trigger-icon--idle rs-icon"><svg viewBox="0 0 24 24"><use xlink:href="#icn-info"></use></svg></i><i role="img" aria-hidden="true" class="rs-tooltip-trigger-icon rs-tooltip-trigger-icon--active rs-icon"><svg viewBox="0 0 24 24"><use xlink:href="#icn-info"></use></svg></i></button></div>
-												<div class="tippy-popper modal-tooltip bottom" role="tooltip" aria-hidden="false" x-placement="top"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow=""></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free after-hours return service allows you to return your vehicle if your location is closed during your selected return time. Please check your specific location's after-hours return policy if available.</div></div></div></div>
+											<label class="rs-checkbox ` + afterHoursReturnChecked + `">
+												<input ` + afterHoursReturnChecked + ` type="checkbox" name="afterHoursReturn" id="afterHoursReturn" class="rs-checkbox__input" value="" />
+												<span class="rs-checkbox__control">
+													<i role="img" aria-hidden="true" class="rs-checkbox__control-icon-green rs-icon">
+														<svg viewBox="0 0 24 24"><use xlink:href="#btn-icn-check"></use></svg>
+													</i>
+													<div class="rs-checkbox__control-box"></div>
+												</span>
+												<span class="rs-checkbox__text">
+													<span class="locations-filter-modal-content__checkbox-text">After-Hours Service Available <i class="icon-block-info__icon icon icon-block-info--size-adjustment icon-after-hours"></i></span></span><div class="tooltip-icon" data-tooltipped="" style="display: inline;"><button class="afterhours-tooltip cta cta--text cta--large rs-tooltip-trigger rs-tooltip-trigger--a11y" aria-label="Tooltip" type="button"><i role="img" aria-hidden="true" class="rs-tooltip-trigger-icon rs-tooltip-trigger-icon--idle rs-icon"><svg viewBox="0 0 24 24"><use xlink:href="#icn-info"></use></svg></i><i role="img" aria-hidden="true" class="rs-tooltip-trigger-icon rs-tooltip-trigger-icon--active rs-icon"><svg viewBox="0 0 24 24"><use xlink:href="#icn-info"></use></svg></i></button></div></span>
+													<div class="tippy-popper modal-tooltip top" role="tooltip" aria-hidden="false" x-placement="top"><div class="tippy-tooltip tippy-tooltip--regular -theme enter tippy-notransition" data-animation="shift"><div class="arrow-regular" x-arrow=""></div><div class="tippy-tooltip-content"><div class="rs-tooltip rs-tooltip--standard">Our free pick-up service is available at non-airport locations during normal business hours. To schedule your pick-up time or make additional arrangements, please call your location's rental office directly.</div></div></div></div>
+												</span>
 											</label>
 										</div>
 										<div class="cta-container cta-container--align-center modal-buttons-container"><button class="cta cta--secondary cta--large cta--noMargin modal-cancel" type="button">Cancel</button><button class="cta cta--primary cta--large cta--noMargin js-modal-apply" type="button">Apply</button></div>
@@ -501,7 +520,7 @@
 				var modalHeading = modal.querySelector('#modal-heading');
 
 				var applyModalBtn = modalContainer.querySelector(".js-modal-apply");
-				var checkboxes = modalContainer.querySelectorAll(".form-checkbox__input");
+				var checkboxes = modalContainer.querySelectorAll(".rs-checkbox__input");
 
 				isoTest.keepFocus(modal);
 
