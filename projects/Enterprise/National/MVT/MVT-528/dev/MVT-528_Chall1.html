@@ -44,8 +44,11 @@
   				isoTest.chall();
 			});*/
 			isoTest.observeEl(isoTest.selector, function(extraEl){ 
-				isoTest.chall();
-				isoTest.log('Test Ready!');
+				var countryCode = window.getState(['session','gbo','reservation','pickup_location','address','country_code']);
+				if (countryCode == 'US'){
+					isoTest.chall();
+					isoTest.log('Test Ready!');
+				}
 			});
 			
 		},
@@ -169,6 +172,8 @@
 				},
 			};
 
-	isoTest.init();
+			
+         isoTest.init();
+            
 })();
 </script>
