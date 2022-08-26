@@ -28,7 +28,7 @@
 		selector : '.vehicle-list >.vehicle',
 		init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -39,10 +39,6 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			/*helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});*/
 			isoTest.observeEl(isoTest.selector, function(extraEl){ 
 				var countryCode = window.getState(['session','gbo','reservation','pickup_location','address','country_code']);
 				if (countryCode == 'US'){
@@ -62,14 +58,13 @@
 
             //window resize 
             window.addEventListener('resize',function(){
-                console.log('resize');
+                //console.log('resize');
                     if (window.matchMedia("(min-width: 57em)").matches ) { 
                         isoTest.desktopUpdates();
                     } else {
 						isoTest.removeDesktopUpdates();
 					}
-                });
-				
+            });		
 		},
         //price updates for each vehicle 
         vehicleCTAupdates : function () {
@@ -84,18 +79,18 @@
        
         //desktop changes 
         desktopUpdates : function() {
-        var vehicles = document.querySelectorAll('.vehicle-list >.vehicle');
-        vehicles.forEach(vehicle => {
-            var perDayPrice = vehicle.querySelector('.vehicle__price > p:not(.vehicle__price-total)');
-            var selectCTA = vehicle.querySelector('.vehicle__cta > button');
-            var attributes = vehicle.querySelector('.vehicle__attributes')
-            if(perDayPrice) {
-                attributes.classList.add('iso-mvt-desktop');
-				perDayPrice.classList.add('iso-mvt-price');
-                selectCTA.insertAdjacentElement('afterend',perDayPrice);
-            }  
+			var vehicles = document.querySelectorAll('.vehicle-list >.vehicle');
+			vehicles.forEach(vehicle => {
+				var perDayPrice = vehicle.querySelector('.vehicle__price > p:not(.vehicle__price-total)');
+				var selectCTA = vehicle.querySelector('.vehicle__cta > button');
+				var attributes = vehicle.querySelector('.vehicle__attributes')
+				if(perDayPrice) {
+					attributes.classList.add('iso-mvt-desktop');
+					perDayPrice.classList.add('iso-mvt-price');
+					selectCTA.insertAdjacentElement('afterend',perDayPrice);
+				}  
 
-            });
+				});
         },
 		removeDesktopUpdates : function () {
             var attributes = document.querySelectorAll('.iso-mvt-desktop');
@@ -126,7 +121,6 @@
 
 		observeEl: function(selector, callback) {
 					var processed = new Map();
-				
 					var processElement = function processElement(el) {
 						if (processed && !processed.has(el)) {
 							processed.set(el, true);
@@ -171,9 +165,7 @@
 					});
 				},
 			};
-
-			
-         isoTest.init();
-            
+	
+         isoTest.init();          
 })();
 </script>
