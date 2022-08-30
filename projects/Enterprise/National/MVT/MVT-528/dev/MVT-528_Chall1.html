@@ -40,7 +40,7 @@
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
 			isoTest.observeEl(isoTest.selector, function(extraEl){ 
-				var countryCode = window.getState(['session','gbo','reservation','pickup_location','address','country_code']);
+				var countryCode = '' || window.getState(['session','gbo','reservation','pickup_location','address','country_code']);
 				if (countryCode == 'US'){
 					isoTest.chall();
 					isoTest.log('Test Ready!');
