@@ -29,39 +29,10 @@
 
 			},
 			chall: function () {
-				isoTest.organizer()
+				//isoTest.organizer()
 			},
 
-			organizer:function () {
-				var sections = [
-					'.reservationWidget.section',
-					'.two-up-three-up.section',
-					'.threeup.section',
-					".text.parbase.section",
-					".meet-the-fleet.section",
-					".two-up-three-up.section",
-					".interrupter-tile.section"
-				];
-				// Loop through section and create a variable for each
-				for (var i = 0; i < sections.length; i++) {
-					var ele = document.querySelector(sections[i]);
-					ele.classList.add("iso_Home");
-					sections[i] = ele;
-				}
-				isoTest.sorter();
-			},
-
-			sorter: function () {
-				var ele_Array = document.querySelectorAll(".iso_Home")
-				ele_Array[0].insertAdjacentElement("afterend", ele_Array[2]) //3 =>  2
-               // console.log("step 1",ele_Array )
-				ele_Array[2].insertAdjacentElement("afterend", ele_Array[3]) // 4 => 3                               
-                              //  console.log("step 1",ele_Array )
-				ele_Array[2].insertAdjacentElement("afterend", ele_Array[4]) // 4 => 3
-                              //  console.log("step 1",ele_Array )
-                                document.querySelector(".threeup.section").insertAdjacentElement("afterend",ele_Array[3] )
-				
-			},
+		
 			
 			fireTag: function (element, value) {
 				var linkName = value ? value : element.innerText;
