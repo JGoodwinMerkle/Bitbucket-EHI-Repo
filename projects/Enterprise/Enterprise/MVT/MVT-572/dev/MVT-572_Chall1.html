@@ -4,7 +4,7 @@
 		border: 1px solid #127F4A;
 		border-radius: 60px;
 		color: #127F4A;
-		height: 33px;
+		height: 44px;
 		width: 109px;
 	}
 </style>
@@ -19,7 +19,7 @@
 		selector : '.review-section',
 		init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -30,10 +30,6 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			/*helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});*/
 			isoTest.observeEl(isoTest.selector, function(){ 
              
                   isoTest.chall();
