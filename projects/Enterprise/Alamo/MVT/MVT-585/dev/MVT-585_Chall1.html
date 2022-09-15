@@ -1,5 +1,4 @@
 <style>
-
 </style>
 <script>
 (function() {
@@ -12,7 +11,7 @@
 		selector : '.extras-header__row button',
 		init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -24,15 +23,13 @@
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
 			isoTest.observeEl(isoTest.selector, function(){ 
-             
                   isoTest.chall();
                   isoTest.log('Test Ready!');
 				 
-          });
+            });
 			
 		},
 		chall : function() {
-
 			// Your code goes here
 			document.querySelector(isoTest.selector).remove();
 
