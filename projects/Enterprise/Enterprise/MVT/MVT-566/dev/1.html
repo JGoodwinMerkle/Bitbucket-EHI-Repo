@@ -104,6 +104,15 @@
 			
 		},
 		chall : function() {
+      // When filters are added - check if they're checked
+      isoTest.observeEl('.vehicle-filter .vehicle-filter__filter', (parentEl)=>{
+        var checkedInputs = parentEl.querySelectorAll('.vehicle-filter__filter-list input:checked');
+        if(checkedInputs.length > 0){
+          parentEl.classList.add('checked');
+        }else{
+          parentEl.classList.remove('checked');
+        }
+      });
       document.addEventListener('click', e =>{
         var titleClicked = e.target.classList.contains('vehicle-filter__title');
         if(titleClicked){
@@ -141,7 +150,53 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
-		}
+		},
+    observeEl: function(selector, callback) {
+      var processed = new Map();
+    
+      var processElement = function processElement(el) {
+        if (processed && !processed.has(el)) {
+          processed.set(el, true);
+          callback(el);
+        }
+      };
+    
+      var lookForSelector = function lookForSelector() {
+        var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+    
+        if (el.matches && el.matches(selector)) {
+          if (processElement(el)) return true;
+        }
+    
+        if (el.querySelectorAll) {
+          var elements = el.querySelectorAll(selector);
+    
+          if (elements.length) {
+            for (var i = 0; i < elements.length; i++) {
+              var _el = elements[i];
+              if (processElement(_el)) return true;
+            }
+          }
+        }
+      };
+      lookForSelector();
+    
+      var obs = new MutationObserver(function (mutationsList) {
+        mutationsList.forEach(function (record) {
+          if (record && record.addedNodes && record.addedNodes.length) {
+            for (var i = 0; i < record.addedNodes.length; i++) {
+              var el = record.addedNodes[i].parentElement;
+              if (el && lookForSelector(el)) return true;
+            }
+          }
+        });
+      });
+      obs.observe(document, {
+        attributes: false,
+        childList: true,
+        subtree: true
+      });
+    },
 	};
 
 	var helpers = {
