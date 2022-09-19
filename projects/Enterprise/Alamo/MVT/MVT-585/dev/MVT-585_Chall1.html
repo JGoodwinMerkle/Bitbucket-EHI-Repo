@@ -24,7 +24,8 @@
 
 			helpers.elementLoaded(isoTest.selector, function() {
 				isoTest.log('Test Ready!');
-				 isoTest.inFlightUpdates();
+				isoTest.chall();
+				isoTest.inFlightUpdates();
 			});
             window.addEventListener("hashchange", isoTest.viewChange, false);
 
@@ -45,7 +46,7 @@
 			}
 		},
 		inFlightUpdates: function() {
-           console.log( document.querySelector(isoTest.selector));
+           //console.log( document.querySelector(isoTest.selector));
 			var mainObserver = new MutationObserver(function (mutations) {
 			mutations.forEach(function (mutation) {
                             isoTest.chall(); 
