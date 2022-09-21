@@ -1,4 +1,7 @@
 <style>
+	.mvt-hide {
+		display: none!important;
+	}
 </style>
 <script>
 (function() {
@@ -41,8 +44,8 @@
 		chall : function() {
 
 			// Your code goes here
-			if(!document.querySelector(isoTest.selector).classList.contains('hide')){
-							document.querySelector(isoTest.selector).classList.add('hide');
+			if(!document.querySelector(isoTest.selector).classList.contains('mvt-hide')){
+							document.querySelector(isoTest.selector).classList.add('mvt-hide');
 			}
 		},
 		inFlightUpdates: function() {
