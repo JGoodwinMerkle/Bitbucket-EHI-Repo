@@ -32,12 +32,11 @@
           test: "MVT-530",
           creative: "Challenger 1",
           selector: ".vehicle-select",
-		  //template : '<div class="mvt-urgency-banner"><div class="mvt-icon"></div> <div class="mvt-banner-copy">+''+</div></div>',
 		  banner: {
-			 'GB' : 'We get lots of bookings for this destination. <strong>Prices are likely to change</strong> - book now to secure this price.',
-			 'FR' : '<strong>Les prix sont susceptibles de changer</strong> - réservez dès maintenant pour obtenir ce tarif. Profitez !',
-			 'DE' : '<strong>Unsere Preise werden sich voraussichtlich ändern</strong> - buchen Sie jetzt, um diesen Preis zu sichern.',
-			 'ES' : '<strong>Los precios pueden cambiar</strong>; reserve ahora para asegurar este precio.'
+			 'en' : 'We get lots of bookings for this destination. <strong>Prices are likely to change</strong> - book now to secure this price.',
+			 'fr' : '<strong>Les prix sont susceptibles de changer</strong> - réservez dès maintenant pour obtenir ce tarif. Profitez !',
+			 'de' : '<strong>Unsere Preise werden sich voraussichtlich ändern</strong> - buchen Sie jetzt, um diesen Preis zu sichern.',
+			 'es' : '<strong>Los precios pueden cambiar</strong>; reserve ahora para asegurar este precio.'
 		  },
 			init: function () {
 
@@ -61,12 +60,13 @@
 			},
 			chall: function () {
 				 // Your code goes here
+				 var lang = document.URL.split('/')[3];
                  var pickUpLocationCountry = null || ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'address','country_code']);
             var reservationCountry = null || ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest','country_of_residence_code']);
             console.log(pickUpLocationCountry,reservationCountry);
             if(pickUpLocationCountry == reservationCountry) {
                 console.log('test will run');
-				var template =  '<div class="mvt-urgency-banner"><div class="mvt-icon"></div> <div class="mvt-banner-copy">'+isoTest.banner[reservationCountry]+'</div></div>' ;
+				var template =  '<div class="mvt-urgency-banner"><div class="mvt-icon"></div> <div class="mvt-banner-copy">'+isoTest.banner[lang]+'</div></div>' ;
 				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',template)
             }
 			},
