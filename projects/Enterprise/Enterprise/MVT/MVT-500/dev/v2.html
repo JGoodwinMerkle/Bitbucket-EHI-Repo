@@ -71,6 +71,7 @@
 	.stuck .booking-widget .booking-submit .cta{
 		max-width: 200px;
     max-height: 54px;
+		white-space: nowrap;
 	}
 	.stuck #reservationWidget .booking-widget .booking-submit .cta{
 		background-color: #006639;
@@ -110,6 +111,11 @@
 	}
 	/* Mobile Only */
 	@media (max-width: 599px) {
+		.container .overlap-background-image .cmp-container .reservationWidget.style-modal{
+			z-index: 2;
+			overflow: auto;
+    	position: fixed;
+		}
 		.style-modal {
 			overflow: auto;
 			position: fixed;
@@ -288,7 +294,7 @@
 			height: 1px;
 			padding: 0.8rem;
 			width: 100%;
-			position: sticky;
+			position: fixed;
 			top: -1px;
 			visibility: hidden;
 			z-index: 1;
@@ -345,6 +351,10 @@
 		}
 		.stuck .home-page .parbase, .home-page .interrupter-tile {
 			background: #ffffff;
+		}
+		/* 601 adjustments */
+		.stuck .container .overlap-background-image .cmp-container .reservationWidget .booking-widget{
+			margin-bottom: 0;
 		}
 		/* Fix Background Size */
 		/* .stuck div.booking-widget-hero .img-container {
@@ -415,9 +425,10 @@
 		}
 		.stuck #main .reservationWidget {
 			pointer-events: none;
-			position: sticky;
+			position: fixed;
 			top: -1px;
 			z-index: 1;
+			border-bottom: 0;
 		}
 		.stuck .reservationWidget-Existing {
 			position: relative;
@@ -898,6 +909,17 @@
 			margin-top: 0;
 		}
 	}
+	@media (max-width: 980px) {
+		.stuck .booking-widget.booking-widget--user-friendly .coupon-filters-wrapper{
+			flex: 0 0 100%;
+		}
+		.stuck .booking-widget.booking-widget--user-friendly .coupon-filters-wrapper .coupon-field-wrapper{
+			max-width: 100%;
+		}
+		.stuck #reservationWidget .booking-widget .booking-submit{
+			margin: 15px 0 0 0;
+		}
+	}
 	/* Desktop */
 	@media (min-width: 61.25em) {
 		.stuck .reservationWidget section.cf.reserve-widget-band.colors {
@@ -1056,7 +1078,7 @@
 				document.addEventListener('scroll', function(e) {
 						// Mobile only
 						if (window.matchMedia("(max-width: 599px)").matches) {
-								var elDistanceTop = $('.iso-res-widget').getBoundingClientRect().top;
+								var elDistanceTop = $('.teaser-style-3').getBoundingClientRect().top;
 								if (elDistanceTop < 0) {
 									$('.iso-res-widget').setAttribute('stuck','');
 									if (isoTest.stickySeenCounter < 1) {
