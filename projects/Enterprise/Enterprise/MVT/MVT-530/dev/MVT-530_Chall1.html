@@ -100,7 +100,7 @@
 		  },
 			init: function () {
 
-                isoTest.debug = true;
+                //isoTest.debug = true;
 
 
 				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
@@ -126,12 +126,12 @@
 				var lang = document.URL.split('/')[3];
 				var pickUpLocationCountry = null || ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'address','country_code']);
 				var reservationCountry = null || ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest','country_of_residence_code']);
-				console.log(pickUpLocationCountry,reservationCountry);
+				//console.log(pickUpLocationCountry,reservationCountry);
 					if(pickUpLocationCountry == reservationCountry) {
-						console.log('test will run');
+						//console.log('test will run');
 						var template =  '<div class="mvt-urgency-banner"><div class="mvt-icon"></div> <div class="mvt-banner-copy">'+isoTest.banner[lang]+'</div></div>' ;
 						if(!document.querySelector('.mvt-urgency-banner')) {
-							console.log('banner add');
+							//console.log('banner add');
 							if(document.querySelector(isoTest.selector)){
 							document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',template);
 							}
@@ -139,7 +139,7 @@
                     }else{
 						if(document.querySelector('.mvt-urgency-banner')) {
 							document.querySelector('.mvt-urgency-banner').remove();
-							console.log('banner remove');
+							//console.log('banner remove');
 						}
 					}
 			},
