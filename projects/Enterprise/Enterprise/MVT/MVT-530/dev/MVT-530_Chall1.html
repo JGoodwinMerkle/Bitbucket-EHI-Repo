@@ -51,38 +51,53 @@
 				isoTest.log('Test Running...');
 				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-                isoTest.waitFor( function () {
-                    isoTest.observeEl(isoTest.selector, function () {
-                        isoTest.log('Test Ready new!');
-                        isoTest.chall();
-                    });
-                });
 
-
+				helpers.elementLoaded(isoTest.selector, function () {
+					isoTest.log('Test Ready !');
+					isoTest.chall();
+                    isoTest.inFlightChnage();
+				});
+			
 			},
-            waitFor : function (callback) {
-                var waitForCheck = setInterval(function () {
-                    // Define what you're waiting for here
-                    if (typeof window.ReservationStateTree.data.session !== 'undefined' && typeof window.ReservationStateTree.data.session.reservationSession !== 'undefined') {
-                    clearInterval(waitForCheck);
-                    callback();
-                    }
-                }, 100);
-            },
+		
 			chall: function () {
 				 // Your code goes here
-				 var lang = document.URL.split('/')[3];
-                 var pickUpLocationCountry = null || ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'address','country_code']);
+                
+				var lang = document.URL.split('/')[3];
+				var pickUpLocationCountry = null || ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'address','country_code']);
 				var reservationCountry = null || ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest','country_of_residence_code']);
 				console.log(pickUpLocationCountry,reservationCountry);
-				if(pickUpLocationCountry == reservationCountry) {
-                console.log('test will run');
-				var template =  '<div class="mvt-urgency-banner"><div class="mvt-icon"></div> <div class="mvt-banner-copy">'+isoTest.banner[lang]+'</div></div>' ;
-				document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',template)
-            }
+					if(pickUpLocationCountry == reservationCountry) {
+						console.log('test will run');
+						var template =  '<div class="mvt-urgency-banner"><div class="mvt-icon"></div> <div class="mvt-banner-copy">'+isoTest.banner[lang]+'</div></div>' ;
+						if(!document.querySelector('.mvt-urgency-banner')) {
+							console.log('banner add');
+							if(document.querySelector(isoTest.selector)){
+							document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin',template);
+							}
+					    }
+                    }else{
+						if(document.querySelector('.mvt-urgency-banner')) {
+							document.querySelector('.mvt-urgency-banner').remove();
+							console.log('banner remove');
+						}
+					}
 			},
 
-		
+            inFlightChnage: function () { 
+               var onPageUpdate = new MutationObserver(function(mutationsList) {
+                mutationsList.forEach(function(mutation) {
+                    mutation.removedNodes.forEach(function(removedNode) {
+                        if (removedNode.classList !== undefined) {
+                            if(removedNode.classList.contains('spinner-container')) {
+                                isoTest.chall();
+                            }
+                        }
+                    });
+                });
+            });
+            onPageUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
+           },
 			
 			fireTag: function (element, value) {
 				var linkName = value ? value : element.innerText;
@@ -96,53 +111,34 @@
 					console.log(obj);
 				}
 			},
-
-			observeEl: function(selector, callback) {
-						var processed = new Map();
-						var processElement = function processElement(el) {
-							if (processed && !processed.has(el)) {
-								processed.set(el, true);
-								callback(el);
-							}
-						};
+		};
+		var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          	if (c[p[i]] == null)
+		            	return a;
+		          	c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	};
 					
-						var lookForSelector = function lookForSelector() {
-							var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
-					
-							if (el.matches && el.matches(selector)) {
-								if (processElement(el)) return true;
-							}
-					
-							if (el.querySelectorAll) {
-								var elements = el.querySelectorAll(selector);
-					
-								if (elements.length) {
-									for (var i = 0; i < elements.length; i++) {
-										var _el = elements[i];
-										if (processElement(_el)) return true;
-									}
-								}
-							}
-						};
-						lookForSelector();
-					
-						var obs = new MutationObserver(function (mutationsList) {
-							mutationsList.forEach(function (record) {
-								if (record && record.addedNodes && record.addedNodes.length) {
-									for (var i = 0; i < record.addedNodes.length; i++) {
-										var el = record.addedNodes[i].parentElement;
-										if (el && lookForSelector(el)) return true;
-									}
-								}
-							});
-						});
-						obs.observe(document, {
-							attributes: false,
-							childList: true,
-							subtree: true
-						});
-					},
-					};
 				
 		isoTest.init();
 	})();
