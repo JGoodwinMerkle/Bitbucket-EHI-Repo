@@ -14,7 +14,6 @@
   }
   .vehicle-filter__title{
     width: 100%;
-    border-bottom: 1px solid #C3C3C3;
     padding-bottom: 1rem;
     position: relative;
     cursor: pointer;
@@ -55,8 +54,10 @@
   .vehicle-filter__filter-header + .vehicle-filter__accordion-content{
     max-height: 500px;
     transition: max-height .5s, padding .5s;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #c3c3c3;
   }
-  .vehicle-filter__filter:last-of-type .vehicle-filter__filter-header.collapsed .vehicle-filter__title{
+  .vehicle-filter__filter:last-of-type .vehicle-filter__filter-header.collapsed + .vehicle-filter__accordion-content{
     border: 0;
   }
   .vehicle-filter__filter-header.collapsed .vehicle-filter__price-indicator{
@@ -70,6 +71,7 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height .5s;
+    padding-bottom: 0;
   }
   .vehicle-filter__filter-header.collapsed .vehicle-filter__title:before{
     transform: rotate(180deg);
