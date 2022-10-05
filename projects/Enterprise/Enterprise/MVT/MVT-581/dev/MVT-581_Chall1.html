@@ -8,7 +8,28 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-581',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '.container.responsivegrid.teaser-style-3 .cmp-container .teaser.teaser-style-3 .cmp-teaser__image',
+        loginSelector : '.header-nav-item.sign-in',
+        authSelector : '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
+		auth : {
+			'NON-PYP' : {
+				'Header': 'Register for Plus Your Points',
+				'Copy': 'Earn double points on qualifying rentals now through January 31, 2023. Terms apply.',
+				'Link':'https://plusyourpoints.enterprise.com/en_us/login?TLGVC=E23A&TLG_CID=50602'
+			},
+			'PYP' : {
+				'Header': 'View Plus Your Points Dashboard',
+				'Copy': 'Earn double points on qualifying rentals now through January 31, 2023. Terms apply.',
+				'Link':' https://plusyourpoints.enterprise.com/en_us/login?TLGVC=E23A&TLG_CID=50602'
+			}
+			
+
+		},
+		unAuth : {
+			'Header': 'Plus Your Points',
+			'Copy': 'Plus Your Points is back! Join Enterprise Plus<sup>®</sup> and register to earn double points on qualifying rentals now through January 31, 2023. Terms apply.<br>',
+			'Link':'https://plusyourpoints.enterprise.com/en_us/login?TLGVC=E23A&TLG_CID=50601'
+		},
 		init : function() {
 
 			isoTest.debug = true;
@@ -25,14 +46,45 @@
 			helpers.elementLoaded(isoTest.selector, function() {
 				isoTest.log('Test Ready!');
   				isoTest.chall();
+				isoTest.inFlightUpdates();
 			});
 			
 		},
 		chall : function() {
 
 			// Your code goes here
-
+			if (document.querySelector(isoTest.authSelector)) {
+                    isoTest.logInUpdates();
+             } 
 		},
+		inFlightUpdates: function() {
+             var eleUpdates = new MutationObserver(function(mutationsList) {
+                 mutationsList.forEach(function(mutation){
+                     //added nodes 
+                     mutation.addedNodes.forEach(function (addedNode){
+                         if(addedNode.classList != undefined) {
+                         if(document.querySelector('.utility-nav-label--logged-in') ) {
+                                 isoTest.logInUpdates();
+                             } else if(document.querySelector('.login-widget.active')){
+								if(!document.querySelector('.field-container.logged-in')) {
+										isoTest.logOutUpdates();
+									}		
+                             } else {
+                                 isoTest.logOutUpdates();
+                             }
+                         }
+                     });
+                 });
+             }) ;
+             //after observe add target element
+                 eleUpdates.observe(document.querySelector(isoTest.loginSelector), {subtree: true, childList: true});
+             },
+
+         addEventsTag : function() {
+           // console.log('add event');
+				
+         },
+
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
@@ -40,6 +92,13 @@
 			s.eVar20 = linkName;
 			s.tl(this, 'o', linkName);
 		},
+		fireTag89 : function(element, value) {
+             var linkName = value ? value : element.innerText;
+                 linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+             s.linkTrackVars = 'eVar89';
+             s.eVar89 = linkName;
+             s.tl(this, 'o', linkName);
+         },
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
@@ -60,18 +119,6 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
 	};
 
 	isoTest.init();
