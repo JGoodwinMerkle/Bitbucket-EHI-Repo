@@ -57,6 +57,40 @@
                     isoTest.logInUpdates();
              } 
 		},
+		logInUpdates: function() {
+			if(!document.querySelector('.iso-auth-pyp')) {
+				//based on AEP set the auth to PYP or non Pyp
+				//var auth = 'PYP' || 'NON-PYP'
+				console.log('login');
+				isoTest.tileUpdate(isoTest.auth.PYP);
+			}
+		},
+		logOutUpdates: function() {
+			if(document.querySelector('.iso-auth-pyp')) {
+				isoTest.tileUpdate(isoTest.unAuth);
+				console.log('logout');
+				document.querySelector('.iso-auth-pyp').classList.remove('iso-auth-pyp');
+			}
+
+		},
+		tileUpdate: function(user) {
+				var mainTile = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement.classList.add('.iso-auth-pyp');
+				var Url = document.querySelectorAll('.iso-auth-pyp  a');
+				var headline = document.querySelector('.iso-auth-pyp div.cmp-teaser__content h3 > a');
+            	var bodyCopy = document.querySelector('.iso-auth-pyp div.cmp-teaser__content p');
+
+				Url.forEach(embeddedUrl => {
+                	embeddedUrl.setAttribute('href',user.Link);
+           		});
+				headline.innerText = user.Header;
+				if(user == 'unAuth') {
+					bodyCopy.innerHTML = user.Copy;
+				} else {
+					bodyCopy.innerText = user.Copy;
+				}
+
+
+		},
 		inFlightUpdates: function() {
              var eleUpdates = new MutationObserver(function(mutationsList) {
                  mutationsList.forEach(function(mutation){
