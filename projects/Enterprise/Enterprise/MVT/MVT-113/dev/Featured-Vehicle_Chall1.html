@@ -157,6 +157,16 @@
 			});
 			spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
 
+			// Search filter bug fix
+			isoTest.observeEl('.iso-featured .is-search-by-filter.rs-tag-container--darkGreen', function (el) {
+				var vehicleItem = el.closest('.vehicle-list__item');
+				if(vehicleItem.classList.contains('iso-preSelectedClass-filtered')){
+					var featuredTag = vehicleItem.querySelector('.rs-callout');
+					if(featuredTag){
+						featuredTag.style.display = 'none';
+					}
+				}
+			});
 		},
 		hashHandler : function(){
 			if(/cars/.test(location.hash)){
@@ -295,6 +305,53 @@
 	        } else {
 	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
 	        }
+		},
+		observeEl: function (selector, callback) {
+			var processed = new Map();
+
+			var processElement = function processElement(el) {
+				if (processed && !processed.has(el)) {
+					processed.set(el, true);
+					callback(el);
+				}
+			};
+
+			var lookForSelector = function lookForSelector() {
+				var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+				if (el.matches && el.matches(selector)) {
+					if (processElement(el)) return true;
+				}
+
+				if (el.querySelectorAll) {
+					var elements = el.querySelectorAll(selector);
+
+					if (elements.length) {
+						for (var i = 0; i < elements.length; i++) {
+							var _el = elements[i];
+							if (processElement(_el)) return true;
+						}
+					}
+				}
+			};
+			lookForSelector();
+
+			var obs = new MutationObserver(function (mutationsList) {
+				mutationsList.forEach(function (record) {
+					if (record && record.addedNodes && record.addedNodes.length) {
+						for (var i = 0; i < record.addedNodes.length; i++) {
+							var el = record.addedNodes[i].parentElement;
+							if (el && lookForSelector(el)) return true;
+						}
+					}
+				});
+			});
+			obs.observe(document, {
+				attributes: true,
+				attributeFilter: ['style', 'className'],
+				childList: true,
+				subtree: true
+			});
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
