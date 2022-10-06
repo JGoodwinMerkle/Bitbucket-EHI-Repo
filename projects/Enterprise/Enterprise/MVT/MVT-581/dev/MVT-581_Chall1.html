@@ -12,7 +12,8 @@
         loginSelector : '.header-nav-item.sign-in',
         authSelector : '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
 		auth : {
-			'NON-PYP' : {
+			'type': 'auth',
+			'NonPYP' : {
 				'Header': 'Register for Plus Your Points',
 				'Copy': 'Earn double points on qualifying rentals now through January 31, 2023. Terms apply.',
 				'Link':'https://plusyourpoints.enterprise.com/en_us/login?TLGVC=E23A&TLG_CID=50602'
@@ -26,6 +27,7 @@
 
 		},
 		unAuth : {
+			'type': 'unAuth',
 			'Header': 'Plus Your Points',
 			'Copy': 'Plus Your Points is back! Join Enterprise Plus<sup>®</sup> and register to earn double points on qualifying rentals now through January 31, 2023. Terms apply.<br>',
 			'Link':'https://plusyourpoints.enterprise.com/en_us/login?TLGVC=E23A&TLG_CID=50601'
@@ -51,7 +53,6 @@
 			
 		},
 		chall : function() {
-
 			// Your code goes here
 			if (document.querySelector(isoTest.authSelector)) {
                     isoTest.logInUpdates();
@@ -60,21 +61,21 @@
 		logInUpdates: function() {
 			if(!document.querySelector('.iso-auth-pyp')) {
 				//based on AEP set the auth to PYP or non Pyp
-				//var auth = 'PYP' || 'NON-PYP'
+				//var auth = 'PYP' || 'NonPYP'
 				console.log('login');
-				isoTest.tileUpdate(isoTest.auth.PYP);
+				isoTest.tileUpdate(isoTest.auth.NonPYP);
 			}
 		},
 		logOutUpdates: function() {
+			console.log('logout');
 			if(document.querySelector('.iso-auth-pyp')) {
 				isoTest.tileUpdate(isoTest.unAuth);
-				console.log('logout');
 				document.querySelector('.iso-auth-pyp').classList.remove('iso-auth-pyp');
 			}
 
 		},
 		tileUpdate: function(user) {
-				var mainTile = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement.classList.add('.iso-auth-pyp');
+				var mainTile = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement.classList.add('iso-auth-pyp');
 				var Url = document.querySelectorAll('.iso-auth-pyp  a');
 				var headline = document.querySelector('.iso-auth-pyp div.cmp-teaser__content h3 > a');
             	var bodyCopy = document.querySelector('.iso-auth-pyp div.cmp-teaser__content p');
@@ -83,7 +84,7 @@
                 	embeddedUrl.setAttribute('href',user.Link);
            		});
 				headline.innerText = user.Header;
-				if(user == 'unAuth') {
+				if(user.type == 'unAuth') {
 					bodyCopy.innerHTML = user.Copy;
 				} else {
 					bodyCopy.innerText = user.Copy;
