@@ -59,7 +59,7 @@
              } 
 		},
 		logInUpdates: function() {
-			if(!document.querySelector('.iso-auth-pyp')) {
+			if(!document.querySelector('.iso-auth-pyp-loyalty')) {
 				//based on AEP set the auth to PYP or non Pyp
 				//var auth = 'PYP' || 'NonPYP'
 				console.log('login');
@@ -68,17 +68,17 @@
 		},
 		logOutUpdates: function() {
 			console.log('logout');
-			if(document.querySelector('.iso-auth-pyp')) {
+			if(document.querySelector('.iso-auth-pyp-loyalty')) {
 				isoTest.tileUpdate(isoTest.unAuth);
-				document.querySelector('.iso-auth-pyp').classList.remove('iso-auth-pyp');
+				document.querySelector('.iso-auth-pyp-loyalty').classList.remove('iso-auth-pyp-loyalty');
 			}
 
 		},
 		tileUpdate: function(user) {
-				var mainTile = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement.classList.add('iso-auth-pyp');
-				var Url = document.querySelectorAll('.iso-auth-pyp  a');
-				var headline = document.querySelector('.iso-auth-pyp div.cmp-teaser__content h3 > a');
-            	var bodyCopy = document.querySelector('.iso-auth-pyp div.cmp-teaser__content p');
+				var mainTile = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement.classList.add('iso-auth-pyp-loyalty');
+				var Url = document.querySelectorAll('.iso-auth-pyp-loyalty  a');
+				var headline = document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a');
+            	var bodyCopy = document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content p');
 
 				Url.forEach(embeddedUrl => {
                 	embeddedUrl.setAttribute('href',user.Link);
