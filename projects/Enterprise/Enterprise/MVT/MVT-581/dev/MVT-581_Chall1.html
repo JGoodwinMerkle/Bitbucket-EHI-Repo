@@ -64,6 +64,7 @@
 				//var auth = 'PYP' || 'NonPYP'
 				console.log('login');
 				isoTest.tileUpdate(isoTest.auth.NonPYP);
+				isoTest.addEventsTag();
 			}
 		},
 		logOutUpdates: function() {
@@ -116,8 +117,26 @@
              },
 
          addEventsTag : function() {
-           // console.log('add event');
-				
+           console.log('add event');
+		   if(sessionStorage.getItem('MVT-581_RegisteredTileSeen') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == 'Register for Plus Your Points') {
+				isoTest.fireTag89('','Unregistered: Register Tile Seen');
+				sessionStorage.setItem('MVT-581_RegisteredTileSeen','true');
+			}
+			if(sessionStorage.getItem('MVT-581_DashboardTileSeen') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == 'View Plus Your Points Dashboard') {
+				isoTest.fireTag89('','Registered: Dashboard Tile Seen');
+				sessionStorage.setItem('MVT-581_DashboardTileSeen','true');
+			}
+			//click events
+			document.querySelector('.iso-auth-pyp-loyalty').addEventListener('click',function(){
+				if(sessionStorage.getItem('MVT-581_RegisteredTileClicked') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == 'Register for Plus Your Points') {
+					isoTest.fireTag(document.querySelector('.iso-auth-pyp-loyalty'),'Unregistered: Register Tile Click');
+					sessionStorage.setItem('MVT-581_RegisteredTileClicked','true');
+				}
+				if(sessionStorage.getItem('MVT-581_DashboardTileClicked') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == 'View Plus Your Points Dashboard') {
+					isoTest.fireTag(document.querySelector('.iso-auth-pyp-loyalty'),'Registered: Dashboard Tile Click');
+					sessionStorage.setItem('MVT-581_DashboardTileClicked','true');
+				}
+			});
          },
 
 		fireTag : function(element, value) {
