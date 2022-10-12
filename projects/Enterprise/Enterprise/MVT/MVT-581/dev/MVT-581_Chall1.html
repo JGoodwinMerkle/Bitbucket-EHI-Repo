@@ -62,13 +62,13 @@
 			if(!document.querySelector('.iso-auth-pyp-loyalty')) {
 				//based on AEP set the auth to PYP or non Pyp
 				//var auth = 'PYP' || 'NonPYP'
-				console.log('login');
+				//console.log('login');
 				isoTest.tileUpdate(isoTest.auth.NonPYP);
 				isoTest.addEventsTag();
 			}
 		},
 		logOutUpdates: function() {
-			console.log('logout');
+			//console.log('logout');
 			if(document.querySelector('.iso-auth-pyp-loyalty')) {
 				isoTest.tileUpdate(isoTest.unAuth);
 				document.querySelector('.iso-auth-pyp-loyalty').classList.remove('iso-auth-pyp-loyalty');
@@ -117,7 +117,7 @@
              },
 
          addEventsTag : function() {
-           console.log('add event');
+           //console.log('add event');
 		   if(sessionStorage.getItem('MVT-581_RegisteredTileSeen') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == 'Register for Plus Your Points') {
 				isoTest.fireTag89('','Unregistered: Register Tile Seen');
 				sessionStorage.setItem('MVT-581_RegisteredTileSeen','true');
