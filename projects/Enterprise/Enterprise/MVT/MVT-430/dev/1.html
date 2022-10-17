@@ -1,0 +1,406 @@
+<style>
+	.iso-modal-open {
+		height: 100%;
+		overflow: hidden;
+	}
+	.iso-load {
+		background: rgba(255,255,255,.9);
+		height: 200px;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+		z-index: 3;
+	}
+	.iso-load .loading {
+		top: 50%;
+	}
+	.iso-modal-abandon .ima-col-wrap {
+		margin-bottom: 60px;
+		overflow: hidden;
+	}
+	.iso-modal-abandon .ima-col-6 {
+		border: 1px solid #ddd;
+		float: left;
+		padding: 25px 35px;
+		width: 50%;
+	}
+	.iso-modal-abandon .ima-pickup {
+		position: relative;
+	}
+	.iso-modal-abandon .ima-pickup::after {
+		background-color: #fff;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%20standalone%3D%22no%22%3F%3E%0A%3Csvg%0A%20%20%20xmlns%3Adc%3D%22http%3A//purl.org/dc/elements/1.1/%22%0A%20%20%20xmlns%3Acc%3D%22http%3A//creativecommons.org/ns%23%22%0A%20%20%20xmlns%3Ardf%3D%22http%3A//www.w3.org/1999/02/22-rdf-syntax-ns%23%22%0A%20%20%20xmlns%3Asvg%3D%22http%3A//www.w3.org/2000/svg%22%0A%20%20%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%0A%20%20%20viewBox%3D%220%200%2053.333332%2050.093334%22%0A%20%20%20height%3D%2250.093334%22%0A%20%20%20width%3D%2253.333332%22%0A%20%20%20xml%3Aspace%3D%22preserve%22%0A%20%20%20version%3D%221.1%22%0A%20%20%20id%3D%22svg2%22%3E%3Cmetadata%0A%20%20%20%20%20id%3D%22metadata8%22%3E%3Crdf%3ARDF%3E%3Ccc%3AWork%0A%20%20%20%20%20%20%20%20%20rdf%3Aabout%3D%22%22%3E%3Cdc%3Aformat%3Eimage/svg+xml%3C/dc%3Aformat%3E%3Cdc%3Atype%0A%20%20%20%20%20%20%20%20%20%20%20rdf%3Aresource%3D%22http%3A//purl.org/dc/dcmitype/StillImage%22%20/%3E%3C/cc%3AWork%3E%3C/rdf%3ARDF%3E%3C/metadata%3E%3Cdefs%0A%20%20%20%20%20id%3D%22defs6%22%3E%3CclipPath%0A%20%20%20%20%20%20%20id%3D%22clipPath18%22%0A%20%20%20%20%20%20%20clipPathUnits%3D%22userSpaceOnUse%22%3E%3Cpath%0A%20%20%20%20%20%20%20%20%20id%3D%22path20%22%0A%20%20%20%20%20%20%20%20%20d%3D%22m%200%2C0%20400%2C0%200%2C375.652%20-400%2C0%20L%200%2C0%20Z%22%20/%3E%3C/clipPath%3E%3C/defs%3E%3Cg%0A%20%20%20%20%20transform%3D%22matrix%281.3333333%2C0%2C0%2C-1.3333333%2C0%2C50.093333%29%22%0A%20%20%20%20%20id%3D%22g10%22%3E%3Cg%0A%20%20%20%20%20%20%20transform%3D%22scale%280.1%29%22%0A%20%20%20%20%20%20%20id%3D%22g12%22%3E%3Cg%0A%20%20%20%20%20%20%20%20%20id%3D%22g14%22%3E%3Cg%0A%20%20%20%20%20%20%20%20%20%20%20clip-path%3D%22url%28%23clipPath18%29%22%0A%20%20%20%20%20%20%20%20%20%20%20id%3D%22g16%22%3E%3Cpath%0A%20%20%20%20%20%20%20%20%20%20%20%20%20id%3D%22path22%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20style%3D%22fill%3A%23000000%3Bfill-opacity%3A1%3Bfill-rule%3Anonzero%3Bstroke%3Anone%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20d%3D%22m%20385.004%2C172.965%20-370.004%2C0%20c%20-8.28516%2C0%20-15%2C6.711%20-15%2C15%200%2C8.285%206.71484%2C15%2015%2C15%20l%20333.793%2C0%20-147.09%2C147.082%20c%20-5.859%2C5.855%20-5.859%2C15.359%200%2C21.211%205.859%2C5.859%2015.352%2C5.859%2021.211%2C0%20L%20395.609%2C198.57%20c%204.289%2C-4.289%205.579%2C-10.742%203.254%2C-16.347%20-2.324%2C-5.606%20-7.793%2C-9.258%20-13.859%2C-9.258%22%20/%3E%3Cpath%0A%20%20%20%20%20%20%20%20%20%20%20%20%20id%3D%22path24%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20style%3D%22fill%3A%23000000%3Bfill-opacity%3A1%3Bfill-rule%3Anonzero%3Bstroke%3Anone%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20d%3D%22m%20212.309%2C0%20c%20-3.836%2C0%20-7.676%2C1.46484%20-10.606%2C4.39453%20-5.859%2C5.85937%20-5.859%2C15.35157%200%2C21.21097%20L%20302.66%2C126.551%20c%205.86%2C5.859%2015.352%2C5.859%2021.211%2C0%205.859%2C-5.86%205.859%2C-15.352%200%2C-21.211%20L%20222.914%2C4.39453%20C%20219.984%2C1.46484%20216.148%2C0%20212.309%2C0%22%20/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 20px;
+    content: '';
+    height: 30px;
+    padding: 10px;
+    position: absolute;
+    width: 30px;
+	}
+	.iso-modal-abandon p {
+		margin-bottom: 5px;
+	}
+	.iso-modal-abandon #global-modal-title {
+		font-weight: bold;
+	}
+	.iso-modal-abandon .ima-content-title {
+		font-size: 14px;
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+	.iso-modal-abandon .ima-btn-wrap {
+		text-align: right;
+	}
+	.iso-modal-abandon .ima-btn-wrap .btn {
+		margin-bottom: 10px;
+		margin-left: 20px;
+		min-width: 200px;
+		padding: 0.8em 1em;
+    border-radius: 3.75rem;
+	}
+	.iso-modal-abandon h2.ima-header {
+		border-bottom: 3px solid #333;
+    margin-bottom: 30px;
+		padding-bottom: 20px;
+    font-weight: 700;
+	}
+	.iso-modal-abandon .modal-body {
+		padding: 20px;
+	}
+	@media (max-width: 674px) {
+		.iso-modal-abandon .ima-col-wrap {
+			margin-bottom: 30px;
+		}
+		.iso-modal-abandon .ima-col-6 {
+			width: 100%;
+			float: none;
+		}
+		.iso-modal-abandon .ima-btn-wrap {
+			text-align: center;
+		}
+		.iso-modal-abandon .ima-btn-wrap .btn {
+			margin-top: 10px;
+			margin-left: 0;
+			min-width: 100%;
+		}
+		.iso-modal-abandon .ima-pickup {
+			border-bottom: none;
+		}
+		.iso-modal-abandon .ima-pickup::after {
+      bottom: -25px;
+      left: calc(50% - 25px);
+      transform: rotate(90deg);
+		}
+
+    .iso-modal-abandon .ima-pickup {
+      border: 0;
+    }
+    .iso-modal-abandon .ima-return{
+      border-right: 0;
+      border-left: 0;
+      border-bottom: 0;
+    }
+	}
+	@media (min-width: 48em) {
+		.iso-modal-abandon .modal-body {
+			padding: 50px;
+		}
+		.iso-modal-abandon .modal-content.ReactModal__Content--after-open {
+			width: 720px;
+			margin-left: auto;
+		}
+	}
+	@media (min-width: 675px) {
+		.iso-modal-abandon .ima-col-wrap {
+			display: flex;
+		}
+		.iso-modal-abandon .ima-pickup::after {
+      right: -25px;
+      top: calc(50% - 25px);
+		}
+    .iso-modal-abandon .ima-pickup {
+      border-left: 0;
+      border-top: 0;
+      border-bottom: 0;
+    }
+    .iso-modal-abandon .ima-return{
+      border-right: 0;
+      border-top: 0;
+      border-bottom: 0;
+    }
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'Homepage Abandoned Cart',
+		creative : 'Challenger 1',
+		selector: '#book',
+		loopCount: 0,
+    modal: `
+      <div class="ReactModalPortal iso-modal-abandon">
+        <div class="ReactModal__Overlay ReactModal__Overlay--after-open rs-modal__overlay">
+          <div class="ReactModal__Content ReactModal__Content--after-open rs-modal rs-modal--calendar date-time-error-modal" tabindex="-1" role="dialog" aria-describedby="rs-modal-content" aria-labelledby="rs-modal-heading" aria-modal="true">
+            <div class="rs-modal__wrapper">
+              <div class="rs-modal__header">
+                <button id="iso-close-modal" class="cta cta--text cta--large cta--noMargin cta--text-inverted rs-modal__header-close-icon" aria-label="Close">
+                  <i role="img" aria-hidden="true" class="rs-icon rs-icon--cta">
+                    <svg viewBox="0 0 24 24"><use xlink:href="#btn-icn-close"></use></svg>
+                  </i>
+                </button>
+              </div>
+              <div class="rs-modal__content">
+                <div class="location-date-time-modal">
+                  <div class="content">
+                    <h2 class="rs-modal__modal-title ima-header" id="rs-modal-heading">Do you want to continue?</h2>
+                    <div class="ima-content">
+											<div class="iso-load hide"><div class="loading"></div></div>
+											<div class="ima-col-wrap">
+												<div class="ima-col-6 ima-pickup"><h5 class="ima-content-title">PICK-UP</h5><p class="ima-pickup-location">{pickuplocation}</p><p class="ima-pickup-date">{pickupdate}</p><p class="ima-pickup-time">{pickuptime}</p></div>
+												<div class="ima-col-6 ima-return"><h5 class="ima-content-title">RETURN</h5><p class="ima-return-location">{returnlocation}</p><p class="ima-return-date">{returndate}</p><p class="ima-return-time">{returntime}</p></div>
+											</div>
+										</div>
+                    <div class="cta-container cta-container--align-center rs-modal__buttons-container">
+                      <button class="cta cta--secondary cta--large cta--noMargin btn-cancel" type="button">Discard</button>
+                      <a class="cta cta--primary cta--large cta--noMargin btn-continue" type="button">Continue</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+		deeplink : '/en/deeplink.html?v=2&pickUpLocation.searchCriteria={pickupID}&dropOffLocation.searchCriteria={returnID}&pickUpDateTime.date={pickupDateShort}&dropOffDateTime.date={returnDateShort}&pickUpDateTime.time={pickupTimeShort}&dropOffDateTime.time={returnTimeShort}',
+		tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+		init : function() {
+
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+				if (sessionStorage.getItem("isoTestMVT120") === null) {
+					isoTest.chall();
+				} else {
+					isoTest.log(isoTest.test + ' - Already Fired This Session');
+				}
+			});
+
+		},
+		chall : function() {
+
+			// Set reservation info
+			var pickupLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickupLocation','name']);
+			var returnLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','returnLocation','name']);
+			var pickupDate = new Date(ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickup_time']));
+			var returnDate = new Date(ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','return_time']));
+
+			var dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',};
+
+			var pickupDateFormatted = pickupDate.toLocaleDateString('en-US', dateOptions);
+			var returnDateFormatted = returnDate.toLocaleDateString('en-US', dateOptions);
+			var pickupTimeFormatted = pickupDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+			var returnTimeFormatted = returnDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+
+			// console.log("pickuplocation", pickupLocation, returnLocation, pickupDate, returnDate, dateOptions, pickupDateFormatted, returnDateFormatted, pickupTimeFormatted, returnTimeFormatted)
+
+			var modal = helpers.supplant(isoTest.modal, {
+				'pickuplocation' : pickupLocation,
+				'returnlocation' : returnLocation,
+				'pickupdate' : pickupDateFormatted,
+				'returndate' : returnDateFormatted,
+				'pickuptime' : pickupTimeFormatted,
+				'returntime' : returnTimeFormatted,
+			});
+
+			// Set deeplink
+			var pickupID = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickup_location_id']);
+			var returnID = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','return_location_id']);
+			var pickupDateShort = pickupDate.toLocaleDateString();
+			var returnDateShort = returnDate.toLocaleDateString();
+			var pickupTimeShort = pickupDate.toLocaleTimeString('en-US', { hour12: false });
+			var returnTimeShort = returnDate.toLocaleTimeString('en-US', { hour12: false });
+
+			// console.log("pickup information ", pickupID, returnID, pickupDateShort, returnDateShort, pickupTimeShort, returnTimeShort);
+
+			var deeplinkURL = helpers.supplant(isoTest.deeplink, {
+				'pickupID' : pickupID,
+				'returnID' : returnID,
+				'pickupDateShort' : pickupDateShort,
+				'returnDateShort' : returnDateShort,
+				'pickupTimeShort' : pickupTimeShort,
+				'returnTimeShort' : returnTimeShort,
+			});
+
+			// Inject modal
+      // Adding check to make sure we have all of our required values
+      if(pickupID && returnID && pickupDateShort && returnDateShort && pickupTimeShort && returnTimeShort){
+        // Prevent same-session re-trigger
+			  sessionStorage.setItem('isoTestMVT120', 'true');
+        
+        if(!document.querySelector('.iso-modal-abandon')){
+          document.querySelector('body').insertAdjacentHTML('beforeend', modal);
+          // Update deeplink URL
+          document.querySelector('.iso-modal-abandon .btn-continue').setAttribute('href', deeplinkURL);
+          // Add events
+          isoTest.bindModalEvents();
+        }
+
+        // Open modal
+        if (!!pickupLocation && !!pickupDate && !!returnLocation && !!returnDate) {
+          isoTest.showModal();
+        }
+      }
+		},
+		bindModalEvents: function(){
+			// close, continue button, escape key
+			document.addEventListener('keydown',function(e){
+				if(e.keyCode == 27 || e.key == 'Esc' || e.key == 'Escape') {
+					isoTest.hideModal();
+				}
+			});
+
+			// event tracking
+			window.addEventListener('click', function (event) {
+				if (event.target.closest('#iso-close-modal')) {
+					isoTest.fireTag(this,'Modal Close');
+					isoTest.hideModal();
+				}
+				if (event.target.matches('.iso-modal-abandon .btn-cancel')) {
+					isoTest.fireTag(this,'Modal Discard');
+					isoTest.hideModal();
+				}
+				if (event.target.closest('.iso-modal-abandon .btn-continue')) {
+					isoTest.fireTag(this,'Modal Continue');
+				}
+			}, false);
+
+		},
+		showModal: function () {
+			helpers.elementLoaded('.iso-modal-abandon', function(){
+				var propName = isoTest.test + ' : Modal Open';
+				s.linkTrackVars = 'prop23';
+				s.prop23 = propName;
+				s.tl(this, 'o', propName);
+
+				document.querySelector('.iso-modal-abandon').classList.add('active');
+				document.querySelector('.iso-load').classList.add('hide');
+
+				document.querySelector('html').classList.add('iso-modal-open');
+				var modalFocus = document.querySelector('.iso-modal-abandon.active');
+
+				modalFocus.focus();
+
+        isoTest.keepFocus(modalFocus);
+
+        setTimeout(function(){document.getElementById('iso-close-modal').focus(); }, 500);
+			});
+		},
+		hideModal : function () {
+			document.querySelector('html').classList.remove('iso-modal-open');
+			document.querySelector('.iso-modal-abandon').classList.remove('active');
+			document.querySelector('.iso-modal-abandon').classList.remove('ReactModal__Overlay--after-open');
+			document.querySelector('.iso-modal-abandon').remove();
+		},
+		keepFocus : function(context) {
+	      var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+	          firstTabbableElement = allTabbableElements[0],
+	          lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+	      var keyListener = function(e) {
+	    		var keyCode = e.which || e.keyCode;
+
+	    		e.preventDefault = e.preventDefault || function () {
+	    			e.returnValue = false;
+	    		};
+	    		if (keyCode === 9) {
+			        if (e.target === lastTabbableElement && !e.shiftKey) {
+	    				e.preventDefault();
+	    				firstTabbableElement.focus();
+			        } else if (e.target === firstTabbableElement && e.shiftKey) {
+	    				e.preventDefault();
+	    				lastTabbableElement.focus();
+	    			}
+	    		}
+	    	};
+	    	context.addEventListener('keydown', keyListener, false);
+	    },
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+		dependsLoadedCount : 0,
+		dependsLoaded : function (callback) {
+			//console.log("MVT-120 - Searching data object for previous reservation");
+			window.clearTimeout(isoTest.timer);
+			//Check for reservation info in data object specified number of times
+			if (helpers.dependsLoadedCount < 50) {
+				if (typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest']) !== 'undefined' && typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest','pickupLocation','name']) !== 'undefined') {
+					if (typeof callback === "function") {
+						//console.log("MVT-120 - Previous reservation found");
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						helpers.dependsLoadedCount++;
+						helpers.dependsLoaded(callback);
+					}, 100);
+				}
+			}
+		},
+		supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	};
+
+	helpers.dependsLoaded(function(){
+		isoTest.init();
+	});
+})();
+</script>
