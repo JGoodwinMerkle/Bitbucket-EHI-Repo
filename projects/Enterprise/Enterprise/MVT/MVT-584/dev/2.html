@@ -24,7 +24,7 @@
     justify-content: end;
     width: 100%;
   }
-  .icon.icon-eplus-logo{
+  .vehicle-redemption__title-brand-eplus .icon.icon-eplus-logo{
     height: 53px;
     width: 53px;
   }
@@ -105,10 +105,7 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-584',
 		creative : 'Challenger 2',
-		selector : 'body',
 		init : function() {
-
-			// isoTest.debug = ${user.mvtDebug};
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -119,15 +116,10 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  			isoTest.chall();
-			});
-			
+  		isoTest.chall();
 		},
 		chall : function() {
       isoTest.observeEl('.vehicle-redemption:not(.vehicle-redemption--aside) .vehicle-redemption__options li:nth-of-type(2) button', (pointsToggleEl)=>{
-        console.log('584 observing ' + pointsToggleEl);
         var cashToggleEl = pointsToggleEl.parentElement.previousSibling.querySelector('button');
         var toggleContainerEl = pointsToggleEl.parentElement.parentElement;
         toggleContainerEl.insertAdjacentHTML('beforebegin', `
@@ -143,7 +135,7 @@
         var toggle = document.querySelector('.pay-in-toggle input');
         toggle.addEventListener('change', ()=>{
           var toggleChecked = !!document.querySelector('.pay-in-toggle input:checked');
-          console.log('584 toggleChecked ' + toggleChecked);
+
           if(toggleChecked){
             pointsToggleEl.click();
           }else{
@@ -151,13 +143,6 @@
           }
         });
       });
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
@@ -210,21 +195,6 @@
         subtree: true
       });
     },
-	};
-
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
-		}
 	};
 
 	isoTest.init();
