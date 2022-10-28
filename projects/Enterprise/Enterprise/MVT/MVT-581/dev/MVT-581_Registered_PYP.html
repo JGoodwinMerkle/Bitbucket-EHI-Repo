@@ -7,7 +7,7 @@
       portfolio: 'Enterprise',
       test: 'MVT-581',
       creative: 'PYP',
-      selector: '.container.responsivegrid.teaser-style-3 .cmp-container .teaser.teaser-style-3 .cmp-teaser__image',
+      selector: '.teaser.teaser-style-3 .cmp-teaser__image',
       loginSelector: '.header-nav-item.sign-in',
       authSelector: '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
       auth: {
@@ -103,13 +103,13 @@
       },
       addEventsTag: function() {
         //console.log('add event');
-        if (sessionStorage.getItem('MVT-581_DashboardTileSeen') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == 'View Plus Your Points Dashboard') {
+        if (sessionStorage.getItem('MVT-581_DashboardTileSeen') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == isoTest.auth.PYP.Header) {
           isoTest.fireTag89('', 'Registered: Dashboard Tile Seen');
           sessionStorage.setItem('MVT-581_DashboardTileSeen', 'true');
         }
         //click events
         document.querySelector('.iso-auth-pyp-loyalty').addEventListener('click', function() {
-          if (sessionStorage.getItem('MVT-581_DashboardTileClicked') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == 'View Plus Your Points Dashboard') {
+          if (sessionStorage.getItem('MVT-581_DashboardTileClicked') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == isoTest.auth.PYP.Header) {
             isoTest.fireTag(document.querySelector('.iso-auth-pyp-loyalty'), 'Registered: Dashboard Tile Click');
             sessionStorage.setItem('MVT-581_DashboardTileClicked', 'true');
           }
