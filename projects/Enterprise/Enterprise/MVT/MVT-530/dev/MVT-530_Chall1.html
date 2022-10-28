@@ -1,10 +1,17 @@
 <style>
+    .mvt-banner {
+        width:100%;
+    }
     .mvt-urgency-banner {
+        background-color: #f3f3f3;
+        border-top: 0.25rem solid #181918;
+        box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
+        margin-bottom: 0;
         display: flex;
         background: #F3F3F3;
         align-items: center;
         width: 100%;
-        justify-content: center;
+        justify-content: flex-start;
         padding: 16px;
         margin-top: 24px;
     }
@@ -117,7 +124,7 @@
             portfolio: "Enterprise",
             test: "MVT-530",
             creative: "Challenger 1",
-            selector: ".vehicle-select",
+            selector: ".vehicle-select__content-wrapper",
             banner: {
                 'en': 'We get lots of bookings for this destination. <strong>Prices are likely to change - book now</strong> to secure this price.',
                 'fr': '<strong>Les prix sont susceptibles de changer</strong> - réservez dès maintenant pour obtenir ce tarif. Profitez !',
@@ -126,7 +133,7 @@
             },
             init: function() {
 
-                //isoTest.debug = true;
+                isoTest.debug = true;
 
                 if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
                     _satellite.setVar('TargetCampaign', isoTest.test);
@@ -151,7 +158,7 @@
                 var pickUpLocationCountry = null || ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'address', 'country_code']);
                 var reservationCountry = null || ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest', 'country_of_residence_code']);
                 if (pickUpLocationCountry == reservationCountry) {
-                    var template = '<div class="mvt-urgency-banner"><div class="mvt-icon"></div> <div class="mvt-banner-copy">' + isoTest.banner[lang] + '</div></div>';
+                    var template = '<section class="mvt-banner vehicle-select__message-wrapper"><div class="mvt-urgency-banner"><div class="mvt-icon"></div> <div class="mvt-banner-copy">' + isoTest.banner[lang] + '</div></div></section>';
                     if (!document.querySelector('.mvt-urgency-banner')) {
                         if (document.querySelector(isoTest.selector)) {
                             document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', template);
