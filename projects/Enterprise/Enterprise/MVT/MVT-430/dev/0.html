@@ -1,0 +1,121 @@
+<script>
+  (function() {
+    'use strict';
+    var isoTest = {
+      account : 'EHI',
+      portfolio : 'Enterprise',
+      test : 'Homepage Abandoned Cart',
+      creative : 'Challenger 0',
+      selector: '#book',
+      init : function() {
+  
+        if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+          _satellite.setVar('TargetCampaign', isoTest.test);
+          _satellite.setVar('TargetCreative', isoTest.creative);
+        }
+  
+        isoTest.log('Test Running...');
+        isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+        isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+  
+        helpers.elementLoaded(isoTest.selector, function() {
+          isoTest.log('Test Ready!');
+          if (sessionStorage.getItem("isoTestMVT120") === null) {
+            isoTest.chall();
+          } else {
+            isoTest.log(isoTest.test + ' - Already Fired This Session');
+          }
+        });
+  
+      },
+      chall : function() {
+  
+        // Set reservation info
+        var pickupLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickupLocation','name']);
+        var returnLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','returnLocation','name']);
+        var pickupDate = new Date(ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickup_time']));
+        var returnDate = new Date(ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','return_time']));
+  
+        var dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',};
+  
+        var pickupDateFormatted = pickupDate.toLocaleDateString('en-US', dateOptions);
+        var returnDateFormatted = returnDate.toLocaleDateString('en-US', dateOptions);
+        var pickupTimeFormatted = pickupDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+        var returnTimeFormatted = returnDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  
+        // console.log("pickuplocation", pickupLocation, returnLocation, pickupDate, returnDate, dateOptions, pickupDateFormatted, returnDateFormatted, pickupTimeFormatted, returnTimeFormatted)
+  
+        // Set deeplink
+        var pickupID = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickup_location_id']);
+        var returnID = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','return_location_id']);
+        var pickupDateShort = pickupDate.toLocaleDateString();
+        var returnDateShort = returnDate.toLocaleDateString();
+        var pickupTimeShort = pickupDate.toLocaleTimeString('en-US', { hour12: false });
+        var returnTimeShort = returnDate.toLocaleTimeString('en-US', { hour12: false });
+  
+        // console.log("pickup information ", pickupID, returnID, pickupDateShort, returnDateShort, pickupTimeShort, returnTimeShort);
+  
+        // Inject modal
+        // Adding check to make sure we have all of our required values
+        if(pickupID && returnID && pickupDateShort && returnDateShort && pickupTimeShort && returnTimeShort){
+          // Prevent same-session re-trigger
+          sessionStorage.setItem('isoTestMVT120', 'true');
+          
+          // Open modal
+          if (!!pickupLocation && !!pickupDate && !!returnLocation && !!returnDate) {
+            isoTest.showModal();
+          }
+        }
+      },
+      showModal: function () {
+        var propName = isoTest.test + ' : Modal Open';
+        s.linkTrackVars = 'prop23';
+        s.prop23 = propName;
+        s.tl(this, 'o', propName);
+      },
+      log : function(obj){
+        if(isoTest.debug === true){
+          console.log(obj);
+        }
+      }
+    };
+  
+    var helpers = {
+      elementLoaded : function (ele, callback) {
+        isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+        window.clearTimeout(isoTest.eleTimer);
+        if (document.querySelectorAll(ele).length > 0) {
+          if (typeof callback === 'function') {
+            isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+            callback();
+          }
+            } else {
+                isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+            }
+      },
+      dependsLoadedCount : 0,
+      dependsLoaded : function (callback) {
+        //console.log("MVT-120 - Searching data object for previous reservation");
+        window.clearTimeout(isoTest.timer);
+        //Check for reservation info in data object specified number of times
+        if (helpers.dependsLoadedCount < 50) {
+          if (typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest']) !== 'undefined' && typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest','pickupLocation','name']) !== 'undefined') {
+            if (typeof callback === "function") {
+              //console.log("MVT-120 - Previous reservation found");
+              callback();
+            }
+          } else {
+            isoTest.timer = window.setTimeout(function() {
+              helpers.dependsLoadedCount++;
+              helpers.dependsLoaded(callback);
+            }, 100);
+          }
+        }
+      }
+    };
+  
+    helpers.dependsLoaded(function(){
+      isoTest.init();
+    });
+  })();
+  </script>
