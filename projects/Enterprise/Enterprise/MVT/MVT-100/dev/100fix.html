@@ -77,7 +77,6 @@
         width: 0;
     }
 
-
     .iso-preSelectedClass .rs-callout.rs-callout--highlight {
         background-color: #ce810d;
         color: #fcf1e0;
@@ -118,30 +117,22 @@
         var isoTest = {
             debug: false,
             account: 'Enterprise',
-            portfolio: 'Enterprise.de',
-            test: 'Featured Vehile 3.0',
+            portfolio: 'Enterprise.co.uk',
+            test: 'Featured Vehicle 3.0',
             creative: 'Challenger 1',
             filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
             vehicleItem: '.vehicle-list__item',
             vehicleItemImage: '.vehicle-item__image',
+            vehicleItemSummary: '.vehicle-item__summary',
             preSelected: '.vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected',
-            template: '<span class="rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
-            content: {
-                en: {
-                    tag: 'Enjoy Low Price',
-                    shortTag: 'Enjoy Low Price'
-                },
-                de: {
-                    tag: 'Großes Auto zum kleinen Preis',
-                    shortTag: 'Großes Auto zum kleinen Preis'
-                }
-            },
+            template: '<span class="rs-callout rs-callout--highlight custom"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
             featured: {
-                car: 'IFMR'
+                car: 'IFAR',
+                tag: 'Most Versatile',
+                shortTag: 'Most Versatile'
             },
-            altCar: '',
+            altCar: 'LYMR',
             featAvail: false,
-            lang: '',
             init: function () {
 
                 isoTest.debug = Boolean(helpers.getQueryParam('debug'));
@@ -152,9 +143,7 @@
 
                 isoTest.elementLoaded(isoTest.vehicleItem, function () {
                     isoTest.log('Test Ready!');
-                    if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
-                        isoTest.chall();
-                    }
+                    isoTest.chall();
                 });
 
                 window.addEventListener('hashchange', isoTest.hashHandler, false);
@@ -187,24 +176,17 @@
             hashHandler: function () {
                 if (/cars/.test(location.hash)) {
                     isoTest.elementLoaded(isoTest.vehicleItem, function () {
-                        if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
-                            isoTest.chall();
-                        }
+                        isoTest.chall();
                     });
                 }
             },
             chall: function () {
-                isoTest.log('chall()');
-                isoTest.setLanguage();
-                isoTest.runTest();
-            },
-            setLanguage: function () {
-                isoTest.lang = location.pathname.split('/')[1];
+                if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+                    isoTest.runTest();
+                }
             },
             runTest: function () {
                 isoTest.log('runTest()');
-                // isoTest.day = helpers.getQueryParam('dayOverride') ? helpers.getQueryParam('dayOverride') : new Date(ReservationStateTree.get(['session', 'reservationSession', 'pickup_time'])).getDay();
-                // isoTest.vehicleClass = isoTest.featured[isoTest.day];
                 isoTest.vehicleClass = isoTest.featured;
                 isoTest.onLoadpreSelected = document.querySelectorAll(isoTest.preSelected).length > 0;
                 isoTest.checkSort();
@@ -230,7 +212,6 @@
                 }, false);
             },
             checkSort: function () {
-                isoTest.log('fn: checkSort');
                 var sort = document.querySelector('#vehicleSortBy').value;
                 var list = document.querySelector('.vehicle-list');
                 if (sort == 'Recommended') {
@@ -279,7 +260,7 @@
                 }
 
                 var tag = helpers.supplant(isoTest.template, {
-                    'tag': isoTest.onLoadpreSelected ? isoTest.content[isoTest.lang].shortTag : isoTest.content[isoTest.lang].tag
+                    'tag': isoTest.onLoadpreSelected ? isoTest.vehicleClass.shortTag : isoTest.vehicleClass.tag
                 });
                 vehicleItem.insertAdjacentHTML('afterbegin', tag);
                 // adds tag fix for regression 633
@@ -287,9 +268,8 @@
                     const newTag = document.querySelector(".rs-callout.rs-callout--highlight");
                     const pictureImg = newTag.parentElement.querySelector('.vehicle-item__image');
                     const vehicleSummary = newTag.parentElement.querySelector('.vehicle-item__summary');
-                    // console.log(vehicleSummary);
+                    
 
-                    // newTag.classList.remove("custom");
                     const mediaQuery = window.matchMedia('(max-width: 653px)')
 
                     function handleTabletChange(e) {

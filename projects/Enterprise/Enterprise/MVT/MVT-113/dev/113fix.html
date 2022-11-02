@@ -103,6 +103,12 @@
             width: 100%;
         }
     }
+    @media (max-width: 653px) {
+
+        .iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
+            margin-bottom: 5%;
+        }
+    }
 </style>
 <script>
     (function () {
@@ -110,21 +116,31 @@
         var isoTest = {
             debug: false,
             account: 'Enterprise',
-            portfolio: 'Enterprise.co.uk',
-            test: 'Featured Vehicle 3.0',
+            portfolio: 'Enterprise.es',
+            test: 'Featured Vehile 3.0',
             creative: 'Challenger 1',
             filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
             vehicleItem: '.vehicle-list__item',
             vehicleItemImage: '.vehicle-item__image',
+            vehicleItemSummary: '.vehicle-item__summary',
             preSelected: '.vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected',
-            template: '<span class="rs-callout rs-callout--highlight custom"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
-            featured: {
-                car: 'IFAR',
-                tag: 'Most Versatile',
-                shortTag: 'Most Versatile'
+            template: '<span class="rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
+            content: {
+                en: {
+                    tag: 'Best Value Van',
+                    shortTag: 'Best Value Van'
+                },
+                es: {
+                    tag: 'Van de mejor valor',
+                    shortTag: 'Van de mejor valor'
+                }
             },
-            altCar: 'LYMR',
+            featured: {
+                car: 'IKMD'
+            },
+            altCar: '',
             featAvail: false,
+            lang: '',
             init: function () {
 
                 isoTest.debug = Boolean(helpers.getQueryParam('debug'));
@@ -135,7 +151,9 @@
 
                 isoTest.elementLoaded(isoTest.vehicleItem, function () {
                     isoTest.log('Test Ready!');
-                    isoTest.chall();
+                    if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+                        isoTest.chall();
+                    }
                 });
 
                 window.addEventListener('hashchange', isoTest.hashHandler, false);
@@ -155,7 +173,7 @@
                 spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
 
                 // Search filter bug fix
-                isoTest.observeEl('.is-search-by-filter.rs-tag-container--darkGreen', function (el) {
+                isoTest.observeEl('.iso-featured .is-search-by-filter.rs-tag-container--darkGreen', function (el) {
                     var vehicleItem = el.closest('.vehicle-list__item');
                     if (vehicleItem.classList.contains('iso-preSelectedClass-filtered')) {
                         var featuredTag = vehicleItem.querySelector('.rs-callout');
@@ -168,17 +186,24 @@
             hashHandler: function () {
                 if (/cars/.test(location.hash)) {
                     isoTest.elementLoaded(isoTest.vehicleItem, function () {
-                        isoTest.chall();
+                        if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+                            isoTest.chall();
+                        }
                     });
                 }
             },
             chall: function () {
-                if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
-                    isoTest.runTest();
-                }
+                isoTest.log('chall()');
+                isoTest.setLanguage();
+                isoTest.runTest();
+            },
+            setLanguage: function () {
+                isoTest.lang = location.pathname.split('/')[1];
             },
             runTest: function () {
                 isoTest.log('runTest()');
+                // isoTest.day = helpers.getQueryParam('dayOverride') ? helpers.getQueryParam('dayOverride') : new Date(ReservationStateTree.get(['session', 'reservationSession', 'pickup_time'])).getDay();
+                // isoTest.vehicleClass = isoTest.featured[isoTest.day];
                 isoTest.vehicleClass = isoTest.featured;
                 isoTest.onLoadpreSelected = document.querySelectorAll(isoTest.preSelected).length > 0;
                 isoTest.checkSort();
@@ -204,6 +229,7 @@
                 }, false);
             },
             checkSort: function () {
+                isoTest.log('fn: checkSort');
                 var sort = document.querySelector('#vehicleSortBy').value;
                 var list = document.querySelector('.vehicle-list');
                 if (sort == 'Recommended') {
@@ -252,15 +278,35 @@
                 }
 
                 var tag = helpers.supplant(isoTest.template, {
-                    'tag': isoTest.onLoadpreSelected ? isoTest.vehicleClass.shortTag : isoTest.vehicleClass.tag
+                    'tag': isoTest.onLoadpreSelected ? isoTest.content[isoTest.lang].shortTag : isoTest.content[isoTest.lang].tag
                 });
                 vehicleItem.insertAdjacentHTML('afterbegin', tag);
                 // adds tag fix for regression 633
-                isoTest.observeEl('.rs-callout.rs-callout--highlight.custom', function () {
-                    const newTag = document.querySelector(".rs-callout.rs-callout--highlight.custom");
+                isoTest.observeEl('.rs-callout.rs-callout--highlight', function () {
+                    const newTag = document.querySelector(".rs-callout.rs-callout--highlight");
                     const pictureImg = newTag.parentElement.querySelector('.vehicle-item__image');
-                    pictureImg.insertAdjacentElement("afterbegin", newTag);
-                    newTag.classList.remove("custom");
+                    const vehicleSummary = newTag.parentElement.querySelector('.vehicle-item__summary');
+
+
+                    const mediaQuery = window.matchMedia('(max-width: 653px)')
+
+                    function handleTabletChange(e) {
+                        // Check if the media query is true
+                        if (e.matches) {
+                            // Then log the following message to the console
+
+                            vehicleSummary.insertAdjacentElement("afterbegin", newTag);
+                        }
+                        else {
+                            pictureImg.insertAdjacentElement("afterbegin", newTag);
+                        }
+                    }
+
+                    // Register event listener
+                    mediaQuery.addListener(handleTabletChange);
+
+                    // Initial check
+                    handleTabletChange(mediaQuery);
                 });
             },
             reOrder: function () {
@@ -290,6 +336,18 @@
                 }
                 var e = new Event('ttFeatOrder');
                 window.dispatchEvent(e);
+            },
+            elementLoaded: function (ele, callback) {
+                isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+                window.clearTimeout(isoTest.eleTimer);
+                if (document.querySelectorAll(ele).length > 0) {
+                    if (typeof callback === 'function') {
+                        isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+                        callback();
+                    }
+                } else {
+                    isoTest.eleTimer = window.setTimeout(function () { isoTest.elementLoaded(ele, callback); }, 100);
+                }
             },
             observeEl: function (selector, callback) {
                 var processed = new Map();
@@ -337,18 +395,6 @@
                     childList: true,
                     subtree: true
                 });
-            },
-            elementLoaded: function (ele, callback) {
-                isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-                window.clearTimeout(isoTest.eleTimer);
-                if (document.querySelectorAll(ele).length > 0) {
-                    if (typeof callback === 'function') {
-                        isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-                        callback();
-                    }
-                } else {
-                    isoTest.eleTimer = window.setTimeout(function () { isoTest.elementLoaded(ele, callback); }, 100);
-                }
             },
             log: function (obj) {
                 if (isoTest.debug === true) {

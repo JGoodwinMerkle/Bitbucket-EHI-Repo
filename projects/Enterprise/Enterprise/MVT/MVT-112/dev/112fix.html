@@ -77,7 +77,6 @@
         width: 0;
     }
 
-
     .iso-preSelectedClass .rs-callout.rs-callout--highlight {
         background-color: #ce810d;
         color: #fcf1e0;
@@ -86,6 +85,7 @@
     .iso-preSelectedClass .rs-callout__icon {
         fill: #fcf1e0;
     }
+
 
     @media (max-width: 1081px) {
 
@@ -118,26 +118,25 @@
         var isoTest = {
             debug: false,
             account: 'Enterprise',
-            portfolio: 'Enterprise.de',
+            portfolio: 'Enterprise.fr',
             test: 'Featured Vehile 3.0',
             creative: 'Challenger 1',
             filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
             vehicleItem: '.vehicle-list__item',
-            vehicleItemImage: '.vehicle-item__image',
             preSelected: '.vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected',
             template: '<span class="rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
             content: {
                 en: {
-                    tag: 'Enjoy Low Price',
-                    shortTag: 'Enjoy Low Price'
+                    tag: 'Most Versatile',
+                    shortTag: 'Most Versatile'
                 },
-                de: {
-                    tag: 'Großes Auto zum kleinen Preis',
-                    shortTag: 'Großes Auto zum kleinen Preis'
+                fr: {
+                    tag: 'Le plus polyvalent',
+                    shortTag: 'Le plus polyvalent'
                 }
             },
             featured: {
-                car: 'IFMR'
+                car: 'CFMR'
             },
             altCar: '',
             featAvail: false,
@@ -174,7 +173,7 @@
                 spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
 
                 // Search filter bug fix
-                isoTest.observeEl('.is-search-by-filter.rs-tag-container--darkGreen', function (el) {
+                isoTest.observeEl('.iso-featured .is-search-by-filter.rs-tag-container--darkGreen', function (el) {
                     var vehicleItem = el.closest('.vehicle-list__item');
                     if (vehicleItem.classList.contains('iso-preSelectedClass-filtered')) {
                         var featuredTag = vehicleItem.querySelector('.rs-callout');
@@ -183,6 +182,7 @@
                         }
                     }
                 });
+
             },
             hashHandler: function () {
                 if (/cars/.test(location.hash)) {
@@ -287,16 +287,15 @@
                     const newTag = document.querySelector(".rs-callout.rs-callout--highlight");
                     const pictureImg = newTag.parentElement.querySelector('.vehicle-item__image');
                     const vehicleSummary = newTag.parentElement.querySelector('.vehicle-item__summary');
-                    // console.log(vehicleSummary);
 
-                    // newTag.classList.remove("custom");
+
                     const mediaQuery = window.matchMedia('(max-width: 653px)')
 
                     function handleTabletChange(e) {
                         // Check if the media query is true
                         if (e.matches) {
                             // Then log the following message to the console
-                            // console.log('Media Query Matched!');
+
                             vehicleSummary.insertAdjacentElement("afterbegin", newTag);
                         }
                         else {
@@ -338,6 +337,18 @@
                 }
                 var e = new Event('ttFeatOrder');
                 window.dispatchEvent(e);
+            },
+            elementLoaded: function (ele, callback) {
+                isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+                window.clearTimeout(isoTest.eleTimer);
+                if (document.querySelectorAll(ele).length > 0) {
+                    if (typeof callback === 'function') {
+                        isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+                        callback();
+                    }
+                } else {
+                    isoTest.eleTimer = window.setTimeout(function () { isoTest.elementLoaded(ele, callback); }, 100);
+                }
             },
             observeEl: function (selector, callback) {
                 var processed = new Map();
@@ -385,18 +396,6 @@
                     childList: true,
                     subtree: true
                 });
-            },
-            elementLoaded: function (ele, callback) {
-                isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-                window.clearTimeout(isoTest.eleTimer);
-                if (document.querySelectorAll(ele).length > 0) {
-                    if (typeof callback === 'function') {
-                        isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-                        callback();
-                    }
-                } else {
-                    isoTest.eleTimer = window.setTimeout(function () { isoTest.elementLoaded(ele, callback); }, 100);
-                }
             },
             log: function (obj) {
                 if (isoTest.debug === true) {
