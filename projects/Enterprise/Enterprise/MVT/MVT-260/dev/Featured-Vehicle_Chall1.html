@@ -1,340 +1,441 @@
 <style>
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
-	  margin-right: -15px;
-	  margin-top: -3px;
+		margin-right: -15px;
+		margin-top: -3px;
 	}
-  
+
 	.vehicle-list.iso-featured {
-	  display: flex;
-	  flex-flow: wrap;
+		display: flex;
+		flex-flow: wrap;
 	}
-  
+
 	.vehicle-list__item {
-	  order: 0;
-	  width: 100%;
+		order: 0;
+		width: 100%;
 	}
-  
+
 	.vehicle-list__item.iso-preSelectedClass .vehicle-item {
-	  padding-right: 15px;
-	  margin-right: -15px;
+		padding-right: 15px;
+		/* margin-right: -15px; */
 	}
-  
+
 	.iso-tag {
-	  background: #0a643a;
-	  color: #fff;
-	  display: block;
-	  font-size: 14px;
-	  padding: 4px 8px 1px 8px;
-	  width: calc(100% + 15px);
+		background: #0a643a;
+		color: #fff;
+		display: block;
+		font-size: 14px;
+		padding: 4px 8px 1px 8px;
+		width: calc(100% + 15px);
 	}
-  
+
 	.iso-unavailable-msg {
-	  background: #f2f2f2;
-	  border-bottom: 0.125rem solid #c3c3c3;
-	  display: block;
-	  font-size: 14px;
-	  padding: 15px 20px;
-	  width: 100%;
+		background: #f2f2f2;
+		border-bottom: 0.125rem solid #c3c3c3;
+		display: block;
+		font-size: 14px;
+		padding: 15px 20px;
+		width: 100%;
 	}
-  
+
 	.iso-preSelectedClass.iso-preSelectedClass-filtered {
-	  margin-top: 0;
+		margin-top: 0;
 	}
-  
+
 	.iso-preSelectedClass-filtered .iso-tag {
-	  display: none;
+		display: none;
 	}
-  
+
 	.iso-preSelectedClass-filtered .vehicle-item.is-pre-selected,
 	.iso-preSelectedClass-filtered .vehicle-item.is-search-by-filter {
-	  border-color: #169a5a;
+		border-color: #169a5a;
 	}
-  
+
 	.iso-preSelectedClass {
-	  margin-top: 7px;
+		margin-top: 7px;
 	}
-  
+
 	.iso-tag {
-	  display: inline;
-	  font-size: 12px;
-	  font-weight: 600;
-	  padding: 4px 15px;
-	  position: relative;
-	  width: auto;
+		display: inline;
+		font-size: 12px;
+		font-weight: 600;
+		padding: 4px 15px;
+		position: relative;
+		width: auto;
 	}
-  
+
 	.iso-tag:after {
-	  border-left: 6px solid transparent;
-	  border-right: 6px solid transparent;
-	  border-top: 6px solid #0a643a;
-	  bottom: -6px;
-	  content: " ";
-	  height: 0;
-	  left: 20px;
-	  position: absolute;
-	  width: 0;
+		border-left: 6px solid transparent;
+		border-right: 6px solid transparent;
+		border-top: 6px solid #0a643a;
+		bottom: -6px;
+		content: " ";
+		height: 0;
+		left: 20px;
+		position: absolute;
+		width: 0;
 	}
-  
+
+	.iso-preSelectedClass .rs-callout.rs-callout--highlight {
+		background-color: #ce810d;
+		color: #fcf1e0;
+	}
+
+	.iso-preSelectedClass .rs-callout__icon {
+		fill: #fcf1e0;
+	}
+
 	@media (max-width: 1081px) {
-  
-	  .vehicle-enough-points.cf,
-	  .vehicle-not-enough-points {
-		margin-right: 0;
-	  }
-  
-	  .vehicle-list__item.iso-preSelectedClass .vehicle-item {
-		padding-right: 0;
-		margin-right: 0;
-	  }
-  
-	  .iso-tag {
-		margin-left: 5px;
-		width: 100%;
-	  }
+
+		.vehicle-enough-points.cf,
+		.vehicle-not-enough-points {
+			margin-right: 0;
+		}
+
+		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+			padding-right: 0;
+			margin-right: 0;
+		}
+
+		.iso-tag {
+			margin-left: 5px;
+			width: 100%;
+		}
 	}
-  </style>
-  <script>
+
+	@media (max-width: 653px) {
+
+		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
+			margin-bottom: 5%;
+		}
+	}
+</style>
+<script>
 	!(function () {
-	  "use strict";
-	  var r = {
-		debug: !1,
-		account: "Enterprise",
-		portfolio: "Enterprise.com",
-		test: "Featured Vehile 3.0: List C",
-		creative: "Challenger 1",
-		filters: ".vehicle-filter__header-cta .vehicle-filter__header-link",
-		vehicleItem: ".vehicle-list__item",
-		preSelected: ".vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected",
-		template:
-		  '<span class="rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
-		featured: {
-		  0: { car: "SFAR", tag: "Most Versatile", shortTag: "Most Versatile" },
-		  1: { car: "MVAR", tag: "Best for Vacation", shortTag: "Best for Vacation" },
-		  2: { car: "MVAR", tag: "Best for Vacation", shortTag: "Best for Vacation" },
-		  3: { car: "MVAR", tag: "Best for Vacation", shortTag: "Best for Vacation" },
-		  4: { car: "SFAR", tag: "Most Versatile", shortTag: "Most Versatile" },
-		  5: { car: "SFAR", tag: "Most Versatile", shortTag: "Most Versatile" },
-		  6: { car: "SFAR", tag: "Most Versatile", shortTag: "Most Versatile" },
+		"use strict";
+		var r = {
+			debug: !1,
+			account: "Enterprise",
+			portfolio: "Enterprise.com",
+			test: "Featured Vehile 3.0: List C",
+			creative: "Challenger 1",
+			filters: ".vehicle-filter__header-cta .vehicle-filter__header-link",
+			vehicleItem: ".vehicle-list__item",
+			preSelected: ".vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected",
+			template:
+				'<span class="rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
+			featured: {
+				0: { car: "SFAR", tag: "Most Versatile", shortTag: "Most Versatile" },
+				1: { car: "MVAR", tag: "Best for Vacation", shortTag: "Best for Vacation" },
+				2: { car: "MVAR", tag: "Best for Vacation", shortTag: "Best for Vacation" },
+				3: { car: "MVAR", tag: "Best for Vacation", shortTag: "Best for Vacation" },
+				4: { car: "SFAR", tag: "Most Versatile", shortTag: "Most Versatile" },
+				5: { car: "SFAR", tag: "Most Versatile", shortTag: "Most Versatile" },
+				6: { car: "SFAR", tag: "Most Versatile", shortTag: "Most Versatile" },
+			},
+			featuredOverride: {
+				0: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
+				1: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
+				2: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
+				3: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
+				4: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
+				5: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
+				6: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
+			},
+			altCar: "",
+			featAvail: !1,
+			audience: {
+				branch: "airport",
+				peopleSoftId: [
+					"1019178",
+					"1018543",
+					"1019084",
+					"1019129",
+					"1019155",
+					"1019192",
+					"1019164",
+					"1019131",
+					"1019202",
+					"1019138",
+					"1019113",
+					"1019184",
+					"1019172",
+					"1019087",
+					"1021700",
+					"1019326",
+					"1019187",
+					"1019181",
+					"1019135",
+					"1019146",
+					"1021601",
+					"1021051",
+					"1019199",
+					"1019158",
+					"1022354",
+					"1021052",
+					"1034806",
+					"1022518",
+					"1029836",
+					"1030702",
+					"1039110",
+				],
+			},
+			exclusions: { minDate: "2019-06-15T00:00:00", maxDate: "2019-08-31T00:00:00" },
+			init: function () {
+				new MutationObserver(function (e) {
+					e.forEach(function (e) {
+						e.removedNodes.forEach(function (e) {
+							void 0 !== e.classList &&
+								e.classList.contains("spinner-container") &&
+								r.elementLoaded(r.vehicleItem, function () {
+									r.chall();
+								});
+						});
+					});
+				}).observe(document.querySelector("body"), { subtree: !0, childList: !0 }),
+					r.elementLoaded(r.vehicleItem, function () {
+						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall();
+					}),
+					window.addEventListener("hashchange", r.hashHandler, !1),
+					window.addEventListener("ttFeatVehicle", r.labelVehicle, !1);
+
+				// Search filter bug fix
+				r.observeEl('.is-search-by-filter.rs-tag-container--darkGreen', function (el) {
+					var vehicleItem = el.closest('.vehicle-list__item');
+					if (vehicleItem.classList.contains('iso-preSelectedClass-filtered')) {
+						var featuredTag = vehicleItem.querySelector('.rs-callout');
+						if (featuredTag) {
+							featuredTag.style.display = 'none';
+						}
+					}
+				});
+			},
+			hashHandler: function () {
+				/cars/.test(location.hash) &&
+					r.elementLoaded(r.vehicleItem, function () {
+						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall();
+					});
+			},
+			chall: function () {
+				r.branchType = ReservationStateTree.get(["session", "reservationSession", "pickup_location", "location_type"]);
+				var e = r.branchType == r.audience.branch,
+					t = ReservationStateTree.get(["session", "reservationSession", "pickup_location", "id"]),
+					t = r.checkId(t);
+				(r.pickupDate = new Date(ReservationStateTree.get(["session", "reservationSession", "pickup_time"]))), t && e && r.runTest();
+			},
+			checkDate: function () {
+				var e = new Date(r.exclusions.minDate),
+					t = new Date(r.exclusions.maxDate);
+				return r.pickupDate >= e && r.pickupDate <= t;
+			},
+			checkId: function (e) {
+				return -1 < r.audience.peopleSoftId.indexOf(e);
+			},
+			checkGroup: function (t) {
+				var a = !1;
+				return (
+					r.audience.group.forEach(function (e) {
+						t.substring(0, e.length) == e && (a = !0);
+					}),
+					a
+				);
+			},
+			runTest: function () {
+				(r.day = a.getQueryParam("dayOverride") ? a.getQueryParam("dayOverride") : r.pickupDate.getDay()),
+					(r.vehicleClass = (r.checkDate() ? r.featuredOverride : r.featured)[r.day]),
+					(r.onLoadpreSelected = 0 < document.querySelectorAll(r.preSelected).length),
+					r.checkSort();
+				for (var e = document.querySelectorAll(".vehicle-filter__filter .form-checkbox,.vehicle-filter__header-link, .vehicle-redemption__options-cta, .iso-pay"), t = 0; t < e.length; t++)
+					e[t].addEventListener(
+						"click",
+						function () {
+							setTimeout(r.checkSort, 200);
+						},
+						!1
+					);
+				document.addEventListener("click", function (e) {
+					(!e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') && !e.target.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]')) ||
+						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) ||
+						r.checkSort();
+				}),
+					document.querySelector("#vehicleSortBy").addEventListener(
+						"change",
+						function () {
+							setTimeout(r.checkSort, 200);
+						},
+						!1
+					);
+			},
+			checkSort: function () {
+				var e = document.querySelector("#vehicleSortBy").value,
+					t = document.querySelector(".vehicle-list");
+				"Recommended" == e ? t.classList.add("iso-featured") : t.classList.remove("iso-featured"), r.labelVehicle();
+			},
+			labelVehicle: function () {
+				var e;
+				(r.vehicleItems = document.querySelectorAll(".vehicle-list > li")),
+					(r.lastPreselectedIndex = document.querySelectorAll(r.preSelected).length - 1),
+					(r.lastPreselected = document.querySelectorAll(r.preSelected)[r.lastPreselectedIndex]),
+					r.lastPreselected && ((e = Array.prototype.slice.call(r.vehicleItems)), (r.lastPreselectedIndex = e.indexOf(r.lastPreselected.parentNode))),
+					r.findVehicle(r.vehicleClass.car),
+					0 == document.querySelectorAll(".iso-preSelectedClass").length && r.altCar && !r.featAvail && r.findVehicle(r.altCar),
+					r.reOrder();
+			},
+			findVehicle: function (e) {
+				for (var t, a, s = 0; s < r.vehicleItems.length; s++)
+					!r.vehicleItems[s].classList.contains("iso-preSelectedClass") &&
+						r.vehicleItems[s].classList.contains("vehicle-list__item") &&
+						((t = (a = r.vehicleItems[s].getAttribute("data-dtm-tracking").split("|"))[1]),
+							(a = a[2]),
+							t == e && "SOLD_OUT" != a && "RESTRICTED_AT_RETAIL_RATE" != a && (r.addPreselect(r.vehicleItems[s]), (r.featAvail = t != r.altCar)));
+			},
+			addPreselect: function (e) {
+				e.classList.add("iso-preSelectedClass");
+				var t = e.querySelector(".vehicle-item"),
+					t =
+						(r.onLoadpreSelected && (t.classList.contains("is-search-by-filter") || t.classList.contains("is-pre-selected"))
+							? e.classList.add("iso-preSelectedClass-filtered")
+							: !r.onLoadpreSelected || (t.classList.contains("is-search-by-filter") && t.classList.contains("is-pre-selected")) || e.classList.add("iso-preselected-second"),
+							a.supplant(r.template, { tag: r.onLoadpreSelected ? r.vehicleClass.shortTag : r.vehicleClass.tag }));
+				e.insertAdjacentHTML("afterbegin", t);
+				// adds tag fix for regression 633
+				r.observeEl('.rs-callout.rs-callout--highlight', function () {
+					const newTag = document.querySelector(".rs-callout.rs-callout--highlight");
+					const pictureImg = newTag.parentElement.children[1].children[0].querySelector('.vehicle-item__image');
+					const vehicleSummary = newTag.parentElement.children[1].children[0].querySelector('.vehicle-item__summary');
+
+
+					const mediaQuery = window.matchMedia('(max-width: 653px)')
+
+					function handleTabletChange(e) {
+						// Check if the media query is true
+						if (e.matches) {
+							// Then log the following message to the console
+							// console.log('Media Query Matched!');
+							vehicleSummary.insertAdjacentElement("afterbegin", newTag);
+						}
+						else {
+							pictureImg.insertAdjacentElement("afterbegin", newTag);
+						}
+					}
+
+					// Register event listener
+					mediaQuery.addListener(handleTabletChange);
+
+					// Initial check
+					handleTabletChange(mediaQuery);
+				});
+			},
+			reOrder: function () {
+				var e = 0,
+					t = document.querySelector(".iso-preSelectedClass .vehicle-item");
+				if (t && (!t.classList.contains("is-search-by-filter") || !t.classList.contains("is-pre-selected")))
+					for (var a = 0; a < r.vehicleItems.length; a++)
+						r.vehicleItems[a].classList.contains("iso-preSelectedClass")
+							? 0 == a && r.vehicleItems[a].classList.contains("iso-preSelectedClass") && ((t.parentNode.style.order = e), e++)
+							: ((r.vehicleItems[a].style.order = e),
+								0 == a && -1 == r.lastPreselectedIndex && (r.vehicleItems[a].classList.contains("vehicle-list__unavailable-car") || r.vehicleItems[a].firstChild.classList.contains("vehicle-not-enough-points"))
+									? (t.parentNode.style.order = e += 1)
+									: 0 != a || -1 != r.lastPreselectedIndex || r.vehicleItems[a].firstChild.classList.contains("vehicle-not-enough-points")
+										? a == r.lastPreselectedIndex && (t.parentNode.style.order = e += 1)
+										: (t.parentNode.style.order = -1),
+								e++);
+				var s = new Event("ttFeatOrder");
+				window.dispatchEvent(s);
+
+
+				var selectedCurCar = document.querySelector(".iso-preSelectedClass")
+				if (selectedCurCar) {
+					if (selectedCurCar.innerText.includes("Current Selection")) {
+						document.querySelector(".rs-callout.rs-callout--highlight").remove()
+					}
+				}
+
+				var preSel = document.querySelector(".vehicle-list__item.iso-preSelectedClass.iso-preSelectedClass-filtered")
+				if (preSel) {
+					if (preSel.children.length > 1)
+						if (preSel.children[0].className == 'rs-callout rs-callout--highlight' && preSel.children[1].className == 'rs-tag-container rs-tag-container--darkGreen vehicle-item is-search-by-filter') {
+							preSel.children[0].remove()
+						}
+				}
+
+			},
+			observeEl: function (selector, callback) {
+				var processed = new Map();
+
+				var processElement = function processElement(el) {
+					if (processed && !processed.has(el)) {
+						processed.set(el, true);
+						callback(el);
+					}
+				};
+
+				var lookForSelector = function lookForSelector() {
+					var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+					if (el.matches && el.matches(selector)) {
+						if (processElement(el)) return true;
+					}
+
+					if (el.querySelectorAll) {
+						var elements = el.querySelectorAll(selector);
+
+						if (elements.length) {
+							for (var i = 0; i < elements.length; i++) {
+								var _el = elements[i];
+								if (processElement(_el)) return true;
+							}
+						}
+					}
+				};
+				lookForSelector();
+
+				var obs = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (record) {
+						if (record && record.addedNodes && record.addedNodes.length) {
+							for (var i = 0; i < record.addedNodes.length; i++) {
+								var el = record.addedNodes[i].parentElement;
+								if (el && lookForSelector(el)) return true;
+							}
+						}
+					});
+				});
+				obs.observe(document, {
+					attributes: true,
+					attributeFilter: ['style', 'className'],
+					childList: true,
+					subtree: true
+				});
+			},
+			elementLoaded: function (e, t) {
+				window.clearTimeout(r.eleTimer),
+					0 < document.querySelectorAll(e).length
+						? "function" == typeof t && t()
+						: (r.eleTimer = window.setTimeout(function () {
+							r.elementLoaded(e, t);
+						}, 100));
+			},
+			log: function (e) {
+				!0 === r.debug && console.log(e);
+			},
 		},
-		featuredOverride: {
-		  0: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
-		  1: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
-		  2: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
-		  3: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
-		  4: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
-		  5: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
-		  6: { car: "PPAR", tag: "Best for Hauling", shortTag: "Best for Hauling" },
-		},
-		altCar: "",
-		featAvail: !1,
-		audience: {
-		  branch: "airport",
-		  peopleSoftId: [
-			"1019178",
-			"1018543",
-			"1019084",
-			"1019129",
-			"1019155",
-			"1019192",
-			"1019164",
-			"1019131",
-			"1019202",
-			"1019138",
-			"1019113",
-			"1019184",
-			"1019172",
-			"1019087",
-			"1021700",
-			"1019326",
-			"1019187",
-			"1019181",
-			"1019135",
-			"1019146",
-			"1021601",
-			"1021051",
-			"1019199",
-			"1019158",
-			"1022354",
-			"1021052",
-			"1034806",
-			"1022518",
-			"1029836",
-			"1030702",
-			"1039110",
-		  ],
-		},
-		exclusions: { minDate: "2019-06-15T00:00:00", maxDate: "2019-08-31T00:00:00" },
-		init: function () {
-		  new MutationObserver(function (e) {
-			e.forEach(function (e) {
-			  e.removedNodes.forEach(function (e) {
-				void 0 !== e.classList &&
-				  e.classList.contains("spinner-container") &&
-				  r.elementLoaded(r.vehicleItem, function () {
-					r.chall();
-				  });
-			  });
-			});
-		  }).observe(document.querySelector("body"), { subtree: !0, childList: !0 }),
-			r.elementLoaded(r.vehicleItem, function () {
-			  ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall();
-			}),
-			window.addEventListener("hashchange", r.hashHandler, !1),
-			window.addEventListener("ttFeatVehicle", r.labelVehicle, !1);
-		},
-		hashHandler: function () {
-		  /cars/.test(location.hash) &&
-			r.elementLoaded(r.vehicleItem, function () {
-			  ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall();
-			});
-		},
-		chall: function () {
-		  r.branchType = ReservationStateTree.get(["session", "reservationSession", "pickup_location", "location_type"]);
-		  var e = r.branchType == r.audience.branch,
-			t = ReservationStateTree.get(["session", "reservationSession", "pickup_location", "id"]),
-			t = r.checkId(t);
-		  (r.pickupDate = new Date(ReservationStateTree.get(["session", "reservationSession", "pickup_time"]))), t && e && r.runTest();
-		},
-		checkDate: function () {
-		  var e = new Date(r.exclusions.minDate),
-			t = new Date(r.exclusions.maxDate);
-		  return r.pickupDate >= e && r.pickupDate <= t;
-		},
-		checkId: function (e) {
-		  return -1 < r.audience.peopleSoftId.indexOf(e);
-		},
-		checkGroup: function (t) {
-		  var a = !1;
-		  return (
-			r.audience.group.forEach(function (e) {
-			  t.substring(0, e.length) == e && (a = !0);
-			}),
-			a
-		  );
-		},
-		runTest: function () {
-		  (r.day = a.getQueryParam("dayOverride") ? a.getQueryParam("dayOverride") : r.pickupDate.getDay()),
-			(r.vehicleClass = (r.checkDate() ? r.featuredOverride : r.featured)[r.day]),
-			(r.onLoadpreSelected = 0 < document.querySelectorAll(r.preSelected).length),
-			r.checkSort();
-		  for (var e = document.querySelectorAll(".vehicle-filter__filter .form-checkbox,.vehicle-filter__header-link, .vehicle-redemption__options-cta, .iso-pay"), t = 0; t < e.length; t++)
-			e[t].addEventListener(
-			  "click",
-			  function () {
-				setTimeout(r.checkSort, 200);
-			  },
-			  !1
-			);
-		  document.addEventListener("click", function (e) {
-			(!e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') && !e.target.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]')) ||
-			  ReservationStateTree.get(["model", "carSelect", "selectedCar"]) ||
-			  r.checkSort();
-		  }),
-			document.querySelector("#vehicleSortBy").addEventListener(
-			  "change",
-			  function () {
-				setTimeout(r.checkSort, 200);
-			  },
-			  !1
-			);
-		},
-		checkSort: function () {
-		  var e = document.querySelector("#vehicleSortBy").value,
-			t = document.querySelector(".vehicle-list");
-		  "Recommended" == e ? t.classList.add("iso-featured") : t.classList.remove("iso-featured"), r.labelVehicle();
-		},
-		labelVehicle: function () {
-		  var e;
-		  (r.vehicleItems = document.querySelectorAll(".vehicle-list > li")),
-			(r.lastPreselectedIndex = document.querySelectorAll(r.preSelected).length - 1),
-			(r.lastPreselected = document.querySelectorAll(r.preSelected)[r.lastPreselectedIndex]),
-			r.lastPreselected && ((e = Array.prototype.slice.call(r.vehicleItems)), (r.lastPreselectedIndex = e.indexOf(r.lastPreselected.parentNode))),
-			r.findVehicle(r.vehicleClass.car),
-			0 == document.querySelectorAll(".iso-preSelectedClass").length && r.altCar && !r.featAvail && r.findVehicle(r.altCar),
-			r.reOrder();
-		},
-		findVehicle: function (e) {
-		  for (var t, a, s = 0; s < r.vehicleItems.length; s++)
-			!r.vehicleItems[s].classList.contains("iso-preSelectedClass") &&
-			  r.vehicleItems[s].classList.contains("vehicle-list__item") &&
-			  ((t = (a = r.vehicleItems[s].getAttribute("data-dtm-tracking").split("|"))[1]),
-				(a = a[2]),
-				t == e && "SOLD_OUT" != a && "RESTRICTED_AT_RETAIL_RATE" != a && (r.addPreselect(r.vehicleItems[s]), (r.featAvail = t != r.altCar)));
-		},
-		addPreselect: function (e) {
-		  e.classList.add("iso-preSelectedClass");
-		  var t = e.querySelector(".vehicle-item"),
-			t =
-			  (r.onLoadpreSelected && (t.classList.contains("is-search-by-filter") || t.classList.contains("is-pre-selected"))
-				? e.classList.add("iso-preSelectedClass-filtered")
-				: !r.onLoadpreSelected || (t.classList.contains("is-search-by-filter") && t.classList.contains("is-pre-selected")) || e.classList.add("iso-preselected-second"),
-				a.supplant(r.template, { tag: r.onLoadpreSelected ? r.vehicleClass.shortTag : r.vehicleClass.tag }));
-		  e.insertAdjacentHTML("afterbegin", t);
-		},
-		reOrder: function () {
-		  var e = 0,
-			t = document.querySelector(".iso-preSelectedClass .vehicle-item");
-		  if (t && (!t.classList.contains("is-search-by-filter") || !t.classList.contains("is-pre-selected")))
-			for (var a = 0; a < r.vehicleItems.length; a++)
-			  r.vehicleItems[a].classList.contains("iso-preSelectedClass")
-				? 0 == a && r.vehicleItems[a].classList.contains("iso-preSelectedClass") && ((t.parentNode.style.order = e), e++)
-				: ((r.vehicleItems[a].style.order = e),
-				  0 == a && -1 == r.lastPreselectedIndex && (r.vehicleItems[a].classList.contains("vehicle-list__unavailable-car") || r.vehicleItems[a].firstChild.classList.contains("vehicle-not-enough-points"))
-					? (t.parentNode.style.order = e += 1)
-					: 0 != a || -1 != r.lastPreselectedIndex || r.vehicleItems[a].firstChild.classList.contains("vehicle-not-enough-points")
-					  ? a == r.lastPreselectedIndex && (t.parentNode.style.order = e += 1)
-					  : (t.parentNode.style.order = -1),
-				  e++);
-		  var s = new Event("ttFeatOrder");
-		  window.dispatchEvent(s);
-  
-  
-		  var selectedCurCar = document.querySelector(".iso-preSelectedClass")
-		  if (selectedCurCar) {
-			if (selectedCurCar.innerText.includes("Current Selection")) {
-			  document.querySelector(".rs-callout.rs-callout--highlight").remove()
-			}
-		  }
-  
-		  var preSel = document.querySelector(".vehicle-list__item.iso-preSelectedClass.iso-preSelectedClass-filtered")
-		  if (preSel) {
-			if (preSel.children.length > 1)
-			  if (preSel.children[0].className == 'rs-callout rs-callout--highlight' && preSel.children[1].className == 'rs-tag-container rs-tag-container--darkGreen vehicle-item is-search-by-filter') {
-				preSel.children[0].remove()
-			  }
-		  }
-  
-		},
-		elementLoaded: function (e, t) {
-		  window.clearTimeout(r.eleTimer),
-			0 < document.querySelectorAll(e).length
-			  ? "function" == typeof t && t()
-			  : (r.eleTimer = window.setTimeout(function () {
-				r.elementLoaded(e, t);
-			  }, 100));
-		},
-		log: function (e) {
-		  !0 === r.debug && console.log(e);
-		},
-	  },
-		a = {
-		  getQueryParam: function (e) {
-			for (var t = window.location.search.substring(1).split("&"), a = 0; a < t.length; a++) {
-			  var s = t[a].split("=");
-			  if (decodeURIComponent(s[0]) == e) return decodeURIComponent(s[1]);
-			}
-		  },
-		  supplant: function (e, i) {
-			return e.replace(/{([^{}]*)}/g, function (e, t) {
-			  for (var a = t.split(/\./), s = i, r = 0; r < a.length; r++) {
-				if (null == s[a[r]]) return e;
-				s = s[a[r]];
-			  }
-			  return "string" == typeof s || "number" == typeof s ? s : e;
-			});
-		  },
-		};
-	  r.init();
+			a = {
+				getQueryParam: function (e) {
+					for (var t = window.location.search.substring(1).split("&"), a = 0; a < t.length; a++) {
+						var s = t[a].split("=");
+						if (decodeURIComponent(s[0]) == e) return decodeURIComponent(s[1]);
+					}
+				},
+				supplant: function (e, i) {
+					return e.replace(/{([^{}]*)}/g, function (e, t) {
+						for (var a = t.split(/\./), s = i, r = 0; r < a.length; r++) {
+							if (null == s[a[r]]) return e;
+							s = s[a[r]];
+						}
+						return "string" == typeof s || "number" == typeof s ? s : e;
+					});
+				},
+			};
+		r.init();
 	})();
-  </script>
+</script>
