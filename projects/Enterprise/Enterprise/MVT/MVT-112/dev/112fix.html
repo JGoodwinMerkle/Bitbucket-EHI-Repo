@@ -309,6 +309,12 @@
                     // Initial check
                     handleTabletChange(mediaQuery);
                 });
+                isoTest.observeEl('.iso-preSelectedClass-filtered', function () {
+                    if (document.querySelector(".iso-preSelectedClass-filtered").children[0].querySelector(".rs-tag--darkGreen").innerText.includes("Best Match") && document.querySelector(".iso-preSelectedClass-filtered").children[0].children[1].querySelector(".rs-callout--highlight")) {
+                        const hideTag = document.querySelector(".iso-preSelectedClass-filtered").children[0].children[1].querySelector(".rs-callout--highlight");
+                        hideTag.style.display = 'none';
+                    }
+                });
             },
             reOrder: function () {
                 var o = 0;

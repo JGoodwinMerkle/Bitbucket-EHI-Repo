@@ -165,7 +165,9 @@
 						mutation.removedNodes.forEach(function (removedNode) {
 							if (removedNode.classList !== undefined) {
 								if (removedNode.classList.contains('spinner-container')) {
-									isoTest.hashHandler();
+									window.setTimeout(function () {
+										isoTest.hashHandler();
+									}, 200);
 								}
 							}
 						});
@@ -194,9 +196,11 @@
 				}
 			},
 			chall: function () {
-				isoTest.log('chall()');
-				isoTest.setLanguage();
-				isoTest.runTest();
+				if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "ES") {
+					isoTest.log('chall()');
+					isoTest.setLanguage();
+					isoTest.runTest();
+				}
 			},
 			setLanguage: function () {
 				isoTest.lang = location.pathname.split('/')[1];
@@ -299,8 +303,11 @@
 							vehicleSummary.insertAdjacentElement("afterbegin", newTag);
 						}
 						else {
-							pictureImg.insertAdjacentElement("afterbegin", newTag);
+							if (pictureImg) {
+								pictureImg.insertAdjacentElement("afterbegin", newTag);
+							}
 						}
+
 					}
 
 					// Register event listener
@@ -308,6 +315,13 @@
 
 					// Initial check
 					handleTabletChange(mediaQuery);
+				});
+
+				isoTest.observeEl('.iso-preSelectedClass-filtered', function () {
+					if (document.querySelector(".iso-preSelectedClass-filtered").children[0].querySelector(".rs-tag--darkGreen").innerText.includes("Best Match") && document.querySelector(".iso-preSelectedClass-filtered").children[0].children[1].querySelector(".rs-callout--highlight")) {
+						const hideTag = document.querySelector(".iso-preSelectedClass-filtered").children[0].children[1].querySelector(".rs-callout--highlight");
+						hideTag.style.display = 'none';
+					}
 				});
 			},
 			reOrder: function () {

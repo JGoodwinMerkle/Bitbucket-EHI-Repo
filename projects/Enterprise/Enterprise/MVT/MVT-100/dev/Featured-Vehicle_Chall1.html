@@ -86,8 +86,6 @@
     fill: #fcf1e0;
   }
 
-
-
   @media (max-width: 1081px) {
 
     .vehicle-enough-points.cf,
@@ -156,7 +154,9 @@
             mutation.removedNodes.forEach(function (removedNode) {
               if (removedNode.classList !== undefined) {
                 if (removedNode.classList.contains('spinner-container')) {
-                  isoTest.hashHandler();
+                  window.setTimeout(function () {
+                    isoTest.hashHandler();
+                  }, 200)
                 }
               }
             });
@@ -183,8 +183,10 @@
         }
       },
       chall: function () {
-        if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
-          isoTest.runTest();
+        if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "GB") {
+          if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+            isoTest.runTest();
+          }
         }
       },
       runTest: function () {
@@ -282,7 +284,9 @@
               vehicleSummary.insertAdjacentElement("afterbegin", newTag);
             }
             else {
-              pictureImg.insertAdjacentElement("afterbegin", newTag);
+              if (pictureImg) {
+                pictureImg.insertAdjacentElement("afterbegin", newTag);
+              }
             }
           }
 
@@ -291,6 +295,13 @@
 
           // Initial check
           handleTabletChange(mediaQuery);
+        });
+
+        isoTest.observeEl('.iso-preSelectedClass-filtered', function () {
+          if (document.querySelector(".iso-preSelectedClass-filtered").children[0].querySelector(".rs-tag--darkGreen").innerText.includes("Best Match") && document.querySelector(".iso-preSelectedClass-filtered").children[0].children[1].querySelector(".rs-callout--highlight")) {
+            const hideTag = document.querySelector(".iso-preSelectedClass-filtered").children[0].children[1].querySelector(".rs-callout--highlight");
+            hideTag.style.display = 'none';
+          }
         });
       },
       reOrder: function () {
