@@ -210,7 +210,7 @@
 						}
 					}
 				});
-
+				// adds filter box fix
 				r.observeEl('.vehicle-filter__content .vehicle-filter__filter:last-child .vehicle-filter__filter-list-item:last-child', async function (el) {
 					const rsCheckboxInputs = document.querySelectorAll(".vehicle-filter__filter-list-item input");
 
@@ -302,7 +302,7 @@
 							(a = a[2]),
 							t == e && "SOLD_OUT" != a && "RESTRICTED_AT_RETAIL_RATE" != a && (r.addPreselect(r.vehicleItems[s]), (r.featAvail = t != r.altCar)));
 			},
-			addFeaturedOrange: function(){
+			addFeaturedOrange: function () {
 				r.observeEl('.rs-callout.rs-callout--highlight', function () {
 					//Fix the orange tag showing when filter is used on a Green Featured item!
 
@@ -354,7 +354,7 @@
 				e.insertAdjacentHTML("afterbegin", t);
 				// adds tag fix for regression 633
 				r.addFeaturedOrange();
-				
+
 			},
 			reOrder: function () {
 				var e = 0,
