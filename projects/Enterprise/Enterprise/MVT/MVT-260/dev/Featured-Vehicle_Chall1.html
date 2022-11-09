@@ -318,15 +318,18 @@
 						if (e.matches) {
 							// Then log the following message to the console
 							// console.log('Media Query Matched!');
-							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
+							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered") && pictureImg !== null) {
 								vehicleSummary.insertAdjacentElement("afterbegin", newTag);
-							} else {
+							}
+							if (newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
 								newTag.style.display = "none";
 							}
 						} else {
-							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
+							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered") && pictureImg !== null) {
+								// console.log("pictureImg", pictureImg)
 								pictureImg.insertAdjacentElement("afterbegin", newTag);
-							} else {
+							}
+							if (newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
 								newTag.style.display = "none";
 							}
 						}
