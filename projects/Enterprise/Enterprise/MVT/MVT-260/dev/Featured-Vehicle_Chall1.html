@@ -76,13 +76,14 @@
 		width: 0;
 	}
 
+	/* default featured color */
 	.iso-preSelectedClass .rs-callout.rs-callout--highlight {
-		background-color: #ce810d;
-		color: #fcf1e0;
+		border-left: 4px solid #ce810d;
 	}
 
-	.iso-preSelectedClass .rs-callout__icon {
-		fill: #fcf1e0;
+	.iso-preSelectedClass .rs-icon {
+		width: 20px;
+		height: 20px;
 	}
 
 	@media (max-width: 1081px) {
@@ -209,6 +210,18 @@
 						}
 					}
 				});
+
+				r.observeEl('.vehicle-filter__content .vehicle-filter__filter:last-child .vehicle-filter__filter-list-item:last-child', async function (el) {
+					const rsCheckboxInputs = document.querySelectorAll(".vehicle-filter__filter-list-item input");
+
+					rsCheckboxInputs.forEach(rs => {
+						rs.addEventListener('change', function (e) {
+							setTimeout(() => {
+								r.chall();
+							}, 1.5);
+						});
+					});
+				});
 			},
 			hashHandler: function () {
 				/cars/.test(location.hash) &&
@@ -289,6 +302,44 @@
 							(a = a[2]),
 							t == e && "SOLD_OUT" != a && "RESTRICTED_AT_RETAIL_RATE" != a && (r.addPreselect(r.vehicleItems[s]), (r.featAvail = t != r.altCar)));
 			},
+			addFeaturedOrange: function(){
+				r.observeEl('.rs-callout.rs-callout--highlight', function () {
+					//Fix the orange tag showing when filter is used on a Green Featured item!
+
+					const newTag = document.querySelector(".rs-callout.rs-callout--highlight");
+					const pictureImg = newTag.parentElement.querySelector('.vehicle-item__image');
+					const vehicleSummary = newTag.parentElement.querySelector('.vehicle-item__summary');
+
+
+					const mediaQuery = window.matchMedia('(max-width: 653px)')
+
+					function handleTabletChange(e) {
+						// Check if the media query is true
+						if (e.matches) {
+							// Then log the following message to the console
+							// console.log('Media Query Matched!');
+							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
+								vehicleSummary.insertAdjacentElement("afterbegin", newTag);
+							} else {
+								newTag.style.display = "none";
+							}
+						} else {
+							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
+								pictureImg.insertAdjacentElement("afterbegin", newTag);
+							} else {
+								newTag.style.display = "none";
+							}
+						}
+					}
+
+					// Register event listener
+					mediaQuery.addListener(handleTabletChange);
+
+					// Initial check
+					handleTabletChange(mediaQuery);
+				});
+
+			},
 			addPreselect: function (e) {
 				e.classList.add("iso-preSelectedClass");
 				var t = e.querySelector(".vehicle-item"),
@@ -299,32 +350,16 @@
 							a.supplant(r.template, { tag: r.onLoadpreSelected ? r.vehicleClass.shortTag : r.vehicleClass.tag }));
 				e.insertAdjacentHTML("afterbegin", t);
 				// adds tag fix for regression 633
-				r.observeEl('.rs-callout.rs-callout--highlight', function () {
-					const newTag = document.querySelector(".rs-callout.rs-callout--highlight");
-					const pictureImg = newTag.parentElement.children[1].children[0].querySelector('.vehicle-item__image');
-					const vehicleSummary = newTag.parentElement.children[1].children[0].querySelector('.vehicle-item__summary');
-
-
-					const mediaQuery = window.matchMedia('(max-width: 653px)')
-
-					function handleTabletChange(e) {
-						// Check if the media query is true
-						if (e.matches) {
-							// Then log the following message to the console
-							// console.log('Media Query Matched!');
-							vehicleSummary.insertAdjacentElement("afterbegin", newTag);
-						}
-						else {
-							pictureImg.insertAdjacentElement("afterbegin", newTag);
-						}
-					}
-
-					// Register event listener
-					mediaQuery.addListener(handleTabletChange);
-
-					// Initial check
-					handleTabletChange(mediaQuery);
-				});
+				r.addFeaturedOrange();
+				
+				
+				// r.observeEl('.iso-preSelectedClass-filtered', function (){
+				// 	const featuredOrange = document.querySelector(".iso-preSelectedClass-filtered .rs-callout.rs-callout--highlight");
+				// 	const featuredGreen = document.querySelector(".iso-preSelectedClass-filtered");
+				// 	if (featuredGreen && featuredOrange) {
+				// 		featuredOrange.style.display = 'none';
+				// 	}
+				// });
 			},
 			reOrder: function () {
 				var e = 0,
