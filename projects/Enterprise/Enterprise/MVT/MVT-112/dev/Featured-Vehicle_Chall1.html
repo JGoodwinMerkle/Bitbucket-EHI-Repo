@@ -77,13 +77,14 @@
 		width: 0;
 	}
 
+	/* default featured color */
 	.iso-preSelectedClass .rs-callout.rs-callout--highlight {
-		background-color: #ce810d;
-		color: #fcf1e0;
+		border-left: 4px solid #ce810d;
 	}
 
-	.iso-preSelectedClass .rs-callout__icon {
-		fill: #fcf1e0;
+	.iso-preSelectedClass .rs-icon {
+		width: 20px;
+		height: 20px;
 	}
 
 
@@ -184,6 +185,18 @@
 						}
 					}
 				});
+				// adds filter box fix
+				isoTest.observeEl('.vehicle-filter__content .vehicle-filter__filter:last-child .vehicle-filter__filter-list-item:last-child', async function (el) {
+					const rsCheckboxInputs = document.querySelectorAll(".vehicle-filter__filter-list-item input");
+
+					rsCheckboxInputs.forEach(rs => {
+						rs.addEventListener('change', function (e) {
+							setTimeout(() => {
+								isoTest.chall();
+							}, 1.5);
+						});
+					});
+				});
 
 			},
 			hashHandler: function () {
@@ -273,6 +286,47 @@
 					}
 				}
 			},
+			addFeaturedOrange: function () {
+				isoTest.observeEl('.rs-callout.rs-callout--highlight', function () {
+					//Fix the orange tag showing when filter is used on a Green Featured item!
+
+					const newTag = document.querySelector(".rs-callout.rs-callout--highlight");
+					const pictureImg = newTag.parentElement.querySelector('.vehicle-item__image');
+					const vehicleSummary = newTag.parentElement.querySelector('.vehicle-item__summary');
+
+
+					const mediaQuery = window.matchMedia('(max-width: 653px)')
+
+					function handleTabletChange(e) {
+						// Check if the media query is true
+						if (e.matches) {
+							// Then log the following message to the console
+							// console.log('Media Query Matched!');
+							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered") && pictureImg !== null) {
+								vehicleSummary.insertAdjacentElement("afterbegin", newTag);
+							}
+							if (newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
+								newTag.style.display = "none";
+							}
+						} else {
+							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered") && pictureImg !== null) {
+								// console.log("pictureImg", pictureImg)
+								pictureImg.insertAdjacentElement("afterbegin", newTag);
+							}
+							if (newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
+								newTag.style.display = "none";
+							}
+						}
+					}
+
+					// Register event listener
+					mediaQuery.addListener(handleTabletChange);
+
+					// Initial check
+					handleTabletChange(mediaQuery);
+				});
+
+			},
 			addPreselect: function (vehicleItem) {
 				vehicleItem.classList.add('iso-preSelectedClass');
 				var vi = vehicleItem.querySelector('.vehicle-item');
@@ -287,40 +341,7 @@
 				});
 				vehicleItem.insertAdjacentHTML('afterbegin', tag);
 				// adds tag fix for regression 633
-				isoTest.observeEl('.rs-callout.rs-callout--highlight', function () {
-					const newTag = document.querySelector(".rs-callout.rs-callout--highlight");
-					const pictureImg = newTag.parentElement.querySelector('.vehicle-item__image');
-					const vehicleSummary = newTag.parentElement.querySelector('.vehicle-item__summary');
-
-
-					const mediaQuery = window.matchMedia('(max-width: 653px)')
-
-					function handleTabletChange(e) {
-						// Check if the media query is true
-						if (e.matches) {
-							// Then log the following message to the console
-
-							vehicleSummary.insertAdjacentElement("afterbegin", newTag);
-						}
-						else {
-							if (pictureImg) {
-								pictureImg.insertAdjacentElement("afterbegin", newTag);
-							}
-						}
-					}
-
-					// Register event listener
-					mediaQuery.addListener(handleTabletChange);
-
-					// Initial check
-					handleTabletChange(mediaQuery);
-				});
-				isoTest.observeEl('.iso-preSelectedClass-filtered', function () {
-					if (document.querySelector(".iso-preSelectedClass-filtered").children[0].querySelector(".rs-tag--darkGreen").innerText.includes("Best Match") && document.querySelector(".iso-preSelectedClass-filtered").children[0].children[1].querySelector(".rs-callout--highlight")) {
-						const hideTag = document.querySelector(".iso-preSelectedClass-filtered").children[0].children[1].querySelector(".rs-callout--highlight");
-						hideTag.style.display = 'none';
-					}
-				});
+				isoTest.addFeaturedOrange();
 			},
 			reOrder: function () {
 				var o = 0;
