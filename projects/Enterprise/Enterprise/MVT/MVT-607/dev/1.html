@@ -1,0 +1,125 @@
+<style>
+  .pre-expedited-banner.iso-mvt-banner > button {
+    background: #ffffff;
+    border: 1px solid #127f4a;
+    border-radius: 60px;
+    color: #127f4a;
+    height: 44px;
+    width: 109px;
+  }
+  .pre-expedited-banner.iso-mvt-banner > button:hover {
+    background-color: #006639;
+    border-color: #006639;
+    color: #fff;
+  }
+  #expedite-question.matched-location .expedite__details{
+    flex: 100%;
+  }
+  #expedite-question.matched-location .expedite__details-wrapper{
+    flex-wrap: wrap;
+  }
+  #expedite-question.matched-location .expedite__clock.icon{
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='190' height='23' viewBox='0 0 190 23' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.38131 14.6642H3.41556V21.9489H0V0.411957H8.63419C13.4415 0.411957 16.9203 3.19935 16.9203 7.53831C16.9203 10.7372 15.0224 13.1127 12.113 14.1261L18.1219 21.9489H13.9472L8.38131 14.6642ZM3.41556 11.5286H8.50775C11.3855 11.5286 13.5683 10.0083 13.5683 7.53789C13.5683 5.06747 11.3855 3.54715 8.50775 3.54715H3.41556V11.5286Z' fill='%23231F20'/%3E%3Cpath d='M24.6363 3.54757V9.7234H35.3897V12.859H24.6363V18.782H36.6549V21.9489H21.2212V0.411957H36.6549V3.54757H24.6363Z' fill='%23231F20'/%3E%3Cpath d='M54.7756 16.7864H44.2752L42.0616 21.9489H38.4243L47.9444 0.411957H51.1387L60.6268 21.9489H56.9896L54.776 16.7864H54.7756ZM53.4787 13.7458L49.5254 4.46601L45.5404 13.7458H53.4787Z' fill='%23231F20'/%3E%3Cpath d='M82.0049 11.0538C82.0049 17.3567 77.1976 21.9489 70.5877 21.9489H62.6494V0.411957H70.5877C77.1976 0.411957 82.0049 4.90919 82.0049 11.0538ZM78.5573 11.0538C78.5573 6.77815 75.1097 3.54757 70.5873 3.54757H66.065V18.782H70.5873C75.1097 18.782 78.5573 15.4881 78.5573 11.0542V11.0538Z' fill='%23231F20'/%3E%3Cpath d='M102.923 0.411957L94.2251 14.6009V21.9489H90.7783V14.6009L82.0801 0.411957H85.8438L92.4857 11.3075L99.1588 0.411957H102.923Z' fill='%23231F20'/%3E%3Cpath d='M186.549 1.60352C186.511 1.26291 186.314 1.09787 185.898 1.09787C185.51 1.09787 185.285 1.25151 185.285 1.49463C185.285 1.65206 185.379 1.76813 185.543 1.81667C185.794 1.89138 186.048 1.95511 186.299 2.01505C186.696 2.10495 186.968 2.37466 186.968 2.74904C186.968 3.17956 186.605 3.55056 185.977 3.55056C185.244 3.55056 184.852 3.17998 184.84 2.64436L185.177 2.6144C185.199 2.80138 185.244 2.93644 185.394 3.05631C185.54 3.17238 185.738 3.23232 185.966 3.23232C186.381 3.23232 186.631 3.04871 186.631 2.76044C186.631 2.56586 186.466 2.42362 186.152 2.34849C185.939 2.29615 185.714 2.24001 185.497 2.17628C185.169 2.08258 184.948 1.83524 184.948 1.517C184.948 1.09365 185.299 0.779205 185.882 0.779205C186.499 0.779205 186.866 1.08606 186.889 1.58073L186.549 1.6031L186.549 1.60352Z' fill='%2300A34F'/%3E%3Cpath d='M187.446 3.50586V0.824402H187.98L188.612 2.7229C188.658 2.85417 188.698 2.98881 188.74 3.12008C188.792 2.94787 188.84 2.80563 188.882 2.68956L189.525 0.824823H190V3.50628H189.66V1.26294L188.882 3.50628H188.56L187.786 1.2258V3.50628H187.446V3.50586Z' fill='%2300A34F'/%3E%3Cpath d='M122.801 8.29847C122.801 13.3347 119.132 16.4699 113.281 16.4699H110.372V21.9493H105.026V0.411957H113.693C119.322 0.411957 122.801 3.4526 122.801 8.29847H122.801ZM117.488 8.29847C117.488 6.36662 115.938 5.09955 113.598 5.09955H110.372V11.7823H113.598C115.938 11.7823 117.488 10.4202 117.488 8.29847Z' fill='%2300A34F'/%3E%3Cpath d='M137.489 18.243H128.38L126.957 21.9489H121.264L130.405 0.411957H135.528L144.636 21.9489H138.943L137.489 18.243ZM135.75 13.7775L132.935 6.52448L130.119 13.7775H135.749H135.75Z' fill='%2300A34F'/%3E%3Cpath d='M163.486 7.0947H158.109C157.824 5.47941 156.844 4.37061 154.567 4.37061C152.67 4.37061 151.436 5.09912 151.436 6.49282C151.436 7.72781 152.322 8.26638 154.03 8.6146L157.035 9.24813C160.988 10.0716 163.518 11.6869 163.518 15.3923C163.518 19.6996 159.976 22.36 154.599 22.36C149.761 22.36 145.396 20.0483 144.89 14.7271H150.266C150.614 16.6273 152.227 17.8311 154.757 17.8311C156.655 17.8311 157.793 17.1026 157.793 15.8992C157.793 15.1391 157.382 14.3473 155.516 13.999L151.974 13.2389C147.736 12.3204 145.744 10.3882 145.744 6.96765C145.744 2.66035 149.222 0 154.282 0C157.761 0 162.948 1.29873 163.486 7.0947Z' fill='%2300A34F'/%3E%3Cpath d='M184.245 7.0947H178.869C178.584 5.47941 177.603 4.37061 175.327 4.37061C173.429 4.37061 172.195 5.09912 172.195 6.49282C172.195 7.72781 173.081 8.26638 174.789 8.6146L177.793 9.24813C181.746 10.0716 184.277 11.6869 184.277 15.3923C184.277 19.6996 180.734 22.36 175.358 22.36C170.519 22.36 166.155 20.0483 165.648 14.7271H171.025C171.373 16.6273 172.986 17.8311 175.516 17.8311C177.414 17.8311 178.552 17.1026 178.552 15.8992C178.552 15.1391 178.141 14.3473 176.275 13.999L172.733 13.2389C168.495 12.3204 166.502 10.3882 166.502 6.96765C166.502 2.66035 169.982 0 175.042 0C178.521 0 183.707 1.29873 184.245 7.0947Z' fill='%2300A34F'/%3E%3C/svg%3E");
+    order: -1;
+    width: 190px;
+    height: 24px;
+    margin-bottom: 20px;
+    margin-left: 0;
+    display: block;
+  }
+</style>
+<script>
+  (function () {
+    "use strict";
+    var isoTest = {
+      account: "EHI",
+      portfolio: "Enterprise",
+      test: "MVT-607",
+      creative: "Challenger 1",
+      selector: ".review-section",
+      pilotLocations: "1021296,1018719,1018724,1018895,1019192,1018840",
+      init: function () {
+        //isoTest.debug = true;
+
+        if (_satellite && typeof _satellite.setVar === "function" && typeof _satellite.track === "function") {
+          _satellite.setVar("TargetCampaign", isoTest.test);
+          _satellite.setVar("TargetCreative", isoTest.creative);
+        }
+
+        isoTest.log("Test Running...");
+        isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+        isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+        isoTest.observeEl(isoTest.selector, function () {
+          isoTest.chall572();
+        });
+
+        isoTest.chall607();
+      },
+      chall572: function () {
+        var pickUpLocationID = null || ReservationStateTree.get(["session", "reservationSession", "pickup_location", "id"]);
+
+        if (isoTest.pilotLocations.indexOf(pickUpLocationID) > -1) {
+          var banner = document.querySelectorAll(".pre-expedited-banner");
+          banner.forEach((element) => {
+            element.classList.add("iso-mvt-banner");
+            element.querySelector(".pre-expedited-banner__content > p").innerText = "Sign in to earn points and unlock exclusive access to expedited services";
+          });
+        }
+      },
+      chall607: function(){
+        isoTest.observeEl('#expedite-question', function(saveTimeEl){
+          var pickUpLocationID = null || ReservationStateTree.get(["session", "reservationSession", "pickup_location", "id"]);
+          if (isoTest.pilotLocations.indexOf(pickUpLocationID) > -1) {  
+
+            // Apply CSS changes
+            saveTimeEl.classList.add('matched-location');
+
+            var headerTitle = saveTimeEl.querySelector('h2.view-header__title');
+            headerTitle.textContent = 'Sign Up to Save Time';
+
+            var subTitle = saveTimeEl.querySelector('.expedite__disclaimer');
+            subTitle.textContent = 'Explore the benefits of this exclusive loyalty service, offered free of charge at select locations. Enterprise ReadyPass helps you:';
+
+            var listEl = saveTimeEl.querySelectorAll('.expedite__list li p');
+            listEl[0].textContent = 'Check in ahead of time';
+            listEl[1].textContent = 'Get to your vehicle faster';
+            listEl[2].textContent = 'Try our newest innovations - now and in the future';
+
+            var questionEl = saveTimeEl.querySelector('.expedite__question');
+            questionEl.textContent = 'Take the first step by joining Enterprise Plus?';
+
+            var answerEls = saveTimeEl.querySelectorAll('.expedite__option .rs-radio__text');
+            answerEls[0].textContent = 'Yes, I\'d like to save time.';
+            answerEls[1].textContent = 'No, I\'ll provide my information at the counter.';
+          }
+        });
+
+        isoTest.observeEl('#expedite-question .expedite-enroll__header', function(headerEl){
+          var pickUpLocationID = null || ReservationStateTree.get(["session", "reservationSession", "pickup_location", "id"]);
+
+          if (isoTest.pilotLocations.indexOf(pickUpLocationID) > -1) { 
+            headerEl.textContent = 'Create an Enterprise Plus® Account';
+          }
+        });
+      },
+      fireTag: function (element, value) {
+        var linkName = value ? value : element.innerText;
+        linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+        s.linkTrackVars = "eVar20";
+        s.eVar20 = linkName;
+        s.tl(this, "o", linkName);
+      },
+      log: function (obj) {
+        if (isoTest.debug === true) {
+          console.log(obj);
+        }
+      },
+      observeEl: function (selector, callback) {
+        var processed=new Map,processElement=function(e){processed&&!processed.has(e)&&(processed.set(e,!0),callback(e))},lookForSelector=function(){var e=0<arguments.length&&void 0!==arguments[0]?arguments[0]:document;if(e.matches&&e.matches(selector)&&processElement(e))return!0;if(e.querySelectorAll){var r=e.querySelectorAll(selector);if(r.length)for(var o=0;o<r.length;o++){var t=r[o];if(processElement(t))return!0}}};lookForSelector();var obs=new MutationObserver(function(e){e.forEach(function(e){if(e&&e.addedNodes&&e.addedNodes.length)for(var r=0;r<e.addedNodes.length;r++){var o=e.addedNodes[r].parentElement;if(o&&lookForSelector(o))return!0}})});obs.observe(document,{attributes:!1,childList:!0,subtree:!0});
+      },
+    };
+
+    isoTest.init();
+  })();
+</script>
