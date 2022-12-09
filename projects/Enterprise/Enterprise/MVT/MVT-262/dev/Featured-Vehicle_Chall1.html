@@ -280,12 +280,16 @@
 						}
 					}
 				});
-				document.querySelector('#vehicleSortBy').addEventListener('change', function () {
+				// document.querySelector('#vehicleSortBy').addEventListener('change', function () {
+				// 	setTimeout(isoTest.checkSort, 200);
+				// }, false);
+				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
 					setTimeout(isoTest.checkSort, 200);
 				}, false);
 			},
 			checkSort: function () {
-				var sort = document.querySelector('#vehicleSortBy').value;
+				// var sort = document.querySelector('#vehicleSortBy').value;
+				var sort = document.querySelector('.vehicle-header__sort-by .rs-input').value;
 				var list = document.querySelector('.vehicle-list');
 				if (sort == 'Recommended') {
 					list.classList.add('iso-featured');
@@ -342,7 +346,7 @@
 							// console.log('Media Query Matched!');
 							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered") && pictureImg !== null) {
 								vehicleSummary.insertAdjacentElement("afterbegin", newTag);
-							} 
+							}
 							if (newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
 								newTag.style.display = "none";
 							}
