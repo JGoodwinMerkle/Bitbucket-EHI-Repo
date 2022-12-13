@@ -1,4 +1,36 @@
-<style></style>
+<style>
+  .booking-widget .location-search .location-name span{
+    color: #000;
+  }
+  .booking-widget #locations-list .location-group.hide-locations li:not(:nth-child(-n+5)){
+    display: none;
+  }
+  .booking-widget #locations-list .location-group.show-locations-active{
+    position: relative;
+    padding-bottom: 1rem;
+  }
+  .booking-widget #locations-list .location-group.show-locations-active + .location-group{
+    padding-top: 1.2rem;
+  }
+  .booking-widget #locations-list .location-group .show-more{
+    cursor: pointer;
+    position: absolute;
+    display: inline-block;
+    background: #f2f3f3;
+    font-size: 15px;
+    padding: 0 15px;
+    bottom: -10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    color: #3A7D4F;
+    font-weight: bold;
+  }
+  .show-more i{
+    fill: #3a7d4f;
+    top: 3px;
+    position: relative;
+  }
+</style>
 <script>
   (function() {
   	'use strict';
@@ -7,8 +39,6 @@
   		portfolio : 'Enterprise',
   		test : 'MVT-636',
   		creative : 'Challenger 1',
-  		selector : 'div.location-group',
-      observeEl : function(e,t){var r=new Map,n=function e(n){r&&!r.has(n)&&(r.set(n,!0),t(n))},d=function t(){var r=arguments.length>0&&void 0!==arguments[0]?arguments[0]:document;if(r.matches&&r.matches(e)&&n(r))return!0;if(r.querySelectorAll){var d=r.querySelectorAll(e);if(d.length){for(var a=0;a<d.length;a++)if(n(d[a]))return!0}}};d(),new MutationObserver(function(e){e.forEach(function(e){if(e&&e.addedNodes&&e.addedNodes.length)for(var t=0;t<e.addedNodes.length;t++){var r=e.addedNodes[t].parentElement;if(r&&d(r))return!0}})}).observe(document,{attributes:!1,childList:!0,subtree:!0})},
       init : function() {
         if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
           _satellite.setVar('TargetCampaign', isoTest.test);
@@ -20,10 +50,10 @@
         isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
         isoTest.mvt569();
-        // isoTest.mvt636();
+        isoTest.mvt636();
       },
       mvt569 : function(){
-        isoTest.observeEl(isoTest.selector, function(allLocations){
+        isoTest.observeEl('div.location-group', function(allLocations){
           const airportIcon = document.querySelector('i.icon-location-airport');
           const cityIcon = document.querySelector("i.icon-location-city");
           if (airportIcon != null && cityIcon != null){
@@ -33,44 +63,86 @@
       },
       mvt636 : function(){
 
+        const maxIconLength = 5;
+
+        // Adds a "Show more" toggle to a list of items
         const showMore = (iconEl)=>{
           if(!iconEl) return;
+
+          // Pull out the list of locations/items
           const iconGroup = iconEl.closest('div.location-group');
           const iconList = iconGroup.querySelectorAll('ul li');
 
           const addAfter = ()=>{
+            // We'll stop running this if there's already a show-more button
+            const existingShowMore = document.querySelector('.show-more');
+            if(!!existingShowMore) return;
+            
+            iconGroup.classList.add('show-locations-active');
+            iconGroup.classList.add('hide-locations');
 
+            iconGroup.insertAdjacentHTML('beforeend', `
+              <div class="show-more">Show More <i role="img" aria-hidden="true" class="rs-icon rs-icon--after rs-icon--cta"><svg viewBox="0 0 24 24"><use xlink:href="#drawer-icn-down"></use></svg></i></div>
+            `);
+
+            const newShowMore = document.querySelector('.show-more');
+            newShowMore.addEventListener('click', ()=>{
+              isoTest.fireTag('', 'Show More clicked');
+              iconGroup.classList.toggle('hide-locations');
+              if(iconGroup.classList.contains('hide-locations')){
+                newShowMore.innerHTML = `Show More <i role="img" aria-hidden="true" class="rs-icon rs-icon--after rs-icon--cta"><svg viewBox="0 0 24 24"><use xlink:href="#drawer-icn-down"></use></svg></i>`;
+              }else{
+                newShowMore.innerHTML = `Show Less <i role="img" aria-hidden="true" class="rs-icon rs-icon--after rs-icon--cta"><svg viewBox="0 0 24 24"><use xlink:href="#drawer-icn-up"></use></svg></i>`;
+              }
+            });
           };
 
           const removeItem = ()=>{
+            iconGroup.classList.remove('hide-locations');
+            iconGroup.classList.remove('show-locations-active');
 
+            const existingShowMore = document.querySelector('.show-more');
+            if(!!existingShowMore){
+              existingShowMore.remove();
+            }
           };
-
           
-          if(iconList.length > 5){
-            showMore.addAfter();
+          // Determine when to add and remove the "Show more" toggle depending on the list results
+          if(iconList.length > maxIconLength){
+            addAfter();
           }else{
-            showMore.removeItem();
+            removeItem();
           }
         };
 
-        isoTest.observeEl(isoTest.selector, function(allLocations){
-          const cityIcon = document.querySelector("i.icon-location-city");
-          showMore(cityIcon);
+        // Observe the actual list to watch for page changes / any SPA-related activity
+        isoTest.observeEl('#locations-list', function(locationsListEl){
+          var onLocationListChange = new MutationObserver(function(observedEl) {
+            // Choose the icon of the list you want to add the "Show more" feature to
+            const cityIcon = document.querySelector("i.icon-location-city");
+            showMore(cityIcon);
+          });
+          onLocationListChange.observe(locationsListEl, {
+            childList: true,
+            subtree: true
+          });
         });
       },
       fireTag : function(element, value) {
         var linkName = value ? value : element.innerText;
           linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-        s.linkTrackVars = 'eVar20';
-        s.eVar20 = linkName;
+        s.linkTrackVars = 'eVar89';
+        s.eVar89 = linkName;
         s.tl(this, 'o', linkName);
       },
       log : function(obj){
         if(isoTest.debug === true){
           console.log(obj);
         }
-      }
+      },
+      observeEl: function (selector, callback) {
+        var processed=new Map,processElement=function(e){processed&&!processed.has(e)&&(processed.set(e,!0),callback(e))},lookForSelector=function(){var e=0<arguments.length&&void 0!==arguments[0]?arguments[0]:document;if(e.matches&&e.matches(selector)&&processElement(e))return!0;if(e.querySelectorAll){var r=e.querySelectorAll(selector);if(r.length)for(var o=0;o<r.length;o++){var t=r[o];if(processElement(t))return!0}}};lookForSelector();var obs=new MutationObserver(function(e){e.forEach(function(e){if(e&&e.addedNodes&&e.addedNodes.length)for(var r=0;r<e.addedNodes.length;r++){var o=e.addedNodes[r].parentElement;if(o&&lookForSelector(o))return!0}})});obs.observe(document,{attributes:!1,childList:!0,subtree:!0});
+      },
     };
 
     isoTest.init();
