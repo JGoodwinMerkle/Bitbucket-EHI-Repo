@@ -1,0 +1,165 @@
+<style>
+	.iso-link {
+		white-space: nowrap;
+	}
+
+	.booking-widget-hero .img-container {
+		align-items: start;
+		height: auto;
+	}
+
+	.iso-preres-banner-container {
+		width: 100%;
+		height: 100%;
+	}
+
+	.iso-preres-banner {
+		background: #f3f3f3;
+		display: flex;
+		font-size: 15px;
+		align-items: center;
+    justify-content: center;
+		text-align: left;
+		padding: 8px;
+    /* border-top: 4px solid #181918; */
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+	}
+	/* @media(max-width: 800px){
+		.iso-preres-banner > span > span{
+			display: none;
+		}
+	} */
+
+	.iso-preres-banner svg {
+		max-height: 20px;
+    max-width: 20px;
+    margin-right: 7px;
+	}
+
+	.iso-preres-banner a {
+		text-decoration: underline;
+	}
+
+	.iso-preres-banner span {
+		margin-right: 8px;
+	}
+</style>
+<script>
+	(function () {
+		'use strict';
+		var isoTest = {
+			account: 'EHI',
+			portfolio: 'Enterprise',
+			test: ' Homepage Promo Banner',
+			creative: 'Challenger 1',
+			selector: '.header-nav-item.sign-in',
+			content: {
+				en_US: {
+					text: '<strong>Plus Your Points:</strong> <span>You can earn double points on qualifying rentals through 1/31/2023. Terms apply. </span>',
+					url: 'https://plusyourpoints.enterprise.com/en_us/login?TLGVC=E23A&TLG_CID=50633',
+					cta: 'Register Now'
+				},
+			},
+			init: function () {
+
+				// isoTest.debug = ${user.mvtDebug};
+
+				if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+					_satellite.setVar('TargetCampaign', isoTest.test);
+					_satellite.setVar('TargetCreative', isoTest.creative);
+				}
+
+				isoTest.log('Test Running...');
+				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+				helpers.elementLoaded(isoTest.selector, function () {
+					isoTest.log('Test Selector Found');
+					isoTest.log('Test Ready!');
+					isoTest.chall();
+				});
+			},
+			chall: function () {
+				isoTest.addBanner();
+				isoTest.events();
+			},
+			addBanner: function () {
+				if (!$('.iso-preres-banner')) {
+					var lang = enterprise.locale;
+					if (document.querySelector('#main')) {
+						$('#main').insertAdjacentHTML('afterbegin', ' <div  role="banner" class="iso-preres-banner"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M35.5281 5.74844L32.9041 8.37244C34.1941 10.3195 33.9813 12.9687 32.2658 14.6842C30.3075 16.6425 27.1324 16.6425 25.174 14.6842C23.2156 12.7258 23.2156 9.55068 25.174 7.59232C26.0437 6.72262 27.1816 6.21505 28.3842 6.13475L28.5178 8.13617C27.7954 8.1844 27.1152 8.48781 26.5924 9.01069C25.4173 10.1857 25.4173 12.0908 26.5924 13.2658C27.7674 14.4408 29.6725 14.4408 30.8475 13.2658C32.0225 12.0908 32.0225 10.1857 30.8475 9.01069C30.4558 8.61902 30.4558 7.98399 30.8475 7.59232L34.8189 3.62088C35.2106 3.22921 35.8456 3.22921 36.2373 3.62088L39.4286 6.81222C39.6156 6.99917 39.7211 7.25239 39.7224 7.51678L39.7724 18.3882C39.7737 18.6558 39.6679 18.9128 39.4787 19.102L18.9332 39.6475C18.4632 40.1175 17.7011 40.1175 17.2311 39.6475L0.352505 22.7689C-0.117502 22.2989 -0.117502 21.5368 0.352505 21.0668L20.898 0.521323C21.0806 0.33873 21.3266 0.233599 21.5848 0.22782L31.7613 0L31.8062 2.00538L22.0319 2.22419L2.33822 21.9179L18.0821 37.6618L37.7646 17.9793L37.7184 7.93874L35.5281 5.74844Z" fill="#181918"/></svg> <span>' + isoTest.content[lang].text + '<a class="iso-link" href="' + isoTest.content[lang].url + '">' + isoTest.content[lang].cta + '</a></span></div>');
+						helpers.sCodeLoaded(function () {
+							isoTest.fireTag89('', 'PYP Promo Banner View')
+						})
+					}
+				}
+			},
+
+			events: function () {
+				document.addEventListener('click', function (event) {
+					if (event.target.matches('.iso-preres-banner a')) {
+						isoTest.fireTag20('', 'PYP Promo Banner Register Now');
+					}
+				}, false);
+			},
+			fireTag89: function (element, value) {
+				console.log("EVAR 89 -R Promo")
+				var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+				s.linkTrackVars = 'eVar89';
+				s.eVar89 = linkName;
+				s.tl(this, 'o', linkName);
+			},
+			fireTag20: function (element, value) {
+				console.log("EVAR 20 -R Promo")
+				var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+				s.linkTrackVars = 'eVar20';
+				s.eVar20 = linkName;
+				s.tl(this, 'o', linkName);
+			},
+			log: function (obj) {
+				if (isoTest.debug === true) {
+					console.log(obj);
+				}
+			}
+		};
+		var helpers = {
+			userProfileLoaded: function (callback) {
+				if (typeof store.getState().toJS().app.baobab.User.profile !== 'undefined') {
+					isoTest.log('User.profile loaded');
+					if (typeof store.getState().toJS().app.baobab.User.profile.basicProfile !== 'undefined') {
+						callback();
+					}
+				} else {
+					isoTest.eleTimer = window.setTimeout(function () { helpers.userProfileLoaded(callback); }, 100);
+				}
+			},
+			elementLoaded: function (ele, callback) {
+				isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+				window.clearTimeout(isoTest.eleTimer);
+				if (document.querySelectorAll(ele).length > 0) {
+					if (typeof callback === 'function') {
+						isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+						callback();
+					}
+				} else {
+					isoTest.eleTimer = window.setTimeout(function () { helpers.elementLoaded(ele, callback); }, 100);
+				}
+			},
+			sCodeLoaded: function (callback) {
+				isoTest.log('sCodeLoaded::  - Checking...');
+				var sCodeCheck = setInterval(function () {
+					if (window.s !== undefined) {
+						isoTest.log('sCodeLoaded::  ' + s + ' - Found!');
+						clearInterval(sCodeCheck);
+						callback();
+					}
+				}, 100);
+			}
+		};
+		var $ = document.querySelector.bind(document);
+		var $$ = document.querySelectorAll.bind(document);
+		isoTest.init();
+	})();
+</script>

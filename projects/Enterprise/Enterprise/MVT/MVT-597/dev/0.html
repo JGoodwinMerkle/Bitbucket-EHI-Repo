@@ -1,13 +1,3 @@
-<style>
-  .cta.js-redeem-points{
-    align-self: center;
-  }
-  @media(max-width: 980px){
-    .vehicle-enough-points__brand-eplus-title{
-      font-size: 1.2rem;
-    }
-  }
-</style>
 <script>
   (function () {
     "use strict";
@@ -15,10 +5,8 @@
       account: "EHI",
       portfolio: "Enterprise",
       test: "MVT-597",
-      creative: "Challenger 1",
+      creative: "Challenger 0",
       init: function () {
-        //isoTest.debug = true;
-
         if (_satellite && typeof _satellite.setVar === "function" && typeof _satellite.track === "function") {
           _satellite.setVar("TargetCampaign", isoTest.test);
           _satellite.setVar("TargetCreative", isoTest.creative);
@@ -33,10 +21,9 @@
         });
       },
       chall: function(headerEl){
-
         isoTest.waitForPoints(function () {
           var totalPoints = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
-
+          
           if(totalPoints > 1500){
             isoTest.fireTag('', 'Loyalty Points: 1501+');
           }else if(totalPoints > 500){
@@ -46,50 +33,6 @@
           }else{
             isoTest.fireTag('', 'Loyalty Points: 0');
           }
-
-          // Removing the points check - running on all users regardless of points
-          // if (totalPoints < 1500) return;
-
-          // Only reason we don't show the points banner is if it exists already
-          var existingPointsBanner = document.querySelector('.vehicle-enough-points');
-          if(!!existingPointsBanner) return;
-
-          headerEl.insertAdjacentHTML('afterend', `
-            <div class="vehicle-enough-points mvt597_addition">
-              <div class="vehicle-enough-points__brand">
-                <span class="vehicle-enough-points__brand-eplus"><i class="icon icon-eplus-logo"></i><span class="vehicle-enough-points__brand-eplus-title">Enterprise Plus®</span></span>
-              </div>
-              <div class="vehicle-enough-points__content">
-                <div class="vehicle-enough-points__points-indicator"><span class="vehicle-enough-points__indicator-points">0</span><span class="vehicle-enough-points__indicator-label">Points Redeeming</span></div>
-                <div class="vehicle-enough-points__points-indicator"><span class="vehicle-enough-points__indicator-points">` + totalPoints + `</span><span class="vehicle-enough-points__indicator-label">Your Points Total</span></div>
-              </div>
-              <button class="cta cta--secondary cta--large cta--secondary-inverted js-redeem-points" aria-label="Redeem Points">Redeem Points</button>
-            </div>
-          `);
-          
-          var swapToPoints = function (callback) {
-            var maxCheck = 60;
-            var interval = window.setInterval(function () {
-              var payInPointsEl = document.querySelector('.vehicle-redemption__options-cta[data-analytics-tracking*="Pay in Points"]');
-              if (payInPointsEl && payInPointsEl.ariaSelected !== 'true') {
-                payInPointsEl.click();
-              } else if (--maxCheck < 0) {
-                window.clearInterval(interval);
-              }
-            }, 50);
-          };
-          
-          var redeemPointsEl = document.querySelector('.js-redeem-points');
-          redeemPointsEl.addEventListener('click', ()=>{
-
-            isoTest.fireTag(redeemPointsEl, 'Redeem Points clicked');
-            // Move to #cars page
-            window.location.hash = '#cars';
-
-            isoTest.elementLoaded('#reservationFlow[data-within-res-flow] .vehicle-redemption__options-cta[data-analytics-tracking*="Pay in Points"]', ()=>{
-              swapToPoints();
-            });
-          });
         });
       },
       fireTag: function (element, value) {
@@ -114,18 +57,6 @@
             window.clearInterval(interval);
           }
         }, 50);
-      },
-      elementLoaded : function (ele, callback) {
-        isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-        window.clearTimeout(isoTest.eleTimer);
-        if (document.querySelectorAll(ele).length > 0) {
-          if (typeof callback === 'function') {
-            isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-            callback();
-          }
-        } else {
-          isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
-        }
       },
       observeEl: function (selector, callback) {
         var processed=new Map,processElement=function(e){processed&&!processed.has(e)&&(processed.set(e,!0),callback(e))},lookForSelector=function(){var e=0<arguments.length&&void 0!==arguments[0]?arguments[0]:document;if(e.matches&&e.matches(selector)&&processElement(e))return!0;if(e.querySelectorAll){var r=e.querySelectorAll(selector);if(r.length)for(var o=0;o<r.length;o++){var t=r[o];if(processElement(t))return!0}}};lookForSelector();var obs=new MutationObserver(function(e){e.forEach(function(e){if(e&&e.addedNodes&&e.addedNodes.length)for(var r=0;r<e.addedNodes.length;r++){var o=e.addedNodes[r].parentElement;if(o&&lookForSelector(o))return!0}})});obs.observe(document,{attributes:!1,childList:!0,subtree:!0});
