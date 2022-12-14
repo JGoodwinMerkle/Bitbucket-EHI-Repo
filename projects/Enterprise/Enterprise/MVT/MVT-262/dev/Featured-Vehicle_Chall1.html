@@ -5,6 +5,10 @@
 		margin-top: -3px;
 	}
 
+	.addsFlex {
+		display: flex;
+	}
+
 	.vehicle-list.iso-featured {
 		display: flex;
 		flex-flow: wrap;
@@ -85,6 +89,21 @@
 	.iso-preSelectedClass .rs-icon {
 		width: 20px;
 		height: 20px;
+	}
+
+	/* potentially fixes sorting issue */
+	.vehicle-list__item .vehicle-item {
+		width: 100%;
+	}
+
+	.vehicle-select__main .vehicle-list {
+
+		display: flex;
+		flex-direction: column;
+	}
+
+	.vehicle-list .vehicle-list__item {
+		display: flex;
 	}
 
 	@media (max-width: 1081px) {
@@ -288,14 +307,52 @@
 				}, false);
 			},
 			checkSort: function () {
-				// var sort = document.querySelector('#vehicleSortBy').value;
-				var sort = document.querySelector('.vehicle-header__sort-by .rs-input').value;
-				var list = document.querySelector('.vehicle-list');
+				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
+				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
 				if (sort == 'Recommended') {
-					list.classList.add('iso-featured');
-				} else {
-					list.classList.remove('iso-featured');
-				}
+					helpers.elementLoaded('.iso-preSelectedClass', function () {
+						const filteredList = [];
+						list.forEach(l => {
+							const listItems = l.querySelector(".vehicle-item");
+							if(listItems.classList.contains("rs-tag-container")){
+								filteredList.push(l);
+							};
+						});
+
+						if(filteredList.length > 0){
+							document.querySelector('.iso-preSelectedClass').style.order = filteredList.length;
+							list.forEach((l, index) => {
+								if ((!l.querySelector(".vehicle-item").classList.contains("rs-tag-container")) && (!l.classList.contains('iso-preSelectedClass')) ){
+									l.style.order = index+(filteredList.length);
+								};
+							});
+						}else{
+							document.querySelector('.iso-preSelectedClass').style.order = -1;
+						};
+					});
+				};
+
+				if (sort == 'High to Low') {
+					helpers.elementLoaded('.iso-preSelectedClass', function () {
+						const preSelectedList = document.querySelector('.iso-preSelectedClass');
+						const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+						const currentOrder = dtmAttr.split("|").slice(-1);
+						setTimeout(() => {
+							preSelectedList.style.order = currentOrder;
+						}, 10);
+					});
+				};
+
+				if (sort == 'Low to High') {
+					helpers.elementLoaded('.iso-preSelectedClass', function () {
+						const preSelectedList = document.querySelector('.iso-preSelectedClass');
+						const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+						const currentOrder = dtmAttr.split("|").slice(-1);
+						setTimeout(() => {
+							preSelectedList.style.order = currentOrder;
+						}, 10);
+					});
+				};
 				isoTest.labelVehicle();
 			},
 			labelVehicle: function () {
@@ -377,7 +434,7 @@
 				} else if (isoTest.onLoadpreSelected && (!vi.classList.contains('is-search-by-filter') || !vi.classList.contains('is-pre-selected'))) {
 					vehicleItem.classList.add('iso-preselected-second');
 				}
-
+				//Tthe Next four lines adds the tag inside of the vehicle list item t
 				var tag = helpers.supplant(isoTest.template, {
 					'tag': isoTest.onLoadpreSelected ? isoTest.vehicleClass.shortTag : isoTest.vehicleClass.tag
 				});
@@ -393,11 +450,12 @@
 					for (var i = 0; i < isoTest.vehicleItems.length; i++) {
 						if (!isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass')) {
 							isoTest.vehicleItems[i].style.order = o;
+
 							if (i == 0 && isoTest.lastPreselectedIndex == -1 && (isoTest.vehicleItems[i].classList.contains('vehicle-list__unavailable-car') || isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points'))) {
 								o += 1;
 								featVehicle.parentNode.style.order = o;
 							} else if (i == 0 && isoTest.lastPreselectedIndex == -1 && !isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points')) {
-								featVehicle.parentNode.style.order = -1;
+								// featVehicle.parentNode.style.order = -1;
 							} else if (i == isoTest.lastPreselectedIndex) {
 								o += 1;
 								featVehicle.parentNode.style.order = o;
@@ -488,6 +546,18 @@
 					if (decodeURIComponent(pair[0]) == variable) {
 						return decodeURIComponent(pair[1]);
 					}
+				}
+			},
+			elementLoaded: function (ele, callback) {
+				isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+				window.clearTimeout(isoTest.eleTimer);
+				if (document.querySelectorAll(ele).length > 0) {
+					if (typeof callback === 'function') {
+						isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+						callback();
+					}
+				} else {
+					isoTest.eleTimer = window.setTimeout(function () { helpers.elementLoaded(ele, callback); }, 100);
 				}
 			},
 			supplant: function (str, o) {

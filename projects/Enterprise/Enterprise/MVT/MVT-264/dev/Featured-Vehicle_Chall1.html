@@ -1,349 +1,534 @@
 <style>
-.vehicle-enough-points.cf, .vehicle-not-enough-points {
-	margin-right: -15px;
-	margin-top: -3px;
-}
-.vehicle-list.iso-featured {
-	display: flex;
-	flex-flow: wrap;
-}
-.vehicle-list__item {
-	order: 0;
-	width: 100%;
-}
-.vehicle-list__item.iso-preSelectedClass .vehicle-item {
-	padding-right: 15px;
-	margin-right: -15px;
-}
-.iso-tag {
-	background: #0A643A;
-	color: #fff;
-	display: block;
-	font-size: 14px;
-	padding: 4px 8px 1px 8px;
-	width: calc(100% + 15px);
-}
-.iso-unavailable-msg {
-	background: #f2f2f2;
-	border-bottom: .125rem solid #c3c3c3;
-	display: block;
-	font-size: 14px;
-	padding: 15px 20px;
-	width: 100%;
-}
-/* Pre-selected styles */
-.iso-preSelectedClass.iso-preSelectedClass-filtered {
-    margin-top: 0;
-}
-.iso-preSelectedClass-filtered .iso-tag {
-    display: none;
-}
-.iso-preSelectedClass-filtered .vehicle-item.is-search-by-filter, .iso-preSelectedClass-filtered .vehicle-item.is-pre-selected {
-    border-color: #169a5a;
-}
-.iso-preSelectedClass {
-    margin-top: 7px;
-}
-.iso-tag {
-	display:inline;
-	font-size: 12px;
-	font-weight: 600;
-	padding: 4px 15px;
-	position: relative;
-    width: auto;
-}
-.iso-tag:after{
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 6px solid #0A643A;
-    bottom: -6px;
-	content: " ";
-    height: 0;
-    left: 20px;
-    position: absolute;
-    width: 0;
-}
-@media (max-width: 1081px){
-	.vehicle-enough-points.cf, .vehicle-not-enough-points {
-		margin-right: 0;
+	.vehicle-enough-points.cf,
+	.vehicle-not-enough-points {
+		margin-right: -15px;
+		margin-top: -3px;
 	}
-	.vehicle-list__item.iso-preSelectedClass .vehicle-item {
-		padding-right: 0;
-		margin-right: 0;
+
+	.vehicle-list.iso-featured {
+		display: flex;
+		flex-flow: wrap;
 	}
-	.iso-tag {
-		margin-left: 5px;
+
+	.vehicle-list__item {
+		order: 0;
 		width: 100%;
 	}
-}
+
+	.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+		padding-right: 15px;
+		margin-right: -15px;
+	}
+
+	.iso-tag {
+		background: #0A643A;
+		color: #fff;
+		display: block;
+		font-size: 14px;
+		padding: 4px 8px 1px 8px;
+		width: calc(100% + 15px);
+	}
+
+	.iso-unavailable-msg {
+		background: #f2f2f2;
+		border-bottom: .125rem solid #c3c3c3;
+		display: block;
+		font-size: 14px;
+		padding: 15px 20px;
+		width: 100%;
+	}
+
+	/* Pre-selected styles */
+	.iso-preSelectedClass.iso-preSelectedClass-filtered {
+		margin-top: 0;
+	}
+
+	.iso-preSelectedClass-filtered .iso-tag {
+		display: none;
+	}
+
+	.iso-preSelectedClass-filtered .vehicle-item.is-search-by-filter,
+	.iso-preSelectedClass-filtered .vehicle-item.is-pre-selected {
+		border-color: #169a5a;
+	}
+
+	.iso-preSelectedClass {
+		margin-top: 7px;
+	}
+
+	.iso-tag {
+		display: inline;
+		font-size: 12px;
+		font-weight: 600;
+		padding: 4px 15px;
+		position: relative;
+		width: auto;
+	}
+
+	.iso-tag:after {
+		border-left: 6px solid transparent;
+		border-right: 6px solid transparent;
+		border-top: 6px solid #0A643A;
+		bottom: -6px;
+		content: " ";
+		height: 0;
+		left: 20px;
+		position: absolute;
+		width: 0;
+	}
+
+	/* potentially fixes sorting issue */
+	.vehicle-list__item .vehicle-item {
+		width: 100%;
+	}
+
+	.vehicle-select__main .vehicle-list {
+
+		display: flex;
+		flex-direction: column;
+	}
+
+	.vehicle-list .vehicle-list__item {
+		display: flex;
+	}
+
+	@media (max-width: 1081px) {
+
+		.vehicle-enough-points.cf,
+		.vehicle-not-enough-points {
+			margin-right: 0;
+		}
+
+		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+			padding-right: 0;
+			margin-right: 0;
+		}
+
+		.iso-tag {
+			margin-left: 5px;
+			width: 100%;
+		}
+	}
 </style>
 <script>
-(function() {
-	'use strict';
-	var isoTest = {
-		debug : false,
-		account : 'Enterprise',
-		portfolio : 'Enterprise.com',
-		test : 'Featured Vehile 2.0',
-		creative : 'Challenger 1',
-		filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
-		vehicleItem: '.vehicle-list__item',
-		preSelected: '.vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected',
-		template: '<span class="rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
-		featured: {
-			0: {
-				car: 'WCAE',
-				tag: '<strong>Try Something New!</strong>',
-				shortTag: 'Try Something New'
-			},
-			1: {
-				car: 'WCAE',
-				tag: '<strong>Try Something New!</strong>',
-				shortTag: 'Try Something New'
-			},
-			2: {
-				car: 'WCAE',
-				tag: '<strong>Try Something New!</strong>',
-				shortTag: 'Try Something New'
-			},
-			3: {
-				car: 'WCAE',
-				tag: '<strong>Try Something New!</strong>',
-				shortTag: 'Try Something New'
-			},
-			4: {
-				car: 'WCAE',
-				tag: '<strong>Try Something New!</strong>',
-				shortTag: 'Try Something New'
-			},
-			5: {
-				car: 'WCAE',
-				tag: '<strong>Try Something New!</strong>',
-				shortTag: 'Try Something New'
-			},
-			6: {
-				car: 'WCAE',
-				tag: '<strong>Try Something New!</strong>',
-				shortTag: 'Try Something New'
-			}
-		},
-		altCar: 'IFAR',
-		audience: {
-			group: ['32','23','30','16']
-		},
-		featAvail: false,
-		init : function() {
-
-			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
-
-			isoTest.log('Test Running...');
-			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
-			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-
-			isoTest.elementLoaded(isoTest.vehicleItem, function() {
-				isoTest.log('Test Ready!');
-				if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
-					isoTest.chall();
+	(function () {
+		'use strict';
+		var isoTest = {
+			debug: false,
+			account: 'Enterprise',
+			portfolio: 'Enterprise.com',
+			test: 'Featured Vehile 2.0',
+			creative: 'Challenger 1',
+			filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
+			vehicleItem: '.vehicle-list__item',
+			preSelected: '.vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected',
+			template: '<span class="rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
+			featured: {
+				0: {
+					car: 'WCAE',
+					tag: '<strong>Try Something New!</strong>',
+					shortTag: 'Try Something New'
+				},
+				1: {
+					car: 'WCAE',
+					tag: '<strong>Try Something New!</strong>',
+					shortTag: 'Try Something New'
+				},
+				2: {
+					car: 'WCAE',
+					tag: '<strong>Try Something New!</strong>',
+					shortTag: 'Try Something New'
+				},
+				3: {
+					car: 'WCAE',
+					tag: '<strong>Try Something New!</strong>',
+					shortTag: 'Try Something New'
+				},
+				4: {
+					car: 'WCAE',
+					tag: '<strong>Try Something New!</strong>',
+					shortTag: 'Try Something New'
+				},
+				5: {
+					car: 'WCAE',
+					tag: '<strong>Try Something New!</strong>',
+					shortTag: 'Try Something New'
+				},
+				6: {
+					car: 'WCAE',
+					tag: '<strong>Try Something New!</strong>',
+					shortTag: 'Try Something New'
 				}
-			});
+			},
+			altCar: 'IFAR',
+			audience: {
+				group: ['32', '23', '30', '16']
+			},
+			featAvail: false,
+			init: function () {
 
-			window.addEventListener('hashchange', isoTest.hashHandler, false);
-			window.addEventListener('ttFeatVehicle', isoTest.labelVehicle, false);
+				isoTest.debug = Boolean(helpers.getQueryParam('debug'));
 
-			var spinnerUpdate = new MutationObserver(function(mutationsList) {
-				mutationsList.forEach(function(mutation) {
-					mutation.removedNodes.forEach(function(removedNode) {
-						if (removedNode.classList !== undefined) {
-							if(removedNode.classList.contains('spinner-container')) {
-								isoTest.hashHandler();
+				isoTest.log('Test Running...');
+				isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+				isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+				isoTest.elementLoaded(isoTest.vehicleItem, function () {
+					isoTest.log('Test Ready!');
+					if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+						isoTest.chall();
+					}
+				});
+
+				window.addEventListener('hashchange', isoTest.hashHandler, false);
+				window.addEventListener('ttFeatVehicle', isoTest.labelVehicle, false);
+
+				var spinnerUpdate = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (mutation) {
+						mutation.removedNodes.forEach(function (removedNode) {
+							if (removedNode.classList !== undefined) {
+								if (removedNode.classList.contains('spinner-container')) {
+									isoTest.hashHandler();
+								}
+							}
+						});
+					});
+				});
+				spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
+
+				// Search filter bug fix
+				isoTest.observeEl('.is-search-by-filter.rs-tag-container--darkGreen', function (el) {
+					var vehicleItem = el.closest('.vehicle-list__item');
+					if (vehicleItem.classList.contains('iso-preSelectedClass-filtered')) {
+						var featuredTag = vehicleItem.querySelector('.rs-callout');
+						if (featuredTag) {
+							featuredTag.style.display = 'none';
+						}
+					}
+				});
+
+				isoTest.observeEl('.vehicle-filter__content .vehicle-filter__filter:last-child .vehicle-filter__filter-list-item:last-child', async function (el) {
+					const rsCheckboxInputs = document.querySelectorAll(".vehicle-filter__filter-list-item input");
+
+					rsCheckboxInputs.forEach(rs => {
+						rs.addEventListener('change', function (e) {
+							setTimeout(() => {
+								isoTest.chall();
+							}, 1.5);
+						});
+					});
+				});
+			},
+			hashHandler: function () {
+				if (/cars/.test(location.hash)) {
+					isoTest.elementLoaded(isoTest.vehicleItem, function () {
+						if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+							isoTest.chall();
+						}
+					});
+				}
+			},
+			chall: function () {
+				isoTest.log('chall()');
+				isoTest.branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']);
+				var groupNumber = ReservationStateTree.get(['session', 'reservationSession', 'pickupLocationWithDetail', 'location_id']).slice(0, 2);
+				var isGroup = isoTest.checkGroup(groupNumber);
+				isoTest.log('isGroup:: ' + isGroup);
+
+				if (isGroup) {
+					isoTest.runTest();
+				}
+			},
+			checkGroup: function (groupNumber) {
+				isoTest.log('checkGroup()');
+				var checksOut = false;
+				isoTest.audience.group.forEach(function (g) {
+					if (groupNumber.substring(0, g.length) == g) {
+						checksOut = true;
+					}
+				});
+				return checksOut;
+			},
+			runTest: function () {
+				isoTest.log('runTest()');
+				isoTest.day = helpers.getQueryParam('dayOverride') ? helpers.getQueryParam('dayOverride') : new Date(ReservationStateTree.get(['session', 'reservationSession', 'pickup_time'])).getDay();
+				isoTest.vehicleClass = isoTest.featured[isoTest.day];
+				isoTest.onLoadpreSelected = document.querySelectorAll(isoTest.preSelected).length > 0;
+				isoTest.checkSort();
+
+				// Filters and sort
+				var filterElements = document.querySelectorAll('.vehicle-filter__filter .form-checkbox,.vehicle-filter__header-link, .vehicle-redemption__options-cta, .iso-pay');
+				for (var i = 0; i < filterElements.length; i++) {
+					filterElements[i].addEventListener('click', function () {
+						isoTest.log('Event: Filter Checkbox Click');
+						setTimeout(isoTest.checkSort, 200);
+					}, false);
+				}
+
+				document.addEventListener('click', function (e) {
+					if (e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') || e.target.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]')) {
+						if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+							isoTest.checkSort();
+						}
+					}
+				});
+				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
+					setTimeout(isoTest.checkSort, 200);
+				}, false);
+			},
+			checkSort: function () {
+				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
+				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
+				if (sort == 'Recommended') {
+					isoTest.elementLoaded('.iso-preSelectedClass', function () {
+						const filteredList = [];
+						list.forEach(l => {
+							const listItems = l.querySelector(".vehicle-item");
+							if (listItems.classList.contains("rs-tag-container")) {
+								filteredList.push(l);
+							};
+						});
+
+						if (filteredList.length > 0) {
+							document.querySelector('.iso-preSelectedClass').style.order = filteredList.length;
+							list.forEach((l, index) => {
+								if ((!l.querySelector(".vehicle-item").classList.contains("rs-tag-container")) && (!l.classList.contains('iso-preSelectedClass'))) {
+									l.style.order = index + (filteredList.length);
+								};
+							});
+						} else {
+							document.querySelector('.iso-preSelectedClass').style.order = -1;
+						};
+					});
+				};
+
+				if (sort == 'High to Low') {
+					isoTest.elementLoaded('.iso-preSelectedClass', function () {
+						const preSelectedList = document.querySelector('.iso-preSelectedClass');
+						const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+						const currentOrder = dtmAttr.split("|").slice(-1);
+						setTimeout(() => {
+							preSelectedList.style.order = currentOrder;
+						}, 10);
+					});
+				};
+
+				if (sort == 'Low to High') {
+					isoTest.elementLoaded('.iso-preSelectedClass', function () {
+						const preSelectedList = document.querySelector('.iso-preSelectedClass');
+						const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+						const currentOrder = dtmAttr.split("|").slice(-1);
+						setTimeout(() => {
+							preSelectedList.style.order = currentOrder;
+						}, 10);
+					});
+				};
+				isoTest.labelVehicle();
+			},
+			labelVehicle: function () {
+				isoTest.log('labelVehicle()');
+				isoTest.vehicleItems = document.querySelectorAll('.vehicle-list > li');
+				isoTest.lastPreselectedIndex = document.querySelectorAll(isoTest.preSelected).length - 1;
+				isoTest.lastPreselected = document.querySelectorAll(isoTest.preSelected)[isoTest.lastPreselectedIndex];
+				if (isoTest.lastPreselected) {
+					var vehicleItems = Array.prototype.slice.call(isoTest.vehicleItems);
+					isoTest.lastPreselectedIndex = vehicleItems.indexOf(isoTest.lastPreselected.parentNode);
+				}
+				isoTest.findVehicle(isoTest.vehicleClass.car);
+				if (document.querySelectorAll('.iso-preSelectedClass').length == 0 && isoTest.altCar && !isoTest.featAvail) {
+					isoTest.findVehicle(isoTest.altCar);
+				}
+				isoTest.reOrder();
+			},
+			findVehicle: function (featClass) {
+				for (var i = 0; i < isoTest.vehicleItems.length; i++) {
+					if (!isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass') && isoTest.vehicleItems[i].classList.contains('vehicle-list__item')) {
+						var dataInfo = isoTest.vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
+						var carClass = dataInfo[1];
+						var avail = dataInfo[2];
+						isoTest.log(carClass + ' :: ' + avail);
+						if (carClass == featClass && (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE')) {
+							isoTest.addPreselect(isoTest.vehicleItems[i]);
+							isoTest.featAvail = carClass == isoTest.altCar ? false : true;
+						}
+					}
+				}
+			},
+			addFeaturedOrange: function () {
+				isoTest.observeEl('.rs-callout.rs-callout--highlight', function () {
+					//Fix the orange tag showing when filter is used on a Green Featured item!
+
+					const newTag = document.querySelector(".rs-callout.rs-callout--highlight");
+					const pictureImg = newTag.parentElement.querySelector('.vehicle-item__image');
+					const vehicleSummary = newTag.parentElement.querySelector('.vehicle-item__summary');
+
+
+					const mediaQuery = window.matchMedia('(max-width: 653px)')
+
+					function handleTabletChange(e) {
+						// Check if the media query is true
+						if (e.matches) {
+							// Then log the following message to the console
+							// console.log('Media Query Matched!');
+							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered") && pictureImg !== null) {
+								vehicleSummary.insertAdjacentElement("afterbegin", newTag);
+							}
+							if (newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
+								newTag.style.display = "none";
+							}
+						} else {
+							if (!newTag.parentElement.classList.contains("iso-preSelectedClass-filtered") && pictureImg !== null) {
+								// console.log("pictureImg", pictureImg)
+								pictureImg.insertAdjacentElement("afterbegin", newTag);
+							}
+							if (newTag.parentElement.classList.contains("iso-preSelectedClass-filtered")) {
+								newTag.style.display = "none";
+							}
+						}
+					}
+
+					// Register event listener
+					mediaQuery.addListener(handleTabletChange);
+
+					// Initial check
+					handleTabletChange(mediaQuery);
+				});
+
+			},
+			addPreselect: function (vehicleItem) {
+				vehicleItem.classList.add('iso-preSelectedClass');
+				var vi = vehicleItem.querySelector('.vehicle-item');
+				if (isoTest.onLoadpreSelected && (vi.classList.contains('is-search-by-filter') || vi.classList.contains('is-pre-selected'))) {
+					vehicleItem.classList.add('iso-preSelectedClass-filtered');
+				} else if (isoTest.onLoadpreSelected && (!vi.classList.contains('is-search-by-filter') || !vi.classList.contains('is-pre-selected'))) {
+					vehicleItem.classList.add('iso-preselected-second');
+				}
+
+				var tag = helpers.supplant(isoTest.template, {
+					'tag': isoTest.onLoadpreSelected ? isoTest.vehicleClass.shortTag : isoTest.vehicleClass.tag
+				});
+				vehicleItem.insertAdjacentHTML('afterbegin', tag);
+
+				isoTest.addFeaturedOrange();
+			},
+			reOrder: function () {
+				var o = 0;
+				var featVehicle = document.querySelector('.iso-preSelectedClass .vehicle-item');
+				if (featVehicle && (!featVehicle.classList.contains('is-search-by-filter') || !featVehicle.classList.contains('is-pre-selected'))) {
+					for (var i = 0; i < isoTest.vehicleItems.length; i++) {
+						if (!isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass')) {
+							isoTest.vehicleItems[i].style.order = o;
+
+							if (i == 0 && isoTest.lastPreselectedIndex == -1 && (isoTest.vehicleItems[i].classList.contains('vehicle-list__unavailable-car') || isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points'))) {
+								o += 1;
+								featVehicle.parentNode.style.order = o;
+							} else if (i == 0 && isoTest.lastPreselectedIndex == -1 && !isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points')) {
+								// featVehicle.parentNode.style.order = -1;
+							} else if (i == isoTest.lastPreselectedIndex) {
+								o += 1;
+								featVehicle.parentNode.style.order = o;
+							}
+							o++;
+						} else {
+							if (i == 0 && isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass')) {
+								featVehicle.parentNode.style.order = o;
+								o++;
+							}
+						}
+					}
+				}
+				var e = new Event('ttFeatOrder');
+				window.dispatchEvent(e);
+			},
+			observeEl: function (selector, callback) {
+				var processed = new Map();
+
+				var processElement = function processElement(el) {
+					if (processed && !processed.has(el)) {
+						processed.set(el, true);
+						callback(el);
+					}
+				};
+
+				var lookForSelector = function lookForSelector() {
+					var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+					if (el.matches && el.matches(selector)) {
+						if (processElement(el)) return true;
+					}
+
+					if (el.querySelectorAll) {
+						var elements = el.querySelectorAll(selector);
+
+						if (elements.length) {
+							for (var i = 0; i < elements.length; i++) {
+								var _el = elements[i];
+								if (processElement(_el)) return true;
+							}
+						}
+					}
+				};
+				lookForSelector();
+
+				var obs = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (record) {
+						if (record && record.addedNodes && record.addedNodes.length) {
+							for (var i = 0; i < record.addedNodes.length; i++) {
+								var el = record.addedNodes[i].parentElement;
+								if (el && lookForSelector(el)) return true;
 							}
 						}
 					});
 				});
-			});
-			spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
-
-		},
-		hashHandler : function(){
-			if(/cars/.test(location.hash)){
-				isoTest.elementLoaded(isoTest.vehicleItem, function() {
-					if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
-						isoTest.chall();
+				obs.observe(document, {
+					attributes: true,
+					attributeFilter: ['style', 'className'],
+					childList: true,
+					subtree: true
+				});
+			},
+			elementLoaded: function (ele, callback) {
+				isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+				window.clearTimeout(isoTest.eleTimer);
+				if (document.querySelectorAll(ele).length > 0) {
+					if (typeof callback === 'function') {
+						isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+						callback();
 					}
+				} else {
+					isoTest.eleTimer = window.setTimeout(function () { isoTest.elementLoaded(ele, callback); }, 100);
+				}
+			},
+			log: function (obj) {
+				if (isoTest.debug === true) {
+					console.log(obj);
+				}
+			}
+		};
+		var helpers = {
+			getQueryParam: function (variable) {
+				var query = window.location.search.substring(1);
+				var vars = query.split('&');
+				for (var i = 0; i < vars.length; i++) {
+					var pair = vars[i].split('=');
+					if (decodeURIComponent(pair[0]) == variable) {
+						return decodeURIComponent(pair[1]);
+					}
+				}
+			},
+			supplant: function (str, o) {
+				return str.replace(/{([^{}]*)}/g, function (a, b) {
+					var p = b.split(/\./),
+						c = o;
+					for (var i = 0; i < p.length; i++) {
+						if (c[p[i]] == null)
+							return a;
+						c = c[p[i]];
+					}
+					return typeof c === 'string' || typeof c === 'number' ? c : a;
 				});
 			}
-		},
-		chall : function(){
-			isoTest.log('chall()');
-			isoTest.branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location','location_type']);
-			var groupNumber = ReservationStateTree.get(['session', 'reservationSession','pickupLocationWithDetail','location_id']).slice(0,2);
-			var isGroup = isoTest.checkGroup(groupNumber);
-			isoTest.log('isGroup:: ' + isGroup);
-
-			if(isGroup){
-				isoTest.runTest();
-			}
-		},
-		checkGroup: function(groupNumber){
-			isoTest.log('checkGroup()');
-			var checksOut = false;
-			isoTest.audience.group.forEach(function(g){
-				if(groupNumber.substring(0,g.length) == g){
-					checksOut = true;
-				}
-			});
-			return checksOut;
-		},
-		runTest : function() {
-			isoTest.log('runTest()');
-			isoTest.day = helpers.getQueryParam('dayOverride') ? helpers.getQueryParam('dayOverride') : new Date(ReservationStateTree.get(['session', 'reservationSession','pickup_time'])).getDay();
-			isoTest.vehicleClass = isoTest.featured[isoTest.day];
-			isoTest.onLoadpreSelected = document.querySelectorAll(isoTest.preSelected).length > 0;
-			isoTest.checkSort();
-
-			// Filters and sort
-			var filterElements = document.querySelectorAll('.vehicle-filter__filter .form-checkbox,.vehicle-filter__header-link, .vehicle-redemption__options-cta, .iso-pay');
-			for(var i = 0; i < filterElements.length; i++) {
-			    filterElements[i].addEventListener('click', function(){
-						isoTest.log('Event: Filter Checkbox Click');
-						setTimeout(isoTest.checkSort,200);
-			    }, false);
-			}
-			
-			document.addEventListener('click',function(e){
-				if(e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') || e.target.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]')){
-					if(!ReservationStateTree.get(['model','carSelect','selectedCar'])){
-						isoTest.checkSort();
-					}
-				}
-			});
-			document.querySelector('#vehicleSortBy').addEventListener('change',function(){
-				setTimeout(isoTest.checkSort,200);
-			},false);
-		},
-		checkSort: function(){
-			var sort = document.querySelector('#vehicleSortBy').value;
-			var list = document.querySelector('.vehicle-list');
-			if(sort == 'Recommended'){
-				list.classList.add('iso-featured');
-			} else {
-				list.classList.remove('iso-featured');
-			}
-			isoTest.labelVehicle();
-		},
-		labelVehicle: function(){
-			isoTest.log('labelVehicle()');
-			isoTest.vehicleItems = document.querySelectorAll('.vehicle-list > li');
-			isoTest.lastPreselectedIndex = document.querySelectorAll(isoTest.preSelected).length -1;
-			isoTest.lastPreselected = document.querySelectorAll(isoTest.preSelected)[isoTest.lastPreselectedIndex];
-			if(isoTest.lastPreselected){
-				var vehicleItems = Array.prototype.slice.call(isoTest.vehicleItems);
-				isoTest.lastPreselectedIndex = vehicleItems.indexOf(isoTest.lastPreselected.parentNode);
-			}
-			isoTest.findVehicle(isoTest.vehicleClass.car);
-			if(document.querySelectorAll('.iso-preSelectedClass').length == 0 && isoTest.altCar && !isoTest.featAvail){
-				isoTest.findVehicle(isoTest.altCar);
-			}
-			isoTest.reOrder();
-		},
-		findVehicle: function(featClass){
-			for(var i = 0; i < isoTest.vehicleItems.length; i++) {
-			    if (!isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass') && isoTest.vehicleItems[i].classList.contains('vehicle-list__item')) {
-			        var dataInfo = isoTest.vehicleItems[i].getAttribute('data-dtm-tracking').split('|');
-			        var carClass = dataInfo[1];
-			        var avail = dataInfo[2];
-			        isoTest.log(carClass + ' :: ' + avail);
-			        if(carClass == featClass && (avail != 'SOLD_OUT' && avail != 'RESTRICTED_AT_RETAIL_RATE')){
-						isoTest.addPreselect(isoTest.vehicleItems[i]);
-						isoTest.featAvail = carClass == isoTest.altCar ? false : true;
-			        }
-			    }
-			}
-		},
-		addPreselect: function(vehicleItem){
-			vehicleItem.classList.add('iso-preSelectedClass');
-			var vi = vehicleItem.querySelector('.vehicle-item');
-			if(isoTest.onLoadpreSelected && (vi.classList.contains('is-search-by-filter') || vi.classList.contains('is-pre-selected'))){
-				vehicleItem.classList.add('iso-preSelectedClass-filtered');
-			} else if(isoTest.onLoadpreSelected && (!vi.classList.contains('is-search-by-filter') || !vi.classList.contains('is-pre-selected'))){
-				vehicleItem.classList.add('iso-preselected-second');
-			}
-
-			var tag = helpers.supplant(isoTest.template, {
-				'tag' : isoTest.onLoadpreSelected ? isoTest.vehicleClass.shortTag : isoTest.vehicleClass.tag
-			});
-			vehicleItem.insertAdjacentHTML('afterbegin', tag);
-		},
-		reOrder: function(){
-			var o = 0;
-			var featVehicle = document.querySelector('.iso-preSelectedClass .vehicle-item');
-			if(featVehicle && (!featVehicle.classList.contains('is-search-by-filter') || !featVehicle.classList.contains('is-pre-selected'))){
-				for(var i=0;i < isoTest.vehicleItems.length; i++){
-					if(!isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass')){
-						isoTest.vehicleItems[i].style.order = o;
-						if(i==0 && isoTest.lastPreselectedIndex == -1 && (isoTest.vehicleItems[i].classList.contains('vehicle-list__unavailable-car') || isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points'))){
-							o +=1;
-							featVehicle.parentNode.style.order = o;
-						} else if(i==0 && isoTest.lastPreselectedIndex == -1 && !isoTest.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points')){
-							featVehicle.parentNode.style.order = -1;
-						} else if(i == isoTest.lastPreselectedIndex){
-							o +=1;
-							featVehicle.parentNode.style.order = o;
-						}
-						o++;
-					} else {
-						if(i==0 && isoTest.vehicleItems[i].classList.contains('iso-preSelectedClass')){
-							featVehicle.parentNode.style.order = o;
-							o++;
-						}
-					}
-				}
-			}
-			var e = new Event('ttFeatOrder');
-			window.dispatchEvent(e);
-		},
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
-	        }
-		},
-		log : function(obj){
-			if(isoTest.debug === true){
-				console.log(obj);
-			}
-		}
-	};
-	var helpers = {
-		getQueryParam: function(variable) {
-	      	var query = window.location.search.substring(1);
-	      	var vars = query.split('&');
-	      	for (var i = 0; i < vars.length; i++) {
-	        	var pair = vars[i].split('=');
-	        	if (decodeURIComponent(pair[0]) == variable) {
-	        		return decodeURIComponent(pair[1]);
-	        	}
-	      	}
-	    },
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
-	};
-	isoTest.init();
-})();
+		};
+		isoTest.init();
+	})();
 </script>

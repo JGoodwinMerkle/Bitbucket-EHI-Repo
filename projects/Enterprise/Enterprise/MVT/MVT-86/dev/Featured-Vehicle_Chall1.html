@@ -98,6 +98,23 @@
 		height: 20px;
 	}
 
+	/* potentially fixes sorting issue */
+	.vehicle-list__item .vehicle-item {
+		width: 100%;
+	}
+
+	.vehicle-select__main .vehicle-list {
+
+		display: flex;
+		flex-direction: column;
+	}
+
+	.vehicle-list .vehicle-list__item {
+		display: flex;
+	}
+
+
+
 	@media (max-width:1081px) {
 
 		.vehicle-enough-points.cf,
@@ -172,22 +189,18 @@
 				group: ["32"]
 			},
 			init: function () {
-				_satellite && "function" == typeof _satellite.setVar && "function" == typeof _satellite.track &&
-					(_satellite.setVar("TargetCampaign", r.test), _satellite.setVar("TargetCreative", r
-						.creative)), r.elementLoaded(r.vehicleItem, function () {
-							ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall()
-						}), window.addEventListener("hashchange", r.hashHandler, !1), window.addEventListener(
-							"ttFeatVehicle", r.labelVehicle, !1), new MutationObserver(function (e) {
-								e.forEach(function (e) {
-									e.removedNodes.forEach(function (e) {
-										void 0 !== e.classList && e.classList.contains(
-											"spinner-container") && r.chall();
-									})
-								})
-							}).observe(document.querySelector("body"), {
-								subtree: !0,
-								childList: !0
+				r.elementLoaded(r.vehicleItem, function () {
+					ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall();
+				}),
+					window.addEventListener("hashchange", r.hashHandler, !1),
+					window.addEventListener("ttFeatVehicle", r.labelVehicle, !1),
+					new MutationObserver(function (e) {
+						e.forEach(function (e) {
+							e.removedNodes.forEach(function (e) {
+								void 0 !== e.classList && e.classList.contains("spinner-container") && r.hashHandler();
 							});
+						});
+					}).observe(document.querySelector("body"), { subtree: !0, childList: !0 });
 				// adds fix for filter boxes
 				r.observeEl('.vehicle-filter__content .vehicle-filter__filter:last-child .vehicle-filter__filter-list-item:last-child', async function (el) {
 					const rsCheckboxInputs = document.querySelectorAll(".vehicle-filter__filter-list-item input");
@@ -225,17 +238,6 @@
 
 
 			},
-			// flagInRightPlace: function () {
-			//     document.querySelectorAll(".mvt86").forEach(function (vli) {
-			//         if (window.innerWidth < 654) {
-			//             var vlipic = vli.closest(".iso-preSelectedClass").querySelector("section.vehicle-item__summary");
-			//             vlipic.insertAdjacentElement("afterbegin", vli);
-			//         } else {
-			//             var vlipic = vli.closest(".iso-preSelectedClass").querySelector("picture.vehicle-item__image");
-			//             vlipic.insertAdjacentElement("afterbegin", vli);
-			//         }
-			//     });
-			// },
 			checkGroup: function (t) {
 				var s = !1;
 				return r.audience.group.forEach(function (e) {
@@ -256,23 +258,60 @@
 					!e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') && !e.target
 						.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]') ||
 						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.checkSort()
-				}), document.querySelector("#vehicleSortBy").addEventListener("change", function () {
-					setTimeout(r.checkSort, 200)
-				}, !1)
+				}), document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
+					setTimeout(r.checkSort, 200);
+				}, false);
 			},
 			checkSort: function () {
 				if (ReservationStateTree.get(["session", "reservationSession", "pickupLocationWithDetail",
 					"location_id"
 				]).slice(0, 2) == 32) {
-					var sort = document.querySelector('#vehicleSortBy').value;
-					var list = document.querySelectorAll('.vehicle-list')[0];
+					var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
+					var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
 					if (sort == 'Recommended') {
+						r.elementLoaded('.iso-preSelectedClass', function () {
+							const filteredList = [];
+							list.forEach(l => {
+								const listItems = l.querySelector(".vehicle-item");
+								if (listItems.classList.contains("rs-tag-container")) {
+									filteredList.push(l);
+								};
+							});
 
-						if (list) { list.classList.add('iso-featured'); }
+							if (filteredList.length > 0) {
+								document.querySelector('.iso-preSelectedClass').style.order = filteredList.length;
+								list.forEach((l, index) => {
+									if ((!l.querySelector(".vehicle-item").classList.contains("rs-tag-container")) && (!l.classList.contains('iso-preSelectedClass'))) {
+										l.style.order = index + (filteredList.length);
+									};
+								});
+							} else {
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							};
+						});
+					};
 
-					} else {
-						list.classList.remove('iso-featured');
-					}
+					if (sort == 'High to Low') {
+						r.elementLoaded('.iso-preSelectedClass', function () {
+							const preSelectedList = document.querySelector('.iso-preSelectedClass');
+							const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+							const currentOrder = dtmAttr.split("|").slice(-1);
+							setTimeout(() => {
+								preSelectedList.style.order = currentOrder;
+							}, 10);
+						});
+					};
+
+					if (sort == 'Low to High') {
+						r.elementLoaded('.iso-preSelectedClass', function () {
+							const preSelectedList = document.querySelector('.iso-preSelectedClass');
+							const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+							const currentOrder = dtmAttr.split("|").slice(-1);
+							setTimeout(() => {
+								preSelectedList.style.order = currentOrder;
+							}, 10);
+						});
+					};
 					r.labelVehicle();
 				}
 			},
@@ -356,22 +395,33 @@
 				// window.addEventListener("resize", r.flagInRightPlace);
 			},
 			reOrder: function () {
-				var e = 0,
-					t = document.querySelector(".iso-preSelectedClass .vehicle-item");
-				if (t && (!t.classList.contains("is-search-by-filter") || !t.classList.contains(
-					"is-pre-selected")))
-					for (var s = 0; s < r.vehicleItems.length; s++) r.vehicleItems[s].classList.contains(
-						"iso-preSelectedClass") ? 0 == s && r.vehicleItems[s].classList.contains(
-							"iso-preSelectedClass") && (t.parentNode.style.order = e, e++) : (r.vehicleItems[s]
-								.style.order = e, 0 == s && -1 == r.lastPreselectedIndex && (r.vehicleItems[s]
-									.classList.contains("vehicle-list__unavailable-car") || r.vehicleItems[s]
-										.firstChild.classList.contains("vehicle-not-enough-points")) ? t.parentNode
-											.style.order = e += 1 : 0 != s || -1 != r.lastPreselectedIndex || r.vehicleItems[s]
-												.firstChild.classList.contains("vehicle-not-enough-points") ? s == r
-													.lastPreselectedIndex && (t.parentNode.style.order = e += 1) : t.parentNode.style
-														.order = -1, e++);
-				var i = new Event("ttFeatOrder");
-				window.dispatchEvent(i)
+				var o = 0;
+				var featVehicle = document.querySelector('.iso-preSelectedClass .vehicle-item');
+				if (featVehicle && (!featVehicle.classList.contains('is-search-by-filter') || !featVehicle.classList.contains('is-pre-selected'))) {
+					for (var i = 0; i < r.vehicleItems.length; i++) {
+						if (!r.vehicleItems[i].classList.contains('iso-preSelectedClass')) {
+							r.vehicleItems[i].style.order = o;
+
+							if (i == 0 && r.lastPreselectedIndex == -1 && (r.vehicleItems[i].classList.contains('vehicle-list__unavailable-car') || r.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points'))) {
+								o += 1;
+								featVehicle.parentNode.style.order = o;
+							} else if (i == 0 && r.lastPreselectedIndex == -1 && !r.vehicleItems[i].firstChild.classList.contains('vehicle-not-enough-points')) {
+								// featVehicle.parentNode.style.order = -1;
+							} else if (i == r.lastPreselectedIndex) {
+								o += 1;
+								featVehicle.parentNode.style.order = o;
+							}
+							o++;
+						} else {
+							if (i == 0 && r.vehicleItems[i].classList.contains('iso-preSelectedClass')) {
+								featVehicle.parentNode.style.order = o;
+								o++;
+							}
+						}
+					}
+				}
+				var e = new Event('ttFeatOrder');
+				window.dispatchEvent(e);
 			},
 			observeEl: function (selector, callback) {
 				var processed = new Map();
