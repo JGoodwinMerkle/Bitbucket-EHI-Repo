@@ -9,6 +9,9 @@
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
+	.vehicle-redemption__title-margin{
+		margin-bottom: 0;
+	}
   .vehicle-redemption__points-text{
     text-transform: uppercase;
   }
@@ -31,6 +34,31 @@
 			isoTest.log('Test Running...');
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			var waitForPoints = function (callback) {
+        var maxCheck = 60;
+        var interval = window.setInterval(function () {
+          if (window.store && window.store.getState() && window.store.getState().toJS() && window.store.getState().toJS().app && window.store.getState().toJS().app.baobab && window.store.getState().toJS().app.baobab.User && window.store.getState().toJS().app.baobab.User.profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data && typeof window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date === 'number') {
+            callback();
+            window.clearInterval(interval);
+          } else if (--maxCheck < 0) {
+            window.clearInterval(interval);
+          }
+        }, 50);
+      };
+
+			waitForPoints(()=>{
+				if(window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date === 0){
+
+					var pointsSection = document.querySelectorAll('.vehicle-redemption__points');
+					if(pointsSection && pointsSection.length > 0){
+						for (let i = 0; i < pointsSection.length; i++) {
+							const element = pointsSection[i];
+							element.style.display = 'none';
+						}
+					}
+				}
+			});
 		},
 		log : function(obj){
 			if(isoTest.debug === true){

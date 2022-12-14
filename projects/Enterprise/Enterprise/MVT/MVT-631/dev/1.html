@@ -1,0 +1,220 @@
+<style>
+  .popular-locations{
+    background-color: #fff;
+  }
+  .popular-locations .cmp-list__item-link{
+    text-decoration: none;
+  }
+  .link-list-us-locations .cmp-list{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    max-height: 160px;
+  }
+  @media(max-width: 1200px){
+    .link-list-us-locations .cmp-list{
+      max-height: 200px;
+    }
+  }
+  @media(max-width: 800px){
+    .link-list-us-locations .cmp-list{
+      max-height: 300px;
+    }
+  }
+  .link-list-us-locations .cmp-list__item{
+    flex-basis: 25%;
+  }
+  @media(max-width: 800px){
+    .link-list-us-locations .cmp-list__item{
+      flex-basis: 50%;
+    }
+  }
+</style>
+<script>
+  (function () {
+    "use strict";
+    var isoTest = {
+      account: "EHI",
+      portfolio: "Enterprise",
+      test: "MVT-631",
+      creative: "Challenger 1",
+      init: function () {
+        if (_satellite && typeof _satellite.setVar === "function" && typeof _satellite.track === "function") {
+          _satellite.setVar("TargetCampaign", isoTest.test);
+          _satellite.setVar("TargetCreative", isoTest.creative);
+        }
+
+        isoTest.log("Test Running...");
+        isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+        isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+        isoTest.observeEl('.meet-the-fleet', function(meetTheFleetEl){
+          var container = meetTheFleetEl.closest('.aem-GridColumn');
+          isoTest.chall(container);
+        });
+      },
+      chall: function(container){
+        container.insertAdjacentHTML('afterend', `
+          <div class="popular-locations container responsivegrid padding--top-bottom max-width--default aem-GridColumn aem-GridColumn--default--12">
+            <div class="cmp-container">
+              <div class="aem-Grid aem-Grid--12 aem-Grid--default--12">
+                <div class="container responsivegrid padding--top-bottom max-width--default aem-GridColumn aem-GridColumn--default--12">
+                  <div class="cmp-container">
+                    <div class="cmp-title">
+                      <h2 class="cmp-title__text">
+                        Popular US Locations
+                      </h2>
+                    </div>
+                    <div class="aem-Grid aem-Grid--12 aem-Grid--default--12">
+                      <div class="list link-list-us-locations aem-GridColumn aem-GridColumn--default--12">
+                        <ul class="cmp-list">
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/ca/los-angeles.html?icid=home.popular-{}los-angeles{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Los Angeles, CA</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/fl/orlando.html?icid=home.popular-{}orlando{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Orlando, FL</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/ga/atlanta.html?icid=home.popular-{}atlanta{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Atlanta, GA</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/ca/san-diego.html?icid=home.popular-{}san-diego{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">San Diego, CA</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/co/denver.html?icid=home.popular-{}denver{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Denver, CO</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/fl/miami.html?icid=home.popular-{}miami{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Miami, FL</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/fl/tampa.html?icid=home.popular-{}tampa{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Tampa, FL</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/fl/fort-lauderdale.html?icid=home.popular-{}ft-lauderdale{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Ft. Lauderdale, FL</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/az/phoenix.html?icid=home.popular-{}phoenix{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Phoenix, AZ</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/nv/las-vegas.html?icid=home.popular-{}las-vegas{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Las Vegas, NV</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/wa/seattle.html?icid=home.popular-{}seattle{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Seattle, WA</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/mi/detroit.html?icid=home.popular-{}detroit{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Detroit, MI</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/ca/san-francisco.html?icid=home.popular-{}san-francisco{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">San Francisco, CA</span>
+                              </a>
+                            </article>
+                          </li>
+                          <li class="cmp-list__item">
+                            <article>
+                              <a class="cmp-list__item-link" href="/en/car-rental/locations/us/ma/boston.html?icid=home.popular-{}boston{}-ENUS.NULL">
+                                <span class="cmp-list__item-title">Boston, MA</span>
+                              </a>
+                            </article>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `);
+
+        var locationLinks = document.querySelectorAll('.popular-locations .cmp-list__item-link');
+        for (let i = 0; i < locationLinks.length; i++) {
+          const link = locationLinks[i];
+          link.addEventListener('click', ()=>{
+            var linkText = link.querySelector('span').innerText;
+            console.log('Popular Location Click: ' + linkText);
+            isoTest.fireTag(link, 'Popular Location Click: ' + linkText);
+          });
+        }
+      },
+      fireTag: function (element, value) {
+        var linkName = value ? value : element.innerText;
+        linkName = isoTest.test ? isoTest.test + ": " + linkName : linkName;
+        s.linkTrackVars = "eVar89";
+        s.eVar89 = linkName;
+        s.tl(this, "o", linkName);
+      },
+      log: function (obj) {
+        if (isoTest.debug === true) {
+          console.log(obj);
+        }
+      },
+      elementLoaded : function (ele, callback) {
+        isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+        window.clearTimeout(isoTest.eleTimer);
+        if (document.querySelectorAll(ele).length > 0) {
+          if (typeof callback === 'function') {
+            isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+            callback();
+          }
+        } else {
+          isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+        }
+      },
+      observeEl: function (selector, callback) {
+        var processed=new Map,processElement=function(e){processed&&!processed.has(e)&&(processed.set(e,!0),callback(e))},lookForSelector=function(){var e=0<arguments.length&&void 0!==arguments[0]?arguments[0]:document;if(e.matches&&e.matches(selector)&&processElement(e))return!0;if(e.querySelectorAll){var r=e.querySelectorAll(selector);if(r.length)for(var o=0;o<r.length;o++){var t=r[o];if(processElement(t))return!0}}};lookForSelector();var obs=new MutationObserver(function(e){e.forEach(function(e){if(e&&e.addedNodes&&e.addedNodes.length)for(var r=0;r<e.addedNodes.length;r++){var o=e.addedNodes[r].parentElement;if(o&&lookForSelector(o))return!0}})});obs.observe(document,{attributes:!1,childList:!0,subtree:!0});
+      },
+    };
+
+    isoTest.init();
+  })();
+</script>

@@ -1,0 +1,39 @@
+<style></style>
+<script>
+  (function() {
+  	'use strict';
+  	var isoTest = {
+  		account : 'EHI',
+  		portfolio : 'Enterprise',
+  		test : 'MVT-636',
+  		creative : 'Challenger 0',
+  		selector : 'div.location-group',
+      observeEl : function(e,t){var r=new Map,n=function e(n){r&&!r.has(n)&&(r.set(n,!0),t(n))},d=function t(){var r=arguments.length>0&&void 0!==arguments[0]?arguments[0]:document;if(r.matches&&r.matches(e)&&n(r))return!0;if(r.querySelectorAll){var d=r.querySelectorAll(e);if(d.length){for(var a=0;a<d.length;a++)if(n(d[a]))return!0}}};d(),new MutationObserver(function(e){e.forEach(function(e){if(e&&e.addedNodes&&e.addedNodes.length)for(var t=0;t<e.addedNodes.length;t++){var r=e.addedNodes[t].parentElement;if(r&&d(r))return!0}})}).observe(document,{attributes:!1,childList:!0,subtree:!0})},
+      init : function() {
+        if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+          _satellite.setVar('TargetCampaign', isoTest.test);
+          _satellite.setVar('TargetCreative', isoTest.creative);
+        }
+
+        isoTest.log('Test Running...');
+        isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+        isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+        isoTest.observeEl(isoTest.selector, function(allLocations){
+          const airportIcon = document.querySelector('i.icon-location-airport');
+          const cityIcon = document.querySelector("i.icon-location-city");
+          if (airportIcon != null && cityIcon!= null){
+            airportIcon.closest('div.location-group').insertAdjacentElement('afterend', cityIcon.closest('div.location-group'));
+          }
+        });
+      },
+      log : function(obj){
+        if(isoTest.debug === true){
+          console.log(obj);
+        }
+      }
+    };
+
+    isoTest.init();
+  })();
+</script>

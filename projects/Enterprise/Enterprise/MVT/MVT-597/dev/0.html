@@ -1,0 +1,68 @@
+<script>
+  (function () {
+    "use strict";
+    var isoTest = {
+      account: "EHI",
+      portfolio: "Enterprise",
+      test: "MVT-597",
+      creative: "Challenger 0",
+      init: function () {
+        if (_satellite && typeof _satellite.setVar === "function" && typeof _satellite.track === "function") {
+          _satellite.setVar("TargetCampaign", isoTest.test);
+          _satellite.setVar("TargetCreative", isoTest.creative);
+        }
+
+        isoTest.log("Test Running...");
+        isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+        isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+        isoTest.observeEl('.verification-page .verification-header', function(headerEl){
+          isoTest.chall(headerEl);
+        });
+      },
+      chall: function(headerEl){
+        isoTest.waitForPoints(function () {
+          var totalPoints = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
+          
+          if(totalPoints > 1500){
+            isoTest.fireTag('', 'Loyalty Points: 1501+');
+          }else if(totalPoints > 500){
+            isoTest.fireTag('', 'Loyalty Points: 501-1500');
+          }else if(totalPoints > 0){
+            isoTest.fireTag('', 'Loyalty Points: 1-500');
+          }else{
+            isoTest.fireTag('', 'Loyalty Points: 0');
+          }
+        });
+      },
+      fireTag: function (element, value) {
+        var linkName = value ? value : element.innerText;
+        linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+        s.linkTrackVars = "eVar89";
+        s.eVar89 = linkName;
+        s.tl(this, "o", linkName);
+      },
+      log: function (obj) {
+        if (isoTest.debug === true) {
+          console.log(obj);
+        }
+      },
+      waitForPoints: function (callback) {
+        var maxCheck = 500;
+        var interval = window.setInterval(function () {
+          if (window.store && window.store.getState() && window.store.getState().toJS() && window.store.getState().toJS().app && window.store.getState().toJS().app.baobab && window.store.getState().toJS().app.baobab.User && window.store.getState().toJS().app.baobab.User.profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data && typeof window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date === 'number') {
+            callback();
+            window.clearInterval(interval);
+          } else if (--maxCheck < 0) {
+            window.clearInterval(interval);
+          }
+        }, 50);
+      },
+      observeEl: function (selector, callback) {
+        var processed=new Map,processElement=function(e){processed&&!processed.has(e)&&(processed.set(e,!0),callback(e))},lookForSelector=function(){var e=0<arguments.length&&void 0!==arguments[0]?arguments[0]:document;if(e.matches&&e.matches(selector)&&processElement(e))return!0;if(e.querySelectorAll){var r=e.querySelectorAll(selector);if(r.length)for(var o=0;o<r.length;o++){var t=r[o];if(processElement(t))return!0}}};lookForSelector();var obs=new MutationObserver(function(e){e.forEach(function(e){if(e&&e.addedNodes&&e.addedNodes.length)for(var r=0;r<e.addedNodes.length;r++){var o=e.addedNodes[r].parentElement;if(o&&lookForSelector(o))return!0}})});obs.observe(document,{attributes:!1,childList:!0,subtree:!0});
+      },
+    };
+
+    isoTest.init();
+  })();
+</script>
