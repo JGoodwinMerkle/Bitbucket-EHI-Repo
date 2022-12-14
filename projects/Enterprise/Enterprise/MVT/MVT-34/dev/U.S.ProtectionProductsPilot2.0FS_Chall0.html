@@ -1,119 +1,137 @@
 <style>
-	.extras-mobile-row__details-text p, .extras-row__details-text p{
+	.extras-mobile-row__details-text p,
+	.extras-row__details-text p {
 		font-size: 14px;
 	}
-	.extras-mobile-row__details-text ul, .extras-row__details-text ul {
-    	list-style: disc;
+
+	.extras-mobile-row__details-text ul,
+	.extras-row__details-text ul {
+		list-style: disc;
 		margin: 10px 0 10px 18px;
+	}
+
+	.rs-ulist ul>li,
+	ul:not([class])>li {
+		font-family: din-2014, Arial, sans-serif;
+	}
+
+	.rs-ulist ul>li,
+	ul:not([class])>li {
+		font-size: inherit;
+		font-style: normal;
+		font-weight: 200 !important;
+		letter-spacing: normal;
+		line-height: normal;
+		list-style-type: none;
+		margin: 0 0 15px;
+		padding: 0 0 0 20px;
+		position: relative;
+		text-transform: none;
+	}
+
+	.extras-row__details-info--show span {
+		display: none;
+	}
+
+	.extras-row__details-info--show button.cta.cta--text.cta--large {
+		display: none;
+	}
+
+	.extras-row:nth-child(2) .extras-mobile-row__sanitized-text p:nth-child(2) {
+		display: none;
+	}
+
+	@media ((max-width: 700px)) {
+		.rs-ulist ul,
+		ul:not([class]) {
+			padding-top: 15px;
+		}
 	}
 </style>
 <script>
-(function() {
-	'use strict';
-	var isoTest = {
-		account : 'Enterprise',
-		portfolio : 'Enterprise.com',
-		test : 'U.S. Protection Products Pilot 2.0 FS',
-		creative : 'Challenger 0',
-		selector: '.extras-content > .extras-container:nth-of-type(2)',
-		headline: 'Insurance and Other Protection Products',
-		content: {
-			CDW : 'Damage Waiver (DW) is optional and can be added to your rental now or at the counter.<br /><br />When you purchase DW, we will waive your responsibility for damage, loss, or theft of your rental vehicle as long as you do not violate the terms of the DW as listed on your rental agreement.',
-			RAP : 'Roadside Assistance Protection (RAP) is optional and can be added to your rental either now or at the counter. <br /><br />If you purchase RAP, we will waive your responsibility for providing 24/7 roadside assistance (where available) which includes:<br><ul><li>replacement of lost keys </li><li>flat tire service </li><li>lockout service </li><li>jumpstarts, and</li><li>fuel delivery service for up to 3 gallons</li></ul>',
-			PAI : 'Personal Accident Insurance/Personal Effects Coverage (PAI/PEC) is optional and can be added to your rental now or at the counter.<br /><ul><li>PAI covers you and your passengers in case of accidental death or injury requiring an ambulance or medical treatment.</li><li>PEC insures your personal effects and the belongings of those traveling with you.</li><li>Benefits are payable in addition to any other insurance coverage.</li></ul><br />See the full policy when you pick up your vehicle. ',
-			SLP : 'Supplemental Liability Protection (SLP) is optional and may be added to your rental now or at the counter.<br /><br />If purchased, SLP provides you and any authorized drivers with up to $1,000,000 coverage for third-party liability claims.<br /><br />See the full policy when you pick up your vehicle.'
-		},
-		init : function() {
-
-			isoTest.debug = ${user.mvtDebug};
-
-			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-				// _satellite.track('target_variables');
-			}
-
-			isoTest.log('Test Running...');
-			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
-			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});
-
-			window.addEventListener('hashchange', isoTest.viewChange, false);
-			
-			window.addEventListener('resize', function() {
-				isoTest.log('fn: resize');
-
-				isoTest.updateContent();
-
-				var contentInt = setInterval(function(){
-					isoTest.updateContent();
-				},100);
-
-				setTimeout(function() { 
-					clearInterval(contentInt); 
-				}, 1000);
-			});
-
-		},
-		viewChange : function() {
-			if(/extras/.test(location.hash)){
-				helpers.elementLoaded(isoTest.selector, function() {
-					isoTest.chall();
-				});
-			}
-		},
-		chall : function() {
-			isoTest.log('fn: chall()');
-			isoTest.updateContent();
-		},
-		updateContent: function() {
-			isoTest.log('fn: updateContent()');
-			for(var i=0;i<Object.keys(isoTest.content).length;i++){
-				isoTest.updateExtra(Object.keys(isoTest.content)[i]);
-			}
-		},
-		updateExtra: function (code) {
-			isoTest.log('fn: updateExtra() : ' + code);
-			if(document.querySelector('div[data-code^='+code+']')){
-				var extraRow = document.querySelector('div[data-code^='+code+']').parentNode.parentNode.parentNode.parentNode;
-				var detailsSelector = extraRow.querySelector('.extras-row__details-text') ? '.extras-row__details-text' : '.extras-mobile-row__details-text';
-				var details = extraRow.querySelector(detailsSelector + ' div p') ? extraRow.querySelector(detailsSelector + ' div p') : extraRow.querySelector(detailsSelector + ' p');
-				details.innerHTML = isoTest.content[code];
-			}
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
-		},
-		log : function(obj){
-			if(isoTest.debug === true){
-				console.log(obj);
-			}
-		}
-
-	};
-
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
+	!(function () {
+		"use strict";
+		var n = {
+			account: "Enterprise",
+			portfolio: "Enterprise.com",
+			test: "U.S. Protection Products Pilot 2.0 FS",
+			creative: "Challenger 0",
+			selector: ".extras-content > .extras-container:nth-of-type(2)",
+			headline: "Insurance and Other Protection Products",
+			content: {
+				CDW:
+					"Damage Waiver (DW) is optional and can be added to your rental now or at the counter.<br /><br />When you purchase DW, we will waive your responsibility for damage, loss, or theft of your rental vehicle as long as you do not violate the terms of the DW as listed on your rental agreement.",
+				RAP:
+					"Roadside Assistance Protection (RAP) is optional and can be added to your rental either now or at the counter. <br /><br />If you purchase RAP, we will waive your responsibility for providing 24/7 roadside assistance (where available) which includes:<br><ul><li>replacement of lost keys </li><li>flat tire service </li><li>lockout service </li><li>jumpstarts, and</li><li>fuel delivery service for up to 3 gallons</li></ul>",
+				PAI:
+					"Personal Accident Insurance/Personal Effects Coverage (PAI/PEC) is optional and can be added to your rental now or at the counter.<br /><ul><li>PAI covers you and your passengers in case of accidental death or injury requiring an ambulance or medical treatment.</li><li>PEC insures your personal effects and the belongings of those traveling with you.</li><li>Benefits are payable in addition to any other insurance coverage.</li></ul><br />See the full policy when you pick up your vehicle. ",
+                PEC:
+					"Personal Effects Coverage (PEC) is optional and can be added to your rental now or at the counter.<br /><ul><li>PEC insures your personal effects and the belongings of those traveling with you.</li><li>Benefits are payable in addition to any other insurance coverage.</li></ul><br />See the full policy when you pick up your vehicle. ",
+				SLP:
+					"Supplemental Liability Protection (SLP) is optional and may be added to your rental now or at the counter.<br /><br />If purchased, SLP provides you and any authorized drivers with up to $300,000 coverage for third-party liability claims.<br /><br />See the full policy when you pick up your vehicle.",
+			},
+			init: function () {
+				_satellite && "function" == typeof _satellite.setVar && "function" == typeof _satellite.track && (_satellite.setVar("TargetCampaign", n.test), _satellite.setVar("TargetCreative", n.creative)),
+					o.elementLoaded(n.selector, function () {
+						n.chall();
+					}),
+					window.addEventListener("hashchange", n.viewChange, !1),
+					window.addEventListener("resize", function () {
+						n.updateContent();
+						var e = setInterval(function () {
+							n.updateContent();
+						}, 100);
+						setTimeout(function () {
+							clearInterval(e);
+						}, 1e3);
+					});
+			},
+			viewChange: function () {
+				/extras/.test(location.hash) &&
+					o.elementLoaded(n.selector, function () {
+						n.chall();
+					});
+			},
+			chall: function () {
+				n.updateContent();
+				function displayWindowSize() {
+					// Get width and height of the window excluding scrollbars and fire carousles accordingly
+					var w = document.documentElement.clientWidth;
+					var h = document.documentElement.clientHeight;
+					if (window.innerWidth <= 750 && !document.querySelector("#PAI_PECAriaDescription").innerHTML.includes("Benefits") ) {
+						n.updateContent();
+					}
 				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
-		}
-	};
-
-	isoTest.init();
-})();
+				window.addEventListener("resize", displayWindowSize);
+			},
+			updateContent: function () {
+				for (var e = 0; e < Object.keys(n.content).length; e++) n.updateExtra(Object.keys(n.content)[e]);
+			},
+			updateExtra: function (e) {
+				if (document.querySelector("div[data-code^=" + e + "]")) {
+					var t = document.querySelector("div[data-code^=" + e + "]").parentNode.parentNode.parentNode.parentNode,
+						o = t.querySelector(".extras-row__details-text") ? ".extras-row__details-text" : ".extras-mobile-row__sanitized-text";
+					(t.querySelector(o + " div p") ? t.querySelector(o + " div p") : t.querySelector(o + " p")).innerHTML = n.content[e];
+				}
+			},
+			fireTag: function (e, t) {
+				var o = t || e.innerText;
+				(s.linkTrackVars = "eVar20"), (s.eVar20 = o), s.tl(this, "o", o);
+			},
+			log: function (e) {
+				!0 === n.debug && console.log(e);
+			},
+		},
+			o = {
+				elementLoaded: function (e, t) {
+					window.clearTimeout(n.eleTimer),
+						0 < document.querySelectorAll(e).length
+							? "function" == typeof t && t()
+							: (n.eleTimer = window.setTimeout(function () {
+								o.elementLoaded(e, t);
+							}, 100));
+				},
+			};
+		n.init();
+	})();
 </script>
