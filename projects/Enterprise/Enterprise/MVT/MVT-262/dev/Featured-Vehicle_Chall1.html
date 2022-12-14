@@ -307,22 +307,40 @@
 				}, false);
 			},
 			checkSort: function () {
-				console.log("I'm in the sort");
+				console.log("I'm in the sort still>>>>");
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
-				var list = document.querySelector('.vehicle-list');
+				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
 				if (sort == 'Recommended') {
 					helpers.elementLoaded('.iso-preSelectedClass', function () {
-						document.querySelector('.iso-preSelectedClass').style.order = -1;
-						console.log("should be adding featured");
+						const filteredList = [];
+						list.forEach(l => {
+							const listItems = l.querySelector(".vehicle-item");
+							if(listItems.classList.contains("rs-tag-container")){
+								filteredList.push(l);
+							};
+						});
+
+						if(filteredList.length > 0){
+							document.querySelector('.iso-preSelectedClass').style.order = filteredList.length;
+							list.forEach((l, index) => {
+								if ((!l.querySelector(".vehicle-item").classList.contains("rs-tag-container")) && (!l.classList.contains('iso-preSelectedClass')) ){
+									l.style.order = index+(filteredList.length);
+								};
+							});
+						}else{
+							document.querySelector('.iso-preSelectedClass').style.order = -1;
+						};
 					});
-				}
+				};
 
 				if (sort == 'High to Low') {
 					helpers.elementLoaded('.iso-preSelectedClass', function () {
 						const preSelectedList = document.querySelector('.iso-preSelectedClass');
 						const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
 						const currentOrder = dtmAttr.split("|").slice(-1);
-						preSelectedList.style.order = currentOrder;
+						setTimeout(() => {
+							preSelectedList.style.order = currentOrder;
+						}, 10);
 					});
 				};
 
@@ -331,7 +349,9 @@
 						const preSelectedList = document.querySelector('.iso-preSelectedClass');
 						const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
 						const currentOrder = dtmAttr.split("|").slice(-1);
-						preSelectedList.style.order = currentOrder;
+						setTimeout(() => {
+							preSelectedList.style.order = currentOrder;
+						}, 10);
 					});
 				};
 				isoTest.labelVehicle();
