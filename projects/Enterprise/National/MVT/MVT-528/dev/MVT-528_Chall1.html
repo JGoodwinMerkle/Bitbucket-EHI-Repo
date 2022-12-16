@@ -1,0 +1,171 @@
+<style>
+	  .iso-mvt-price {
+        font-size: 1rem;
+        letter-spacing: 0.05rem;
+        line-height: 1.3125;
+        text-align: center;
+        margin-top: 8px;
+    }
+    .vehicle__price-total.iso-mvt-hide {
+        display: none;
+    }
+    .vehicle__attributes.iso-mvt-desktop{
+        display: flex;
+        justify-content: space-evenly;
+        width: 36.3%;
+        margin-top: 10px;
+        margin-bottom: auto;
+    }
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'National',
+		test : 'MVT-528',
+		creative : 'Challenger 1',
+		selector : '.vehicle-list >.vehicle',
+		init : function() {
+
+			//isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			isoTest.observeEl(isoTest.selector, function(extraEl){ 
+				var countryCode = '' || window.getState(['session','gbo','reservation','pickup_location','address','country_code']);
+				if (countryCode == 'US'){
+					isoTest.chall();
+					isoTest.log('Test Ready!');
+				}
+			});
+			
+		},
+		chall : function() {
+
+			// Your code goes here
+            isoTest.vehicleCTAupdates();
+            if (window.matchMedia("(min-width: 57em)").matches ) { 
+                isoTest.desktopUpdates();
+            }
+
+            //window resize 
+            window.addEventListener('resize',function(){
+                //console.log('resize');
+                    if (window.matchMedia("(min-width: 57em)").matches ) { 
+                        isoTest.desktopUpdates();
+                    } else {
+						isoTest.removeDesktopUpdates();
+					}
+            });		
+		},
+        //price updates for each vehicle 
+        vehicleCTAupdates : function () {
+            var vehicles = document.querySelectorAll('.vehicle-list >.vehicle');
+            vehicles.forEach(vehicle => {
+                var totalPrice = vehicle.querySelector('.vehicle__price-total');
+                var selectCTA = vehicle.querySelector('.vehicle__cta > button');
+                totalPrice.classList.add('iso-mvt-hide');
+                selectCTA.innerText = totalPrice.innerText;
+            });
+        },
+       
+        //desktop changes 
+        desktopUpdates : function() {
+			var vehicles = document.querySelectorAll('.vehicle-list >.vehicle');
+			vehicles.forEach(vehicle => {
+				var perDayPrice = vehicle.querySelector('.vehicle__price > p:not(.vehicle__price-total)');
+				var selectCTA = vehicle.querySelector('.vehicle__cta > button');
+				var attributes = vehicle.querySelector('.vehicle__attributes')
+				if(perDayPrice) {
+					attributes.classList.add('iso-mvt-desktop');
+					perDayPrice.classList.add('iso-mvt-price');
+					selectCTA.insertAdjacentElement('afterend',perDayPrice);
+				}  
+
+				});
+        },
+		removeDesktopUpdates : function () {
+            var attributes = document.querySelectorAll('.iso-mvt-desktop');
+            if(attributes.length > 0) {
+                attributes.forEach(attribute => {
+                    attribute.classList.remove('iso-mvt-desktop');
+                    var parentContent = attribute.parentElement;
+                    var priceCompoment = parentContent.querySelector('.iso-mvt-price');
+                    parentContent.querySelector('.vehicle__price').insertAdjacentElement('afterbegin',priceCompoment);
+                    priceCompoment.classList.remove('iso-mvt-price');
+                });
+            }
+        },
+
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		},
+	
+
+		observeEl: function(selector, callback) {
+					var processed = new Map();
+					var processElement = function processElement(el) {
+						if (processed && !processed.has(el)) {
+							processed.set(el, true);
+							callback(el);
+						}
+					};
+				
+					var lookForSelector = function lookForSelector() {
+						var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+				
+						if (el.matches && el.matches(selector)) {
+							if (processElement(el)) return true;
+						}
+				
+						if (el.querySelectorAll) {
+							var elements = el.querySelectorAll(selector);
+				
+							if (elements.length) {
+								for (var i = 0; i < elements.length; i++) {
+									var _el = elements[i];
+									if (processElement(_el)) return true;
+								}
+							}
+						}
+					};
+					lookForSelector();
+				
+					var obs = new MutationObserver(function (mutationsList) {
+						mutationsList.forEach(function (record) {
+							if (record && record.addedNodes && record.addedNodes.length) {
+								for (var i = 0; i < record.addedNodes.length; i++) {
+									var el = record.addedNodes[i].parentElement;
+									if (el && lookForSelector(el)) return true;
+								}
+							}
+						});
+					});
+					obs.observe(document, {
+						attributes: false,
+						childList: true,
+						subtree: true
+					});
+				},
+			};
+	
+         isoTest.init();          
+})();
+</script>
