@@ -1,0 +1,140 @@
+<style>
+    .iso-demand-message {
+        background: #FFFFFF;
+        padding:20px;
+        display: flex;
+        padding: 20px;
+        flex-direction: row;
+        margin-bottom: 10px;
+    }
+    .iso-demand-message .iso-copy {
+		display: flex;
+        margin-left: 10px;
+		flex-direction: column;
+    }
+    .iso-demand-message .iso-copy > p {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;
+        color: #213B73;
+        margin-bottom: 0px;
+    }
+	.iso-demand-message .iso-copy > p.iso-heading {
+		font-weight: 700;
+	}
+	@media only screen and (min-width:768px) and (max-width:1279px) {
+		.iso-demand-message .iso-copy {
+			display: flex;
+			margin-left: 10px;
+			flex-direction: row;
+			gap: 0.5rem;
+			height: 21px;
+   	 	}
+			.iso-demand-message .iso-icon {
+				font-size: 0px;
+			}
+	}
+	@media only screen and (max-width:1279px) {
+		.iso-demand-message {
+			margin-bottom: 20px;
+		}
+		
+	}
+	@media only screen and (max-width:375px) {
+		.iso-demand-message .iso-copy > p {
+			font-size: 12px;
+		}
+		
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Alamo',
+		test : 'MVT-508',
+		creative : 'Challenger 1',
+		selector : 'section.review-rental-details.rental-details',
+        template: '<div class="iso-demand-message"> <div class="iso-icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M10 2H14" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M9 10L12 13" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M20 5L17.66 7.34" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M19 4L21 6" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M3 15H8" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M8 18H5" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M8 21H7" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M4.27002 11C5.16002 7.55 8.28002 5 12 5C16.42 5 20 8.58 20 13C20 17.42 16.42 21 12 21" stroke="#213B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </svg> </div><div class="iso-copy"> <p class="iso-heading">Book Now to Lock in Your Rate.</p><p class="iso-subcopy">Pricing and availability subject to change.</p></div></div>',
+		init : function() {
+
+			//isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		viewChange : function(){
+			if(/review/.test(location.hash)){
+				helpers.elementLoaded(isoTest.selector, function() {
+					isoTest.chall();
+				});
+			}
+		},
+		chall : function() {
+
+			// Your code goes here
+            if (!document.querySelector('.iso-demand-message')) {
+					document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', isoTest.template);
+				}
+		},
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          	if (c[p[i]] == null)
+		            	return a;
+		          	c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
