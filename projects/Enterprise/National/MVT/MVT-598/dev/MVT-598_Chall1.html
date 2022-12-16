@@ -1,0 +1,116 @@
+<style>
+    .mvt598-add-on {
+        display: flex;
+		justify-content: center;
+      
+    }
+	.mvt598-add-on button.add-on__btn.add-on__btn--text.link {
+		display: flex;
+	}
+	.add-on:not(.add-on--selected) .mvt598-add-on button.add-on__btn.add-on__btn--text.link {
+		margin-left: -24px;
+	}
+	.mvt598-add-on button.add-on__btn.add-on__btn--text.link::before{
+		content: '';
+		width: 25px;
+        height: 25px;
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='25' height='25' viewBox='0 0 25 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_214_257)'%3E%3Cpath d='M12.5 6.5V18.4999' stroke='%2300703C' stroke-width='1.5' stroke-miterlimit='10'/%3E%3Cpath d='M18.5 12.5H6.50004' stroke='%2300703C' stroke-width='1.5' stroke-miterlimit='10'/%3E%3Cpath d='M24.2679 0.732147H0.732178V24.2679H24.2679V0.732147Z' stroke='%2300703C' stroke-width='1.5' stroke-miterlimit='10'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_214_257'%3E%3Crect width='25' height='25' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E"); 
+        background-size: 25px 25px;
+        background-repeat: no-repeat;
+		display: inline-block;
+        margin-right: 12px;
+	}
+	.add-on.add-on--selected .mvt598-add-on button.add-on__btn.add-on__btn--text.link::before{
+		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='25' height='25' viewBox='0 0 25 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_214_265)'%3E%3Cpath d='M24.2678 0.732117H0.732117V24.2678H24.2678V0.732117Z' fill='%2300703C' stroke='%2300703C' stroke-width='1.5' stroke-miterlimit='10'/%3E%3Cpath d='M8 8L17 17' stroke='white' stroke-width='1.5' stroke-miterlimit='10'/%3E%3Cpath d='M17 8L8 17' stroke='white' stroke-width='1.5' stroke-miterlimit='10'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_214_265'%3E%3Crect width='25' height='25' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
+        
+	}
+	.mvt598-add-on.add-on__actions .add-on__btn--disabled, .mvt598-add-on.add-on__actions .add-on__label--disabled {
+		margin-right: 14px;
+	}
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'National',
+		test : 'MVT-598',
+		creative : 'Challenger 1',
+		selector : '.add-on__actions',
+		init : function() {
+
+			//isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			isoTest.observeEl(isoTest.selector, function (addOn) {
+                addOn.classList.add('mvt598-add-on');
+            });
+			
+		},
+	
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		},
+        observeEl: function (selector, callback) {
+				var processed = new Map();
+				var processElement = function processElement(el) {
+					if (processed && !processed.has(el)) {
+						processed.set(el, true);
+						callback(el);
+					}
+				};
+
+				var lookForSelector = function lookForSelector() {
+					var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+					if (el.matches && el.matches(selector)) {
+						if (processElement(el)) return true;
+					}
+					if (el.querySelectorAll) {
+						var elements = el.querySelectorAll(selector);
+						if (elements.length) {
+							for (var i = 0; i < elements.length; i++) {
+								var _el = elements[i];
+								if (processElement(_el)) return true;
+							}
+						}
+					}
+				};
+				lookForSelector();
+
+				var obs = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (record) {
+						if (record && record.addedNodes && record.addedNodes.length) {
+							for (var i = 0; i < record.addedNodes.length; i++) {
+								var el = record.addedNodes[i].parentElement;
+								if (el && lookForSelector(el)) return true;
+							}
+						}
+					});
+				});
+				obs.observe(document, {
+					attributes: false,
+					childList: true,
+					subtree: true
+				});
+			}
+	};
+	isoTest.init();
+})();
+</script>
