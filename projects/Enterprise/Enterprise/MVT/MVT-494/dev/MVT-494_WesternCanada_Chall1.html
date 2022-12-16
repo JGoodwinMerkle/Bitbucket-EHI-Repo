@@ -1,0 +1,150 @@
+<style>
+    .img-container.iso-background {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 0 0;
+    }
+    .booking-widget-hero.section .img-container.iso-background > img {
+        display: none;
+    }
+    .img-container.iso-background.iso-background-a {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_dt_western_b.png');
+    }
+    .img-container.iso-background.iso-background-b {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_dt_western_a.png');
+    }
+  /*  @media only screen and (max-width:375px) {
+        .img-container.iso-background.iso-background-a {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_mb_western_a.png');
+         }
+        .img-container.iso-background.iso-background-b {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_mb_western_b.png');
+         }
+    }
+    @media only screen and (max-width:768px) {
+        .img-container.iso-background.iso-background-a {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_tb_western_a.png');
+         }
+        .img-container.iso-background.iso-background-b {
+        background-image: url('https://www.enterprise.com/content/dam/ecom/hosted/mvt-494-canada-background-images/mvt494_tb_western_b.png');
+         }
+    }*/
+
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'MVT-494',
+		creative : 'Challenger 1',
+		selector : 'body',
+        images : ['a','b'],
+		init : function() {
+
+			isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+			});
+			
+		window.addEventListener('hashchange', isoTest.viewChange, false);
+		
+		},
+		
+		chall : function() {
+
+			// Your code goes here
+            var targetDiv = document.querySelector('.booking-widget-hero.section .img-container');
+            targetDiv.classList.add('iso-background');
+            var imageUse = isoTest.getImageIndex();
+            console.log('final index', imageUse );
+            targetDiv.classList.add('iso-background-'+isoTest.images[imageUse]);
+			if (imageUse == 0) {
+				isoTest.fireTag89(isoTest.selector,'Background Image - Western Canada A');
+			} else  {
+				isoTest.fireTag89(isoTest.selector,'Background Image - Western Canada B');
+			}
+            //targetDiv.style.backgroundImage = "url("+isoTest.images[imageUse]+")";
+            window.localStorage.setItem('iso-MVT-494-Image',imageUse);
+            window.sessionStorage.setItem('iso-MVT-494-Image','true');
+
+		},
+        getImageIndex: function () {
+            var index = 0;
+            var imageSeen = window.localStorage.getItem('iso-MVT-494-Image');
+            var imageIndex = parseInt(imageSeen);
+
+            if (imageSeen !== null) {
+                index = imageIndex; 
+                if(window.sessionStorage.getItem('iso-MVT-494-Image') === null) {
+                    index++;
+                    console.log(index);
+                    index = index % isoTest.images.length; // revert index to first image
+                }
+            }
+
+            return index;
+        },
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+        fireTag89 : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar89';
+			s.eVar89 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	    supplant : function(str, o) {
+			return str.replace(/{([^{}]*)}/g, function(a, b) {
+		        var p = b.split(/\./),
+		            c = o;
+		        for (var i = 0; i < p.length; i++) {
+		          	if (c[p[i]] == null)
+		            	return a;
+		          	c = c[p[i]];
+		        }
+				return typeof c === 'string' || typeof c === 'number' ? c : a;
+			});
+		}
+	};
+
+	isoTest.init();
+})();
+</script>
