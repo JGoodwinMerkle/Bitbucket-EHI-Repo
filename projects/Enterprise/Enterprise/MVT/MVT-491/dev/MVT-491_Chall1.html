@@ -10,7 +10,7 @@
         height: 29.01px;
         margin-right: 1rem;
         width: 23px;
-        margin-bottom: 0px;
+        margin-bottom: 6px;
     }
 
     @media only screen and  (min-width: 39.8em) {
@@ -31,12 +31,12 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-491',
 		creative : 'Challenger 1',
-		selector : '.two-up-three-up-container ul.two-up-three-up-container__list a > div >img',
+		selector : '.container.responsivegrid.teaser-style-3 .cmp-container .teaser.teaser-style-3 .cmp-teaser__image',
         loginSelector : '.header-nav-item.sign-in',
         authSelector : '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
 		init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
             
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
@@ -74,16 +74,19 @@
            if(!document.querySelector('.iso-auth-img')) {
 			//console.log('login');
             var iconImg = document.querySelectorAll(isoTest.selector)[2];
-            var embeddedUrl = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement;
-                embeddedUrl.classList.add('iso-auth-loyalty');
-            var headline = document.querySelector('.iso-auth-loyalty h2.two-up-three-up-tile__heading');
-            var bodyCopy = document.querySelector('.iso-auth-loyalty .two-up-three-up-tile__text p');
+            document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement.classList.add('iso-auth-loyalty');
+            var embeddedUrls = document.querySelectorAll('.iso-auth-loyalty  a')
+                
+            var headline = document.querySelector('.iso-auth-loyalty div.cmp-teaser__content h3 > a');
+            var bodyCopy = document.querySelector('.iso-auth-loyalty div.cmp-teaser__content p');
            
             iconImg.insertAdjacentHTML('beforebegin','<div class="iso-auth-img"></div');
           
             iconImg.classList.add('iso-auth-hide');
-
-            embeddedUrl.setAttribute('href','https://www.enterprise.com/en/car-rental/mobile-app.html?icid=home.three.up-_-mobile-app-_-ENUS');
+            embeddedUrls.forEach(embeddedUrl => {
+                embeddedUrl.setAttribute('href','https://www.enterprise.com/en/car-rental/mobile-app.html?icid=home.three.up-_-mobile-app-_-ENUS');
+            });
+            
             headline.innerText = 'Download The Enterprise App';
             bodyCopy.innerText = 'Enterprise is bringing innovation to the rental experience. Members with the app may be eligible to try new features soon.';
            }
@@ -92,16 +95,18 @@
           if(document.querySelector('.iso-auth-img')) {
 				//console.log('logout');
             var iconImg = document.querySelectorAll(isoTest.selector)[2];
-            var embeddedUrl = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement;
-                embeddedUrl.classList.add('iso-auth-loyalty');
-            var headline = document.querySelector('.iso-auth-loyalty h2.two-up-three-up-tile__heading');
-            var bodyCopy = document.querySelector('.iso-auth-loyalty .two-up-three-up-tile__text p');
+            document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement.classList.add('iso-auth-loyalty');
+            var embeddedUrls = document.querySelectorAll('.iso-auth-loyalty  a');
+            var headline = document.querySelector('.iso-auth-loyalty div.cmp-teaser__content h3 > a');
+            var bodyCopy = document.querySelector('.iso-auth-loyalty div.cmp-teaser__content p');
             iconImg.classList.remove('iso-auth-hide');
             
                 document.querySelector('.iso-auth-img').remove();
             
-            
-            embeddedUrl.setAttribute('href','https://www.enterprise.com/en/loyalty.html?icid=home.3up1-_-loyalty-_-ENUS.NULL');
+            embeddedUrls.forEach(embeddedUrl => {
+                embeddedUrl.setAttribute('href','https://www.enterprise.com/en/loyalty.html?icid=home.3up1-_-loyalty-_-ENUS.NULL');
+            });
+           
             headline.innerText = 'Not an Enterprise Plus® member?';
             bodyCopy.innerText = 'You could be earning points toward free rentals. What are you waiting for?';
           }
