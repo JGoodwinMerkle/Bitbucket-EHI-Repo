@@ -8,7 +8,8 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-660',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '.header-nav-item.sign-in',
+        template: '<div class="mvt660-value-prop-banner"> <div class="prop-container"> <div class="prop"> <span class="icon"></span> <span class="text">Pay when you pick-up</span> </div><div class="prop"> <span class="icon"></span> <span class="text">No cancellation fee</span> </div><div class="prop"> <span class="icon"></span> <span class="text">Unlimited mileage on most car classes</span> </div></div><div class="close"></div></div>',
 		init : function() {
 
 			isoTest.debug = true;
@@ -31,6 +32,8 @@
 		chall : function() {
 
 			// Your code goes here
+			document.querySelector('#main').insertAdjacentHTML('afterbegin',isoTest.template);
+
 
 		},
 		fireTag : function(element, value) {
@@ -40,6 +43,13 @@
 			s.eVar20 = linkName;
 			s.tl(this, 'o', linkName);
 		},
+		fireTag89 : function(element, value) {
+             var linkName = value ? value : element.innerText;
+                 linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+             s.linkTrackVars = 'eVar89';
+             s.eVar89 = linkName;
+             s.tl(this, 'o', linkName);
+         },
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
@@ -60,18 +70,6 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
 	};
 
 	isoTest.init();
