@@ -167,6 +167,19 @@
 				window.addEventListener('hashchange', isoTest.hashHandler, false);
 				window.addEventListener('ttFeatVehicle', isoTest.labelVehicle, false);
 
+				var spinnerUpdate = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (mutation) {
+						mutation.removedNodes.forEach(function (removedNode) {
+							if (removedNode.classList !== undefined) {
+								if (removedNode.classList.contains('spinner-container')) {
+									isoTest.hashHandler();
+								}
+							}
+						});
+					});
+				});
+				spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
+
 				// Search filter bug fix
 				isoTest.observeEl('.is-search-by-filter.rs-tag-container--darkGreen', function (el) {
 					var vehicleItem = el.closest('.vehicle-list__item');
@@ -201,9 +214,11 @@
 				}
 			},
 			chall: function () {
-				isoTest.log('chall()');
+				if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "NZ" || window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "NZ" || window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "NZ" || window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "AU" || window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "GU" || window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "MP") {
+					isoTest.log('chall()');
 
-				isoTest.runTest();
+					isoTest.runTest();
+				}
 			},
 			runTest: function () {
 				isoTest.log('runTest()');
