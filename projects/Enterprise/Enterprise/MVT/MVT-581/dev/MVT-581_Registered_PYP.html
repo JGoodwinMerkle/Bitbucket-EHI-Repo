@@ -1,0 +1,156 @@
+<style></style>
+<script>
+  (function() {
+    'use strict';
+    var isoTest = {
+      account: 'EHI',
+      portfolio: 'Enterprise',
+      test: 'MVT-581',
+      creative: 'PYP',
+      selector: '.teaser.teaser-style-3 .cmp-teaser__image',
+      loginSelector: '.header-nav-item.sign-in',
+      authSelector: '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
+      auth: {
+        'type': 'auth',
+        'PYP': {
+          'Header': 'View Plus Your Points Dashboard',
+          'Copy': 'Earn double points on qualifying rentals now through January 31, 2023. Terms apply.',
+          'Link': ' https://plusyourpoints.enterprise.com/en_us/dashboard?TLGVC=E23A&TLG_CID=50602'
+        }
+      },
+      unAuth: {
+        'type': 'unAuth',
+        'Header': 'Plus Your Points',
+        'Copy': 'Plus Your Points is back! Join Enterprise Plus < sup > ® < /sup> and register to earn double points on qualifying rentals now through January 31, 2023. Terms apply. < br > ',
+        'Link': 'https://plusyourpoints.enterprise.com/en_us/login?TLGVC=E23A&TLG_CID=50601'
+      },
+      init: function() {
+        isoTest.debug = true;
+        if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+          _satellite.setVar('TargetCampaign', isoTest.test);
+          _satellite.setVar('TargetCreative', isoTest.creative);
+        }
+        isoTest.log('Test Running...');
+        isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+        isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+        helpers.elementLoaded(isoTest.selector, function() {
+          isoTest.log('Test Ready!');
+          isoTest.chall();
+          isoTest.inFlightUpdates();
+        });
+      },
+      chall: function() {
+        // Your code goes here
+        if (document.querySelector(isoTest.authSelector)) {
+          isoTest.logInUpdates();
+        }
+      },
+      logInUpdates: function() {
+        if (!document.querySelector('.iso-auth-pyp-loyalty')) {
+          //based on AEP set the auth to PYP or non Pyp
+          //var auth = 'PYP' || 'NonPYP'
+          //console.log('Registered');
+          isoTest.tileUpdate(isoTest.auth.PYP);
+          isoTest.addEventsTag();
+        }
+      },
+      logOutUpdates: function() {
+        //console.log('logout');
+        if (document.querySelector('.iso-auth-pyp-loyalty')) {
+          isoTest.tileUpdate(isoTest.unAuth);
+          document.querySelector('.iso-auth-pyp-loyalty').classList.remove('iso-auth-pyp-loyalty');
+        }
+      },
+      tileUpdate: function(user) {
+        var mainTile = document.querySelectorAll(isoTest.selector)[2].parentElement.parentElement.classList.add('iso-auth-pyp-loyalty');
+        var Url = document.querySelectorAll('.iso-auth-pyp-loyalty  a');
+        var headline = document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a');
+        var bodyCopy = document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content p');
+        Url.forEach(embeddedUrl => {
+          embeddedUrl.setAttribute('href', user.Link);
+        });
+        headline.innerText = user.Header;
+        if (user.type == 'unAuth') {
+          bodyCopy.innerHTML = user.Copy;
+        } else {
+          bodyCopy.innerText = user.Copy;
+        }
+      },
+      inFlightUpdates: function() {
+        var eleUpdates = new MutationObserver(function(mutationsList) {
+          mutationsList.forEach(function(mutation) {
+            //added nodes 
+            mutation.addedNodes.forEach(function(addedNode) {
+              if (addedNode.classList != undefined) {
+                if (document.querySelector('.utility-nav-label--logged-in')) {
+                  isoTest.logInUpdates();
+                } else if (document.querySelector('.login-widget.active')) {
+                  if (!document.querySelector('.field-container.logged-in')) {
+                    isoTest.logOutUpdates();
+                  }
+                } else {
+                  isoTest.logOutUpdates();
+                }
+              }
+            });
+          });
+        });
+        //after observe add target element
+        eleUpdates.observe(document.querySelector(isoTest.loginSelector), {
+          subtree: true,
+          childList: true
+        });
+      },
+      addEventsTag: function() {
+        //console.log('add event');
+        if (sessionStorage.getItem('MVT-581_DashboardTileSeen') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == isoTest.auth.PYP.Header) {
+          isoTest.fireTag89('', 'Registered: Dashboard Tile Seen');
+          sessionStorage.setItem('MVT-581_DashboardTileSeen', 'true');
+        }
+        //click events
+        document.querySelector('.iso-auth-pyp-loyalty').addEventListener('click', function() {
+          if (sessionStorage.getItem('MVT-581_DashboardTileClicked') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == isoTest.auth.PYP.Header) {
+            isoTest.fireTag(document.querySelector('.iso-auth-pyp-loyalty'), 'Registered: Dashboard Tile Click');
+            sessionStorage.setItem('MVT-581_DashboardTileClicked', 'true');
+          }
+        });
+      },
+      fireTag: function(element, value) {
+        var linkName = value ? value : element.innerText;
+        linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+        s.linkTrackVars = 'eVar20';
+        s.eVar20 = linkName;
+        s.tl(this, 'o', linkName);
+      },
+      fireTag89: function(element, value) {
+        var linkName = value ? value : element.innerText;
+        linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+        s.linkTrackVars = 'eVar89';
+        s.eVar89 = linkName;
+        s.tl(this, 'o', linkName);
+      },
+      log: function(obj) {
+        if (isoTest.debug === true) {
+          console.log(obj);
+        }
+      }
+    };
+    var helpers = {
+      elementLoaded: function(ele, callback) {
+        isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+        window.clearTimeout(isoTest.eleTimer);
+        if (document.querySelectorAll(ele).length > 0) {
+          if (typeof callback === 'function') {
+            isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+            callback();
+          }
+        } else {
+          isoTest.eleTimer = window.setTimeout(function() {
+            helpers.elementLoaded(ele, callback);
+          }, 100);
+        }
+      },
+    };
+    isoTest.init();
+  })();
+</script>
