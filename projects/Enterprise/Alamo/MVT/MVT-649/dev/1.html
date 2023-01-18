@@ -1,0 +1,120 @@
+<style>
+  .aem-hero{
+    display: none;
+  }
+  .aem-hero + .theme--light-blue{
+    background-color: #005DAA;
+  }
+  @media (min-width: 769px){
+    .aem-hero + .theme--light-blue{
+      background-color: #5AB7E8;
+    }
+  }
+  @media (min-width: 769px){
+    .aem-hero + .theme--light-blue{
+      background-image: url('https://www.alamo.com/content/dam/alamo/marketing/mvt/mvt649_dt_bwest.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: bottom;
+    }
+  }
+  .mvt649__heading .title__heading-text{
+    color: #213B73;
+    text-align: center;
+  }
+  .mvt649__heading{
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  @media (max-width: 768px){
+    .mvt649__heading{
+      background-image: url('https://www.alamo.com/content/dam/alamo/marketing/mvt/mvt649_mb_bwest.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-color: #5bb6e7;
+      background-position: bottom;
+    }
+    .title {
+      margin-top: 2rem;
+    }
+  }
+  @media (min-width: 1280px){
+    .mvt649__heading{
+      padding-top: 0;
+    }
+  }
+  @media (max-width: 1279px){
+    .aem-hero + .container{
+      padding-top: 0rem;
+    }
+  }
+  @media (min-width: 769px){
+    .aem-hero + .container > .cmp-container > div{
+      background-color: #05518D;
+      padding: 15px 10px;
+    }
+  }
+</style>
+<script>
+  (function () {
+    "use strict";
+    var isoTest = {
+      account: "EHI",
+      portfolio: "Alamo",
+      test: "MVT-649",
+      creative: "Challenger 1",
+      selector: '.aem-hero + .container',
+      init: function () {
+        if (_satellite && typeof _satellite.setVar === "function" && typeof _satellite.track === "function") {
+          _satellite.setVar("TargetCampaign", isoTest.test);
+          _satellite.setVar("TargetCreative", isoTest.creative);
+        }
+
+        isoTest.log("Test Running...");
+        isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+        isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+        isoTest.chall();
+      },
+      chall: function(){
+        isoTest.elementLoaded(isoTest.selector, ()=>{
+          var el = document.querySelector(isoTest.selector);
+          el.insertAdjacentHTML('afterbegin', `
+            <div class="mvt649__heading">
+              <h1 class="title__heading-text">
+                Rent with Alamo and Drive Happy<sup>®</sup>
+              </h1>
+            </div>
+          `);
+        });
+      },
+      fireTag: function (element, value) {
+        var linkName = value ? value : element.innerText;
+        linkName = isoTest.test ? isoTest.test + ": " + linkName : linkName;
+        s.linkTrackVars = "eVar89";
+        s.eVar89 = linkName;
+        s.tl(this, "o", linkName);
+      },
+      log: function (obj) {
+        if (isoTest.debug === true) {
+          console.log(obj);
+        }
+      },
+      elementLoaded : function (ele, callback) {
+        isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+        window.clearTimeout(isoTest.eleTimer);
+        if (document.querySelectorAll(ele).length > 0) {
+          if (typeof callback === 'function') {
+            isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+            callback();
+          }
+        } else {
+          isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+        }
+      },
+    };
+
+    isoTest.init();
+  })();
+</script>
