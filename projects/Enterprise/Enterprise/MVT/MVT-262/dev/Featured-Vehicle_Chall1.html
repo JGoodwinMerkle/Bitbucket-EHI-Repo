@@ -1,4 +1,5 @@
 <style>
+	/* add this to hide tag when outside of designated location */
 	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
 		display: none;
 	}
@@ -215,6 +216,8 @@
 							if (removedNode.classList !== undefined) {
 								if (removedNode.classList.contains('spinner-container')) {
 									isoTest.hashHandler();
+									/* add this to hide tag when outside of designated location */
+									isoTest.hideBanner();
 								}
 							}
 						});
@@ -257,8 +260,8 @@
 				isoTest.log('chall()');
 				isoTest.branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']);
 				var isBranchType = isoTest.branchType == isoTest.audience.branch;
-				var peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
-				var isPeopleSoftId = isoTest.checkId(peopleSoftId);
+				/* add this to hide tag when outside of designated location (remove peoplesoftid var and delete it from checkid method below) */
+				var isPeopleSoftId = isoTest.checkId();
 
 				isoTest.log('isPeopleSoftId:: ' + isPeopleSoftId);
 
@@ -266,21 +269,30 @@
 					isoTest.runTest();
 				}
 			},
-			checkId: function (peopleSoftId) {
+			/* add this to hide tag when outside of designated location */
+			checkId: function () {
 				isoTest.log('fn:checkId()');
+				const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
 				const filteredReservation = isoTest.audience.peopleSoftId.filter(p => p == peopleSoftId);
 				if (!filteredReservation.length) {
-					isoTest.hideBanner(peopleSoftId);
+					isoTest.hideBanner();
 				}
 				return isoTest.audience.peopleSoftId.indexOf(peopleSoftId) > -1;
 			},
-			hideBanner: function (peopleSoftId) {
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
 				isoTest.observeEl('.iso-preSelectedClass', function () {
-					const filteredReservation = isoTest.audience.peopleSoftId.filter(p => p == peopleSoftId);
-					const isoPreselected = document.querySelector('.iso-preSelectedClass');
-					if (!filteredReservation.length) {
-						document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
-					}
+					setTimeout(() => {
+						const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+						const filteredReservation = isoTest.audience.peopleSoftId.filter(p => p == peopleSoftId);
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (!filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						}
+						if (filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
+						}
+					}, 200);
 				})
 			},
 			checkGroup: function (groupNumber) {
@@ -316,6 +328,7 @@
 						}
 					}
 				});
+				/* add this to hide tag when outside of designated location */
 				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
 					setTimeout(() => {
 						isoTest.checkSort();
@@ -383,7 +396,7 @@
 					var vehicleItems = Array.prototype.slice.call(isoTest.vehicleItems);
 					isoTest.lastPreselectedIndex = vehicleItems.indexOf(isoTest.lastPreselected.parentNode);
 				}
-				isoTest.findVehicle(isoTest.vehicleClass.car);
+				isoTest.findVehicle(isoTest.findVehicle.car);
 				if (document.querySelectorAll('.iso-preSelectedClass').length == 0 && isoTest.altCar && !isoTest.featAvail) {
 					isoTest.findVehicle(isoTest.altCar);
 				}
@@ -446,6 +459,7 @@
 
 			},
 			addPreselect: function (vehicleItem) {
+				//In flight Modify switch to get Featured on top!!
 				vehicleItem.classList.add('iso-preSelectedClass');
 				var vi = vehicleItem.querySelector('.vehicle-item');
 				if (isoTest.onLoadpreSelected && (vi.classList.contains('is-search-by-filter') || vi.classList.contains('is-pre-selected'))) {

@@ -1,4 +1,8 @@
 <style>
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
 		margin-right: -15px;
@@ -190,6 +194,7 @@
 							if (removedNode.classList !== undefined) {
 								if (removedNode.classList.contains('spinner-container')) {
 									isoTest.hashHandler();
+									isoTest.hideBanner();
 								}
 							}
 						});
@@ -232,8 +237,7 @@
 				isoTest.log('chall()');
 				isoTest.branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']);
 				var isBranchType = isoTest.branchType == isoTest.audience.branch;
-				var peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
-				var isPeopleSoftId = isoTest.checkId(peopleSoftId);
+				var isPeopleSoftId = isoTest.checkId();
 
 				isoTest.log('isPeopleSoftId:: ' + isPeopleSoftId);
 
@@ -241,9 +245,29 @@
 					isoTest.runTest();
 				}
 			},
-			checkId: function (peopleSoftId) {
+			checkId: function () {
 				isoTest.log('fn:checkId()');
+				const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+				const filteredReservation = isoTest.audience.peopleSoftId.filter(p => p == peopleSoftId);
+				if (!filteredReservation.length) {
+					isoTest.hideBanner();
+				}
 				return isoTest.audience.peopleSoftId.indexOf(peopleSoftId) > -1;
+			},
+			hideBanner: function () {
+				isoTest.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+						const filteredReservation = isoTest.audience.peopleSoftId.filter(p => p == peopleSoftId);
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (!filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						}
+						if (filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
+						}
+					}, 200);
+				})
 			},
 			checkGroup: function (groupNumber) {
 				isoTest.log('checkGroup()');
@@ -279,7 +303,10 @@
 					}
 				});
 				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(isoTest.checkSort, 200);
+					setTimeout(() => {
+						isoTest.checkSort();
+						isoTest.hideBanner();
+					}, 200);
 				}, false);
 			},
 			checkSort: function () {
