@@ -10,6 +10,11 @@
   .booking-widget #locations-list .location-group.hide-locations li:not(:nth-child(-n+5)){
     display: none;
   }
+  @media (max-width: 48em){
+    .location-search #locations-list.auto-complete  .show-locations-active .icon {
+      left: 0rem;
+    }
+  }
   .booking-widget #locations-list .location-group.show-locations-active{
     position: relative;
     padding-bottom: 1rem;
@@ -29,6 +34,7 @@
     transform: translate(-50%, 0);
     color: #3A7D4F;
     font-weight: bold;
+    z-index: 1;
   }
   .show-more i{
     fill: #3a7d4f;
@@ -71,7 +77,7 @@
         const maxIconLength = 5;
 
         // Adds a "Show more" toggle to a list of items
-        const showMore = (iconEl)=>{
+        const showMore = (iconEl, toggleType)=>{
           if(!iconEl) return;
 
           // Pull out the list of locations/items
@@ -80,17 +86,17 @@
 
           const addAfter = ()=>{
             // We'll stop running this if there's already a show-more button
-            const existingShowMore = document.querySelector('.show-more');
+            const existingShowMore = document.querySelector('.show-more.show-more-' + toggleType);
             if(!!existingShowMore) return;
             
             iconGroup.classList.add('show-locations-active');
             iconGroup.classList.add('hide-locations');
 
             iconGroup.insertAdjacentHTML('beforeend', `
-              <div class="show-more">Show More <i role="img" aria-hidden="true" class="rs-icon rs-icon--after rs-icon--cta"><svg viewBox="0 0 24 24"><use xlink:href="#drawer-icn-down"></use></svg></i></div>
+              <div class="show-more show-more-` + toggleType + `">Show More <i role="img" aria-hidden="true" class="rs-icon rs-icon--after rs-icon--cta"><svg viewBox="0 0 24 24"><use xlink:href="#drawer-icn-down"></use></svg></i></div>
             `);
 
-            const newShowMore = document.querySelector('.show-more');
+            const newShowMore = document.querySelector('.show-more-' + toggleType);
             newShowMore.addEventListener('click', ()=>{
               isoTest.fireTag('', 'Show More clicked');
               iconGroup.classList.toggle('hide-locations');
@@ -106,7 +112,7 @@
             iconGroup.classList.remove('hide-locations');
             iconGroup.classList.remove('show-locations-active');
 
-            const existingShowMore = document.querySelector('.show-more');
+            const existingShowMore = document.querySelector('.show-more-' + toggleType);
             if(!!existingShowMore){
               existingShowMore.remove();
             }
@@ -125,7 +131,10 @@
           var onLocationListChange = new MutationObserver(function(observedEl) {
             // Choose the icon of the list you want to add the "Show more" feature to
             const cityIcon = document.querySelector("i.icon-location-city");
-            showMore(cityIcon);
+            showMore(cityIcon, 'city');
+
+            const airportIcon = document.querySelector('i.icon-location-airport');
+            showMore(airportIcon, 'airport');
           });
           onLocationListChange.observe(locationsListEl, {
             childList: true,
