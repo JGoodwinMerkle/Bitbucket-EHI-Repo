@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
 		margin-right: -15px;
@@ -125,37 +130,37 @@
 			template: '<span class="rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
 			featured: {
 				0: {
-					car: 'WCAE',
+					car: 'ICAE',
 					tag: '<strong>Try Something New!</strong>',
 					shortTag: 'Try Something New'
 				},
 				1: {
-					car: 'WCAE',
+					car: 'ICAE',
 					tag: '<strong>Try Something New!</strong>',
 					shortTag: 'Try Something New'
 				},
 				2: {
-					car: 'WCAE',
+					car: 'ICAE',
 					tag: '<strong>Try Something New!</strong>',
 					shortTag: 'Try Something New'
 				},
 				3: {
-					car: 'WCAE',
+					car: 'ICAE',
 					tag: '<strong>Try Something New!</strong>',
 					shortTag: 'Try Something New'
 				},
 				4: {
-					car: 'WCAE',
+					car: 'ICAE',
 					tag: '<strong>Try Something New!</strong>',
 					shortTag: 'Try Something New'
 				},
 				5: {
-					car: 'WCAE',
+					car: 'ICAE',
 					tag: '<strong>Try Something New!</strong>',
 					shortTag: 'Try Something New'
 				},
 				6: {
-					car: 'WCAE',
+					car: 'ICAE',
 					tag: '<strong>Try Something New!</strong>',
 					shortTag: 'Try Something New'
 				}
@@ -189,6 +194,8 @@
 							if (removedNode.classList !== undefined) {
 								if (removedNode.classList.contains('spinner-container')) {
 									isoTest.hashHandler();
+									/* add this to hide tag when outside of designated location */
+									isoTest.hideBanner();
 								}
 							}
 						});
@@ -231,7 +238,7 @@
 			chall: function () {
 				isoTest.log('chall()');
 				isoTest.branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']);
-				var groupNumber = ReservationStateTree.get(['session', 'reservationSession', 'pickupLocationWithDetail', 'location_id']).slice(0, 2);
+				var groupNumber = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
 				var isGroup = isoTest.checkGroup(groupNumber);
 				isoTest.log('isGroup:: ' + isGroup);
 
@@ -239,12 +246,31 @@
 					isoTest.runTest();
 				}
 			},
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				isoTest.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+						const filteredReservation = isoTest.audience.group.filter(g => g == groupId);
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (!filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						}
+						if (filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
+						}
+					}, 200);
+				})
+			},
 			checkGroup: function (groupNumber) {
 				isoTest.log('checkGroup()');
 				var checksOut = false;
 				isoTest.audience.group.forEach(function (g) {
 					if (groupNumber.substring(0, g.length) == g) {
 						checksOut = true;
+					}
+					else {
+						isoTest.hideBanner();
 					}
 				});
 				return checksOut;
@@ -272,13 +298,19 @@
 						}
 					}
 				});
+				/* add this to hide tag when outside of designated location */
 				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(isoTest.checkSort, 200);
+					setTimeout(() => {
+						isoTest.checkSort();
+						isoTest.hideBanner();
+					}, 200);
 				}, false);
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
 				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
+				const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+				const filteredReservation = isoTest.audience.group.filter(g => g == groupId);
 				if (sort == 'Recommended') {
 					isoTest.elementLoaded('.iso-preSelectedClass', function () {
 						const filteredList = [];
@@ -297,7 +329,10 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+							if (store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2)) {
+								console.log("this is the matched location", filteredReservation);
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};
