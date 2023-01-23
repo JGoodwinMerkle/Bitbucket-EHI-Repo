@@ -1,0 +1,163 @@
+<style>
+</style>
+<script>
+(function() {
+	'use strict';
+	var isoTest = {
+		account : 'EHI',
+		portfolio : 'Enterprise',
+		test : 'MVT-683',
+		creative : 'Loyalty member with upcoming reservations',
+		selector : '.container.responsivegrid.teaser-style-3 .cmp-container .teaser.teaser-style-3 .cmp-teaser__image',
+        loginSelector : '.header-nav-item.sign-in',
+        authSelector : '.header-nav-item.sign-in button.cta.cta--primary.cta--small.cta--noMargin.utility-nav-label.utility-nav-label--logged-in',
+		auth : {
+			'type': 'auth',
+			'Header': 'Manage Upcoming Reservation',
+			'Copy': 'Modify and change or view any important information about your upcoming reservation.',
+			'Link':'https://www.enterprise.com/en/account.html#reservation'
+			
+			
+
+		},
+		unAuth : {
+			'type': 'unAuth',
+			'Header': 'Email Offers',
+			'Copy': 'Don\'t miss an excuse to hit the road: our latest offers delivered to your inbox.',
+			'Link':'https://www.enterprise.com/en/email-specials.html?icid=home.3up1-_-email.specials-_-ENUS.NULL'
+		},
+		init : function() {
+
+			isoTest.debug = true;
+			
+			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				_satellite.setVar('TargetCampaign', isoTest.test);
+				_satellite.setVar('TargetCreative', isoTest.creative);
+			}
+
+			isoTest.log('Test Running...');
+			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+			helpers.elementLoaded(isoTest.selector, function() {
+				isoTest.log('Test Ready!');
+  				isoTest.chall();
+				isoTest.inFlightUpdates();
+			});		
+		},
+		chall : function() {
+			// Your code goes here
+			if (document.querySelector(isoTest.authSelector)) {
+                    isoTest.logInUpdates();
+             } 
+		},
+		logInUpdates: function() {
+			if(!document.querySelector('.mvt-loyalty-with-reservations')) {
+				console.log('Registered');
+				isoTest.tileUpdate(isoTest.auth);
+				//isoTest.addEventsTag();
+			}
+		},
+		logOutUpdates: function() {
+			//console.log('logout');
+			if(document.querySelector('.mvt-loyalty-with-reservations')) {
+				isoTest.tileUpdate(isoTest.unAuth);
+				document.querySelector('.mvt-loyalty-with-reservations').classList.remove('mvt-loyalty-with-reservations');
+			}
+
+		},
+		tileUpdate: function(user) {
+				var mainTile = document.querySelectorAll(isoTest.selector)[1].parentElement.parentElement.classList.add('mvt-loyalty-with-reservations');
+				var Url = document.querySelectorAll('.mvt-loyalty-with-reservations  a');
+				var headline = document.querySelector('.mvt-loyalty-with-reservations div.cmp-teaser__content h3 > a');
+            	var bodyCopy = document.querySelector('.mvt-loyalty-with-reservations div.cmp-teaser__content p');
+
+				Url.forEach(embeddedUrl => {
+                	embeddedUrl.setAttribute('href',user.Link);
+           		});
+				headline.innerText = user.Header;
+				if(user.type == 'unAuth') {
+					bodyCopy.innerHTML = user.Copy;
+				} else {
+					bodyCopy.innerText = user.Copy;
+				}
+
+
+		},
+		inFlightUpdates: function() {
+             var eleUpdates = new MutationObserver(function(mutationsList) {
+                 mutationsList.forEach(function(mutation){
+                     //added nodes 
+                     mutation.addedNodes.forEach(function (addedNode){
+                         if(addedNode.classList != undefined) {
+                         if(document.querySelector('.utility-nav-label--logged-in') ) {
+                                 isoTest.logInUpdates();
+                             } else if(document.querySelector('.login-widget.active')){
+								if(!document.querySelector('.field-container.logged-in')) {
+										isoTest.logOutUpdates();
+									}		
+                             } else {
+                                 isoTest.logOutUpdates();
+                             }
+                         }
+                     });
+                 });
+             }) ;
+             //after observe add target element
+                 eleUpdates.observe(document.querySelector(isoTest.loginSelector), {subtree: true, childList: true});
+             },
+
+       /*  addEventsTag : function() {
+           //console.log('add event');
+			if(sessionStorage.getItem('MVT-581_DashboardTileSeen') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == 'View Plus Your Points Dashboard') {
+				isoTest.fireTag89('','Registered: Dashboard Tile Seen');
+				sessionStorage.setItem('MVT-581_DashboardTileSeen','true');
+			}
+			//click events
+			document.querySelector('.iso-auth-pyp-loyalty').addEventListener('click',function(){
+				if(sessionStorage.getItem('MVT-581_DashboardTileClicked') == null && document.querySelector('.iso-auth-pyp-loyalty div.cmp-teaser__content h3 > a').innerText == 'View Plus Your Points Dashboard') {
+					isoTest.fireTag(document.querySelector('.iso-auth-pyp-loyalty'),'Registered: Dashboard Tile Click');
+					sessionStorage.setItem('MVT-581_DashboardTileClicked','true');
+				}
+			});
+         },*/
+
+		fireTag : function(element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			s.linkTrackVars = 'eVar20';
+			s.eVar20 = linkName;
+			s.tl(this, 'o', linkName);
+		},
+		fireTag89 : function(element, value) {
+             var linkName = value ? value : element.innerText;
+                 linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+             s.linkTrackVars = 'eVar89';
+             s.eVar89 = linkName;
+             s.tl(this, 'o', linkName);
+         },
+		log : function(obj){
+			if(isoTest.debug === true){
+				console.log(obj);
+			}
+		}
+	};
+
+	var helpers = {
+		elementLoaded : function (ele, callback) {
+			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+			window.clearTimeout(isoTest.eleTimer);
+			if (document.querySelectorAll(ele).length > 0) {
+				if (typeof callback === 'function') {
+					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+					callback();
+				}
+	        } else {
+	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+	        }
+		},
+	};
+
+	isoTest.init();
+})();
+</script>
