@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
 		margin-right: -15px;
@@ -182,6 +187,7 @@
 								if (removedNode.classList.contains('spinner-container')) {
 									window.setTimeout(function () {
 										isoTest.hashHandler();
+										isoTest.hideBanner();
 									}, 200)
 
 								}
@@ -257,9 +263,27 @@
 						}
 					}
 				});
+				/* add this to hide tag when outside of designated location */
 				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(isoTest.checkSort, 200);
+					setTimeout(() => {
+						isoTest.checkSort();
+						isoTest.hideBanner();
+					}, 200);
 				}, false);
+			},
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				isoTest.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode !== "DE") {
+							isoPreselected.classList.add("iso-hide");
+						}
+						if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "DE") {
+							isoPreselected.classList.remove("iso-hide");
+						}
+					}, 200);
+				})
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
@@ -282,7 +306,9 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+							if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "DE") {
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};
