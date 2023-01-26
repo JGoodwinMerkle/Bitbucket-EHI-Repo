@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	@media (max-width: 653px) {
 		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
 			margin-bottom: 5%;
@@ -194,7 +199,7 @@
 						e.forEach(function (e) {
 							e.removedNodes.forEach(function (e) {
 								void 0 !== e.classList && e.classList.contains(
-									"spinner-container") && c.hashHandler()
+									"spinner-container") && c.hashHandler() && c.hideBanner();
 							})
 						})
 					}).observe(document.querySelector("body"), {
@@ -234,16 +239,37 @@
 				c.branchType = ReservationStateTree.get(["session", "reservationSession", "pickup_location",
 					"location_type"
 				]);
-				var e = ReservationStateTree.get(["session", "reservationSession", "pickupLocationWithDetail",
-					"location_id"
-				]).slice(0, 2);
+				var e = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
 				c.checkGroup(e) && c.runTest();
 			},
-			checkGroup: function (t) {
-				var s = !1;
-				return c.audience.group.forEach(function (e) {
-					t.substring(0, e.length) == e && (s = !0)
-				}), s
+			checkGroup: function (groupNumber) {
+				c.log('checkGroup()');
+				var checksOut = false;
+				c.audience.group.forEach(function (g) {
+					if (groupNumber.substring(0, g.length) == g) {
+						checksOut = true;
+					}
+					else {
+						c.hideBanner();
+					}
+				});
+				return checksOut;
+			},
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				c.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+						const filteredReservation = c.audience.group.filter(g => g == groupId);
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (!filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						}
+						if (filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
+						}
+					}, 100);
+				})
 			},
 			runTest: function () {
 				c.day = s.getQueryParam("dayOverride") ? s.getQueryParam("dayOverride") : new Date(
@@ -259,13 +285,19 @@
 					!e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') && !e.target
 						.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]') ||
 						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || c.checkSort()
-				}), document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(c.checkSort, 200);
-				}, false);
+				}),
+					document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
+						setTimeout(() => {
+							c.checkSort();
+							c.hideBanner();
+						}, 50);
+					}, false);
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
 				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
+				const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+				const filteredReservation = c.audience.group.filter(g => g == groupId);
 				if (sort == 'Recommended') {
 					c.elementLoaded('.iso-preSelectedClass', function () {
 						const filteredList = [];
@@ -284,7 +316,9 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+							if (store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2)) {
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};
@@ -383,7 +417,7 @@
 				if (!document.querySelector(
 					".iso-preSelectedClass > .rs-tag-container--darkGreen > span.rs-tag--darkGreen")) e
 						.insertAdjacentHTML("afterbegin", t);
-						c.addFeaturedOrange();
+				c.addFeaturedOrange();
 			},
 			reOrder: function () {
 				var o = 0;

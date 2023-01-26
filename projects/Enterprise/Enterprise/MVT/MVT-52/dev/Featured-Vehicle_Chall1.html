@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	@media (max-width: 653px) {
 		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
 			margin-bottom: 5%;
@@ -202,7 +207,7 @@
 					new MutationObserver(function (e) {
 						e.forEach(function (e) {
 							e.removedNodes.forEach(function (e) {
-								void 0 !== e.classList && e.classList.contains("spinner-container") && r.hashHandler();
+								void 0 !== e.classList && e.classList.contains("spinner-container") && r.hashHandler() && r.hideBanner();
 							});
 						});
 					}).observe(document.querySelector("body"), { subtree: !0, childList: !0 });
@@ -219,6 +224,22 @@
 					});
 				});
 			},
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				r.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+						const filteredReservation = r.audience.peopleSoftId.filter(p => p == peopleSoftId);
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (!filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						}
+						if (filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
+						}
+					}, 200);
+				})
+			},
 			hashHandler: function () {
 				/cars/.test(location.hash) &&
 					r.elementLoaded(r.vehicleItem, function () {
@@ -233,17 +254,25 @@
 
 
 			},
-			checkId: function (e) {
-				return -1 < r.audience.peopleSoftId.indexOf(e);
+			/* add this to hide tag when outside of designated location */
+			checkId: function () {
+				r.log('fn:checkId()');
+				const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+				const filteredReservation = r.audience.peopleSoftId.filter(p => p == peopleSoftId);
+				if (!filteredReservation.length) {
+					r.hideBanner();
+				}
+				return r.audience.peopleSoftId.indexOf(peopleSoftId) > -1;
 			},
-			checkGroup: function (t) {
-				var s = !1;
-				return (
-					r.audience.group.forEach(function (e) {
-						t.substring(0, e.length) == e && (s = !0);
-					}),
-					s
-				);
+			checkGroup: function (groupNumber) {
+				r.log('checkGroup()');
+				var checksOut = false;
+				r.audience.group.forEach(function (g) {
+					if (groupNumber.substring(0, g.length) == g) {
+						checksOut = true;
+					}
+				});
+				return checksOut;
 			},
 			runTest: function () {
 				(r.day = s.getQueryParam("dayOverride") ? s.getQueryParam("dayOverride") : new Date(ReservationStateTree.get(["session", "reservationSession", "pickup_time"])).getDay()),
@@ -263,8 +292,12 @@
 						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) ||
 						r.checkSort();
 				}),
+					/* add this to hide tag when outside of designated location */
 					document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-						setTimeout(r.checkSort, 200);
+						setTimeout(() => {
+							r.checkSort();
+							r.hideBanner();
+						}, 100);
 					}, false);
 
 				//regression Bug fix 9/26/22
@@ -297,7 +330,9 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+							if (store.getState().toJS().app.baobab.session.reservationSession.pickup_location.id) {
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};

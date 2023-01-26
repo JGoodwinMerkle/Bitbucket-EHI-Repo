@@ -92,15 +92,16 @@
                 isoTest.log('Test Running...');
                 isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
                 isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-                isoTest.viewChange();
                 isoTest.chall();
+                window.addEventListener('hashchange', isoTest.viewChange(), false);
+
             },
             defaultRegion: 'EAST',
             cycle: -1,
             regionBasedStates: {
                 'EAST': ['PA', 'NY', 'ME', 'VT', 'NH', 'MA', 'RI', 'CT', 'NJ', 'DE', 'MD', 'district of columbia'],
                 'WEST': ['WA', 'OR', 'CA', 'NV', 'ID', 'AZ', 'UT', 'NM', 'CO', 'MT', 'WY', 'AK', 'HI'],
-                'SOUTH': ['FL', 'GA', 'AL', 'MS', 'TN', 'KY', 'WV', 'VA', 'SC', 'LA', ' TX', 'OK', 'AR', 'SJU'],
+                'SOUTH': ['FL', 'GA', 'AL', 'MS', 'TN', 'KY', 'WV', 'VA', 'SC', 'LA', 'TX', 'OK', 'AR', 'SJU'],
                 'MIDWEST': ['ND', 'SD', 'NE', 'KS', 'MO', 'IA', 'MN', 'WI', 'IL', 'IN', 'MI', 'OH']
             },
             locationBasedImages: {
@@ -162,44 +163,53 @@
                 ]
             },
             viewChange: function () {
-                window.addEventListener(
-                    "hashchange",
-                    function () {
-                        var timer = setInterval(function () {
-                            if (document.querySelector("#loader .spinner-container") === null && document.querySelector('.vehicle-select .vehicle-select__main .transition') === null) {
-                                if (/cars/.test(location.hash)) {
-                                    isoTest.chall();
-                                }
-                                clearInterval(timer);
-                            }
-                        }, 100);
-                    },
-                    false
-                );
+                console.log("viewChange")
+                var timer = setInterval(function () {
+                    if (document.querySelector("#loader .spinner-container") === null && document.querySelector('.vehicle-select .vehicle-select__main .transition') === null) {
+                        if (/cars/.test(location.hash)) {
+                            console.log("hashfire")
+                            isoTest.chall();
+                        }
+                        clearInterval(timer);
+                    }
+                }, 100);
             },
             getUserStateRegion: function (stateCode) {
+                console.log("getUserStateRegion")
+// The keys method goes through the number of keys or indexes in an array and lists them not numerically Ex: 0,1,2,3,4,5;
                 var keys = Object.keys(isoTest.regionBasedStates);
                 for (var i = 0; i < keys.length; i++) {
+                    //if this returns a true value
                     if (isoTest.regionBasedStates[keys[i]].indexOf(stateCode) != -1) {
+                        console.log("getUserStateRegion", keys[i])
                         return keys[i]; // RETURN USER'S STATE REGION
                     }
                 }
                 return '';
             },
             getRegionObject: function (action, region, cycle) {
+                console.log("getRegionObject, What is action 1", action)
+                console.log("getRegionObject, What is region 1", region)
+                console.log("getRegionObject, What is cycle 1", cycle)
                 if (action == 'next') {
+                    console.log("getRegionObject, What is action 2", action);
+                    console.log("getRegionObject, What is region 2", region)
+                    console.log("getRegionObject, What is cycle 2", cycle)
                     return {
                         curr: JSON.parse(window.localStorage.getItem('iso_region')).curr,
                         next: region + '_' + cycle,
                     }
                 }
+                // I believe I am seeing the empty string here.
                 return {
                     curr: region + '_' + cycle,
                     next: ''
                 }
             },
             swapRegionData: function () {
+                console.log("swapRegionData")
                 var data = isoTest.getRegionData();
+                // why are they emptying the next image in the local storage? Looks like it's happening twice
                 if (data.next.length && this.getUsersSession() == null) {
                     var tempObj = {
                         curr: data.next,
@@ -209,6 +219,7 @@
                 }
             },
             setRegionData: function (region, index) {
+                console.log("setRegionData")
                 var regionData = JSON.parse(window.localStorage.getItem('iso_region'));
                 if (regionData != null) {
                     if (region == regionData.curr.split('_')[0]) {
@@ -221,15 +232,19 @@
                 }
             },
             getRegionData: function () {
+                console.log("getRegionData", JSON.parse(window.localStorage.getItem('iso_region')))
                 return JSON.parse(window.localStorage.getItem('iso_region'));
             },
             setUsersSession: function (value) {
+                console.log("setUsersSession", window.sessionStorage.setItem('iso_state_image', value))
                 window.sessionStorage.setItem('iso_state_image', value);
             },
             getUsersSession: function () {
+                console.log("getUsersSession", window.sessionStorage.getItem('iso_state_image'))
                 return window.sessionStorage.getItem('iso_state_image');
             },
             heroImageChangeListener: function (trigger) {
+                console.log("heroImageChangeListener")
                 var targetNode = document.querySelector('.cmp-image__image');
                 if (targetNode != null) {
                     var config = { attributes: true, childList: true, subtree: true };
@@ -245,11 +260,19 @@
                 }
             },
             changeImageAttribute: function (region, index) {
+                console.log("changeImageAttribute", region, index, isoTest.locationBasedImages[region][index])
+
                 if (window.location.pathname == '/en/home-new.html' || window.location.pathname == '/en/home.html') {
                     document.querySelector('.cmp-image__image').setAttribute('src', isoTest.locationBasedImages[region][index].imageLink);
                     console.log("This is isotestIMage", isoTest.locationBasedImages[region][index].imageLink)
                     document.querySelector('.cmp-image__image').setAttribute('data-original', isoTest.locationBasedImages[region][index].imageLink);
                     document.querySelector('.cmp-image__image').setAttribute('alt', isoTest.locationBasedImages[region][index].cityName);
+
+                    // document.querySelector('.cmp-image__image').srcset = isoTest.locationBasedImages[region][index].imageLink;
+                    document.body.classList.add('iso-changed-hero');
+                    var imgHTML = ' <img class="iso-bg-image" src="' + isoTest.locationBasedImages[region][index].imageLink + '" alt="' + isoTest.locationBasedImages[region][index].cityName + '"/>';
+                    document.querySelector('section.cf.reserve-widget-band.colors.white').insertAdjacentHTML('afterbegin', imgHTML);
+
                 } else {
                     document.body.classList.add('iso-changed-hero');
                     var imgHTML = ' <img class="iso-bg-image" src="' + isoTest.locationBasedImages[region][index].imageLink + '" alt="' + isoTest.locationBasedImages[region][index].cityName + '"/>';
@@ -257,6 +280,8 @@
                 }
             },
             changeImageHandler: function (region, index) {
+                index = 2;
+                console.log("changeImageHandler", region, index)
                 isoTest.log(isoTest.locationBasedImages[region][index])
                 // CHANGE IMAGE
                 helpers.elementLoaded(isoTest.selector, function () {
@@ -273,6 +298,7 @@
                 isoTest.fireTag('', cityNameTracking);
             },
             resetCycleHandler: function (region, round) {
+                console.log("resetCycleHandler")
                 var cycle = ++round;
                 if (cycle > 2) cycle = 0;
                 var data = this.getRegionData();
@@ -285,7 +311,9 @@
                     this.waitForEntDatalayer(function () {
                         var stateCode = window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code;
                         var region = isoTest.getUserStateRegion(stateCode);
+                        console.log("chall", "state code is", stateCode)
                         if (region.length > 0) {
+                            console.log("chall", "state code is", stateCode)
                             isoTest.setRegionData(region, isoTest.cycle);
                         }
                     });
@@ -316,8 +344,11 @@
                     }
                 }
 
+
             },
             waitForEntDatalayer: function (callback) {
+                console.log("waitForEntDatalayer")
+ 
                 var maxCheck = 500;
                 var interval = window.setInterval(function () {
                     if (
@@ -374,14 +405,3 @@
         isoTest.init();
     })();
 </script>
-
-<!-- body.iso-changed-hero
-section.cf.reserve-widget-band.colors.white{position:relative;background-size:cover!important;background-repeat:no-repeat!important}body.iso-changed-hero
-div#reservationWidget .inner-container{background:#fff;padding-top:29px;padding-right:78px;padding-left:78px;border:1px
-solid #ccc;z-index:999;position:relative;margin-top:151px;margin-bottom:38px}body.iso-changed-hero
-.booking-widget{width:100%}@media (min-width:1025px){body.iso-changed-hero div#reservationWidget
-.inner-container{width:63em}}@media (min-width:768px) and (max-width:1024px){body.iso-changed-hero div#reservationWidget
-.inner-container{width:100%;border:none;margin-top:130px}body.iso-changed-hero .iso-bg{height:130px}}@media
-(max-width:767px){body.iso-changed-hero div#reservationWidget
-.inner-container{padding:0;border:none;margin-top:90px}body.iso-changed-hero .iso-bg{height:90px}}</style>
-<script>!function () { "use strict"; var n = { account: "Enterprise", portfolio: "EHI", test: "Res Background Image", creative: "Challenger 1", selector: ".booking-widget-hero .img-container img[src], section.cf.reserve-widget-band.colors.white", debug: !1, init: function () { _satellite && "function" == typeof _satellite.setVar && "function" == typeof _satellite.track && (_satellite.setVar("TargetCampaign", n.test), _satellite.setVar("TargetCreative", n.creative)), n.viewChange(), n.chall() }, defaultRegion: "WEST", cycle: -1, regionBasedStates: { EAST: ["PA", "NY", "ME", "VT", "NH", "MA", "RI", "CT", "NJ", "DE", "MD", "district of columbia"], WEST: ["WA", "OR", "CA", "NV", "ID", "AZ", "UT", "NM", "CO", "MT", "WY", "AK", "HI"], SOUTH: ["FL", "GA", "AL", "MS", "TN", "KY", "WV", "VA", "SC", "LA", " TX", "OK", "AR", "SJU"], MIDWEST: ["ND", "SD", "NE", "KS", "MO", "IA", "MN", "WI", "IL", "IN", "MI", "OH"] }, locationBasedImages: { EAST: [{ cityName: "background-image-of-brooklyn", imageLink: "/content/dam/ecom/hosted/res-widget-background/east_1.png" }, { cityName: "background-image-of-east", imageLink: "/content/dam/ecom/hosted/res-widget-background/east_4%403x.png" }, { cityName: "background-image-of-new-york", imageLink: "/content/dam/ecom/hosted/res-widget-background/east_3.png" }], WEST: [{ cityName: "background-image-of-maui", imageLink: "/content/dam/ecom/hosted/res-widget-background/west_1.png" }, { cityName: "background-image-of-bierstadt-lake", imageLink: "/content/dam/ecom/hosted/res-widget-background/west_2.png" }, { cityName: "background-image-of-san-francisco", imageLink: "/content/dam/ecom/hosted/res-widget-background/west_3.png" }], SOUTH: [{ cityName: "background-image-of-fort-lauderdale", imageLink: "/content/dam/ecom/hosted/res-widget-background/south_1.png" }, { cityName: "background-image-of-clearwater", imageLink: "/content/dam/ecom/hosted/res-widget-background/south_2.png" }, { cityName: "background-image-of-atlanta", imageLink: "/content/dam/ecom/hosted/res-widget-background/south_3.png" }], MIDWEST: [{ cityName: "background-image-of-midwest", imageLink: "/content/dam/ecom/hosted/res-widget-background/midwest_4%403x.png" }, { cityName: "background-image-of-chicago", imageLink: "/content/dam/ecom/hosted/res-widget-background/midwest_2.png" }, { cityName: "background-image-of-utah", imageLink: "/content/dam/ecom/hosted/res-widget-background/midwest_3.png" }] }, viewChange: function () { window.addEventListener("hashchange", function () { var e = setInterval(function () { null === document.querySelector("#loader .spinner-container") && null === document.querySelector(".vehicle-select .vehicle-select__main .transition") && (/cars/.test(location.hash) && n.chall(), clearInterval(e)) }, 100) }, !1) }, getUserStateRegion: function (e) { for (var t = Object.keys(n.regionBasedStates), o = 0; o < t.length; o++)if (-1 != n.regionBasedStates[t[o]].indexOf(e)) return t[o]; return "" }, getRegionObject: function (e, t, o) { return "next" == e ? { curr: JSON.parse(window.localStorage.getItem("iso_region")).curr, next: t + "_" + o } : { curr: t + "_" + o, next: "" } }, swapRegionData: function () { var e = n.getRegionData(); e.next.length && null == this.getUsersSession() && (e = { curr: e.next, next: "" }, window.localStorage.setItem("iso_region", JSON.stringify(e))) }, setRegionData: function (e, t) { var o = JSON.parse(window.localStorage.getItem("iso_region")); null != o ? e == o.curr.split("_")[0] ? window.localStorage.setItem("iso_region", JSON.stringify(n.getRegionObject("curr", e, o.curr.split("_")[1]))) : window.localStorage.setItem("iso_region", JSON.stringify(n.getRegionObject("next", e, t))) : window.localStorage.setItem("iso_region", JSON.stringify(n.getRegionObject("curr", e, t))) }, getRegionData: function () { return JSON.parse(window.localStorage.getItem("iso_region")) }, setUsersSession: function (e) { window.sessionStorage.setItem("iso_state_image", e) }, getUsersSession: function () { return window.sessionStorage.getItem("iso_state_image") }, heroImageChangeListener: function (n) { var i = document.querySelector('#main .image img'); null != i && new MutationObserver(function (e, t) { for (var o = 0; o < e.length; o++)"attributes" == e[o].type && i.getAttribute("src").indexOf("/hosted/res-widget-background/") < 0 && n() }).observe(i, { attributes: !0, childList: !0, subtree: !0 }) }, changeImageAttribute: function (e, t) { "/en/home.html" == window.location.pathname ? (document.querySelector('#main .image img').setAttribute("src", n.locationBasedImages[e][t].imageLink), document.querySelector('#main .image img').setAttribute("data-original", n.locationBasedImages[e][t].imageLink), document.querySelector('#main .image  img').setAttribute("alt", n.locationBasedImages[e][t].cityName)) : (document.body.classList.add("iso-changed-hero"), t = ' <img class="iso-bg-image" src="' + n.locationBasedImages[e][t].imageLink + '" alt="' + n.locationBasedImages[e][t].cityName + '"/>', document.querySelector("section.cf.reserve-widget-band.colors.white").insertAdjacentHTML("afterbegin", t)) }, changeImageHandler: function (e, t) { i.elementLoaded(n.selector, function () { n.changeImageAttribute(e, t), n.heroImageChangeListener(function () { n.changeImageAttribute(e, t) }) }), this.setUsersSession(!0); var o = n.locationBasedImages[e][t].cityName; n.fireTag("", o) }, resetCycleHandler: function (e, t) { var o = ++t; 2 < o && (o = 0); t = this.getRegionData(); return t.curr = e + "_" + o, window.localStorage.setItem("iso_region", JSON.stringify(t)), o }, chall: function () { var e, t, o; "/en/reserve.html" == window.location.pathname && "#cars" == window.location.hash && this.waitForEntDatalayer(function () { var e = window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code, e = n.getUserStateRegion(e); 0 < e.length && n.setRegionData(e, n.cycle) }), "/en/home.html" != window.location.pathname && "/en/car-rental.html" != window.location.pathname || (null != (e = this.getRegionData()) ? (this.swapRegionData(), t = (e = this.getRegionData()).curr.split("_")[0], o = e.curr.split("_")[1], null == this.getUsersSession() ? (o = this.resetCycleHandler(t, o), this.changeImageHandler(t, o)) : "true" == this.getUsersSession() ? this.changeImageHandler(t, o) : "false" == this.getUsersSession() && this.changeImageHandler(this.defaultRegion, o)) : (null == this.getUsersSession() && (this.setRegionData(this.defaultRegion, this.cycle), o = this.resetCycleHandler(this.defaultRegion, this.cycle), this.changeImageHandler(this.defaultRegion, o)), this.setUsersSession(!1))) }, waitForEntDatalayer: function (e) { var t = 500, o = window.setInterval(function () { window.store && window.store.getState() && window.store.getState().toJS() && window.store.getState().toJS().app && window.store.getState().toJS().app.baobab && window.store.getState().toJS().app.baobab.session && window.store.getState().toJS().app.baobab.session.gbo && window.store.getState().toJS().app.baobab.session.gbo.pickup_location && window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address && window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code ? (e(), window.clearInterval(o)) : --t < 0 && window.clearInterval(o) }, 50) }, fireTag: function (t, o) { setTimeout(function () { var e = o || t.innerText, e = n.test ? n.test + " : " + e : e; s.linkTrackVars = "eVar89", s.eVar89 = e, s.tl(this, "o", e) }, 1e3) }, log: function (e) { !0 === n.debug && console.log(e) } }, i = { elementLoaded: function (e, t) { window.clearTimeout(n.eleTimer), 0 < document.querySelectorAll(e).length ? "function" == typeof t && t() : n.eleTimer = window.setTimeout(function () { i.elementLoaded(e, t) }, 100) } }; n.init() }()</script> -->
