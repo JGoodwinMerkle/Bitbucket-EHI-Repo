@@ -28,11 +28,19 @@
 			});
 			
 		},
-		chall : function() {
-
-			// Your code goes here
-
-		},
+		chall: function(){
+            var profileDashboard = document.querySelector(isoTest.selector);
+            var profileContainers = document.querySelectorAll('.profile-dashboard__nav-links .profile-dashboard__nav-link-container');
+            isoTest.reOrder(profileDashboard,profileContainers )
+        },
+        reOrder: function(wrapper,arry) {
+            var newOrder = [0,3,7,8,2,6,1,9,4,5]       
+            var output = newOrder.map(i => arry[i]);
+           // console.log(output);
+            output.forEach(el => {
+                wrapper.appendChild(el)
+            });
+        },
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
