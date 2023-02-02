@@ -51,7 +51,7 @@
 		},
 		init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -136,19 +136,19 @@
 				isoTest.fireTag89('','Manage Reservations tile seen');
 				document.querySelector('.container.responsivegrid.teaser-style-3 .cmp-container .teaser.teaser-style-3.mvt-loyalty-with-reservations a.cmp-teaser__action-link--overlay[href="https://www.enterprise.com/en/account.html#reservation"]').addEventListener('click',function(e){
 					if(e.target.href == 'https://www.enterprise.com/en/email-specials.html?icid=home.3up1-_-email.specials-_-ENUS.NULL'){
-						isoTest.fireTag('','Email Offers 3-up click');
+						isoTest.fireTag('','Email Offers 3 up click');
 					} else {
-						isoTest.fireTag('','Manage Reservations 3-up click');
+						isoTest.fireTag('','Manage Reservations 3 up click');
 					}
 					
 		  		 });
 		   }
 		   document.querySelector('.container.responsivegrid.teaser-style-3 .cmp-container .teaser.teaser-style-3 a.cmp-teaser__action-link--overlay[href="/en/car-rental/deals.html"]').addEventListener('click',function(){
-			isoTest.fireTag('','Current Deals 3-up click');
+			isoTest.fireTag('','Current Deals 3 up click');
 		   });
 		   
-		   document.querySelector('.container.responsivegrid.teaser-style-3 .cmp-container .teaser.teaser-style-3 a.cmp-teaser__action-link--overlay[href="https://plusyourpoints.enterprise.com/en_us/login?TLGVC=E23A&TLG_CID=50601"]').addEventListener('click',function(){
-			isoTest.fireTag('','Plus Your Points 3-up click');
+		   document.querySelector('.container.responsivegrid.teaser-style-3 .cmp-container .teaser.teaser-style-3 a.cmp-teaser__action-link--overlay[href="https://www.enterprise.com/en/car-rental/mobile-app.html?icid=home.three.up-_-mobile-app-_-ENUS"]').addEventListener('click',function(){
+			isoTest.fireTag('','Download the Enterprise Plus App 3 up click');
 		   });
 		  
 		   
