@@ -111,6 +111,30 @@
 		display: flex;
 	}
 
+	/* reduces whitespace*/
+	.iso-preSelectedClass .vehicle-item {
+		padding: 1rem;
+		padding-bottom: 0rem;
+	}
+
+	.iso-preSelectedClass .rs-icon {
+		width: 1em;
+		height: 1em;
+	}
+
+	/* take from this line downwards to address spacing and font issues for desktop, tablet and mobile */
+	@media (max-width:1135px) {
+		.iso-preSelectedClass .rs-callout.rs-callout--highlight {
+			font-size: 12px;
+		}
+
+		/* increases whitespace*/
+		.iso-preSelectedClass .vehicle-item {
+			padding: 1rem;
+		}
+	}
+
+	/* for desktop down */
 	@media (max-width: 1081px) {
 
 		.vehicle-enough-points.cf,
@@ -129,15 +153,29 @@
 		}
 	}
 
+	/* for tablet */
+	@media (max-width: 1081px) and (min-width: 768px) {
+
+		/* lines up pricing */
+		.iso-preSelectedClass .vehicle-item__pricing {
+			margin-right: 35px;
+		}
+
+	}
+
+	/* for tablet */
+	@media (max-width: 768px) and (min-width: 654px) {
+
+		/* lines up pricing */
+		.iso-preSelectedClass .vehicle-item__pricing {
+			margin-right: 20px;
+		}
+	}
+
 	@media (max-width: 653px) {
 
 		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
 			margin-bottom: 5%;
-		}
-
-		.iso-preSelectedClass .rs-icon {
-			width: 1em;
-			height: 1em;
 		}
 
 		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
