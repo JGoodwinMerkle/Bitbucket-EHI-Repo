@@ -4,16 +4,18 @@
         position: relative !important;
     }
 
-    body.iso-changed-hero .iso-bg-image {
+    /* body.iso-changed-hero .iso-bg-image {
         position: absolute;
         width: 100%;
-    }
 
-    body.iso-changed-hero .iso-bg {
+    } */
+
+    body.iso-changed-hero .iso-bg-image {
         position: absolute;
         top: 0;
         width: 100%;
-        height: 369px;
+        /* height: 369px; */
+        height: 91.5%;
         background-size: cover;
         background-repeat: no-repeat;
     }
@@ -53,8 +55,15 @@
             margin-top: 130px;
         }
 
-        body.iso-changed-hero .iso-bg {
+        /* body.iso-changed-hero .iso-bg {
             height: 130px;
+        } */
+        body.iso-changed-hero .iso-bg-image {
+            height: 130px;
+        }
+
+        .container .overlap-background-image .cmp-container .cmp-image {
+            height: 0rem;
         }
     }
 
@@ -65,8 +74,12 @@
             margin-top: 90px;
         }
 
-        body.iso-changed-hero .iso-bg {
+        body.iso-changed-hero .iso-bg-image {
             height: 90px;
+        }
+
+        .container .overlap-background-image .cmp-container .cmp-image {
+            height: 0rem;
         }
     }
 </style>
@@ -176,7 +189,7 @@
             },
             getUserStateRegion: function (stateCode) {
                 console.log("getUserStateRegion")
-// The keys method goes through the number of keys or indexes in an array and lists them not numerically Ex: 0,1,2,3,4,5;
+                // The keys method goes through the number of keys or indexes in an array and lists them not numerically Ex: 0,1,2,3,4,5;
                 var keys = Object.keys(isoTest.regionBasedStates);
                 for (var i = 0; i < keys.length; i++) {
                     //if this returns a true value
@@ -188,13 +201,8 @@
                 return '';
             },
             getRegionObject: function (action, region, cycle) {
-                console.log("getRegionObject, What is action 1", action)
-                console.log("getRegionObject, What is region 1", region)
-                console.log("getRegionObject, What is cycle 1", cycle)
+
                 if (action == 'next') {
-                    console.log("getRegionObject, What is action 2", action);
-                    console.log("getRegionObject, What is region 2", region)
-                    console.log("getRegionObject, What is cycle 2", cycle)
                     return {
                         curr: JSON.parse(window.localStorage.getItem('iso_region')).curr,
                         next: region + '_' + cycle,
@@ -215,11 +223,12 @@
                         curr: data.next,
                         next: ''
                     };
+                    console.log()
                     window.localStorage.setItem('iso_region', JSON.stringify(tempObj));
                 }
             },
             setRegionData: function (region, index) {
-                console.log("setRegionData")
+                // console.log("setRegionData")
                 var regionData = JSON.parse(window.localStorage.getItem('iso_region'));
                 if (regionData != null) {
                     if (region == regionData.curr.split('_')[0]) {
@@ -232,19 +241,19 @@
                 }
             },
             getRegionData: function () {
-                console.log("getRegionData", JSON.parse(window.localStorage.getItem('iso_region')))
+                // console.log("getRegionData", JSON.parse(window.localStorage.getItem('iso_region')))
                 return JSON.parse(window.localStorage.getItem('iso_region'));
             },
             setUsersSession: function (value) {
-                console.log("setUsersSession", window.sessionStorage.setItem('iso_state_image', value))
+                // console.log("setUsersSession", window.sessionStorage.setItem('iso_state_image', value))
                 window.sessionStorage.setItem('iso_state_image', value);
             },
             getUsersSession: function () {
-                console.log("getUsersSession", window.sessionStorage.getItem('iso_state_image'))
+                // console.log("getUsersSession", window.sessionStorage.getItem('iso_state_image'))
                 return window.sessionStorage.getItem('iso_state_image');
             },
             heroImageChangeListener: function (trigger) {
-                console.log("heroImageChangeListener")
+                // console.log("heroImageChangeListener")
                 var targetNode = document.querySelector('.cmp-image__image');
                 if (targetNode != null) {
                     var config = { attributes: true, childList: true, subtree: true };
@@ -260,15 +269,15 @@
                 }
             },
             changeImageAttribute: function (region, index) {
-                console.log("changeImageAttribute", region, index, isoTest.locationBasedImages[region][index])
+                // console.log("changeImageAttribute", region, index, isoTest.locationBasedImages[region][index])
 
                 if (window.location.pathname == '/en/home-new.html' || window.location.pathname == '/en/home.html') {
                     document.querySelector('.cmp-image__image').setAttribute('src', isoTest.locationBasedImages[region][index].imageLink);
-                    console.log("This is isotestIMage", isoTest.locationBasedImages[region][index].imageLink)
+                    // console.log("This is isotestIMage", isoTest.locationBasedImages[region][index].imageLink)
                     document.querySelector('.cmp-image__image').setAttribute('data-original', isoTest.locationBasedImages[region][index].imageLink);
                     document.querySelector('.cmp-image__image').setAttribute('alt', isoTest.locationBasedImages[region][index].cityName);
 
-                    // document.querySelector('.cmp-image__image').srcset = isoTest.locationBasedImages[region][index].imageLink;
+                    document.querySelector('.cmp-image__image').srcset = isoTest.locationBasedImages[region][index].imageLink;
                     document.body.classList.add('iso-changed-hero');
                     var imgHTML = ' <img class="iso-bg-image" src="' + isoTest.locationBasedImages[region][index].imageLink + '" alt="' + isoTest.locationBasedImages[region][index].cityName + '"/>';
                     document.querySelector('section.cf.reserve-widget-band.colors.white').insertAdjacentHTML('afterbegin', imgHTML);
@@ -281,7 +290,7 @@
             },
             changeImageHandler: function (region, index) {
                 index = 2;
-                console.log("changeImageHandler", region, index)
+                // console.log("changeImageHandler", region, index)
                 isoTest.log(isoTest.locationBasedImages[region][index])
                 // CHANGE IMAGE
                 helpers.elementLoaded(isoTest.selector, function () {
@@ -298,7 +307,7 @@
                 isoTest.fireTag('', cityNameTracking);
             },
             resetCycleHandler: function (region, round) {
-                console.log("resetCycleHandler")
+                // console.log("resetCycleHandler")
                 var cycle = ++round;
                 if (cycle > 2) cycle = 0;
                 var data = this.getRegionData();
@@ -311,9 +320,9 @@
                     this.waitForEntDatalayer(function () {
                         var stateCode = window.store.getState().toJS().app.baobab.session.gbo.pickup_location.address.country_subdivision_code;
                         var region = isoTest.getUserStateRegion(stateCode);
-                        console.log("chall", "state code is", stateCode)
+                        // console.log("chall", "state code is", stateCode)
                         if (region.length > 0) {
-                            console.log("chall", "state code is", stateCode)
+                            // console.log("chall", "state code is", stateCode)
                             isoTest.setRegionData(region, isoTest.cycle);
                         }
                     });
@@ -348,7 +357,7 @@
             },
             waitForEntDatalayer: function (callback) {
                 console.log("waitForEntDatalayer")
- 
+
                 var maxCheck = 500;
                 var interval = window.setInterval(function () {
                     if (

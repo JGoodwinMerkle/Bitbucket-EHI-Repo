@@ -126,7 +126,6 @@
 		}
 
 		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
-			padding-right: 0;
 			margin-right: 0
 		}
 
@@ -135,6 +134,22 @@
 			width: 100%
 		}
 	}
+
+	@media (max-width: 653px) {
+		.vehicle-item__attribute-item {
+			margin-right: .7em;
+		}
+
+		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+			padding-right: 15px
+		}
+
+		.iso-preSelectedClass img {
+			margin-top: 45px;
+		}
+	}
+/* 
+	@media screen and (max-width: 414px) {} */
 </style>
 <script>
 	! function () {
