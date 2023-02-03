@@ -113,6 +113,26 @@
 			width: 100%;
 		}
 	}
+
+	@media (max-width: 653px) {
+
+		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
+			margin-bottom: 5%;
+		}
+
+		.iso-preSelectedClass .rs-icon {
+			width: 1em;
+			height: 1em;
+		}
+
+		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+			padding-right: 15px
+		}
+
+		.iso-preSelectedClass img {
+			margin-top: 45px;
+		}
+	}
 </style>
 <script>
 	(function () {
@@ -312,6 +332,8 @@
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
 				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
+				const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+				const filteredReservation = isoTest.audience.peopleSoftId.filter(p => p == peopleSoftId);
 				if (sort == 'Recommended') {
 					isoTest.elementLoaded('.iso-preSelectedClass', function () {
 						const filteredList = [];
@@ -330,7 +352,10 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+
+							if (store.getState().toJS().app.baobab.session.reservationSession.pickup_location.id) {
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};

@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
 		margin-right: -15px;
@@ -124,6 +129,19 @@
 		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
 			margin-bottom: 5%;
 		}
+
+		.iso-preSelectedClass .rs-icon {
+			width: 1em;
+			height: 1em;
+		}
+
+		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+			padding-right: 15px
+		}
+
+		.iso-preSelectedClass img {
+			margin-top: 45px;
+		}
 	}
 </style>
 <script>
@@ -205,6 +223,7 @@
 								e.classList.contains("spinner-container") &&
 								r.elementLoaded(r.vehicleItem, function () {
 									r.chall();
+									r.hideBanner();
 								});
 						});
 					});
@@ -256,8 +275,32 @@
 					t = new Date(r.exclusions.maxDate);
 				return r.pickupDate >= e && r.pickupDate <= t;
 			},
-			checkId: function (e) {
-				return -1 < r.audience.peopleSoftId.indexOf(e);
+
+			/* add this to hide tag when outside of designated location */
+			checkId: function () {
+				r.log('fn:checkId()');
+				const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+				const filteredReservation = r.audience.peopleSoftId.filter(p => p == peopleSoftId);
+				if (!filteredReservation.length) {
+					r.hideBanner();
+				}
+				return r.audience.peopleSoftId.indexOf(peopleSoftId) > -1;
+			},
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				r.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+						const filteredReservation = r.audience.peopleSoftId.filter(p => p == peopleSoftId);
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (!filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						}
+						if (filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
+						}
+					}, 200);
+				})
 			},
 			checkGroup: function (t) {
 				var a = !1;
@@ -286,13 +329,20 @@
 						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) ||
 						r.checkSort();
 				}),
+					/* add this to hide tag when outside of designated location */
 					document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-						setTimeout(r.checkSort, 200);
+						setTimeout(() => {
+							r.checkSort();
+							r.hideBanner();
+						}, 100);
 					}, false);
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
 				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
+				const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+				// const peopleSoftId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id use this instead
+				const filteredReservation = r.audience.peopleSoftId.filter(p => p == peopleSoftId);
 				if (sort == 'Recommended') {
 					r.elementLoaded('.iso-preSelectedClass', function () {
 						const filteredList = [];
@@ -311,7 +361,9 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+							if (store.getState().toJS().app.baobab.session.reservationSession.pickup_location.id) {
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};

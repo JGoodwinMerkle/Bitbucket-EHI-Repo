@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
 		margin-right: -15px;
@@ -109,6 +114,26 @@
 			width: 100%;
 		}
 	}
+
+	@media (max-width: 653px) {
+
+		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
+			margin-bottom: 5%;
+		}
+
+		.iso-preSelectedClass .rs-icon {
+			width: 1em;
+			height: 1em;
+		}
+
+		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+			padding-right: 15px
+		}
+
+		.iso-preSelectedClass img {
+			margin-top: 45px;
+		}
+	}
 </style>
 <script>
 	(function () {
@@ -189,6 +214,8 @@
 							if (removedNode.classList !== undefined) {
 								if (removedNode.classList.contains('spinner-container')) {
 									isoTest.hashHandler();
+									/* add this to hide tag when outside of designated location */
+									isoTest.hideBanner();
 								}
 							}
 						});
@@ -231,7 +258,7 @@
 			chall: function () {
 				isoTest.log('chall()');
 				isoTest.branchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']);
-				var groupNumber = ReservationStateTree.get(['session', 'reservationSession', 'pickupLocationWithDetail', 'location_id']).slice(0, 2);
+				var groupNumber = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
 				var isGroup = isoTest.checkGroup(groupNumber);
 				isoTest.log('isGroup:: ' + isGroup);
 
@@ -239,12 +266,31 @@
 					isoTest.runTest();
 				}
 			},
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				isoTest.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+						const filteredReservation = isoTest.audience.group.filter(g => g == groupId);
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (!filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						}
+						if (filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
+						}
+					}, 200);
+				})
+			},
 			checkGroup: function (groupNumber) {
 				isoTest.log('checkGroup()');
 				var checksOut = false;
 				isoTest.audience.group.forEach(function (g) {
 					if (groupNumber.substring(0, g.length) == g) {
 						checksOut = true;
+					}
+					else {
+						isoTest.hideBanner();
 					}
 				});
 				return checksOut;
@@ -272,13 +318,19 @@
 						}
 					}
 				});
+				/* add this to hide tag when outside of designated location */
 				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(isoTest.checkSort, 200);
+					setTimeout(() => {
+						isoTest.checkSort();
+						isoTest.hideBanner();
+					}, 200);
 				}, false);
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
 				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
+				const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+				const filteredReservation = isoTest.audience.group.filter(g => g == groupId);
 				if (sort == 'Recommended') {
 					isoTest.elementLoaded('.iso-preSelectedClass', function () {
 						const filteredList = [];
@@ -297,7 +349,10 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+							if (store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2)) {
+								console.log("this is the matched location", filteredReservation);
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};

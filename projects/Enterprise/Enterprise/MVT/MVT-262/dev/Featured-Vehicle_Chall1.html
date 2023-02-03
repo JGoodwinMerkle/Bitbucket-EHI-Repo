@@ -134,6 +134,19 @@
 		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
 			margin-bottom: 5%;
 		}
+
+		.iso-preSelectedClass .rs-icon {
+			width: 1em;
+			height: 1em;
+		}
+
+		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+			padding-right: 15px
+		}
+
+		.iso-preSelectedClass img {
+			margin-top: 45px;
+		}
 	}
 </style>
 <script>
@@ -339,7 +352,9 @@
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
 				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
-				var peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+				const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
+				// const peopleSoftId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id use this instead
+				const filteredReservation = isoTest.audience.peopleSoftId.filter(p => p == peopleSoftId);
 				if (sort == 'Recommended') {
 					helpers.elementLoaded('.iso-preSelectedClass', function () {
 
@@ -359,7 +374,10 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+							if (store.getState().toJS().app.baobab.session.reservationSession.pickup_location.id) {
+								console.log("this is the matched location", filteredReservation);
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};
@@ -396,7 +414,7 @@
 					var vehicleItems = Array.prototype.slice.call(isoTest.vehicleItems);
 					isoTest.lastPreselectedIndex = vehicleItems.indexOf(isoTest.lastPreselected.parentNode);
 				}
-				isoTest.findVehicle(isoTest.findVehicle.car);
+				isoTest.findVehicle(isoTest.vehicleClass.car);
 				if (document.querySelectorAll('.iso-preSelectedClass').length == 0 && isoTest.altCar && !isoTest.featAvail) {
 					isoTest.findVehicle(isoTest.altCar);
 				}

@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
 		margin-right: -15px;
@@ -125,6 +130,19 @@
 		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
 			margin-bottom: 5%;
 		}
+
+		.iso-preSelectedClass .rs-icon {
+			width: 1em;
+			height: 1em;
+		}
+
+		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+			padding-right: 15px
+		}
+
+		.iso-preSelectedClass img {
+			margin-top: 45px;
+		}
 	}
 </style>
 <script>
@@ -181,6 +199,7 @@
 								if (removedNode.classList.contains('spinner-container')) {
 									window.setTimeout(function () {
 										isoTest.hashHandler();
+										isoTest.hideBanner();
 									}, 200);
 								}
 							}
@@ -256,9 +275,27 @@
 						}
 					}
 				});
+				/* add this to hide tag when outside of designated location */
 				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(isoTest.checkSort, 200);
+					setTimeout(() => {
+						isoTest.checkSort();
+						isoTest.hideBanner();
+					}, 200);
 				}, false);
+			},
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				isoTest.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode !== "FR") {
+							isoPreselected.classList.add("iso-hide");
+						}
+						if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "FR") {
+							isoPreselected.classList.remove("iso-hide");
+						}
+					}, 200);
+				})
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
@@ -281,7 +318,9 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+							if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "FR") {
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};

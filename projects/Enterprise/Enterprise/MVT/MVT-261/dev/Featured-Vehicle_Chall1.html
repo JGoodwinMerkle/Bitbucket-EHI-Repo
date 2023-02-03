@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	@media (max-width: 653px) {
 		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
 			margin-bottom: 5%;
@@ -130,6 +135,26 @@
 			width: 100%
 		}
 	}
+
+	@media (max-width: 653px) {
+
+		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
+			margin-bottom: 5%;
+		}
+
+		.iso-preSelectedClass .rs-icon {
+			width: 1em;
+			height: 1em;
+		}
+
+		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
+			padding-right: 15px
+		}
+
+		.iso-preSelectedClass img {
+			margin-top: 45px;
+		}
+	}
 </style>
 <script>
 	! function () {
@@ -191,7 +216,7 @@
 						e.forEach(function (e) {
 							e.removedNodes.forEach(function (e) {
 								void 0 !== e.classList && e.classList.contains(
-									"spinner-container") && a.hashHandler()
+									"spinner-container") && a.hashHandler() && a.hideBanner()
 							})
 						})
 					}).observe(document.querySelector("body"), {
@@ -218,9 +243,11 @@
 				})
 			},
 			chall: function () {
-				"airport" != ReservationStateTree.get(["session", "reservationSession", "pickup_location",
-					"location_type"
-				]) && a.runTest();
+				a.log('chall()');
+				var isBranchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']) == 'airport';
+				if (!isBranchType) {
+					a.runTest();
+				}
 
 			},
 			runTest: function () {
@@ -237,13 +264,35 @@
 					!e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') && !e.target
 						.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]') ||
 						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || a.checkSort()
-				}), document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(a.checkSort, 200);
-				}, false);
+				}),
+					/* add this to hide tag when outside of designated location */
+					document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
+						setTimeout(() => {
+							a.checkSort();
+							a.hideBanner();
+						}, 200);
+					}, false);
+			},
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				a.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const isBranchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']) == 'airport';
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (isBranchType) {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						}
+						if (!isBranchType) {
+							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
+						}
+					}, 100);
+				})
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
 				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
+				const isBranchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']) == 'airport';
+
 				if (sort == 'Recommended') {
 					a.elementLoaded('.iso-preSelectedClass', function () {
 						const filteredList = [];
@@ -262,7 +311,9 @@
 								};
 							});
 						} else {
-							document.querySelector('.iso-preSelectedClass').style.order = -1;
+							if (!isBranchType) {
+								document.querySelector('.iso-preSelectedClass').style.order = -1;
+							}
 						};
 					});
 				};
