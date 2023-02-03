@@ -1,4 +1,19 @@
 <style>
+	.verification-page hr.ehi-separator{
+		display: none;
+	}
+  .verification-page .review-section .section-content.expedite:not(.first-step):not(.non-participating) > .view-header{
+    display: none;
+  }
+  .verification-page .review-section .section-content .expedite__enrolled-banner + .view-header{
+    display: none;
+  }
+  .verification-page .review-section .section-content.expedite:not(.first-step):not(.non-participating) .expedite__details .expedite__disclaimer,
+  .verification-page .review-section .section-content.expedite:not(.first-step):not(.non-participating) .expedite__clock,
+  .verification-page .review-section .section-content .expedite__enrolled-banner + .view-header + .layout-stack .expedite__details .expedite__disclaimer,
+  .verification-page .review-section .section-content .expedite__enrolled-banner + .view-header + .layout-stack .expedite__clock{
+    display: none;
+  }
 	.pre-expedited-banner.iso-mvt-banner>button {
 		background: #ffffff;
 		border: 1px solid #127f4a;
@@ -42,8 +57,7 @@
 			creative: "Challenger 1",
 			selector: ".review-section",
 			pilotLocations: "1021296,1018719,1018724,1018895,1019192,1018840",
-			errTag: `<div class="rs-error-container" tabindex="-1" role="alertdialog" aria-label="One or more errors were found. Here are the errors:" aria-describedby="errorList"><ul class="rs-error rs-error--no-margins rs-error--extra-spaced" id="errorList"><li><span class="rs-error__prefix">Error: </span><span id="FE_SAVE_TIME_AT_THE_COUNTER-error">Save time at the counter selection is required.</span> <span>FE_SAVE_TIME_AT_THE_COUNTER</span></li></ul></div>`,
-			renterDetails: `<div class="rs-error-container personal-information__error" tabindex="-1" role="alertdialog" aria-label="One or more errors were found. Here are the errors:" aria-describedby="errorList" type="GLOBAL"><ul class="rs-error" id="errorList"><li><span class="rs-error__prefix">Error: </span><span id="FE_MISSING_RENTER_DETAILS-error">Incomplete Renter Details</span> </li></ul></div>`,
+			errTag: `<div class="rs-error-container" tabindex="-1" role="alertdialog" aria-label="One or more errors were found. Here are the errors:" aria-describedby="errorList"><ul class="rs-error rs-error--no-margins rs-error--extra-spaced" id="errorList"><li><span class="rs-error__prefix">Error: </span><span id="FE_SAVE_TIME_AT_THE_COUNTER-error">Password Creation is required.</span> <span>FE_SAVE_TIME_AT_THE_COUNTER</span></li></ul></div>`,
 			init: function () {
 				//isoTest.debug = true;
 
@@ -56,37 +70,23 @@
 				isoTest.log(isoTest.account + " - " + isoTest.portfolio);
 				isoTest.log(isoTest.test + " - " + isoTest.creative);
 
-				isoTest.observeEl(isoTest.selector, function () {
-					isoTest.chall572();
-					// isoTest.chall642();
-					// Fires anytime page is loaded or in-flight modify occurs
-					var spinnerUpdates = new MutationObserver(function (mutationsList) {
-						mutationsList.forEach(function (mutation) {
-							mutation.addedNodes.forEach(function (addedNode) {
-								console.log(addedNode.classList)
-								if (addedNode.classList !== undefined) {
-									if (addedNode.classList.contains('rs-label')) {
-										// isoTest.chall642();
-									}
-								}
-							});
-						});
-					});
-					spinnerUpdates.observe(document.querySelector('body'), { subtree: true, childList: true });
-				});
-
+				isoTest.chall572();
 				isoTest.chall607();
+        isoTest.chall679();
 			},
 			chall572: function () {
-				var pickUpLocationID = null || ReservationStateTree.get(["session", "reservationSession", "pickup_location", "id"]);
+        // Observing the review section
+				isoTest.observeEl(isoTest.selector, function () {
+          var pickUpLocationID = null || ReservationStateTree.get(["session", "reservationSession", "pickup_location", "id"]);
+          if (isoTest.pilotLocations.indexOf(pickUpLocationID) > -1) {
 
-				if (isoTest.pilotLocations.indexOf(pickUpLocationID) > -1) {
-					var banner = document.querySelectorAll(".pre-expedited-banner");
-					banner.forEach((element) => {
-						element.classList.add("iso-mvt-banner");
-						element.querySelector(".pre-expedited-banner__content > p").innerText = "Sign in to earn points and unlock exclusive access to expedited services";
-					});
-				}
+            var banner = document.querySelectorAll(".pre-expedited-banner");
+            banner.forEach((element) => {
+              element.classList.add("iso-mvt-banner");
+              element.querySelector(".pre-expedited-banner__content > p").innerText = "Sign in to earn points and unlock exclusive access to expedited services";
+            });
+          }
+        });
 			},
 			chall607: function () {
 				isoTest.observeEl('#expedite-question', function (saveTimeEl) {
@@ -124,54 +124,112 @@
 					}
 				});
 			},
-			chall642: function () {
-				var pickUpLocationID = null || ReservationStateTree.get(["session", "reservationSession", "pickup_location", "id"]);
-				if (isoTest.pilotLocations.indexOf(pickUpLocationID) > -1 && store.getState().toJS().app.baobab.User.loggedIn == false) {
-					let reserveBtnPrnt = document.querySelector(".submit-button-wrapper")
-					let reserveBtnIso = document.querySelector(".cta.cta--primary.cta--extra-large.cta--noMargin:not(iso)").cloneNode(true)
-					reserveBtnIso.classList.add("iso")
+			chall679: function () {
+        // Only need to disable the submit button if they pass the first step (which is the only way you see this element)
+        isoTest.observeEl('#expedite-question .expedite-enroll__header', function () {
+          var pickUpLocationID = null || ReservationStateTree.get(["session", "reservationSession", "pickup_location", "id"]);
+          if (isoTest.pilotLocations.indexOf(pickUpLocationID) > -1 && store.getState().toJS().app.baobab.User.loggedIn == false) {
+            
+            // Running chall679 password error portion
+            
+            var existingFormBtn = document.querySelector(".cta.cta--primary.cta--extra-large.cta--noMargin.iso");
+            if(!existingFormBtn){
+              // Full form submit button wrapper
+              let reserveBtnPrnt = document.querySelector(".submit-button-wrapper");
+              // Cloned version of the full form submit button
+              let reserveBtnIso = document.querySelector(".cta.cta--primary.cta--extra-large.cta--noMargin:not(iso)").cloneNode(true);
+              reserveBtnIso.classList.add("iso");
+              // Hide existing full form submit button
+              document.querySelector(".cta.cta--primary.cta--extra-large.cta--noMargin:not(.iso)").style.display = "none";
+              // Add cloned version to the page
+              reserveBtnPrnt.insertAdjacentElement("afterbegin", reserveBtnIso);
 
-					document.querySelector(".cta.cta--primary.cta--extra-large.cta--noMargin:not(.iso)").style.display = "none";
+              // On click of the reserve button - fire the error
+              reserveBtnIso.addEventListener("click", () => {
+                isoTest.passwordValidation('form');
+              });
+            }
 
-					reserveBtnPrnt.insertAdjacentElement("afterbegin", reserveBtnIso);
-					reserveBtnIso.addEventListener("click", () => {
-						isoTest.errorFire();
-					});
-				} else if (document.querySelector(".cta.cta--primary.cta--extra-large.cta--noMargin:not(.iso)").style.display == "none") {
-					document.querySelector(".cta.cta--primary.cta--extra-large.cta--noMargin:not(.iso)").style.display = "block";
-					document.querySelector(".cta.cta--primary.cta--extra-large.cta--noMargin.iso").style.display = "none";
-				}
+            var existingSaveBtn = document.querySelector(".expedite__details-save-btn.iso");
+            if(!existingSaveBtn){
+              // Do the same thing with the button: .expedite__details-save-btn
+              var saveBtnWrapper = document.querySelector(".expedite-enroll");
+              var saveBtnEl = document.querySelector(".expedite__details-save-btn:not(iso)");
+              var saveBtn = saveBtnEl.cloneNode(true);
+              saveBtn.classList.add("iso");
+              // Hide existing full form submit button
+              document.querySelector(".expedite__details-save-btn:not(iso)").style.display = "none";
+              // Add cloned version to the page
+              saveBtnEl.insertAdjacentElement("afterend", saveBtn);
+              
+              saveBtn.addEventListener("click", () => {
+                isoTest.passwordValidation('save');
+              });
+            }
+          }
+        });
+
+				isoTest.observeEl('#expedite-question .view-header__title', function(el){
+					if(el.textContent === 'Sign Up to Save Time'){
+						el.parentElement.parentElement.classList.add('first-step');
+					}
+					if(el.textContent === 'Save Time At the Counter'){
+						el.parentElement.parentElement.classList.add('non-participating');
+					}
+				});
+				isoTest.observeEl('.expedite .expedite__disclaimer', function(el){
+					if(el.childNodes[0].textContent === 'To Save Time at the Counter please verify the following information and if incorrect, '){
+						el.childNodes[0].textContent = 'Please verify the following information and if incorrect, ';
+					}
+				});
 			},
-			errorFire: function () {
-				var saveTimeSec = document.querySelector("#expedite-question");
-				var counterYesFalse = document.querySelectorAll(".expedite__option.rs-radio")[0].innerHTML.includes('aria-checked="false');
-				var counterNoFalse = document.querySelectorAll(".expedite__option.rs-radio")[1].innerHTML.includes('aria-checked="false');
-				var errorBanner = document.querySelector("#expedite-question .rs-error-container");
+      validPassword: function(){
+        var password = document.querySelector(".expedite-enroll #password");
+        var passwordConfirm = document.querySelector(".expedite-enroll #passwordConfirm");
+        var passVal = (password) ? password.value : '';
+        var passConfirmVal = (passwordConfirm) ? passwordConfirm.value : '';
+        var validPass = function(passwordValue){
+          if (passwordValue.length < 8) {
+            // Password must be at least 8 characters long
+            return false;
+          } else if (!/[a-zA-Z]/.test(passwordValue)) {
+            // Password must contain at least one letter
+            return false;
+          } else if (!/\d/.test(passwordValue)) {
+            // Password must contain at least one number
+            return false;
+          } else if (passwordValue.toLowerCase().includes("password")) {
+            // Password cannot contain the word 'password'
+            return false;
+          }else{
+            return true;
+          }
+        };
+        var passwordsMatch = passVal === passConfirmVal;
 
-				var valBox1 = document.querySelectorAll(".rs-input__field")[0].value.length;
-				var valBox2 = document.querySelectorAll(".rs-input__field")[1].value.length;
-				var valBox3 = document.querySelectorAll(".rs-input__field")[2].value.length;
-				var valBox4 = document.querySelectorAll(".rs-input__field")[3].value.length;
-				var perDetailTxtBx = document.querySelector(".personal-information__required-text");
-				var renterDetailsQS = document.querySelector(".rs-error-container.personal-information__error")
+        return validPass(passVal) && passwordsMatch;
+      },
+			passwordValidation: function (buttonType) {
+				var saveTimeSec = document.querySelector(".expedite-enroll");
+        var passwordBoxClosed = !saveTimeSec;
+				var errorBanner = document.querySelector(".expedite-enroll .rs-error-container");
 
-				if (counterYesFalse && counterNoFalse) {
-					if (!errorBanner) { saveTimeSec.insertAdjacentHTML("afterbegin", isoTest.errTag); }
-					document.querySelector("#expedite-question .rs-error-container").scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+        var validPassword = isoTest.validPassword();
+
+        // Add and remove error banner depending on password validity
+        if(!passwordBoxClosed && !validPassword){
+				  if (!errorBanner) { saveTimeSec.insertAdjacentHTML("afterbegin", isoTest.errTag); }
+					document.querySelector(".expedite-enroll .rs-error-container").scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
 				} else if (errorBanner) {
 					errorBanner.remove();
 				}
 
-				if (valBox1 == 0 || valBox2 == 0 || valBox3 == 0 || valBox4 == 0) {
-					if (!renterDetailsQS) { perDetailTxtBx.insertAdjacentHTML("afterend", isoTest.renterDetails); }
-					document.querySelector(".rs-error-container.personal-information__error").scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-				} else if (renterDetailsQS) {
-					renterDetailsQS.remove();
-				}
-
-				if (valBox1 > 0 && valBox2 > 0 && valBox3 > 0 && valBox4 > 0 && !counterYesFalse || valBox1 > 0 && valBox2 > 0 && valBox3 > 0 && valBox4 > 0 && !counterNoFalse) {
+        // Click the real button depending on password checks or whether or not the box is even open
+				if (buttonType === 'form' && (validPassword || passwordBoxClosed)) {
 					document.querySelector(".cta.cta--primary.cta--extra-large.cta--noMargin:not(.iso)").click()
-				}
+				} else if(buttonType === 'save' && (validPassword || passwordBoxClosed)){
+          document.querySelector(".expedite__details-save-btn:not(iso)").click();
+        }
 			},
 			fireTag: function (element, value) {
 				var linkName = value ? value : element.innerText;
