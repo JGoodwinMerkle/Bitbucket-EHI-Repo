@@ -94,14 +94,25 @@
 	}
 
 	/* default featured color */
-	.iso-preSelectedClass .rs-callout.rs-callout--highlight {
+	/* .iso-preSelectedClass .rs-callout.rs-callout--highlight {
 		border-left: 4px solid #ce810d;
+	} */
+
+	.iso-preSelectedClass .rs-callout--highlight .rs-callout__icon {
+		fill: #c96d1f;
+	}
+
+	/* reduces whitespace*/
+	.iso-preSelectedClass .vehicle-item {
+		padding: 1rem;
+		padding-bottom: 0rem;
 	}
 
 	.iso-preSelectedClass .rs-icon {
-		width: 20px;
-		height: 20px;
+		width: 1em;
+		height: 1em;
 	}
+
 
 	/* potentially fixes sorting issue */
 	.vehicle-list__item .vehicle-item {
@@ -118,26 +129,60 @@
 		display: flex;
 	}
 
-	@media (max-width:1081px) {
+	/* take from this line downwards to address spacing and font issues for desktop, tablet and mobile */
+	@media (max-width:1135px) {
+		.iso-preSelectedClass .rs-callout.rs-callout--highlight {
+			font-size: 12px;
+		}
+
+		/* increases whitespace*/
+		.iso-preSelectedClass .vehicle-item {
+			padding: 1rem;
+		}
+	}
+
+	/* for desktop down */
+	@media (max-width: 1081px) {
 
 		.vehicle-enough-points.cf,
 		.vehicle-not-enough-points {
-			margin-right: 0
+			margin-right: 0;
 		}
 
 		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
-			margin-right: 0
+			padding-right: 0;
+			margin-right: 0;
 		}
 
 		.iso-tag {
 			margin-left: 5px;
-			width: 100%
+			width: 100%;
+		}
+	}
+
+	/* for tablet */
+	@media (max-width: 1081px) and (min-width: 768px) {
+
+		/* lines up pricing */
+		.iso-preSelectedClass .vehicle-item__pricing {
+			margin-right: 35px;
+		}
+
+	}
+
+	/* for tablet */
+	@media (max-width: 768px) and (min-width: 654px) {
+
+		/* lines up pricing */
+		.iso-preSelectedClass .vehicle-item__pricing {
+			margin-right: 20px;
 		}
 	}
 
 	@media (max-width: 653px) {
-		.vehicle-item__attribute-item {
-			margin-right: .7em;
+
+		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
+			margin-bottom: 5%;
 		}
 
 		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
@@ -148,8 +193,6 @@
 			margin-top: 45px;
 		}
 	}
-/* 
-	@media screen and (max-width: 414px) {} */
 </style>
 <script>
 	! function () {

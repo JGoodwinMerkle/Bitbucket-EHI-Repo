@@ -1,10 +1,4 @@
 <style>
-	@media (max-width:1135px) {
-		.iso-preSelectedClass .rs-callout.rs-callout--highlight {
-			font-size: 12px;
-		}
-	}
-
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
 		margin-right: -15px;
@@ -83,13 +77,23 @@
 	}
 
 	/* default featured color */
-	.iso-preSelectedClass .rs-callout.rs-callout--highlight {
+	/* .iso-preSelectedClass .rs-callout.rs-callout--highlight {
 		border-left: 4px solid #ce810d;
+	} */
+
+	.iso-preSelectedClass .rs-callout--highlight .rs-callout__icon {
+		fill: #c96d1f;
+	}
+
+	/* reduces whitespace*/
+	.iso-preSelectedClass .vehicle-item {
+		padding: 1rem;
+		padding-bottom: 0rem;
 	}
 
 	.iso-preSelectedClass .rs-icon {
-		width: 20px;
-		height: 20px;
+		width: 1em;
+		height: 1em;
 	}
 
 	/* potentially fixes sorting issue */
@@ -108,22 +112,53 @@
 	}
 
 
+	/* take from this line downwards to address spacing and font issues for desktop, tablet and mobile */
+	@media (max-width:1135px) {
+		.iso-preSelectedClass .rs-callout.rs-callout--highlight {
+			font-size: 12px;
+		}
 
-	@media (max-width:1081px) {
+		/* increases whitespace*/
+		.iso-preSelectedClass .vehicle-item {
+			padding: 1rem;
+		}
+	}
+
+	/* for desktop down */
+	@media (max-width: 1081px) {
 
 		.vehicle-enough-points.cf,
 		.vehicle-not-enough-points {
-			margin-right: 0
+			margin-right: 0;
 		}
 
 		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
 			padding-right: 0;
-			margin-right: 0
+			margin-right: 0;
 		}
 
 		.iso-tag {
 			margin-left: 5px;
-			width: 100%
+			width: 100%;
+		}
+	}
+
+	/* for tablet */
+	@media (max-width: 1081px) and (min-width: 768px) {
+
+		/* lines up pricing */
+		.iso-preSelectedClass .vehicle-item__pricing {
+			margin-right: 35px;
+		}
+
+	}
+
+	/* for tablet */
+	@media (max-width: 768px) and (min-width: 654px) {
+
+		/* lines up pricing */
+		.iso-preSelectedClass .vehicle-item__pricing {
+			margin-right: 20px;
 		}
 	}
 
@@ -131,11 +166,6 @@
 
 		.iso-preSelectedClass .vehicle-item__main-content .vehicle-item__summary .rs-callout.rs-callout--highlight {
 			margin-bottom: 5%;
-		}
-
-		.iso-preSelectedClass .rs-icon {
-			width: 1em;
-			height: 1em;
 		}
 
 		.vehicle-list__item.iso-preSelectedClass .vehicle-item {
@@ -211,7 +241,7 @@
 					new MutationObserver(function (e) {
 						e.forEach(function (e) {
 							e.removedNodes.forEach(function (e) {
-								void 0 !== e.classList && e.classList.contains("spinner-container") && r.hashHandler();
+								void 0 !== e.classList && e.classList.contains("spinner-container") && r.hashHandler() && r.hideBanner();
 							});
 						});
 					}).observe(document.querySelector("body"), { subtree: !0, childList: !0 });
@@ -237,9 +267,7 @@
 				r.branchType = ReservationStateTree.get(["session", "reservationSession", "pickup_location",
 					"location_type"
 				]);
-				var e = ReservationStateTree.get(["session", "reservationSession", "pickupLocationWithDetail",
-					"location_id"
-				]).slice(0, 2);
+				var e = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
 
 				// r.checkGroup(e) && r.runTest();
 				window.setTimeout(function () {
@@ -252,11 +280,31 @@
 
 
 			},
-			checkGroup: function (t) {
-				var s = !1;
-				return r.audience.group.forEach(function (e) {
-					t.substring(0, e.length) == e && (s = !0)
-				}), s
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				r.observeEl('.iso-preSelectedClass', function () {
+					setTimeout(() => {
+						const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+						const filteredReservation = r.audience.group.filter(g => g == groupId);
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (!filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						}
+						if (filteredReservation.length) {
+							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
+						}
+					}, 200);
+				})
+			},
+			checkGroup: function (groupNumber) {
+				r.log('checkGroup()');
+				var checksOut = false;
+				r.audience.group.forEach(function (g) {
+					if (groupNumber.substring(0, g.length) == g) {
+						checksOut = true;
+					}
+				});
+				return checksOut;
 			},
 			runTest: function () {
 				r.day = s.getQueryParam("dayOverride") ? s.getQueryParam("dayOverride") : new Date(
@@ -272,16 +320,21 @@
 					!e.target.matches('[data-dtm-tracking^="cars|filter_modal|submit"]') && !e.target
 						.matches('[data-dtm-tracking^="car_filters|clear_filters|select"]') ||
 						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.checkSort()
-				}), document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(r.checkSort, 200);
-				}, false);
+				}),
+					/* add this to hide tag when outside of designated location */
+					document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
+						setTimeout(() => {
+							r.checkSort();
+							r.hideBanner();
+						}, 100);
+					}, false);
 			},
 			checkSort: function () {
-				if (ReservationStateTree.get(["session", "reservationSession", "pickupLocationWithDetail",
-					"location_id"
-				]).slice(0, 2) == 32) {
-					var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
-					var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
+				const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+				const filteredReservation = r.audience.group.filter(g => g == groupId);
+				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
+				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
+				if (groupId == 32) {
 					if (sort == 'Recommended') {
 						r.elementLoaded('.iso-preSelectedClass', function () {
 							const filteredList = [];
@@ -300,7 +353,10 @@
 									};
 								});
 							} else {
-								document.querySelector('.iso-preSelectedClass').style.order = -1;
+								if (store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2) == 32) {
+									document.querySelector('.iso-preSelectedClass').style.order = -1;
+
+								}
 							};
 						});
 					};
