@@ -1,3 +1,8 @@
+<style>
+	.email-optin.ReactModal__Overlay--after-open .rs-modal .rs-modal__button-bar{
+		border-top: 0;
+	}
+</style>
 <script>
 (function() {
 	'use strict';
@@ -12,24 +17,33 @@
 		timeOut : 10000,
 		content : {
 			enterprise : {
-				modalHeader : {
-					deals : {
-						modalText : 'Get the latest rental discounts, great rates and special offers delivered directly to your inbox.'
-					}
-				},
-				modalBody : '<h2>Sign up for Enterprise emails</h2>\
-											<p>{modalText}</p>\
-											<div class="btn-grp">\
-												<button class="btn ok">Sign Up</button>\
-												<button class="btn cancel">No Thanks</button>\
-											</div>'
+				reskinModal : `
+					<div class="ReactModal__Overlay ReactModal__Overlay--after-open rs-modal__overlay email-optin">
+						<div class="ReactModal__Content ReactModal__Content--after-open rs-modal rs-modal--small" tabindex="-1" role="dialog" aria-describedby="rs-modal-content" aria-labelledby="rs-modal-heading" aria-modal="true">
+							<div class="rs-modal__wrapper">
+								<div class="rs-modal__header">
+									<button class="cta cta--text cta--large cta--noMargin cta--text-inverted rs-modal__header-close-icon" aria-label="Close">
+										<i role="img" aria-hidden="true" class="rs-icon rs-icon--cta">
+											<svg viewBox="0 0 24 24"><use xlink:href="#btn-icn-remove"></use></svg>
+										</i>
+									</button>
+								</div>
+								<div class="rs-modal__content">
+									<h2>Sign up for Enterprise emails</h2>
+									<p>Get the latest rental discounts, great rates and special offers delivered directly to your inbox.</p>
+								</div>
+								<div class="rs-modal__button-bar">
+									<div class="cta-container cta-container--align-center rs-modal__buttons-container">
+										<button class="cta cta--secondary cta--large cta--noMargin close-modal" type="button">No Thanks</button><button class="cta cta--primary cta--large cta--noMargin yes" type="button">Sign Up</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				`,
 			}
 		},
 		init : function() {
-
-			isoTest.debug = Boolean(helpers.getQueryParam('debug'));
-
-			
 			if (_satellite && _satellite.setVar && typeof _satellite.setVar === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
 				_satellite.setVar('TargetCreative', isoTest.creative);
@@ -54,33 +68,22 @@
 		triggerModal : {
 			enterprise : function() {
 				isoTest.cookieModal();
-				document.querySelector('.modal-container').classList.add('active');
-				document.querySelector('.modal-content').classList.add('redirect-modal', 'iso-signup-modal');
-				var parent = document.querySelectorAll('.modal-header')[0];
-				
-				for( var i = 0; i < parent.childNodes.length; i++ ) {
-				  var current_child = parent.childNodes[i];
-				  if( current_child.nodeType == 3 ) {
-				    parent.removeChild( current_child );
-				  }
-				}
 
-				document.querySelector('.modal-content.redirect-modal.iso-signup-modal .close-modal').textContent = '';
-				document.querySelector('.modal-content.redirect-modal.iso-signup-modal .close-modal').insertAdjacentHTML("beforeend", '<i class="icon icon-close-x-white">X</i>');
-				document.querySelector('.modal-body').innerHTML = helpers.supplant(isoTest.content.enterprise.modalBody, isoTest.content['enterprise'].modalHeader['deals']);
+				document.querySelector('.modal-container').insertAdjacentHTML('afterend', isoTest.content.enterprise.reskinModal);
 
-				document.querySelector('.iso-signup-modal .btn.cancel').addEventListener('click', function (e) {
-					document.querySelector('.iso-signup-modal .close-modal').click();
+				document.querySelector('.email-optin .rs-modal__header-close-icon').addEventListener('click', function (e) {
+					document.querySelector('.email-optin .close-modal').click();
 				}, false);
 
-				document.querySelector('.iso-signup-modal .close-modal').addEventListener('click', function (e) {
+				document.querySelector('.email-optin .close-modal').addEventListener('click', function (e) {
 					var linkName = 'Close (X)';
 					s.linkTrackVars = 'eVar20';
 					s.eVar20 = linkName;
 					s.tl(this, 'o', linkName);
+					document.querySelector('.email-optin').outerHTML = '';
 				}, false);
 
-				document.querySelector('.iso-signup-modal .btn.ok').addEventListener('click', function (e) {
+				document.querySelector('.email-optin .yes').addEventListener('click', function (e) {
 					var linkName = 'Email Opt-In';
 					s.linkTrackVars = 'eVar20';
 					s.eVar20 = linkName;
@@ -96,18 +99,6 @@
 		},
 		cookieModal : function() {
 			localStorage.setItem('enterpriseOptInSeen','true');
-		},
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
-	        }
 		},
 		dependsLoaded : function (callback) {
 			if (isoTest.debug === true) {
@@ -133,30 +124,6 @@
 			}
 		}
 		
-	}
-	var helpers = {
-		getQueryParam: function(variable) {
-	      var query = window.location.search.substring(1);
-	      var vars = query.split('&');
-	      for (var i = 0; i < vars.length; i++) {
-	        var pair = vars[i].split('=');
-	        if (decodeURIComponent(pair[0]) == variable) {
-	        	return decodeURIComponent(pair[1]);
-	        }
-	      }
-	    },
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          if (c[p[i]] == null)
-		            return a;
-		          c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
 	}
 
 	isoTest.init();
