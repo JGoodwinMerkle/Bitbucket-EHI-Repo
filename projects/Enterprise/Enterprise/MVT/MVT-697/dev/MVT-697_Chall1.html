@@ -6,12 +6,14 @@
 	var isoTest = {
 		account : 'EHI',
 		portfolio : 'Enterprise',
-		test : 'MVT-697',
+		test : 'MVT-679',
 		creative : 'Challenger 1',
-		selector : 'body',
+		selector : '.sidebar-box .switch-pay-type > button',
+        templatePayNow:  `<div class="sidebar-box mvt-697-value-prop"> <div class="value-prop-header"> <h2>Why Choose Enterprise?</h2> </div><div class="value-prop-info"> <p class="value-prop"><i class="value-prop-icon"></i>Free Cancellation</p><p class="value-prop"><i class="value-prop-icon"></i>Pay Now</p><p class="value-prop"><i class="value-prop-icon"></i>Unlimited Mileage</p></div></div>`,
+        templatePayLater: `<div class="sidebar-box mvt-697-value-prop"> <div class="value-prop-header"> <h2>Why Choose Enterprise?</h2> </div><div class="value-prop-info"> <p class="value-prop"><i class="value-prop-icon"></i>Free Cancellation</p><p class="value-prop"><i class="value-prop-icon"></i>Pay at Pickup</p><p class="value-prop"><i class="value-prop-icon"></i>Unlimited Mileage</p></div></div>`,
 		init : function() {
 
-			isoTest.debug = true;
+			isoTest.debug =true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -22,17 +24,20 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
+			isoTest.observeEl(isoTest.selector, function(ele) {
+				isoTest.log('Test Ready!');   
+  				isoTest.chall(ele);
 			});
 			
 		},
-		chall : function() {
-
-			// Your code goes here
-
-		},
+		chall: function(ele){
+           console.log('changes made', ele);
+           var mainContainer = ele.parentElement.parentElement.parentElement;
+          console.log(ele.getAttribute('id'));
+          ele.getAttribute('id') == 'payLaterToggle' ? mainContainer.insertAdjacentHTML("afterend", isoTest.templatePayLater): mainContainer.insertAdjacentHTML("afterend", isoTest.templatePayNow);  
+           
+        },
+       
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
@@ -44,36 +49,12 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
-		}
-	};
-
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
-	};
+		observeEl: function (selector, callback) {
+                  var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
+        },
 
+	};
 	isoTest.init();
 })();
 </script>
