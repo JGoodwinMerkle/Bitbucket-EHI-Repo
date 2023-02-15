@@ -1,0 +1,90 @@
+<style>
+	#signin-content{
+		width: auto;
+		border-radius: 8px;
+		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .25);
+	}
+	#login-container .login-curtain{
+		display: none;
+	}
+	#signin-content .left-container{
+		display: none;
+	}
+	#signin-content .right-container{
+		left: 0;
+    width: 100%;
+		border-left: 0;
+	}
+	#enterprise-login .rs-checkbox{
+		display: none;
+	}
+</style>
+<script>
+	(function () {
+		"use strict";
+		var isoTest = {
+			account: "EHI",
+			portfolio: "Enterprise",
+			test: "MVT-680",
+			creative: "Challenger 3",
+			init: function () {
+				//isoTest.debug = true;
+
+				if (_satellite && typeof _satellite.setVar === "function" && typeof _satellite.track === "function") {
+					_satellite.setVar("TargetCampaign", isoTest.test);
+					_satellite.setVar("TargetCreative", isoTest.creative);
+				}
+
+				isoTest.log("Test Running...");
+				isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+				isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+				isoTest.chall();
+			},
+			chall: function () {
+				isoTest.elementLoaded('.header-nav-item.sign-in #signInJoinButton', function(){
+					var buttonEl = document.querySelector('.header-nav-item.sign-in .cta');
+					var signInText = document.querySelector('.header-nav-item.sign-in #signInJoinButton');
+					var el = document.querySelector('.header-nav-item.sign-in');
+					// el.insertAdjacentHTML('beforebegin', `
+					// 	<div class="welcome-back">
+					// 		<p>Welcome Back!</p>	
+					// 	</div>
+					// `);
+					signInText.textContent = 'Sign in';
+					buttonEl.click();
+					// buttonEl.click();
+				});
+			},
+			fireTag: function (element, value) {
+				var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+				s.linkTrackVars = "eVar20";
+				s.eVar20 = linkName;
+				s.tl(this, "o", linkName);
+			},
+			log: function (obj) {
+				if (isoTest.debug === true) {
+					console.log(obj);
+				}
+			},
+			elementLoaded : function (ele, callback) {
+        console.log('elementLoaded::  ' + ele + ' - Checking...');
+        window.clearTimeout(isoTest.eleTimer);
+        if (document.querySelectorAll(ele).length > 0) {
+          if (typeof callback === 'function') {
+            isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+            callback();
+          }
+        } else {
+          isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+        }
+      },
+			observeEl: function (selector, callback) {
+				var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
+			},
+		};
+
+		isoTest.init();
+	})();
+</script>
