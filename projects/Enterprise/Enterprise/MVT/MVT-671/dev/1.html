@@ -215,7 +215,7 @@
 					enoughPoints : function(){
 						var getReactComponent = function(node){
 							for(var key in node) {
-								if(key.startsWith('__reactInternalInstance$') ) {
+								if(key.startsWith('__reactInternalInstance$') || key.startsWith('__reactFiber$')) {
 									return node[key];
 								}
 							}
