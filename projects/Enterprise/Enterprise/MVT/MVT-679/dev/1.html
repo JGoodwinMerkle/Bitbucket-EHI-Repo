@@ -57,7 +57,7 @@
 			creative: "Challenger 1",
 			selector: ".review-section",
 			pilotLocations: "1021296,1018719,1018724,1018895,1019192,1018840",
-			errTag: `<div class="rs-error-container" tabindex="-1" role="alertdialog" aria-label="One or more errors were found. Here are the errors:" aria-describedby="errorList"><ul class="rs-error rs-error--no-margins rs-error--extra-spaced" id="errorList"><li><span class="rs-error__prefix">Error: </span><span id="FE_SAVE_TIME_AT_THE_COUNTER-error">Password Creation is required.</span> <span>FE_SAVE_TIME_AT_THE_COUNTER</span></li></ul></div>`,
+			errTag: `<div class="rs-error-container" tabindex="-1" role="alertdialog" aria-label="One or more errors were found. Here are the errors:" aria-describedby="errorList"><ul class="rs-error rs-error--no-margins rs-error--extra-spaced" id="errorList"><li><span class="rs-error__prefix">Error: </span><span id="FE_SAVE_TIME_AT_THE_COUNTER-error">Password Creation is required to join the Enterprise Plus program.</span></li></ul></div>`,
 			init: function () {
 				//isoTest.debug = true;
 
@@ -180,6 +180,9 @@
 				isoTest.observeEl('.expedite .expedite__disclaimer', function(el){
 					if(el.childNodes[0].textContent === 'To Save Time at the Counter please verify the following information and if incorrect, '){
 						el.childNodes[0].textContent = 'Please verify the following information and if incorrect, ';
+					}
+					if(el.textContent === 'Thank you! Please fill in the remaining information below to save time at the counter.'){
+						el.textContent = 'Thank you! Please fill in the remaining information below.';
 					}
 				});
 			},
