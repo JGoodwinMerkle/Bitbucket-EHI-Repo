@@ -301,6 +301,15 @@
 						});
 					});
 				});
+
+
+				// adds filter box fix
+				isoTest.observeEl('.vehicle-filter__header-cta button', async function (el) {
+					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
+					clearAll.addEventListener('click', function (e) {
+						isoTest.hideBanner();
+					});
+				});
 			},
 			hashHandler: function () {
 				if (/cars/.test(location.hash)) {
@@ -336,8 +345,9 @@
 			},
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
-				isoTest.observeEl('.iso-preSelectedClass', function () {
-					setTimeout(() => {
+				setTimeout(() => {
+					isoTest.observeEl('.iso-preSelectedClass', function () {
+
 						const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
 						const filteredReservation = isoTest.audience.peopleSoftId.filter(p => p == peopleSoftId);
 						const isoPreselected = document.querySelector('.iso-preSelectedClass');
@@ -347,8 +357,9 @@
 						if (filteredReservation.length) {
 							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
 						}
-					}, 200);
-				})
+
+					})
+				}, 50);
 			},
 			checkGroup: function (groupNumber) {
 				isoTest.log('checkGroup()');

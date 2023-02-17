@@ -287,6 +287,13 @@
 						});
 					});
 				});
+				// adds filter box fix
+				c.observeEl('.vehicle-filter__header-cta button', async function (el) {
+					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
+					clearAll.addEventListener('click', function (e) {
+						c.hideBanner();
+					});
+				});
 			},
 			hashHandler: function () {
 				/cars/.test(location.hash) && c.elementLoaded(c.vehicleItem, function () {
@@ -315,8 +322,9 @@
 			},
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
-				c.observeEl('.iso-preSelectedClass', function () {
-					setTimeout(() => {
+				setTimeout(() => {
+					c.observeEl('.iso-preSelectedClass', function () {
+
 						const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
 						const filteredReservation = c.audience.group.filter(g => g == groupId);
 						const isoPreselected = document.querySelector('.iso-preSelectedClass');
@@ -326,8 +334,9 @@
 						if (filteredReservation.length) {
 							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
 						}
-					}, 100);
-				})
+
+					})
+				}, 100);
 			},
 			runTest: function () {
 				c.day = s.getQueryParam("dayOverride") ? s.getQueryParam("dayOverride") : new Date(
