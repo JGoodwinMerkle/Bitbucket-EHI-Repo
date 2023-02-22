@@ -58,10 +58,9 @@
 		creative : 'Challenger 1',
 		selector : '.sidebar-box .switch-pay-type > button',
 		templateDefault: `<div class="sidebar-box mvt-697-value-prop"> <div class="value-prop-header"> <h2>Why Choose Enterprise?</h2> </div><div class="value-prop-info"> <div class="value-prop"><i class="value-prop-icon icon-1"></i><p>Award-Winning Customer Service</p></div><div class="value-prop"><i class="value-prop-icon icon-2"></i><p>Clean, Low Mileage Vehicles</p></div><div class="value-prop"><i class="value-prop-icon icon-3"></i><p>Free Cancellation 3 or More Days Before Pick Up</p></div></div></div>`,
-		
 		init : function() {
 
-			isoTest.debug =true;
+			//isoTest.debug =true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -76,22 +75,20 @@
 				isoTest.log('Test Ready!');   
   				isoTest.chall();
 			});
-			
 		},
-		chall: function(){
-           
+
+		chall: function(){      
            var mainContainer = document.querySelectorAll(isoTest.selector);
 		   isoTest.updateHTML(mainContainer);
-		   
         },
+
 		updateHTML: function(ele) {
-			console.log('changes made', ele);
+			//console.log('changes made', ele);
 			isoTest.removeHTML();
 			ele.forEach(item => {
 				var sideBox = item.parentElement.parentElement.parentElement;
 				sideBox.insertAdjacentHTML("afterend",  isoTest.templateDefault);
 			});
-			
 		},
 		
 		removeHTML: function() {
