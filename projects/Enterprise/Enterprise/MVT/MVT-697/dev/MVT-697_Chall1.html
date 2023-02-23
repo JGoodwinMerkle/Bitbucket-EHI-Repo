@@ -1,5 +1,5 @@
 <style>
-.mvt-697-value-prop {
+	.mvt-697-value-prop {
 		background-color: #FCF1E0;
 		padding-top: 16px;
 		padding-bottom: 16px;
@@ -18,6 +18,9 @@
 		margin-bottom: 16px;
 	}
 	.mvt-697-value-prop .value-prop-info .value-prop {
+		display: flex;
+	}
+	.mvt-697-value-prop .value-prop-info .value-prop p {
 		font-weight: 300;
 		font-size: 15px;
 		line-height: 20px;
@@ -25,15 +28,24 @@
 		color: #393A3B;
 		margin-bottom: 8px;
 	}
-	.mvt-697-value-prop .value-prop-info i.value-prop-icon {
+	.mvt-697-value-prop  i.value-prop-icon {
 		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNSAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMy41Njc1IDYuNTA5MDNDMTMuNzI5NCA3LjE2NjUzIDEzLjc4NTYgNy44NDY1MyAxMy43MjY5IDguNTQwMjhDMTMuNDc4MSAxMS41MTkgMTEuMDQ1NiAxMy45NjI4IDguMDcwMDIgMTQuMjI1M0M2LjExMjUyIDE0LjM5NzggNC4yMzI1MiAxMy42NzQgMi45MDc1MiAxMi4yMzk3QzEuNTgzMTQgMTAuODA1OSAxLjAxMjUyIDguODYyMTUgMS4zNDI1MiA2LjkwNjUzQzEuNzc0MzkgNC4zNDU5IDMuODY2MjcgMi4yNjIxNSA2LjQyOTM5IDEuODM5MDNDOC4yNzE4OSAxLjUzMjc4IDEwLjA2ODEgMi4wMTIxNSAxMS40ODQ0IDMuMTg1MjhDMTEuNjk2MyAzLjM2MDkgMTEuNzMzOCAzLjY1ODQgMTEuNTY5NCAzLjg2MzRMNy4xNzA2NCA5LjMzNzE1QzYuODc2ODkgOS43MTIxNSA2LjMzNjI3IDkuNzc3MTUgNS45NjMxNCA5LjQ4NjUzTDMuNzUzNzcgNy43NjE1M0wyLjk4NTAyIDguNzQ2NTNMNS4xOTQzOSAxMC40NzE1QzYuMTExODkgMTEuMTg2NSA3LjQzOTM5IDExLjAyNCA4LjE1MDY0IDEwLjExNEwxMi41NDM4IDQuNjQ2NTNDMTMuMTMwNiAzLjkxNTkgMTMuMDEzMSAyLjgyNzc4IDEyLjI4MTMgMi4yMjIxNUMxMC42MDc1IDAuODM1Mjc3IDguNDAyNTIgMC4yNDcxNTIgNi4yMjUwMiAwLjYwNTkwMkMzLjE0NDM5IDEuMTE0NjUgMC42Mjg3NjggMy42MTk2NSAwLjEwOTM5MyA2LjY5ODRDLTAuMjg1NjA3IDkuMDM4NCAwLjQwMDAxOCAxMS4zNjcyIDEuOTg5MzkgMTMuMDg4NEMzLjQyNDM5IDE0LjY0MTUgNS40MDMxNCAxNS41MDAzIDcuNDk5MzkgMTUuNTAwM0M3LjcyNTAyIDE1LjUwMDMgNy45NTE4OSAxNS40OTAzIDguMTc5MzkgMTUuNDcwM0MxMS43NTMxIDE1LjE1NDcgMTQuNjczOCAxMi4yMjA5IDE0Ljk3MjUgOC42NDUyOEMxNS4wNjg4IDcuNTAyNzggMTQuOTEyNSA2LjM4OTY1IDE0LjUxMDYgNS4zMzUyOEwxMy41Njc1IDYuNTA5MDNaIiBmaWxsPSIjMTgxOTE4Ii8+CjxtYXNrIGlkPSJtYXNrMF82M18zNjM5NCIgc3R5bGU9Im1hc2stdHlwZTphbHBoYSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMy41Njc1IDYuNTA5MDNDMTMuNzI5NCA3LjE2NjUzIDEzLjc4NTYgNy44NDY1MyAxMy43MjY5IDguNTQwMjhDMTMuNDc4MSAxMS41MTkgMTEuMDQ1NiAxMy45NjI4IDguMDcwMDIgMTQuMjI1M0M2LjExMjUyIDE0LjM5NzggNC4yMzI1MiAxMy42NzQgMi45MDc1MiAxMi4yMzk3QzEuNTgzMTQgMTAuODA1OSAxLjAxMjUyIDguODYyMTUgMS4zNDI1MiA2LjkwNjUzQzEuNzc0MzkgNC4zNDU5IDMuODY2MjcgMi4yNjIxNSA2LjQyOTM5IDEuODM5MDNDOC4yNzE4OSAxLjUzMjc4IDEwLjA2ODEgMi4wMTIxNSAxMS40ODQ0IDMuMTg1MjhDMTEuNjk2MyAzLjM2MDkgMTEuNzMzOCAzLjY1ODQgMTEuNTY5NCAzLjg2MzRMNy4xNzA2NCA5LjMzNzE1QzYuODc2ODkgOS43MTIxNSA2LjMzNjI3IDkuNzc3MTUgNS45NjMxNCA5LjQ4NjUzTDMuNzUzNzcgNy43NjE1M0wyLjk4NTAyIDguNzQ2NTNMNS4xOTQzOSAxMC40NzE1QzYuMTExODkgMTEuMTg2NSA3LjQzOTM5IDExLjAyNCA4LjE1MDY0IDEwLjExNEwxMi41NDM4IDQuNjQ2NTNDMTMuMTMwNiAzLjkxNTkgMTMuMDEzMSAyLjgyNzc4IDEyLjI4MTMgMi4yMjIxNUMxMC42MDc1IDAuODM1Mjc3IDguNDAyNTIgMC4yNDcxNTIgNi4yMjUwMiAwLjYwNTkwMkMzLjE0NDM5IDEuMTE0NjUgMC42Mjg3NjggMy42MTk2NSAwLjEwOTM5MyA2LjY5ODRDLTAuMjg1NjA3IDkuMDM4NCAwLjQwMDAxOCAxMS4zNjcyIDEuOTg5MzkgMTMuMDg4NEMzLjQyNDM5IDE0LjY0MTUgNS40MDMxNCAxNS41MDAzIDcuNDk5MzkgMTUuNTAwM0M3LjcyNTAyIDE1LjUwMDMgNy45NTE4OSAxNS40OTAzIDguMTc5MzkgMTUuNDcwM0MxMS43NTMxIDE1LjE1NDcgMTQuNjczOCAxMi4yMjA5IDE0Ljk3MjUgOC42NDUyOEMxNS4wNjg4IDcuNTAyNzggMTQuOTEyNSA2LjM4OTY1IDE0LjUxMDYgNS4zMzUyOEwxMy41Njc1IDYuNTA5MDNaIiBmaWxsPSJ3aGl0ZSIvPgo8L21hc2s+CjxnIG1hc2s9InVybCgjbWFzazBfNjNfMzYzOTQpIj4KPC9nPgo8L3N2Zz4K);
 		display: inline-block;
 		height: 16px;
 		background-repeat: no-repeat;
 		margin-left: 0.1875rem;
 		margin-right: 6px;
-		vertical-align: middle;
-		width: 15px;
+		margin-top: 1px;
+		width: 16px;
+	}
+	@media screen and (min-width: 746px) and (max-width: 920px) { 
+		.icon-1 {
+			width: 20px!important;
+		}
+		
+		.icon-3 {
+			width: 22px!important;
+		}
 	}
 </style>
 <script>
@@ -45,11 +57,10 @@
 		test : 'MVT-697',
 		creative : 'Challenger 1',
 		selector : '.sidebar-box .switch-pay-type > button',
-        templatePayNow:  `<div class="sidebar-box mvt-697-value-prop"> <div class="value-prop-header"> <h2>Why Choose Enterprise?</h2> </div><div class="value-prop-info"> <p class="value-prop"><i class="value-prop-icon"></i>Free Cancellation</p><p class="value-prop"><i class="value-prop-icon"></i>Pay Now</p><p class="value-prop"><i class="value-prop-icon"></i>Unlimited Mileage</p></div></div>`,
-        templatePayLater: `<div class="sidebar-box mvt-697-value-prop"> <div class="value-prop-header"> <h2>Why Choose Enterprise?</h2> </div><div class="value-prop-info"> <p class="value-prop"><i class="value-prop-icon"></i>Free Cancellation</p><p class="value-prop"><i class="value-prop-icon"></i>Pay at Pickup</p><p class="value-prop"><i class="value-prop-icon"></i>Unlimited Mileage</p></div></div>`,
+		templateDefault: `<div class="sidebar-box mvt-697-value-prop"> <div class="value-prop-header"> <h2>Why Choose Enterprise?</h2> </div><div class="value-prop-info"> <div class="value-prop"><i class="value-prop-icon icon-1"></i><p>Award-Winning Customer Service</p></div><div class="value-prop"><i class="value-prop-icon icon-2"></i><p>Clean, Low Mileage Vehicles</p></div><div class="value-prop"><i class="value-prop-icon icon-3"></i><p>Free Cancellation 3 or More Days Before Pick Up</p></div></div></div>`,
 		init : function() {
 
-			isoTest.debug =true;
+			//isoTest.debug =true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -64,25 +75,22 @@
 				isoTest.log('Test Ready!');   
   				isoTest.chall();
 			});
-			
 		},
-		chall: function(){
-           
+
+		chall: function(){      
            var mainContainer = document.querySelectorAll(isoTest.selector);
 		   isoTest.updateHTML(mainContainer);
-		   
         },
+
 		updateHTML: function(ele) {
-			console.log('changes made', ele);
+			//console.log('changes made', ele);
 			isoTest.removeHTML();
 			ele.forEach(item => {
 				var sideBox = item.parentElement.parentElement.parentElement;
-				console.log(item.getAttribute('id'));
-				item.getAttribute('id') == 'payLaterToggle' ? sideBox.insertAdjacentHTML("afterend",  isoTest.templatePayNow): sideBox.insertAdjacentHTML("afterend", isoTest.templatePayLater);  
-           
+				sideBox.insertAdjacentHTML("afterend",  isoTest.templateDefault);
 			});
-			
 		},
+		
 		removeHTML: function() {
 			var removeItem = document.querySelectorAll('.mvt-697-value-prop');
 			if(removeItem) {
