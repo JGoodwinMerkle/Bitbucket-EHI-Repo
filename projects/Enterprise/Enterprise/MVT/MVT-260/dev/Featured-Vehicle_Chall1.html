@@ -296,9 +296,7 @@
 				// adds filter box fix
 				r.observeEl('.vehicle-filter__header-cta button', async function (el) {
 					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
-
 					clearAll.addEventListener('click', function (e) {
-						console.log("got here", clearAll);
 						r.hideBanner();
 					});
 				});
@@ -306,7 +304,7 @@
 			hashHandler: function () {
 				/cars/.test(location.hash) &&
 					r.elementLoaded(r.vehicleItem, function () {
-						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall();
+						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall() && r.hideBanner()
 					});
 			},
 			chall: function () {
@@ -335,6 +333,12 @@
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
 				setTimeout(() => {
+					if (document.querySelector('.is-selected')) {
+						r.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').style.display = "none";
+
+						})
+					}
 					r.observeEl('.iso-preSelectedClass', function () {
 
 						const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
@@ -348,7 +352,7 @@
 						}
 
 					})
-				}, 200);
+				}, 50);
 			},
 			checkGroup: function (t) {
 				var a = !1;

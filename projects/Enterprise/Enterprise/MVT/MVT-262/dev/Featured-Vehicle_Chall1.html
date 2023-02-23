@@ -303,7 +303,7 @@
 				});
 
 
-				// adds filter box fix
+				// adds filter box fix where featured vehicle reappears
 				isoTest.observeEl('.vehicle-filter__header-cta button', async function (el) {
 					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
 					clearAll.addEventListener('click', function (e) {
@@ -346,6 +346,12 @@
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
 				setTimeout(() => {
+					if (document.querySelector('.is-selected')) {
+						isoTest.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').style.display = "none";
+
+						})
+					}
 					isoTest.observeEl('.iso-preSelectedClass', function () {
 
 						const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);

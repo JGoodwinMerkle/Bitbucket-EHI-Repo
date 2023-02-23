@@ -267,17 +267,13 @@
 					});
 				});
 
-				// adds filter box fix
+				// adds filter box fix where featured vehicle reappears
 				a.observeEl('.vehicle-filter__header-cta button', async function (el) {
 					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
-
 					clearAll.addEventListener('click', function (e) {
-						console.log("got here", clearAll);
 						a.hideBanner();
 					});
 				});
-
-
 
 			},
 			hashHandler: function () {
@@ -319,6 +315,12 @@
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
 				setTimeout(() => {
+					if (document.querySelector('.is-selected')) {
+						a.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').style.display = "none";
+
+						})
+					}
 					a.observeEl('.iso-preSelectedClass', function () {
 						console.log("preselected in")
 						const isBranchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']) == 'airport';

@@ -255,8 +255,17 @@
             rs.addEventListener('change', function (e) {
               setTimeout(() => {
                 isoTest.chall();
+                isoTest.hideBanner();
               }, 1.5);
             });
+          });
+        });
+
+        // adds filter box fix where featured vehicle reappears
+        isoTest.observeEl('.vehicle-filter__header-cta button', async function (el) {
+          const clearAll = document.querySelector(".vehicle-filter__header-cta button");
+          clearAll.addEventListener('click', function (e) {
+            isoTest.hideBanner();
           });
         });
       },
@@ -264,6 +273,7 @@
         if (/cars/.test(location.hash)) {
           isoTest.elementLoaded(isoTest.vehicleItem, function () {
             isoTest.chall();
+            isoTest.hideBanner();
           });
         }
       },
@@ -273,6 +283,16 @@
             isoTest.runTest();
           }
         }
+        
+        // adds fix for filter buttons
+        isoTest.observeEl('.ReactModal__Overlay--after-open.rs-modal__overlay', function () {
+          isoTest.observeEl('.rs-modal__buttons-container button:last-child', function () {
+            const discardBtn = document.querySelector(".rs-modal__buttons-container button:last-child");
+            discardBtn.addEventListener("click", function () {
+              localStorage.removeItem('greenSelected');
+            })
+          });
+        });
       },
       runTest: function () {
         isoTest.log('runTest()');
@@ -306,8 +326,9 @@
       },
       /* add this to hide tag when outside of designated location */
       hideBanner: function () {
-        isoTest.observeEl('.iso-preSelectedClass', function () {
-          setTimeout(() => {
+        setTimeout(() => {
+          isoTest.observeEl('.iso-preSelectedClass', function () {
+
             const isoPreselected = document.querySelector('.iso-preSelectedClass');
             if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode !== "GB") {
               isoPreselected.classList.add("iso-hide");
@@ -315,8 +336,26 @@
             if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "GB") {
               isoPreselected.classList.remove("iso-hide");
             }
-          }, 200);
-        })
+
+
+          })
+
+          isoTest.observeEl('.rs-tag-container.is-selected', function () {
+            console.log("show preselected observe L");
+            localStorage.setItem('greenSelected', true);
+            isoTest.observeEl('.iso-preSelectedClass', function () {
+              document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+            })
+          })
+
+          const greenSelected = localStorage.getItem('greenSelected');
+
+          if (greenSelected) {
+            isoTest.observeEl('.iso-preSelectedClass', function () {
+              document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+            })
+          };
+        }, 20);
       },
       checkSort: function () {
         var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;

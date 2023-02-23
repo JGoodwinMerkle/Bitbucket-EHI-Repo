@@ -293,7 +293,7 @@
 					});
 				});
 
-				// adds filter box fix
+				// adds filter box fix where featured vehicle reappears
 				isoTest.observeEl('.vehicle-filter__header-cta button', async function (el) {
 					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
 					clearAll.addEventListener('click', function (e) {
@@ -307,6 +307,7 @@
 					isoTest.elementLoaded(isoTest.vehicleItem, function () {
 						if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
 							isoTest.chall();
+							isoTest.hideBanner();
 						}
 					});
 				}
@@ -324,12 +325,22 @@
 			},
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
+
 				setTimeout(() => {
+					if (document.querySelector('.is-selected')) {
+						isoTest.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').style.display = "none";
+
+						})
+					}
+
+
 					isoTest.observeEl('.iso-preSelectedClass', function () {
 
 						const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
 						const filteredReservation = isoTest.audience.group.filter(g => g == groupId);
-						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+
+
 						if (!filteredReservation.length) {
 							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
 						}
@@ -338,7 +349,7 @@
 						}
 
 					})
-				}, 200);
+				}, 50);
 			},
 			checkGroup: function (groupNumber) {
 				isoTest.log('checkGroup()');

@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none;
+	}
+
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
 		margin-right: -15px;
@@ -263,12 +268,21 @@
 						});
 					});
 				});
+
+				// adds filter box fix where featured vehicle reappears
+				isoTest.observeEl('.vehicle-filter__header-cta button', async function (el) {
+					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
+					clearAll.addEventListener('click', function (e) {
+						isoTest.hideBanner();
+					});
+				});
 			},
 			hashHandler: function () {
 				if (/cars/.test(location.hash)) {
 					isoTest.elementLoaded(isoTest.vehicleItem, function () {
 						if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
 							isoTest.chall();
+							isoTest.hideBanner();
 						}
 					});
 				}
@@ -307,9 +321,35 @@
 						}
 					}
 				});
+				/* add this to hide tag when outside of designated location */
 				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(isoTest.checkSort, 200);
+					setTimeout(() => {
+						isoTest.checkSort();
+						isoTest.hideBanner();
+					}, 200);
 				}, false);
+			},
+			/* add this to hide tag when outside of designated location */
+			hideBanner: function () {
+				setTimeout(() => {
+					if (document.querySelector('.is-selected')) {
+						isoTest.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').style.display = "none";
+
+						})
+					}
+					isoTest.observeEl('.iso-preSelectedClass', function () {
+
+						const isoPreselected = document.querySelector('.iso-preSelectedClass');
+						if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode !== "ES") {
+							isoPreselected.classList.add("iso-hide");
+						}
+						if (window.store.getState().toJS().app.baobab.session.reservationSession.reservationsInitiateRequest.pickupLocation.countryCode == "ES") {
+							isoPreselected.classList.remove("iso-hide");
+						}
+
+					})
+				}, 50);
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
