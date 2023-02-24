@@ -309,8 +309,8 @@
 				c.checkGroup(e) && c.runTest();
 
 				// adds fix for filter buttons
-				a.observeEl('.ReactModal__Overlay--after-open.rs-modal__overlay', function () {
-					a.observeEl('.rs-modal__buttons-container button:last-child', function () {
+				c.observeEl('.ReactModal__Overlay--after-open.rs-modal__overlay', function () {
+					c.observeEl('.rs-modal__buttons-container button:last-child', function () {
 						const discardBtn = document.querySelector(".rs-modal__buttons-container button:last-child");
 						discardBtn.addEventListener("click", function () {
 							localStorage.removeItem('greenSelected');
@@ -350,10 +350,10 @@
 					})
 
 					// adds fix for filter buttons
-					a.observeEl('.rs-tag-container.is-selected', function () {
+					c.observeEl('.rs-tag-container.is-selected', function () {
 						// console.log("show preselected observe L");
 						localStorage.setItem('greenSelected', true);
-						a.observeEl('.iso-preSelectedClass', function () {
+						c.observeEl('.iso-preSelectedClass', function () {
 							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
 						})
 					})
@@ -361,7 +361,7 @@
 					const greenSelected = localStorage.getItem('greenSelected');
 
 					if (greenSelected) {
-						a.observeEl('.iso-preSelectedClass', function () {
+						c.observeEl('.iso-preSelectedClass', function () {
 							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
 						})
 					};
