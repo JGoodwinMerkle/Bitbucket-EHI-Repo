@@ -52,7 +52,7 @@
         templateDefault:`<div class="sidebar-box mvt-697-value-prop"> <div class="value-prop-header"> <h2>Why Choose Enterprise?</h2> </div><div class="value-prop-info"> <div class="value-prop"><i class="value-prop-icon"></i><p>Unlimited Mileage</p></div><div class="value-prop"><i class="value-prop-icon"></i><p>Clean, Low Mileage Vehicles</p></div><div class="value-prop"><i class="value-prop-icon"></i><p>No Hidden Fees</p></div></div></div>`,
 		init : function() {
 
-			isoTest.debug =true;
+			//isoTest.debug =true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -93,7 +93,6 @@
 			var removeItem = document.querySelectorAll('.mvt-697-value-prop');
 			if(removeItem) {
 				removeItem.forEach(e => {
-					console.log(e)
 					e.remove();
 				});
 			}
