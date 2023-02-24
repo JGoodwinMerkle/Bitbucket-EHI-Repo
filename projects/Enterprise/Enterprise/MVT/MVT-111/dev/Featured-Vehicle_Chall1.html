@@ -266,6 +266,7 @@
 						rs.addEventListener('change', function (e) {
 							setTimeout(() => {
 								isoTest.chall();
+								isoTest.hideBanner();
 							}, 1.5);
 						});
 					});
@@ -295,6 +296,16 @@
 					isoTest.setLanguage();
 					isoTest.runTest();
 				}
+
+				// adds fix for filter buttons
+				isoTest.observeEl('.ReactModal__Overlay--after-open.rs-modal__overlay', function () {
+					isoTest.observeEl('.rs-modal__buttons-container button:last-child', function () {
+						const discardBtn = document.querySelector(".rs-modal__buttons-container button:last-child");
+						discardBtn.addEventListener("click", function () {
+							localStorage.removeItem('greenSelected');
+						})
+					});
+				});
 			},
 			setLanguage: function () {
 				isoTest.lang = location.pathname.split('/')[1];
@@ -334,12 +345,7 @@
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
 				setTimeout(() => {
-					if (document.querySelector('.is-selected')) {
-						isoTest.observeEl('.iso-preSelectedClass', function () {
-							document.querySelector('.iso-preSelectedClass').style.display = "none";
 
-						})
-					}
 					isoTest.observeEl('.iso-preSelectedClass', function () {
 
 						const isoPreselected = document.querySelector('.iso-preSelectedClass');
@@ -351,7 +357,23 @@
 						}
 
 					})
-				}, 50);
+
+					isoTest.observeEl('.rs-tag-container.is-selected', function () {
+						// console.log("show preselected observe L");
+						localStorage.setItem('greenSelected', true);
+						isoTest.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					})
+
+					const greenSelected = localStorage.getItem('greenSelected');
+
+					if (greenSelected) {
+						isoTest.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					};
+				}, 20);
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;

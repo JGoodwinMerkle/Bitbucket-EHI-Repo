@@ -283,6 +283,7 @@
 						rs.addEventListener('change', function (e) {
 							setTimeout(() => {
 								c.chall();
+								c.hideBanner();
 							}, 1.5);
 						});
 					});
@@ -306,6 +307,16 @@
 				]);
 				var e = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
 				c.checkGroup(e) && c.runTest();
+
+				// adds fix for filter buttons
+				a.observeEl('.ReactModal__Overlay--after-open.rs-modal__overlay', function () {
+					a.observeEl('.rs-modal__buttons-container button:last-child', function () {
+						const discardBtn = document.querySelector(".rs-modal__buttons-container button:last-child");
+						discardBtn.addEventListener("click", function () {
+							localStorage.removeItem('greenSelected');
+						})
+					});
+				});
 			},
 			checkGroup: function (groupNumber) {
 				c.log('checkGroup()');
@@ -323,12 +334,7 @@
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
 				setTimeout(() => {
-					if (document.querySelector('.is-selected')) {
-						c.observeEl('.iso-preSelectedClass', function () {
-							document.querySelector('.iso-preSelectedClass').style.display = "none";
 
-						})
-					}
 					c.observeEl('.iso-preSelectedClass', function () {
 
 						const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
@@ -342,7 +348,24 @@
 						}
 
 					})
-				}, 100);
+
+					// adds fix for filter buttons
+					a.observeEl('.rs-tag-container.is-selected', function () {
+						// console.log("show preselected observe L");
+						localStorage.setItem('greenSelected', true);
+						a.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					})
+
+					const greenSelected = localStorage.getItem('greenSelected');
+
+					if (greenSelected) {
+						a.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					};
+				}, 20);
 			},
 			runTest: function () {
 				c.day = s.getQueryParam("dayOverride") ? s.getQueryParam("dayOverride") : new Date(
