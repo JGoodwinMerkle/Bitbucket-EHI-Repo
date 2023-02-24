@@ -38,15 +38,7 @@
 		margin-top: 1px;
 		width: 16px;
 	}
-	@media screen and (min-width: 746px) and (max-width: 920px) { 
-		.icon-1 {
-			width: 20px!important;
-		}
-		
-		.icon-3 {
-			width: 22px!important;
-		}
-	}
+	
 </style>
 <script>
 (function() {
@@ -57,7 +49,7 @@
 		test : 'MVT-697',
 		creative : 'Challenger 1',
 		selector : '.sidebar-box .switch-pay-type > button',
-		templateDefault: `<div class="sidebar-box mvt-697-value-prop"> <div class="value-prop-header"> <h2>Why Choose Enterprise?</h2> </div><div class="value-prop-info"> <div class="value-prop"><i class="value-prop-icon icon-1"></i><p>Award-Winning Customer Service</p></div><div class="value-prop"><i class="value-prop-icon icon-2"></i><p>Clean, Low Mileage Vehicles</p></div><div class="value-prop"><i class="value-prop-icon icon-3"></i><p>Free Cancellation 3 or More Days Before Pick Up</p></div></div></div>`,
+        templateDefault:`<div class="sidebar-box mvt-697-value-prop"> <div class="value-prop-header"> <h2>Why Choose Enterprise?</h2> </div><div class="value-prop-info"> <div class="value-prop"><i class="value-prop-icon"></i><p>Unlimited Mileage</p></div><div class="value-prop"><i class="value-prop-icon"></i><p>Clean, Low Mileage Vehicles</p></div><div class="value-prop"><i class="value-prop-icon"></i><p>No Hidden Fees</p></div></div></div>`,
 		init : function() {
 
 			//isoTest.debug =true;
@@ -75,27 +67,32 @@
 				isoTest.log('Test Ready!');   
   				isoTest.chall();
 			});
+			
 		},
-
-		chall: function(){      
+		chall: function(){
            var mainContainer = document.querySelectorAll(isoTest.selector);
 		   isoTest.updateHTML(mainContainer);
         },
-
 		updateHTML: function(ele) {
-			//console.log('changes made', ele);
 			isoTest.removeHTML();
 			ele.forEach(item => {
 				var sideBox = item.parentElement.parentElement.parentElement;
 				sideBox.insertAdjacentHTML("afterend",  isoTest.templateDefault);
 			});
+			isoTest.checkMileage();
 		},
+        checkMileage : function() {
+            var mileageDiv = document.querySelectorAll('.value-prop-info .value-prop p')
+            if (store.getState().toJS().app.baobab.session.reservationSession.selectedCarClassDetails.mileage_info.unlimited_mileage == false) {
+                mileageDiv[0].innerText = 'Award-Winning Customer Service';
+				mileageDiv[3].innerText = 'Award-Winning Customer Service';	
+				}
+        },
 		
 		removeHTML: function() {
 			var removeItem = document.querySelectorAll('.mvt-697-value-prop');
 			if(removeItem) {
 				removeItem.forEach(e => {
-					console.log(e)
 					e.remove();
 				});
 			}
