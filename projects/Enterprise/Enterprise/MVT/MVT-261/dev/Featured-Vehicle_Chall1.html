@@ -262,6 +262,8 @@
 						rs.addEventListener('change', function (e) {
 							setTimeout(() => {
 								a.chall();
+								// adds filter box fix where featured vehicle reappears
+								a.hideBanner();
 							}, 1.5);
 						});
 					});
@@ -278,7 +280,7 @@
 			},
 			hashHandler: function () {
 				/cars/.test(location.hash) && a.elementLoaded(a.vehicleItem, function () {
-					ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || a.chall()
+					ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || a.chall() && a.hideBanner()
 				})
 			},
 			chall: function () {
@@ -287,6 +289,16 @@
 				if (!isBranchType) {
 					a.runTest();
 				}
+
+				// adds fix for filter buttons
+				a.observeEl('.ReactModal__Overlay--after-open.rs-modal__overlay', function () {
+					a.observeEl('.rs-modal__buttons-container button:last-child', function () {
+						const discardBtn = document.querySelector(".rs-modal__buttons-container button:last-child");
+						discardBtn.addEventListener("click", function () {
+							localStorage.removeItem('greenSelected');
+						})
+					});
+				});
 
 			},
 			runTest: function () {
@@ -315,12 +327,6 @@
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
 				setTimeout(() => {
-					if (document.querySelector('.is-selected')) {
-						a.observeEl('.iso-preSelectedClass', function () {
-							document.querySelector('.iso-preSelectedClass').style.display = "none";
-
-						})
-					}
 					a.observeEl('.iso-preSelectedClass', function () {
 						console.log("preselected in")
 						const isBranchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']) == 'airport';
@@ -335,6 +341,24 @@
 						}
 
 					})
+
+					// adds fix for filter buttons
+					a.observeEl('.rs-tag-container.is-selected', function () {
+						// console.log("show preselected observe L");
+						localStorage.setItem('greenSelected', true);
+						a.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					})
+
+					const greenSelected = localStorage.getItem('greenSelected');
+
+					if (greenSelected) {
+						a.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					};
+
 				}, 50);
 			},
 			checkSort: function () {
