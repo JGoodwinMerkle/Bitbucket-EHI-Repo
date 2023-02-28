@@ -32,18 +32,19 @@
 				isoTest.chall();
 			},
 			chall: function () {
-				isoTest.elementLoaded('.header-nav-item.sign-in #signInJoinButton', function(){
+				isoTest.observeEl('.header-nav-item.sign-in #signInJoinButton', function(){
 					var buttonEl = document.querySelector('.header-nav-item.sign-in .cta');
 					var signInText = document.querySelector('.header-nav-item.sign-in #signInJoinButton');
 					var el = document.querySelector('.header-nav-item.sign-in');
-					el.insertAdjacentHTML('beforebegin', `
-						<div class="welcome-back">
-							<p>Welcome Back!</p>	
-						</div>
-					`);
+					var existingWelcome = document.querySelector('.welcome-back');
+					if(!existingWelcome){
+						el.insertAdjacentHTML('beforebegin', `
+							<div class="welcome-back">
+								<p>Welcome Back!</p>	
+							</div>
+						`);
+					}
 					signInText.textContent = 'Sign in';
-					// buttonEl.click();
-					// buttonEl.click();
 				});
 			},
 			fireTag: function (element, value) {

@@ -1,5 +1,5 @@
 <style>
-	#signin-content{
+	#signin-content:not(.authenticated){
 		width: auto;
 		border-radius: 8px;
 		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .25);
@@ -7,16 +7,47 @@
 	#login-container .login-curtain{
 		display: none;
 	}
-	#signin-content .left-container{
+	#signin-content:not(.authenticated) .left-container{
 		display: none;
 	}
-	#signin-content .right-container{
+	#signin-content:not(.authenticated) .right-container{
 		left: 0;
     width: 100%;
 		border-left: 0;
+		height: 446px;
 	}
 	#enterprise-login .rs-checkbox{
 		display: none;
+	}
+	#signin-content:not(.authenticated) .welcome-back p{
+		font-size: 14px;
+    line-height: 21px;
+    margin: 0;
+	}
+	#signin-content:not(.authenticated) .icon-eplus-logo-black{
+		margin-top: 8px;
+	}
+	#signin-content:not(.authenticated) .brand-login-title{
+		padding-left: 0;
+    font-size: 18px;
+	}
+	#signin-content:not(.authenticated){
+		height: 446px;
+	}
+	@media(max-width: 500px){
+		#signin-content:not(.authenticated){
+			width: 92%;
+    	margin-right: 4%;
+		}
+	}
+	#reservationHeader .login-widget .utility-nav-content fieldset .login-field-container, .master-nav .login-widget .utility-nav-content fieldset .login-field-container, .mfn__topright .login-widget .utility-nav-content fieldset .login-field-container{
+		height: 390px;
+	}
+	#reservationHeader .login-widget .utility-nav-content fieldset .emerald-club-login.active, .master-nav .login-widget .utility-nav-content fieldset .emerald-club-login.active, .mfn__topright .login-widget .utility-nav-content fieldset .emerald-club-login.active{
+		top: -463px;
+	}
+	#reservationHeader .login-widget.active .utility-nav-content fieldset .right-container .mask button.emerald-club.selected:after, #reservationHeader .login-widget.active .utility-nav-content fieldset .right-container .mask button.enterprise-plus.selected:after, .master-nav .login-widget.active .utility-nav-content fieldset .right-container .mask button.emerald-club.selected:after, .master-nav .login-widget.active .utility-nav-content fieldset .right-container .mask button.enterprise-plus.selected:after, .mfn__topright .login-widget.active .utility-nav-content fieldset .right-container .mask button.emerald-club.selected:after, .mfn__topright .login-widget.active .utility-nav-content fieldset .right-container .mask button.enterprise-plus.selected:after{
+		border: none;
 	}
 </style>
 <script>
@@ -42,18 +73,50 @@
 				isoTest.chall();
 			},
 			chall: function () {
-				isoTest.elementLoaded('.header-nav-item.sign-in #signInJoinButton', function(){
+				isoTest.observeEl('.header-nav-item.sign-in #signInJoinButton', function(){
 					var buttonEl = document.querySelector('.header-nav-item.sign-in .cta');
 					var signInText = document.querySelector('.header-nav-item.sign-in #signInJoinButton');
-					var el = document.querySelector('.header-nav-item.sign-in');
-					// el.insertAdjacentHTML('beforebegin', `
-					// 	<div class="welcome-back">
-					// 		<p>Welcome Back!</p>	
-					// 	</div>
-					// `);
+					var existingWelcome = document.querySelector('.welcome-back');
+		
 					signInText.textContent = 'Sign in';
+
+					if(!!existingWelcome) return;
 					buttonEl.click();
-					// buttonEl.click();
+
+					var loggedInUser = false;
+					function miniSignIn(e){
+            var targetEl = e.target;
+
+            if(!targetEl.closest('#signin-content') && !loggedInUser){
+              isoTest.fireTag(targetEl,'Tooltip Dismissed');
+              document.removeEventListener('click', miniSignIn);
+            }else{
+							document.removeEventListener('click', miniSignIn);
+						}
+          };
+          document.addEventListener('click', miniSignIn);	
+					
+					isoTest.observeEl('.header-nav-item.sign-in .brand-login-title', function(title){
+						title.insertAdjacentHTML('beforebegin', `
+							<div class="welcome-back">
+								<p>Welcome Back!</p>	
+							</div>
+						`);
+					});
+
+					var triedToLogin = false;
+					// This element shows up if the user tries to login
+					isoTest.elementLoaded('#signin-content .loading', function(){
+						triedToLogin = true;
+					});	
+
+					// Setting this value to ensure we're not firing tags when we're clicking dismiss
+					isoTest.observeEl('.utility-nav-label--logged-in', function(){
+						loggedInUser = true;
+						if(!triedToLogin){
+							buttonEl.click();
+						}
+					});
 				});
 			},
 			fireTag: function (element, value) {
@@ -69,7 +132,6 @@
 				}
 			},
 			elementLoaded : function (ele, callback) {
-        console.log('elementLoaded::  ' + ele + ' - Checking...');
         window.clearTimeout(isoTest.eleTimer);
         if (document.querySelectorAll(ele).length > 0) {
           if (typeof callback === 'function') {
