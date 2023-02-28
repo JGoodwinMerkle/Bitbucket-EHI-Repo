@@ -406,12 +406,12 @@
 						}
 					}
 				});
-				/* add this to hide tag when outside of designated location */
-				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-					setTimeout(() => {
-						isoTest.checkSort();
-						isoTest.hideBanner();
-					}, 200);
+					/* add this to hide tag when outside of designated location */
+					document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
+						setTimeout(() => {
+							isoTest.checkSort();
+							isoTest.hideBanner();
+						}, 200);
 				}, false);
 			},
 			checkSort: function () {
