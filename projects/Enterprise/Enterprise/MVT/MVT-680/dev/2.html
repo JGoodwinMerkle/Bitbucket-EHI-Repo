@@ -1,0 +1,177 @@
+<style>
+  #login-container.mini-open .login-widget .utility-nav-label:before{
+    display: block;
+  }
+  #login-container.mini-open .mini-signin{
+    display: block;
+  }
+  .mini-signin{
+    display: none;
+    width: 205px;
+    padding: 20px;
+    right: 0.625rem;
+    position: absolute;
+    top: 3.75rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 25%);
+    background: white;
+    z-index: 2;
+  }
+  .mini-signin .brand-login-title{
+    color: #181918;
+    display: block;
+    font-weight: 700;
+    letter-spacing: -.5px;
+    padding-right: 1.25rem;
+    padding-left: 0;
+    font-size: 18px;
+  }
+  .mini-signin h4{
+    margin-left: 1.875rem;
+    position: relative;
+  }
+  .mini-signin h4 .icon {
+    height: 28px;
+    left: -30px;
+    position: absolute;
+    width: 20px;
+  }
+	.mini-signin .welcome-back p{
+		font-size: 14px;
+    line-height: 21px;
+    margin: 0;
+	}
+	.mini-signin .icon-eplus-logo-black{
+		margin-top: 8px;
+	}
+  .mini-signin .emerald-club{
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  .mini-signin .close{
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.92923 0.962372L9.25737 9.29051' stroke='black' stroke-width='1.5' stroke-miterlimit='10'/%3E%3Cpath d='M9.25737 0.962372L0.92923 9.29051' stroke='black' stroke-width='1.5' stroke-miterlimit='10'/%3E%3C/svg%3E");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    width: 10px;
+    height: 10px;
+    margin-top: 5px;
+    margin-right: 3px;
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    z-index: 2;
+  }
+</style>
+<script>
+	(function () {
+		"use strict";
+		var isoTest = {
+			account: "EHI",
+			portfolio: "Enterprise",
+			test: "MVT-680",
+			creative: "Challenger 3",
+			init: function () {
+				//isoTest.debug = true;
+
+				if (_satellite && typeof _satellite.setVar === "function" && typeof _satellite.track === "function") {
+					_satellite.setVar("TargetCampaign", isoTest.test);
+					_satellite.setVar("TargetCreative", isoTest.creative);
+				}
+
+				isoTest.log("Test Running...");
+				isoTest.log(isoTest.account + " - " + isoTest.portfolio);
+				isoTest.log(isoTest.test + " - " + isoTest.creative);
+
+				isoTest.chall();
+			},
+			chall: function () {
+				isoTest.observeEl('.header-nav-item.sign-in #signInJoinButton', function(){
+          var container = document.querySelector('#login-container');
+					var buttonEl = document.querySelector('.header-nav-item.sign-in .cta');
+					var signInText = document.querySelector('.header-nav-item.sign-in #signInJoinButton');
+
+          signInText.textContent = 'Sign in';
+					
+          var existingMini = document.querySelector('.mini-signin');
+          if(!!existingMini) return;
+
+          container.classList.add('mini-open');
+
+          buttonEl.parentElement.insertAdjacentHTML('afterend', `
+            <div class="mini-signin">
+              <div class="close"></div>
+              <h4><i class="icon icon-eplus-logo-black" aria-hidden="true" role="presentation"></i>
+              <div class="welcome-back">
+                <p>Welcome Back!</p>	
+              </div>
+              <span class="brand-login-title">Enterprise Plus</span></h4>
+              <button class="mini-signin-button cta cta--primary cta--large cta--fullWidth cta--noMargin" aria-label="Sign In" >Sign In</button>
+              <button class="cta cta--text cta--large cta--icons cta--noMargin emerald-club selected" aria-label="Add Emerald Club" aria-expanded="false" aria-controls="emerald-club-login">Add Emerald Club<i role="img" aria-hidden="true" class="rs-icon rs-icon--after rs-icon--cta"><svg viewBox="0 0 24 24"><use xlink:href="#drawer-icn-up"></use></svg></i></button>
+            </div>
+          `);
+
+          var closeSignIn = function(){
+            container.classList.remove('mini-open');
+            document.removeEventListener('click', miniSignIn);
+          };
+          
+          function miniSignIn(e){
+            var targetEl = e.target;
+
+            if(targetEl.classList.contains('mini-signin-button')){
+              closeSignIn();
+              buttonEl.click();
+            }
+            if(!targetEl.closest('.mini-signin') || targetEl.classList.contains('close')){
+              isoTest.fireTag(targetEl,'Tooltip Dismissed');
+              closeSignIn();	
+            }
+            if(targetEl.closest('.emerald-club')){
+              closeSignIn();
+
+              buttonEl.click();
+              isoTest.elementLoaded('#signin-content .emerald-club', function(){
+                var emeraldClubButton = document.querySelector('#signin-content .emerald-club');
+                emeraldClubButton.click();
+              });
+            }
+          };
+          document.addEventListener('click', miniSignIn);	
+				});
+			},
+			fireTag: function (element, value) {
+				var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + " : " + linkName : linkName;
+				s.linkTrackVars = "eVar20";
+				s.eVar20 = linkName;
+				s.tl(this, "o", linkName);
+			},
+			log: function (obj) {
+				if (isoTest.debug === true) {
+					console.log(obj);
+				}
+			},
+			elementLoaded : function (ele, callback) {
+        window.clearTimeout(isoTest.eleTimer);
+        if (document.querySelectorAll(ele).length > 0) {
+          if (typeof callback === 'function') {
+            isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+            callback();
+          }
+        } else {
+          isoTest.eleTimer = window.setTimeout(function(){isoTest.elementLoaded(ele, callback);}, 100);
+        }
+      },
+			observeEl: function (selector, callback) {
+				var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
+			},
+		};
+
+		isoTest.init();
+	})();
+</script>
