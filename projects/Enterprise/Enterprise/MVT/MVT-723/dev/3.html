@@ -1,0 +1,405 @@
+<style>
+	.isoSVGFilter {
+			filter: grayscale(1) invert(1);
+	}
+
+	.iso-modal button.close-modal {
+			align-items: center;
+			float: right;
+			height: 2.125rem;
+			justify-content: center;
+			margin-left: auto;
+			width: 2.125rem;
+	}
+
+	.iso-modal .ReactModal__Content--after-open .rs-modal__header-close-icon.cta--text {
+			align-items: center;
+			float: right;
+			height: 2.125rem;
+			justify-content: center;
+			margin-left: auto;
+			width: 2.125rem;
+	}
+
+	.iso-modal .ReactModal__Overlay--after-open {
+			opacity: 1;
+			background-color: rgba(24, 25, 24, .7);
+			bottom: 0;
+			left: 0;
+			overflow-y: scroll;
+			position: fixed;
+			right: 0;
+			top: 0;
+			z-index: 999;
+	}
+
+	.iso-modal .ReactModal__Overlay--after-open .vehicle-redemption-modal__reactModal {
+			position: absolute;
+			left: 0%;
+			justify-content: center;
+			margin-left: auto;
+			margin-right: auto;
+			right: 0;
+			top: 30%;
+	}
+
+	.iso-modal .ReactModal__Content--after-open.default-modal .modal-header {
+			min-height: 60px;
+	}
+
+	.modal-header .close-modal {
+			margin-left: 70%;
+			padding: 0em 0.5em 0.5em 0.5em;
+	}
+
+	.iso-modal-open {
+			height: 100%;
+			overflow: hidden;
+	}
+
+	.iso-modal.iso-modal-points {
+		display: none;
+		text-align: left;
+	}
+
+	.iso-modal.iso-modal-points.active {
+			display: block;
+	}
+
+	.iso-modal.iso-modal-points .ReactModal__Content--after-open.fixed-scroll-modal {
+			min-width: auto;
+			max-width: 565px;
+	}
+
+	.iso-modal-points .modal-header {
+		text-align: left;
+	}
+
+	.imp-header {
+		color: #181918;
+		font-size: 26px;
+		line-height: 32px;
+		font-weight: 800;
+		margin-bottom: 0;
+		letter-spacing: .15px;
+		margin-bottom: 20px;
+	}
+
+	.imp-subheader {
+			color: #169a5a;
+			font-size: 1.7rem;
+			font-weight: 700;
+			text-transform: uppercase;
+	}
+
+	.imp-body {
+		margin-bottom: 5px;
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.imp-body-mobile {
+			margin-bottom: 0px;
+			font-size: 1.2em;
+	}
+
+	@media (max-width: 39.8em) {
+			.iso-modal.iso-modal-points .ReactModal__Content--after-open.fixed-scroll-modal .modal-content {
+					padding: 1.5625rem 1.9375rem;
+			}
+
+			.imp-body-mobile {
+					display: block;
+			}
+
+			.imp-body {
+					display: none;
+			}
+	}
+
+	@media (min-width: 480px) and (max-width: 636px) {
+			.iso-modal.iso-modal-points .ReactModal__Content--after-open.fixed-scroll-modal {
+					width: 80%;
+			}
+
+			.imp-body-mobile {
+					display: block;
+			}
+
+			.imp-body {
+					display: none;
+			}
+	}
+
+	@media (min-width: 637px) {
+
+			.iso-modal.iso-modal-points .ReactModal__Content--after-open.fixed-scroll-modal {
+					min-width: 565px;
+			}
+
+			.imp-body {
+					display: block;
+			}
+
+			.imp-body-mobile {
+					display: none;
+			}
+
+
+	}
+</style>
+<script>
+	(function () {
+			'use strict';
+			var isoTest = {
+					account: 'EHI',
+					portfolio: 'Enterprise',
+					test: 'MVT-723',
+					creative: 'Offer C',
+					selector: '#cars',
+					modal: 
+					'<div class="iso-modal iso-modal-points">\
+						<div class="ReactModal__Overlay ReactModal__Overlay--after-open modal-overlay fixed-overlay rs-modal" aria-modal="true">\
+							<div class="ReactModal__Content ReactModal__Content--after-open rs-modal rs-modal--small vehicle-redemption-modal__reactModal" tabindex="-1" role="dialog" aria-describedby="rs-modal-content" aria-labelledby="rs-modal-heading" aria-modal="true">\
+								<div class="rs-modal__wrapper">\
+									<div class="rs-modal__header"> \
+										<div class="modal-header"></div>\
+										<button class="close-modal" aria-label="Close" role="button" type="button"><i role="img" aria-hidden="true" class="rs-icon rs-icon--cta"><svg class="isoSVGFilter" viewBox="0 0 24 24"><use xlink:href="#btn-icn-close"></use></svg></i></button>\
+									</div>\
+									<div class="rs-modal__content">\
+										<div class="modal-content cf">\
+											<p class="imp-header">Good News! You have points to redeem.</p>\
+											<p class="imp-body"><strong>You have <span class="imp-pts"></span> Enterprise Plus® Points</strong> to redeem on this rental.</p>\
+											<p class="imp-body">Select <strong>PAY IN POINTS</strong> to use your member rewards now.</p>\
+											<p class="imp-body-mobile"><strong>You have <span class="imp-pts"></span> Enterprise Plus® Points</strong> to redeem on this rental. Select <strong>PAY IN POINTS</strong> to use your member rewards now.</p>\
+										</div>\
+									</div>\
+								</div>\
+							</div>\
+						<div>\
+					</div>',
+					tabbableElements: 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+					init: function () {
+
+							// isoTest.debug = ${ user.mvtDebug };
+
+							if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+									_satellite.setVar('TargetCampaign', isoTest.test);
+									_satellite.setVar('TargetCreative', isoTest.creative);
+							}
+
+							isoTest.log('Test Running...');
+							isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+							isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+
+							helpers.elementLoaded(isoTest.selector, function () {
+									isoTest.viewChange();
+									helpers.tagLoaded(function () {
+											isoTest.fireTag90('', 'Experience Fired');
+									});
+							});
+
+							window.addEventListener('hashchange', isoTest.viewChange, false);
+
+					},
+					viewChange: function () {
+						if (/cars/.test(location.hash)) {
+							helpers.elementLoaded(isoTest.selector, function () {
+								isoTest.chall();
+							});
+						}
+					},
+					chall: function () {
+						isoTest.pointsCheck();
+					},
+					enoughPoints : function(){
+						var getReactComponent = function(node){
+							for(var key in node) {
+								if(key.startsWith('__reactInternalInstance$') || key.startsWith('__reactFiber$')) {
+									return node[key];
+								}
+							}
+							return null;
+						}
+						var totalPoints = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
+
+						var vehicleReact = getReactComponent(document.querySelector('.vehicle-list'));
+						if(!vehicleReact || !vehicleReact.return || !vehicleReact.return.memoizedProps) return;
+
+						var vehicleProps = vehicleReact.return.memoizedProps;
+						var vehiclesAvailable = vehicleProps.availableVehicles;
+						var lowestPoint = 999999;
+						var lowestCar = '';
+
+						for (let i = 0; i < vehiclesAvailable.length; i++) {
+							const vehicle = vehiclesAvailable[i];
+							if(!!vehicle.redemptionPointsRate){
+								var pointAmount = Number(vehicle.redemptionPointsRate);
+								if((pointAmount > 0) && (pointAmount < lowestPoint)){
+									lowestPoint = pointAmount;
+									lowestCar = vehicle;
+								}
+							}
+						}
+
+						var rentalIsAvailable = totalPoints > lowestPoint;
+
+						// console.log('Lowest Points Needed for Rental: ' + lowestPoint);
+						// console.log('Rental is available: ' + rentalIsAvailable);
+						// console.log('For the following car', lowestCar);
+
+						return rentalIsAvailable;
+					},
+					pointsCheck: function () {
+						var waitForPoints = function (callback){
+							var maxCheck = 500;
+							var interval = window.setInterval(function () {
+								if (window.store && window.store.getState() && window.store.getState().toJS() && window.store.getState().toJS().app && window.store.getState().toJS().app.baobab && window.store.getState().toJS().app.baobab.User && window.store.getState().toJS().app.baobab.User.profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data && typeof window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date === 'number') {
+									callback();
+									window.clearInterval(interval);
+								} else if (--maxCheck < 0) {
+									window.clearInterval(interval);
+								}
+							}, 50);
+						}
+						waitForPoints(function () {
+							var pointsEarned = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
+
+							if (isoTest.enoughPoints()) {
+								if (sessionStorage.getItem('isoModalPointsSeen') !== 'true') {
+									isoTest.insertModal();
+									document.querySelector('.imp-pts').innerText = helpers.numberWithCommas(pointsEarned);
+									if (document.querySelectorAll('.imp-pts')[0]) {
+										document.querySelectorAll('.imp-pts')[0].innerText = helpers.numberWithCommas(pointsEarned);
+									}
+									if (document.querySelectorAll('.imp-pts')[1]) {
+										document.querySelectorAll('.imp-pts')[1].innerText = helpers.numberWithCommas(pointsEarned);
+									}
+									isoTest.modalOpen();
+									isoTest.fireTag89('', 'Experience Displayed');
+								}
+							}
+						});
+					},
+					insertModal: function () {
+							document.querySelector('#cars').insertAdjacentHTML('afterend', isoTest.modal);
+							isoTest.addEvents();
+					},
+					addEvents: function () {
+							document.querySelector('.iso-modal.iso-modal-points .close-modal').addEventListener('click', function (e) {
+									isoTest.destroyModal();
+							}, false);
+
+							document.addEventListener('keydown', function (e) {
+									var keyCode = (e.keyCode ? e.keyCode : e.which);
+
+									if (keyCode == '27') {
+											if (document.querySelector('html').classList.contains('iso-modal-open')) {
+													isoTest.destroyModal();
+											}
+									}
+							}, false);
+					},
+					modalOpen: function () {
+							isoTest.log("modalOpen()");
+
+							document.querySelector('.iso-modal.iso-modal-points').classList.add('active');
+							document.querySelector('html').classList.add('iso-modal-open');
+
+							sessionStorage.setItem('isoModalPointsSeen', true);
+
+							var modalFocus = document.querySelector('.iso-modal.iso-modal-points');
+							isoTest.keepFocus(modalFocus);
+
+							window.setTimeout(function () {
+									modalFocus.querySelector('.close-modal').focus();
+							}, 100);
+					},
+					destroyModal: function () {
+							isoTest.log("destroyModal()");
+
+							document.querySelector('html').classList.remove('iso-modal-open');
+							var elModal = document.querySelector('.iso-modal.iso-modal-points');
+							elModal.classList.remove('active');
+					},
+					keepFocus: function (context) {
+							isoTest.log("keepFocus()");
+
+							var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+									firstTabbableElement = allTabbableElements[0],
+									lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+							var keyListener = function (e) {
+									var keyCode = e.which || e.keyCode;
+
+									e.preventDefault = e.preventDefault || function () {
+											e.returnValue = false;
+									};
+
+									if (keyCode === 9) {
+											if (e.target === lastTabbableElement && !e.shiftKey) {
+													e.preventDefault();
+													firstTabbableElement.focus();
+											} else if (e.target === firstTabbableElement && e.shiftKey) {
+													e.preventDefault();
+													lastTabbableElement.focus();
+											}
+									}
+							};
+							context.addEventListener('keydown', keyListener, false);
+					},
+					fireTag89: function (element, value) {
+							var linkName = value ? value : element.innerText;
+							linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+							s.linkTrackVars = 'eVar89';
+							s.eVar89 = linkName;
+							s.tl(this, 'o', linkName);
+					},
+					fireTag90: function (element, value) {
+							var linkName = value ? value : element.innerText;
+							linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+							s.linkTrackVars = 'eVar90';
+							s.eVar90 = linkName;
+							s.tl(this, 'o', linkName);
+					},
+					log: function (obj) {
+							if (isoTest.debug === true) {
+									console.log(obj);
+							}
+					}
+
+			};
+
+			var helpers = {
+					elementLoaded: function (ele, callback) {
+							isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+							window.clearTimeout(isoTest.eleTimer);
+							if (document.querySelectorAll(ele).length > 0) {
+									if (typeof callback === 'function') {
+											isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+											callback();
+									}
+							} else {
+									isoTest.eleTimer = window.setTimeout(function () { helpers.elementLoaded(ele, callback); }, 100);
+							}
+					},
+					tagLoaded: function (callback) {
+							isoTest.log('tagLoaded:: s - Checking...');
+							window.clearTimeout(isoTest.tagTimer);
+							if (window.s && typeof window.s !== undefined) {
+									if (typeof callback === 'function') {
+											isoTest.log('tagLoaded:: s - Found!');
+											callback();
+									}
+							} else {
+									isoTest.tagTimer = window.setTimeout(function () { helpers.tagLoaded(callback); }, 100);
+							}
+					},
+					numberWithCommas: function (x) {
+							return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					}
+			};
+
+			isoTest.init();
+	})();
+</script>
