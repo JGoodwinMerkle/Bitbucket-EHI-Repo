@@ -246,18 +246,37 @@
 				],
 			},
 			init: function () {
+				r.debug = Boolean(s.getQueryParam('debug'));
+
+				r.log('Test Running...');
+				r.log(r.account + ' - ' + r.portfolio);
+				r.log(r.test + ' - ' + r.creative);
+
 				r.elementLoaded(r.vehicleItem, function () {
-					ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall();
-				}),
-					window.addEventListener("hashchange", r.hashHandler, !1),
-					window.addEventListener("ttFeatVehicle", r.labelVehicle, !1),
-					new MutationObserver(function (e) {
-						e.forEach(function (e) {
-							e.removedNodes.forEach(function (e) {
-								void 0 !== e.classList && e.classList.contains("spinner-container") && r.hashHandler() && r.hideBanner();
-							});
+					r.log('Test Ready!');
+					if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+						r.chall();
+					}
+				});
+
+				window.addEventListener('hashchange', r.hashHandler, false);
+				window.addEventListener('ttFeatVehicle', r.labelVehicle, false);
+
+				var spinnerUpdate = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (mutation) {
+						mutation.removedNodes.forEach(function (removedNode) {
+							if (removedNode.classList !== undefined) {
+								if (removedNode.classList.contains('spinner-container')) {
+									r.hashHandler();
+									/* add this to hide tag when outside of designated location */
+									r.hideBanner();
+								}
+							}
 						});
-					}).observe(document.querySelector("body"), { subtree: !0, childList: !0 });
+					});
+				});
+				spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
+
 				// adds fix for filter boxes
 				r.observeEl('.vehicle-filter__content .vehicle-filter__filter:last-child .vehicle-filter__filter-list-item:last-child', async function (el) {
 					const rsCheckboxInputs = document.querySelectorAll(".vehicle-filter__filter-list-item input");
@@ -266,15 +285,47 @@
 						rs.addEventListener('change', function (e) {
 							setTimeout(() => {
 								r.chall();
+								if (document.querySelector('.is-selected')) {
+									r.observeEl('.iso-preSelectedClass', function () {
+										document.querySelector('.iso-preSelectedClass').style.display = "none";
+
+									})
+								}
 							}, 1.5);
 						});
+					});
+				});
+
+				// adds filter box fix where featured vehicle reappears
+				r.observeEl('.vehicle-filter__header-cta button', async function (el) {
+					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
+					clearAll.addEventListener('click', function (e) {
+						r.hideBanner();
 					});
 				});
 			},
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
+
 				r.observeEl('.iso-preSelectedClass', function () {
-					setTimeout(() => {
+					console.log("this exists")
+
+				})
+
+				setTimeout(() => {
+
+					// r.observeEl('.is-selected', function () {
+					// 	console.log('got here')
+					// 	document.querySelector('.iso-preSelectedClass').style.display = "none";
+
+					// })
+					// r.observeEl('', function () {
+
+
+					// })
+
+					r.observeEl('.iso-preSelectedClass', function () {
+
 						const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
 						const filteredReservation = r.audience.peopleSoftId.filter(p => p == peopleSoftId);
 						const isoPreselected = document.querySelector('.iso-preSelectedClass');
@@ -284,14 +335,19 @@
 						if (filteredReservation.length) {
 							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
 						}
-					}, 200);
-				})
+
+					})
+				}, 50);
 			},
 			hashHandler: function () {
-				/cars/.test(location.hash) &&
+				if (/cars/.test(location.hash)) {
 					r.elementLoaded(r.vehicleItem, function () {
-						ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall();
+						if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+							r.chall();
+							r.hideBanner();
+						}
 					});
+				}
 			},
 			chall: function () {
 				r.branchType = ReservationStateTree.get(["session", "reservationSession", "pickup_location", "location_type"]);
@@ -317,6 +373,9 @@
 				r.audience.group.forEach(function (g) {
 					if (groupNumber.substring(0, g.length) == g) {
 						checksOut = true;
+					}
+					else {
+						r.hideBanner();
 					}
 				});
 				return checksOut;
@@ -344,6 +403,13 @@
 						setTimeout(() => {
 							r.checkSort();
 							r.hideBanner();
+							if (document.querySelector('.is-selected')) {
+								r.observeEl('.iso-preSelectedClass', function () {
+									document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+
+								})
+							}
+
 						}, 100);
 					}, false);
 

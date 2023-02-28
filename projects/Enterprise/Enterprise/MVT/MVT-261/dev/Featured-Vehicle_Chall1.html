@@ -262,14 +262,25 @@
 						rs.addEventListener('change', function (e) {
 							setTimeout(() => {
 								a.chall();
+								// adds filter box fix where featured vehicle reappears
+								a.hideBanner();
 							}, 1.5);
 						});
 					});
 				});
+
+				// adds filter box fix where featured vehicle reappears
+				a.observeEl('.vehicle-filter__header-cta button', async function (el) {
+					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
+					clearAll.addEventListener('click', function (e) {
+						a.hideBanner();
+					});
+				});
+
 			},
 			hashHandler: function () {
 				/cars/.test(location.hash) && a.elementLoaded(a.vehicleItem, function () {
-					ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || a.chall()
+					ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || a.chall() && a.hideBanner()
 				})
 			},
 			chall: function () {
@@ -278,6 +289,16 @@
 				if (!isBranchType) {
 					a.runTest();
 				}
+
+				// adds fix for filter buttons
+				a.observeEl('.ReactModal__Overlay--after-open.rs-modal__overlay', function () {
+					a.observeEl('.rs-modal__buttons-container button:last-child', function () {
+						const discardBtn = document.querySelector(".rs-modal__buttons-container button:last-child");
+						discardBtn.addEventListener("click", function () {
+							localStorage.removeItem('greenSelected');
+						})
+					});
+				});
 
 			},
 			runTest: function () {
@@ -305,18 +326,40 @@
 			},
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
-				a.observeEl('.iso-preSelectedClass', function () {
-					setTimeout(() => {
+				setTimeout(() => {
+					a.observeEl('.iso-preSelectedClass', function () {
+						console.log("preselected in")
 						const isBranchType = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'location_type']) == 'airport';
 						const isoPreselected = document.querySelector('.iso-preSelectedClass');
 						if (isBranchType) {
+							console.log("branch a", isBranchType)
 							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
 						}
 						if (!isBranchType) {
+							console.log("branch b", isBranchType)
 							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
 						}
-					}, 100);
-				})
+
+					})
+
+					// adds fix for filter buttons
+					a.observeEl('.rs-tag-container.is-selected', function () {
+						// console.log("show preselected observe L");
+						localStorage.setItem('greenSelected', true);
+						a.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					})
+
+					const greenSelected = localStorage.getItem('greenSelected');
+
+					if (greenSelected) {
+						a.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					};
+
+				}, 50);
 			},
 			checkSort: function () {
 				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;

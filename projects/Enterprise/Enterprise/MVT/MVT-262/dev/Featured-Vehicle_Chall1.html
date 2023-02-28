@@ -297,8 +297,18 @@
 						rs.addEventListener('change', function (e) {
 							setTimeout(() => {
 								isoTest.chall();
+								isoTest.hideBanner();
 							}, 1.5);
 						});
+					});
+				});
+
+
+				// adds filter box fix where featured vehicle reappears
+				isoTest.observeEl('.vehicle-filter__header-cta button', async function (el) {
+					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
+					clearAll.addEventListener('click', function (e) {
+						isoTest.hideBanner();
 					});
 				});
 			},
@@ -307,6 +317,7 @@
 					isoTest.elementLoaded(isoTest.vehicleItem, function () {
 						if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
 							isoTest.chall();
+							isoTest.hideBanner();
 						}
 					});
 				}
@@ -323,6 +334,16 @@
 				if (isPeopleSoftId && isBranchType) {
 					isoTest.runTest();
 				}
+
+				// adds fix for filter buttons
+				isoTest.observeEl('.ReactModal__Overlay--after-open.rs-modal__overlay', function () {
+					isoTest.observeEl('.rs-modal__buttons-container button:last-child', function () {
+						const discardBtn = document.querySelector(".rs-modal__buttons-container button:last-child");
+						discardBtn.addEventListener("click", function () {
+							localStorage.removeItem('greenSelected');
+						})
+					});
+				});
 			},
 			/* add this to hide tag when outside of designated location */
 			checkId: function () {
@@ -336,8 +357,9 @@
 			},
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
-				isoTest.observeEl('.iso-preSelectedClass', function () {
-					setTimeout(() => {
+				setTimeout(() => {
+					isoTest.observeEl('.iso-preSelectedClass', function () {
+
 						const peopleSoftId = ReservationStateTree.get(['session', 'reservationSession', 'pickup_location', 'id']);
 						const filteredReservation = isoTest.audience.peopleSoftId.filter(p => p == peopleSoftId);
 						const isoPreselected = document.querySelector('.iso-preSelectedClass');
@@ -347,8 +369,25 @@
 						if (filteredReservation.length) {
 							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
 						}
-					}, 200);
-				})
+
+					})
+
+					isoTest.observeEl('.rs-tag-container.is-selected', function () {
+						// console.log("show preselected observe L");
+						localStorage.setItem('greenSelected', true);
+						isoTest.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					})
+
+					const greenSelected = localStorage.getItem('greenSelected');
+
+					if (greenSelected) {
+						isoTest.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					};
+				}, 50);
 			},
 			checkGroup: function (groupNumber) {
 				isoTest.log('checkGroup()');

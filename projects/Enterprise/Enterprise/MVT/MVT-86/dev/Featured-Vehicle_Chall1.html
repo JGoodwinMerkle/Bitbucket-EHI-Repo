@@ -1,4 +1,9 @@
 <style>
+	/* add this to hide tag when outside of designated location */
+	.iso-preSelectedClass.iso-hide .rs-callout.rs-callout--highlight {
+		display: none !important;
+	}
+
 	.vehicle-enough-points.cf,
 	.vehicle-not-enough-points {
 		margin-right: -15px;
@@ -190,6 +195,7 @@
 			vehicleItem: ".vehicle-list__item",
 			preSelected: ".vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected",
 			template: '<span class="mvt86 rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
+			isoSelected: false,
 			featured: {
 				0: {
 					car: "LYMR",
@@ -233,18 +239,40 @@
 				group: ["32"]
 			},
 			init: function () {
+				r.debug = Boolean(s.getQueryParam('debug'));
+
+				r.log('Test Running...');
+				r.log(r.account + ' - ' + r.portfolio);
+				r.log(r.test + ' - ' + r.creative);
+
 				r.elementLoaded(r.vehicleItem, function () {
-					ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall();
-				}),
-					window.addEventListener("hashchange", r.hashHandler, !1),
-					window.addEventListener("ttFeatVehicle", r.labelVehicle, !1),
-					new MutationObserver(function (e) {
-						e.forEach(function (e) {
-							e.removedNodes.forEach(function (e) {
-								void 0 !== e.classList && e.classList.contains("spinner-container") && r.hashHandler() && r.hideBanner();
-							});
+					r.log('Test Ready!');
+					if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
+						r.chall();
+					}
+				});
+
+				window.addEventListener('hashchange', r.hashHandler, false);
+				window.addEventListener('ttFeatVehicle', r.labelVehicle, false);
+
+				var spinnerUpdate = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (mutation) {
+						mutation.removedNodes.forEach(function (removedNode) {
+							if (removedNode.classList !== undefined) {
+								if (removedNode.classList.contains('spinner-container')) {
+									r.hashHandler();
+									/* add this to hide tag when outside of designated location */
+									r.hideBanner();
+								}
+							}
 						});
-					}).observe(document.querySelector("body"), { subtree: !0, childList: !0 });
+					});
+				});
+				spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
+
+
+
+
 				// adds fix for filter boxes
 				r.observeEl('.vehicle-filter__content .vehicle-filter__filter:last-child .vehicle-filter__filter-list-item:last-child', async function (el) {
 					const rsCheckboxInputs = document.querySelectorAll(".vehicle-filter__filter-list-item input");
@@ -253,14 +281,27 @@
 						rs.addEventListener('change', function (e) {
 							setTimeout(() => {
 								r.chall();
+								// adds filter box fix where featured vehicle reappears
+								r.hideBanner();
 							}, 1.5);
 						});
 					});
 				});
+
+				// adds filter box fix where featured vehicle reappears
+				r.observeEl('.vehicle-filter__header-cta button', async function (el) {
+					const clearAll = document.querySelector(".vehicle-filter__header-cta button");
+					clearAll.addEventListener('click', function (e) {
+						r.hideBanner();
+					});
+				});
+
+
+
 			},
 			hashHandler: function () {
 				/cars/.test(location.hash) && r.elementLoaded(r.vehicleItem, function () {
-					ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall()
+					ReservationStateTree.get(["model", "carSelect", "selectedCar"]) || r.chall() && r.hideBanner()
 				})
 			},
 			chall: function () {
@@ -277,13 +318,22 @@
 					}
 				}, 1.5);
 
-
-
+				// adds fix for filter buttons
+				r.observeEl('.ReactModal__Overlay--after-open.rs-modal__overlay', function () {
+					r.observeEl('.rs-modal__buttons-container button:last-child', function () {
+						const discardBtn = document.querySelector(".rs-modal__buttons-container button:last-child");
+						discardBtn.addEventListener("click", function () {
+							localStorage.removeItem('greenSelected');
+						})
+					});
+				});
 			},
 			/* add this to hide tag when outside of designated location */
 			hideBanner: function () {
-				r.observeEl('.iso-preSelectedClass', function () {
-					setTimeout(() => {
+				setTimeout(() => {
+					// if an added car is a selected banner switch selector to true
+
+					r.observeEl('.iso-preSelectedClass', function () {
 						const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
 						const filteredReservation = r.audience.group.filter(g => g == groupId);
 						const isoPreselected = document.querySelector('.iso-preSelectedClass');
@@ -293,8 +343,26 @@
 						if (filteredReservation.length) {
 							document.querySelector('.iso-preSelectedClass').classList.remove("iso-hide");
 						}
-					}, 200);
-				})
+
+					});
+
+					// adds fix for filter buttons
+					r.observeEl('.rs-tag-container.is-selected', function () {
+						console.log("show preselected observe L");
+						localStorage.setItem('greenSelected', true);
+						r.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					})
+
+					const greenSelected = localStorage.getItem('greenSelected');
+
+					if (greenSelected) {
+						r.observeEl('.iso-preSelectedClass', function () {
+							document.querySelector('.iso-preSelectedClass').classList.add("iso-hide");
+						})
+					};
+				}, 20);
 			},
 			checkGroup: function (groupNumber) {
 				r.log('checkGroup()');
