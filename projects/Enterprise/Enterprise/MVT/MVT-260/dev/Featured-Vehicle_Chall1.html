@@ -176,7 +176,8 @@
 		}
 
 		.iso-preSelectedClass img {
-			margin-top: 45px;
+			/* margin-top: 45px; */
+			margin-top: 0px;
 		}
 	}
 </style>
@@ -269,6 +270,21 @@
 					}),
 					window.addEventListener("hashchange", r.hashHandler, !1),
 					window.addEventListener("ttFeatVehicle", r.labelVehicle, !1);
+
+				var removedMobileBanner = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (mutation) {
+						mutation.removedNodes.forEach(function (removedNode) {
+							if (removedNode.classList !== undefined) {
+								if (removedNode.classList.contains('ReactModal__Overlay--after-open')) {
+									// console.log(removedNode.classList, "<<< these are all teh removed nodes")
+									r.hideBanner();
+								}
+							}
+						});
+					});
+				});
+
+				removedMobileBanner.observe(document.querySelector('body'), { subtree: true, childList: true });
 
 				// Search filter bug fix
 				r.observeEl('.is-search-by-filter.rs-tag-container--darkGreen', function (el) {

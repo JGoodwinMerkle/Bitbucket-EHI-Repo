@@ -182,7 +182,8 @@
 		}
 
 		.iso-preSelectedClass img {
-			margin-top: 45px;
+			/* margin-top: 45px; */
+			margin-top: 0px;
 		}
 	}
 </style>
@@ -253,6 +254,22 @@
 						subtree: !0,
 						childList: !0
 					});
+
+
+				var removedMobileBanner = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (mutation) {
+						mutation.removedNodes.forEach(function (removedNode) {
+							if (removedNode.classList !== undefined) {
+								if (removedNode.classList.contains('ReactModal__Overlay--after-open')) {
+									// console.log(removedNode.classList, "<<< these are all teh removed nodes")
+									a.hideBanner();
+								}
+							}
+						});
+					});
+				});
+
+				removedMobileBanner.observe(document.querySelector('body'), { subtree: true, childList: true });
 
 				// adds filter box fix
 				a.observeEl('.vehicle-filter__content .vehicle-filter__filter:last-child .vehicle-filter__filter-list-item:last-child', async function (el) {
