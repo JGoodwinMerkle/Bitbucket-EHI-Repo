@@ -178,7 +178,8 @@
 		}
 
 		.iso-preSelectedClass img {
-			margin-top: 45px;
+			/* margin-top: 45px; */
+			margin-top: 0px;
 		}
 	}
 </style>
@@ -269,6 +270,21 @@
 					});
 				});
 				spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
+
+				var removedMobileBanner = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (mutation) {
+						mutation.removedNodes.forEach(function (removedNode) {
+							if (removedNode.classList !== undefined) {
+								if (removedNode.classList.contains('ReactModal__Overlay--after-open')) {
+									// console.log(removedNode.classList, "<<< these are all teh removed nodes")
+									isoTest.hideBanner();
+								}
+							}
+						});
+					});
+				});
+
+				removedMobileBanner.observe(document.querySelector('body'), { subtree: true, childList: true });
 
 				// Search filter bug fix
 				isoTest.observeEl('.is-search-by-filter.rs-tag-container--darkGreen', function (el) {
@@ -406,12 +422,12 @@
 						}
 					}
 				});
-					/* add this to hide tag when outside of designated location */
-					document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
-						setTimeout(() => {
-							isoTest.checkSort();
-							isoTest.hideBanner();
-						}, 200);
+				/* add this to hide tag when outside of designated location */
+				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
+					setTimeout(() => {
+						isoTest.checkSort();
+						isoTest.hideBanner();
+					}, 200);
 				}, false);
 			},
 			checkSort: function () {
