@@ -286,9 +286,24 @@
 							isoTest.addEvents();
 					},
 					addEvents: function () {
+						var modalOpen = true;
+
 							document.querySelector('.iso-modal.iso-modal-points .close-modal').addEventListener('click', function (e) {
-									isoTest.destroyModal();
+								isoTest.destroyModal();
+								modalOpen = false;
 							}, false);
+
+							// Handle clicks outside of the modal
+							document.addEventListener('click', function(e){
+								if(modalOpen){
+									var targetEl = e.target;
+
+									if(!targetEl.closest('.iso-modal-points .rs-modal__wrapper')){
+										isoTest.destroyModal();
+										modalOpen = false;
+									}
+								}
+							});	
 
 							document.addEventListener('keydown', function (e) {
 									var keyCode = (e.keyCode ? e.keyCode : e.which);
@@ -296,6 +311,7 @@
 									if (keyCode == '27') {
 											if (document.querySelector('html').classList.contains('iso-modal-open')) {
 													isoTest.destroyModal();
+													modalOpen = false;
 											}
 									}
 							}, false);
