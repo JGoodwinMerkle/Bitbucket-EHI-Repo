@@ -178,7 +178,8 @@
 		}
 
 		.iso-preSelectedClass img {
-			margin-top: 45px;
+			/* margin-top: 45px; */
+			margin-top: 0px;
 		}
 	}
 </style>
@@ -270,7 +271,20 @@
 				});
 				spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
 
+				var removedMobileBanner = new MutationObserver(function (mutationsList) {
+					mutationsList.forEach(function (mutation) {
+						mutation.removedNodes.forEach(function (removedNode) {
+							if (removedNode.classList !== undefined) {
+								if (removedNode.classList.contains('ReactModal__Overlay--after-open')) {
+									// console.log(removedNode.classList, "<<< these are all teh removed nodes")
+									r.hideBanner();
+								}
+							}
+						});
+					});
+				});
 
+				removedMobileBanner.observe(document.querySelector('body'), { subtree: true, childList: true });
 
 
 				// adds fix for filter boxes

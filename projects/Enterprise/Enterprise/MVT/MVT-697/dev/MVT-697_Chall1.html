@@ -77,7 +77,10 @@
 			isoTest.removeHTML();
 			ele.forEach(item => {
 				var sideBox = item.parentElement.parentElement.parentElement;
-				sideBox.insertAdjacentHTML("afterend",  isoTest.templateDefault);
+				if(store.getState().toJS().app.baobab.session.reservationSession.chargeType == 'PAYLATER') {
+					sideBox.insertAdjacentHTML("afterend",  isoTest.templateDefault) ;
+				}
+				
 			});
 			isoTest.checkMileage();
 		},
