@@ -1,4 +1,67 @@
 <style>
+    .mvt-700-banner {
+        background-color: #f3f3f3;
+        border-top: 0.25rem solid #181918;
+        box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
+
+    }
+    .mvt-700-banner-mobile {
+        display: flex;
+        padding: 10px 15px;
+        margin: 15px;
+        width: auto;
+    }
+    .mvt-700-banner-desktop {
+        display: none;
+        padding: 13px 12px;
+        margin-bottom: 24px;
+    }
+    .mvt-700-banner .svg-icon   {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='20' height='18' viewBox='0 0 20 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.2822 18C15.0849 18 14.8876 17.952 14.7149 17.8679L10.5585 15.742C10.2502 15.5738 9.86785 15.5738 9.55952 15.742L5.40315 17.8679C5.00848 18.048 4.52748 18.012 4.16981 17.7718C3.78747 17.4955 3.59014 17.0271 3.6888 16.5707L4.47814 12.0667C4.50281 11.7304 4.36714 11.3941 4.09581 11.1779L0.765782 7.99504C0.445112 7.68277 0.321778 7.21435 0.457446 6.79397C0.605447 6.36158 0.987783 6.06131 1.44412 5.98925L6.08149 5.34067C6.42683 5.29263 6.73516 5.08844 6.8955 4.78817L9.02918 0.644464C9.34985 0.0559373 10.0899 -0.172267 10.6942 0.140013C10.9162 0.248109 11.1012 0.428271 11.2122 0.644464L13.2225 4.78817C13.3829 5.10045 13.6912 5.31665 14.0489 5.36469L19.5496 6.14539L18.3163 6.90207C17.7736 7.25038 17.1076 7.39451 16.4662 7.29842L13.7652 6.91408C12.9019 6.76995 12.1495 6.21745 11.7795 5.43675L10.0652 2.03771L8.33851 5.43675C7.94384 6.20544 7.17916 6.74593 6.30349 6.86603L2.45546 7.40652L5.24282 10.0609C5.88415 10.6614 6.16782 11.5262 6.01982 12.379L5.32915 16.1143L8.80718 14.3968C9.58418 14.0124 10.4969 14.0124 11.2739 14.3968L14.7272 16.1624L13.9996 12.1267C13.8762 11.4662 14.2092 10.7935 14.8136 10.4693L15.3069 10.193L16.4292 16.6188C16.5279 17.2794 16.0716 17.8919 15.3932 17.988C15.3316 17.988 15.2576 18 15.1959 18' fill='black'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 18.65px;
+        display: inline-block;
+        height: 18px;
+        margin-right: 7px;
+    }
+    .mvt-700-banner .banner-message {
+        font-size: 15px;
+        line-height: 20px;
+        align-items: center;
+        color: #000000;
+        margin-bottom: 0;
+    }
+    @media (min-width: 1280px) {
+        .mvt-700-banner-mobile {
+            display: none;
+        }
+        .mvt-700-banner-desktop {
+            display: flex;
+        }
+    }
+    @media (max-width: 479px) {
+        .mvt-700-banner-mobile.mvt-700-banner .svg-icon {
+                background-size: contain;
+                width: 51px;
+                margin-right: 5px;
+            }
+    }
+    @media (min-width: 480px) and (max-width: 639px) {
+        .mvt-700-banner-mobile.mvt-700-banner .svg-icon {
+            background-size: contain;
+            width: 41px;
+            margin-right: 5px;
+        }
+     }
+     @media (min-width: 640px) and (max-width: 767px) {
+        .mvt-700-banner-mobile.mvt-700-banner .svg-icon {
+            background-size: contain;
+            width: 31px;
+            margin-right: 5px;
+        }
+     }
+   
 </style>
 <script>
 (function() {
@@ -7,9 +70,12 @@
 		account : 'Enterprise',
 		portfolio : 'EHI',
 		test : 'MVT-700',
-		creative : 'Challenger 1',
-		selector : 'body',
-		init : function() {
+		creative : 'Challenger 2',
+		selector : '.vehicle-list',
+        templateMobile : '<div class="mvt-700-banner mvt-700-banner-mobile"> <span class="svg-icon"></span> <p class="banner-message"><strong>Good News!</strong> You have <span class="re-points">2,500</span> Enterprise Plus Points to redeem on this rental. Select <strong>Pay in Points</strong> to use your member rewards now.</p></div>',
+        templateDesktop : '<div class="mvt-700-banner mvt-700-banner-desktop"> <span class="svg-icon"></span> <p class="banner-message"><strong>Good News!</strong> You have <span class="re-points">2,500</span> Enterprise Plus Points to redeem on this rental. Select <strong>Pay in Points</strong> to use your member rewards now.</p></div>',
+		
+        init : function() {
 
 			isoTest.debug = true;
 			
@@ -26,12 +92,88 @@
 				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
-			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		},
+        viewChange: function () {
+			if (/cars/.test(location.hash)) {
+				helpers.elementLoaded(isoTest.selector, function () {
+					isoTest.chall();
+				});
+			}
 		},
 		chall : function() {
 
 			// Your code goes here
+            isoTest.pointsCheck();
 
+		},
+        insertBanner : function () {
+            document.querySelector('.vehicle-select__main').insertAdjacentHTML('afterbegin',isoTest.templateDesktop);
+            document.querySelector('.vehicle-redemption:not(.vehicle-redemption--aside)').insertAdjacentHTML('beforebegin',isoTest.templateMobile);
+
+        },
+        enoughPoints : function(){
+						var getReactComponent = function(node){
+							for(var key in node) {
+								if(key.startsWith('__reactInternalInstance$') || key.startsWith('__reactFiber$')) {
+									return node[key];
+								}
+							}
+							return null;
+						}
+						var totalPoints = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
+
+						var vehicleReact = getReactComponent(document.querySelector('.vehicle-list'));
+						if(!vehicleReact || !vehicleReact.return || !vehicleReact.return.memoizedProps) return;
+
+						var vehicleProps = vehicleReact.return.memoizedProps;
+						var vehiclesAvailable = vehicleProps.availableVehicles;
+						var lowestPoint = 999999;
+						var lowestCar = '';
+
+						for (let i = 0; i < vehiclesAvailable.length; i++) {
+							const vehicle = vehiclesAvailable[i];
+							if(!!vehicle.redemptionPointsRate){
+								var pointAmount = Number(vehicle.redemptionPointsRate);
+								if((pointAmount > 0) && (pointAmount < lowestPoint)){
+									lowestPoint = pointAmount;
+									lowestCar = vehicle;
+								}
+							}
+						}
+
+						var rentalIsAvailable = totalPoints > lowestPoint;
+
+						// console.log('Lowest Points Needed for Rental: ' + lowestPoint);
+						// console.log('Rental is available: ' + rentalIsAvailable);
+						// console.log('For the following car', lowestCar);
+
+						return rentalIsAvailable;
+		},
+
+        pointsCheck: function () {
+						var waitForPoints = function (callback){
+							var maxCheck = 500;
+							var interval = window.setInterval(function () {
+								if (window.store && window.store.getState() && window.store.getState().toJS() && window.store.getState().toJS().app && window.store.getState().toJS().app.baobab && window.store.getState().toJS().app.baobab.User && window.store.getState().toJS().app.baobab.User.profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data && typeof window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date === 'number') {
+									callback();
+									window.clearInterval(interval);
+								} else if (--maxCheck < 0) {
+									window.clearInterval(interval);
+								}
+							}, 50);
+						}
+						waitForPoints(function () {
+							var pointsEarned = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
+                            console.log(pointsEarned);
+
+							if (isoTest.enoughPoints()) {
+							
+									isoTest.insertBanner();
+                                    document.querySelector('.mvt-700-banner-mobile .re-points').innerText = helpers.numberWithCommas(pointsEarned);
+                                    document.querySelector('.mvt-700-banner-desktop .re-points').innerText = helpers.numberWithCommas(pointsEarned);
+						}
+						});
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
@@ -60,17 +202,8 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
+        numberWithCommas: function (x) {
+							return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		}
 	};
 
