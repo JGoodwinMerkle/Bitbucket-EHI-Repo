@@ -8,7 +8,7 @@
     .mvt-700-banner-mobile {
         display: flex;
         padding: 10px 15px;
-        margin: 15px;
+		margin: 15px 0px 10px;
         width: auto;
     }
     .mvt-700-banner-desktop {
@@ -109,8 +109,8 @@
 		},
         insertBanner : function () {
             document.querySelector('.vehicle-select__main').insertAdjacentHTML('afterbegin',isoTest.templateDesktop);
-            document.querySelector('.vehicle-redemption:not(.vehicle-redemption--aside)').insertAdjacentHTML('beforebegin',isoTest.templateMobile);
-
+             // document.querySelector('.vehicle-redemption:not(.vehicle-redemption--aside)').insertAdjacentHTML('beforebegin',isoTest.templateMobile);
+           document.querySelector('.vehicle-select__header').insertAdjacentHTML('beforeend',isoTest.templateMobile);
         },
         enoughPoints : function(){
 						var getReactComponent = function(node){
