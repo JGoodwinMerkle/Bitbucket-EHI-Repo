@@ -1,4 +1,33 @@
 <style>
+    .mvt-700-redemption {
+        background-image: url(https://media.giphy.com/media/U3qYN8S0j3bpK/giphy.gif);
+        background-repeat: repeat;
+    }
+   .mvt-700-redemption p.vehicle-redemption__points {
+       border-bottom: none;
+   }
+   .mvt-700-redemption .vehicle-redemption__points-total {
+         border-bottom: 3px solid #169a5a;
+   }
+   .mvt-700-redemption:not(.vehicle-redemption--aside) .vehicle-redemption__title-brand-eplus-text {
+       display: none;
+   }
+   .mvt-700-redemption:not(.vehicle-redemption--aside) p.vehicle-redemption__points {
+        flex-direction: row-reverse;
+        width: 70%;
+        justify-content: space-between ;
+   }
+   .mvt-700-redemption:not(.vehicle-redemption--aside) p.vehicle-redemption__points .vehicle-redemption__points-text {
+        font-size: 16px;
+   }
+   @media (min-width: 639px) and (max-width: 1279px) {
+	.mvt-700-redemption:not(.vehicle-redemption--aside) p.vehicle-redemption__points {
+		justify-content: center;
+	}
+	.mvt-700-redemption .vehicle-redemption__points-total {
+		margin-left: 2%;
+	}
+   }
 </style>
 <script>
 (function() {
@@ -7,9 +36,10 @@
 		account : 'Enterprise',
 		portfolio : 'EHI',
 		test : 'MVT-700',
-		creative : 'Challenger 1',
-		selector : 'body',
-		init : function() {
+		creative : 'Challenger 2',
+		selector : '.vehicle-redemption',
+      
+        init : function() {
 
 			isoTest.debug = true;
 			
@@ -26,12 +56,95 @@
 				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
-			
+			window.addEventListener('hashchange', isoTest.viewChange, false);
+		},
+        viewChange: function () {
+			if (/cars/.test(location.hash)) {
+				helpers.elementLoaded(isoTest.selector, function () {
+					isoTest.chall();
+				});
+			}
 		},
 		chall : function() {
 
 			// Your code goes here
+            isoTest.pointsCheck();
 
+		},
+        updateBanner : function () {
+           var redemption = document.querySelectorAll(isoTest.selector);
+           
+         redemption.forEach((element) => {
+            element.classList.add('mvt-700-redemption');
+             console.log(element)
+             element.querySelector('.vehicle-redemption__points-text').innerText = 'You have points to redeem!';
+         
+         });
+
+
+        },
+        enoughPoints : function(){
+						var getReactComponent = function(node){
+							for(var key in node) {
+								if(key.startsWith('__reactInternalInstance$') || key.startsWith('__reactFiber$')) {
+									return node[key];
+								}
+							}
+							return null;
+						}
+						var totalPoints = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
+
+						var vehicleReact = getReactComponent(document.querySelector('.vehicle-list'));
+						if(!vehicleReact || !vehicleReact.return || !vehicleReact.return.memoizedProps) return;
+
+						var vehicleProps = vehicleReact.return.memoizedProps;
+						var vehiclesAvailable = vehicleProps.availableVehicles;
+						var lowestPoint = 999999;
+						var lowestCar = '';
+
+						for (let i = 0; i < vehiclesAvailable.length; i++) {
+							const vehicle = vehiclesAvailable[i];
+							if(!!vehicle.redemptionPointsRate){
+								var pointAmount = Number(vehicle.redemptionPointsRate);
+								if((pointAmount > 0) && (pointAmount < lowestPoint)){
+									lowestPoint = pointAmount;
+									lowestCar = vehicle;
+								}
+							}
+						}
+
+						var rentalIsAvailable = totalPoints > lowestPoint;
+
+						// console.log('Lowest Points Needed for Rental: ' + lowestPoint);
+						// console.log('Rental is available: ' + rentalIsAvailable);
+						// console.log('For the following car', lowestCar);
+
+						return rentalIsAvailable;
+		},
+
+        pointsCheck: function () {
+						var waitForPoints = function (callback){
+							var maxCheck = 500;
+							var interval = window.setInterval(function () {
+								if (window.store && window.store.getState() && window.store.getState().toJS() && window.store.getState().toJS().app && window.store.getState().toJS().app.baobab && window.store.getState().toJS().app.baobab.User && window.store.getState().toJS().app.baobab.User.profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data && typeof window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date === 'number') {
+									callback();
+									window.clearInterval(interval);
+								} else if (--maxCheck < 0) {
+									window.clearInterval(interval);
+								}
+							}, 50);
+						}
+						waitForPoints(function () {
+							var pointsEarned = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
+                            console.log(pointsEarned);
+
+							if (isoTest.enoughPoints()) {
+							
+									isoTest.updateBanner();
+                                   // document.querySelector('.mvt-700-banner-mobile .re-points').innerText = helpers.numberWithCommas(pointsEarned);
+                                    //document.querySelector('.mvt-700-banner-desktop .re-points').innerText = helpers.numberWithCommas(pointsEarned);
+						}
+						});
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
@@ -60,17 +173,8 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
+        numberWithCommas: function (x) {
+							return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		}
 	};
 
