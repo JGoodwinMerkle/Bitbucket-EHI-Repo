@@ -19,6 +19,8 @@
    }
    .mvt-700-redemption:not(.vehicle-redemption--aside) p.vehicle-redemption__points .vehicle-redemption__points-text {
         font-size: 16px;
+		text-align: center;
+    	width: 55%;
    }
    @media (min-width: 639px) and (max-width: 1279px) {
 	.mvt-700-redemption:not(.vehicle-redemption--aside) p.vehicle-redemption__points {
@@ -38,6 +40,7 @@
 		test : 'MVT-700',
 		creative : 'Challenger 2',
 		selector : '.vehicle-redemption',
+		carList : '.vehicle-list',
       
         init : function() {
 
@@ -52,7 +55,7 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
+			helpers.elementLoaded(isoTest.carList, function() {
 				isoTest.log('Test Ready!');
   				isoTest.chall();
 			});
@@ -60,13 +63,12 @@
 		},
         viewChange: function () {
 			if (/cars/.test(location.hash)) {
-				helpers.elementLoaded(isoTest.selector, function () {
+				helpers.elementLoaded(isoTest.carList, function () {
 					isoTest.chall();
 				});
 			}
 		},
 		chall : function() {
-
 			// Your code goes here
             isoTest.pointsCheck();
 
@@ -115,7 +117,7 @@
 
 						var rentalIsAvailable = totalPoints > lowestPoint;
 
-						// console.log('Lowest Points Needed for Rental: ' + lowestPoint);
+						//console.log('Lowest Points Needed for Rental: ' + lowestPoint);
 						// console.log('Rental is available: ' + rentalIsAvailable);
 						// console.log('For the following car', lowestCar);
 
@@ -123,29 +125,14 @@
 		},
 
         pointsCheck: function () {
-						var waitForPoints = function (callback){
-							var maxCheck = 500;
-							var interval = window.setInterval(function () {
-								if (window.store && window.store.getState() && window.store.getState().toJS() && window.store.getState().toJS().app && window.store.getState().toJS().app.baobab && window.store.getState().toJS().app.baobab.User && window.store.getState().toJS().app.baobab.User.profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data && typeof window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date === 'number') {
-									callback();
-									window.clearInterval(interval);
-								} else if (--maxCheck < 0) {
-									window.clearInterval(interval);
-								}
-							}, 50);
-						}
-						waitForPoints(function () {
 							var pointsEarned = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
                             console.log(pointsEarned);
 
 							if (isoTest.enoughPoints()) {
-							
-									isoTest.updateBanner();
-                                   // document.querySelector('.mvt-700-banner-mobile .re-points').innerText = helpers.numberWithCommas(pointsEarned);
-                                    //document.querySelector('.mvt-700-banner-desktop .re-points').innerText = helpers.numberWithCommas(pointsEarned);
-						}
-						});
+									isoTest.updateBanner();    
+							}
 		},
+
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
