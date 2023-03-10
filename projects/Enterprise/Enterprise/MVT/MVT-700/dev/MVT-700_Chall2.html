@@ -8,7 +8,7 @@
     .mvt-700-banner-mobile {
         display: flex;
         padding: 10px 15px;
-		margin: 15px 0px 10px;
+        margin: 15px 0px 10px;
         width: auto;
     }
     .mvt-700-banner-desktop {
@@ -102,15 +102,14 @@
 			}
 		},
 		chall : function() {
-
 			// Your code goes here
             isoTest.pointsCheck();
 
 		},
         insertBanner : function () {
             document.querySelector('.vehicle-select__main').insertAdjacentHTML('afterbegin',isoTest.templateDesktop);
-             // document.querySelector('.vehicle-redemption:not(.vehicle-redemption--aside)').insertAdjacentHTML('beforebegin',isoTest.templateMobile);
-           document.querySelector('.vehicle-select__header').insertAdjacentHTML('beforeend',isoTest.templateMobile);
+            document.querySelector('.vehicle-select__header').insertAdjacentHTML('beforeend',isoTest.templateMobile);
+
         },
         enoughPoints : function(){
 						var getReactComponent = function(node){
@@ -144,7 +143,7 @@
 
 						var rentalIsAvailable = totalPoints > lowestPoint;
 
-						// console.log('Lowest Points Needed for Rental: ' + lowestPoint);
+						//console.log('Lowest Points Needed for Rental: ' + lowestPoint);
 						// console.log('Rental is available: ' + rentalIsAvailable);
 						// console.log('For the following car', lowestCar);
 
@@ -152,18 +151,6 @@
 		},
 
         pointsCheck: function () {
-						var waitForPoints = function (callback){
-							var maxCheck = 500;
-							var interval = window.setInterval(function () {
-								if (window.store && window.store.getState() && window.store.getState().toJS() && window.store.getState().toJS().app && window.store.getState().toJS().app.baobab && window.store.getState().toJS().app.baobab.User && window.store.getState().toJS().app.baobab.User.profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile && window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data && typeof window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date === 'number') {
-									callback();
-									window.clearInterval(interval);
-								} else if (--maxCheck < 0) {
-									window.clearInterval(interval);
-								}
-							}, 50);
-						}
-						waitForPoints(function () {
 							var pointsEarned = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
                             console.log(pointsEarned);
 
@@ -172,8 +159,7 @@
 									isoTest.insertBanner();
                                     document.querySelector('.mvt-700-banner-mobile .re-points').innerText = helpers.numberWithCommas(pointsEarned);
                                     document.querySelector('.mvt-700-banner-desktop .re-points').innerText = helpers.numberWithCommas(pointsEarned);
-						}
-						});
+							}
 		},
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
