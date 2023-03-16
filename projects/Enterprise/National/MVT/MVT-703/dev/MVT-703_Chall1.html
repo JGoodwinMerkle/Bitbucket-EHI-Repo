@@ -6,13 +6,17 @@
         background-size: cover;
         background-repeat: no-repeat; 
         align-self: flex-end;
+        pointer-events: none;
     }
     .mvt-703-vehicle-image{
         display: flex;
         flex-direction: column;
         cursor: pointer;
     }
-    .mvt-703-modal.modals_v2 {
+    .mvt-703-vehicle-image.vehicle__image img {
+        pointer-events: none;
+    }
+    .mvt-703-modal.modals_v2.mvt-703-hide {
         display: none;
     }
 	.mvt-703-modal.modals_v2 .modal__body {
@@ -30,12 +34,12 @@
 		creative : 'Challenger 1',
 		selector : '.vehicle-select .vehicle-list > .vehicle',
         templateDefault: `<div class="mvt-703-vehicle-zoom"></div>`,
-        modal: `<div class="mvt-703-modal modals_v2">
+        modal: `<div class="mvt-703-modal modals_v2 mvt-703-hide">
                 <div class="ReactModal__Overlay ReactModal__Overlay--after-open modal__overlay modal__overlay--lightbox">
                     <div class="ReactModal__Content ReactModal__Content--after-open modal__content modal__content--lightbox zl-section--bgcolor-light modal__content--scroll-visible" tabindex="-1" role="alertdialog" aria-label="" aria-modal="true">
                         <div class="modal__header">
                             <h2>Economy</h2>
-                            <button type="button" class="modal__btn-close icon icon--close" aria-label="Close the modal" data-dtm-track-modalclose="button.exit reservation path.close"><span class="icon__text">Close the modal</span></button>
+                            <button type="button" class="modal__btn-close icon icon--close" aria-label="Close the modal" "><span class="icon__text">Close the modal</span></button>
                         </div>
                         <div class="modal__body"><img class="content" src="https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ECAR.doi.352.medium.imageSmallSideProfileNodePath.png/1492780366644.png" alt=""></div>
                         <div class="modal__footer cancel-and-apply-buttons">
@@ -73,7 +77,23 @@
          var vImage = ele.querySelector('.vehicle__image');
          vImage.classList.add('mvt-703-vehicle-image');
          vImage.insertAdjacentHTML('beforeend',isoTest.templateDefault);
-
+         isoTest.addEvents();
+        },
+        addEvents: function() {
+            //event for modal show
+            isoTest.addEventOn('click','.mvt-703-vehicle-image',function() {
+                if(document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-703-hide');
+                    document.body.classList.add('ReactModal__Body--open');
+                }
+             });
+            //event for modal close
+            isoTest.addEventOn('click','.mvt-703-modal.modals_v2 .modal__btn-close.icon.icon--close',function() {
+                if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
+                    document.body.classList.remove('ReactModal__Body--open');
+                }
+             });
         },
 		
 		fireTag : function(element, value) {
@@ -91,6 +111,22 @@
 		observeEl: function (selector, callback) {
                   var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
         },
+        //adding helper to add events to multiple elements
+        addEventOn: function (eventType, selector, action) {
+        document.addEventListener(eventType, function (e) {
+          var target = e.target;
+          if (target.matches(selector)) {
+            action(e);
+          } else {
+            while (target && target.parentNode !== document) {
+              target = target.parentNode;
+              if (!target) {
+                return;
+              }
+            }
+          }
+        });
+      },
 
 	};
 	isoTest.init();
