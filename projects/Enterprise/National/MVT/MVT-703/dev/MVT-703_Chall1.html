@@ -49,7 +49,16 @@
                     </div>
                 </div>
             </div>`,
-       
+        vehicleData: {
+            SCAR: {
+                title: 'Standard',
+                image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/SCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1544210775124.png',
+            },
+            FCAR: {
+                title: 'Full Size',
+                image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/FCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262777765.png',
+            },
+        },
        init : function() {
 
 			isoTest.debug =true;
@@ -64,7 +73,8 @@
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
 			isoTest.observeEl(isoTest.selector, function(ele) {
-				isoTest.log('Test Ready!');   
+				isoTest.log('Test Ready!');  
+                
   				isoTest.chall(ele);
 			});
 			
@@ -79,21 +89,39 @@
          vImage.insertAdjacentHTML('beforeend',isoTest.templateDefault);
          isoTest.addEvents();
         },
+        updateModal:function (ele) {
+            console.log(ele.closest('.vehicle'));
+            var vehicleReact = isoTest.getReactComponent(ele.closest('.vehicle'));
+            var sippCode = vehicleReact.return.memoizedProps.vehicleCode;
+            console.log(isoTest.vehicleData[sippCode].title);
+            ele.classList.add('mvt-'+sippCode);
+            document.querySelector('.mvt-703-modal.modals_v2 .modal__header h2').innerText = isoTest.vehicleData[sippCode].title;
+            document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').setAttribute('src',isoTest.vehicleData[sippCode].image);
+        },
         addEvents: function() {
             //event for modal show
-            isoTest.addEventOn('click','.mvt-703-vehicle-image',function() {
+            isoTest.addEventOn('click','.mvt-703-vehicle-image',function(e) {
+                isoTest.updateModal(e.target);
                 if(document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
                     document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-703-hide');
                     document.body.classList.add('ReactModal__Body--open');
                 }
              });
-            //event for modal close
+            //event for modal close on X click
             isoTest.addEventOn('click','.mvt-703-modal.modals_v2 .modal__btn-close.icon.icon--close',function() {
                 if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
                     document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
                     document.body.classList.remove('ReactModal__Body--open');
                 }
              });
+             //event for modal close on closebtn click
+             isoTest.addEventOn('click','.mvt-703-modal.modals_v2 .btn.btn--opaque.btn--underline.btn-secondary.mvt-703-close',function() {
+                if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
+                    document.body.classList.remove('ReactModal__Body--open');
+                }
+             });
+
         },
 		
 		fireTag : function(element, value) {
@@ -107,6 +135,14 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
+		},
+        getReactComponent: function(node){
+			    for(var key in node) {
+					if(key.startsWith('__reactInternalInstance$') || key.startsWith('__reactFiber$')) {
+						return node[key];
+					}
+					}
+				return null;
 		},
 		observeEl: function (selector, callback) {
                   var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
