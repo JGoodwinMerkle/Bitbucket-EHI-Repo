@@ -60,7 +60,7 @@
 		portfolio : 'National',
 		test : 'MVT-703',
 		creative : 'Challenger 1',
-		selector : '.vehicle-select .vehicle-list > .vehicle',
+		selector : '.vehicle-select .vehicle-list',
         templateDefault: `<div class="mvt-703-vehicle-zoom"></div>`,
         modal: `<div class="mvt-703-modal modals_v2 mvt-703-hide">
                 <div class="ReactModal__Overlay ReactModal__Overlay--after-open modal__overlay modal__overlay--lightbox">
@@ -113,12 +113,17 @@
          if(!document.querySelector('.mvt-703-modal.modals_v2')) {
             document.body.insertAdjacentHTML('beforeend',isoTest.modal);
          }
-         var vImage = ele.querySelector('.vehicle__image');
-         vImage.classList.add('mvt-703-vehicle-image');
-         vImage.insertAdjacentHTML('beforeend',isoTest.templateDefault);
+         isoTest.insertTemplate();
          isoTest.addEvents();
         },
-
+        insertTemplate : function() {
+            var vImage = document.querySelectorAll('.vehicle__image');
+            vImage.forEach(image => {
+                image.classList.add('mvt-703-vehicle-image');
+                image.insertAdjacentHTML('beforeend',isoTest.templateDefault);
+            });
+           
+        },
         updateModal:function (ele) {
             //console.log(ele.closest('.vehicle'));
             var vehicleMain = ele.closest('.vehicle');
@@ -144,6 +149,11 @@
                     document.body.classList.add('ReactModal__Body--open');
                 }
              });
+            // ONCE IMAGE LOADED
+            document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').addEventListener('load', function() {
+                console.log('image loaded');
+                this.closest('.mvt-703-modal.modals_v2').classList.add('iso-image-loaded');
+            })
             //event for modal close on X click
             document.querySelector('.mvt-703-modal.modals_v2 .modal__btn-close.icon.icon--close').addEventListener('click',function(){
                 if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
