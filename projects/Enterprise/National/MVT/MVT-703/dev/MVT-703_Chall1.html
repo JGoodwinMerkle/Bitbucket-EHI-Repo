@@ -49,6 +49,7 @@
                     </div>
                 </div>
             </div>`,
+        tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
         vehicleData: {
             SCAR: {
                 title: 'Standard',
@@ -100,8 +101,10 @@
             document.querySelector('.mvt-703-modal.modals_v2 .modal__header h2').innerText = isoTest.vehicleData[sippCode].title;
             document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').setAttribute('src',isoTest.vehicleData[sippCode].image);
         },
-        
+
         addEvents: function() {
+            //keep focus 
+            isoTest.keepFocus(document.querySelector('.mvt-703-modal.modals_v2'));
             //event for modal show
             isoTest.addEventOn('click','.mvt-703-vehicle-image',function(e) {
                 if(document.querySelector('.vehicle.mvt-active')){
@@ -140,6 +143,29 @@
           
 
         },
+        keepFocus : function(context) {
+      		var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+         		firstTabbableElement = allTabbableElements[0],
+          		lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+      		var keyListener = function(e) {
+    			var keyCode = e.which || e.keyCode;
+
+    			e.preventDefault = e.preventDefault || function () {
+    				e.returnValue = false;
+    			};
+    			if (keyCode === 9) {
+          			if (e.target === lastTabbableElement && !e.shiftKey) {
+    					e.preventDefault();
+    					firstTabbableElement.focus();
+          			} else if (e.target === firstTabbableElement && e.shiftKey) {
+    					e.preventDefault();
+    					lastTabbableElement.focus();
+    				}
+    			}
+    		};
+    		context.addEventListener('keydown', keyListener, false);
+    	},
 		
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
