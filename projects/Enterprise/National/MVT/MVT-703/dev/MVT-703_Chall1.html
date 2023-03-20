@@ -27,6 +27,21 @@
         display: flex;
         justify-content: center;
     }
+    .mvt-703-modal.modals_v2 .modal__body img {
+        width: 337px;
+    }
+    .mvt-703-modal.modals_v2 .modal__header .modal__btn-close:before {
+        color: #b3d78b;
+    }
+    @media  screen and (min-width: 640px) {
+        .mvt-703-close , .mvt-703-select {
+            width: 216px;
+        }
+        .mvt-703-modal.modals_v2 .modal__footer{
+            flex-direction: column;
+        }
+    }
+    
     @media  screen and (min-width: 1280px) and (max-width: 1406px){ 
         .mvt-703-vehicle-zoom{
             margin: auto;
@@ -69,7 +84,7 @@
                             <h2>Economy</h2>
                             <button type="button" class="modal__btn-close icon icon--close" aria-label="Close the modal" "><span class="icon__text">Close the modal</span></button>
                         </div>
-                        <div class="modal__body"><img class="content" src="https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ECAR.doi.352.medium.imageSmallSideProfileNodePath.png/1492780366644.png" alt=""></div>
+                        <div class="modal__body"><img class="content" src="" alt="image"></div>
                         <div class="modal__footer cancel-and-apply-buttons">
                             <button class="btn btn--opaque btn--underline btn-secondary mvt-703-close" type="button">Close</button>
                             <button class="btn btn-primary mvt-703-select" type="button">Select</button>
@@ -144,20 +159,22 @@
                     document.querySelector('.vehicle.mvt-active').classList.remove('mvt-active');
                 }
                 isoTest.updateModal(e.target);
-                if(document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
-                    document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-703-hide');
-                    document.body.classList.add('ReactModal__Body--open');
-                }
+               
              });
             // ONCE IMAGE LOADED
             document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').addEventListener('load', function() {
                 console.log('image loaded');
-                this.closest('.mvt-703-modal.modals_v2').classList.add('iso-image-loaded');
+                this.closest('.mvt-703-modal.modals_v2').classList.add('mvt-image-loaded');
+                if(document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide') && document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-image-loaded')) {
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-703-hide');
+                    document.body.classList.add('ReactModal__Body--open');
+                }
             })
             //event for modal close on X click
             document.querySelector('.mvt-703-modal.modals_v2 .modal__btn-close.icon.icon--close').addEventListener('click',function(){
                 if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
                     document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-image-loaded');
                     document.body.classList.remove('ReactModal__Body--open');
                 }
             });
@@ -166,6 +183,7 @@
              document.querySelector('.mvt-703-modal.modals_v2 .btn.btn--opaque.btn--underline.btn-secondary.mvt-703-close').addEventListener('click',function(){
                 if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
                     document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-image-loaded');
                     document.body.classList.remove('ReactModal__Body--open');
                 }
             });
