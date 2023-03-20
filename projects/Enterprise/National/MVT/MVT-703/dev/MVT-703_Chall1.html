@@ -7,11 +7,15 @@
         background-repeat: no-repeat; 
         align-self: flex-end;
         pointer-events: none;
+        margin: auto 15% 0%;
+        position: absolute;
+        bottom: 8%;
     }
     .mvt-703-vehicle-image{
         display: flex;
         flex-direction: column;
         cursor: pointer;
+        position: relative;
     }
     .mvt-703-vehicle-image.vehicle__image img {
         pointer-events: none;
@@ -22,6 +26,30 @@
 	.mvt-703-modal.modals_v2 .modal__body {
         display: flex;
         justify-content: center;
+    }
+    @media  screen and (min-width: 1280px) and (max-width: 1406px){ 
+        .mvt-703-vehicle-zoom{
+            margin: auto;
+        }
+        
+    }
+    @media  screen and (min-width: 912px) and (max-width: 1130px){ 
+        .mvt-703-vehicle-zoom{
+            margin: auto 2% -5%;
+        }
+        
+    }
+    @media  screen and (min-width: 640px) and (max-width: 869px){ 
+        .mvt-703-vehicle-zoom{
+            margin: auto -1% 0%;
+        }
+        
+    }
+    @media  screen and (max-width: 639px) { 
+        .mvt-703-vehicle-zoom{
+            margin: auto;
+        }
+        
     }
 </style>
 <script>
