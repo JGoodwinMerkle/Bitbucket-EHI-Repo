@@ -1,4 +1,79 @@
 <style>
+	.mvt-703-vehicle-zoom {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.85613 9.7068C2.17831 9.7068 0 7.52952 0 4.85326C0 2.17702 2.17848 0 4.85613 0C7.53378 0 9.71255 2.17727 9.71255 4.85354C9.71255 7.52977 7.53398 9.7068 4.85613 9.7068ZM4.85613 1.25703C2.87196 1.25703 1.25778 2.87037 1.25778 4.85326C1.25778 6.83614 2.87207 8.44948 4.85613 8.44948C6.84019 8.44948 8.45449 6.83614 8.45449 4.85326C8.4546 2.87026 6.8403 1.25703 4.85613 1.25703Z' fill='%2300703C'/%3E%3Cpath d='M4.89996 2.79834V7.17203' stroke='%2300703C' stroke-miterlimit='10'/%3E%3Cpath d='M7.08811 4.98519H2.71182' stroke='%2300703C' stroke-miterlimit='10'/%3E%3Cpath d='M12.6782 13.9137L8.24745 9.48556C8.13228 9.37046 8.13228 9.182 8.24745 9.06678L9.06383 8.25087C9.179 8.13578 9.36757 8.13578 9.48286 8.25087L13.9136 12.679C14.0288 12.7941 14.0288 12.9826 13.9136 13.0978L13.0972 13.9137C12.9821 14.0288 12.7935 14.0288 12.6783 13.9136L12.6782 13.9137Z' fill='%2300703C'/%3E%3C/svg%3E");
+        width: 14px;
+        height: 14px; 
+        background-size: cover;
+        background-repeat: no-repeat; 
+        align-self: flex-end;
+        pointer-events: none;
+        margin: auto 15% 0%;
+        position: absolute;
+        bottom: 8%;
+    }
+    .mvt-703-vehicle-image{
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        position: relative;
+    }
+    .mvt-703-vehicle-image.vehicle__image img {
+        pointer-events: none;
+    }
+    .mvt-703-modal.modals_v2.mvt-703-hide {
+        display: none;
+    }
+	.mvt-703-modal.modals_v2 .modal__body {
+        display: flex;
+        justify-content: center;
+    }
+    .mvt-703-modal.modals_v2 .modal__body img {
+        width: 337px;
+    }
+    .mvt-703-modal.modals_v2 .modal__header .modal__btn-close:before {
+        color: #b3d78b;
+    }
+    @media  screen and (max-width: 869px) {
+        .mvt-703-modal.modals_v2 .modal__body img {
+            width: auto;
+        }
+    }
+    @media  screen and (min-width: 640px) {
+        .mvt-703-close , .mvt-703-select {
+            width: 216px!important;
+        }
+        
+    }
+    
+    @media  screen and (min-width: 1280px) and (max-width: 1406px){ 
+        .mvt-703-vehicle-zoom{
+            margin: auto;
+        }
+        
+    }
+    @media  screen and (min-width: 912px) and (max-width: 1130px){ 
+        .mvt-703-vehicle-zoom{
+            margin: auto 2% -5%;
+        }
+        
+    }
+    @media  screen and (min-width: 640px) and (max-width: 869px){ 
+        .mvt-703-vehicle-zoom{
+            margin: auto -1% 0%;
+        }
+        
+    }
+    @media  screen and (max-width: 639px) { 
+        .mvt-703-vehicle-zoom{
+            margin: auto;
+        }
+        .mvt-703-modal.modals_v2 .modal__footer{
+            flex-direction: column !important;
+        }
+        .modals_v2 .modal__footer .btn-secondary.mvt-703-close{
+            margin-bottom: 1.25rem !important;
+        }
+    }
 </style>
 <script>
 (function() {
@@ -7,11 +82,267 @@
 		account : 'EHI',
 		portfolio : 'National',
 		test : 'MVT-703',
-		creative : 'Challenger 1',
-		selector : 'body',
-		init : function() {
+		creative : 'Challenger 2',
+		selector : '.vehicle-select .vehicle-list',
+        templateDefault: `<div class="mvt-703-vehicle-zoom"></div>`,
+        modal: `<div class="mvt-703-modal modals_v2 mvt-703-hide">
+                <div class="ReactModal__Overlay ReactModal__Overlay--after-open modal__overlay modal__overlay--lightbox">
+                    <div class="ReactModal__Content ReactModal__Content--after-open modal__content modal__content--lightbox zl-section--bgcolor-light modal__content--scroll-visible" tabindex="-1" role="alertdialog" aria-label="" aria-modal="true">
+                        <div class="modal__header">
+                            <h2>Economy</h2>
+                            <button type="button" class="modal__btn-close icon icon--close" aria-label="Close the modal" "><span class="icon__text">Close the modal</span></button>
+                        </div>
+                        <div class="modal__body"><img class="content" src="" alt="image"></div>
+                        <div class="modal__footer cancel-and-apply-buttons">
+                            <button class="btn btn--opaque btn--underline btn-secondary mvt-703-close" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`,
+        tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
+        vehicleData: {
+            CCAR:	{   title: 'Compact',
+                         image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/CCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492780374467.png'},
 
-			isoTest.debug = ${user.mvtDebug};
+            CFAE:	{   title: 'Compact Electric SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/CFAE.doi.640.medium.imageSmallSideProfileNodePath.png/1613575808073.png'},
+
+            CFAR:	{   title: 'Compact SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/CFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262879339.png'},
+
+            CFDR:	{   title: 'Compact SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/CFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262942143.png'},
+
+            CTAR:	{   title: 'Compact Convertible',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/CTAR.doi.640.medium.imageSmallSideProfileNodePath.png/1567006637480.png'},
+
+            ECAR:	{   title: 'Economy',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ECAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492780366644.png'},
+
+            FCAH:	{   title: 'Full Size Hybrid',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/FCAH.doi.640.medium.imageSmallSideProfileNodePath.png/1492780375254.png'},
+
+            FCAR:	{   title: 'Full Size',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/FCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262777765.png'},
+
+            FFAR:	{   title: 'Full Size SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/FFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262877780.png'},
+
+            FFDR:	{   title: 'Full Size SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/FFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262877780.png'},
+
+            FJAR:	{   title: 'Jeep Wrangler 4',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/FJAR.doi.640.medium.imageSmallSideProfileNodePath.png/1543606103567.png'},
+
+            FVAR:	{   title: '15 Passenger Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/FVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744312521.png'},
+
+            GVAR:	{   title: '10 Passenger Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/GVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1543606185056.png'},
+
+            GXAE:	{   title: 'Full Size Elite Electric'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/GXAE.doi.640.medium.imageSmallSideProfileNodePath.png/1629688085107.png'},
+
+            GXAR:	{    title: 'Full Size Elite',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/GXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262775554.png'},
+
+            ICAE:	{   title: 'Intermediate Electric',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ICAE.doi.640.medium.imageSmallSideProfileNodePath.png/1544210775276.png'},
+
+            ICAR:	{   title: 'Midsize',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ICAR.doi.640.medium.imageSmallSideProfileNodePath.png/1620230914227.png'},
+
+            IFAR:	{   title: 'Midsize SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/IFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262879727.png'},
+
+            IFDR:	{   title: 'Midsize SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/IFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262879727.png'},
+
+            IJAR:	{   title: 'Jeep' ,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/IJAR.doi.640.medium.imageSmallSideProfileNodePath.png/1544220629072.png'},
+
+            ITAR:	{   title: 'Midsize Convertible',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ITAR.doi.640.medium.imageSmallSideProfileNodePath.png/1526421297876.png'},
+
+            JKAR:	{   title: 'Compact Cargo Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/JKAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744318450.png'},
+
+            LCAR:	{   title: 'Luxury',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/LCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262778275.png'},
+
+            LFAR:	{   title: 'Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/LFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1554401969012.png'},
+
+            LFDR:	{   title: 'Luxury SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/LFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1554401969012.png'},
+
+            LSAR:	{   title: 'Luxury Sport',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/LSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786412861.png'},
+
+            LTAR:	{   title: 'Luxury Convertible',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/LTAR.doi.640.medium.imageSmallSideProfileNodePath.png/1501593253092.png'},
+
+            MVAR:	{   title: '7 Passenger Minivan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/MVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618263096675.png'},
+
+            OFAR:	{   title: 'Extended Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/OFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786790699.png'},
+
+            OVAR:	{   title: '12-Passenger-Van-Med-High Roof',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/OVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744296328.png'},
+
+            PCAR:	{   title: 'Premium',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/PCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1574880326763.png'},
+
+            PFAR:	{   title: 'Premium SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262876980.png'},
+
+            PFDR:	{   title: 'Premium SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262876980.png'},
+
+            PGAR:	{   title: 'Premium Crossover',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PGAR.doi.640.medium.imageSmallSideProfileNodePath.png/1547581755813.png'},
+
+            PGDR:	{   title: 'Premium Crossover AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PGDR.doi.640.medium.imageSmallSideProfileNodePath.png/1547581755813.png'},
+
+            PPAR:	{   title: 'Pickup',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/PPAR.doi.640.medium.imageSmallSideProfileNodePath.png/1512427309887.png'},
+
+            PPBD:	{   title: 'Full Size Diesel Pickup',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/PPBD.doi.640.medium.imageSmallSideProfileNodePath.png/1512427309887.png'},
+
+            PPBR:	{   title: 'Premium Pickup AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/PPBR.doi.640.medium.imageSmallSideProfileNodePath.png/1512427309887.png'},
+
+            PQAR:	{   title: 'Premium All-Terrain',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PQAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786791294.png'},
+
+            PSAR:	{   title: 'American Muscle Car',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/PSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786450843.png'},
+
+            PXAR:	{   title: 'Premium Special',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/PXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262777268.png'},
+
+            RFAR:	{   title: 'Standard Elite SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/RFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262875775.png'},
+
+            RVAR:	{   title: '12 Passenger Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/RVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744320042.png'},
+
+            RXAR:	{   title: 'Standard Elite',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/RXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262775892.png'},
+
+            SCAH:	{   title: 'Standard Hybrid',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/SCAH.doi.640.medium.imageSmallSideProfileNodePath.png/1543605920546.png'},
+
+            SCAR:	{   title: 'Standard',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/SCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1544210775124.png'},
+
+            SFAR:	{   title: 'Standard SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1551905658879.png'},
+
+            SFBR:	{   title: 'Intermediate SUV 4WD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SFBR.doi.640.medium.imageSmallSideProfileNodePath.png/1551905658879.png'},
+
+            SFDR:	{   title: 'Standard SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1551905658879.png'},
+
+            SGAR:	{   title: 'Standard Crossover',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SGAR.doi.640.medium.imageSmallSideProfileNodePath.png/1629326200874.png'},
+
+            SGDR:	{   title: 'Standard Crossover AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SGDR.doi.640.medium.imageSmallSideProfileNodePath.png/1629326200874.png'},
+
+            SKAR:	{   title: 'Cargo Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/SKAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744297142.png'},
+
+            SPAR:	{   title: 'Standard Pickup',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/SPAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618263047434.png'},
+
+            SPBR:	{   title: 'Standard Pickup',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/SPBR.doi.640.medium.imageSmallSideProfileNodePath.png/1618263047434.png'},
+
+            SSAR:	{   title: 'Sporty Car',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/SSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1574880314547.png'},
+
+            STAR:	{   title: 'Convertible',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/STAR.doi.640.medium.imageSmallSideProfileNodePath.png/1543605919377.png'},
+
+            SVAR:	{   title: '8 Passenger Minivan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/SVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1547668804155.png'},
+
+            UDAR:	{   title: 'Midsize Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/UDAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786816745.png'},
+
+            UFAR:	{   title: 'Premium Elite SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/UFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1544210749802.png'},
+
+            USAR:	{   title: 'Corvette',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/USAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786523359.png'},
+
+            UVAR:	{   title: '15-Passenger-Van-Med-High Roof',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/UVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744296328.png'},
+
+            UXAR:	{   title: 'Midsize Luxury Sedan'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/UXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786524705.png'},
+
+            UZAR:	{   title: 'Midsize Sport Luxury Sedan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/UZAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786525251.png'},
+
+            WCAE:	{   title: 'Electric Luxury Sedan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WCAE.doi.640.medium.imageSmallSideProfileNodePath.png/1654786525931.png'},
+
+            WCAR:	{   title: 'Full Size Luxury Sedan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786526850.png'},
+
+            WDAR:	{   title: 'Midsize Elite Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/WDAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786845703.png'},
+
+            WFAE:	{   title: 'Electric Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/WFAE.doi.640.medium.imageSmallSideProfileNodePath.png/1563547601546.png'},
+
+            WFAR:	{   title: 'Full Size Luxury SUV'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/WFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786870245.png'},
+
+            WSAR:	{   title: 'Performance Sport',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786640529.png'},
+
+            WXAR:	{   title: 'Luxury Performance Sport'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786641257.png'},
+
+            WZAR:	{   title: 'Premium Luxury Sedan'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WZAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786642019.png'},
+
+            WZAR:	{   title: 'Large Executive Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/WZAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262876399.png'},
+
+            XEAR:	{   title: 'Ultra Performance Sport',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/XEAR.doi.640.medium.imageSmallSideProfileNodePath.png/1656645360774.png'},
+
+            XFAR:	{   title: 'Special SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/XFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1574796945850.png'},
+
+            XFAV:	{   title: 'Premium Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/XFAV.doi.640.medium.imageSmallSideProfileNodePath.png/1654786903622.png'},
+
+            XGAR:	{   title: 'Ultra Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/XGAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786937958.png'},
+
+            XSAR:	{   title: 'Elite Performance Sport',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/XSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786674535.png'},
+
+            XVAR:	{   title: 'Limo Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/XVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786699492.png'},
+
+            XZAR:	{   title: 'Ultra Luxury Sedan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/XZAR.doi.640.medium.imageSmallSideProfileNodePath.png/1655326317085.png'},
+
+                    
+        },
+       init : function() {
+
+			isoTest.debug =true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -22,17 +353,122 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
+			isoTest.observeEl(isoTest.selector, function(ele) {
+				isoTest.log('Test Ready!');  
+                
+  				isoTest.chall(ele);
 			});
 			
 		},
-		chall : function() {
+		chall: function(ele){
+         console.log(ele);
+         if(!document.querySelector('.mvt-703-modal.modals_v2')) {
+            document.body.insertAdjacentHTML('beforeend',isoTest.modal);
+         }
+         isoTest.insertTemplate();
+         isoTest.addEvents();
+        },
+        insertTemplate : function() {
+            var vImage = document.querySelectorAll('.vehicle__image');
+            vImage.forEach(image => {
+                image.classList.add('mvt-703-vehicle-image');
+                image.insertAdjacentHTML('beforeend',isoTest.templateDefault);
+            });
+           
+        },
+        updateModal:function (ele) {
+            //console.log(ele.closest('.vehicle'));
+            var vehicleMain = ele.closest('.vehicle');
+            var vehicleReact = isoTest.getReactComponent(vehicleMain);
+            var sippCode = vehicleReact.return.memoizedProps.vehicleCode;
+            console.log(isoTest.vehicleData[sippCode].title);
+            vehicleMain.classList.add('mvt-active');
+            document.querySelector('.mvt-703-modal.modals_v2 .modal__header h2').innerText = isoTest.vehicleData[sippCode].title;
+            document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').setAttribute('src',isoTest.vehicleData[sippCode].image);
+        },
 
-			// Your code goes here
+        addEvents: function() {
+            //keep focus 
+            isoTest.keepFocus(document.querySelector('.mvt-703-modal.modals_v2'));
+            //event for modal show
+            isoTest.addEventOn('click','.mvt-703-vehicle-image',function(e) {
+                if(document.querySelector('.vehicle.mvt-active')){
+                    document.querySelector('.vehicle.mvt-active').classList.remove('mvt-active');
+                }
+                //console.log(e.target);
+                //fire tag
+                isoTest.fireTag(e.target,'Image Magnify Click');
+                isoTest.updateModal(e.target);
+               
+             });
+            // check for image load
+            document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').addEventListener('load', function() {
+                console.log('image loaded');
+                this.closest('.mvt-703-modal.modals_v2').classList.add('mvt-image-loaded');
+                if(document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide') && document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-image-loaded')) {
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-703-hide');
+                    document.body.classList.add('ReactModal__Body--open');
+                }
+            })
+            //event for modal close on X click
+            document.querySelector('.mvt-703-modal.modals_v2 .modal__btn-close.icon.icon--close').addEventListener('click',function(e){
+                if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-image-loaded');
+                    document.body.classList.remove('ReactModal__Body--open');
+                    //fire tag
+                    isoTest.fireTag(e.target,'Zoom Modal X Click');
+                }
+            });
+         
+             //event for modal close on closebtn click
+             document.querySelector('.mvt-703-modal.modals_v2 .btn.btn--opaque.btn--underline.btn-secondary.mvt-703-close').addEventListener('click',function(e){
+                if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
+                    document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-image-loaded');
+                    document.body.classList.remove('ReactModal__Body--open');
+                     //fire tag
+                     isoTest.fireTag(e.target,'Zoom Modal Close CTA Click');
+                }
+            });
+          
+             // select event click 
+            /* document.querySelector('.mvt-703-modal.modals_v2 .mvt-703-select').addEventListener('click',function(e){
+                //fire tag
+                isoTest.fireTag(e.target,'Zoom Modal Select CTA Click');
+                document.querySelector('.vehicle-list > .vehicle.mvt-active .vehicle__cta > button').click();
+                if(document.querySelector('.mvt-703-modal.modals_v2')){
+                    document.querySelector('.mvt-703-modal.modals_v2').remove();
+                }
+                document.body.classList.remove('ReactModal__Body--open');
+             });*/
+          
 
-		},
+        },
+        keepFocus : function(context) {
+      		var allTabbableElements = context.querySelectorAll(isoTest.tabbableElements),
+         		firstTabbableElement = allTabbableElements[0],
+          		lastTabbableElement = allTabbableElements[allTabbableElements.length - 1];
+
+      		var keyListener = function(e) {
+    			var keyCode = e.which || e.keyCode;
+
+    			e.preventDefault = e.preventDefault || function () {
+    				e.returnValue = false;
+    			};
+    			if (keyCode === 9) {
+          			if (e.target === lastTabbableElement && !e.shiftKey) {
+    					e.preventDefault();
+    					firstTabbableElement.focus();
+          			} else if (e.target === firstTabbableElement && e.shiftKey) {
+    					e.preventDefault();
+    					lastTabbableElement.focus();
+    				}
+    			}
+    		};
+    		context.addEventListener('keydown', keyListener, false);
+    	},
+		
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
@@ -44,36 +480,36 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
-		}
-	};
-
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
 		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
-	};
+        getReactComponent: function(node){
+			    for(var key in node) {
+					if(key.startsWith('__reactInternalInstance$') || key.startsWith('__reactFiber$')) {
+						return node[key];
+					}
+					}
+				return null;
+		},
+		observeEl: function (selector, callback) {
+                  var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
+        },
+        //adding helper to add events to multiple elements
+        addEventOn: function (eventType, selector, action) {
+        document.addEventListener(eventType, function (e) {
+          var target = e.target;
+          if (target.matches(selector)) {
+            action(e);
+          } else {
+            while (target && target.parentNode !== document) {
+              target = target.parentNode;
+              if (!target) {
+                return;
+              }
+            }
+          }
+        });
+      },
 
+	};
 	isoTest.init();
 })();
 </script>
