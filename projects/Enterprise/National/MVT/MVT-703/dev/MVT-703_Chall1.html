@@ -102,14 +102,244 @@
             </div>`,
         tabbableElements : 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]',
         vehicleData: {
-            SCAR: {
-                title: 'Standard',
-                image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/SCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1544210775124.png',
-            },
-            FCAR: {
-                title: 'Full Size',
-                image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/FCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262777765.png',
-            },
+            CCAR:	{   title: 'Compact',
+                         image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/CCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492780374467.png'},
+
+            CFAE:	{   title: 'Compact Electric SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/CFAE.doi.640.medium.imageSmallSideProfileNodePath.png/1613575808073.png'},
+
+            CFAR:	{   title: 'Compact SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/CFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262879339.png'},
+
+            CFDR:	{   title: 'Compact SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/CFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262942143.png'},
+
+            CTAR:	{   title: 'Compact Convertible',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/CTAR.doi.640.medium.imageSmallSideProfileNodePath.png/1567006637480.png'},
+
+            ECAR:	{   title: 'Economy',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ECAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492780366644.png'},
+
+            FCAH:	{   title: 'Full Size Hybrid',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/FCAH.doi.640.medium.imageSmallSideProfileNodePath.png/1492780375254.png'},
+
+            FCAR:	{   title: 'Full Size',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/FCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262777765.png'},
+
+            FFAR:	{   title: 'Full Size SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/FFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262877780.png'},
+
+            FFDR:	{   title: 'Full Size SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/FFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262877780.png'},
+
+            FJAR:	{   title: 'Jeep Wrangler 4',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/FJAR.doi.640.medium.imageSmallSideProfileNodePath.png/1543606103567.png'},
+
+            FVAR:	{   title: '15 Passenger Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/FVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744312521.png'},
+
+            GVAR:	{   title: '10 Passenger Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/GVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1543606185056.png'},
+
+            GXAE:	{   title: 'Full Size Elite Electric'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/GXAE.doi.640.medium.imageSmallSideProfileNodePath.png/1629688085107.png'},
+
+            GXAR:	{    title: 'Full Size Elite',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/GXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262775554.png'},
+
+            ICAE:	{   title: 'Intermediate Electric',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ICAE.doi.640.medium.imageSmallSideProfileNodePath.png/1544210775276.png'},
+
+            ICAR:	{   title: 'Midsize',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ICAR.doi.640.medium.imageSmallSideProfileNodePath.png/1620230914227.png'},
+
+            IFAR:	{   title: 'Midsize SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/IFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262879727.png'},
+
+            IFDR:	{   title: 'Midsize SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/IFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262879727.png'},
+
+            IJAR:	{   title: 'Jeep' ,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/IJAR.doi.640.medium.imageSmallSideProfileNodePath.png/1544220629072.png'},
+
+            ITAR:	{   title: 'Midsize Convertible',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/ITAR.doi.640.medium.imageSmallSideProfileNodePath.png/1526421297876.png'},
+
+            JKAR:	{   title: 'Compact Cargo Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/JKAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744318450.png'},
+
+            LCAR:	{   title: 'Luxury',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/LCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262778275.png'},
+
+            LFAR:	{   title: 'Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/LFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1554401969012.png'},
+
+            LFDR:	{   title: 'Luxury SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/LFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1554401969012.png'},
+
+            LSAR:	{   title: 'Luxury Sport',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/LSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786412861.png'},
+
+            LTAR:	{   title: 'Luxury Convertible',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/LTAR.doi.640.medium.imageSmallSideProfileNodePath.png/1501593253092.png'},
+
+            MVAR:	{   title: '7 Passenger Minivan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/MVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618263096675.png'},
+
+            OFAR:	{   title: 'Extended Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/OFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786790699.png'},
+
+            OVAR:	{   title: '12-Passenger-Van-Med-High Roof',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/OVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744296328.png'},
+
+            PCAR:	{   title: 'Premium',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/PCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1574880326763.png'},
+
+            PFAR:	{   title: 'Premium SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262876980.png'},
+
+            PFDR:	{   title: 'Premium SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262876980.png'},
+
+            PGAR:	{   title: 'Premium Crossover',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PGAR.doi.640.medium.imageSmallSideProfileNodePath.png/1547581755813.png'},
+
+            PGDR:	{   title: 'Premium Crossover AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PGDR.doi.640.medium.imageSmallSideProfileNodePath.png/1547581755813.png'},
+
+            PPAR:	{   title: 'Pickup',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/PPAR.doi.640.medium.imageSmallSideProfileNodePath.png/1512427309887.png'},
+
+            PPBD:	{   title: 'Full Size Diesel Pickup',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/PPBD.doi.640.medium.imageSmallSideProfileNodePath.png/1512427309887.png'},
+
+            PPBR:	{   title: 'Premium Pickup AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/PPBR.doi.640.medium.imageSmallSideProfileNodePath.png/1512427309887.png'},
+
+            PQAR:	{   title: 'Premium All-Terrain',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/PQAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786791294.png'},
+
+            PSAR:	{   title: 'American Muscle Car',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/PSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786450843.png'},
+
+            PXAR:	{   title: 'Premium Special',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/PXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262777268.png'},
+
+            RFAR:	{   title: 'Standard Elite SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/RFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262875775.png'},
+
+            RVAR:	{   title: '12 Passenger Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/RVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744320042.png'},
+
+            RXAR:	{   title: 'Standard Elite',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/RXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262775892.png'},
+
+            SCAH:	{   title: 'Standard Hybrid',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/SCAH.doi.640.medium.imageSmallSideProfileNodePath.png/1543605920546.png'},
+
+            SCAR:	{   title: 'Standard',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/SCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1544210775124.png'},
+
+            SFAR:	{   title: 'Standard SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1551905658879.png'},
+
+            SFBR:	{   title: 'Intermediate SUV 4WD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SFBR.doi.640.medium.imageSmallSideProfileNodePath.png/1551905658879.png'},
+
+            SFDR:	{   title: 'Standard SUV AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SFDR.doi.640.medium.imageSmallSideProfileNodePath.png/1551905658879.png'},
+
+            SGAR:	{   title: 'Standard Crossover',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SGAR.doi.640.medium.imageSmallSideProfileNodePath.png/1629326200874.png'},
+
+            SGDR:	{   title: 'Standard Crossover AWD',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/SGDR.doi.640.medium.imageSmallSideProfileNodePath.png/1629326200874.png'},
+
+            SKAR:	{   title: 'Cargo Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/SKAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744297142.png'},
+
+            SPAR:	{   title: 'Standard Pickup',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/SPAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618263047434.png'},
+
+            SPBR:	{   title: 'Standard Pickup',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/TRUCKS/SPBR.doi.640.medium.imageSmallSideProfileNodePath.png/1618263047434.png'},
+
+            SSAR:	{   title: 'Sporty Car',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/SSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1574880314547.png'},
+
+            STAR:	{   title: 'Convertible',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/STAR.doi.640.medium.imageSmallSideProfileNodePath.png/1543605919377.png'},
+
+            SVAR:	{   title: '8 Passenger Minivan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/SVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1547668804155.png'},
+
+            UDAR:	{   title: 'Midsize Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/UDAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786816745.png'},
+
+            UFAR:	{   title: 'Premium Elite SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/UFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1544210749802.png'},
+
+            USAR:	{   title: 'Corvette',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/USAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786523359.png'},
+
+            UVAR:	{   title: '15-Passenger-Van-Med-High Roof',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/UVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1492744296328.png'},
+
+            UXAR:	{   title: 'Midsize Luxury Sedan'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/UXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786524705.png'},
+
+            UZAR:	{   title: 'Midsize Sport Luxury Sedan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/UZAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786525251.png'},
+
+            WCAE:	{   title: 'Electric Luxury Sedan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WCAE.doi.640.medium.imageSmallSideProfileNodePath.png/1654786525931.png'},
+
+            WCAR:	{   title: 'Full Size Luxury Sedan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WCAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786526850.png'},
+
+            WDAR:	{   title: 'Midsize Elite Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/WDAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786845703.png'},
+
+            WFAE:	{   title: 'Electric Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/WFAE.doi.640.medium.imageSmallSideProfileNodePath.png/1563547601546.png'},
+
+            WFAR:	{   title: 'Full Size Luxury SUV'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/WFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786870245.png'},
+
+            WSAR:	{   title: 'Performance Sport',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786640529.png'},
+
+            WXAR:	{   title: 'Luxury Performance Sport'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WXAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786641257.png'},
+
+            WZAR:	{   title: 'Premium Luxury Sedan'	,
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/WZAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786642019.png'},
+
+            WZAR:	{   title: 'Large Executive Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/WZAR.doi.640.medium.imageSmallSideProfileNodePath.png/1618262876399.png'},
+
+            XEAR:	{   title: 'Ultra Performance Sport',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/XEAR.doi.640.medium.imageSmallSideProfileNodePath.png/1656645360774.png'},
+
+            XFAR:	{   title: 'Special SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/XFAR.doi.640.medium.imageSmallSideProfileNodePath.png/1574796945850.png'},
+
+            XFAV:	{   title: 'Premium Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/XFAV.doi.640.medium.imageSmallSideProfileNodePath.png/1654786903622.png'},
+
+            XGAR:	{   title: 'Ultra Luxury SUV',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/SUVS/XGAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786937958.png'},
+
+            XSAR:	{   title: 'Elite Performance Sport',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/XSAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786674535.png'},
+
+            XVAR:	{   title: 'Limo Van',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/VANS/XVAR.doi.640.medium.imageSmallSideProfileNodePath.png/1654786699492.png'},
+
+            XZAR:	{   title: 'Ultra Luxury Sedan',
+                        image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/XZAR.doi.640.medium.imageSmallSideProfileNodePath.png/1655326317085.png'},
+                        
+                    
         },
        init : function() {
 
