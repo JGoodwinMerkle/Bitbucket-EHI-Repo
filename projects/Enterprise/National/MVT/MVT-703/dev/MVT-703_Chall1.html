@@ -338,7 +338,7 @@
 
             XZAR:	{   title: 'Ultra Luxury Sedan',
                         image:'https://assets.gcs.ehi.com/content/national/data/vehicle/bookingCountries/US/CARS/XZAR.doi.640.medium.imageSmallSideProfileNodePath.png/1655326317085.png'},
-                        
+
                     
         },
        init : function() {
@@ -396,10 +396,13 @@
                 if(document.querySelector('.vehicle.mvt-active')){
                     document.querySelector('.vehicle.mvt-active').classList.remove('mvt-active');
                 }
+                //console.log(e.target);
+                //fire tag
+                isoTest.fireTag(e.target,'Image Magnify Click');
                 isoTest.updateModal(e.target);
                
              });
-            // ONCE IMAGE LOADED
+            // check for image load
             document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').addEventListener('load', function() {
                 console.log('image loaded');
                 this.closest('.mvt-703-modal.modals_v2').classList.add('mvt-image-loaded');
@@ -409,25 +412,31 @@
                 }
             })
             //event for modal close on X click
-            document.querySelector('.mvt-703-modal.modals_v2 .modal__btn-close.icon.icon--close').addEventListener('click',function(){
+            document.querySelector('.mvt-703-modal.modals_v2 .modal__btn-close.icon.icon--close').addEventListener('click',function(e){
                 if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
                     document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
                     document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-image-loaded');
                     document.body.classList.remove('ReactModal__Body--open');
+                    //fire tag
+                    isoTest.fireTag(e.target,'Zoom Modal X Click');
                 }
             });
          
              //event for modal close on closebtn click
-             document.querySelector('.mvt-703-modal.modals_v2 .btn.btn--opaque.btn--underline.btn-secondary.mvt-703-close').addEventListener('click',function(){
+             document.querySelector('.mvt-703-modal.modals_v2 .btn.btn--opaque.btn--underline.btn-secondary.mvt-703-close').addEventListener('click',function(e){
                 if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
                     document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
                     document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-image-loaded');
                     document.body.classList.remove('ReactModal__Body--open');
+                     //fire tag
+                     isoTest.fireTag(e.target,'Zoom Modal Close CTA Click');
                 }
             });
           
              // select event click 
-             document.querySelector('.mvt-703-modal.modals_v2 .mvt-703-select').addEventListener('click',function(){
+             document.querySelector('.mvt-703-modal.modals_v2 .mvt-703-select').addEventListener('click',function(e){
+                //fire tag
+                isoTest.fireTag(e.target,'Zoom Modal Select CTA Click');
                 document.querySelector('.vehicle-list > .vehicle.mvt-active .vehicle__cta > button').click();
                 if(document.querySelector('.mvt-703-modal.modals_v2')){
                     document.querySelector('.mvt-703-modal.modals_v2').remove();
