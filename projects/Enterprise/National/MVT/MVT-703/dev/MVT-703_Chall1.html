@@ -343,7 +343,7 @@
         },
        init : function() {
 
-			isoTest.debug =true;
+			//isoTest.debug =true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -362,7 +362,7 @@
 			
 		},
 		chall: function(ele){
-         console.log(ele);
+         //console.log(ele);
          if(!document.querySelector('.mvt-703-modal.modals_v2')) {
             document.body.insertAdjacentHTML('beforeend',isoTest.modal);
          }
@@ -382,7 +382,7 @@
             var vehicleMain = ele.closest('.vehicle');
             var vehicleReact = isoTest.getReactComponent(vehicleMain);
             var sippCode = vehicleReact.return.memoizedProps.vehicleCode;
-            console.log(isoTest.vehicleData[sippCode].title);
+            //console.log(isoTest.vehicleData[sippCode].title);
             vehicleMain.classList.add('mvt-active');
             document.querySelector('.mvt-703-modal.modals_v2 .modal__header h2').innerText = isoTest.vehicleData[sippCode].title;
             document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').setAttribute('src',isoTest.vehicleData[sippCode].image);
@@ -404,7 +404,7 @@
              });
             // check for image load
             document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').addEventListener('load', function() {
-                console.log('image loaded');
+                //console.log('image loaded');
                 this.closest('.mvt-703-modal.modals_v2').classList.add('mvt-image-loaded');
                 if(document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide') && document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-image-loaded')) {
                     document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-703-hide');
