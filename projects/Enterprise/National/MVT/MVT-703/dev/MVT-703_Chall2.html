@@ -1,5 +1,4 @@
 <style>
-  
 	.mvt-703-vehicle-zoom {
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.85613 9.7068C2.17831 9.7068 0 7.52952 0 4.85326C0 2.17702 2.17848 0 4.85613 0C7.53378 0 9.71255 2.17727 9.71255 4.85354C9.71255 7.52977 7.53398 9.7068 4.85613 9.7068ZM4.85613 1.25703C2.87196 1.25703 1.25778 2.87037 1.25778 4.85326C1.25778 6.83614 2.87207 8.44948 4.85613 8.44948C6.84019 8.44948 8.45449 6.83614 8.45449 4.85326C8.4546 2.87026 6.8403 1.25703 4.85613 1.25703Z' fill='%2300703C'/%3E%3Cpath d='M4.89996 2.79834V7.17203' stroke='%2300703C' stroke-miterlimit='10'/%3E%3Cpath d='M7.08811 4.98519H2.71182' stroke='%2300703C' stroke-miterlimit='10'/%3E%3Cpath d='M12.6782 13.9137L8.24745 9.48556C8.13228 9.37046 8.13228 9.182 8.24745 9.06678L9.06383 8.25087C9.179 8.13578 9.36757 8.13578 9.48286 8.25087L13.9136 12.679C14.0288 12.7941 14.0288 12.9826 13.9136 13.0978L13.0972 13.9137C12.9821 14.0288 12.7935 14.0288 12.6783 13.9136L12.6782 13.9137Z' fill='%2300703C'/%3E%3C/svg%3E");
         width: 14px;
@@ -392,7 +391,9 @@
             //keep focus 
             isoTest.keepFocus(document.querySelector('.mvt-703-modal.modals_v2'));
             //event for modal show
-            isoTest.addEventOn('click','.mvt-703-vehicle-image',function(e) {
+			var zoomIcons = document.querySelectorAll(".mvt-703-vehicle-image");
+			for (var i = 0; i < zoomIcons.length; i++) {
+				zoomIcons[i].addEventListener("click",function(e) {
                 if(document.querySelector('.vehicle.mvt-active')){
                     document.querySelector('.vehicle.mvt-active').classList.remove('mvt-active');
                 }
@@ -402,6 +403,8 @@
                 isoTest.updateModal(e.target);
                
              });
+			}
+           
             // check for image load
             document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').addEventListener('load', function() {
                 //console.log('image loaded');
@@ -423,7 +426,7 @@
             });
          
              //event for modal close on closebtn click
-             document.querySelector('.mvt-703-modal.modals_v2 .btn.btn--opaque.btn--underline.btn-secondary.mvt-703-close').addEventListener('click',function(e){
+             document.querySelector('.mvt-703-modal.modals_v2 .btn.btn-primary.mvt-703-close').addEventListener('click',function(e){
                 if(!document.querySelector('.mvt-703-modal.modals_v2').classList.contains('mvt-703-hide')) {
                     document.querySelector('.mvt-703-modal.modals_v2').classList.add('mvt-703-hide');
                     document.querySelector('.mvt-703-modal.modals_v2').classList.remove('mvt-image-loaded');
@@ -482,22 +485,6 @@
 		observeEl: function (selector, callback) {
                   var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
         },
-        //adding helper to add events to multiple elements
-        addEventOn: function (eventType, selector, action) {
-        document.addEventListener(eventType, function (e) {
-          var target = e.target;
-          if (target.matches(selector)) {
-            action(e);
-          } else {
-            while (target && target.parentNode !== document) {
-              target = target.parentNode;
-              if (!target) {
-                return;
-              }
-            }
-          }
-        });
-      },
 
 	};
 	isoTest.init();

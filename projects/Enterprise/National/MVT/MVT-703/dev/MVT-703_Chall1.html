@@ -392,16 +392,20 @@
             //keep focus 
             isoTest.keepFocus(document.querySelector('.mvt-703-modal.modals_v2'));
             //event for modal show
-            isoTest.addEventOn('click','.mvt-703-vehicle-image',function(e) {
+            var zoomIcons = document.querySelectorAll(".mvt-703-vehicle-image");
+			for (var i = 0; i < zoomIcons.length; i++) {
+				zoomIcons[i].addEventListener("click",function(e) {
                 if(document.querySelector('.vehicle.mvt-active')){
                     document.querySelector('.vehicle.mvt-active').classList.remove('mvt-active');
                 }
-                //console.log(e.target);
+               // console.log(e.target);
                 //fire tag
                 isoTest.fireTag(e.target,'Image Magnify Click');
                 isoTest.updateModal(e.target);
                
              });
+			}
+          
             // check for image load
             document.querySelector('.mvt-703-modal.modals_v2 .modal__body img').addEventListener('load', function() {
                 //console.log('image loaded');
@@ -493,22 +497,7 @@
 		observeEl: function (selector, callback) {
                   var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
         },
-        //adding helper to add events to multiple elements
-        addEventOn: function (eventType, selector, action) {
-        document.addEventListener(eventType, function (e) {
-          var target = e.target;
-          if (target.matches(selector)) {
-            action(e);
-          } else {
-            while (target && target.parentNode !== document) {
-              target = target.parentNode;
-              if (!target) {
-                return;
-              }
-            }
-          }
-        });
-      },
+      
 
 	};
 	isoTest.init();
