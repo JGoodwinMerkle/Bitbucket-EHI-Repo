@@ -93,6 +93,10 @@
 		flex-direction: column;
 	}
 
+	.vehicle-header__sort-by:not(.Iso) {
+		display: none;
+	}
+
 	.vehicle-list .vehicle-list__item {
 		display: flex;
 	}
@@ -192,10 +196,102 @@
 			portfolio: 'Enterprise.com',
 			test: 'Featured Vehile 2.0',
 			creative: 'Challenger 1',
+			selector: "MVT695B",
+			selector2: "MVT695C",
 			filters: '.vehicle-filter__header-cta .vehicle-filter__header-link',
 			vehicleItem: '.vehicle-list__item',
 			preSelected: '.vehicle-item.is-search-by-filter, .vehicle-item.is-pre-selected',
 			template: '<span class="rs-callout rs-callout--highlight"><span class="rs-callout__icon-container"><i role="img" aria-hidden="true" class="rs-callout__icon rs-icon"><svg viewBox="0 0 22 20"><use xlink:href="#icn-star2"></use></svg></i></span><span class="rs-callout__label">{tag}</span></span>',
+			mostPopExists: false,
+			topReserveSipArr: [
+				"FCAR",
+				"ICAR",
+				"IFAR",
+				"CCAR",
+				"SCAR",
+				"MVAR",
+				"ECAR",
+				"SFAR",
+				"FFAR",
+				"PPAR",
+				"CFAR",
+				"PCAR",
+				"PFAR",
+				"SPAR",
+				"XXAR",
+				"FVAR",
+				"LCAR",
+				"PGAR",
+				"STAR",
+				"SSAR",
+				"UFAR",
+				"PXAR",
+				"FJAR",
+				"GXAR",
+				"RVAR",
+				"LYMR",
+				"RFAR",
+				"SFDR",
+				"WFAR",
+				"LFAR",
+				"WZAR",
+				"SKAR",
+				"IFDR",
+				"IJAR",
+				"UXAR",
+				"WCAR",
+				"WXAR",
+				"RXAR",
+				"WCAE",
+				"SYMR",
+				"GXAE",
+				"FFDR",
+				"ICAE",
+				"PFDR",
+				"SVAR",
+				"CFDR",
+				"PPBR",
+				"GYMR",
+				"EYMR",
+				"XFAR",
+				"PGDR",
+				"FCAH",
+				"FYMR",
+				"UVAR",
+				"UDAR",
+				"OFAR",
+				"SCAH",
+				"JKAR",
+				"IYMR",
+				"WDAR",
+				"PYMR",
+				"XFAV",
+				"GKAR",
+				"PSAR",
+				"LFDR",
+				"OVAR",
+				"UZAR",
+				"CFAE",
+				"OQBD",
+				"SPBR",
+				"RKAR",
+				"USAR",
+				"PQAR",
+				"LSAR",
+				"LTAR",
+				"XSAR",
+				"WSAR",
+				"OQAR",
+				"XEAR",
+				"OPBD",
+				"XGAR",
+				"XVAR",
+				"CTAR",
+				"ITAR",
+				"XZAR",
+				"SGAR",
+			],
+			availCarSippArr_In_Order: [],
 			featured: {
 				0: {
 					car: 'ICAE',
@@ -237,6 +333,29 @@
 			audience: {
 				group: ['32', '23', '30', '16']
 			},
+			sortOptions: [
+				{ index: 0, value: "Recommended", text: "Featured", selected: false },
+				{ index: 3, value: "Most Popular", text: "Most Popular", selected: false },
+				{ index: 1, value: "Low to High", text: "Low to High", selected: false },
+				{ index: 2, value: "High to Low", text: "High to Low", selected: false },
+			],
+			sortOptionsC: [
+				{ index: 3, value: "Most Popular", text: "Most Popular", selected: false },
+				{ index: 0, value: "Recommended", text: "Featured", selected: false },
+				{ index: 1, value: "Low to High", text: "Low to High", selected: false },
+				{ index: 2, value: "High to Low", text: "High to Low", selected: false },
+			],
+			sortOptionsControl: [
+				{ index: 0, value: "Recommended", text: "Featured", selected: false },
+				{ index: 1, value: "Low to High", text: "Low to High", selected: false },
+				{ index: 2, value: "High to Low", text: "High to Low", selected: false },
+			],
+			mobileOptions: [
+				{ index: 0, value: "Recommended", text: "Featured", selected: false },
+				{ index: 3, value: "Most Popular", text: "Most Popular", selected: false },
+				{ index: 1, value: "Low to High", text: "Low to High", selected: false },
+				{ index: 2, value: "High to Low", text: "High to Low", selected: false },
+			],
 			featAvail: false,
 			init: function () {
 
@@ -253,23 +372,22 @@
 					}
 				});
 
-				window.addEventListener('hashchange', isoTest.hashHandler, false);
 				window.addEventListener('ttFeatVehicle', isoTest.labelVehicle, false);
 
-				var spinnerUpdate = new MutationObserver(function (mutationsList) {
+				const spinnerUpdate = new MutationObserver(function (mutationsList) {
 					mutationsList.forEach(function (mutation) {
 						mutation.removedNodes.forEach(function (removedNode) {
-							if (removedNode.classList !== undefined) {
-								if (removedNode.classList.contains('spinner-container')) {
-									isoTest.hashHandler();
-									/* add this to hide tag when outside of designated location */
+							if (removedNode.classList !== undefined && removedNode.classList.contains("transition")) {
+								isoTest.elementLoaded(".vehicle-list .vehicle-list__item:last-child", function () {
+									isoTest.chall();
 									isoTest.hideBanner();
-								}
+									setTimeout(isoTest.checkSort, 200);
+								});
 							}
 						});
 					});
 				});
-				spinnerUpdate.observe(document.querySelector('body'), { subtree: true, childList: true });
+				spinnerUpdate.observe(document.querySelector("body"), { subtree: true, childList: true });
 
 				var removedMobileBanner = new MutationObserver(function (mutationsList) {
 					mutationsList.forEach(function (mutation) {
@@ -318,16 +436,6 @@
 					});
 				});
 
-			},
-			hashHandler: function () {
-				if (/cars/.test(location.hash)) {
-					isoTest.elementLoaded(isoTest.vehicleItem, function () {
-						if (!ReservationStateTree.get(['model', 'carSelect', 'selectedCar'])) {
-							isoTest.chall();
-							isoTest.hideBanner();
-						}
-					});
-				}
 			},
 			chall: function () {
 				isoTest.log('chall()');
@@ -423,66 +531,495 @@
 					}
 				});
 				/* add this to hide tag when outside of designated location */
-				document.querySelector('.vehicle-header__sort-by .rs-input').addEventListener('change', function () {
+				if (document.querySelector(".vehicle-header__sort-by .rs-input .rs-select.Iso")) {
+					document.querySelector(".vehicle-header__sort-by .rs-input .rs-select.Iso").addEventListener(
+						"change",
+						function (e) {
+							setTimeout(() => {
+								document.querySelector(".rs-input__field.rs-select:not(.Iso)").value = e.target.value;
+								isoTest.checkSort();
+								isoTest.hideBanner();
+							}, 200);
+						}, false);
+				}
+			},
+			spinnerChange: function () {
+				isoTest.observeEl(".vehicle-header__info-group", function () {
+					isoTest.chall();
+				});
+			},
+			recommendedSort: function (sort, list) {
+				isoTest.elementLoaded(".iso-preSelectedClass", function () {
+					const filteredList = [];
+					list.forEach((l) => {
+						const listItems = l.querySelector(".vehicle-item");
+						if (listItems.classList.contains("rs-tag-container")) {
+							filteredList.push(l);
+						}
+					});
+
+					if (filteredList.length > 0) {
+						document.querySelector(".iso-preSelectedClass").style.order = filteredList.length;
+						list.forEach((l, index) => {
+							if (!l.querySelector(".vehicle-item").classList.contains("rs-tag-container") && !l.classList.contains("iso-preSelectedClass")) {
+								l.style.order = index + filteredList.length;
+							}
+						});
+					} else {
+						document.querySelector(".iso-preSelectedClass").style.order = -1;
+					}
+
+				});
+			},
+			mostPopSort: function (sort) {
+				isoTest.elementLoaded(".iso-preSelectedClass", function () {
+					isoTest.availCarSippArr_In_Order = [];
 					setTimeout(() => {
-						isoTest.checkSort();
-						isoTest.hideBanner();
-					}, 200);
-				}, false);
+						isoTest.orderCars(sort);
+					}, 5);
+				});
+			},
+			updateSearchData: function () {
+				const radioButtons = document.querySelectorAll(".vehicle-filter__filter__radio.rs-radio > input[name='vehicleSortBy']");
+				for (let index = 0; index < radioButtons.length; index++) {
+					const element = radioButtons[index];
+					if (element.checked) {
+						const activeRadio = element;
+						if (activeRadio.value == "High to Low" || activeRadio.value == "Low to High") {
+							isoTest.elementLoaded(".iso-preSelectedClass", function () {
+								const preSelectedList = document.querySelector(".iso-preSelectedClass");
+								const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+								const currentOrder = dtmAttr.split("|").slice(-1);
+								setTimeout(() => {
+									preSelectedList.style.order = currentOrder;
+								}, 1.5);
+							});
+							const event = new Event("change", {
+								bubbles: true,
+							});
+							document.querySelector(".rs-input__field.rs-select:not(.Iso)").dispatchEvent(event);
+						}
+						if (activeRadio.value === "Most Popular") {
+							isoTest.mostPopSort(activeRadio);
+						}
+					}
+				}
+			},
+			allMobileSort: function () {
+				const vehicleHeaderText = document.querySelector(".vehicle-header__sorted-by");
+				isoTest.mobileOptions.forEach((s) => {
+					if (s.selected) {
+						vehicleHeaderText.innerText = "Sorted By: " + s.text;
+					}
+				});
+
+				const selected = isoTest.mobileOptions.filter((m) => m.selected === true);
+
+				if (selected[0].value == "High to Low" || selected[0].value == "Low to High") {
+					isoTest.elementLoaded(".iso-preSelectedClass", function () {
+						const preSelectedList = document.querySelector(".iso-preSelectedClass");
+						const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+						const currentOrder = dtmAttr.split("|").slice(-1);
+						setTimeout(() => {
+							preSelectedList.style.order = currentOrder;
+						}, 1.5);
+
+						// setTimeout(() => {
+						const event = new Event("change", {
+							bubbles: true,
+						});
+						// console.log("selc", isoTest.mobileOptions);
+						// console.log("high low val", document.querySelector(".rs-input__field.rs-select:not(.Iso)").value);
+						document.querySelector(".rs-input__field.rs-select:not(.Iso)").dispatchEvent(event);
+						// }, 20);
+					});
+				}
+				/*  if (selected[0].value === "Most Popular") {
+					  isoTest.mostPopSort(selected[0].value);
+				  } */
+				if (selected[0].value === "Recommended") {
+					const radioButtons = document.querySelectorAll(".vehicle-filter__filter__radio.rs-radio > input[name='vehicleSortBy']");
+					const list = document.querySelectorAll(".vehicle-list .vehicle-list__item");
+					isoTest.recommendedSort(selected[0].value, list);
+				}
 			},
 			checkSort: function () {
-				var sort = document.querySelector('.vehicle-header__sort-by .rs-input .rs-select').value;
-				var list = document.querySelectorAll('.vehicle-list .vehicle-list__item');
-				const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
-				const filteredReservation = isoTest.audience.group.filter(g => g == groupId);
-				if (sort == 'Recommended') {
-					isoTest.elementLoaded('.iso-preSelectedClass', function () {
-						const filteredList = [];
-						list.forEach(l => {
-							const listItems = l.querySelector(".vehicle-item");
-							if (listItems.classList.contains("rs-tag-container")) {
-								filteredList.push(l);
-							};
+				const mediaQuery = window.matchMedia("(max-width: 1279px)");
+
+				function handleTabletChange(e) {
+					// Check if the media query is true
+					if (e.matches) {
+						// debugger;
+						console.log("This is Mobile");
+						isoTest.labelVehicle();
+						isoTest.elementLoaded(".vehicle-header__sorted-by", function () {
+							const vehicleHeaderText = document.querySelector(".vehicle-header__sorted-by");
+							isoTest.mobileOptions.forEach((s) => {
+								if (s.selected) {
+									vehicleHeaderText.innerText = "Sorted By: " + s.text;
+								}
+							});
 						});
 
-						if (filteredList.length > 0) {
-							document.querySelector('.iso-preSelectedClass').style.order = filteredList.length;
-							list.forEach((l, index) => {
-								if ((!l.querySelector(".vehicle-item").classList.contains("rs-tag-container")) && (!l.classList.contains('iso-preSelectedClass'))) {
-									l.style.order = index + (filteredList.length);
-								};
-							});
-						} else {
-							if (store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2)) {
-								console.log("this is the matched location", filteredReservation);
-								document.querySelector('.iso-preSelectedClass').style.order = -1;
+						if (document.querySelector(".vehicle-header__sorted-by")) {
+							const selectedVal = isoTest.mobileOptions.filter((m) => m.selected === true);
+
+							if (!selectedVal.length || (selectedVal.length && selectedVal[0].value == "Recommended")) {
+								setTimeout(() => {
+									const radioButtons = document.querySelectorAll(".vehicle-filter__filter__radio.rs-radio > input[name='vehicleSortBy']");
+									const list = document.querySelectorAll(".vehicle-list .vehicle-list__item");
+									// console.log("selectedVal", selectedVal)
+									isoTest.recommendedSort("Recommended", list);
+								}, 201);
+							} else if (selectedVal[0].value == "Most Popular") {
+								setTimeout(() => {
+									// console.log("selectedVal", selectedVal)
+									isoTest.mostPopSort(selectedVal[0].value);
+								}, 201);
+							} else {
+								if (document.querySelector(".iso-preSelectedClass")) {
+									const preSelectedList = document.querySelector(".iso-preSelectedClass");
+									const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+									const currentOrder = dtmAttr.split("|").slice(-1);
+									setTimeout(() => {
+										// console.log("selectedVal", selectedVal)
+										preSelectedList.style.order = currentOrder;
+										const event = new Event("change", {
+											bubbles: true,
+										});
+										document.querySelector(".rs-input__field.rs-select:not(.Iso)").dispatchEvent(event);
+									}, 201);
+								}
 							}
-						};
-					});
-				};
+						}
 
-				if (sort == 'High to Low') {
-					isoTest.elementLoaded('.iso-preSelectedClass', function () {
-						const preSelectedList = document.querySelector('.iso-preSelectedClass');
-						const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
-						const currentOrder = dtmAttr.split("|").slice(-1);
-						setTimeout(() => {
-							preSelectedList.style.order = currentOrder;
-						}, 10);
-					});
-				};
+						isoTest.observeEl(".ReactModal__Overlay--after-open", () => {
+							/*  const mostPopBtn =
+								  '<label class="vehicle-filter__filter__radio rs-radio"><input aria-checked="false" type="radio" class="mobilePop" name="vehicleSortBy" value="Most Popular"><span class="rs-radio__text" aria-hidden="false">Most Popular</span></label>';
+   */
+							isoTest.elementLoaded(".vehicle-filter__header", function () {
+								// this is offer B
+								/* if (!document.querySelector(".mobilePop")) {
+									 document
+										 .querySelectorAll(".ReactModal__Overlay--after-open .vehicle-filter__filter")[0]
+										 .firstChild.querySelectorAll(".rs-radio")[0]
+										 .insertAdjacentHTML("afterend", mostPopBtn);
+								 } */
 
-				if (sort == 'Low to High') {
-					isoTest.elementLoaded('.iso-preSelectedClass', function () {
-						const preSelectedList = document.querySelector('.iso-preSelectedClass');
-						const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
-						const currentOrder = dtmAttr.split("|").slice(-1);
-						setTimeout(() => {
-							preSelectedList.style.order = currentOrder;
-						}, 10);
+
+								const radioButtons = document.querySelectorAll(".vehicle-filter__filter__radio.rs-radio > input[name='vehicleSortBy']");
+
+								radioButtons.forEach((r) => {
+									isoTest.mobileOptions.forEach((m) => {
+										if (m.selected) {
+											if (m.value == r.value) {
+												r.checked = true;
+											}
+										}
+									});
+								});
+
+								const list = document.querySelectorAll(".vehicle-list .vehicle-list__item");
+								// loop through the radio buttons
+								for (let i = 0; i < radioButtons.length; i++) {
+									// listen for changes on each radio button
+									const allRadio = radioButtons[i];
+									radioButtons[i].addEventListener("change", function (e) {
+										const radioValue = e.target.value;
+										isoTest.mobileOptions = isoTest.mobileOptions.map((m) => {
+											if (m.value == radioValue) {
+												m.selected = true;
+												m.value == radioValue;
+												sessionStorage.setItem("radioSelected", m.selected);
+												sessionStorage.setItem("radioValue", m.value);
+											} else {
+												m.selected = false;
+											}
+											return m;
+										});
+
+										setTimeout(() => {
+											isoTest.allMobileSort();
+										}, 10);
+									});
+								}
+
+								const modalClose = document.querySelector(".rs-modal__wrapper .cta.cta--primary.cta--large.cta--noMargin");
+
+								// modalClose.addEventListener("click", function (e) {
+								//     isoTest.allMobileSort();
+								// })
+							});
+						});
+
+						const dollarCoin = document.querySelectorAll(".vehicle-redemption__options .vehicle-redemption__options-cta");
+						for (let x = 0; x < dollarCoin.length; x++) {
+							dollarCoin[x].addEventListener("click", function () {
+								const selectedVal = isoTest.mobileOptions.filter((m) => m.selected === true);
+
+								if (!selectedVal.length || (selectedVal.length && selectedVal[0].value == "Recommended")) {
+									setTimeout(() => {
+										const radioButtons = document.querySelectorAll(".vehicle-filter__filter__radio.rs-radio > input[name='vehicleSortBy']");
+										const list = document.querySelectorAll(".vehicle-list .vehicle-list__item");
+										isoTest.recommendedSort("Recommended", list);
+									}, 201);
+								} else {
+									const preSelectedList = document.querySelector(".iso-preSelectedClass");
+									const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+									const currentOrder = dtmAttr.split("|").slice(-1);
+									setTimeout(() => {
+										preSelectedList.style.order = currentOrder;
+									}, 201);
+								}
+
+								/*else if (selectedVal[0].value == "Most Popular") {
+									setTimeout(() => {
+										isoTest.mostPopSort(selectedVal[0].value);
+									}, 201);
+								} */
+							});
+						}
+					} else {
+						isoTest.elementLoaded(".vehicle-list", () => {
+							const vehicleList = document.querySelector(".vehicle-list");
+
+
+							if (vehicleList.classList.contains(isoTest.selector)) { //Offer B
+
+								console.log('Variant B is running at the same time')
+
+								console.log("This is Desktop!!");
+								const vehicleHeaderInfo = document.querySelector(".vehicle-header__info-group");
+								const vehicleSortBy = '<div class="vehicle-header__sort-by Iso"><label class="rs-label" for="vehicleSortBy"><span>Sort By</span></label><div class="rs-input"><select class="rs-input__field rs-select Iso" name="vehicleSortBy" aria-required="false" id="vehicleSortBy"></select></div></div>';
+								if (!document.querySelector(".vehicle-header__sort-by.Iso .rs-select")) {
+									vehicleHeaderInfo.insertAdjacentHTML("afterbegin", vehicleSortBy);
+								}
+
+								isoTest.elementLoaded(".vehicle-header__sort-by.Iso .rs-select", function () {
+									const sort = document.querySelector(".vehicle-header__sort-by.Iso .rs-select");
+									if (!sort.classList.contains("added")) {
+										isoTest.sortOptions.forEach(s => {
+											let option = document.createElement('option');
+											option.innerHTML = s.text;
+											option.value = s.value;
+											option.selected = s.selected;
+											option.setAttribute("data-index", s.index);
+											sort.appendChild(option);
+											sort.classList.add("added");
+										})
+									}
+
+									const list = document.querySelectorAll(".vehicle-list .vehicle-list__item");
+									const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+									const filteredReservation = isoTest.audience.group.filter((g) => g == groupId);
+									isoTest.sortOptions = isoTest.sortOptions.map(s => {
+										if (sort.value == s.value) {
+											s.selected = true;
+											s.value = sort.value;
+										} else {
+											s.selected = false;
+										}
+										return s;
+									})
+
+									if (sort.value == "Recommended") {
+										isoTest.recommendedSort(sort, list);
+									}
+
+									if (sort.value == "High to Low" || sort.value == "Low to High") {
+										isoTest.elementLoaded(".iso-preSelectedClass", function () {
+											const preSelectedList = document.querySelector(".iso-preSelectedClass");
+											const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+											const currentOrder = dtmAttr.split("|").slice(-1);
+											setTimeout(() => {
+												preSelectedList.style.order = currentOrder;
+											}, 1.5);
+										});
+										const event = new Event('change', {
+											bubbles: true
+										});
+										document.querySelector(".rs-input__field.rs-select:not(.Iso)").dispatchEvent(event);
+									}
+
+									if (sort.value == "Most Popular") {
+										isoTest.mostPopSort(sort);
+									}
+
+									isoTest.labelVehicle();
+
+								})
+							} else if (vehicleList.classList.contains(isoTest.selector2)) { // Offer C
+								console.log("Variant C is running at the same time");
+
+								console.log("This is Desktop!!");
+								const vehicleHeaderInfo = document.querySelector(".vehicle-header__info-group");
+								const vehicleSortBy =
+									'<div class="vehicle-header__sort-by Iso"><label class="rs-label" for="vehicleSortBy"><span>Sort By</span></label><div class="rs-input"><select class="rs-input__field rs-select Iso" name="vehicleSortBy" aria-required="false" id="vehicleSortBy"></select></div></div>';
+								if (!document.querySelector(".vehicle-header__sort-by.Iso .rs-select")) {
+									vehicleHeaderInfo.insertAdjacentHTML("beforebegin", vehicleSortBy);
+								}
+
+								isoTest.elementLoaded(".vehicle-header__sort-by.Iso .rs-select", function () {
+									const sort = document.querySelector(".vehicle-header__sort-by.Iso .rs-select");
+									if (!sort.classList.contains("added")) {
+										isoTest.sortOptionsC.forEach((s) => {
+											let option = document.createElement("option");
+											option.innerHTML = s.text;
+											option.value = s.value;
+											option.selected = s.selected;
+											option.setAttribute("data-index", s.index);
+											sort.appendChild(option);
+											sort.classList.add("added");
+										});
+									}
+
+									const list = document.querySelectorAll(".vehicle-list .vehicle-list__item");
+									const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+									const filteredReservation = isoTest.audience.group.filter((g) => g == groupId);
+									isoTest.sortOptionsC = isoTest.sortOptionsC.map((s) => {
+										if (sort.value == s.value) {
+											s.selected = true;
+											s.value = sort.value;
+										} else {
+											s.selected = false;
+										}
+										return s;
+									});
+
+									if (sort.value == "Recommended") {
+										isoTest.recommendedSort(sort, list);
+									}
+
+									if (sort.value == "High to Low" || sort.value == "Low to High") {
+										isoTest.elementLoaded(".iso-preSelectedClass", function () {
+											const preSelectedList = document.querySelector(".iso-preSelectedClass");
+											const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+											const currentOrder = dtmAttr.split("|").slice(-1);
+											setTimeout(() => {
+												preSelectedList.style.order = currentOrder;
+											}, 1.5);
+										});
+										const event = new Event("change", {
+											bubbles: true,
+										});
+										document.querySelector(".rs-input__field.rs-select:not(.Iso)").dispatchEvent(event);
+									}
+
+									if (sort.value == "Most Popular") {
+										isoTest.mostPopSort(sort);
+									}
+
+									isoTest.labelVehicle();
+								});
+							} else if (!vehicleList.classList.contains(isoTest.selector) && !vehicleList.classList.contains(isoTest.selector2)) {
+								console.log("Control");
+
+								console.log("This is Desktop!!");
+								const vehicleHeaderInfo = document.querySelector(".vehicle-header__info-group");
+								const vehicleSortBy =
+									'<div class="vehicle-header__sort-by Iso"><label class="rs-label" for="vehicleSortBy"><span>Sort By</span></label><div class="rs-input"><select class="rs-input__field rs-select Iso" name="vehicleSortBy" aria-required="false" id="vehicleSortBy"></select></div></div>';
+								if (!document.querySelector(".vehicle-header__sort-by.Iso .rs-select")) {
+									vehicleHeaderInfo.insertAdjacentHTML("beforebegin", vehicleSortBy);
+								}
+
+								isoTest.elementLoaded(".vehicle-header__sort-by.Iso .rs-select", function () {
+									const sort = document.querySelector(".vehicle-header__sort-by.Iso .rs-select");
+									if (!sort.classList.contains("added")) {
+										isoTest.sortOptionsControl.forEach((s) => {
+											let option = document.createElement("option");
+											option.innerHTML = s.text;
+											option.value = s.value;
+											option.selected = s.selected;
+											option.setAttribute("data-index", s.index);
+											sort.appendChild(option);
+											sort.classList.add("added");
+										});
+									}
+
+									const list = document.querySelectorAll(".vehicle-list .vehicle-list__item");
+									const groupId = store.getState().toJS().app.baobab.session.reservationSession.pickupLocationWithDetail.location_id.slice(0, 2);
+									const filteredReservation = isoTest.audience.group.filter((g) => g == groupId);
+									isoTest.sortOptionsControl = isoTest.sortOptionsControl.map((s) => {
+										if (sort.value == s.value) {
+											s.selected = true;
+											s.value = sort.value;
+										} else {
+											s.selected = false;
+										}
+										return s;
+									});
+
+									if (sort.value == "Recommended") {
+										isoTest.recommendedSort(sort, list);
+									}
+
+									if (sort.value == "High to Low" || sort.value == "Low to High") {
+										isoTest.elementLoaded(".iso-preSelectedClass", function () {
+											const preSelectedList = document.querySelector(".iso-preSelectedClass");
+											const dtmAttr = preSelectedList.getAttribute("data-dtm-tracking");
+											const currentOrder = dtmAttr.split("|").slice(-1);
+											setTimeout(() => {
+												preSelectedList.style.order = currentOrder;
+											}, 1.5);
+										});
+										const event = new Event("change", {
+											bubbles: true,
+										});
+										document.querySelector(".rs-input__field.rs-select:not(.Iso)").dispatchEvent(event);
+									}
+
+
+									isoTest.labelVehicle();
+								});
+							}
+
+						});
+					}
+				}
+
+				// Register event listener
+				mediaQuery.addListener(handleTabletChange);
+
+				// Initial check
+				handleTabletChange(mediaQuery);
+			},
+			orderCars: async function (value) {
+				const availCarsInDomArr = document.querySelectorAll(".vehicle-select__main>.vehicle-list .vehicle-list__item");
+
+				const mostPopularFilter = document.querySelector(".vehicle-header__sort-by");
+
+				const allCars = store.getState().toJS().gmi.ui.filters.car_classes.items.filtered;
+				const availableCarList = allCars.filter((v) => v.status === "AVAILABLE_AT_RETAIL_RATE");
+				var availCarSippArr = [];
+				for (let i = 0; i < allCars.length; i++) {
+					if (allCars[i].status === "AVAILABLE_AT_RETAIL_RATE") {
+						availCarSippArr.push(allCars[i].code);
+					}
+				}
+				for (let i = 0; i < isoTest.topReserveSipArr.length; i++) {
+					if (availCarSippArr.includes(isoTest.topReserveSipArr[i])) {
+						isoTest.availCarSippArr_In_Order.push(isoTest.topReserveSipArr[i]);
+					}
+				}
+
+				let availableDOMVehicles = [];
+				for (let i = 0; i < availableCarList.length; i++) {
+					const index = isoTest.availCarSippArr_In_Order.findIndex((x) => x == availableCarList[i].code);
+					availableCarList[i].sort_id = index;
+				}
+
+				availableCarList.sort((a, b) => a.sort_id - b.sort_id); // b - a for reverse sort
+				const vItems = document.querySelectorAll(".vehicle-list .vehicle-list__item");
+				availableCarList.forEach((h) => {
+					vItems.forEach((v) => {
+						const attrb = v.getAttribute("data-dtm-tracking");
+						if (attrb.includes(h.code)) {
+							const order = attrb.split("|")[4];
+							v.style.order = parseInt(h.sort_id);
+							availableDOMVehicles.push(v);
+						}
 					});
-				};
-				isoTest.labelVehicle();
+				});
 			},
 			labelVehicle: function () {
 				isoTest.log('labelVehicle()');
