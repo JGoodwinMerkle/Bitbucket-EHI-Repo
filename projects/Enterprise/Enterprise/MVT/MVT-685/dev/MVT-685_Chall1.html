@@ -1,4 +1,85 @@
 <style>
+    /*styling for reswidget */
+    .inner-container.expanded.mvt-685-widget{
+        min-height: 0px;
+    }
+    .inner-container.expanded.mvt-685-widget .expanded-components {
+        display: none;
+    }
+    .inner-container.expanded.mvt-685-widget .pick-up-location .rs-input__field--hidden {
+        display: block;
+    }
+    .inner-container.expanded.mvt-685-widget .pick-up-location .rs-input__fake-field {
+        display: none;
+    }
+    /*styling for banner */
+	.mvt-685-banner {
+        margin: 96px auto 83px auto;
+        position: relative;
+        width: 65.6875rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .mvt-685-banner .mvt-header {
+        align-self: center;
+        font-weight: 800;
+        font-size: 26px;
+        line-height: 24px;
+        text-align: center;
+        letter-spacing: 0.2px;
+    }
+    .mvt-685-banner .mvt-container {
+        display: flex;
+        margin-top: 24px;
+        border-bottom: 1px solid #c3c3c3;
+        box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    .mvt-685-banner .mvt-image {
+        height: 256px;
+        background-size: cover;
+        width: 325px;
+     }
+     .mvt-685-banner .mvt-content {
+        background: #FFFFFF;
+         width: 70%;
+     }
+     .mvt-685-banner .mvt-wrap {
+        display: flex;
+        flex-direction: row;
+        padding: 33px 44px 26px 45px;
+     }
+     .mvt-685-banner .mvt-pickup {
+        border: 1px solid #C3C3C3;
+        border-radius: 0px;
+        padding: 18px 34px;
+        width: 50%;
+     }
+     .mvt-685-banner .mvt-pickup h5 ,.mvt-return h5{
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 21px;
+        letter-spacing: 0.02em;
+        color: #000000;
+        margin-bottom: 0px;
+     }
+     .mvt-685-banner .mvt-pickup p , .mvt-return p {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+        letter-spacing: 0.01em;
+        color: #000000;
+        margin-bottom: 0px;
+     }
+     .mvt-685-banner .mvt-return {
+        border: 1px solid #C3C3C3;
+        border-radius: 0px;
+        padding: 18px 34px;
+        width: 50%;
+     }
+     .mvt-685-banner .cta-container.cta-container--align-center.rs-modal__buttons-container {
+        justify-content: flex-end;
+        margin-right: 44px;
+     }
 </style>
 <script>
 (function() {
@@ -8,10 +89,29 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-685',
 		creative : 'Challenger 1',
-		selector : 'body',
-		init : function() {
+		selector : '.container.responsivegrid.teaser-style-3.padding-top--medium.aem-GridColumn.aem-GridColumn--default--12',
+        resWidget : '.inner-container.expanded',
+        templateBanner: `<div class="mvt-685-banner">
+                        <div class="mvt-header">Welcome back! Would you like to continue your reservation?</div>
+                        <div class="mvt-container"><div class="mvt-image"></div>
+                        <div class="mvt-content"> 
+                            <div class="mvt-wrap">
+                                <div class="mvt-pickup"><h5 class="mvt-content-title">PICK-UP</h5><p class="mvt-pickup-date">{pickupdate}</p><p class="mvt-pickup-time"> at {pickuptime}</p><p class="mvt-pickup-location">{pickuplocation}</p></div>
+                                <div class="mvt-return"><h5 class="mvt-content-title">RETURN</h5><p class="mvt-return-date">{returndate}</p><p class="mvt-return-time"> at {returntime}</p><p class="mvt-return-location">{returnlocation}</p></div>
+                            </div>
+                            
+                            <div class="cta-container cta-container--align-center rs-modal__buttons-container">
+                                <button class="cta cta--secondary cta--large cta--noMargin btn-cancel" type="button">Discard</button>
+                                <a class="cta cta--primary cta--large cta--noMargin btn-continue" type="button">Continue Reservation</a>
+                            </div>
+                        </div>
+                        </div>
+                     </div>`,
+        deepLink : '/en/deeplink.html?v=2&pickUpLocation.searchCriteria={pickupID}&dropOffLocation.searchCriteria={returnID}&pickUpDateTime.date={pickupDateShort}&dropOffDateTime.date={returnDateShort}&pickUpDateTime.time={pickupTimeShort}&dropOffDateTime.time={returnTimeShort}',
+  
+       init : function() {
 
-			isoTest.debug = true;
+			isoTest.debug =true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -22,17 +122,93 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
+			isoTest.observeEl(isoTest.selector, function(ele) {
+				isoTest.log('Test Ready!');  
+                
   				isoTest.chall();
+			});
+            isoTest.observeEl(isoTest.resWidget, function(ele) {
+				isoTest.log('resWidget Ready!');  
+  				isoTest.updateResWidget(ele);
 			});
 			
 		},
-		chall : function() {
+        updateResWidget: function(ele) {
+            console.log(ele);
+            ele.classList.add('mvt-685-widget');
+        },
+		chall: function(){
+         //console.log(ele);
+         // Set reservation info
+			var pickupLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickupLocation','name']);
+			var returnLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','returnLocation','name']);
+			var pickupDate = new Date(ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickup_time']));
+			var returnDate = new Date(ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','return_time']));
 
-			// Your code goes here
+			var dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',};
 
-		},
+			var pickupDateFormatted = pickupDate.toLocaleDateString('en-US', dateOptions);
+			var returnDateFormatted = returnDate.toLocaleDateString('en-US', dateOptions);
+			var pickupTimeFormatted = pickupDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+			var returnTimeFormatted = returnDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+
+			// console.log("pickuplocation", pickupLocation, returnLocation, pickupDate, returnDate, dateOptions, pickupDateFormatted, returnDateFormatted, pickupTimeFormatted, returnTimeFormatted)
+
+			var banner = helpers.supplant(isoTest.templateBanner, {
+				'pickuplocation' : pickupLocation,
+				'returnlocation' : returnLocation,
+				'pickupdate' : pickupDateFormatted,
+				'returndate' : returnDateFormatted,
+				'pickuptime' : pickupTimeFormatted,
+				'returntime' : returnTimeFormatted,
+			});
+
+			// Set deeplink
+			var pickupID = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickup_location_id']);
+			var returnID = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','return_location_id']);
+			var pickupDateShort = pickupDate.toLocaleDateString();
+			var returnDateShort = returnDate.toLocaleDateString();
+			var pickupTimeShort = pickupDate.toLocaleTimeString('en-US', { hour12: false });
+			var returnTimeShort = returnDate.toLocaleTimeString('en-US', { hour12: false });
+
+			// console.log("pickup information ", pickupID, returnID, pickupDateShort, returnDateShort, pickupTimeShort, returnTimeShort);
+
+			var deeplinkURL = helpers.supplant(isoTest.deepLink, {
+				'pickupID' : pickupID,
+				'returnID' : returnID,
+				'pickupDateShort' : pickupDateShort,
+				'returnDateShort' : returnDateShort,
+				'pickupTimeShort' : pickupTimeShort,
+				'returnTimeShort' : returnTimeShort,
+			});
+            if (!!pickupLocation && !!pickupDate && !!returnLocation && !!returnDate) {
+                isoTest.insertTemplate(banner,deeplinkURL);
+            }
+         
+         
+        },
+        insertTemplate : function(banner, link) {
+            document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', banner);
+          // Update deeplink URL
+            document.querySelector('.mvt-685-banner .btn-continue').setAttribute('href', link);
+            sessionStorage.setItem('MVT-685-Banner-Seen', 'true');
+            isoTest.addEvents();
+        },
+       
+
+        addEvents: function() {
+       
+          // discard fucntionality 
+          document.querySelector('.mvt-685-banner .btn-cancel').addEventListener('click',function(){
+            document.querySelector('.mvt-685-banner').remove();
+            if(document.querySelector('.mvt-685-widget')) {
+                document.querySelector('.inner-container.expanded.mvt-685-widget').classList.remove('mvt-685-widget');
+            }
+          });
+
+        },
+       
+		
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
@@ -44,10 +220,14 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
-		}
+		},
+       
+		observeEl: function (selector, callback) {
+                  var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
+        },
+        
 	};
-
-	var helpers = {
+    var helpers = {
 		elementLoaded : function (ele, callback) {
 			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
 			window.clearTimeout(isoTest.eleTimer);
@@ -60,20 +240,43 @@
 	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
 	        }
 		},
-	    supplant : function(str, o) {
+		dependsLoadedCount : 0,
+		dependsLoaded : function (callback) {
+			window.clearTimeout(isoTest.timer);
+			//Check for reservation info in data object specified number of times
+			if (helpers.dependsLoadedCount < 50) {
+				if (typeof ReservationStateTree !== 'undefined' && typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest']) !== 'undefined' && typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest','pickupLocation','name']) !== 'undefined') {
+					if (typeof callback === "function") {
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						helpers.dependsLoadedCount++;
+						helpers.dependsLoaded(callback);
+					}, 100);
+				}
+			}
+		},
+		supplant : function(str, o) {
 			return str.replace(/{([^{}]*)}/g, function(a, b) {
 		        var p = b.split(/\./),
 		            c = o;
 		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
 		        }
 				return typeof c === 'string' || typeof c === 'number' ? c : a;
 			});
 		}
 	};
-
-	isoTest.init();
+    if (sessionStorage.getItem('MVT-685-Banner-Seen') === null){
+        helpers.dependsLoaded(function(){
+		isoTest.init();
+	    });
+    } else {
+       console.log('banner already seen in this visit');
+   }
+	
 })();
 </script>
