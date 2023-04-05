@@ -77,7 +77,7 @@
 		
         init : function() {
 
-			isoTest.debug = true;
+			//isoTest.debug = true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -88,18 +88,13 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});
-			window.addEventListener('hashchange', isoTest.viewChange, false);
-		},
-        viewChange: function () {
-			if (/cars/.test(location.hash)) {
-				helpers.elementLoaded(isoTest.selector, function () {
+			isoTest.observeEl(isoTest.selector, function() {
+				isoTest.log('Test Ready!');  
+				if (!document.querySelector('.mvt-700-banner')) {
 					isoTest.chall();
-				});
-			}
+				}
+  				
+			});
 		},
 		chall : function() {
 			// Your code goes here
@@ -152,7 +147,7 @@
 
         pointsCheck: function () {
 							var pointsEarned = window.store.getState().toJS().app.baobab.User.profile.basic_profile.loyalty_data.points_to_date;
-                            console.log(pointsEarned);
+                            //console.log(pointsEarned);
 
 							if (isoTest.enoughPoints()) {
 							
@@ -172,22 +167,13 @@
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
-		}
+		},
+		observeEl: function (selector, callback) {
+                  var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
+        }
 	};
 
 	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
-		},
         numberWithCommas: function (x) {
 							return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		}
