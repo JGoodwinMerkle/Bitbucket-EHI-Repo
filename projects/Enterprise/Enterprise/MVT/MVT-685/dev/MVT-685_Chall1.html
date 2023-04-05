@@ -1,15 +1,15 @@
 <style>
     /*styling for reswidget */
-    .inner-container.expanded.mvt-685-widget{
+    .mvt-685-widget .inner-container.expanded{
         min-height: 0px;
     }
-    .inner-container.expanded.mvt-685-widget .expanded-components {
+    .mvt-685-widget .booking-widget-expanded {
         display: none;
     }
-    .inner-container.expanded.mvt-685-widget .pick-up-location .rs-input__field--hidden {
+    .mvt-685-widget .inner-container.expanded .pick-up-location .rs-input__field--hidden {
         display: block;
     }
-    .inner-container.expanded.mvt-685-widget .pick-up-location .rs-input__fake-field {
+    .mvt-685-widget .inner-container.expanded .pick-up-location .rs-input__fake-field {
         display: none;
     }
     /*styling for banner */
@@ -35,6 +35,7 @@
         box-shadow: 0 1px 3px rgba(0,0,0,.2);
     }
     .mvt-685-banner .mvt-image {
+        background-image: url('https://www.enterprise.com/content/dam/enterprise/marketing/mvt/mvt685_b_alldevices.jpg');
         height: 256px;
         background-size: cover;
         width: 325px;
@@ -90,7 +91,7 @@
 		test : 'MVT-685',
 		creative : 'Challenger 1',
 		selector : '.container.responsivegrid.teaser-style-3.padding-top--medium.aem-GridColumn.aem-GridColumn--default--12',
-        resWidget : '.inner-container.expanded',
+        resWidget : '#reservationWidget',
         templateBanner: `<div class="mvt-685-banner">
                         <div class="mvt-header">Welcome back! Would you like to continue your reservation?</div>
                         <div class="mvt-container"><div class="mvt-image"></div>
@@ -124,7 +125,6 @@
 
 			isoTest.observeEl(isoTest.selector, function(ele) {
 				isoTest.log('Test Ready!');  
-                
   				isoTest.chall();
 			});
             isoTest.observeEl(isoTest.resWidget, function(ele) {
@@ -136,6 +136,41 @@
         updateResWidget: function(ele) {
             console.log(ele);
             ele.classList.add('mvt-685-widget');
+            isoTest.resWidgetFunction();
+        },
+        //Functionality to update res widget based on interaction 
+        resWidgetFunction: function() {
+            var eleUpdates = new MutationObserver(function(mutationsList) {
+                mutationsList.forEach(function(mutation){
+                    console.log(mutation)
+                    //removed nodes
+                    mutation.removedNodes.forEach(function (removedNode){
+                        if(removedNode.classList != undefined) {
+                            console.log(removedNode);
+                            if(removedNode.classList.contains('rs-input__fake-field') ) {
+                                console.log('removing class')
+                            }
+                        }
+                    });
+                    //added nodes 
+                    mutation.addedNodes.forEach(function (addedNode){
+                        if(addedNode.classList != undefined) {
+                            console.log(addedNode);
+                            if(addedNode.classList.contains('auto-complete') ) {
+                                //actions
+                                console.log('adding class');
+                                if(document.querySelector('.mvt-685-widget')){
+                                    document.querySelector('#reservationWidget.mvt-685-widget').classList.remove('mvt-685-widget');
+                                    console.log('res class remove');
+                                }
+                            }
+                        }
+                    });
+
+                });
+            }) ;
+            //after observe  add target element
+            eleUpdates.observe(document.querySelector('form.location-input-container.location-search'), {subtree: true, childList: true});
         },
 		chall: function(){
          //console.log(ele);
@@ -202,7 +237,7 @@
           document.querySelector('.mvt-685-banner .btn-cancel').addEventListener('click',function(){
             document.querySelector('.mvt-685-banner').remove();
             if(document.querySelector('.mvt-685-widget')) {
-                document.querySelector('.inner-container.expanded.mvt-685-widget').classList.remove('mvt-685-widget');
+                document.querySelector('#reservationWidget.mvt-685-widget').classList.remove('mvt-685-widget');
             }
           });
 
