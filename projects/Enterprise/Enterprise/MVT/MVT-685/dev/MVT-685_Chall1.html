@@ -13,8 +13,6 @@
         display: none;
     }
     .reservationWidget #reservationWidget.sticky-reservation-widget.mvt-685-widget {
-       /* transition: none;
-        visibility: hidden;*/
         opacity: 0;
         transition: all .01s ease-out;
     }
@@ -222,7 +220,7 @@
 			
 		},
         updateResWidget: function(ele) {
-            console.log(ele);
+            //console.log(ele);
             ele.classList.add('mvt-685-widget');
             isoTest.resWidgetFunction();
         },
@@ -230,26 +228,16 @@
         resWidgetFunction: function() {
             var eleUpdates = new MutationObserver(function(mutationsList) {
                 mutationsList.forEach(function(mutation){
-                    console.log(mutation)
-                    //removed nodes
-                    mutation.removedNodes.forEach(function (removedNode){
-                        if(removedNode.classList != undefined) {
-                            console.log(removedNode);
-                            if(removedNode.classList.contains('rs-input__fake-field') ) {
-                                console.log('removing class')
-                            }
-                        }
-                    });
+                    //console.log(mutation)
                     //added nodes 
                     mutation.addedNodes.forEach(function (addedNode){
                         if(addedNode.classList != undefined) {
-                            console.log(addedNode);
                             if(addedNode.classList.contains('auto-complete') ) {
                                 //actions
-                                console.log('adding class');
+                                //console.log('adding class');
                                 if(document.querySelector('.mvt-685-widget')){
                                     document.querySelector('#reservationWidget.mvt-685-widget').classList.remove('mvt-685-widget');
-                                    console.log('res class remove');
+                                    //console.log('res class remove');
                                 }
                             }
                         }
@@ -261,7 +249,6 @@
             eleUpdates.observe(document.querySelector('form.location-input-container.location-search'), {subtree: true, childList: true});
         },
 		chall: function(){
-         //console.log(ele);
          // Set reservation info
 			var pickupLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickupLocation','name']);
 			var returnLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','returnLocation','name']);
@@ -307,30 +294,37 @@
             if (!!pickupLocation && !!pickupDate && !!returnLocation && !!returnDate) {
                 isoTest.insertTemplate(banner,deeplinkURL);
             }
-         
-         
         },
+
         insertTemplate : function(banner, link) {
             document.querySelector(isoTest.selector).insertAdjacentHTML('afterbegin', banner);
-          // Update deeplink URL
+            // Update deeplink URL
             document.querySelector('.mvt-685-banner .btn-continue').setAttribute('href', link);
             sessionStorage.setItem('MVT-685-Banner-Seen', 'true');
+            //tagging 
+            isoTest.fireTag89('','Abandoned Cart Banner Shown');
             isoTest.addEvents();
         },
        
 
         addEvents: function() {
-       
           // discard fucntionality 
-          document.querySelector('.mvt-685-banner .btn-cancel').addEventListener('click',function(){
+          document.querySelector('.mvt-685-banner .btn-cancel').addEventListener('click',function(e){
             document.querySelector('.mvt-685-banner').remove();
             if(document.querySelector('.mvt-685-widget')) {
                 document.querySelector('#reservationWidget.mvt-685-widget').classList.remove('mvt-685-widget');
+                //discard tag
+                isoTest.fireTag(e.target,'Discard CTA Clicked');
             }
           });
 
+          // continue tag 
+          document.querySelector('.mvt-685-banner .btn-continue').addEventListener('click',function(e){
+            isoTest.fireTag(e.target,'Continue Reservation CTA Clicked');
+          });
+
+
         },
-       
 		
 		fireTag : function(element, value) {
 			var linkName = value ? value : element.innerText;
@@ -338,6 +332,13 @@
 			s.linkTrackVars = 'eVar20';
 			s.eVar20 = linkName;
 			s.tl(this, 'o', linkName);
+		},
+        fireTag89: function (element, value) {
+			var linkName = value ? value : element.innerText;
+				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+				s.linkTrackVars = 'eVar89';
+				s.eVar89 = linkName;
+				s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
@@ -398,7 +399,7 @@
 		isoTest.init();
 	    });
     } else {
-       console.log('banner already seen in this visit');
+       //console.log('banner already seen in this visit');
    }
 	
 })();
