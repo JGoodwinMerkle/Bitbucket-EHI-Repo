@@ -198,7 +198,7 @@
   
        init : function() {
 
-			isoTest.debug =true;
+			//isoTest.debug =true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -352,18 +352,6 @@
         
 	};
     var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
-		},
 		dependsLoadedCount : 0,
 		dependsLoaded : function (callback) {
 			window.clearTimeout(isoTest.timer);
@@ -398,9 +386,7 @@
         helpers.dependsLoaded(function(){
 		isoTest.init();
 	    });
-    } else {
-       //console.log('banner already seen in this visit');
-   }
+    }
 	
 })();
 </script>
