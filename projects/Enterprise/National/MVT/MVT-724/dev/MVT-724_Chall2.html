@@ -1,79 +1,159 @@
 <style>
-</style>
-<script>
-(function() {
-	'use strict';
-	var isoTest = {
-		account : 'National',
-		portfolio : 'EHI',
-		test : 'MVT-724',
-		creative : 'Challenger 1',
-		selector : 'body',
-		init : function() {
-
-			isoTest.debug = ${user.mvtDebug};
-			
-			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-			}
-
-			isoTest.log('Test Running...');
-			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
-			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});
-			
-		},
-		chall : function() {
-
-			// Your code goes here
-
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
-		},
-		log : function(obj){
-			if(isoTest.debug === true){
-				console.log(obj);
-			}
-		}
-	};
-
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
-	};
-
-	isoTest.init();
-})();
-</script>
+	.mvt-724-restructure.vehicle-list .vehicle .vehicle__content .vehicle__cta .btn.btn--opaque {
+	 background-color: #00703C;
+	 color: #ffffff;
+   }
+   .mvt-724-restructure.vehicle-list .vehicle .vehicle__content .vehicle__cta .btn.btn--opaque:hover:enabled, .mvt-724-restructure.vehicle-list .vehicle .vehicle__content .vehicle__cta .btn.btn--opaque:focus:enabled {
+	 background-color: #000000;
+	 color: #ffffff;
+   }
+ 
+   .mvt-724-restructure.vehicle-list .vehicle__price {
+	 display: flex;
+	 flex-direction: row-reverse;
+	 width: fit-content;
+	 margin-right: 0px;
+   }
+ 
+   .mvt-724-restructure.vehicle-list .vehicle__price .vehicle__price-day {
+	 font-weight: 400;
+	 font-size: 14px;
+	 line-height: 34px;
+	 margin-bottom: 0px;
+	 margin-left: 6px;
+   }
+ 
+   .mvt-724-restructure.vehicle-list .vehicle__price .vehicle__price-total span:not(:last-child) {
+	 font-weight: 600;
+	 font-size: 22px;
+   }
+   .mvt-724-restructure.vehicle-list .vehicle__price .vehicle__price-total span:last-child {
+	 font-weight: 700;
+	 font-size: 12px;
+	 line-height: 16px;
+   }
+ 
+   .mvt-724-restructure.vehicle-list .vehicle__cta {
+	 margin-left: auto;
+	 margin-top: -3%;
+	 width: 236px;
+   }
+ 
+   @media screen and (max-width: 40em) {
+	 .mvt-724-restructure.vehicle-list .vehicle__content .vehicle__price {
+		 width: 100%;
+		 justify-content: center;
+		 margin-top: 0px;
+	 }
+	 
+	 .mvt-724-restructure.vehicle-list .vehicle__content .vehicle__cta {
+		 width: 100%;
+		 margin-top: 2%;
+	 }
+   }
+   @media screen and (min-width: 40.0625em) {
+	 .mvt-724-restructure.vehicle-list .vehicle__content {
+		 display: flex;
+		 flex-wrap: wrap;
+		 justify-content: space-between;
+	 }
+	 .mvt-724-restructure.vehicle-list .vehicle__content .vehicle__image {
+		 order: 1;
+	 }
+	 .mvt-724-restructure.vehicle-list .vehicle__content .vehicle__type {
+		 order: 2;
+ 
+	 }
+	 .mvt-724-restructure.vehicle-list .vehicle__content .vehicle__attributes {
+		 order: 3;
+	 }
+	 .mvt-724-restructure.vehicle-list .vehicle__content .vehicle__price {
+		 order: 4;
+	 }
+	 
+	 .mvt-724-restructure.vehicle-list .vehicle__content .vehicle__cta {
+		 order: 5;
+	 }
+	 
+ }
+ @media screen and (min-width: 40.0625em) and (max-width: 56.9375em) {
+	 .mvt-724-restructure.vehicle-list .vehicle__content .vehicle__price {
+		 width: 100%;
+	 }
+	 .mvt-724-restructure.vehicle-list .vehicle__content .vehicle__cta {
+		 margin-top: 1%;
+	 }
+ }
+ 
+ </style>
+ <script>
+ (function() {
+	 'use strict';
+	 var isoTest = {
+		 account : 'National',
+		 portfolio : 'EHI',
+		 test : 'MVT-724',
+		 creative : 'Challenger 2',
+		 selector : '.vehicle-select .vehicle-list',
+		 
+		 init : function() {
+ 
+			// isoTest.debug = true;
+			 
+			 if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+				 _satellite.setVar('TargetCampaign', isoTest.test);
+				 _satellite.setVar('TargetCreative', isoTest.creative);
+			 }
+ 
+			 isoTest.log('Test Running...');
+			 isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+			 isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+ 
+			 isoTest.observeEl(isoTest.selector, function(ele) {
+				 isoTest.log('Test Ready!');  
+				 ele.classList.add('mvt-724-restructure');
+				 isoTest.chall();
+			 
+				   
+			 });
+		 },
+		 chall : function() {
+			 // Your code goes here
+			 isoTest.updatePricing();
+ 
+		 },
+		 updatePricing : function () {
+			 var vehicleList = document.querySelectorAll('.vehicle-list > .vehicle');
+			 vehicleList.forEach(vehicle => {
+			   var totalPrice = vehicle.querySelector('.vehicle__price .vehicle__price-total');
+			   var dayPrice = vehicle.querySelector('.vehicle__price p:not(:last-child)');
+			   var dayText = dayPrice.innerText.split(' ');
+			   dayPrice.innerText = '('+dayText[0]+dayText[1]+' '+dayText[2]+' '+dayText[3]+ ')';
+			   var textArray = vehicle.querySelector('.vehicle__price .vehicle__price-total').innerText.split(' ');
+			   totalPrice.innerHTML = '<span>'+textArray[0]+textArray[1]+'</span><span> Total</span>';
+			});   
+ 
+		 },
+		
+		 fireTag : function(element, value) {
+			 var linkName = value ? value : element.innerText;
+				 linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+			 s.linkTrackVars = 'eVar20';
+			 s.eVar20 = linkName;
+			 s.tl(this, 'o', linkName);
+		 },
+		 log : function(obj){
+			 if(isoTest.debug === true){
+				 console.log(obj);
+			 }
+		 },
+		 observeEl: function (selector, callback) {
+				   var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
+		 }
+	 };
+ 
+	 
+ 
+	 isoTest.init();
+ })();
+ </script>
