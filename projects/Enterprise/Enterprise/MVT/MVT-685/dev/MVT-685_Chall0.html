@@ -8,10 +8,10 @@
 		portfolio : 'Enterprise',
 		test : 'MVT-685',
 		creative : 'Challenger 0',
-		selector : 'body',
-		init : function() {
-
-			//isoTest.debug = true;
+		selector : '.container.responsivegrid.teaser-style-3.padding-top--medium.aem-GridColumn.aem-GridColumn--default--12',
+       
+       init : function() {
+			//isoTest.debug =true;
 			
 			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
 				_satellite.setVar('TargetCampaign', isoTest.test);
@@ -22,58 +22,85 @@
 			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
 			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
 
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
+			isoTest.observeEl(isoTest.selector, function(ele) {
+				isoTest.log('Test Ready!');  
   				isoTest.chall();
 			});
+           
 			
 		},
-		chall : function() {
+       
+		chall: function(){
+         // Set reservation info
+			var pickupLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickupLocation','name']);
+			var returnLocation = ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','returnLocation','name']);
+			var pickupDate = new Date(ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','pickup_time']));
+			var returnDate = new Date(ReservationStateTree.get(['session','reservationSession','reservationsInitiateRequest','return_time']));
 
-			// Your code goes here
+			
+            if (!!pickupLocation && !!pickupDate && !!returnLocation && !!returnDate) {
+                sessionStorage.setItem('MVT-685-Banner-Seen', 'true');
+                //tagging 
+              //console.log('tagging')
+                isoTest.fireTag89('','Abandoned Cart Banner Shown');
+            }
+        },
 
-		},
-		fireTag : function(element, value) {
+
+        fireTag89: function (element, value) {
 			var linkName = value ? value : element.innerText;
 				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
+				s.linkTrackVars = 'eVar89';
+				s.eVar89 = linkName;
+				s.tl(this, 'o', linkName);
 		},
 		log : function(obj){
 			if(isoTest.debug === true){
 				console.log(obj);
 			}
-		}
-	};
-
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
 		},
-	    supplant : function(str, o) {
+       
+		observeEl: function (selector, callback) {
+                  var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
+        },
+        
+	};
+    var helpers = {
+		dependsLoadedCount : 0,
+		dependsLoaded : function (callback) {
+			window.clearTimeout(isoTest.timer);
+			//Check for reservation info in data object specified number of times
+			if (helpers.dependsLoadedCount < 50) {
+				if (typeof ReservationStateTree !== 'undefined' && typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest']) !== 'undefined' && typeof ReservationStateTree.get(['session', 'reservationSession', 'reservationsInitiateRequest','pickupLocation','name']) !== 'undefined') {
+					if (typeof callback === "function") {
+						callback();
+					}
+				} else {
+					isoTest.timer = window.setTimeout(function() {
+						helpers.dependsLoadedCount++;
+						helpers.dependsLoaded(callback);
+					}, 100);
+				}
+			}
+		},
+		supplant : function(str, o) {
 			return str.replace(/{([^{}]*)}/g, function(a, b) {
 		        var p = b.split(/\./),
 		            c = o;
 		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
+		          if (c[p[i]] == null)
+		            return a;
+		          c = c[p[i]];
 		        }
 				return typeof c === 'string' || typeof c === 'number' ? c : a;
 			});
 		}
 	};
-
-	isoTest.init();
+    if (sessionStorage.getItem('MVT-685-Banner-Seen') === null){
+        helpers.dependsLoaded(function(){
+		isoTest.init();
+	    });
+    }
+	
 })();
 </script>
