@@ -1,79 +1,114 @@
 <style>
-</style>
-<script>
-(function() {
-	'use strict';
-	var isoTest = {
-		account : 'Enterprise',
-		portfolio : 'EHI',
-		test : 'MVT-736',
-		creative : 'Challenger 1',
-		selector : 'body',
-		init : function() {
+    .mvt-736-nav .mvt-736-step {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 8.875V11.25H2.375L9.25 4.3125L6.875 1.9375L0 8.875ZM11.0625 2.5C11.3125 2.25 11.3125 1.875 11.0625 1.625L9.625 0.1875C9.375 -0.0625 9 -0.0625 8.75 0.1875L7.625 1.3125L10 3.6875C9.9375 3.6875 11.0625 2.5 11.0625 2.5Z' fill='%2321995C'/%3E%3C/svg%3E");
+        display: inline-block;
+        width: 11.25px;
+        height: 11.25px;
+        background-repeat: no-repeat;
+        margin-left: 5px;
+    }
+    
+ </style>
+ <script>
+ (function() {
+     'use strict';
+     var isoTest = {
+         account : 'Enterprise',
+         portfolio : 'EHI',
+         test : 'MVT-736',
+         creative : 'Challenger 1',
+         selector : '#navigationSection button.step__item.step-completed',
+         template : '<span class="mvt-736-step"><span>',
+         init : function() {
+ 
+            isoTest.debug = true;
+             
+             if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
+                 _satellite.setVar('TargetCampaign', isoTest.test);
+                 _satellite.setVar('TargetCreative', isoTest.creative);
+             }
+ 
+             isoTest.log('Test Running...');
+             isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
+             isoTest.log(isoTest.test + ' - ' + isoTest.creative);
+ 
+             helpers.elementLoaded(isoTest.selector, function(ele) {
+               isoTest.log('Test Ready!');  
+               console.log(ele);
+               isoTest.chall();
+               isoTest.inFlightModify();
+               
+           });
+         },
+         chall : function () {
+            var stepCompleted = document.querySelectorAll(isoTest.selector);
+            stepCompleted.forEach(element => {
+                console.log('inside', element);
+                element.classList.add('mvt-736-nav');
+                isoTest.update(element);
+            });
+            
+         } ,
+         update: function(ele) {
+            var container =  ele.querySelector('.step__step-wrapper .step__step-title');
+            if (!container.querySelector('.mvt-736-step')) {
+                container.insertAdjacentHTML('beforeend',isoTest.template);
+            }
+            
+         },
 
-			//isoTest.debug = ${user.mvtDebug};
-			
-			if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
-				_satellite.setVar('TargetCampaign', isoTest.test);
-				_satellite.setVar('TargetCreative', isoTest.creative);
-			}
+         inFlightModify : function () {
+            var inFlightPageUpdate = new MutationObserver(function(mutationsList) {
+                mutationsList.forEach(function(mutation) {
+                    mutation.removedNodes.forEach(function(removedNode) {
+                        if (removedNode.classList !== undefined) {
+                            if (removedNode.classList.contains('spinner-container')) {
+                                console.log('spinner removed');
+                                isoTest.chall();
+                            }
+                        }
+                    });
+                });
+            });
+            inFlightPageUpdate.observe(document.querySelector('body'), {
+                subtree: true,
+                childList: true
+            });
+         },
+         fireTag : function(element, value) {
+             var linkName = value ? value : element.innerText;
+                 linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
+             s.linkTrackVars = 'eVar20';
+             s.eVar20 = linkName;
+             s.tl(this, 'o', linkName);
+         },
+         log : function(obj){
+             if(isoTest.debug === true){
+                 console.log(obj);
+             }
+         },
+         observeEl: function (selector, callback) {
+                   var processed = new Map, processElement = function (e) { processed && !processed.has(e) && (processed.set(e, !0), callback(e)) }, lookForSelector = function () { var e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document; if (e.matches && e.matches(selector) && processElement(e)) return !0; if (e.querySelectorAll) { var r = e.querySelectorAll(selector); if (r.length) for (var o = 0; o < r.length; o++) { var t = r[o]; if (processElement(t)) return !0 } } }; lookForSelector(); var obs = new MutationObserver(function (e) { e.forEach(function (e) { if (e && e.addedNodes && e.addedNodes.length) for (var r = 0; r < e.addedNodes.length; r++) { var o = e.addedNodes[r].parentElement; if (o && lookForSelector(o)) return !0 } }) }); obs.observe(document, { attributes: !1, childList: !0, subtree: !0 });
+         },
 
-			isoTest.log('Test Running...');
-			isoTest.log(isoTest.account + ' - ' + isoTest.portfolio);
-			isoTest.log(isoTest.test + ' - ' + isoTest.creative);
-
-			helpers.elementLoaded(isoTest.selector, function() {
-				isoTest.log('Test Ready!');
-  				isoTest.chall();
-			});
-			
-		},
-		chall : function() {
-
-			// Your code goes here
-
-		},
-		fireTag : function(element, value) {
-			var linkName = value ? value : element.innerText;
-				linkName = isoTest.test ? isoTest.test + ' : ' + linkName : linkName;
-			s.linkTrackVars = 'eVar20';
-			s.eVar20 = linkName;
-			s.tl(this, 'o', linkName);
-		},
-		log : function(obj){
-			if(isoTest.debug === true){
-				console.log(obj);
-			}
-		}
-	};
-
-	var helpers = {
-		elementLoaded : function (ele, callback) {
-			isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
-			window.clearTimeout(isoTest.eleTimer);
-			if (document.querySelectorAll(ele).length > 0) {
-				if (typeof callback === 'function') {
-					isoTest.log('elementLoaded::  ' + ele + ' - Found!');
-					callback();
-				}
-	        } else {
-	            isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
-	        }
-		},
-	    supplant : function(str, o) {
-			return str.replace(/{([^{}]*)}/g, function(a, b) {
-		        var p = b.split(/\./),
-		            c = o;
-		        for (var i = 0; i < p.length; i++) {
-		          	if (c[p[i]] == null)
-		            	return a;
-		          	c = c[p[i]];
-		        }
-				return typeof c === 'string' || typeof c === 'number' ? c : a;
-			});
-		}
-	};
-
-	isoTest.init();
-})();
-</script>
+     };
+     var helpers = {
+            elementLoaded : function (ele, callback) {
+                isoTest.log('elementLoaded::  ' + ele + ' - Checking...');
+                window.clearTimeout(isoTest.eleTimer);
+                if (document.querySelectorAll(ele).length > 0) {
+                    if (typeof callback === 'function') {
+                        isoTest.log('elementLoaded::  ' + ele + ' - Found!');
+                        callback();
+                    }
+                } else {
+                    isoTest.eleTimer = window.setTimeout(function(){helpers.elementLoaded(ele, callback);}, 100);
+                }
+            },
+    };
+ 
+     
+ 
+     isoTest.init();
+ })();
+ </script>
