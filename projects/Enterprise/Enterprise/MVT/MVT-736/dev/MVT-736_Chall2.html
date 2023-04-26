@@ -31,7 +31,7 @@
          template : '<span class="mvt-736-step">Edit<span>',
          init : function() {
  
-            isoTest.debug = true;
+            //isoTest.debug = true;
              
              if (_satellite && typeof _satellite.setVar === 'function' && typeof _satellite.track === 'function') {
                  _satellite.setVar('TargetCampaign', isoTest.test);
@@ -44,7 +44,7 @@
  
              helpers.elementLoaded(isoTest.selector, function(ele) {
                isoTest.log('Test Ready!');  
-               console.log(ele);
+              //console.log(ele);
                isoTest.chall();
                isoTest.inFlightModify();
                
@@ -53,7 +53,7 @@
          chall : function () {
             var stepCompleted = document.querySelectorAll(isoTest.selector);
             stepCompleted.forEach(element => {
-                console.log('inside', element);
+                //console.log('inside', element);
                 element.classList.add('mvt-736-nav');
                 isoTest.update(element);
             });
@@ -73,7 +73,7 @@
                     mutation.removedNodes.forEach(function(removedNode) {
                         if (removedNode.classList !== undefined) {
                             if (removedNode.classList.contains('spinner-container')) {
-                                console.log('spinner removed');
+                                //console.log('spinner removed');
                                 isoTest.chall();
                             }
                         }
